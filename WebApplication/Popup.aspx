@@ -22,7 +22,7 @@
 			var name = GetValue("txtPageName");
 			if(name == "") return false;
 			var title = GetValue("txtPageTitle");
-			var c = IsChecked("chkPageNW") ? "^" : "";e
+			var c = IsChecked("chkPageNW") ? "^" : "";
 			if(title != "") {
 				Execute("InsertMarkup(\"[" + c + name + "|" + title + "]\");");
 			}
