@@ -600,7 +600,14 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string CookiePath {
 			get {
-				return HttpContext.Current.Request.ApplicationPath;
+				string requestUrl = HttpContext.Current.Request.RawUrl;
+				string virtualDirectory = HttpContext.Current.Request.ApplicationPath;
+				// We need to convert the case of the virtual directory to that used in the url
+				// Return the virtual directory as is if we can't find it in the URL
+				if (requestUrl.ToLower().Contains(virtualDirectory.ToLower())) {
+					return requestUrl.Substring(requestUrl.ToLower().IndexOf(virtualDirectory.ToLower()),virtualDirectory.Length);
+				}
+				return virtualDirectory;
 			}
 		}
 
