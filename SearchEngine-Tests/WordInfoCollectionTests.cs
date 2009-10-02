@@ -96,6 +96,25 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
+		public void ContainsOccurrence() {
+			WordInfoCollection collection = new WordInfoCollection();
+
+			WordInfo mi1 = new WordInfo("continuous", 7, 0, WordLocation.Content);
+
+			collection.Add(mi1);
+
+			Assert.IsTrue(collection.ContainsOccurrence("continuous", 7), "Collection should contain occurrence");
+			Assert.IsFalse(collection.ContainsOccurrence("continuous2", 7), "Collection should not contain occurrence");
+			Assert.IsFalse(collection.ContainsOccurrence("continuous", 6), "Collection should not contain occurrence");
+			Assert.IsFalse(collection.ContainsOccurrence("continuous", 8), "Collection should not contain occurrence");
+			Assert.IsFalse(collection.ContainsOccurrence("continuous2", 6), "Collection should not contain occurrence");
+
+			Assert.IsFalse(collection.ContainsOccurrence("continuous2", -1), "Contains should return false");
+			Assert.IsFalse(collection.ContainsOccurrence("", 7), "Contains should return false");
+			Assert.IsFalse(collection.ContainsOccurrence(null, 7), "Contains should return false");
+		}
+
+		[Test]
 		public void CopyTo() {
 			WordInfoCollection collection = new WordInfoCollection();
 

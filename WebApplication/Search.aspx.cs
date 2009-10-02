@@ -489,7 +489,8 @@ namespace ScrewTurn.Wiki {
 					len = sb.Length - start;
 					endsAtEnd = true;
 				}
-				else if(len > maxLen) len = maxLen;
+				if(len <= 0) len = sb.Length; // HACK: This should never occur, but if it does it crashes the wiki, so set it to max len
+				if(len > maxLen) len = maxLen;
 
 				result = sb.ToString();
 

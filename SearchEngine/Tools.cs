@@ -61,7 +61,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 								results.Add(res);
 							}
 							else {
-								res.Matches.Add(mi);
+								// Avoid adding duplicate matches (happens when query contains the same word multiple times)
+								if(!res.Matches.ContainsOccurrence(mi.Text, mi.FirstCharIndex)) {
+									res.Matches.Add(mi);
+								}
 								res.Relevance.SetValue(res.Relevance.Value + info.Location.RelativeRelevance);
 							}
 							totalRelevance += info.Location.RelativeRelevance;

@@ -79,6 +79,23 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		}
 
 		/// <summary>
+		/// Determines whether a word occurrence is in the collection.
+		/// </summary>
+		/// <param name="word">The word.</param>
+		/// <param name="firstCharIndex">The index of the first character.</param>
+		/// <returns><c>True</c> if the collection contains the occurrence, <c>false</c> otherwise.</returns>
+		public bool ContainsOccurrence(string word, int firstCharIndex) {
+			if(string.IsNullOrEmpty(word)) return false;
+			if(firstCharIndex < 0) return false;
+
+			foreach(WordInfo w in items) {
+				if(w.Text == word && w.FirstCharIndex == firstCharIndex) return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
 		/// Copies the collection items to an array.
 		/// </summary>
 		/// <param name="array">The destination array.</param>

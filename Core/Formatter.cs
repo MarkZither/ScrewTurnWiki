@@ -316,7 +316,7 @@ namespace ScrewTurn.Wiki {
 								string nsstring = ns != null ? NameTools.GetFullName(ns.Name, "Search") + ".aspx" : "Search.aspx";
 								string doSearchFunction = "<nowiki><nobr><script type=\"text/javascript\"><!--\r\n" + @"function _DoSearch_" + textBoxId + "() { document.location = '" + nsstring + @"?AllNamespaces=1&FilesAndAttachments=1&Query=' + encodeURI(document.getElementById('" + textBoxId + "').value); }" + "\r\n// -->\r\n</script>";
 								sb.Insert(match.Index, doSearchFunction +
-									@"<input class=""txtsearchbox"" type=""text"" id=""" + textBoxId + @""" onkeydown=""javascript:var keycode; if(window.event) keycode = event.keyCode; else keycode = event.which; if(keycode == 10 || keycode == 13) { _DoSearch_" + textBoxId + @"(); return false; }"" /> <big><a href=""#"" onclick=""javascript:_DoSearch(); return false;"">&raquo;</a></big></nowiki></nobr>");
+									@"<input class=""txtsearchbox"" type=""text"" id=""" + textBoxId + @""" onkeydown=""javascript:var keycode; if(window.event) keycode = event.keyCode; else keycode = event.which; if(keycode == 10 || keycode == 13) { _DoSearch_" + textBoxId + @"(); return false; }"" /> <big><a href=""#"" onclick=""javascript:_DoSearch_" + textBoxId + @"(); return false;"">&raquo;</a></big></nowiki></nobr>");
 								break;
 							case "CLOUD":
 								string cloud = BuildCloud(DetectNamespaceInfo(current));
