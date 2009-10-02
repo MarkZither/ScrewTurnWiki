@@ -118,97 +118,97 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnBackResource1.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>Vissza</value>
   </data>
   <data name="btnBackResource1.ToolTip" xml:space="preserve">
-    <value>Back to the Namespace list</value>
+    <value>Vissza a névterek listába</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Mégse</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the Namespace list</value>
+    <value>Mégse és vissza a névterek listába</value>
   </data>
   <data name="btnConfirmDeletionResource1.Text" xml:space="preserve">
-    <value>Confirm Namespace Deletion</value>
+    <value>Névtér törlés megerősítése</value>
   </data>
   <data name="btnConfirmDeletionResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Namespace</value>
+    <value>Névtér létrehozása</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Namespace</value>
+    <value>Új névtér mentése</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Töröl</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Namespace</value>
+    <value>Névtér törlése</value>
   </data>
   <data name="btnNewNamespaceResource1.Text" xml:space="preserve">
-    <value>New Namespace</value>
+    <value>Új névtér</value>
   </data>
   <data name="btnNewNamespaceResource1.ToolTip" xml:space="preserve">
-    <value>Create a new Namespace</value>
+    <value>Új névtér létrehozása</value>
   </data>
   <data name="btnNormalResource1.Text" xml:space="preserve">
-    <value>Normal</value>
+    <value>Normál</value>
   </data>
   <data name="btnNormalResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template</value>
+    <value>Sablon használata</value>
   </data>
   <data name="btnPermsResource1.Text" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Jogosultságok</value>
   </data>
   <data name="btnPermsResource1.ToolTip" xml:space="preserve">
-    <value>Manage permissions for this Namespace</value>
+    <value>Névtér jogosultságok beállításasi</value>
   </data>
   <data name="btnPermsResource2.Text" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Jogosultságok</value>
   </data>
   <data name="btnPermsResource2.ToolTip" xml:space="preserve">
-    <value>Manage permissions for this Namespace</value>
+    <value>Névtér jogosultságok beállításasi</value>
   </data>
   <data name="btnPrivateResource1.Text" xml:space="preserve">
-    <value>Private</value>
+    <value>Privát</value>
   </data>
   <data name="btnPrivateResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template</value>
+    <value>Sablon használata</value>
   </data>
   <data name="btnPublicResource1.Text" xml:space="preserve">
-    <value>Public</value>
+    <value>Publikus</value>
   </data>
   <data name="btnPublicResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template</value>
+    <value>Sablon használata</value>
   </data>
   <data name="btnRenameResource1.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Átnevez</value>
   </data>
   <data name="btnRenameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Namespace</value>
+    <value>Névtér mentése</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>Változtatások mentése</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Kiválaszt</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Select this Namespace for editing</value>
+    <value>Névtér kiválasztása szerkesztésre</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Kiválaszt</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Select this Namespace for editing</value>
+    <value>Névtér kiválasztása szerkesztésre</value>
   </data>
   <data name="cvName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>Érvénytelen név</value>
   </data>
   <data name="cvName2Resource1.Text" xml:space="preserve">
     <value />
@@ -217,7 +217,7 @@
     <value />
   </data>
   <data name="cvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Namespace already exists</value>
+    <value>A névtér már létezik</value>
   </data>
   <data name="cvNameResource1.Text" xml:space="preserve">
     <value />
@@ -226,7 +226,7 @@
     <value />
   </data>
   <data name="cvNewName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>Érvénytelen név</value>
   </data>
   <data name="cvNewName2Resource1.Text" xml:space="preserve">
     <value />
@@ -235,7 +235,7 @@
     <value />
   </data>
   <data name="cvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Namespace already exists</value>
+    <value>A névtér már létezik</value>
   </data>
   <data name="cvNewNameResource1.Text" xml:space="preserve">
     <value />
@@ -244,76 +244,76 @@
     <value />
   </data>
   <data name="lblCategoriesResource1.Text" xml:space="preserve">
-    <value>Categories</value>
+    <value>Kategóriák</value>
   </data>
   <data name="lblConfirmDeletionResource1.Text" xml:space="preserve">
-    <value>Are you sure you want to premanently delete the selected Namespace? Doing so, all the data contained in it will be lost.</value>
+    <value>Törlöd a névteret? Minden benne lévő adat végleg elveszik!</value>
   </data>
   <data name="lblDefaultPageInfoResource1.Text" xml:space="preserve">
-    <value>The default page will be created automatically with name 'MainPage'.</value>
+    <value>Az alapbeállított lap 'MainPage' néven fog létrejönni.</value>
   </data>
   <data name="lblDefaultPageInfoResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblDefaultPageResource1.Text" xml:space="preserve">
-    <value>Default Page</value>
+    <value>Alapbeállított lap</value>
   </data>
   <data name="lblDefaultPageResource2.Text" xml:space="preserve">
-    <value>Default Page</value>
+    <value>Alapbeállított lap</value>
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Namespace Details</value>
+    <value>Névtér részletek</value>
   </data>
   <data name="lblInheritanceInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: sub-namespaces always inherit permissions from the &lt;b&gt;root&lt;/b&gt; namespace.&lt;br /&gt;Changing the permissions in the &lt;b&gt;root&lt;/b&gt; namespace does not change the permissions explicitly set in sub-namespaces.</value>
+    <value>&lt;b&gt;Figyelem&lt;/b&gt;: az al-névterek mindig a &lt;b&gt;gyökér&lt;/b&gt; névtér jogosultságait öröklik.&lt;br /&gt;A &lt;b&gt;gyökér&lt;/b&gt; névtér jogosultságai változtatása nem változtatja az al-névterek külön beállított jogosultságait.</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Név</value>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Név</value>
   </data>
   <data name="lblNamespaceNameResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblNamespacePermissionsResource1.Text" xml:space="preserve">
-    <value>Namespace Permissions</value>
+    <value>Névtér jogosultságok</value>
   </data>
   <data name="lblNamespacesResource1.Text" xml:space="preserve">
-    <value>Namespaces</value>
+    <value>Névterek</value>
   </data>
   <data name="lblNewNameResource1.Text" xml:space="preserve">
-    <value>New Name</value>
+    <value>Új név</value>
   </data>
   <data name="lblNormalInfoResource1.Text" xml:space="preserve">
-    <value>Registered Users can &lt;b&gt;edit&lt;/b&gt; and &lt;b&gt;create&lt;/b&gt; pages and &lt;b&gt;manage&lt;/b&gt; categories.</value>
+    <value>Regisztrált felhasználók &lt;b&gt;szerkeszthetnek&lt;/b&gt; és &lt;b&gt;létrehozhatnak&lt;/b&gt; lapokat, illetve &lt;b&gt;módosíthatják&lt;/b&gt; a kategóriákat.</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Pages</value>
+    <value>Lapok</value>
   </data>
   <data name="lblPermissionsTemplatesInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: setting a template will replace all existing permissions for the default user groups.</value>
+    <value>&lt;b&gt;Figyelem&lt;/b&gt;: sablon beállítása felülírja a mostani jogosultságokat.</value>
   </data>
   <data name="lblPermissionsTemplatesResource1.Text" xml:space="preserve">
-    <value>Permissions Templates</value>
+    <value>Jogosultság sablonok</value>
   </data>
   <data name="lblPrivateInfoResource1.Text" xml:space="preserve">
-    <value>Only registered users can &lt;b&gt;view&lt;/b&gt; pages (and also &lt;b&gt;create&lt;/b&gt; and &lt;b&gt;edit&lt;/b&gt; them as well as &lt;b&gt;manage&lt;/b&gt; categories).</value>
+    <value>Csak regisztrált felhasználó &lt;b&gt;nézheti meg&lt;/b&gt; a lapokat (és &lt;b&gt;létrehozhatja&lt;/b&gt;, &lt;b&gt;szerkesztheti&lt;/b&gt; a lapokat és &lt;b&gt;módosíthatja&lt;/b&gt; a kategóriákat).</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Kiszolgáló</value>
   </data>
   <data name="lblProviderResource2.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Kiszolgáló</value>
   </data>
   <data name="lblPublicInfoResource1.Text" xml:space="preserve">
-    <value>Anyone, including anonymous users, can &lt;b&gt;edit&lt;/b&gt; pages, registered users can also &lt;b&gt;create&lt;/b&gt; pages and &lt;b&gt;manage&lt;/b&gt; categories.</value>
+    <value>Bárki, még az anonim felhasználó is &lt;b&gt;szerkeszthet&lt;/b&gt; lapokat, a regisztrált pedig &lt;b&gt;létrehozhatja&lt;/b&gt; a lapokat és &lt;b&gt;módosíthatja&lt;/b&gt; a kategóriákat</value>
   </data>
   <data name="lblRenameInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: renaming a namespace will break all existing inter-namespace links.</value>
+    <value>&lt;b&gt;Figyelem&lt;/b&gt;: a névtér átnevezése elrontja a névterek közti linkeket.</value>
   </data>
   <data name="lblRenameResource1.Text" xml:space="preserve">
-    <value>Rename this Namespace</value>
+    <value>Névtér átnevezése</value>
   </data>
   <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
@@ -328,10 +328,10 @@
     <value />
   </data>
   <data name="lblThemeResource1.Text" xml:space="preserve">
-    <value>Theme</value>
+    <value>Téma</value>
   </data>
   <data name="lblThemeResource2.Text" xml:space="preserve">
-    <value>Theme</value>
+    <value>Téma</value>
   </data>
   <data name="lstDefaultPageResource1.ToolTip" xml:space="preserve">
     <value />
@@ -340,7 +340,7 @@
     <value />
   </data>
   <data name="PageResource3.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Adminisztráció</value>
   </data>
   <data name="pnlDeleteResource1.GroupingText" xml:space="preserve">
     <value />
@@ -367,7 +367,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>A név kötelező</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />
@@ -376,7 +376,7 @@
     <value />
   </data>
   <data name="rfvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>New Name is required</value>
+    <value>Az új név kötelező</value>
   </data>
   <data name="rfvNewNameResource1.Text" xml:space="preserve">
     <value />

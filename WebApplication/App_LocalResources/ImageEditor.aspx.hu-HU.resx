@@ -118,52 +118,52 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelResource2.Text" xml:space="preserve">
-    <value>Close</value>
+    <value>Bezár</value>
   </data>
   <data name="btnCancelResource2.ToolTip" xml:space="preserve">
-    <value>Close this tolbox</value>
+    <value>Ablak bezárása</value>
   </data>
   <data name="lblRotateResource1.Text" xml:space="preserve">
-    <value>Rotation</value>
+    <value>elforgatás</value>
   </data>
   <data name="chkNewNameResource2.Text" xml:space="preserve">
-    <value>Save as new file</value>
+    <value>Újként ment</value>
   </data>
   <data name="chkNewNameResource2.ToolTip" xml:space="preserve">
-    <value>If not selected, the original file is overwritten</value>
+    <value>Ha nincs kiválasztva, az eredetif felülírja</value>
   </data>
   <data name="rdoJpegHighResource2.Text" xml:space="preserve">
     <value>JPEG 100%</value>
   </data>
   <data name="rdoJpegHighResource2.ToolTip" xml:space="preserve">
-    <value>JPEG format, full quality</value>
+    <value>JPEG legjobb minőség</value>
   </data>
   <data name="rdoJpegMediumResource2.Text" xml:space="preserve">
     <value>JPEG 60%</value>
   </data>
   <data name="rdoJpegMediumResource2.ToolTip" xml:space="preserve">
-    <value>JPEG format, medium quality</value>
+    <value>JPEG közepes minőség</value>
   </data>
   <data name="rdoPercentageResource2.Text" xml:space="preserve">
-    <value>Resize by scale</value>
+    <value>Átméretezés arány alapján</value>
   </data>
   <data name="rdoPercentageResource2.ToolTip" xml:space="preserve">
-    <value>Resize the image specifying a scale</value>
+    <value>Kép átméretezése egy arányszám megadásával</value>
   </data>
   <data name="rdoPixelResource2.Text" xml:space="preserve">
-    <value>Resize by absolute size</value>
+    <value>Átméretezés fix méretre</value>
   </data>
   <data name="rdoPixelResource2.ToolTip" xml:space="preserve">
-    <value>Resize the image specifying the size in pixels</value>
+    <value>Átméretezés, pixel méret megadásával</value>
   </data>
   <data name="rdoPngResource2.ToolTip" xml:space="preserve">
-    <value>PNG format (alpha channel is preserved)</value>
+    <value>PNG formátum (átlátszóság megőrzésével)</value>
   </data>
   <data name="txtPercentageResource2.Text" xml:space="preserve">
     <value>100</value>
   </data>
   <data name="txtPercentageResource2.ToolTip" xml:space="preserve">
-    <value>Resize scale (percentage)</value>
+    <value>Új méret százalékban</value>
   </data>
   <data name="rdoPngResource2.Text" xml:space="preserve">
     <value>PNG</value>

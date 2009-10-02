@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,85 +118,85 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnBulkDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Törlés</value>
   </data>
   <data name="btnBulkDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete old inactive accounts now</value>
+    <value>A régi, inaktív fiókok törlése</value>
   </data>
   <data name="lblBulkDeleteResource1.Text" xml:space="preserve">
-    <value>Delete all &lt;b&gt;inactive&lt;/b&gt; accounts older than &lt;b&gt;1 month&lt;/b&gt;.&lt;br /&gt;Please backup your data before proceeding.</value>
+    <value>Minden &lt;b&gt;inaktív&lt;/b&gt; fiókot töröl, ami régebbi, mint &lt;b&gt;1 hónap&lt;/b&gt;.&lt;br /&gt;Készíts biztonsági mentést előtte!</value>
   </data>
   <data name="lblBulkDeleteTitleResource1.Text" xml:space="preserve">
-    <value>Bulk Delete</value>
+    <value>Csoportos törlés</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Mégse</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the Account list</value>
+    <value>Mégse és visszalép a fióklistához</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Account</value>
+    <value>Fiók létrehozása</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Account</value>
+    <value>Az új fiók elmentése</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Törlés</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Account</value>
+    <value>Törli a fiókot</value>
   </data>
   <data name="btnFilterResource1.AlternateText" xml:space="preserve">
     <value />
   </data>
   <data name="btnFilterResource1.ToolTip" xml:space="preserve">
-    <value>Apply Filter</value>
+    <value>Szűrés</value>
   </data>
   <data name="btnNewUserResource1.Text" xml:space="preserve">
-    <value>New User</value>
+    <value>Új felhasználó</value>
   </data>
   <data name="btnNewUserResource1.ToolTip" xml:space="preserve">
-    <value>Create a new User</value>
+    <value>Új felhasználó létrehozása</value>
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Account</value>
+    <value>Fiók mentése</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>A módosítások mentése</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Kiválaszt</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Select this Account</value>
+    <value>Kiválasztja ezt a fiókot</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Kiválaszt</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Select this Account</value>
+    <value>Kiválasztja ezt a fiókot</value>
   </data>
   <data name="chkActiveResource1.Text" xml:space="preserve">
-    <value>Active Accounts</value>
+    <value>Aktív fiókok</value>
   </data>
   <data name="chkActiveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkInactiveResource1.Text" xml:space="preserve">
-    <value>Inactive Accounts</value>
+    <value>Inaktív fiókok</value>
   </data>
   <data name="chkInactiveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkSetActiveResource1.Text" xml:space="preserve">
-    <value>Active</value>
+    <value>Aktív</value>
   </data>
   <data name="chkSetActiveResource1.ToolTip" xml:space="preserve">
-    <value>If checked, allows the user to login</value>
+    <value>Ha be van jelölve, a felhasználó be tud lépni</value>
   </data>
   <data name="cvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords must be equal</value>
+    <value>A jelszavak egyformák kell legyenek</value>
   </data>
   <data name="cvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -205,7 +205,7 @@
     <value />
   </data>
   <data name="cvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username already in use</value>
+    <value>A felhasználónév már foglalt</value>
   </data>
   <data name="cvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -214,16 +214,16 @@
     <value />
   </data>
   <data name="lblAccountsResource1.Text" xml:space="preserve">
-    <value>User Accounts</value>
+    <value>Felhasználói fiókok</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
-    <value>Display Name</value>
+    <value>Megjelenő név</value>
   </data>
   <data name="lblDisplayNameResource2.Text" xml:space="preserve">
-    <value>Display Name</value>
+    <value>Megjelenő név</value>
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Account Details</value>
+    <value>A fiók részletei</value>
   </data>
   <data name="lblEmailResource1.Text" xml:space="preserve">
     <value>Email</value>
@@ -232,37 +232,37 @@
     <value>Email</value>
   </data>
   <data name="lblFilterResource1.Text" xml:space="preserve">
-    <value>Display: </value>
+    <value>Megjelenítés: </value>
   </data>
   <data name="lblGlobalPermissionsResource1.Text" xml:space="preserve">
-    <value>Global Permissions</value>
+    <value>Globális jogosultságok</value>
   </data>
   <data name="lblMemberOfResource1.Text" xml:space="preserve">
-    <value>Member of</value>
+    <value>Tagja</value>
   </data>
   <data name="lblMembershipResource1.Text" xml:space="preserve">
-    <value>Group Membership</value>
+    <value>Csoporttagság</value>
   </data>
   <data name="lblPassword1Resource1.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>Jelszó</value>
   </data>
   <data name="lblPassword2Resource1.Text" xml:space="preserve">
-    <value>Password (repeat)</value>
+    <value>Jelszó ismét</value>
   </data>
   <data name="lblPasswordInfoResource1.Text" xml:space="preserve">
-    <value>Leave Password fields blank to keep the current password.</value>
+    <value>Hagyd üresen a jelenlegi jelszó megtartásához.</value>
   </data>
   <data name="lblPasswordInfoResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Kiszolgáló</value>
   </data>
   <data name="lblProviderResource2.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Kiszolgáló</value>
   </data>
   <data name="lblRegDateTimeResource1.Text" xml:space="preserve">
-    <value>Reg. Date/Time</value>
+    <value>Reg. ideje</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -271,16 +271,16 @@
     <value />
   </data>
   <data name="lblUsernameResource1.Text" xml:space="preserve">
-    <value>Username</value>
+    <value>Felhasználónév</value>
   </data>
   <data name="lblUsernameResource2.Text" xml:space="preserve">
-    <value>Username</value>
+    <value>Felhasználónév</value>
   </data>
   <data name="lstGroupsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Adminisztráció</value>
   </data>
   <data name="pnlAccountDetailsResource1.GroupingText" xml:space="preserve">
     <value />
@@ -301,7 +301,7 @@
     <value />
   </data>
   <data name="revDisplayNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>Érvénytelen megjelenítési név</value>
   </data>
   <data name="revDisplayNameResource1.Text" xml:space="preserve">
     <value />
@@ -310,7 +310,7 @@
     <value />
   </data>
   <data name="revEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Email</value>
+    <value>Érvénytelen Email</value>
   </data>
   <data name="revEmailResource1.Text" xml:space="preserve">
     <value />
@@ -319,7 +319,7 @@
     <value />
   </data>
   <data name="revPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Érvénytelen jelszó</value>
   </data>
   <data name="revPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -328,7 +328,7 @@
     <value />
   </data>
   <data name="revUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Username</value>
+    <value>Érvénytelen felhasználónév</value>
   </data>
   <data name="revUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -337,7 +337,7 @@
     <value />
   </data>
   <data name="rfvEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>Az Email kötelező</value>
   </data>
   <data name="rfvEmailResource1.Text" xml:space="preserve">
     <value />
@@ -346,7 +346,7 @@
     <value />
   </data>
   <data name="rfvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>A jelszó kötelező</value>
   </data>
   <data name="rfvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -355,7 +355,7 @@
     <value />
   </data>
   <data name="rfvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username is required</value>
+    <value>A felhasználónév kötelező</value>
   </data>
   <data name="rfvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -379,7 +379,7 @@
     <value />
   </data>
   <data name="txtFilterResource1.ToolTip" xml:space="preserve">
-    <value>Filter Accounts by Username</value>
+    <value>Fiókok szűrése felhasználónévre</value>
   </data>
   <data name="txtPassword1Resource1.Text" xml:space="preserve">
     <value />

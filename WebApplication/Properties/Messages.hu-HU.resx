@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,119 +118,119 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AutoUpdateAvailable" xml:space="preserve">
-    <value>Auto-update available</value>
+    <value>Az automatikus frissítés elérhető</value>
   </data>
   <data name="NAccountsDeleted" xml:space="preserve">
-    <value>$ accounts deleted</value>
-    <comment>As in "3 accounts deleted"</comment>
+    <value>$ fiók törölve</value>
+    <comment>Mint "3 fiók törölve"</comment>
   </data>
   <data name="Formatted" xml:space="preserve">
-    <value>formatted</value>
+    <value>formázva</value>
   </data>
   <data name="NoPagesToMigrate" xml:space="preserve">
-    <value>No pages to migrate</value>
+    <value>Nincs migrálható lap</value>
   </data>
   <data name="NoProvidersToUpdate" xml:space="preserve">
-    <value>No Providers to update</value>
+    <value>Nincs frissíthető kiszolgáló</value>
   </data>
   <data name="ProvidersUpdated" xml:space="preserve">
-    <value>Providers updated, please restart the wiki (Admin Home tab)</value>
+    <value>Kiszolgálók frissítve, indítsd újra a wikit!</value>
   </data>
   <data name="BulkMigrationCompleted" xml:space="preserve">
-    <value>Bulk migration completed</value>
+    <value>A csoportos migrálás kész</value>
   </data>
   <data name="BulkMigrationCompletedWithErrors" xml:space="preserve">
-    <value>Bulk migration completed with errors, check the log</value>
+    <value>A csoportos migrálás kész, de hibák voltak. Nézd meg a rendszernaplót!</value>
   </data>
   <data name="BulkRebindCompleted" xml:space="preserve">
-    <value>Bulk rebind completed</value>
+    <value>Csoportos átlinkelés kész</value>
   </data>
   <data name="NoCategories" xml:space="preserve">
-    <value>No Categories selected</value>
+    <value>Nincs kiválasztott kategória</value>
   </data>
   <data name="NoPages" xml:space="preserve">
-    <value>No Pages to rebind</value>
+    <value>Nincs átlinkelhető lap</value>
   </data>
   <data name="InvalidFileName" xml:space="preserve">
-    <value>Invalid file name</value>
+    <value>Érvénytelen fájlnév</value>
   </data>
   <data name="OrderedList" xml:space="preserve">
-    <value>Ordered List</value>
+    <value>Rendezett lista</value>
   </data>
   <data name="UnorderedList" xml:space="preserve">
-    <value>Unordered List</value>
+    <value>Rendezetlen lista</value>
   </data>
   <data name="LinkToThisSection" xml:space="preserve">
-    <value>Link to this Section</value>
+    <value>Ide mutató link</value>
   </data>
   <data name="NoBr" xml:space="preserve">
     <value>NoBR tag</value>
   </data>
   <data name="SelectAndDelete" xml:space="preserve">
-    <value>Select and delete</value>
+    <value>Kiválaszt és töröl</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Hiba</value>
   </data>
   <data name="NewVersion" xml:space="preserve">
-    <value>New version:</value>
+    <value>Új verzió:</value>
   </data>
   <data name="UpToDate" xml:space="preserve">
-    <value>Up-to-date</value>
+    <value>Friss</value>
   </data>
   <data name="CouldNotMigratePage" xml:space="preserve">
-    <value>Could not migrate Page</value>
+    <value>A lap nem lett migrálva</value>
   </data>
   <data name="DiscussionsRss" xml:space="preserve">
-    <value>Discussions RSS</value>
+    <value>Megbeszélések RSS</value>
   </data>
   <data name="RssForThisCategoryDiscussion" xml:space="preserve">
-    <value>Update notifications for this Category's Discussions (RSS 2.0)</value>
+    <value>Frissítési értesítések e kategória megbeszéléseihez (RSS 2.0)</value>
   </data>
   <data name="CodeEscaped" xml:space="preserve">
-    <value>Escaped Block Code</value>
+    <value>Escape-elt kódblokk</value>
   </data>
   <data name="HR" xml:space="preserve">
-    <value>Horizontal Ruler</value>
+    <value>Vízszintes vonal</value>
   </data>
   <data name="Snippets" xml:space="preserve">
-    <value>Snippets</value>
+    <value>Snippetek</value>
   </data>
   <data name="Symbols" xml:space="preserve">
-    <value>Special Symbols</value>
+    <value>Speciális szimbólumok</value>
   </data>
   <data name="WrapperBox" xml:space="preserve">
-    <value>Wrapper Box</value>
+    <value>Befoglaló doboz</value>
   </data>
   <data name="UserTitle" xml:space="preserve">
-    <value>User's Details</value>
+    <value>Felhasználói részletek</value>
   </data>
   <data name="UserDeletedMessage" xml:space="preserve">
-    <value>##USER## deleted a message on the discussion of ##PAGE##.</value>
+    <value>##USER## törölt egy megbeszélés üzenetet ezen a lapon: ##PAGE##.</value>
   </data>
   <data name="UserDeletedPage" xml:space="preserve">
-    <value>##USER## deleted the page ##PAGE##.</value>
+    <value>##USER## törölte ezt a lapot: ##PAGE##.</value>
   </data>
   <data name="UserEditedMessage" xml:space="preserve">
-    <value>##USER## edited a message on the discussion of ##PAGE##.</value>
+    <value>##USER## módosított egy megbeszélés üzenetet ezen a lapon: ##PAGE##.</value>
   </data>
   <data name="UserPostedMessage" xml:space="preserve">
-    <value>##USER## posted a message on the discussion of ##PAGE##.</value>
+    <value>##USER## írt egy megbeszélés üzenetet ezen a lapon: ##PAGE##.</value>
   </data>
   <data name="UserRenamedPage" xml:space="preserve">
-    <value>##USER## renamed the page ##PAGE##.</value>
+    <value>##USER## átnevezte ezt a lapot: ##PAGE##.</value>
   </data>
   <data name="UserRolledBackPage" xml:space="preserve">
-    <value>##USER## rolled back the page ##PAGE##.</value>
+    <value>##USER## visszaállította ezt a lapot: ##PAGE##.</value>
   </data>
   <data name="UserUpdatedPage" xml:space="preserve">
-    <value>##USER## updated the page ##PAGE##.</value>
+    <value>##USER## frissítette ezt a lapot: ##PAGE##.</value>
   </data>
   <data name="CouldNotSaveDisplayName" xml:space="preserve">
-    <value>Could not save Display Name</value>
+    <value>A megjelenítési név nem lett mentve</value>
   </data>
   <data name="DisplayNameSaved" xml:space="preserve">
-    <value>Display Name saved</value>
+    <value>A megjelenítési név mentve</value>
   </data>
   <data name="CreateThisPage" xml:space="preserve">
     <value>E lap létrehozása</value>
@@ -299,10 +299,10 @@
     <value>Létrehozva</value>
   </data>
   <data name="ModifiedBy" xml:space="preserve">
-    <value>Módosította:</value>
+    <value>Módosította</value>
   </data>
   <data name="ModifiedOn" xml:space="preserve">
-    <value>Módosítva:</value>
+    <value>Módosítva</value>
   </data>
   <data name="AMessageWasSentCheckInbox" xml:space="preserve">
     <value>Üzenetet küldtünk az email címedre.</value>
@@ -761,7 +761,7 @@
     <value>Nincs snippet</value>
   </data>
   <data name="LinkTitleOptional" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>Link neve (nem kötelező)</value>
   </data>
   <data name="UpLevel" xml:space="preserve">
     <value>Egy szinttel feljebb</value>
@@ -785,7 +785,7 @@
     <value>Korábban e héten</value>
   </data>
   <data name="LastMonth" xml:space="preserve">
-    <value>Last month</value>
+    <value>Múlt hónap</value>
   </data>
   <data name="Older" xml:space="preserve">
     <value>Régebbi</value>
@@ -797,7 +797,7 @@
     <value>Tegnap</value>
   </data>
   <data name="LoginNoticeFile" xml:space="preserve">
-    <value>Login Notice File</value>
+    <value>Login Notice fájl</value>
   </data>
   <data name="MayBeInaccurate" xml:space="preserve">
     <value>Lehet, hogy pontatlan</value>
@@ -1252,7 +1252,7 @@
   </data>
   <data name="NC" xml:space="preserve">
     <value>n/c</value>
-    <comment>It means 'not categorized'</comment>
+    <comment>Jelentése 'nincs kategóriája'</comment>
   </data>
   <data name="NewerRevision" xml:space="preserve">
     <value>Újabb verzió</value>

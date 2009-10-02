@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDiscussionMessagesInfoResource2.Text" xml:space="preserve">
-    <value>Receive an email notification whenever a &lt;b&gt;message&lt;/b&gt; is posted for a page in the following namespaces (only discussions you have access to):</value>
+    <value>Email értesítő kérése, amikor egy &lt;b&gt;üzenetet&lt;/b&gt; küldenek az alábbi névterek lapjaira:</value>
   </data>
   <data name="lblPageChangesInfoResource2.Text" xml:space="preserve">
-    <value>Receive an email notification whenever a &lt;b&gt;page&lt;/b&gt; in the following namespaces is updated (only pages you have access to):</value>
+    <value>Email értesítő kérése, amikor egy &lt;b&gt;lapot&lt;/b&gt; frissítenek az alábbi névtérben:</value>
   </data>
   <data name="btnSaveDisplayNameResource1.Text" xml:space="preserve">
     <value>Save Display Name</value>
