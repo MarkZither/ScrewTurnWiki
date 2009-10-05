@@ -156,8 +156,9 @@ namespace ScrewTurn.Wiki {
 		public static string PublicDirectoryName {
 			get {
 				string dir = WebConfigurationManager.AppSettings["PublicDirectory"];
+				if(string.IsNullOrEmpty(dir)) throw new InvalidConfigurationException("PublicDirectory cannot be empty or null");
 				dir = dir.Trim('\\', '/'); // Remove '/' and '\' from head and tail
-				if(dir == null || dir.Length == 0) throw new Exception("PublicDirectory cannot be null.");
+				if(string.IsNullOrEmpty(dir)) throw new InvalidConfigurationException("PublicDirectory cannot be empty or null");
 				else return dir;
 			}
 		}
