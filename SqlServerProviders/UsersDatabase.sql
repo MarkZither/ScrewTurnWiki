@@ -6,7 +6,7 @@ create table [User] (
 	[Email] varchar(100) not null,
 	[Active] bit not null,
 	[DateTime] datetime not null,
-	constraint [PK_User] primary key clustered ([USername])
+	constraint [PK_User] primary key clustered ([Username])
 )
 
 create table [UserGroup] (
