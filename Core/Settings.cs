@@ -697,6 +697,18 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether to display section anchors.
+		/// </summary>
+		public static bool EnableSectionAnchors {
+			get {
+				return GetBool(Provider.GetSetting("EnableSectionAnchors"), true);
+			}
+			set {
+				Provider.SetSetting("EnableSectionAnchors", PrintBool(value));
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets a value indicating whether to disable the Breadcrumbs Trail.
 		/// </summary>
 		public static bool DisableBreadcrumbsTrail {

@@ -351,6 +351,12 @@
 		</div>
 		
 		<div class="featurecontainer">
+			<anthem:CheckBox ID="chkEnableSectionAnchors" runat="server" 
+				Text="Display anchors for pages' sections" 
+				meta:resourcekey="chkEnableSectionAnchorsResource1" />
+		</div>
+		
+		<div class="featurecontainer">
 			<anthem:CheckBox ID="chkEnablePageToolbar" runat="server" 
 				Text="Enable Page Toolbar (Edit this Page, History, Admin)" 
 				meta:resourcekey="chkEnablePageToolbarResource1" />

@@ -1071,4 +1071,10 @@
   <data name="lblIpHostFilterResource1.Text" xml:space="preserve">
     <value>IP Filter for allowed editing (seperate with commas, Use '*' for wild cards, Example: 192.168.1.*)</value>
   </data>
+  <data name="chkEnableSectionAnchorsResource1.Text" xml:space="preserve">
+    <value>Display anchors for pages' sections</value>
+  </data>
+  <data name="chkEnableSectionAnchorsResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
 </root>

@@ -165,6 +165,7 @@ namespace ScrewTurn.Wiki {
 
 			chkEnableDoubleClickEditing.Checked = Settings.EnableDoubleClickEditing;
 			chkEnableSectionEditing.Checked = Settings.EnableSectionEditing;
+			chkEnableSectionAnchors.Checked = Settings.EnableSectionAnchors;
 			chkEnablePageToolbar.Checked = Settings.EnablePageToolbar;
 			chkEnableViewPageCode.Checked = Settings.EnableViewPageCodeFeature;
 			chkEnablePageInfoDiv.Checked = Settings.EnablePageInfoDiv;
@@ -453,6 +454,7 @@ namespace ScrewTurn.Wiki {
 			Settings.RssFeedsMode = (RssFeedsMode)Enum.Parse(typeof(RssFeedsMode), lstRssFeedsMode.SelectedValue);
 			Settings.EnableDoubleClickEditing = chkEnableDoubleClickEditing.Checked;
 			Settings.EnableSectionEditing = chkEnableSectionEditing.Checked;
+			Settings.EnableSectionAnchors = chkEnableSectionAnchors.Checked;
 			Settings.EnablePageToolbar = chkEnablePageToolbar.Checked;
 			Settings.EnableViewPageCodeFeature = chkEnableViewPageCode.Checked;
 			Settings.EnablePageInfoDiv = chkEnablePageInfoDiv.Checked;

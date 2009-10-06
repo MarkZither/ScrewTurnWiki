@@ -590,6 +590,15 @@ namespace ScrewTurn.Wiki {
         protected global::Anthem.CheckBox chkEnableSectionEditing;
         
         /// <summary>
+        /// chkEnableSectionAnchors control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Anthem.CheckBox chkEnableSectionAnchors;
+        
+        /// <summary>
         /// chkEnablePageToolbar control.
         /// </summary>
         /// <remarks>
