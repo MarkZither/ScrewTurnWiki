@@ -1031,6 +1031,15 @@ namespace ScrewTurn.Wiki {
         protected global::Anthem.TextBox txtIpHostFilter;
         
         /// <summary>
+        /// lblAdvancedConfig control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblAdvancedConfig;
+        
+        /// <summary>
         /// lblUsernameRegEx control.
         /// </summary>
         /// <remarks>
@@ -1083,15 +1092,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Anthem.CustomValidator cvPasswordRegEx;
-        
-        /// <summary>
-        /// lblAdvancedConfig control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblAdvancedConfig;
         
         /// <summary>
         /// chkEnableAutomaticUpdateChecks control.

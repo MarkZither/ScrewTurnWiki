@@ -586,7 +586,13 @@
 		
 	</div>
 	
-	<div id="ConfigAdvancedDiv">
+	<div id="ConfigAdvancedDiv">	
+		<div class="featurecontainer">
+			<h3 class="separator"><asp:Literal ID="lblAdvancedConfig" runat="server" 
+					Text="Advanced Configuration" EnableViewState="False" 
+					meta:resourcekey="lblAdvancedConfigResource1" /></h3>
+		</div>
+		
 		<div class="featurecontainer">
 		    <asp:Literal ID="lblUsernameRegEx" Text="Regular Expression for validating username" runat="server" EnableViewState="false"
 		    meta:resourcekey="lblUsernameRegExResource1" /><br />
@@ -607,12 +613,6 @@
 				ControlToValidate="txtPasswordRegEx" ErrorMessage="Invalid Regular Expression"
 				OnServerValidate="cvPasswordRegEx_ServerValidate" AutoUpdateAfterCallBack="True" 
 				meta:resourcekey="cvPasswordRegExResource1" UpdateAfterCallBack="True" />
-		</div>
-	
-		<div class="featurecontainer">
-			<h3 class="separator"><asp:Literal ID="lblAdvancedConfig" runat="server" 
-					Text="Advanced Configuration" EnableViewState="False" 
-					meta:resourcekey="lblAdvancedConfigResource1" /></h3>
 		</div>
 		
 		<div class="featurecontainer">
