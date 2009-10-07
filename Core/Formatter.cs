@@ -151,11 +151,11 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Strip out all comments
-			match = CommentRegex.Match(sb.ToString());
-			while(match.Success) {
-				sb.Remove(match.Index, match.Length);
-				match = CommentRegex.Match(sb.ToString(), match.Index + 1);
-			}
+			//match = CommentRegex.Match(sb.ToString());
+			//while(match.Success) {
+			//	sb.Remove(match.Index, match.Length);
+			//	match = CommentRegex.Match(sb.ToString(), match.Index + 1);
+			//}
 
 			// Remove empty NoWiki and NoBr tags
 			sb.Replace("<nowiki></nowiki>", "");
