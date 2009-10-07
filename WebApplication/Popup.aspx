@@ -53,7 +53,7 @@
 		}
 		
 		function ProcessExternalLink() {
-			var url = GetValue("txtLinkUrl");e
+			var url = GetValue("txtLinkUrl");
 			if(url == "") return false;
 			var title = GetValue("txtLinkTitle");
 			var c = IsChecked("chkLinkNW") ? "^" : "";
