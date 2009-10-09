@@ -825,6 +825,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.Where(query, "Namespace", "Name", WhereOperator.NotEquals, "Empty1");
 			query = queryBuilder.AndWhere(query, "Namespace", "DefaultPage", WhereOperator.IsNull, null, true, false);
 			query = queryBuilder.OrWhere(query, "Page", "Namespace", WhereOperator.NotEquals, "Empty2", false, true);
+			query = queryBuilder.OrderBy(query, new[] { "Namespace_Name" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(2);
 			parameters.Add(new Parameter(ParameterType.String, "Empty1", ""));
@@ -1442,6 +1443,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				new string[] { "Name", "Namespace" }, new string[] { "Page" });
 			query = queryBuilder.Where(query, "CategoryBinding", "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "CategoryBinding", "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.OrderBy(query, new[] { "Category_Name" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(2);
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
@@ -1918,6 +1920,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.SelectFrom("Page");
 			query = queryBuilder.Where(query, "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspaceName));
@@ -1958,6 +1961,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspaceName));
+			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
 
@@ -2004,10 +2008,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.SelectFrom("Page");
-			query = queryBuilder.SelectFrom("Page", "CategoryBinding", "Name", "Page", Join.LeftJoin);
+			string query = queryBuilder.SelectFrom("Page", "CategoryBinding", "Name", "Page", Join.LeftJoin);
 			query = queryBuilder.Where(query, "CategoryBinding", "Category", WhereOperator.IsNull, null);
 			query = queryBuilder.AndWhere(query, "Page", "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspaceName));
@@ -2237,6 +2241,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Revision", WhereOperator.GreaterThanOrEqualTo, "Revision");
+			query = queryBuilder.OrderBy(query, new[] { "Revision" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(3);
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
@@ -2283,6 +2288,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Revision", WhereOperator.GreaterThanOrEqualTo, "Revision");
+			query = queryBuilder.OrderBy(query, new[] { "Revision" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(3);
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
@@ -3088,7 +3094,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string query = queryBuilder.SelectFrom("Message", new string[] { "Id", "Parent", "Username", "Subject", "DateTime", "Body" });
 			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
-			query = queryBuilder.OrderBy(query, new string[] { "DateTime" }, new Ordering[] { Ordering.Asc });
+			query = queryBuilder.OrderBy(query, new string[] { "DateTime", "Id" }, new Ordering[] { Ordering.Asc, Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(2);
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
@@ -3164,7 +3170,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string query = queryBuilder.SelectFrom("Message", new string[] { "Id", "Parent", "Username", "Subject", "DateTime", "Body" });
 			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
-			query = queryBuilder.OrderBy(query, new string[] { "DateTime" }, new Ordering[] { Ordering.Asc });
+			query = queryBuilder.OrderBy(query, new string[] { "DateTime", "Id" }, new Ordering[] { Ordering.Asc, Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(2);
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
@@ -3996,7 +4002,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public Snippet[] GetSnippets() {
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).SelectFrom("Snippet");
+			QueryBuilder queryBuilder = QueryBuilder.NewQuery(builder);
+			string query = queryBuilder.SelectFrom("Snippet");
+			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
 
@@ -4194,7 +4202,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public ContentTemplate[] GetContentTemplates() {
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).SelectFrom("ContentTemplate");
+			QueryBuilder queryBuilder = QueryBuilder.NewQuery(builder);
+			string query = queryBuilder.SelectFrom("ContentTemplate");
+			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
 

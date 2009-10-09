@@ -157,6 +157,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public IDictionary<string, string> GetAllSettings() {
 			ICommandBuilder builder = GetCommandBuilder();
 
+			// Sorting order is not relevant
 			string query = QueryBuilder.NewQuery(builder).SelectFrom("Setting");
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
@@ -705,6 +706,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public string[] ListPluginAssemblies() {
 			ICommandBuilder builder = GetCommandBuilder();
 
+			// Sort order is not relevant
 			string query = QueryBuilder.NewQuery(builder).SelectFrom("PluginAssembly", new string[] { "Name" });
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
@@ -1095,6 +1097,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private AclEntry[] LoadDataInternal() {
 			ICommandBuilder builder = GetCommandBuilder();
 
+			// Sort order is not relevant
 			string query = QueryBuilder.NewQuery(builder).SelectFrom("AclEntry");
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
@@ -1257,6 +1260,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.SelectFrom("OutgoingLink", new string[] { "Destination" });
 			query = queryBuilder.Where(query, "Source", WhereOperator.Equals, "Source");
+			query = queryBuilder.OrderBy(query, new[] { "Destination" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Source", page));

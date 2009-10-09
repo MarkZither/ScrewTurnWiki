@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 	/// </summary>
 	public class SqlServerFilesStorageProvider : SqlFilesStorageProviderBase {
 
-		private readonly ComponentInformation info = new ComponentInformation("SQL Server Files Storage Provider", "ScrewTurn Software", "3.0.0.180", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Files.txt");
+		private readonly ComponentInformation info = new ComponentInformation("SQL Server Files Storage Provider", "ScrewTurn Software", "3.0.0.341", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Files.txt");
 
 		private readonly SqlServerCommandBuilder commandBuilder = new SqlServerCommandBuilder();
 

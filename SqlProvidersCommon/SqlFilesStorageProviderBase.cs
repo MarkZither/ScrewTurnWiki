@@ -171,6 +171,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.SelectFrom("File", new string[] { "Name" });
 			query = queryBuilder.Where(query, "Directory", WhereOperator.Equals, "Directory");
+			query = queryBuilder.OrderBy(query, new [] { "Name" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
@@ -213,6 +214,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.SelectFrom("Directory", new string[] { "FullPath" });
 			query = queryBuilder.Where(query, "Parent", WhereOperator.Equals, "Parent");
+			query = queryBuilder.OrderBy(query, new[] { "FullPath" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Parent", directory));
@@ -258,6 +260,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Parent", directory));
+			query = queryBuilder.OrderBy(query, new[] { "FullPath" }, new[] { Ordering.Asc });
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
@@ -850,7 +853,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Attachment", new string[] { "Page" });
-			query = queryBuilder.GroupBy(query, new string[] { "Page" });
+			query = queryBuilder.GroupBy(query, new[] { "Page" });
+			query = queryBuilder.OrderBy(query, new[] { "Page" }, new[] { Ordering.Asc });
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
 
@@ -882,6 +886,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.SelectFrom("Attachment", new string[] { "Name" });
 			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
@@ -919,6 +924,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
 

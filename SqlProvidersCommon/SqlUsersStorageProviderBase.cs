@@ -35,10 +35,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public UserInfo[] GetUsers() {
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).SelectFrom(
+			QueryBuilder queryBuilder = QueryBuilder.NewQuery(builder);
+			string query = queryBuilder.SelectFrom(
 				"User", "UserGroupMembership", "Username", "User", Join.LeftJoin,
 				new string[] { "Username", "DisplayName", "Email", "Active", "DateTime" },
 				new string[] { "UserGroup" });
+			query = queryBuilder.OrderBy(query, new[] { "User_Username" }, new[] { Ordering.Asc });
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
 
@@ -150,6 +152,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.SelectFrom("UserGroupMembership", new string[] { "UserGroup" });
 			query = queryBuilder.Where(query, "User", WhereOperator.Equals, "Username");
+			queryBuilder.OrderBy(query, new[] { "UserGroup_Name" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
@@ -184,6 +187,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.SelectFrom("UserGroupMembership", new string[] { "UserGroup" });
 			query = queryBuilder.Where(query, "User", WhereOperator.Equals, "Username");
+			queryBuilder.OrderBy(query, new[] { "UserGroup_Name" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
@@ -300,9 +304,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public UserGroup[] GetUserGroups() {
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).SelectFrom(
+			QueryBuilder queryBuilder = QueryBuilder.NewQuery(builder);
+			string query = queryBuilder.SelectFrom(
 				"UserGroup", "UserGroupMembership", "Name", "UserGroup", Join.LeftJoin,
 				new string[] { "Name", "Description" }, new string[] { "User" });
+			query = queryBuilder.OrderBy(query, new[] { "UserGroup_Name", "UserGroupMembership_User" }, new[] { Ordering.Asc, Ordering.Asc });
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
 
@@ -395,6 +401,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.SelectFrom("UserGroupMembership", new string[] { "User" });
 			query = queryBuilder.Where(query, "UserGroup", WhereOperator.Equals, "UserGroup");
+			query = queryBuilder.OrderBy(query, new[] { "User" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "UserGroup", group));
@@ -429,6 +436,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.SelectFrom("UserGroupMembership", new string[] { "User" });
 			query = queryBuilder.Where(query, "UserGroup", WhereOperator.Equals, "UserGroup");
+			query = queryBuilder.OrderBy(query, new[] { "User" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "UserGroup", group));
@@ -1020,6 +1028,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
+			// Sorting order is not relevant
 			string query = queryBuilder.SelectFrom("UserData", new string[] { "Key", "Data" });
 			query = queryBuilder.Where(query, "User", WhereOperator.Equals, "Username");
 
@@ -1062,6 +1071,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				new string[] { "Username", "DisplayName", "Email", "Active", "DateTime" }, new string[] { "Data" },
 				"UserGroupMembership", "User", Join.LeftJoin, new string[] { "UserGroup" });
 			query = queryBuilder.Where(query, "UserData", "Key", WhereOperator.Equals, "Key");
+			query = queryBuilder.OrderBy(query, new[] { "User_Username" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(1);
 			parameters.Add(new Parameter(ParameterType.String, "Key", key));
