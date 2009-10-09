@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginPack", "PluginPack\Pl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginPack-Tests", "PluginPack-Tests\PluginPack-Tests.csproj", "{C657F6C0-05E5-4873-97A4-B91ED1F51D85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActiveDirectoryProvider", "ActiveDirectoryProvider\ActiveDirectoryProvider.csproj", "{C7169CA4-9893-4361-96A8-09F87FCF5E8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -211,6 +213,16 @@ Global
 		{C657F6C0-05E5-4873-97A4-B91ED1F51D85}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C657F6C0-05E5-4873-97A4-B91ED1F51D85}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C657F6C0-05E5-4873-97A4-B91ED1F51D85}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Release|.NET.ActiveCfg = Release|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C7169CA4-9893-4361-96A8-09F87FCF5E8C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

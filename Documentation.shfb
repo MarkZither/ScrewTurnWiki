@@ -1,5 +1,6 @@
 ﻿<project schemaVersion="1.6.0.7">
     <assemblies>
+        <assembly assemblyPath=".\ActiveDirectoryProvider\bin\Release\ActiveDirectoryProvider.dll" xmlCommentsPath=".\ActiveDirectoryProvider\bin\Release\ActiveDirectoryProvider.xml" commentsOnly="False" />
         <assembly assemblyPath=".\PluginPack\bin\Release\PluginPack.dll" xmlCommentsPath=".\PluginPack\bin\Release\PluginPack.xml" commentsOnly="False" />
         <assembly assemblyPath=".\AclEngine\bin\Release\ScrewTurn.Wiki.AclEngine.dll" xmlCommentsPath=".\AclEngine\bin\Release\ScrewTurn.Wiki.AclEngine.xml" commentsOnly="False" />
         <assembly assemblyPath=".\Core\bin\Release\ScrewTurn.Wiki.Core.dll" xmlCommentsPath=".\Core\bin\Release\ScrewTurn.Wiki.Core.xml" commentsOnly="False" />
@@ -15,6 +16,7 @@
         <namespaceSummaryItem name="ScrewTurn.Wiki.ImportWiki" isDocumented="True">Namespace containing objects that are used to import data from other wiki engines.</namespaceSummaryItem>
         <namespaceSummaryItem name="ScrewTurn.Wiki.PluginFramework" isDocumented="True">Namespace containing base types used to build the ScrewTurn Wiki engine core and plugins.</namespaceSummaryItem>
         <namespaceSummaryItem name="ScrewTurn.Wiki.PluginPack" isDocumented="True" />
+        <namespaceSummaryItem name="ScrewTurn.Wiki.Plugins.ActiveDirectory" isDocumented="True">Namespace containing Active Directory providers.</namespaceSummaryItem>
         <namespaceSummaryItem name="ScrewTurn.Wiki.Plugins.PluginPack" isDocumented="True">Namespace containing generic helper providers.</namespaceSummaryItem>
         <namespaceSummaryItem name="ScrewTurn.Wiki.Plugins.SqlCommon" isDocumented="True">Namespace containing base types used to build the SQL-based storage providers.</namespaceSummaryItem>
         <namespaceSummaryItem name="ScrewTurn.Wiki.Plugins.SqlServer" isDocumented="True">Namespace containing SQL Server storage providers.</namespaceSummaryItem>
