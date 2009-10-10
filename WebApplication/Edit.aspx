@@ -11,13 +11,21 @@
 	
 		var submitted = false;
 		function __UnloadPage(e) {
-			if (!submitted) {
-				e.returnValue = " ";
+		    if (!submitted) {
+		        if (document.getElementById('EditorDiv').getElementsByTagName('textarea')[0].value.length != 0) {
+				    e.returnValue = " ";
+				}
 			}
 		}
 
 		function __SetSubmitted() {
 			submitted = true;
+        }
+		
+		function __RequestConfirmIfNotEmpty() {
+		    if (document.getElementById('EditorDiv').getElementsByTagName('textarea')[0].value.length != 0) {
+		      return(__RequestConfirm());
+		    }
 		}
 		
 	// -->
@@ -91,7 +99,7 @@
 			Display="Dynamic" ControlToValidate="txtTitle" ValidationGroup="nametitle" meta:resourcekey="rfvTitleResource1" />
 	</div>
 	
-	<div id="TemplatesDiv">
+	<div id="TemplatesDiv" runat="server">
 		<small>
 			<anthem:LinkButton ID="btnTemplates" runat="server" Text="Content Templates..." OnClick="btnTemplates_Click" 
 				AutoUpdateAfterCallBack="True" meta:resourcekey="btnTemplatesResource1" UpdateAfterCallBack="True" />
@@ -108,7 +116,7 @@
 				</div>
 				<small>
 					<anthem:LinkButton ID="btnUseTemplate" runat="server" Text="Use Template" ToolTip="Use this Template (replace current content)"
-						CausesValidation="False" AutoUpdateAfterCallBack="True" Visible="False" PreCallBackFunction="__RequestConfirm" OnClick="btnUseTemplate_Click" 
+						CausesValidation="False" AutoUpdateAfterCallBack="True" Visible="False" PreCallBackFunction="__RequestConfirmIfNotEmpty" OnClick="btnUseTemplate_Click" 
 						meta:resourcekey="btnUseTemplateResource1" UpdateAfterCallBack="True" />
 					&bull;
 					<anthem:LinkButton ID="btnCancelTemplate" runat="server" Text="Cancel" ToolTip="Close the Templates toolbar"

@@ -216,9 +216,16 @@ namespace ScrewTurn.Wiki {
 			// Check and manage editing collisions
 			ManageEditingCollisions();
 
-			// Display draft status
 			if(!Page.IsPostBack) {
+
+				// Hide templates selection if there aren't any
+				if(Templates.GetTemplates().Count == 0)	{
+					TemplatesDiv.Visible = false;
+				}
+
+				// Display draft status
 				ManageDraft();
+
 			}
 
 			// Setup session refresh iframe
@@ -714,6 +721,9 @@ namespace ScrewTurn.Wiki {
 			foreach(ContentTemplate temp in Templates.GetTemplates()) {
 				lstTemplates.Items.Add(new ListItem(temp.Name, temp.Name));
 			}
+			// Hide select button and preview text because the user hasn't selected a template yet
+			btnUseTemplate.Visible = false;
+			lblTemplatePreview.Text = "";
 		}
 
 		protected void lstTemplates_SelectedIndexChanged(object sender, EventArgs e) {
@@ -734,6 +744,12 @@ namespace ScrewTurn.Wiki {
 
 			editor.SetContent(template.Content, Settings.UseVisualEditorAsDefault);
 			btnCancelTemplate_Click(sender, e);
+			// If there's a category matching the selected template name, select it automatically
+			for (int i = 0; i < lstCategories.Items.Count; i++)	{
+				if (lstCategories.Items[i].Value.ToLower().Trim() == lstTemplates.SelectedValue.ToLower().Trim()) {
+					lstCategories.Items[i].Selected = true;
+				}
+			}
 		}
 
 		protected void btnCancelTemplate_Click(object sender, EventArgs e) {
