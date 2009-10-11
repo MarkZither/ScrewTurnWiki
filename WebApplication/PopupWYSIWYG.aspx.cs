@@ -218,7 +218,7 @@ namespace ScrewTurn.Wiki {
 				long size = chkFilesAttachments.Checked ? provider.GetPageAttachmentDetails(currentPage, f).Size : provider.GetFileDetails(f).Size;
 				TreeElement item = new TreeElement(f, f.Substring(f.LastIndexOf("/") + 1) + " (" + Tools.BytesToString(size) + ")",
 					"javascript:return SelectFile('" +
-					(chkFilesAttachments.Checked ? "(" + currentPage.FullName + ")" : "") + "', '" + f.Replace("'", "\\'") + "');");
+					(chkFilesAttachments.Checked ? "(" + Tools.UrlEncode(currentPage.FullName) + ")" : "") + "', '" + f.Replace("'", "\\\\\\'") + "');");
 				result.Add(item);
 			}
 
@@ -277,7 +277,7 @@ namespace ScrewTurn.Wiki {
 						@"&amp;Page=" + (chkImageAttachments.Checked ? Tools.UrlEncode(currentPage.FullName) : "") +
 						@""" alt=""" + name + @""" /><span class=""imageinfo"">" + f.Substring(f.LastIndexOf("/") + 1) + "</span>",
 						"javascript:return SelectImage('" +
-						(chkImageAttachments.Checked ? "(" + currentPage.FullName + ")" : "") + "', '" + f + "', '" +
+						(chkImageAttachments.Checked ? "(" + Tools.UrlEncode(currentPage.FullName) + ")" : "") + "', '" + f.Replace("'", "\\\\\\'") + "', '" +
 						(chkImageAttachments.Checked ? currentPage.FullName : "") + "');");
 					result.Add(item);
 				}

@@ -59,8 +59,8 @@
 			    if (hasProvider) name = name.replace("{UP:", "GetFile.aspx?Provider=");
 			    else name = name.replace("{UP", "GetFile.aspx?");
 			    name = name.replace("(" + page + ")", "");
-			    if (hasProvider) name = name.replace("}", "&Page=" + escape(page) + "&File=");
-			    else name = name.replace("}", "Page=" + escape(page) + "&File=");
+			    if (hasProvider) name = name.replace("}", "&Page=" + page + "&File=");
+			    else name = name.replace("}", "Page=" + page + "&File=");
 			}
 			else {
 			    if (hasProvider) {
@@ -84,6 +84,10 @@
 			var title = GetValue("txtFileTitle");
 
 			if(title == "") title = GetValue("txtFilePath");
+			title = title.replace('\'', '&#39;');
+			title = title.replace('\'', '&#39;');
+			title = title.replace('\'', '&#39;');
+			title = title.replace('\'', '&#39;');
 
 			// Sample string: <a class="internallink" [target="_blank" ]href="GetFile.aspx?Provider=PROVIDER&amp;File=FILE" title="TITLE">TITLE</a>
 			// Sample string: <a class="internallink" [target="_blank" ]href="GetFile.aspx?Provider=PROVIDER&amp;IsPageAttachment=1&amp;Page=PAGE&amp;File=FILE" title="TITLE">TITLE</a>
@@ -100,7 +104,7 @@
 		}
 		
 		function SelectFile(prov, value) {
-			SetValue("txtFilePath", "{UP" + prov + "}" + escape(value));
+			SetValue("txtFilePath", "{UP" + prov + "}" + value);
 		}
 		
 		function ProcessExternalLink() {
@@ -109,6 +113,10 @@
 			var title = GetValue("txtLinkTitle");
 
 			if(title == "") title = url;
+			title = title.replace('\'', '');
+			title = title.replace('\'', '');
+			title = title.replace('\'', '');
+			title = title.replace('\'', '');
 
 			// Sample string: <a class="externallink" href="URL" title="TITLE" target="_blank">TITLE</a>
 
@@ -132,6 +140,10 @@
 			var link = GetValue("txtImageLink");
 			if(link != "" && link.indexOf("{UP") == 0) link = ConvertWikiMarkupFileUrl(link);
 			var descr = GetValue("txtImageDescr");
+			descr = descr.replace('\'', '&#39;');
+			descr = descr.replace('\'', '&#39;');
+			descr = descr.replace('\'', '&#39;');
+			descr = descr.replace('\'', '&#39;');
 			var imageType = GetImageType();
 			
 			if(imageType == "imageleft" || imageType == "imageright") {
@@ -192,13 +204,13 @@
 		
 		function SelectImage(prov, value, page) {
 			document.getElementById("PreviewImg").src = "Thumb.aspx?Provider=" + GetValue("lstProviderImages") +
-				"&File=" + escape(value) + "&Size=Big&Info=1&Page=" + page;
+				"&File=" + value + "&Size=Big&Info=1&Page=" + page;
 			if(IsChecked("rdoImageLink")) {
-				SetValue("txtImageLink", "{UP" + prov + "}" + escape(value));
+				SetValue("txtImageLink", "{UP" + prov + "}" + value);
 				ImageLinkFromBrowser = 1;
 			}
 			else {
-				SetValue("txtImagePath", "{UP" + prov + "}" + escape(value));
+				SetValue("txtImagePath", "{UP" + prov + "}" + value);
 			}
 			return false;
 		}
