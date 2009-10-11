@@ -48,9 +48,11 @@ namespace ScrewTurn.Wiki {
 			HttpCookie cookie = HttpContext.Current.Request.Cookies[Settings.CultureCookieName];
 			if(cookie != null) {
 				string timezone = cookie["T"];
-				return int.Parse(timezone, CultureInfo.InvariantCulture);
+				int res = 0;
+				if(int.TryParse(timezone, NumberStyles.Any, CultureInfo.InvariantCulture, out res)) return res;
 			}
-			else return null;
+			
+			return null;
 		}
 
 		/// <summary>
@@ -61,10 +63,13 @@ namespace ScrewTurn.Wiki {
 			UserInfo currentUser = SessionFacade.GetCurrentUser();
 			if(currentUser != null) {
 				string timezone = Users.GetUserData(currentUser, "Timezone");
-				if(timezone != null) return int.Parse(timezone, CultureInfo.InvariantCulture);
-				else return null;
+				if(timezone != null) {
+					int res = 0;
+					if(int.TryParse(timezone, NumberStyles.Any, CultureInfo.InvariantCulture, out res)) return res;
+				}
 			}
-			else return null;
+			
+			return null;
 		}
 
 		/// <summary>
