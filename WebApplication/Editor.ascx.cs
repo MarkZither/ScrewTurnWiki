@@ -50,6 +50,17 @@ namespace ScrewTurn.Wiki {
 			else lblToolbarInit.Text = "";
 		}
 
+		#region Tabs Management
+
+		/// <summary>
+		/// Gets a value indicating whether the editor is in WikiMarkup mode.
+		/// </summary>
+		/// <returns><c>true</c> if the editor is in WikiMarkup mode, <c>false</c> otherwise.</returns>
+		public bool IsInWikiMarkup() {
+			// Quick and dirty
+			return btnWikiMarkup.CssClass == "tabbuttonactive";
+		}
+
 		/// <summary>
 		/// Selects the active tab.
 		/// </summary>
@@ -74,9 +85,14 @@ namespace ScrewTurn.Wiki {
 					break;
 			}
 			ViewState["Tab"] = index;
+
+			if(SelectedTabChanged != null) SelectedTabChanged(this, new SelectedTabChangedEventArgs());
 		}
 
-		#region Tabs Management
+		/// <summary>
+		/// Fired when the selected tab changes.
+		/// </summary>
+		public event EventHandler<SelectedTabChangedEventArgs> SelectedTabChanged;
 
 		/// <summary>
 		/// Gets or sets a value indicating wherher the Visual tab is enabled.
@@ -261,6 +277,12 @@ namespace ScrewTurn.Wiki {
 
 		#endregion
 
+	}
+
+	/// <summary>
+	/// Contains arguments for the Selected Tab Changed event.
+	/// </summary>
+	public class SelectedTabChangedEventArgs : EventArgs {
 	}
 
 }

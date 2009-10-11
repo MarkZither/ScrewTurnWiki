@@ -217,19 +217,30 @@ namespace ScrewTurn.Wiki {
 			ManageEditingCollisions();
 
 			if(!Page.IsPostBack) {
-
-				// Hide templates selection if there aren't any
-				if(Templates.GetTemplates().Count == 0)	{
-					TemplatesDiv.Visible = false;
-				}
+				ManageTemplatesDisplay();
 
 				// Display draft status
 				ManageDraft();
-
 			}
 
 			// Setup session refresh iframe
 			PrintSessionRefresh();
+		}
+
+		/// <summary>
+		/// Manages the display of the template selection controls.
+		/// </summary>
+		private void ManageTemplatesDisplay() {
+			// Hide templates selection if there aren't any or if the editor is not in WikiMarkup mode
+			if(Templates.GetTemplates().Count == 0 || !editor.IsInWikiMarkup()) {
+				btnTemplates.Visible = false;
+				pnlTemplates.Visible = false;
+			}
+			else btnTemplates.Visible = true;
+		}
+
+		protected void editor_SelectedTabChanged(object sender, SelectedTabChangedEventArgs e) {
+			ManageTemplatesDisplay();
 		}
 
 		/// <summary>

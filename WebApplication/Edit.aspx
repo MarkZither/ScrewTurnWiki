@@ -100,13 +100,10 @@
 	</div>
 	
 	<div id="TemplatesDiv" runat="server">
-		<small>
-			<anthem:LinkButton ID="btnTemplates" runat="server" Text="Content Templates..." OnClick="btnTemplates_Click" 
-				AutoUpdateAfterCallBack="True" meta:resourcekey="btnTemplatesResource1" UpdateAfterCallBack="True" />
-		</small>
+		<anthem:LinkButton ID="btnTemplates" runat="server" Text="Content Templates..." OnClick="btnTemplates_Click" 
+			AutoUpdateAfterCallBack="True" meta:resourcekey="btnTemplatesResource1" CssClass="small" />
 		
-		<anthem:Panel ID="pnlTemplates" runat="server" Visible="False" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlTemplatesResource1" 
-			UpdateAfterCallBack="True">
+		<anthem:Panel ID="pnlTemplates" runat="server" Visible="False" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlTemplatesResource1">
 			<div id="TemplatesInternalDiv">
 				<anthem:DropDownList ID="lstTemplates" runat="server" AutoCallBack="True" OnSelectedIndexChanged="lstTemplates_SelectedIndexChanged" 
 					meta:resourcekey="lstTemplatesResource1" />
@@ -135,7 +132,7 @@
 	</anthem:Panel>
 	
 	<div id="EditorDiv">
-		<st:Editor ID="editor" runat="server" />
+		<st:Editor ID="editor" runat="server" OnSelectedTabChanged="editor_SelectedTabChanged" />
 	</div>
 	
 	<asp:Panel ID="pnlCaptcha" runat="server" CssClass="captcha" meta:resourcekey="pnlCaptchaResource1">
