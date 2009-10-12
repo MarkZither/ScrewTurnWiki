@@ -401,6 +401,7 @@ namespace ScrewTurn.Wiki {
 							dummy.Append("</div>");
 							sb.Insert(match.Index, dummy.ToString());
 						}
+						else sb.Insert(match.Index, @"<b style=""color: #FF0000;"">FORMATTER ERROR (Transcluded inexistent page or this same page)</b>");
 					}
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 					match = TransclusionRegex.Match(sb.ToString(), end);
