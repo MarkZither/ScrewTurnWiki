@@ -150,13 +150,6 @@ namespace ScrewTurn.Wiki {
 				match = JavascriptRegex.Match(sb.ToString(), match.Index + 1);
 			}
 
-			// Strip out all comments
-			//match = CommentRegex.Match(sb.ToString());
-			//while(match.Success) {
-			//	sb.Remove(match.Index, match.Length);
-			//	match = CommentRegex.Match(sb.ToString(), match.Index + 1);
-			//}
-
 			// Remove empty NoWiki and NoBr tags
 			sb.Replace("<nowiki></nowiki>", "");
 			sb.Replace("<nobr></nobr>", "");
@@ -831,6 +824,15 @@ namespace ScrewTurn.Wiki {
 					}
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 					match = TableRegex.Match(sb.ToString(), end);
+				}
+			}
+
+			// Strip out all comments
+			if(!bareBones) {
+				match = CommentRegex.Match(sb.ToString());
+				while(match.Success) {
+					sb.Remove(match.Index, match.Length);
+					match = CommentRegex.Match(sb.ToString(), match.Index + 1);
 				}
 			}
 
