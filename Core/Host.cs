@@ -625,7 +625,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="language">The language code.</param>
 		public void ChangeCurrentUserLanguage(string language) {
 			int timezone = Preferences.LoadTimezoneFromCookie() ?? Settings.DefaultTimezone;
-			if(SessionFacade.LoginKey == null) Preferences.SavePreferencesInCookie(language, timezone);
+			if(SessionFacade.LoginKey == null || SessionFacade.CurrentUsername == "admin") Preferences.SavePreferencesInCookie(language, timezone);
 			else Preferences.SavePreferencesInUserData(language, timezone);
 		}
 
