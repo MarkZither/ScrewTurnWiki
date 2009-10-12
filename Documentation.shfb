@@ -37,7 +37,7 @@
     <CppCommentsFixup>False</CppCommentsFixup>
     <FrameworkVersion>2.0.50727</FrameworkVersion>
     <IndentHtml>False</IndentHtml>
-    <Preliminary>True</Preliminary>
+    <Preliminary>False</Preliminary>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <RootNamespaceTitle />
     <HelpTitle>ScrewTurn Wiki Developer's Documentation</HelpTitle>

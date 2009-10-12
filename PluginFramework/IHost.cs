@@ -283,6 +283,12 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		void LogEntry(string message, LogEntryType entryType, string user, object caller);
 
 		/// <summary>
+		/// Changes the language of the current user.
+		/// </summary>
+		/// <param name="language">The language code.</param>
+		void ChangeCurrentUserLanguage(string language);
+
+		/// <summary>
 		/// Aligns a Date and Time object to the User's Time Zone preferences.
 		/// </summary>
 		/// <param name="dt">The Date/Time to align.</param>

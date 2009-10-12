@@ -620,6 +620,16 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Changes the language of the current user.
+		/// </summary>
+		/// <param name="language">The language code.</param>
+		public void ChangeCurrentUserLanguage(string language) {
+			int timezone = Preferences.LoadTimezoneFromCookie() ?? Settings.DefaultTimezone;
+			if(SessionFacade.LoginKey == null) Preferences.SavePreferencesInCookie(language, timezone);
+			else Preferences.SavePreferencesInUserData(language, timezone);
+		}
+
+		/// <summary>
 		/// Aligns a Date and Time object to the User's Time Zone preferences.
 		/// </summary>
 		/// <param name="dt">The Date/Time to align.</param>
