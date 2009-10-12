@@ -2231,7 +2231,7 @@ namespace ScrewTurn.Wiki {
 					sb.Append(@""" style=""font-size: ");
 					sb.Append(ComputeSize((float)categories[i].Pages.Length / (float)tot * 100F).ToString());
 					sb.Append(@"px;"">");
-					sb.Append(categories[i].FullName);
+					sb.Append(NameTools.GetLocalName(categories[i].FullName));
 					sb.Append("</a>");
 				}
 				if(i != categories.Count - 1) sb.Append(" ");
