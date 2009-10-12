@@ -17,7 +17,7 @@
 
     function OpenPopupImageEditor(file) {
        	var settings = "center=yes,resizable=yes,dialog,status=no,scrollbars=no,width=560,height=400";
-       	window.open(CurrentNamespace + "ImageEditor.aspx?File=" + file, "Popup", settings);
+       	window.open(CurrentNamespace + (CurrentNamespace != "" ? "." : "") + "ImageEditor.aspx?File=" + file, "Popup", settings);
        	return false;
     }
 // -->
