@@ -49,7 +49,7 @@
 		}
 		
 		function SelectFile(prov, value) {
-			SetValue("txtFilePath", "{UP" + prov + "}" + escape(value));
+			SetValue("txtFilePath", "{UP" + prov + "}" + value);
 		}
 		
 		function ProcessExternalLink() {
@@ -92,13 +92,13 @@
 		
 		function SelectImage(prov, value, page) {
 			document.getElementById("PreviewImg").src = "Thumb.aspx?Provider=" + GetValue("lstProviderImages") +
-				"&File=" + escape(value) + "&Size=Big&Info=1&Page=" + page;
+				"&File=" + value + "&Size=Big&Info=1&Page=" + page;
 			if(IsChecked("rdoImageLink")) {
-				SetValue("txtImageLink", "{UP" + prov + "}" + escape(value));
+				SetValue("txtImageLink", "{UP" + prov + "}" + value);
 				ImageLinkFromBrowser = 1;
 			}
 			else {
-				SetValue("txtImagePath", "{UP" + prov + "}" + escape(value));
+				SetValue("txtImagePath", "{UP" + prov + "}" + value);
 			}
 			return false;
 		}
