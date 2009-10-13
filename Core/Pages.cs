@@ -679,7 +679,10 @@ namespace ScrewTurn.Wiki {
 			// Avoid self-references
 			List<string> cleanLinkedPages = new List<string>(linkedPages);
 			for(int i = cleanLinkedPages.Count - 1; i >= 0; i--) {
-				if(cleanLinkedPages[i].ToLowerInvariant() == lowercaseName) {
+				if(cleanLinkedPages[i] == null || cleanLinkedPages[i].Length == 0) {
+					cleanLinkedPages.RemoveAt(i);
+				}
+				else if(cleanLinkedPages[i].ToLowerInvariant() == lowercaseName) {
 					cleanLinkedPages.RemoveAt(i);
 				}
 			}
