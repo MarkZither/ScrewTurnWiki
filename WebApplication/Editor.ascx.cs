@@ -203,9 +203,10 @@ namespace ScrewTurn.Wiki {
 						label, s.Name);
 				}
 				else {
+					bool isPositional = IsSnippetPositional(parameters);
 					label = string.Format("{0} ({1} {2})", s.Name, paramCount, Properties.Messages.Parameters);
-					sb.AppendFormat(@"<a href=""#"" title=""{0}"" onclick=""javascript:return InsertMarkup('&#0123;s:{1}\n{2}&#0125;');"" class=""menulink"">{0}</a>",
-						label, s.Name, GetParametersPlaceHolders(parameters));
+					sb.AppendFormat(@"<a href=""#"" title=""{0}"" onclick=""javascript:return InsertMarkup('&#0123;s:{1}{2}{3}&#0125;');"" class=""menulink"">{0}</a>",
+						label, s.Name, isPositional ? "" : "\\r\\n", GetParametersPlaceHolders(parameters, isPositional));
 				}
 			}
 			if(sb.Length == 0) sb.Append("<i>" + Properties.Messages.NoSnippets + "</i>");
@@ -213,16 +214,32 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Determines whether the parameters of a snippet are positional or not.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns><c>true</c> if the parameters are positional, <c>false</c> otherwise.</returns>
+		private static bool IsSnippetPositional(string[] parameters) {
+			int dummy;
+			for(int i = 0; i < parameters.Length; i++) {
+				if(!int.TryParse(parameters[i], out dummy)) return false;
+				if(dummy != i + 1) return false;
+			}
+			return true;
+		}
+
+		/// <summary>
 		/// Gets the placeholder for snippet parameters.
 		/// </summary>
 		/// <param name="parameters">The parameters.</param>
+		/// <param name="isSnippetPositional">A value indicating whether the snippet parameters are positional.</param>
 		/// <returns>The snippet placeholder/template.</returns>
-		private static string GetParametersPlaceHolders(string[] parameters) {
+		private static string GetParametersPlaceHolders(string[] parameters, bool isSnippetPositional) {
 			if(parameters.Length == 0) return "";
 			else {
 				StringBuilder sb = new StringBuilder(20);
 				foreach(string param in parameters) {
-					sb.AppendFormat("| {0} = PLACE YOUR VALUE HERE\\r\\n", param);
+					if(isSnippetPositional) sb.AppendFormat("|PLACE YOUR VALUE HERE ({0})", param);
+					else sb.AppendFormat("| {0} = PLACE YOUR VALUE HERE\\r\\n", param);
 				}
 				/*for(int i = 1; i <= paramCount; i++) {
 					sb.Append("|P");
