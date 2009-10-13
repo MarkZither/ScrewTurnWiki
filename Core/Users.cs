@@ -13,6 +13,7 @@ namespace ScrewTurn.Wiki {
 	public static class Users {
 
 		private static UserInfo adminAccount = null;
+		private static UserInfo anonAccount = null;
 
 		/// <summary>
 		/// Gets the built-in administrator account.
@@ -21,10 +22,23 @@ namespace ScrewTurn.Wiki {
 		public static UserInfo GetAdministratorAccount() {
 			if(adminAccount == null) {
 				adminAccount = new UserInfo("admin", "Administrator", Settings.ContactEmail, true, DateTime.MinValue, null);
-				adminAccount.Groups = new string[] { Settings.AdministratorsGroup };
+				adminAccount.Groups = new[] { Settings.AdministratorsGroup };
 			}
 
 			return adminAccount;
+		}
+
+		/// <summary>
+		/// Gets the fake anonymous account.
+		/// </summary>
+		/// <returns>The account.</returns>
+		public static UserInfo GetAnonymousAccount() {
+			if(anonAccount == null) {
+				anonAccount = new UserInfo(SessionFacade.AnonymousUsername, null, null, false, DateTime.MinValue, null);
+				anonAccount.Groups = new[] { Settings.AnonymousGroup };
+			}
+
+			return anonAccount;
 		}
 
 		/// <summary>

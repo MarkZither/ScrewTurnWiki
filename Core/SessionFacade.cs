@@ -49,10 +49,10 @@ namespace ScrewTurn.Wiki {
 				else {
 					string un = CurrentUsername;
 					if(string.IsNullOrEmpty(un)) return null;
-					else if(object.ReferenceEquals(un, AnonymousUsername) || un == AnonymousUsername) return Users.GetAdministratorAccount();
+					else if(un == AnonymousUsername) return Users.GetAnonymousAccount();
 					else {
 						current = Users.FindUser(un);
-						SessionCache.SetCurrentUser(sessionId, current);
+						if(current != null) SessionCache.SetCurrentUser(sessionId, current);
 						return current;
 					}
 				}
