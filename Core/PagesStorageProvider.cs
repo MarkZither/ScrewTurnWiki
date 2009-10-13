@@ -1690,6 +1690,7 @@ namespace ScrewTurn.Wiki {
 							UnindexMessageTree(local, msg);
 						}
 
+						string oldFullName = local.FullName;
 						local.FullName = NameTools.GetFullName(NameTools.GetNamespace(local.FullName), newName);
 
 						string newFile = GetNamespacePartialPathForPageContent(NameTools.GetNamespace(local.FullName)) + newName +
@@ -1714,12 +1715,13 @@ namespace ScrewTurn.Wiki {
 							File.Move(oldDraftFullPath, newDraftFullPath);
 						}
 
+						// Rename all backups, store new page list on disk
+						// and rebind new page with old categories
+						RenameBackups(new LocalPageInfo(oldFullName, this, local.CreationDateTime, oldLocalName), newName);
+
 						// Set new filename (local references an element in the pgs array)
 						local.File = newFile;
 
-						// Rename all backups, store new page list on disk
-						// and rebind new page with old categories
-						RenameBackups(page, newName);
 						DumpPages(pgs);
 						// Clear internal cache
 						categoriesCache = null;
