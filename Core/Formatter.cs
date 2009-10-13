@@ -47,7 +47,7 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex TransclusionRegex = new Regex(@"\{T(\:|\|).+\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex HRRegex = new Regex(@"(?<=(\n|^))(\ )*----(\ )*\n", RegexOptions.Compiled);
 		//private static readonly Regex SnippetRegex = new Regex(@"\{S(\:|\|)(.+?)(\|(.+?))*}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-		private static readonly Regex SnippetRegex = new Regex(@"\{s(\:|\|)(.+?)(\|.*?)*\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
+		private static readonly Regex SnippetRegex = new Regex(@"\{s\:(.+?)(\|.*?)*\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
 		private static readonly Regex TableRegex = new Regex(@"\{\|(\ [^\n]*)?\n.+?\|\}", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex IndentRegex = new Regex(@"(?<=(\n|^))\:+(\ )?.+?\n", RegexOptions.Compiled);
 		private static readonly Regex EscRegex = new Regex(@"\<esc\>(.|\n|\r)*?\<\/esc\>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
@@ -1295,14 +1295,18 @@ namespace ScrewTurn.Wiki {
 		/// <param name="cachedToc">The TOC content (trick to allow {TOC} to be inserted in snippets).</param>
 		/// <returns>The formatted result.</returns>
 		private static string FormatSnippet(string capturedMarkup, string cachedToc) {
-			// If the captured markup contains only 1 line, process using "classic" method, assuming there are only numbered parameters
-			if(capturedMarkup.IndexOf("\n") == -1) {
+			// If the markup does not contain equal signs, process it using the classic method, assuming there are only positional parameters
+			if(capturedMarkup.IndexOf("=") == -1) {
 				string tempRes = FormatClassicSnippet(capturedMarkup);
 				return ReplaceToc(tempRes, cachedToc);
 			}
+			// If the markup contains "=" but not new lines, simulate the required structure as shown below
+			if(capturedMarkup.IndexOf("\n") == -1) {
+				capturedMarkup = capturedMarkup.Replace("|", "\n|");
+			}
 
 			// The format is:
-			// {s|Name | param = value			-- OR
+			// {s:Name | param = value			-- OR
 			// | param = value					-- OR
 			// | param = value
 			//
