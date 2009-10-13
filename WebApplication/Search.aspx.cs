@@ -470,8 +470,13 @@ namespace ScrewTurn.Wiki {
 			for(int i = 0; i < matches.Count; i++) {
 				WordInfo match = matches[i];
 
-				sb.Insert(match.FirstCharIndex + i * (highlightOpen.Length + highlightClose.Length), highlightOpen);
-				sb.Insert(match.FirstCharIndex + match.Text.Length + highlightOpen.Length + i * (highlightOpen.Length + highlightClose.Length), highlightClose);
+				int openIndex = match.FirstCharIndex + i * (highlightOpen.Length + highlightClose.Length);
+				bool openIndexOk = openIndex >= 0 && openIndex <= sb.Length;
+				if(openIndexOk) sb.Insert(openIndex, highlightOpen);
+
+				int closeIndex = match.FirstCharIndex + match.Text.Length + highlightOpen.Length + i * (highlightOpen.Length + highlightClose.Length);
+				if(openIndexOk && closeIndex >= 0 && closeIndex <= sb.Length) sb.Insert(closeIndex, highlightClose);
+				else if(openIndexOk) sb.Append(highlightClose); // Make sure an open tags is also closed
 
 			}
 
