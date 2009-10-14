@@ -48,6 +48,7 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex HRRegex = new Regex(@"(?<=(\n|^))(\ )*----(\ )*\n", RegexOptions.Compiled);
 		//private static readonly Regex SnippetRegex = new Regex(@"\{S(\:|\|)(.+?)(\|(.+?))*}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex SnippetRegex = new Regex(@"\{s\:(.+?)(\|.*?)*\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
+		private static readonly Regex ClassicSnippetVerifier = new Regex(@"\|\ ?[a-z0-9]+\ ?\=", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex TableRegex = new Regex(@"\{\|(\ [^\n]*)?\n.+?\|\}", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex IndentRegex = new Regex(@"(?<=(\n|^))\:+(\ )?.+?\n", RegexOptions.Compiled);
 		private static readonly Regex EscRegex = new Regex(@"\<esc\>(.|\n|\r)*?\<\/esc\>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
@@ -1296,7 +1297,8 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The formatted result.</returns>
 		private static string FormatSnippet(string capturedMarkup, string cachedToc) {
 			// If the markup does not contain equal signs, process it using the classic method, assuming there are only positional parameters
-			if(capturedMarkup.IndexOf("=") == -1) {
+			//if(capturedMarkup.IndexOf("=") == -1) {
+			if(!ClassicSnippetVerifier.IsMatch(capturedMarkup)) {
 				string tempRes = FormatClassicSnippet(capturedMarkup);
 				return ReplaceToc(tempRes, cachedToc);
 			}
