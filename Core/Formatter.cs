@@ -346,10 +346,10 @@ namespace ScrewTurn.Wiki {
 						for(int i = tempLines.Count - 1; i >= 1; i--) { // Skip first line
 							string trimmedLine = tempLines[i].Trim();
 							if(!trimmedLine.StartsWith("*") && !trimmedLine.StartsWith("#")) {
-								if(i != tempLines.Count - 1) {
+								//if(i != tempLines.Count - 1 && tempLines[i].Length > 0) {
 									trimmedLine = "<br />" + trimmedLine;
 									tempLines[i - 1] += trimmedLine;
-								}
+								//}
 								tempLines.RemoveAt(i);
 							}
 						}
