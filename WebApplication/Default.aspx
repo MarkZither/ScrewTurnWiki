@@ -42,13 +42,23 @@
 
         var __attachmentsMenuJustShown = false;
         var __adminToolsMenuJustShown = false;
+        var __ie7Mode = false;
 
-        function __ToggleAttachmentsMenu() {
+        function __ToggleAttachmentsMenu(cx, cy) {
         	var element = document.getElementById("PageAttachmentsDiv");
         	if(element) {
         		if(element.style["display"] == "none") {
         			element.style["display"] = "";
-        			__RepositionDiv(document.getElementById("PageAttachmentsLink"), element);
+        			var pos = __AbsolutePosition(element);
+        			if(pos.left - cx > 0) {
+        				__ie7Mode = true;
+        				element.style["position"] = "absolute";
+        				element.style["top"] = cy + "px";
+        				element.style["left"] = (cx - pos.width) + "px";
+        			}
+        			else {
+        				__RepositionDiv(document.getElementById("PageAttachmentsLink"), element);
+        			}
         			__attachmentsMenuJustShown = true;
         		}
         	}
@@ -58,17 +68,27 @@
         	var element = document.getElementById("PageAttachmentsDiv");
         	if(element && !__attachmentsMenuJustShown) {
         		element.style["display"] = "none";
+        		if (__ie7Mode) element.style["left"] = "10000px";
         	}
         	__attachmentsMenuJustShown = false;
         	return true; // Needed to enabled next clicks' action (file download)
         }
 
-        function __ToggleAdminToolsMenu() {
+        function __ToggleAdminToolsMenu(cx, cy) {
         	var element = document.getElementById("AdminToolsDiv");
         	if(element) {
         		if(element.style["display"] == "none") {
         			element.style["display"] = "";
-        			__RepositionDiv(document.getElementById("AdminToolsLink"), element);
+        			var pos = __AbsolutePosition(element);
+        			if(pos.left - cx > 0) {
+        				__ie7Mode = true;
+        				element.style["position"] = "absolute";
+        				element.style["top"] = cy + "px";
+        				element.style["left"] = (cx - pos.width) + "px";
+        			}
+        			else {
+        				__RepositionDiv(document.getElementById("AdminToolsLink"), element);
+        			}
         			__adminToolsMenuJustShown = true;
         		}
         	}
@@ -78,6 +98,7 @@
         	var element = document.getElementById("AdminToolsDiv");
         	if(element && !__adminToolsMenuJustShown) {
         		element.style["display"] = "none";
+        		if(__ie7Mode) element.style["left"] = "10000px";
         	}
         	__adminToolsMenuJustShown = false;
         	return true; // Needed to enable next clicks' action (admin tools)
@@ -233,11 +254,11 @@
 	
 	<asp:Literal ID="lblDoubleClickHandler" runat="server" EnableViewState="False" meta:resourcekey="lblDoubleClickHandlerResource1" />
 	
-	<div id="PageAttachmentsDiv">
+	<div id="PageAttachmentsDiv" style="position: absolute; left: 10000px;">
 		<st:AttachmentViewer ID="attachmentViewer" runat="server" />
     </div>
     
-    <div id="AdminToolsDiv">
+    <div id="AdminToolsDiv" style="position: absolute; left: 10000px;">
 		<asp:Literal ID="lblRollbackPage" runat="server" EnableViewState="False" meta:resourcekey="lblRollbackPageResource1" />
 		<asp:Literal ID="lblAdministratePage" runat="server" EnableViewState="False" meta:resourcekey="lblAdministratePageResource1" />
 		<asp:Literal ID="lblSetPagePermissions" runat="server" EnableViewState="False" meta:resourcekey="lblSetPagePermissionsResource1" />

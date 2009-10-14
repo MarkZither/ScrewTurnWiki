@@ -154,7 +154,7 @@ namespace ScrewTurn.Wiki {
 			int attachmentCount = GetAttachmentCount();
 			lblAttachmentsLink.Visible = canDownloadAttachments && !discussMode && !viewCodeMode && attachmentCount > 0;
 			if(lblAttachmentsLink.Visible) {
-				lblAttachmentsLink.Text = string.Format(@"<a id=""PageAttachmentsLink"" title=""{0}"" href=""#"" onclick=""javascript:return __ToggleAttachmentsMenu();"">{1}</a>",
+				lblAttachmentsLink.Text = string.Format(@"<a id=""PageAttachmentsLink"" title=""{0}"" href=""#"" onclick=""javascript:return __ToggleAttachmentsMenu(event.clientX, event.clientY);"">{1}</a>",
 					Properties.Messages.Attachments, Properties.Messages.Attachments);
 			}
 			attachmentViewer.Visible = lblAttachmentsLink.Visible;
@@ -163,7 +163,7 @@ namespace ScrewTurn.Wiki {
 			lblAdminToolsLink.Visible = Settings.EnablePageToolbar && !discussMode && !viewCodeMode &&
 				((canRollback && bakCount > 0)|| canAdmin || canSetPerms);
 			if(lblAdminToolsLink.Visible) {
-				lblAdminToolsLink.Text = string.Format(@"<a id=""AdminToolsLink"" title=""{0}"" href=""#"" onclick=""javascript:return __ToggleAdminToolsMenu();"">{1}</a>",
+				lblAdminToolsLink.Text = string.Format(@"<a id=""AdminToolsLink"" title=""{0}"" href=""#"" onclick=""javascript:return __ToggleAdminToolsMenu(event.clientX, event.clientY);"">{1}</a>",
 					Properties.Messages.AdminTools, Properties.Messages.Admin);
 
 				if(canRollback && bakCount > 0) {
