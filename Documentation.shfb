@@ -35,7 +35,7 @@
     <BuildLogFile path="" />
     <HelpFileFormat>HtmlHelp1x</HelpFileFormat>
     <CppCommentsFixup>False</CppCommentsFixup>
-    <FrameworkVersion>2.0.50727</FrameworkVersion>
+    <FrameworkVersion>3.5</FrameworkVersion>
     <IndentHtml>False</IndentHtml>
     <Preliminary>False</Preliminary>
     <RootNamespaceContainer>False</RootNamespaceContainer>
@@ -44,7 +44,7 @@
     <HtmlHelpName>ScrewTurnWiki</HtmlHelpName>
     <Language>en-US</Language>
     <CopyrightHref>http://www.screwturn.eu</CopyrightHref>
-    <CopyrightText>Copyright 2006-2009 Dario Solera</CopyrightText>
+    <CopyrightText>Copyright (C)2006-2009 Dario Solera</CopyrightText>
     <FeedbackEMailAddress />
     <FeedbackEMailLinkText />
     <HeaderText>ScrewTurn Wiki Developer's Documentation</HeaderText>
