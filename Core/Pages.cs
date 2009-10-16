@@ -637,12 +637,13 @@ namespace ScrewTurn.Wiki {
 			sb.Replace("~~~~", "§§(" + username + "," + dateTime.ToString("yyyy'/'MM'/'dd' 'HH':'mm':'ss") + ")§§");
 			content = sb.ToString();
 
+			// Because of transclusion and other page-linking features, it is necessary to clear the whole cache
+			Content.ClearPseudoCache();
+			Content.InvalidateAllPages();
+
 			bool done = page.Provider.ModifyPage(page, title, username, dateTime, comment, content, keywords, description, saveMode);
 
 			if(done) {
-				// Because of transclusion and other page-linking features, it is necessary to clear the whole cache
-				Content.ClearPseudoCache();
-				Content.InvalidateAllPages();
 				Log.LogEntry("Page Content updated for " + page.FullName, EntryType.General, Log.SystemUsername);
 
 				StorePageOutgoingLinks(page, content);

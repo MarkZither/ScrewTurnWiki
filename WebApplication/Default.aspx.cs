@@ -351,7 +351,7 @@ namespace ScrewTurn.Wiki {
 
 			if(dest != null) {
 				if(Request["NoRedirect"] != "1") {
-					UrlTools.Redirect(dest.FullName + Settings.PageExtension + "?From=" + currentPage.FullName);
+					UrlTools.Redirect(dest.FullName + Settings.PageExtension + "?From=" + currentPage.FullName, false);
 				}
 				else {
 					// Write redirection hint

@@ -37,6 +37,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static void ClearPseudoCache() {
 			Cache.ClearPseudoCache();
+			Redirections.Clear();
 		}
 
 		/// <summary>
@@ -91,6 +92,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="pageInfo">The Page to invalidate the cached content of.</param>
         public static void InvalidatePage(PageInfo pageInfo) {
 			Cache.RemovePage(pageInfo);
+			Redirections.WipePageOut(pageInfo);
         }
 
 		/// <summary>
@@ -98,6 +100,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static void InvalidateAllPages() {
 			Cache.ClearPageCache();
+			Redirections.Clear();
 		}
 
     }

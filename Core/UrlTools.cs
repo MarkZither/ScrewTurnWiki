@@ -86,8 +86,17 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="target">The target URL.</param>
 		public static void Redirect(string target) {
+			Redirect(target, true);
+		}
+
+		/// <summary>
+		/// Redirects the current response to the specified URL, appending the current namespace if requested.
+		/// </summary>
+		/// <param name="target">The target URL.</param>
+		/// <param name="addNamespace">A value indicating whether to add the namespace.</param>
+		public static void Redirect(string target, bool addNamespace) {
 			string nspace = HttpContext.Current.Request["NS"];
-			if(nspace == null || nspace.Length == 0) HttpContext.Current.Response.Redirect(target);
+			if(nspace == null || nspace.Length == 0 || !addNamespace) HttpContext.Current.Response.Redirect(target);
 			else HttpContext.Current.Response.Redirect(target + (target.Contains("?") ? "&" : "?") + "NS=" + Tools.UrlEncode(nspace));
 		}
 
