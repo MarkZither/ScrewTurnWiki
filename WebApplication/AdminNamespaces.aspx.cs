@@ -415,7 +415,11 @@ namespace ScrewTurn.Wiki {
 			Page.Validate("rename");
 			if(!Page.IsValid) return;
 
-			if(Pages.RenameNamespace(Pages.FindNamespace(txtCurrentNamespace.Value), txtNewName.Text)) {
+			NamespaceInfo nspace = Pages.FindNamespace(txtCurrentNamespace.Value);
+			string theme = Settings.GetTheme(nspace.Name);
+
+			if(Pages.RenameNamespace(nspace, txtNewName.Text)) {
+				Settings.SetTheme(txtNewName.Text, theme);
 				RefreshList();
 				lblRenameResult.CssClass = "resultok";
 				lblRenameResult.Text = Properties.Messages.NamespaceRenamed;
