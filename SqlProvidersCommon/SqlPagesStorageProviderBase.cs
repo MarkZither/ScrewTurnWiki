@@ -1126,8 +1126,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				newCategories = new string[pageCategories.Count];
 
 				for(int i = 0; i < pageCategories.Count; i++) {
-					CategoryInfo added = AddCategory(tempName, pageCategories[i]);
-					newCategories[i] = added.FullName;
+					if(GetCategory(transaction, NameTools.GetFullName(tempName, pageCategories[i])) == null) {
+						CategoryInfo added = AddCategory(tempName, pageCategories[i]);
+						newCategories[i] = added.FullName;
+					}
 				}
 			}
 
