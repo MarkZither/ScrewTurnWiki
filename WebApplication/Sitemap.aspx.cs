@@ -18,6 +18,7 @@ namespace ScrewTurn.Wiki {
 			Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
 
 			string mainUrl = Settings.MainUrl;
+			string rootDefault = Settings.DefaultPage.ToLowerInvariant();
 
 			using(XmlWriter writer = XmlWriter.Create(Response.OutputStream)) {
 				writer.WriteStartDocument();
@@ -26,11 +27,13 @@ namespace ScrewTurn.Wiki {
 				writer.WriteAttributeString("schemaLocation", "xsi", "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/09/sitemap.xsd");
 
 				foreach(PageInfo page in Pages.GetPages(null)) {
-					WritePage(mainUrl, page, writer);
+					WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == rootDefault, writer);
 				}
 				foreach(NamespaceInfo nspace in Pages.GetNamespaces()) {
+					string nspaceDefault = nspace.DefaultPage.FullName.ToLowerInvariant();
+
 					foreach(PageInfo page in Pages.GetPages(nspace)) {
-						WritePage(mainUrl, page, writer);
+						WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == nspaceDefault, writer);
 					}
 				}
 
@@ -44,11 +47,12 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="mainUrl">The main wiki URL.</param>
 		/// <param name="page">The page.</param>
+		/// <param name="isDefault">A value indicating whether the page is the default of its namespace.</param>
 		/// <param name="writer">The writer.</param>
-		private void WritePage(string mainUrl, PageInfo page, XmlWriter writer) {
+		private void WritePage(string mainUrl, PageInfo page, bool isDefault, XmlWriter writer) {
 			writer.WriteStartElement("url");
 			writer.WriteElementString("loc", mainUrl + Tools.UrlEncode(page.FullName) + Settings.PageExtension);
-			writer.WriteElementString("priority", "0.5");
+			writer.WriteElementString("priority", isDefault ? "0.75" : "0.5");
 			writer.WriteElementString("changefreq", "daily");
 			writer.WriteEndElement();
 		}
