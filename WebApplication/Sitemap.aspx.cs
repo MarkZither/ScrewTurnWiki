@@ -24,7 +24,8 @@ namespace ScrewTurn.Wiki {
 				writer.WriteStartDocument();
 
 				writer.WriteStartElement("urlset");
-				writer.WriteAttributeString("schemaLocation", "xsi", "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/09/sitemap.xsd");
+				writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
+				writer.WriteAttributeString("xsi", "schemaLocation", null, "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/09/sitemap.xsd");
 
 				foreach(PageInfo page in Pages.GetPages(null)) {
 					WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == rootDefault, writer);
