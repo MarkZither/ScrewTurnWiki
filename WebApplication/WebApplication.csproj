@@ -581,6 +581,13 @@
     <Compile Include="SessionRefresh.aspx.designer.cs">
       <DependentUpon>SessionRefresh.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Sitemap.aspx.cs">
+      <DependentUpon>Sitemap.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sitemap.aspx.designer.cs">
+      <DependentUpon>Sitemap.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Thumb.aspx.cs">
       <DependentUpon>Thumb.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2363,6 +2370,7 @@
     <Content Include="Images\Editor\UL.png" />
     <Content Include="JS\SearchHighlight.js" />
     <Content Include="PageListBuilder.ascx" />
+    <Content Include="Sitemap.aspx" />
     <Content Include="Themes\Default-v2\Icon.ico" />
     <Content Include="Themes\Default-v2\Images\Attachment.png" />
     <Content Include="Themes\Default-v2\Images\Background.gif" />
