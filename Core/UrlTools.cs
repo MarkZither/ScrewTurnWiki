@@ -31,9 +31,6 @@ namespace ScrewTurn.Wiki {
 			string nspace = GetCurrentNamespace();
 			if(!string.IsNullOrEmpty(nspace)) pageName = pageName.Substring(nspace.Length + 1); // Trim Namespace. from pageName
 
-			//HttpContext.Current.Response.Filter =
-			//	new ScrewTurn.Wiki.RelativeUrlFilterStream(HttpContext.Current.Response.Filter, nspace);
-
 			string queryString = ""; // Empty or begins with ampersand, not question mark
 			try {
 				// This might throw exceptions if 3rd-party modules interfer with the request pipeline
@@ -53,7 +50,7 @@ namespace ScrewTurn.Wiki {
 			else if(ext.Equals("aspx")) {
 				// System page requested, redirect to the root of the application
 				// For example: http://www.server.com/Namespace.Edit.aspx?Page=MainPage -> http://www.server.com/Edit.aspx?Page=MainPage&NS=Namespace
-				if(!string.IsNullOrEmpty(nspace)) { // Needed to avoid infinite loops
+				if(!string.IsNullOrEmpty(nspace)) {
 					if(!queryString.Contains("NS=")) {
 						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + "?NS=" + Tools.UrlEncode(nspace) + queryString);
 					}
@@ -122,6 +119,7 @@ namespace ScrewTurn.Wiki {
 			if(string.IsNullOrEmpty(nspace)) nspace = null;
 			if(nspace == null) nspace = GetCurrentNamespace();
 			if(string.IsNullOrEmpty(nspace)) nspace = null;
+			else nspace = Pages.FindNamespace(nspace).Name;
 
 			if(nspace != null) {
 				string tempStringLower = tempString.ToLowerInvariant();

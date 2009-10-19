@@ -763,6 +763,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The theme name.</returns>
 		public static string GetTheme(string nspace) {
+			if(!string.IsNullOrEmpty(nspace)) nspace = Pages.FindNamespace(nspace).Name;
 			string propertyName = "Theme" + (!string.IsNullOrEmpty(nspace) ? "-" + nspace : "");
 			return GetString(Provider.GetSetting(propertyName), "Default");
 		}
@@ -773,6 +774,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <param name="theme">The theme name.</param>
 		public static void SetTheme(string nspace, string theme) {
+			if(!string.IsNullOrEmpty(nspace)) nspace = Pages.FindNamespace(nspace).Name;
 			string propertyName = "Theme" + (!string.IsNullOrEmpty(nspace) ? "-" + nspace : "");
 			Provider.SetSetting(propertyName, theme);
 		}
