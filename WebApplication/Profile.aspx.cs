@@ -19,6 +19,7 @@ namespace ScrewTurn.Wiki {
 	public partial class UserProfile : BasePage {
 
 		private UserInfo currentUser;
+		private string[] currentGroups;
 		
 		protected void Page_Load(object sender, EventArgs e) {
 			Page.Title = Properties.Messages.ProfileTitle + " - " + Settings.WikiTitle;
@@ -28,6 +29,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			currentUser = SessionFacade.GetCurrentUser();
+			currentGroups = SessionFacade.GetCurrentGroupNames();
 
 			if(currentUser.Username == "admin") {
 				// Admin only has language preferences, stored in a cookie
@@ -79,11 +81,15 @@ namespace ScrewTurn.Wiki {
 			foreach(ScrewTurn.Wiki.PluginFramework.NamespaceInfo ns in Pages.GetNamespaces()) {
 				Users.GetEmailNotification(currentUser, ns, out pageChanges, out discussionMessages);
 
-				lstPageChanges.Items.Add(new ListItem(ns.Name, ns.Name));
-				lstPageChanges.Items[lstPageChanges.Items.Count - 1].Selected = pageChanges;
+				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ReadPages, currentUser.Username, currentGroups)) {
+					lstPageChanges.Items.Add(new ListItem(ns.Name, ns.Name));
+					lstPageChanges.Items[lstPageChanges.Items.Count - 1].Selected = pageChanges;
+				}
 
-				lstDiscussionMessages.Items.Add(new ListItem(ns.Name, ns.Name));
-				lstDiscussionMessages.Items[lstPageChanges.Items.Count - 1].Selected = discussionMessages;
+				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ReadDiscussion, currentUser.Username, currentGroups)) {
+					lstDiscussionMessages.Items.Add(new ListItem(ns.Name, ns.Name));
+					lstDiscussionMessages.Items[lstPageChanges.Items.Count - 1].Selected = discussionMessages;
+				}
 			}
 		}
 
