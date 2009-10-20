@@ -843,7 +843,7 @@ namespace ScrewTurn.Wiki {
 				sb.Replace("</nowiki>", "");
 			}
 
-			ProcessLineBreaks(sb);
+			ProcessLineBreaks(sb, bareBones);
 
 			if(addedNewLineAtEnd) {
 				if(sb.ToString().EndsWith("<br />")) sb.Remove(sb.Length - 6, 6);
@@ -1162,8 +1162,9 @@ namespace ScrewTurn.Wiki {
 		/// Processes line breaks.
 		/// </summary>
 		/// <param name="sb">The <see cref="T:StringBuilder" /> containing the text to process.</param>
-		private static void ProcessLineBreaks(StringBuilder sb) {
-			if(AreSingleLineBreaksToBeProcessed()) {
+		/// <param name="bareBones">A value indicating whether the formatting is being done in bare-bones mode.</param>
+		private static void ProcessLineBreaks(StringBuilder sb, bool bareBones) {
+			if(bareBones || AreSingleLineBreaksToBeProcessed()) {
 				// Replace new-lines only when not enclosed in <nobr> tags
 
 				Match match = NoSingleBr.Match(sb.ToString());
