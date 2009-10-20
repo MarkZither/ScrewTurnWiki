@@ -681,7 +681,7 @@ namespace ScrewTurn.Wiki {
 
 			string wikiMarkup = BuildListWikiMarkup(list, "");
 
-			return wikiMarkup;
+			return wikiMarkup.TrimEnd('\r', '\n');
 		}
 
 		/// <summary>
