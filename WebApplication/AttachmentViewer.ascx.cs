@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki {
 					DataRow row = table.NewRow();
 					row["Name"] = s;
 					row["Size"] = Tools.BytesToString(provider.GetPageAttachmentDetails(pageInfo, s).Size);
-					row["Link"] = "GetFile.aspx?File=" + Tools.UrlEncode(s) + "&amp;AsStreamAttachment=1&amp;Provider=" +
+					row["Link"] = "GetFile.aspx?File=" + Tools.UrlEncode(s).Replace("'", "&#39;") + "&amp;AsStreamAttachment=1&amp;Provider=" +
 						provider.GetType().FullName + "&amp;IsPageAttachment=1&amp;Page=" + Tools.UrlEncode(pageInfo.FullName);
 					table.Rows.Add(row);
 				}

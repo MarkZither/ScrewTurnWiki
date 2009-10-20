@@ -147,7 +147,7 @@ namespace ScrewTurn.Wiki {
 				row["Editable"] = canUpload && canDelete && (ext == ".jpg" || ext == ".jpeg" || ext == ".png");
 				row["Page"] = CurrentPage.FullName;
 				if(canDownload) {
-					row["Link"] = "GetFile.aspx?File=" + Tools.UrlEncode(s) + "&amp;AsStreamAttachment=1&amp;Provider=" +
+					row["Link"] = "GetFile.aspx?File=" + Tools.UrlEncode(s).Replace("'", "&#39;") + "&amp;AsStreamAttachment=1&amp;Provider=" +
 						provider.GetType().FullName + "&amp;IsPageAttachment=1&amp;Page=" +
 						Tools.UrlEncode(CurrentPage.FullName) + "&amp;NoHit=1";
 				}
