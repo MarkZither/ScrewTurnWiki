@@ -22,8 +22,8 @@ namespace ScrewTurn.Wiki {
 				sb.Append("<script type=\"text/javascript\">\r\n<!--\r\n");
 				sb.AppendFormat("\tvar MarkupControl = \"{0}\";\r\n", txtMarkup.ClientID);
 				sb.AppendFormat("\tvar VisualControl = \"{0}\";\r\n", lblWYSIWYG.ClientID);
-				sb.AppendFormat("\tvar CurrentPage = \"{0}\";\r\n", (currentPage != null ? currentPage.FullName : ""));
-				sb.AppendFormat("\tvar CurrentNamespace = \"{0}\";\r\n", currentNamespaceName);
+				sb.AppendFormat("\tvar CurrentPage = \"{0}\";\r\n", (currentPage != null ? Tools.UrlEncode(currentPage.FullName) : ""));
+				sb.AppendFormat("\tvar CurrentNamespace = \"{0}\";\r\n", Tools.UrlEncode(currentNamespaceName));
 				sb.Append("// -->\r\n</script>");
 				lblStrings.Text = sb.ToString();
 

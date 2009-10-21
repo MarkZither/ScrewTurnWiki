@@ -352,6 +352,7 @@
 		var settings = "center=yes,resizable=yes,dialog,status=no,scrollbars=no,width=300,height=300";
 		var w;
 		//added for WYSIWYG
+		// CurrentPage is escaped in code-behind
 		if(mode == 'WYSIWYG')
 			w = window.open(CurrentNamespace + "PopupWYSIWYG.aspx?Feature=" + feature + (CurrentPage != "" ? "&CurrentPage=" + CurrentPage : ""), "Popup", settings);
 		//end
