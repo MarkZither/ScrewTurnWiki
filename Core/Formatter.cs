@@ -232,6 +232,7 @@ namespace ScrewTurn.Wiki {
 			match = ExtendedUpRegex.Match(sb.ToString());
 			while(match.Success) {
 				if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
+					EncodeFilename(sb, match.Index + match.Length);
 					sb.Remove(match.Index, match.Length);
                     string prov = match.Groups[1].Value.StartsWith(":") ? match.Value.Substring(4, match.Value.Length - 5) : match.Value.Substring(3, match.Value.Length - 4);
 					string page = null;
@@ -867,6 +868,26 @@ namespace ScrewTurn.Wiki {
 			linkedPages = tempLinkedPages.ToArray();
 
 			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Encodes a filename used in combination with {UP} tags.
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
+		/// <param name="startIndex">The index where to start working.</param>
+		private static void EncodeFilename(StringBuilder buffer, int startIndex) {
+			// 1. Find end of the filename (first pipe or closed square bracket)
+			// 2. Encode the string
+
+			string allData = buffer.ToString();
+
+			int endIndex = allData.IndexOfAny(new[] { '|', ']' }, startIndex);
+			if(endIndex > startIndex) {
+				int len = endIndex - startIndex;
+				string value = Tools.UrlEncode(allData.Substring(startIndex, len));
+				buffer.Remove(startIndex, len);
+				buffer.Insert(startIndex, value);
+			}
 		}
 
 		/// <summary>
