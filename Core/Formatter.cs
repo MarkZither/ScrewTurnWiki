@@ -1649,14 +1649,14 @@ namespace ScrewTurn.Wiki {
 				if(!isImage) sb.Append(@" class=""emaillink""");
 				if(blank) sb.Append(@" target=""_blank""");
 				sb.Append(@" href=""mailto:");
-				sb.Append(targetUrl.Replace("&amp;", "%26")); // Trick to let ampersands work in email addresses
+				sb.Append(Tools.ObfuscateText(targetUrl.Replace("&amp;", "%26"))); // Trick to let ampersands work in email addresses
 				sb.Append(@""" title=""");
 				if(!isImage && title.Length > 0) sb.Append(nstripped);
 				else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-				else sb.Append(targetUrl);
+				else sb.Append(Tools.ObfuscateText(targetUrl));
 				sb.Append(@""">");
 				if(title.Length > 0) sb.Append(title);
-				else sb.Append(targetUrl);
+				else sb.Append(Tools.ObfuscateText(targetUrl));
 				sb.Append("</a>");
 			}
 			else if(((targetUrl.IndexOf(".") != -1 && !targetUrl.ToLowerInvariant().EndsWith(".aspx")) || targetUrl.EndsWith("/")) &&

@@ -554,6 +554,21 @@ namespace ScrewTurn.Wiki {
 			return hash;
 		}
 
+		/// <summary>
+		/// Obfuscates text, replacing each character with its HTML escaped sequence, for example a becomes <c>&amp;#97;</c>.
+		/// </summary>
+		/// <param name="input">The input text.</param>
+		/// <returns>The output obfuscated text.</returns>
+		public static string ObfuscateText(string input) {
+			StringBuilder buffer = new StringBuilder(input.Length * 4);
+
+			foreach(char c in input) {
+				buffer.Append("&#" + ((int)c).ToString("D2") + ";");
+			}
+
+			return buffer.ToString();
+		}
+
 	}
 
 	/// <summary>
