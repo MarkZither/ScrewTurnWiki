@@ -184,10 +184,10 @@ namespace ScrewTurn.Wiki {
 					sb.Remove(match.Index, match.Length);
 					string content = match.Value.Substring(2, match.Length - 4);
 					dummy = new StringBuilder();
-					dummy.Append("<pre>");
+					dummy.Append("<nobr><pre>");
 					// IE needs \r\n for line breaks
 					dummy.Append(EscapeWikiMarkup(content).Replace("\n", "\r\n"));
-					dummy.Append("</pre>");
+					dummy.Append("</pre></nobr>");
 					sb.Insert(match.Index, dummy.ToString());
 				}
 				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
