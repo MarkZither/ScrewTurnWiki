@@ -317,7 +317,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="input">The input string.</param>
 		/// <returns>The encoded string.</returns>
 		public static string UrlEncode(string input) {
-			return HttpContext.Current.Server.UrlEncode(input).Replace("+", "%20");
+			if(HttpContext.Current != null && HttpContext.Current.Server != null) return HttpContext.Current.Server.UrlEncode(input).Replace("+", "%20");
+			else {
+				Log.LogEntry("HttpContext.Current or HttpContext.Current.Server were null (Tools.UrlEncode)", EntryType.Warning, Log.SystemUsername);
+				return input;
+			}
 		}
 
 		/// <summary>

@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki {
 			if(ext != "ashx" && ext != "aspx") return;
 
 			// Extract the current namespace, if any
-			string nspace = GetCurrentNamespace();
+			string nspace = GetCurrentNamespace() + "";
 			if(!string.IsNullOrEmpty(nspace)) pageName = pageName.Substring(nspace.Length + 1); // Trim Namespace. from pageName
 
 			string queryString = ""; // Empty or begins with ampersand, not question mark
