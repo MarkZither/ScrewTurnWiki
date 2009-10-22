@@ -105,7 +105,7 @@ namespace ScrewTurn.Wiki {
 			// Print header
 			sb.Append(@"<div class=""messageheader"">");
 			//sb.AppendFormat(@"<a id=""MSG_{0}""></a>", message.ID);
-			sb.AppendFormat(@"<a id=""{0}"" href=""#{0}"" title=""Permalink"">#</a> ", Tools.GetMessageIdForAnchor(message.DateTime));
+			sb.AppendFormat(@"<a id=""{0}"" href=""#{0}"" title=""Permalink"">&#0182;</a> ", Tools.GetMessageIdForAnchor(message.DateTime));
 
 			if(!currentPage.Provider.ReadOnly) {
 				// Print reply/edit/delete buttons only if provider is not read-only
