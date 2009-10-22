@@ -93,8 +93,8 @@ second line@@
 
 		private const string ExpectedOutput =
 @"<b>bold</b> <i>italic</i> <u>underlined</u> <strike>striked</strike>
-<a class=""pagelink"" href=""page1.ashx"" title=""Page 1"">page1</a> <a class=""unknownlink"" href=""page2.ashx"" title=""page2"">title</a><br /><br /><pre>&#0042; item 1
-&#0042; item 2
+<a class=""pagelink"" href=""page1.ashx"" title=""Page 1"">page1</a> <a class=""unknownlink"" href=""page2.ashx"" title=""page2"">title</a><br /><br /><pre>&#42; item 1
+&#42; item 2
 second line</pre><br /><table><tr><td>cell</td><td>other cell</td></tr></table>
 ";
 
