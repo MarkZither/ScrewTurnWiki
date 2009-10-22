@@ -83,7 +83,7 @@ namespace ScrewTurn.Wiki {
 			result.Append(GetJavaScriptIncludes());
 
 			// Include HTML Head
-			result.Append(Settings.Provider.GetMetaDataItem(MetaDataItem.HtmlHead, null));
+			result.Append(Settings.Provider.GetMetaDataItem(MetaDataItem.HtmlHead, nspace));
 
             return result.ToString();
         }

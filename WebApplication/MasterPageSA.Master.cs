@@ -54,7 +54,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The item name.</param>
 		/// <returns>The namespace-qualified item name.</returns>
 		private string GetPseudoCacheItemName(string name) {
-			if(currentNamespace == null) return name;
+			if(string.IsNullOrEmpty(currentNamespace)) return name;
 			else return currentNamespace + "." + name;
 		}
 
