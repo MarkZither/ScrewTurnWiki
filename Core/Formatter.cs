@@ -157,6 +157,23 @@ namespace ScrewTurn.Wiki {
 
 			ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 
+			// Before Producing HTML
+			match = FullCodeRegex.Match(sb.ToString());
+			while(match.Success) {
+				if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
+					sb.Remove(match.Index, match.Length);
+					string content = match.Value.Substring(2, match.Length - 4);
+					dummy = new StringBuilder();
+					dummy.Append("<nobr><pre>");
+					// IE needs \r\n for line breaks
+					dummy.Append(EscapeWikiMarkup(content).Replace("\n", "\r\n"));
+					dummy.Append("</pre></nobr>");
+					sb.Insert(match.Index, dummy.ToString());
+				}
+				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
+				match = FullCodeRegex.Match(sb.ToString(), end);
+			}
+
 			if(current != null) {
 				// Check redirection
 				match = RedirectionRegex.Match(sb.ToString());
@@ -175,23 +192,6 @@ namespace ScrewTurn.Wiki {
 					}
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 				}
-			}
-
-			// Before Producing HTML
-			match = FullCodeRegex.Match(sb.ToString());
-			while(match.Success) {
-				if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
-					sb.Remove(match.Index, match.Length);
-					string content = match.Value.Substring(2, match.Length - 4);
-					dummy = new StringBuilder();
-					dummy.Append("<nobr><pre>");
-					// IE needs \r\n for line breaks
-					dummy.Append(EscapeWikiMarkup(content).Replace("\n", "\r\n"));
-					dummy.Append("</pre></nobr>");
-					sb.Insert(match.Index, dummy.ToString());
-				}
-				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
-				match = FullCodeRegex.Match(sb.ToString(), end);
 			}
 
 			// No more needed (Striked Regex modified)
@@ -1497,24 +1497,25 @@ namespace ScrewTurn.Wiki {
 		private static string EscapeWikiMarkup(string content) {
 			StringBuilder sb = new StringBuilder(content);
 			sb.Replace("&", "&amp;"); // Before all other escapes!
-			sb.Replace("#", "&#0035;");
-			sb.Replace("*", "&#0042;");
+			sb.Replace("#", "&#35;");
+			sb.Replace("*", "&#42;");
 			sb.Replace("<", "&lt;");
 			sb.Replace(">", "&gt;");
-			sb.Replace("[", "&#0091;");
-			sb.Replace("]", "&#0093;");
-			sb.Replace("{", "&#0123;");
-			sb.Replace("}", "&#0125;");
-			sb.Replace("'''", "&#0039;&#0039;&#0039;");
-			sb.Replace("''", "&#0039;&#0039;");
-			sb.Replace("=====", "&#0061;&#0061;&#0061;&#0061;&#0061;");
-			sb.Replace("====", "&#0061;&#0061;&#0061;&#0061;");
-			sb.Replace("===", "&#0061;&#0061;&#0061;");
-			sb.Replace("==", "&#0061;&#0061;");
-			sb.Replace("§§", "&#0167;&#0167;");
-			sb.Replace("__", "&#0095;&#0095;");
-			sb.Replace("--", "&#0045;&#0045;");
-			sb.Replace("@@", "&#0064;&#0064;");
+			sb.Replace("[", "&#91;");
+			sb.Replace("]", "&#93;");
+			sb.Replace("{", "&#123;");
+			sb.Replace("}", "&#125;");
+			sb.Replace("'''", "&#39;&#39;&#39;");
+			sb.Replace("''", "&#39;&#39;");
+			sb.Replace("=====", "&#61;&#61;&#61;&#61;&#61;");
+			sb.Replace("====", "&#61;&#61;&#61;&#61;");
+			sb.Replace("===", "&#61;&#61;&#61;");
+			sb.Replace("==", "&#61;&#61;");
+			sb.Replace("§§", "&#167;&#167;");
+			sb.Replace("__", "&#95;&#95;");
+			sb.Replace("--", "&#45;&#45;");
+			sb.Replace("@@", "&#64;&#64;");
+			sb.Replace(":", "&#58;");
 			return sb.ToString();
 		}
 
