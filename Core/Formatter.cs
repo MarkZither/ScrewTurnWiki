@@ -897,15 +897,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="buffer">The string builder.</param>
 		/// <param name="id">The anchor ID.</param>
 		private static void BuildHeaderAnchor(StringBuilder buffer, string id) {
-			if(Settings.EnableSectionAnchors) {
-				buffer.Append(@"<a class=""headeranchor"" id=""");
-				buffer.Append(id);
-				buffer.Append(@""" href=""#");
-				buffer.Append(id);
-				buffer.Append(@""" title=""");
-				buffer.Append(Exchanger.ResourceExchanger.GetResource("LinkToThisSection"));
-				buffer.Append(@""">&#0182;</a>");
-			}
+			buffer.Append(@"<a class=""headeranchor"" id=""");
+			buffer.Append(id);
+			buffer.Append(@""" href=""#");
+			buffer.Append(id);
+			buffer.Append(@""" title=""");
+			buffer.Append(Exchanger.ResourceExchanger.GetResource("LinkToThisSection"));
+			if(Settings.EnableSectionAnchors) buffer.Append(@""">&#0182;</a>");
+			else buffer.Append(@"""></a>");
 		}
 
 		/// <summary>
