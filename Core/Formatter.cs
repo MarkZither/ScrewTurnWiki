@@ -232,7 +232,14 @@ namespace ScrewTurn.Wiki {
 			match = ExtendedUpRegex.Match(sb.ToString());
 			while(match.Success) {
 				if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
-					EncodeFilename(sb, match.Index + match.Length);
+					// Encode filename only if it's used inside a link,
+					// i.e. check if {UP} is used just after a '['
+					// This works because links are processed afterwards
+					string sbString = sb.ToString();
+					if(match.Index > 0 && sbString[match.Index - 1] == '[') {
+						EncodeFilename(sb, match.Index + match.Length);
+					}
+
 					sb.Remove(match.Index, match.Length);
                     string prov = match.Groups[1].Value.StartsWith(":") ? match.Value.Substring(4, match.Value.Length - 5) : match.Value.Substring(3, match.Value.Length - 4);
 					string page = null;
