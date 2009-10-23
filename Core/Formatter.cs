@@ -884,7 +884,8 @@ namespace ScrewTurn.Wiki {
 			int endIndex = allData.IndexOfAny(new[] { '|', ']' }, startIndex);
 			if(endIndex > startIndex) {
 				int len = endIndex - startIndex;
-				string value = Tools.UrlEncode(allData.Substring(startIndex, len));
+				// {, : and } are used in snippets which are useful in links
+				string value = Tools.UrlEncode(allData.Substring(startIndex, len)).Replace("%7b", "{").Replace("%7B", "{").Replace("%7d", "}").Replace("%7D", "}").Replace("%3a", ":").Replace("%3A", ":");
 				buffer.Remove(startIndex, len);
 				buffer.Insert(startIndex, value);
 			}
