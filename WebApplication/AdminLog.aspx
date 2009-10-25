@@ -21,9 +21,10 @@
 			AutoCallBack="True" OnCheckedChanged="chkFilter_CheckedChanged" meta:resourcekey="chkErrorsResource1" />
 		
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<anthem:Label ID="lblLimit" runat="server" Text="Currently displaying only 100 log entries &mdash" AutoUpdateAfterCallBack="true" />
+		<anthem:Label ID="lblLimit" runat="server" Text="Currently displaying only 100 log entries &mdash;" AutoUpdateAfterCallBack="true"
+			meta:resourcekey="lblLimitResource1" />
 		<anthem:LinkButton ID="btnNoLimit" runat="server" Text="Display all" ToolTip="Display all log entries (might take a few seconds)"
-			OnClick="btnNoLimit_Click" AutoUpdateAfterCallBack="true" />
+			OnClick="btnNoLimit_Click" AutoUpdateAfterCallBack="true" meta:resourcekey="btnNoLimitResource1" />
 	</div>
 	
 	<div id="LogListContainerDiv">

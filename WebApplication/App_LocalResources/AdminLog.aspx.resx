@@ -159,4 +159,13 @@
   <data name="PageResource1.Title" xml:space="preserve">
     <value>Administration</value>
   </data>
+  <data name="btnNoLimitResource1.Text" xml:space="preserve">
+    <value>Display all</value>
+  </data>
+  <data name="btnNoLimitResource1.ToolTip" xml:space="preserve">
+    <value>Display all log entries (might take a few seconds)</value>
+  </data>
+  <data name="lblLimitResource1.Text" xml:space="preserve">
+    <value>Currently displaying only 100 log entries &amp;mdash;</value>
+  </data>
 </root>

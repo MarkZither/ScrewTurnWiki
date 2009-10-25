@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="btnNoLimitResource1.Text" xml:space="preserve">
+    <value>Visualizza tutti</value>
+  </data>
+  <data name="btnNoLimitResource1.ToolTip" xml:space="preserve">
+    <value>Visualizza tutti i messaggi (può richiedere alcuni secondi)</value>
+  </data>
+  <data name="lblLimitResource1.Text" xml:space="preserve">
+    <value>Sono visualizzati solo 100 messaggi &amp;mdash;</value>
+  </data>
   <data name="btnClearLogResource1.Text" xml:space="preserve">
     <value>Svuota log</value>
   </data>
