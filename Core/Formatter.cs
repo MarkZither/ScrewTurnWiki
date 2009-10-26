@@ -236,7 +236,7 @@ namespace ScrewTurn.Wiki {
 					// i.e. check if {UP} is used just after a '['
 					// This works because links are processed afterwards
 					string sbString = sb.ToString();
-					if(match.Index > 0 && sbString[match.Index - 1] == '[') {
+					if(match.Index > 0 && (sbString[match.Index - 1] == '[' || sbString[match.Index - 1] == '^')) {
 						EncodeFilename(sb, match.Index + match.Length);
 					}
 
