@@ -178,7 +178,7 @@
     <value>Seleccionar esta cuenta</value>
   </data>
   <data name="chkActiveResource1.Text" xml:space="preserve">
-    <value>Activar cuentas</value>
+    <value>Cuentas activas</value>
   </data>
   <data name="chkActiveResource1.ToolTip" xml:space="preserve">
     <value />

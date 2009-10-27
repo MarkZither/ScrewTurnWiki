@@ -130,7 +130,7 @@
     <value>Cancelar y volver a la lista de rutas de navegación</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Crear ruta de nav.</value>
+    <value>Crear ruta de navegación</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
     <value>Guardar la nueva ruta de navegación</value>
@@ -148,7 +148,7 @@
     <value />
   </data>
   <data name="btnNewNavPathResource1.Text" xml:space="preserve">
-    <value>Nueva ruta de nav.</value>
+    <value>Nueva ruta de navegación</value>
   </data>
   <data name="btnNewNavPathResource1.ToolTip" xml:space="preserve">
     <value>Crear una ruta de navegación</value>
@@ -160,7 +160,7 @@
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Guardar ruta de nav.</value>
+    <value>Guardar ruta de navegación</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
     <value>Guardar modificaciones</value>
@@ -220,7 +220,7 @@
     <value>Contexto</value>
   </data>
   <data name="lblNavPathsResource1.Text" xml:space="preserve">
-    <value>Rutas de nabegación</value>
+    <value>Rutas de navegación</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
     <value>Páginas</value>

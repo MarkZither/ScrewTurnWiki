@@ -157,7 +157,7 @@
     <value>Editar</value>
   </data>
   <data name="btnEditingPageNoticeResource1.Text" xml:space="preserve">
-    <value>Aviso de edición en página (Específico por contexto)</value>
+    <value>Aviso en edición de página (Específico por contexto)</value>
   </data>
   <data name="btnEditingPageNoticeResource1.ToolTip" xml:space="preserve">
     <value>Editar</value>
@@ -247,7 +247,7 @@
     <value>Mensaje mostrado en la parte superior de la página editada.</value>
   </data>
   <data name="lblInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Nota&lt;/b&gt;: el diseño actual del tema actual puede diferir del mostrado aquí.</value>
+    <value>&lt;b&gt;Nota&lt;/b&gt;: el diseño del tema actual puede diferir del mostrado aquí.</value>
   </data>
   <data name="lblLoginNoticeInfoResource1.Text" xml:space="preserve">
     <value>Mensaje que reemplaza la parte superior de la pantalla de login (si no está vacío).</value>

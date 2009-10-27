@@ -193,7 +193,7 @@
     <value>Contexto</value>
   </data>
   <data name="lblOccurrenceCountResource1.Text" xml:space="preserve">
-    <value>Matches</value>
+    <value>Ocurrencias</value>
   </data>
   <data name="lblPageResource1.Text" xml:space="preserve">
     <value>Nombre de la página</value>
