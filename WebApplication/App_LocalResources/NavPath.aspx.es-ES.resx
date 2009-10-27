@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Navigation Paths lo guia a través de los contenidos del Wiki.</value>
+    <value>Las rutas de navegación te guían a través de los contenidos del wiki.</value>
   </data>
   <data name="lblInfoResource1.Text" xml:space="preserve">
-    <value>Aquí puede empezar a navegar una path.</value>
+    <value>Aquí puede empezar una ruta de navegación.</value>
   </data>
   <data name="lblNavPathResource1.Text" xml:space="preserve">
-    <value>Navigation Paths</value>
+    <value>Rutas de navegación</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Página Sin Titulo</value>
+    <value>Página sin título</value>
   </data>
 </root>

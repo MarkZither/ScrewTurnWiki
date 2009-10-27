@@ -118,105 +118,105 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnShutdownConfirmResource2.Text" xml:space="preserve">
-    <value>Shutdown Application</value>
+    <value>Parar aplicación</value>
   </data>
   <data name="btnShutdownConfirmResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRebuildPageLinksResource1.Text" xml:space="preserve">
-    <value>Rebuild Page Links</value>
+    <value>Reconstruir los enlaces de las páginas</value>
   </data>
   <data name="btnRebuildPageLinksResource1.ToolTip" xml:space="preserve">
-    <value>Rebuild the links structure</value>
+    <value>Reconstruir las estructura de los enlaces</value>
   </data>
   <data name="lblOrphanPagesInfoPostResource1.Text" xml:space="preserve">
-    <value>orphan pages in the wiki</value>
+    <value>Páginas huérfanas</value>
   </data>
   <data name="lblOrphanPagesInfoPreResource1.Text" xml:space="preserve">
-    <value>There seem to be </value>
+    <value>Parece haber</value>
   </data>
   <data name="lblOrphanPagesInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: a page is considered an &lt;i&gt;orphan&lt;/i&gt; when it has no incoming links from other pages.</value>
+    <value>&lt;b&gt;Nota&lt;/b&gt;: una página es considerada &lt;i&gt;huérfana&lt;/i&gt; si no es enlazada desde otras páginas.</value>
   </data>
   <data name="lblOrphanPagesResource1.Text" xml:space="preserve">
-    <value>Orphan Pages</value>
+    <value>Páginas huérfanas</value>
   </data>
   <data name="lblRebuildPageLinksInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding page links might take some time. Please do not close this screen while the links are being rebuilt.</value>
+    <value>&lt;b&gt;Atención&lt;/b&gt;: reconstruir los enlaces de las páginas puede tardar cierto tiempo. Por favor, no cierres esta página hasta que la reconstrucción finalice.</value>
   </data>
   <data name="lnkPagesResource1.Text" xml:space="preserve">
-    <value>see Pages</value>
+    <value>ver páginas</value>
   </data>
   <data name="lnkPagesResource1.ToolTip" xml:space="preserve">
-    <value>Go to the Pages administration tab</value>
+    <value>Ir a la pestaña de administración de páginas</value>
   </data>
   <data name="btnClearCacheResource1.Text" xml:space="preserve">
-    <value>Clear Cache</value>
+    <value>Borrar cache</value>
   </data>
   <data name="btnClearCacheResource1.ToolTip" xml:space="preserve">
-    <value>Clears the Cache</value>
+    <value>Limpiar cache</value>
   </data>
   <data name="btnRebuildResource1.Text" xml:space="preserve">
-    <value>Rebuild</value>
+    <value>Reconstruir</value>
   </data>
   <data name="btnRebuildResource1.ToolTip" xml:space="preserve">
-    <value>Rebuild this index</value>
+    <value>Reconstruir este índice</value>
   </data>
   <data name="btnRebuildResource2.Text" xml:space="preserve">
-    <value>Rebuild</value>
+    <value>Reconstruir</value>
   </data>
   <data name="btnRebuildResource2.ToolTip" xml:space="preserve">
-    <value>Rebuild this index</value>
+    <value>Reconstruir este índice</value>
   </data>
   <data name="lblAdminHomeResource1.Text" xml:space="preserve">
-    <value>Administration Home</value>
+    <value>Administración</value>
   </data>
   <data name="lblAppShutdownInfoResource1.Text" xml:space="preserve">
-    <value>You can force a shutdown-and-restart cycle of the Web Application. You will be asked to confirm the restart twice, then the Web Application will restart at the first subsequent request.&lt;br /&gt;&lt;b&gt;Warning&lt;/b&gt;: all the open sessions will be lost, and users may experience errors.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: the restart will affect only this Web Application.</value>
+    <value>Puedes forzar un reinicio de la aplicación web. Deberás confirmar el reinicio. Después, la aplicación se reiniciará con la petición siguiente.&lt;br /&gt;&lt;b&gt;Atención&lt;/b&gt;: Todas las sesiones de los usuarios serán cerradas y los usuarios pueden experimentar errores.&lt;br /&gt;&lt;b&gt;Nota&lt;/b&gt;: El reinicio sólo afectará a esta aplicación web.</value>
   </data>
   <data name="lblAppShutdownResource1.Text" xml:space="preserve">
-    <value>Web Application Shutdown</value>
+    <value>Parar aplicación web</value>
   </data>
   <data name="lblDocCountResource1.Text" xml:space="preserve">
-    <value>Docs</value>
+    <value>Documentos</value>
   </data>
   <data name="lblIndexStatusResource1.Text" xml:space="preserve">
-    <value>Search Index Status</value>
+    <value>Estado del índice de búsqueda</value>
   </data>
   <data name="lblLinkedInResource1.Text" xml:space="preserve">
-    <value>Linked in</value>
+    <value>Enlazada en</value>
   </data>
   <data name="lblMissingPagesResource1.Text" xml:space="preserve">
-    <value>Missing Pages</value>
+    <value>Páginas perdidas</value>
   </data>
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
-    <value>Namespace</value>
+    <value>Contexto</value>
   </data>
   <data name="lblOccurrenceCountResource1.Text" xml:space="preserve">
     <value>Matches</value>
   </data>
   <data name="lblPageResource1.Text" xml:space="preserve">
-    <value>Page Name</value>
+    <value>Nombre de la página</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Proveedor</value>
   </data>
   <data name="lblRebuildIndexInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. After the index is rebuilt, it is recommended to restart the application.</value>
+    <value>&lt;b&gt;Atención&lt;/b&gt;: reconstruir el índice de búsqueda puede tardar cierto tiempo. Por favor, no cierres esta página hasta que la reconstrucción finalice. Una vez reconstruído el índice, se recomienda reiniciar la aplicación.</value>
   </data>
   <data name="lblSizeResource1.Text" xml:space="preserve">
-    <value>Size</value>
+    <value>Tamaño</value>
   </data>
   <data name="lblStatusResource1.Text" xml:space="preserve">
-    <value>Status</value>
+    <value>Estado</value>
   </data>
   <data name="lblSystemStatusContentResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblWordCountResource1.Text" xml:space="preserve">
-    <value>Words</value>
+    <value>Palabras</value>
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administración</value>
   </data>
 </root>

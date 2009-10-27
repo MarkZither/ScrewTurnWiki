@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnSaveNewPasswordResource1.Text" xml:space="preserve">
-    <value>Save New Password</value>
+    <value>Guardar la nueva contraseña</value>
   </data>
   <data name="btnSaveNewPasswordResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvNewPasswordsResource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>La contraseñas no coinciden</value>
   </data>
   <data name="cvNewPasswordsResource1.Text" xml:space="preserve">
     <value />
@@ -136,28 +136,28 @@
     <value />
   </data>
   <data name="lblNewPassword1Resource1.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>Contraseña</value>
   </data>
   <data name="lblNewPassword2Resource1.Text" xml:space="preserve">
-    <value>Password (repeat)</value>
+    <value>Contraseña (repetir)</value>
   </data>
   <data name="lblOrResource1.Text" xml:space="preserve">
-    <value>or</value>
+    <value>o</value>
   </data>
   <data name="lblResetPassword2InfoResource1.Text" xml:space="preserve">
-    <value>Please enter your new password twice.</value>
+    <value>Escribe tu nueva contraseña dos veces</value>
   </data>
   <data name="lblResetPassword2Resource1.Text" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>Resetear la contraseña</value>
   </data>
   <data name="lblResetPasswordInformationResource1.Text" xml:space="preserve">
-    <value>If you forgot your Password, please insert your Username &lt;b&gt;or&lt;/b&gt; Email address, then click on the Reset Password button.&lt;br /&gt;You will receive an email with a link to reset your password.</value>
+    <value>Si has olvidado tu contraseña, por favor, inserta tu nombre de usuario &lt;b&gt;o&lt;/b&gt; tu dirección de email. Después haz click en el botón 'Resetear contraseña'.&lt;br /&gt;Recibirás un email con un enlace para resetear tu contraseña.</value>
   </data>
   <data name="lblResultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rfvNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>la contraseña es obligatoria</value>
   </data>
   <data name="rfvNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -166,7 +166,7 @@
     <value />
   </data>
   <data name="rfvNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>la contraseña es obligatoria</value>
   </data>
   <data name="rfvNewPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -175,7 +175,7 @@
     <value />
   </data>
   <data name="rxNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Contraseña inválida</value>
   </data>
   <data name="rxNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -184,7 +184,7 @@
     <value />
   </data>
   <data name="rxNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Contraseña inválida</value>
   </data>
   <data name="rxNewPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -211,28 +211,28 @@
     <value>Login</value>
   </data>
   <data name="btnLoginResource1.ToolTip" xml:space="preserve">
-    <value>Click to  Login</value>
+    <value>Click para entrar en el sistema (login)</value>
   </data>
   <data name="btnLogoutResource1.Text" xml:space="preserve">
     <value>Logout</value>
   </data>
   <data name="btnLogoutResource1.ToolTip" xml:space="preserve">
-    <value>Click to Logout</value>
+    <value>Click para salir del sistema (logout)</value>
   </data>
   <data name="btnResetPasswordResource1.Text" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>Resetear la contraseña</value>
   </data>
   <data name="btnResetPasswordResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkRememberResource1.Text" xml:space="preserve">
-    <value>Recordar sus Datos</value>
+    <value>Recordar sus datos</value>
   </data>
   <data name="chkRememberResource1.ToolTip" xml:space="preserve">
     <value>Marque esto si quiere que el sistema le recuerde en su próxima visita</value>
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Aquí puede hacer login para entrar al wiki. Podrá editar y crear páginas. Si es un Administrador, podrá realizar tareas de administración.&lt;br /&gt;No tiene una cuenta? Puede &lt;a href="Register.aspx" title="Crear una nueva cuenta"&gt;crear una&lt;/a&gt;.</value>
+    <value>Aquí puede hacer login para entrar al wiki. Podrá editar y crear páginas. Si es un administrador, podrá realizar tareas de administración.&lt;br /&gt;¿No tiene una cuenta? Puede &lt;a href="Register.aspx" title="crear una nueva cuenta"&gt;crear una&lt;/a&gt;.</value>
   </data>
   <data name="lblEmailResetResource1.Text" xml:space="preserve">
     <value>Email</value>
@@ -241,10 +241,10 @@
     <value>Usted está registrado en el sistema. Para salir, click en el botón “Logout”</value>
   </data>
   <data name="lblPasswordResource1.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>Contraseña</value>
   </data>
   <data name="lblResetPasswordResource1.Text" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>Resetear la contraseña</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -259,7 +259,7 @@
     <value>Nombre de usuario</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Página sin titulo</value>
+    <value>Página sin título</value>
   </data>
   <data name="txtEmailResetResource1.Text" xml:space="preserve">
     <value />
@@ -271,7 +271,7 @@
     <value />
   </data>
   <data name="txtPasswordResource1.ToolTip" xml:space="preserve">
-    <value>Escriba aquí su Password</value>
+    <value>Escriba aquí su contraseña</value>
   </data>
   <data name="txtUsernameResetResource1.ToolTip" xml:space="preserve">
     <value />

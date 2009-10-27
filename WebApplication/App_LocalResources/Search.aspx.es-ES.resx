@@ -118,61 +118,61 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="chkFilesAndAttachmentsResource1.Text" xml:space="preserve">
-    <value>Search Files and Attachments</value>
+    <value>Buscar archivos y adjuntos</value>
   </data>
   <data name="chkFilesAndAttachmentsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkAllNamespacesResource1.Text" xml:space="preserve">
-    <value>Search in all Namespaces and all Categories</value>
+    <value>Buscar en todos los contextos y categorías</value>
   </data>
   <data name="chkAllNamespacesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblInstructionsResource1.Text" xml:space="preserve">
-    <value>Here you can search through the pages of this Namespace, their attachments and the files uploaded to the system.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: the results will only display the items you have permissions to read.</value>
+    <value>Aquí puedes buscar en las páginas de este contexto, sus adjuntos y los archivos subidos al sistema.&lt;br /&gt;&lt;b&gt;Nota&lt;/b&gt;: los resultados sólo mostrarán aquellos ítems a los que tienes permiso de lectura.</value>
   </data>
   <data name="btnGoResource1.Text" xml:space="preserve">
-    <value>Go</value>
+    <value>Ir</value>
   </data>
   <data name="btnGoResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkUncategorizedPagesResource1.Text" xml:space="preserve">
-    <value>Uncategorized Pages</value>
+    <value>Páginas sin categorizar</value>
   </data>
   <data name="chkUncategorizedPagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblCategoryFilterResource1.Text" xml:space="preserve">
-    <value>Filter by Category</value>
+    <value>Filtrar por categoría</value>
   </data>
   <data name="lblStatsResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Search Engine</value>
+    <value>Motor de búsqueda</value>
   </data>
   <data name="lstCategoriesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Título</value>
   </data>
   <data name="rdoAllWordsResource1.Text" xml:space="preserve">
-    <value>All words</value>
+    <value>Todas las palabras</value>
   </data>
   <data name="rdoAllWordsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoAtLeastOneWordResource1.Text" xml:space="preserve">
-    <value>At least one word</value>
+    <value>Al menos una palabra</value>
   </data>
   <data name="rdoAtLeastOneWordResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoExactPhraseResource1.Text" xml:space="preserve">
-    <value>Exact phrase</value>
+    <value>Frase exacta</value>
   </data>
   <data name="rdoExactPhraseResource1.ToolTip" xml:space="preserve">
     <value />

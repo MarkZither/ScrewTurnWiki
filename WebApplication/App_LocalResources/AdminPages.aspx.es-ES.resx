@@ -118,61 +118,61 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnBulkMigrateBackResource1.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>Atrás</value>
   </data>
   <data name="btnBulkMigrateBackResource1.ToolTip" xml:space="preserve">
-    <value>Back to the Page list</value>
+    <value>Atrás al listado de páginas</value>
   </data>
   <data name="btnBulkMigratePagesResource1.Text" xml:space="preserve">
-    <value>Migrate</value>
+    <value>Migrar</value>
   </data>
   <data name="btnBulkMigratePagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkBulkMigrateCopyCategoriesResource1.Text" xml:space="preserve">
-    <value>Copy Page Categories</value>
+    <value>Copiar categorías de la página</value>
   </data>
   <data name="chkBulkMigrateCopyCategoriesResource1.ToolTip" xml:space="preserve">
-    <value>Copy Page Categories to target Namespace</value>
+    <value>Copia las categorías de la página al contexto destino</value>
   </data>
   <data name="lblBulkMigrateInfo2Resource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: the default page of the namespace cannot be migrated and is silently skipped.</value>
+    <value>&lt;b&gt;Nota&lt;/b&gt;: la página por defecto del contexto no puede ser migrada y será obviada sin mostrar avisos.</value>
   </data>
   <data name="lblBulkMigrateInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: this list only displays namespaces in which you are allowed to manage all pages.</value>
+    <value>&lt;b&gt;Nota&lt;/b&gt;: esta lista sólo muestra los contextos de los cuales puedes administrar sus páginas.</value>
   </data>
   <data name="lblBulkStep1Resource1.Text" xml:space="preserve">
-    <value>1. Select Pages</value>
+    <value>1. Seleccionar páginas</value>
   </data>
   <data name="lblBulkStep2Resource1.Text" xml:space="preserve">
-    <value>2. Select Target Namespace</value>
+    <value>2. Seleccionar el contexto destino</value>
   </data>
   <data name="lblBulkStep3Resource1.Text" xml:space="preserve">
-    <value>3. Perform Migration</value>
+    <value>3. Realizar migración</value>
   </data>
   <data name="rfvBulkMigrateTargetNamespaceResource1.ErrorMessage" xml:space="preserve">
-    <value>Target Namespace is required</value>
+    <value>El contexto destino es obligatorio</value>
   </data>
   <data name="btnMigrateResource1.Text" xml:space="preserve">
-    <value>Migrate</value>
+    <value>Migrar</value>
   </data>
   <data name="btnMigrateResource1.ToolTip" xml:space="preserve">
-    <value>Migrate the Page</value>
+    <value>Migrar la página</value>
   </data>
   <data name="chkCopyCategoriesResource1.Text" xml:space="preserve">
-    <value>Copy Page Categories</value>
+    <value>Copiar categorías de la página</value>
   </data>
   <data name="chkCopyCategoriesResource1.ToolTip" xml:space="preserve">
-    <value>Copy Page Categories to target Namespace</value>
+    <value>Copia las categorías de la página al contexto destino</value>
   </data>
   <data name="lblMigratePageTitleResource1.Text" xml:space="preserve">
-    <value>Migrate Page</value>
+    <value>Migrar página</value>
   </data>
   <data name="lblMigrateResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblTargetNamespaceResource1.Text" xml:space="preserve">
-    <value>Target Namespace</value>
+    <value>Contexto destino</value>
   </data>
   <data name="lstTargetNamespaceResource1.ToolTip" xml:space="preserve">
     <value />
@@ -187,130 +187,130 @@
     <value />
   </data>
   <data name="txtFilterResource1.ToolTip" xml:space="preserve">
-    <value>Filter Pages by name</value>
+    <value>Filtrar págias por nombre</value>
   </data>
   <data name="btnApproveResource1.Text" xml:space="preserve">
-    <value>Approve</value>
+    <value>Aprobar</value>
   </data>
   <data name="btnApproveResource1.ToolTip" xml:space="preserve">
-    <value>Approve this Revision</value>
+    <value>Aprobar esta revisión</value>
   </data>
   <data name="btnAsNamespaceResource1.Text" xml:space="preserve">
-    <value>As Namespace</value>
+    <value>Como contexto</value>
   </data>
   <data name="btnAsNamespaceResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template</value>
+    <value>Usar esta plantilla</value>
   </data>
   <data name="btnBack2Resource1.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>Atrás</value>
   </data>
   <data name="btnBack2Resource1.ToolTip" xml:space="preserve">
-    <value>Back to the Page list</value>
+    <value>Atrás al listado de páginas</value>
   </data>
   <data name="btnBackResource1.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>Atrás</value>
   </data>
   <data name="btnBackResource1.ToolTip" xml:space="preserve">
-    <value>Back to the Page list</value>
+    <value>Atrás al listado de páginas</value>
   </data>
   <data name="btnClearDiscussionResource1.Text" xml:space="preserve">
-    <value>Clear Discussion</value>
+    <value>Borrar discusión</value>
   </data>
   <data name="btnClearDiscussionResource1.ToolTip" xml:space="preserve">
-    <value>Delete all Messages in the Page's Discussion</value>
+    <value>Borrar todos los mensajes de la página de discusión</value>
   </data>
   <data name="btnDeleteBackupsResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Borrar</value>
   </data>
   <data name="btnDeleteBackupsResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Page's Backups</value>
+    <value>Borrar todos los backups de la página</value>
   </data>
   <data name="btnDeletePageResource1.Text" xml:space="preserve">
-    <value>Delete Page</value>
+    <value>Borrar página</value>
   </data>
   <data name="btnDeletePageResource1.ToolTip" xml:space="preserve">
-    <value>Delete this Page</value>
+    <value>Borrar esta página</value>
   </data>
   <data name="btnFilterResource1.AlternateText" xml:space="preserve">
     <value />
   </data>
   <data name="btnFilterResource1.ToolTip" xml:space="preserve">
-    <value>Apply Filter</value>
+    <value>Aplicar filtro</value>
   </data>
   <data name="btnLockedResource1.Text" xml:space="preserve">
-    <value>Locked</value>
+    <value>Bloqueado</value>
   </data>
   <data name="btnLockedResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template</value>
+    <value>Usar esta plantilla</value>
   </data>
   <data name="btnNewPageResource1.Text" xml:space="preserve">
-    <value>New Page</value>
+    <value>Nueva página</value>
   </data>
   <data name="btnNewPageResource1.ToolTip" xml:space="preserve">
-    <value>Create a new Page</value>
+    <value>Crear una nueva página</value>
   </data>
   <data name="btnPermissionsResource1.Text" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Permisos</value>
   </data>
   <data name="btnPermissionsResource1.ToolTip" xml:space="preserve">
-    <value>Manage Permissions for this Page</value>
+    <value>Administrar permisos de esta página</value>
   </data>
   <data name="btnPermissionsResource2.Text" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Permisos</value>
   </data>
   <data name="btnPermissionsResource2.ToolTip" xml:space="preserve">
-    <value>Manage Permissions for this Page</value>
+    <value>Administrar permisos de esta página</value>
   </data>
   <data name="btnPublicResource1.Text" xml:space="preserve">
-    <value>Public</value>
+    <value>Público</value>
   </data>
   <data name="btnPublicResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template</value>
+    <value>Usar esta plantilla</value>
   </data>
   <data name="btnRejectResource1.Text" xml:space="preserve">
-    <value>Reject</value>
+    <value>Rechazar</value>
   </data>
   <data name="btnRejectResource1.ToolTip" xml:space="preserve">
-    <value>Reject this Revision</value>
+    <value>Rechazar esta revisión</value>
   </data>
   <data name="btnRenameResource1.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Renombrar</value>
   </data>
   <data name="btnRenameResource1.ToolTip" xml:space="preserve">
-    <value>Rename the Page</value>
+    <value>Renombrar la página</value>
   </data>
   <data name="btnRollbackResource1.Text" xml:space="preserve">
-    <value>Rollback</value>
+    <value>Volver a una versión anterior</value>
   </data>
   <data name="btnRollbackResource1.ToolTip" xml:space="preserve">
-    <value>Rollback the Page</value>
+    <value>Volver a una versión anterior de la página</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleccionar</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Select this Page for administration</value>
+    <value>Seleccionar esta página para administrar</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleccionar</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Select this Page for administration</value>
+    <value>Seleccionar esta página para administrar</value>
   </data>
   <data name="chkOrphansOnlyResource1.Text" xml:space="preserve">
-    <value>Display orphan pages only</value>
+    <value>Mostrar páginas huérfanas sólamente</value>
   </data>
   <data name="chkOrphansOnlyResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkShadowPageResource1.Text" xml:space="preserve">
-    <value>Keep shadow Page</value>
+    <value>Mantener página sombra (shadow)</value>
   </data>
   <data name="chkShadowPageResource1.ToolTip" xml:space="preserve">
-    <value>Keep the old Page and set it to auto-redirect to the new Page</value>
+    <value>Mantener la pagina vieja y establecer un auto-redireccionamiento a la página nueva</value>
   </data>
   <data name="cvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Page Name</value>
+    <value>Nombre de página inválido</value>
   </data>
   <data name="cvNewNameResource1.Text" xml:space="preserve">
     <value />
@@ -325,7 +325,7 @@
     <value />
   </data>
   <data name="lblApproveTitleResource1.Text" xml:space="preserve">
-    <value>Approve/Reject Draft</value>
+    <value>Aprobar/rechazar borrador</value>
   </data>
   <data name="lblBackupResultResource1.Text" xml:space="preserve">
     <value />
@@ -334,31 +334,31 @@
     <value />
   </data>
   <data name="lblByResource1.Text" xml:space="preserve">
-    <value>By:</value>
+    <value>Por:</value>
   </data>
   <data name="lblClearDiscussionTitleResource1.Text" xml:space="preserve">
-    <value>Clear Page Discussion</value>
+    <value>Borrar la página de discussión</value>
   </data>
   <data name="lblCreatedByResource1.Text" xml:space="preserve">
-    <value>Created By</value>
+    <value>Creado por</value>
   </data>
   <data name="lblCreatedOnResource1.Text" xml:space="preserve">
-    <value>Created On</value>
+    <value>Creado el</value>
   </data>
   <data name="lblCurrentPageResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblCurrentTitleResource1.Text" xml:space="preserve">
-    <value>Current Title</value>
+    <value>Título actual</value>
   </data>
   <data name="lblDateTimeResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblDeleteBackupsTitleResource1.Text" xml:space="preserve">
-    <value>Delete Backups</value>
+    <value>Borrar copias de seguridad (backups)</value>
   </data>
   <data name="lblDeletePageResource1.Text" xml:space="preserve">
-    <value>Delete Page</value>
+    <value>Borrar página</value>
   </data>
   <data name="lblDeleteResultResource1.Text" xml:space="preserve">
     <value />
@@ -382,61 +382,61 @@
     <value />
   </data>
   <data name="lblEditResource1.Text" xml:space="preserve">
-    <value>Edit</value>
+    <value>Editar</value>
   </data>
   <data name="lblEditResource2.Text" xml:space="preserve">
-    <value>Edit</value>
+    <value>Editar</value>
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Page Operations</value>
+    <value>Operaciones de la página</value>
   </data>
   <data name="lblLastModifiedByResource1.Text" xml:space="preserve">
-    <value>Modified By</value>
+    <value>Modificado por</value>
   </data>
   <data name="lblLastModifiedOnResource1.Text" xml:space="preserve">
-    <value>Modified On</value>
+    <value>Modificado el</value>
   </data>
   <data name="lblLockedInfoResource1.Text" xml:space="preserve">
-    <value>Only Administrators can &lt;b&gt;edit&lt;/b&gt; this page.</value>
+    <value>Sólo los administradores puede &lt;b&gt;editar&lt;/b&gt; esta página.</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nombre</value>
   </data>
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
-    <value>Namespace</value>
+    <value>Contexto</value>
   </data>
   <data name="lblNewNameResource1.Text" xml:space="preserve">
-    <value>New Name</value>
+    <value>Nuevo nombre</value>
   </data>
   <data name="lblNormalInfoResource1.Text" xml:space="preserve">
-    <value>Inherit permissions from the parent namespace.</value>
+    <value>Heredar permisos del contexto padre</value>
   </data>
   <data name="lblOrphanResource1.Text" xml:space="preserve">
-    <value>Orphan</value>
+    <value>Huérfano</value>
   </data>
   <data name="lblPageNameResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblPagePermissionsResource1.Text" xml:space="preserve">
-    <value>Page Permissions</value>
+    <value>Permisos de la página</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Wiki Pages</value>
+    <value>Páginas del wiki</value>
   </data>
   <data name="lblPermissionsTemplatesInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: setting a template will replace all existing permissions for the default user groups.</value>
+    <value>&lt;b&gt;Aviso&lt;/b&gt;: establecer uana plantilla reemplazrá todos los permisos existentes del grupo de usuarios por defecto.</value>
   </data>
   <data name="lblPermissionsTemplatesResource1.Text" xml:space="preserve">
-    <value>Permissions Templates</value>
+    <value>Plantillas de permisos</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Proveedor</value>
   </data>
   <data name="lblPublicInfoResource1.Text" xml:space="preserve">
-    <value>Anyone, including anonymous users, can &lt;b&gt;edit&lt;/b&gt; this page.</value>
+    <value>Cualquiera, incluyendo a los usuarios anónimos, pueden &lt;b&gt;editar&lt;/b&gt; esta página.</value>
   </data>
   <data name="lblRenamePageTitleResource1.Text" xml:space="preserve">
-    <value>Rename Page</value>
+    <value>Renombrar la página</value>
   </data>
   <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
@@ -445,13 +445,13 @@
     <value />
   </data>
   <data name="lblRevisionResource1.Text" xml:space="preserve">
-    <value>Target Revision</value>
+    <value>Revisión destino</value>
   </data>
   <data name="lblRevisionsResource1.Text" xml:space="preserve">
     <value>Rev.</value>
   </data>
   <data name="lblRollbackPageTitleResource1.Text" xml:space="preserve">
-    <value>Rollback Page</value>
+    <value>Restaurar una copia de seguridad de la página</value>
   </data>
   <data name="lblRollbackResultResource1.Text" xml:space="preserve">
     <value />
@@ -460,34 +460,34 @@
     <value />
   </data>
   <data name="lblSavedOnResource1.Text" xml:space="preserve">
-    <value>Saved on:</value>
+    <value>Guardada el:</value>
   </data>
   <data name="lblUserResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lnkDiffResource1.Text" xml:space="preserve">
-    <value>Diff</value>
+    <value>Diferencias</value>
   </data>
   <data name="lnkDiffResource1.ToolTip" xml:space="preserve">
-    <value>Show changes</value>
+    <value>Mostrar cambios</value>
   </data>
   <data name="lnkEditResource1.Text" xml:space="preserve">
-    <value>Edit</value>
+    <value>Editar</value>
   </data>
   <data name="lnkEditResource1.ToolTip" xml:space="preserve">
-    <value>Edit this Draft</value>
+    <value>Editar este borrador</value>
   </data>
   <data name="lstBackupResource1.ToolTip" xml:space="preserve">
-    <value>Available Backups, newer first</value>
+    <value>Copias de seguridad disponibles, nuevas primero</value>
   </data>
   <data name="lstNamespaceResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lstRevisionResource1.ToolTip" xml:space="preserve">
-    <value>Available revisions, newer first</value>
+    <value>Revisiones disponibles, nuevas primero</value>
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administración</value>
   </data>
   <data name="pnlApproveRevisionResource1.GroupingText" xml:space="preserve">
     <value />
@@ -544,19 +544,19 @@
     <value />
   </data>
   <data name="rdoAllBackupsResource1.Text" xml:space="preserve">
-    <value>Delete all Backups</value>
+    <value>Borrar todos las copias de seguridad</value>
   </data>
   <data name="rdoAllBackupsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoUpToResource1.Text" xml:space="preserve">
-    <value>Delete Backups older than and including</value>
+    <value>Borrar las copias de seguridad más viejas o iguales que</value>
   </data>
   <data name="rdoUpToResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rfvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>New Name is required</value>
+    <value>El nuevo nombre es obligatorio</value>
   </data>
   <data name="rfvNewNameResource1.Text" xml:space="preserve">
     <value />

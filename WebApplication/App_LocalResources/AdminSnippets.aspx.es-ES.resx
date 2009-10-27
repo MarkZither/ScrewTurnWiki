@@ -118,55 +118,55 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Cancelar</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the items list</value>
+    <value>Cancelar y volver a la lista de ítems</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Item</value>
+    <value>Crear ítem</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Item</value>
+    <value>Guardar el nuevo ítem</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Borrar</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Item</value>
+    <value>Borrar el ítem</value>
   </data>
   <data name="btnNewSnippetResource1.Text" xml:space="preserve">
-    <value>New Snippet</value>
+    <value>Nueva macro (snippet)</value>
   </data>
   <data name="btnNewSnippetResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnNewTemplateResource1.Text" xml:space="preserve">
-    <value>New Template</value>
+    <value>Nueva plantilla</value>
   </data>
   <data name="btnNewTemplateResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Item</value>
+    <value>Guardar ítem</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>Guardar modificaciones</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleccionar</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Edit or delete this item</value>
+    <value>Editar o borrar este ítem</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleccionar</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Edit or delete this item</value>
+    <value>Editar o borrar este ítem</value>
   </data>
   <data name="cvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Snippet Name</value>
+    <value>Nombre de macro inválido</value>
   </data>
   <data name="cvNameResource1.Text" xml:space="preserve">
     <value />
@@ -175,25 +175,25 @@
     <value />
   </data>
   <data name="lblEditTitleSnippetResource1.Text" xml:space="preserve">
-    <value>Snippet Details</value>
+    <value>Detalles de la macro</value>
   </data>
   <data name="lblEditTitleTemplateResource1.Text" xml:space="preserve">
-    <value>Template Details</value>
+    <value>Detalles de la plantilla</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nombre</value>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nombre</value>
   </data>
   <data name="lblParametersResource1.Text" xml:space="preserve">
-    <value>Params</value>
+    <value>Parámetros</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Proveedor</value>
   </data>
   <data name="lblProviderResource2.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Proveedor</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -202,13 +202,13 @@
     <value />
   </data>
   <data name="lblSnippetsTemplatesResource1.Text" xml:space="preserve">
-    <value>Snippets and Templates</value>
+    <value>Macros (snippets) y plantillas</value>
   </data>
   <data name="lblTypeResource1.Text" xml:space="preserve">
-    <value>Type</value>
+    <value>Tipo</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administración</value>
   </data>
   <data name="pnlEditElementResource1.GroupingText" xml:space="preserve">
     <value />
@@ -223,7 +223,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>El nombre es obligatorio</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />

@@ -145,6 +145,6 @@
     <value />
   </data>
   <data name="txtCaptchaResource1.ToolTip" xml:space="preserve">
-    <value>Copy here the text displayed above (case sensitive)</value>
+    <value>Copia aquí el texto mostrado debajo. Se distinguen mayúsculas y minúsculas.</value>
   </data>
 </root>

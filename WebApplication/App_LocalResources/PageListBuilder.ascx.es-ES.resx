@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAddPageResource1.Text" xml:space="preserve">
-    <value>Add</value>
+    <value>Añadir</value>
   </data>
   <data name="btnAddPageResource1.ToolTip" xml:space="preserve">
-    <value>Add the selected Page to the list</value>
+    <value>Añadir la página seleccionada a la lista</value>
   </data>
   <data name="btnRemoveResource1.Text" xml:space="preserve">
-    <value>Remove</value>
+    <value>Eliminar</value>
   </data>
   <data name="btnRemoveResource1.ToolTip" xml:space="preserve">
-    <value>Remove the selected page from the list</value>
+    <value>Eliminar la página seleccinada de la lista</value>
   </data>
   <data name="btnSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>Buscar</value>
   </data>
   <data name="btnSearchResource1.ToolTip" xml:space="preserve">
-    <value>Search for a Page</value>
+    <value>Buscar una página</value>
   </data>
   <data name="lstAvailablePageResource1.ToolTip" xml:space="preserve">
     <value />

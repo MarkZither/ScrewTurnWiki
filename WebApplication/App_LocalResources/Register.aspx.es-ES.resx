@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnRegisterResource1.Text" xml:space="preserve">
-    <value>Create Account</value>
+    <value>Crear cuenta</value>
   </data>
   <data name="btnRegisterResource1.ToolTip" xml:space="preserve">
-    <value>Click here to create your Account</value>
+    <value>Click aquí para crear tu cuenta</value>
   </data>
   <data name="cvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emails are not equal</value>
+    <value>Los emails no coinciden</value>
   </data>
   <data name="cvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -133,7 +133,7 @@
     <value />
   </data>
   <data name="cvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emails are not equal</value>
+    <value>Los emails no coinciden</value>
   </data>
   <data name="cvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -142,7 +142,7 @@
     <value />
   </data>
   <data name="cvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>Las contraseñas no coinciden</value>
   </data>
   <data name="cvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -151,7 +151,7 @@
     <value />
   </data>
   <data name="cvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>Las contraseñas no coinciden</value>
   </data>
   <data name="cvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -160,7 +160,7 @@
     <value />
   </data>
   <data name="cvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username already exists</value>
+    <value>El nombre de usuario ya existe</value>
   </data>
   <data name="cvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -172,25 +172,25 @@
     <value />
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Control Text (case sensitive):</value>
+    <value>Texto de control (se distinguen mayúsculas)</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
-    <value>Display Name</value>
+    <value>Nombre para mostrar</value>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
     <value>Email</value>
   </data>
   <data name="lblEmail2Resource1.Text" xml:space="preserve">
-    <value>Email (repeat)</value>
+    <value>Email (repetir)</value>
   </data>
   <data name="lblPassword1Resource1.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>Contraseña</value>
   </data>
   <data name="lblPassword2Resource1.Text" xml:space="preserve">
-    <value>Password (repeat)</value>
+    <value>Contraseña (repetir)</value>
   </data>
   <data name="lblRegisterDescriptionResource1.Text" xml:space="preserve">
-    <value>Here you can create a new Account for this Wiki.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: all the fields are mandatory. The Email address will not be published in any way, but it will be visible to the Administrators.</value>
+    <value>Aquí puedes crear una nueva cuenta para este wiki&lt;br /&gt;&lt;b&gt;Nota&lt;/b&gt;: todos los campos son obligatorios. Tu dirección de email nunca será publicada, pero será visible para los administradores.</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -199,13 +199,13 @@
     <value />
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Create a new Account</value>
+    <value>Crear una nueva cuenta</value>
   </data>
   <data name="lblUsernameResource1.Text" xml:space="preserve">
-    <value>Username</value>
+    <value>Nombre de usuario</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
+    <value>Página sin título</value>
   </data>
   <data name="pnlRegisterResource1.GroupingText" xml:space="preserve">
     <value />
@@ -214,7 +214,7 @@
     <value />
   </data>
   <data name="rfvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>El email es obligatorio</value>
   </data>
   <data name="rfvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -223,7 +223,7 @@
     <value />
   </data>
   <data name="rfvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>El email es obligatorio</value>
   </data>
   <data name="rfvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -232,7 +232,7 @@
     <value />
   </data>
   <data name="rfvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>La contraseña es obligatoria</value>
   </data>
   <data name="rfvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -241,7 +241,7 @@
     <value />
   </data>
   <data name="rfvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>La contraseña es obligatoria</value>
   </data>
   <data name="rfvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -250,7 +250,7 @@
     <value />
   </data>
   <data name="rfvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username is required</value>
+    <value>El nombre de usuario es obligatorio</value>
   </data>
   <data name="rfvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -259,7 +259,7 @@
     <value />
   </data>
   <data name="rxvDisplayNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>Nombre para mostrar inválido</value>
   </data>
   <data name="rxvDisplayNameResource1.Text" xml:space="preserve">
     <value />
@@ -268,7 +268,7 @@
     <value />
   </data>
   <data name="rxvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Email</value>
+    <value>Email inválido</value>
   </data>
   <data name="rxvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -277,7 +277,7 @@
     <value />
   </data>
   <data name="rxvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Contraseña inválida</value>
   </data>
   <data name="rxvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -286,7 +286,7 @@
     <value />
   </data>
   <data name="rxvUserNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Username</value>
+    <value>Nombre usuario inválido</value>
   </data>
   <data name="rxvUserNameResource1.Text" xml:space="preserve">
     <value />
@@ -298,36 +298,36 @@
     <value />
   </data>
   <data name="txtDisplayNameResource1.ToolTip" xml:space="preserve">
-    <value>Type here a display name for your account</value>
+    <value>Escribe aquí el nombre para mostrar de tu cuenta</value>
   </data>
   <data name="txtEmail1Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtEmail1Resource1.ToolTip" xml:space="preserve">
-    <value>Type here your Email address</value>
+    <value>Escribe aquí tu dirección de email</value>
   </data>
   <data name="txtEmail2Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtEmail2Resource1.ToolTip" xml:space="preserve">
-    <value>Repeat your Email address</value>
+    <value>Repite tu dirección de email</value>
   </data>
   <data name="txtPassword1Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtPassword1Resource1.ToolTip" xml:space="preserve">
-    <value>Type here your Password</value>
+    <value>Escribe tu contraseña</value>
   </data>
   <data name="txtPassword2Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtPassword2Resource1.ToolTip" xml:space="preserve">
-    <value>Repeat your Password</value>
+    <value>Repite tu contraseña</value>
   </data>
   <data name="txtUsernameResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtUsernameResource1.ToolTip" xml:space="preserve">
-    <value>Type here your Username</value>
+    <value>Escribe aquí tu nombre de usuario</value>
   </data>
 </root>
