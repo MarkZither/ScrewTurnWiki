@@ -193,7 +193,7 @@ namespace ScrewTurn.Wiki {
 				row["Type"] = "F";
 				row["Name"] = GetItemName(s);
 				row["Size"] = Tools.BytesToString(details.Size);
-				row["WikiMarkupLink"] = "{UP}" + Tools.UrlEncode(s);
+				row["WikiMarkupLink"] = "{UP}" + s;
 				if(canDownload) {
 					row["Link"] = "GetFile.aspx?File=" + Tools.UrlEncode(s).Replace("'", "&#39;") + "&amp;AsStreamAttachment=1&amp;Provider=" +
 						provider.GetType().FullName + "&amp;NoHit=1";

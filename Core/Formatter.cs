@@ -884,7 +884,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="startIndex">The index where to start working.</param>
 		private static void EncodeFilename(StringBuilder buffer, int startIndex) {
 			// 1. Find end of the filename (first pipe or closed square bracket)
-			// 2. Encode the string
+			// 2. Decode the string, so that it does not break if it was already encoded
+			// 3. Encode the string
 
 			string allData = buffer.ToString();
 
@@ -892,7 +893,8 @@ namespace ScrewTurn.Wiki {
 			if(endIndex > startIndex) {
 				int len = endIndex - startIndex;
 				// {, : and } are used in snippets which are useful in links
-				string value = Tools.UrlEncode(allData.Substring(startIndex, len)).Replace("%7b", "{").Replace("%7B", "{").Replace("%7d", "}").Replace("%7D", "}").Replace("%3a", ":").Replace("%3A", ":");
+				string input = Tools.UrlDecode(allData.Substring(startIndex, len));
+				string value = Tools.UrlEncode(input).Replace("%7b", "{").Replace("%7B", "{").Replace("%7d", "}").Replace("%7D", "}").Replace("%3a", ":").Replace("%3A", ":");
 				buffer.Remove(startIndex, len);
 				buffer.Insert(startIndex, value);
 			}
