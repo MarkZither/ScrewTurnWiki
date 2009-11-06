@@ -142,6 +142,8 @@ namespace ScrewTurn.Wiki {
 					return Settings.DefaultFilesProvider;
 				case SettingName.DefaultCacheProvider:
 					return Settings.DefaultCacheProvider;
+				case SettingName.RootNamespaceTheme:
+					return Settings.GetTheme(null);
 			}
 			return "";
 		}
@@ -487,7 +489,7 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 			else {
-				string[] dirs = directory.Provider.ListDirectories(null);
+				string[] dirs = directory.Provider.ListDirectories(directory.FullPath);
 
 				foreach(string dir in dirs) {
 					result.Add(new StDirectoryInfo(dir, directory.Provider));

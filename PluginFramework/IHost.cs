@@ -627,7 +627,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The default cache provider.
 		/// </summary>
-		DefaultCacheProvider
+		DefaultCacheProvider,
+		/// <summary>
+		/// The name of the theme of the root namespace.
+		/// </summary>
+		RootNamespaceTheme
 	}
 
 	/// <summary>
