@@ -81,6 +81,7 @@ namespace ScrewTurn.Wiki {
 			Match match = null;
 
 			StringBuilder buffer = new StringBuilder(html);
+			if(!html.EndsWith("\r\n")) buffer.Append("\r\n");
 
 			buffer.Replace("<br>", "<br />");
 			buffer.Replace("<BR>", "<br />");

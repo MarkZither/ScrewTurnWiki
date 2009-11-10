@@ -136,7 +136,7 @@
 			    </td>
             </tr>
             <tr>
-                <td style="vertical-align: top;"><p style="text-align: right;"><asp:Literal ID="lblCaptcha" runat="server" Text="Control Text (case sensitive):" meta:resourcekey="lblCaptchaResource1" /></p></td>
+                <td style="vertical-align: top;"><p style="text-align: right;"><asp:Literal ID="lblCaptcha" runat="server" Text="Control Text (case sensitive)" meta:resourcekey="lblCaptchaResource1" />:</p></td>
                 <td><st:Captcha ID="captcha" runat="server" /></td>
             </tr>
             <tr>

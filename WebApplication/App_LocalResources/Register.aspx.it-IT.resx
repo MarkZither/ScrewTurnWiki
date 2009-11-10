@@ -172,10 +172,10 @@
     <value />
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Testo di controllo (sensibile alle maiuscole):</value>
+    <value>Testo di controllo (sensibile alle maiuscole)</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
-    <value>Nome visualizzato:</value>
+    <value>Nome visualizzato</value>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
     <value>Email</value>

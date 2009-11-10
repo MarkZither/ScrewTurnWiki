@@ -172,7 +172,7 @@
     <value />
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Защита от авторегистраций (регистрозависимо):</value>
+    <value>Защита от авторегистраций (регистрозависимо)</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
     <value>НикНейм</value>

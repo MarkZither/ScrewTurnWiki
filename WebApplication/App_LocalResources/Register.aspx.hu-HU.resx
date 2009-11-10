@@ -172,7 +172,7 @@
     <value />
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Ellenőrző szöveg (kis-nagybetű számít):</value>
+    <value>Ellenőrző szöveg (kis-nagybetű számít)</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
     <value>Megjelenő név</value>

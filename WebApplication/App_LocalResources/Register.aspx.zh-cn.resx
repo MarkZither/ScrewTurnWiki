@@ -172,7 +172,7 @@
     <value />
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>验证码（大小写敏感）：</value>
+    <value>验证码（大小写敏感）</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
     <value>显示名称</value>

@@ -67,6 +67,7 @@ namespace ScrewTurn.Wiki {
 		private const string ExtendedUpReplacement = "GetFile.aspx?$File=";
 		private const string ExtendedUpReplacementForAttachment = "GetFile.aspx?$Page=@&File=";
 		private const string SingleBrPlaceHolder = "%%%%SingleBrPlaceHolder%%%%";
+		private const string SectionLinkTextPlaceHolder = "%%%%SectionLinkTextPlaceHolder%%%%";
 
 		/// <summary>
 		/// Detects the current namespace.
@@ -911,7 +912,7 @@ namespace ScrewTurn.Wiki {
 			buffer.Append(@""" href=""#");
 			buffer.Append(id);
 			buffer.Append(@""" title=""");
-			buffer.Append(Exchanger.ResourceExchanger.GetResource("LinkToThisSection"));
+			buffer.Append(SectionLinkTextPlaceHolder);
 			if(Settings.EnableSectionAnchors) buffer.Append(@""">&#0182;</a>");
 			else buffer.Append(@"""></a>");
 		}
@@ -2401,6 +2402,8 @@ namespace ScrewTurn.Wiki {
 				match = Phase3SpecialTagRegex.Match(sb.ToString());
 			}
 
+			sb.Replace(SectionLinkTextPlaceHolder, Exchanger.ResourceExchanger.GetResource("LinkToThisSection"));
+
 			match = RecentChangesRegex.Match(sb.ToString());
 			while(match.Success) {
 				sb.Remove(match.Index, match.Length);
@@ -2443,11 +2446,9 @@ namespace ScrewTurn.Wiki {
 				int idx = txt.LastIndexOf(",");
 				string[] fields = new string[] { txt.Substring(0, idx), txt.Substring(idx + 1) };
 				dummy = new StringBuilder();
-				dummy.Append(@"<span class=""signature""><a class=""systemlink"" href=""");
-				UrlTools.BuildUrl(dummy, "User.aspx?Username=", Tools.UrlEncode(fields[0]));
-				dummy.Append(@""">");
-				dummy.Append(fields[0]);
-				dummy.Append("</a>, ");
+				dummy.Append(@"<span class=""signature"">");
+				dummy.Append(Users.UserLink(fields[0]));
+				dummy.Append(", ");
 				dummy.Append(Preferences.AlignWithTimezone(DateTime.Parse(fields[1])).ToString(Settings.DateTimeFormat));
 				dummy.Append("</span>");
 				sb.Insert(match.Index, dummy.ToString());

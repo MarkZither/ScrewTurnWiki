@@ -256,7 +256,7 @@
     <value>Uživatelské jméno již existuje</value>
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Kontrolní text (ohled na velikost písmen):</value>
+    <value>Kontrolní text (ohled na velikost písmen)</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
     <value>Zobrazované jméno</value>

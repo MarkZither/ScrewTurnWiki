@@ -256,7 +256,7 @@
     <value />
   </data>
   <data name="lblApprovalRequiredInfoResource1.Text" xml:space="preserve">
-    <value>Le tue midifiche saranno salvate come bozza e non verranno pubblicate finchè un editore o amministratore non le avrà approvate.</value>
+    <value>Le tue modifiche saranno salvate come bozza e non verranno pubblicate finchè un editore o amministratore non le avrà approvate.</value>
   </data>
   <data name="lblAttachmentManagerResource1.Text" xml:space="preserve">
     <value>Gestione allegati</value>
@@ -322,7 +322,7 @@
     <value>Salvare questa pagina potrebbe causare &lt;b&gt;perdite di dati&lt;/b&gt;.</value>
   </data>
   <data name="lblSaveDisabledResource1.Text" xml:space="preserve">
-    <value>Gli amministratori non permettoni di salvare questa pagina.</value>
+    <value>Gli amministratori non permettono di salvare questa pagina.</value>
   </data>
   <data name="lblSessionRefreshResource1.Text" xml:space="preserve">
     <value />

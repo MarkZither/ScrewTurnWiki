@@ -271,7 +271,7 @@
     <value>Klik er for at oprette en konto</value>
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Kontrol tekst:</value>
+    <value>Kontrol tekst</value>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
     <value>E-mail</value>

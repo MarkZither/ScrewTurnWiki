@@ -172,7 +172,7 @@
     <value />
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Kontrol metni (Büyük/küçük harfe dikkat):</value>
+    <value>Kontrol metni (Büyük/küçük harfe dikkat)</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
     <value>Görünür Ad</value>

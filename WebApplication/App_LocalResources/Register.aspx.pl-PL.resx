@@ -271,7 +271,7 @@
     <value>Kliknij tutaj aby utworzyć swoje konto</value>
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Tekst kontrolny:</value>
+    <value>Tekst kontrolny</value>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
     <value>Adres e-mail</value>
