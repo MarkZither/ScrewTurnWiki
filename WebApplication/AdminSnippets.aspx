@@ -56,11 +56,13 @@
 	</asp:Panel>
 	
 	<asp:Panel ID="pnlEditElement" runat="server" Visible="False" meta:resourcekey="pnlEditElementResource1">
-		<div id="EditSnippetDiv">
+		<div id="EditSnippetDiv">		
 			<h2 class="separator">
 				<asp:Literal ID="lblEditTitleSnippet" runat="server" Text="Snippet Details" meta:resourcekey="lblEditTitleSnippetResource1" />
 				<asp:Literal ID="lblEditTitleTemplate" runat="server" Text="Template Details" meta:resourcekey="lblEditTitleTemplateResource1" />
 			</h2>
+			<asp:Literal ID="lblEditSnippetWarning" runat="server" Visible="false" meta:resourcekey="lblEditSnippetWarningResource1"
+				Text="<div class='warning' style='float: right;'>You are now editing a snippet. After you are done,<br />it is <b>strongly</b> suggested to rebuild the search engine index in the <i>Admin Home</i> page.</div>" />
 			
 			<asp:Literal ID="lblProvider" runat="server" Text="Provider" EnableViewState="False" meta:resourcekey="lblProviderResource2" /><br />
 			<st:ProviderSelector ID="providerSelector" runat="server" ExcludeReadOnly="true" ProviderType="Pages" /><br />

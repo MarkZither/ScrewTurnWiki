@@ -237,4 +237,7 @@
   <data name="txtNameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
+  <data name="lblEditSnippetWarningResource1.Text" xml:space="preserve">
+    <value>&lt;div class='warning' style='float: right;'&gt;You are now editing a snippet. After you are done,&lt;br /&gt;it is &lt;b&gt;strongly&lt;/b&gt; suggested to rebuild the search engine index in the &lt;i&gt;Admin Home&lt;/i&gt; page.&lt;/div&gt;</value>
+  </data>
 </root>

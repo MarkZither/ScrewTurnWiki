@@ -83,6 +83,7 @@ namespace ScrewTurn.Wiki {
 			Snippet snippet = Snippets.Find(name);
 			providerSelector.SelectedProvider = snippet.Provider.GetType().FullName;
 			editor.SetContent(snippet.Content, Settings.UseVisualEditorAsDefault);
+			lblEditSnippetWarning.Visible = true;
 			SetTitleForSnippet();
 		}
 
@@ -311,6 +312,8 @@ namespace ScrewTurn.Wiki {
 			btnDelete.Visible = false;
 			lblResult.Text = "";
 			lblResult.CssClass = "";
+
+			lblEditSnippetWarning.Visible = false;
 		}
 
 	}
