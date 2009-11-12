@@ -538,6 +538,12 @@ namespace ScrewTurn.Wiki {
 			if(done) {
 				AuthWriter.ClearEntriesForPage(page.FullName);
 
+				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+					foreach(string attn in prov.ListPageAttachments(page)) {
+						prov.DeletePageAttachment(page, attn);
+					}
+				}
+
 				// Remove the deleted page from the Breadcrumbs Trail and Redirections list
 				SessionFacade.Breadcrumbs.RemovePage(page);
 				Redirections.WipePageOut(page);
@@ -573,12 +579,19 @@ namespace ScrewTurn.Wiki {
 
 			string oldName = page.FullName;
 
-			string title = Content.GetPageContent(page, false).Title;
+			PageContent originalContent = Content.GetPageContent(page, false);
 
+			Settings.Provider.StoreOutgoingLinks(page.FullName, new string[0]);
 			PageInfo pg = page.Provider.RenamePage(page, name);
 			if(pg != null) {
 				AuthWriter.ClearEntriesForPage(newFullName);
 				AuthWriter.ProcessPageRenaming(oldName, newFullName);
+
+				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), pg);
+				}
+
+				StorePageOutgoingLinks(pg, originalContent.Content);
 
 				SessionFacade.Breadcrumbs.RemovePage(page);
 				Redirections.Clear();
@@ -587,8 +600,8 @@ namespace ScrewTurn.Wiki {
 
 				// Page redirect is implemented directly in AdminPages.aspx.cs
 
-				Log.LogEntry("Page " + page.FullName + " renamed to " + name, EntryType.General, Log.SystemUsername);
-				RecentChanges.AddChange(page.FullName, title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRenamed, "");
+				Log.LogEntry("Page " + oldName + " renamed to " + name, EntryType.General, Log.SystemUsername);
+				RecentChanges.AddChange(page.FullName, originalContent.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRenamed, "");
 				Host.Instance.OnPageActivity(page, oldName, SessionFacade.GetCurrentUsername(), PageActivity.PageRenamed);
 				return true;
 			}
@@ -606,11 +619,17 @@ namespace ScrewTurn.Wiki {
 		/// <param name="copyCategories">A value indicating whether to copy the page categories to the target namespace.</param>
 		/// <returns><c>true</c> if the page is migrated, <c>false</c> otherwise.</returns>
 		public static bool MigratePage(PageInfo page, NamespaceInfo targetNamespace, bool copyCategories) {
+			string oldName = page.FullName;
+
 			PageInfo result = page.Provider.MovePage(page, targetNamespace, copyCategories);
 			if(result != null) {
 				Settings.Provider.StoreOutgoingLinks(page.FullName, new string[0]);
 				PageContent content = Content.GetPageContent(result, false);
 				StorePageOutgoingLinks(result, content.Content);
+
+				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), result);
+				}
 			}
 			return result != null;
 		}
