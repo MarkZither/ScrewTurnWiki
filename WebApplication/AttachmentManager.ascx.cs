@@ -70,14 +70,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			DetectPermissions();
-
-			// Setup buttons and controls
-			if(!canUpload) {
-				btnUpload.Enabled = false;
-			}
-			if(!canDelete) {
-				chkOverwrite.Enabled = false;
-			}
+			SetupControls();
 		}
 
 		/// <summary>
@@ -102,6 +95,18 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Sets up buttons and controls using the permissions.
+		/// </summary>
+		private void SetupControls() {
+			if(!canUpload) {
+				btnUpload.Enabled = false;
+			}
+			if(!canDelete) {
+				chkOverwrite.Enabled = false;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the PageInfo object.
 		/// </summary>
 		/// <remarks>This property must be set at page load.</remarks>
@@ -113,6 +118,7 @@ namespace ScrewTurn.Wiki {
 				btnUpload.Enabled = value != null;
 				lblNoUpload.Visible = !btnUpload.Enabled;
 				DetectPermissions();
+				SetupControls();
 				rptItems.DataBind();
 			}
 		}

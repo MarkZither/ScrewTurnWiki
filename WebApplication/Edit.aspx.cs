@@ -426,6 +426,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnCancel_Click(object sender, EventArgs e) {
+			if(currentPage == null && txtName.Visible) currentPage = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text));
 			if(currentPage != null) UrlTools.Redirect(Tools.UrlEncode(currentPage.FullName) + Settings.PageExtension);
 			else UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
 		}
@@ -566,6 +567,7 @@ namespace ScrewTurn.Wiki {
 					Pages.CreatePage(DetectNamespaceInfo(), txtName.Text, provider);
 					pg = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text), provider);
 					saveMode = SaveMode.Normal;
+					attachmentManager.CurrentPage = pg;
 				}
 				Log.LogEntry("Page update requested for " + txtName.Text, EntryType.General, username);
 
