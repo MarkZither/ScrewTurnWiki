@@ -33,6 +33,28 @@
 	</script>
 
 	<h2 class="sectiontitle"><asp:Literal ID="lblAdminHome" runat="server" Text="Administration Home" EnableViewState="False" meta:resourcekey="lblAdminHomeResource1" /></h2>
+	
+	<div id="BulkEmailDiv">
+		<h2 class="separator"><asp:Literal ID="lblBulkEmail" runat="server" Text="Mass Email" EnableViewState="false" meta:resourcekey="lblBulkEmailResource1" /></h2>
+		<asp:Literal ID="lblBulkEmailInfo" runat="server" Text="You can send an email message to all users of one or more groups." EnableViewState="false" meta:resourcekey="lblBulkEmailInfoResource1" />
+		<br /><br />
+		<asp:CheckBoxList ID="lstGroups" runat="server" RepeatDirection="Horizontal" />
+		<br />
+		<asp:Literal ID="lblSubject" runat="server" Text="Subject" EnableViewState="false" meta:resourcekey="lblSubjectResource1" /><br />
+		<asp:TextBox ID="txtSubject" runat="server" CssClass="textbox" /><br />
+		<asp:TextBox ID="txtBody" runat="server" TextMode="MultiLine" CssClass="body" />
+		<br /><br />
+		<asp:Button ID="btnSendBulkEmail" runat="server" Text="Send Mass Email" ValidationGroup="email" OnClick="btnSendBulkEmail_Click" meta:resourcekey="btnSendBulkEmailResource1" />
+		<asp:RequiredFieldValidator ID="rfvSubject" runat="server" Display="Dynamic" CssClass="resulterror"
+			ControlToValidate="txtSubject" ErrorMessage="Subject is required" ValidationGroup="email" meta:resourcekey="rfvSubjectResource1" />
+		<asp:RequiredFieldValidator ID="rfvBody" runat="server" Display="Dynamic" CssClass="resulterror"
+			ControlToValidate="txtBody" ErrorMessage="Body is required" ValidationGroup="email" meta:resourcekey="rfvBodyResource1" />
+		<asp:CustomValidator ID="cvGroups" runat="server" Display="Dynamic" CssClass="resulterror"
+			ErrorMessage="You must select at least one group" ValidationGroup="email" meta:resourcekey="cvGroupsResource1"
+			OnServerValidate="cvGroups_ServerValidate" />
+		<asp:Label ID="lblEmailResult" runat="server" />
+	</div>
+	
     <p>
         <asp:Literal ID="lblSystemStatusContent" runat="server" meta:resourcekey="lblSystemStatusContentResource1" />
         <br /><br />

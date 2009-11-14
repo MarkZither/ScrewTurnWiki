@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
@@ -26,6 +27,15 @@ namespace ScrewTurn.Wiki {
 				rptIndex.DataBind();
 
 				DisplayOrphansCount();
+
+				string anon = Settings.AnonymousGroup;
+				foreach(UserGroup group in Users.GetUserGroups()) {
+					if(group.Name != anon) {
+						ListItem item = new ListItem(group.Name, group.Name);
+						item.Selected = true;
+						lstGroups.Items.Add(item);
+					}
+				}
 			}
 		}
 
@@ -38,6 +48,43 @@ namespace ScrewTurn.Wiki {
 				orphans += Pages.GetOrphanedPages(nspace).Length;
 			}
 			lblOrphanPagesCount.Text = orphans.ToString();
+		}
+
+		protected void cvGroups_ServerValidate(object sender, ServerValidateEventArgs e) {
+			e.IsValid = false;
+			foreach(ListItem item in lstGroups.Items) {
+				if(item.Selected) {
+					e.IsValid = true;
+					break;
+				}
+			}
+		}
+
+		protected void btnSendBulkEmail_Click(object sender, EventArgs e) {
+			lblEmailResult.CssClass = "";
+			lblEmailResult.Text = "";
+
+			Page.Validate("email");
+			if(!Page.IsValid) return;
+
+			List<string> emails = new List<string>();
+			foreach(ListItem item in lstGroups.Items) {
+				if(item.Selected) {
+					UserGroup group = Users.FindUserGroup(item.Value);
+					if(group != null) {
+						foreach(string user in group.Users) {
+							UserInfo u = Users.FindUser(user);
+							if(u != null) emails.Add(u.Email);
+						}
+					}
+				}
+			}
+
+			EmailTools.AsyncSendMassEmail(emails.ToArray(), Settings.SenderEmail,
+				txtSubject.Text, txtBody.Text, false);
+
+			lblEmailResult.CssClass = "resultok";
+			lblEmailResult.Text = Properties.Messages.MassEmailSent;
 		}
 
 		protected void btnClearCache_Click(object sender, EventArgs e) {

@@ -298,6 +298,23 @@ tr.warning td {
 
 /* BEGIN AdminHome.aspx */
 
+#BulkEmailDiv {
+	float: right;
+	width: 33%;
+	padding: 8px;
+	border: solid 1px #999999;
+	background-color: #FFFFFF;
+}
+#BulkEmailDiv input.textbox {
+	width: 98%;
+}
+#BulkEmailDiv textarea.body {
+	width: 98%;
+	height: 150px;
+	font-size: 11px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
 #ShutdownDiv {
 	padding: 10px;
 	float: left;
