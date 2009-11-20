@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDirectoryNameResource1.Text" xml:space="preserve">
-    <value>Directory Name</value>
+    <value>目錄名</value>
   </data>
   <data name="lblManagePermissionsResource1.Text" xml:space="preserve">
-    <value>Manage Permissions</value>
+    <value>管理許可權</value>
   </data>
   <data name="lblNewDirectoryTitleResource1.Text" xml:space="preserve">
-    <value>Create New Directory</value>
+    <value>創建新目錄</value>
   </data>
   <data name="lblNoListResource1.Text" xml:space="preserve">
-    <value>You cannot list the contents of this directory.</value>
+    <value>您不能列出此目錄的內容。</value>
   </data>
   <data name="lblNoListResource1.ToolTip" xml:space="preserve">
     <value />
@@ -151,40 +151,40 @@
     <value />
   </data>
   <data name="lblDownloadsResource1.Text" xml:space="preserve">
-    <value>Downloads</value>
+    <value>下載</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>刪除</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete this Item</value>
+    <value>刪除此項目</value>
   </data>
   <data name="btnDeleteResource2.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>刪除</value>
   </data>
   <data name="btnDeleteResource2.ToolTip" xml:space="preserve">
-    <value>Delete this Item</value>
+    <value>刪除此項目</value>
   </data>
   <data name="btnRenameResource2.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>重命名</value>
   </data>
   <data name="btnRenameResource2.ToolTip" xml:space="preserve">
-    <value>Rename this Item</value>
+    <value>重命名此項目</value>
   </data>
   <data name="btnRenameResource3.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>重命名</value>
   </data>
   <data name="btnRenameResource3.ToolTip" xml:space="preserve">
-    <value>Rename this Item</value>
+    <value>重命名此項目</value>
   </data>
   <data name="lblLinkResource1.Text" xml:space="preserve">
-    <value>Link</value>
+    <value>鏈結</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>名稱</value>
   </data>
   <data name="lblSizeResource1.Text" xml:space="preserve">
-    <value>Size</value>
+    <value>大小</value>
   </data>
   <data name="lnkDirResource1.ToolTip" xml:space="preserve">
     <value />
@@ -193,31 +193,31 @@
     <value />
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnNewDirectoryResource1.Text" xml:space="preserve">
-    <value>Create</value>
+    <value>建立</value>
   </data>
   <data name="btnNewDirectoryResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRenameResource1.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>重命名</value>
   </data>
   <data name="btnRenameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUploadResource1.Text" xml:space="preserve">
-    <value>Upload</value>
+    <value>上傳</value>
   </data>
   <data name="btnUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkOverwriteResource1.Text" xml:space="preserve">
-    <value>Overwrite existing file</value>
+    <value>覆蓋已有文件</value>
   </data>
   <data name="chkOverwriteResource1.ToolTip" xml:space="preserve">
     <value />
@@ -238,7 +238,7 @@
     <value />
   </data>
   <data name="lblRenameResource1.Text" xml:space="preserve">
-    <value>Rename file/directory</value>
+    <value>重命名檔/目錄</value>
   </data>
   <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
@@ -256,10 +256,10 @@
     <value />
   </data>
   <data name="lblUploadFilesInfoResource1.Text" xml:space="preserve">
-    <value>You can upload files up to $1. Allowed file types are: $2.</value>
+    <value>您可以上傳最大 $1 的檔。允許的檔類型為：$2。</value>
   </data>
   <data name="lblUploadFilesResource1.Text" xml:space="preserve">
-    <value>Upload Files</value>
+    <value>上傳文件</value>
   </data>
   <data name="lblUploadResultResource1.Text" xml:space="preserve">
     <value />

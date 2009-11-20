@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnSaveNewPasswordResource1.Text" xml:space="preserve">
-    <value>Save New Password</value>
+    <value>保存新密碼</value>
   </data>
   <data name="btnSaveNewPasswordResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvNewPasswordsResource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>密碼不相符</value>
   </data>
   <data name="cvNewPasswordsResource1.Text" xml:space="preserve">
     <value />
@@ -136,28 +136,28 @@
     <value />
   </data>
   <data name="lblNewPassword1Resource1.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>密碼</value>
   </data>
   <data name="lblNewPassword2Resource1.Text" xml:space="preserve">
-    <value>Password (repeat)</value>
+    <value>密碼（重複）</value>
   </data>
   <data name="lblOrResource1.Text" xml:space="preserve">
-    <value>or</value>
+    <value>或</value>
   </data>
   <data name="lblResetPassword2InfoResource1.Text" xml:space="preserve">
-    <value>Please enter your new password twice.</value>
+    <value>請輸入您的新密碼兩次。</value>
   </data>
   <data name="lblResetPassword2Resource1.Text" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>重置密碼</value>
   </data>
   <data name="lblResetPasswordInformationResource1.Text" xml:space="preserve">
-    <value>If you forgot your Password, please insert your Username &lt;b&gt;or&lt;/b&gt; Email address, then click on the Reset Password button.&lt;br /&gt;You will receive an email with a link to reset your password.</value>
+    <value>如果您忘記了您的密碼，請填寫您的用戶名&lt;b&gt;或&lt;/b&gt;電子郵件位址，然後點擊重置密碼按鈕。&lt;br /&gt;您會收到一封包含重置密碼鏈結的電子郵件。</value>
   </data>
   <data name="lblResultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rfvNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>需要密碼</value>
   </data>
   <data name="rfvNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -166,7 +166,7 @@
     <value />
   </data>
   <data name="rfvNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>需要密碼</value>
   </data>
   <data name="rfvNewPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -175,7 +175,7 @@
     <value />
   </data>
   <data name="rxNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>密碼無效</value>
   </data>
   <data name="rxNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -184,7 +184,7 @@
     <value />
   </data>
   <data name="rxNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>密碼無效</value>
   </data>
   <data name="rxNewPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -205,16 +205,16 @@
     <value />
   </data>
   <data name="btnLoginResource1.Text" xml:space="preserve">
-    <value>登錄</value>
+    <value>登入</value>
   </data>
   <data name="btnLoginResource1.ToolTip" xml:space="preserve">
-    <value>點擊登錄</value>
+    <value>點擊以登入</value>
   </data>
   <data name="btnLogoutResource1.Text" xml:space="preserve">
     <value>登出</value>
   </data>
   <data name="btnLogoutResource1.ToolTip" xml:space="preserve">
-    <value>點擊註銷</value>
+    <value>點擊以登出</value>
   </data>
   <data name="btnResetPasswordResource1.Text" xml:space="preserve">
     <value>重置密碼</value>
@@ -226,16 +226,16 @@
     <value>記住我</value>
   </data>
   <data name="chkRememberResource1.ToolTip" xml:space="preserve">
-    <value>如果你想讓系統下次記住你的話點擊這裏</value>
+    <value>如果您想讓系統下次記住您的話選中這裏</value>
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>這裏你可以登錄到Wiki。你將能夠編輯和創建頁面。如果你是管理員的話還能夠進行管理性操作。&lt;br /&gt;還沒有帳戶嗎？你可以&lt;a href="Register.aspx" title="創建新帳戶"&gt;創建一個&lt;/a&gt;。</value>
+    <value>在這裏您可以登錄到維琪。您沒有帳號？您可以&lt;a href="Register.aspx" title="建立新帳戶"&gt;建立一個&lt;/a&gt;。</value>
   </data>
   <data name="lblEmailResetResource1.Text" xml:space="preserve">
-    <value>Email</value>
+    <value>電子郵件位址</value>
   </data>
   <data name="lblLogoutResource1.Text" xml:space="preserve">
-    <value>當前你已經登錄，可以點擊“登出”按鈕登出。</value>
+    <value>您當前已經登入。要登出，請點擊“登出”按鈕。</value>
   </data>
   <data name="lblPasswordResource1.Text" xml:space="preserve">
     <value>密碼</value>
@@ -250,10 +250,10 @@
     <value>登錄</value>
   </data>
   <data name="lblUsernameResetResource1.Text" xml:space="preserve">
-    <value>用戶名</value>
+    <value>使用者名稱</value>
   </data>
   <data name="lblUsernameResource1.Text" xml:space="preserve">
-    <value>用戶名</value>
+    <value>使用者名稱</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
     <value>無標題頁面</value>
@@ -268,7 +268,7 @@
     <value />
   </data>
   <data name="txtPasswordResource1.ToolTip" xml:space="preserve">
-    <value>輸入你的密碼</value>
+    <value>在這裏輸入您的密碼</value>
   </data>
   <data name="txtUsernameResetResource1.Text" xml:space="preserve">
     <value />
@@ -280,6 +280,6 @@
     <value />
   </data>
   <data name="txtUsernameResource1.ToolTip" xml:space="preserve">
-    <value>輸入你的用戶名</value>
+    <value>在這裏輸入您的使用者名稱</value>
   </data>
 </root>

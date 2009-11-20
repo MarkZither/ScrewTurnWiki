@@ -121,55 +121,55 @@
     <value>&lt;div class='warning' style='float: right;'&gt;You are now editing a snippet. After you are done,&lt;br /&gt;it is &lt;b&gt;strongly&lt;/b&gt; suggested to rebuild the search engine index in the &lt;i&gt;Admin Home&lt;/i&gt; page.&lt;/div&gt;</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the items list</value>
+    <value>取消並返回專案列表</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Item</value>
+    <value>創建項目</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Item</value>
+    <value>保存新專案</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>刪除</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Item</value>
+    <value>刪除項目</value>
   </data>
   <data name="btnNewSnippetResource1.Text" xml:space="preserve">
-    <value>New Snippet</value>
+    <value>新建片段</value>
   </data>
   <data name="btnNewSnippetResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnNewTemplateResource1.Text" xml:space="preserve">
-    <value>New Template</value>
+    <value>新建範本</value>
   </data>
   <data name="btnNewTemplateResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Item</value>
+    <value>保存專案</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>保存修改</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>選擇</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Edit or delete this item</value>
+    <value>編輯或刪除此專案</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>選擇</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Edit or delete this item</value>
+    <value>編輯或刪除此專案</value>
   </data>
   <data name="cvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Snippet Name</value>
+    <value>片段名稱無效</value>
   </data>
   <data name="cvNameResource1.Text" xml:space="preserve">
     <value />
@@ -178,25 +178,25 @@
     <value />
   </data>
   <data name="lblEditTitleSnippetResource1.Text" xml:space="preserve">
-    <value>Snippet Details</value>
+    <value>片段詳情</value>
   </data>
   <data name="lblEditTitleTemplateResource1.Text" xml:space="preserve">
-    <value>Template Details</value>
+    <value>範本詳情</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>名稱</value>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>名稱</value>
   </data>
   <data name="lblParametersResource1.Text" xml:space="preserve">
-    <value>Params</value>
+    <value>參數</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>提供者</value>
   </data>
   <data name="lblProviderResource2.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>提供者</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -205,13 +205,13 @@
     <value />
   </data>
   <data name="lblSnippetsTemplatesResource1.Text" xml:space="preserve">
-    <value>Snippets and Templates</value>
+    <value>片段和範本</value>
   </data>
   <data name="lblTypeResource1.Text" xml:space="preserve">
-    <value>Type</value>
+    <value>類型</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>管理</value>
   </data>
   <data name="pnlEditElementResource1.GroupingText" xml:space="preserve">
     <value />
@@ -226,7 +226,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>需要名稱</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />

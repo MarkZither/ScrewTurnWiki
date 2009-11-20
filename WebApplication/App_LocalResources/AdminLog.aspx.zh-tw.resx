@@ -127,45 +127,45 @@
     <value>Currently displaying only 100 log entries &amp;mdash;</value>
   </data>
   <data name="btnClearLogResource1.Text" xml:space="preserve">
-    <value>Clear Log</value>
+    <value>清除日誌</value>
   </data>
   <data name="btnClearLogResource1.ToolTip" xml:space="preserve">
-    <value>Clear the system log</value>
+    <value>清除系統日誌</value>
   </data>
   <data name="chkErrorsResource1.Text" xml:space="preserve">
-    <value>Errors</value>
+    <value>錯誤</value>
   </data>
   <data name="chkErrorsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkMessagesResource1.Text" xml:space="preserve">
-    <value>Messages</value>
+    <value>消息</value>
   </data>
   <data name="chkMessagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkWarningsResource1.Text" xml:space="preserve">
-    <value>Warnings</value>
+    <value>警告</value>
   </data>
   <data name="chkWarningsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblDateTimeResource1.Text" xml:space="preserve">
-    <value>Date/Time</value>
+    <value>日期/時間</value>
   </data>
   <data name="lblFilterResource1.Text" xml:space="preserve">
-    <value>Display: </value>
+    <value>顯示：</value>
   </data>
   <data name="lblLogResource1.Text" xml:space="preserve">
-    <value>System Log</value>
+    <value>系統日誌</value>
   </data>
   <data name="lblMessageResource1.Text" xml:space="preserve">
-    <value>Message</value>
+    <value>消息</value>
   </data>
   <data name="lblUserResource1.Text" xml:space="preserve">
-    <value>User</value>
+    <value>用戶</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>管理</value>
   </data>
 </root>

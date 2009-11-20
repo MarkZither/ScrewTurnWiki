@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>The complete list of Page Categories of this Namespace.</value>
+    <value>此命名空間中的頁面分類的完整列表。</value>
   </data>
   <data name="lblCategoriesResource1.Text" xml:space="preserve">
-    <value>頁面類別</value>
+    <value>頁面分類</value>
   </data>
   <data name="lblCatListResource1.Text" xml:space="preserve">
     <value />

@@ -118,139 +118,139 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelAnchorResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelAnchorResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelFileLinkResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelFileLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelImageResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelImageResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelLinkResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelPageLinkResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelPageLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkAnchorResource1.Text" xml:space="preserve">
-    <value>OK</value>
+    <value>確定</value>
   </data>
   <data name="btnOkAnchorResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkFileLinkResource1.Text" xml:space="preserve">
-    <value>OK</value>
+    <value>確定</value>
   </data>
   <data name="btnOkFileLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkImageResource1.Text" xml:space="preserve">
-    <value>OK</value>
+    <value>確定</value>
   </data>
   <data name="btnOkImageResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkLinkResource1.Text" xml:space="preserve">
-    <value>OK</value>
+    <value>確定</value>
   </data>
   <data name="btnOkLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkPageLinkResource1.Text" xml:space="preserve">
-    <value>OK</value>
+    <value>確定</value>
   </data>
   <data name="btnOkPageLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkFileNWResource1.Text" xml:space="preserve">
-    <value>Open link in new window</value>
+    <value>在新視窗中打開鏈結</value>
   </data>
   <data name="chkFileNWResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkFilesAttachmentsResource1.Text" xml:space="preserve">
-    <value>Browse Page Attachments</value>
+    <value>瀏覽頁面附件</value>
   </data>
   <data name="chkFilesAttachmentsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkImageAttachmentsResource1.Text" xml:space="preserve">
-    <value>Browse Page Attachments</value>
+    <value>瀏覽頁面附件</value>
   </data>
   <data name="chkImageAttachmentsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkImageNWResource1.Text" xml:space="preserve">
-    <value>Open link in new window</value>
+    <value>在新視窗中打開鏈結</value>
   </data>
   <data name="chkImageNWResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkLinkNWResource1.Text" xml:space="preserve">
-    <value>Open link in new window</value>
+    <value>在新視窗中打開鏈結</value>
   </data>
   <data name="chkLinkNWResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkPageNWResource1.Text" xml:space="preserve">
-    <value>Open link in new window</value>
+    <value>在新視窗中打開鏈結</value>
   </data>
   <data name="chkPageNWResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblAnchorIDResource1.Text" xml:space="preserve">
-    <value>Anchor ID (required)</value>
+    <value>段落鏈結 ID（必填）</value>
   </data>
   <data name="lblAnchorTitleResource1.Text" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>鏈結標題（可選）</value>
   </data>
   <data name="lblExistingAnchorsResource1.Text" xml:space="preserve">
-    <value>Link to:</value>
+    <value>鏈結到：</value>
   </data>
   <data name="lblFilePathResource1.Text" xml:space="preserve">
-    <value>File Path (required)</value>
+    <value>檔路徑（必填）</value>
   </data>
   <data name="lblFileTitleResource1.Text" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>鏈結標題（可選）</value>
   </data>
   <data name="lblImageDescrResource1.Text" xml:space="preserve">
-    <value>Description (optional)</value>
+    <value>描述（可選）</value>
   </data>
   <data name="lblImageLinkResource1.Text" xml:space="preserve">
-    <value>Link (optional)</value>
+    <value>鏈結（可選）</value>
   </data>
   <data name="lblImagePathResource1.Text" xml:space="preserve">
-    <value>Image Path/URL (required)</value>
+    <value>圖像路徑/網址（必填）</value>
   </data>
   <data name="lblInsertAnchorResource1.Text" xml:space="preserve">
-    <value>Insert:</value>
+    <value>插入：</value>
   </data>
   <data name="lblLinkTitleResource1.Text" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>鏈結標題（可選）</value>
   </data>
   <data name="lblLinkUrlResource1.Text" xml:space="preserve">
-    <value>Link URL or Email address (required)</value>
+    <value>鏈結網址或電子郵件位址（必填）</value>
   </data>
   <data name="lblPageNameResource1.Text" xml:space="preserve">
-    <value>Page Name (required)</value>
+    <value>頁面名稱（必填）</value>
   </data>
   <data name="lblPageTitleResource1.Text" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>鏈結標題（可選）</value>
   </data>
   <data name="lblStringsResource1.Text" xml:space="preserve">
     <value />
@@ -280,25 +280,25 @@
     <value />
   </data>
   <data name="rdoAnchorLinkResource1.Text" xml:space="preserve">
-    <value>Link to an existing Anchor</value>
+    <value>鏈結到已有的段落鏈結</value>
   </data>
   <data name="rdoAnchorLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoImageAutoResource1.Text" xml:space="preserve">
-    <value>Auto</value>
+    <value>自動</value>
   </data>
   <data name="rdoImageAutoResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoImageInlineResource1.Text" xml:space="preserve">
-    <value>Inline</value>
+    <value>嵌入</value>
   </data>
   <data name="rdoImageInlineResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoImageLeftResource1.Text" xml:space="preserve">
-    <value>Align Left</value>
+    <value>左對齊</value>
   </data>
   <data name="rdoImageLeftResource1.ToolTip" xml:space="preserve">
     <value />
@@ -307,22 +307,22 @@
     <value />
   </data>
   <data name="rdoImageLinkResource1.ToolTip" xml:space="preserve">
-    <value>Check this to select the linked image using the browser</value>
+    <value>選中以使用瀏覽器選擇被鏈結的圖像</value>
   </data>
   <data name="rdoImagePathResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="rdoImagePathResource1.ToolTip" xml:space="preserve">
-    <value>Check this to select the image using the browser</value>
+    <value>選中以使用瀏覽器選擇圖像</value>
   </data>
   <data name="rdoImageRightResource1.Text" xml:space="preserve">
-    <value>Align Right</value>
+    <value>右對齊</value>
   </data>
   <data name="rdoImageRightResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoNewAnchorResource1.Text" xml:space="preserve">
-    <value>New Anchor</value>
+    <value>新段落鏈結</value>
   </data>
   <data name="rdoNewAnchorResource1.ToolTip" xml:space="preserve">
     <value />

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblAdminResource1.Text" xml:space="preserve">
-    <value>Exception Details</value>
+    <value>錯誤詳情</value>
   </data>
   <data name="lblExceptionResource1.Text" xml:space="preserve">
     <value />
@@ -130,7 +130,7 @@
     <value />
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>抱歉，處理您的請求時發生了錯誤。錯誤資訊已被記錄，我們將追蹤解決。&lt;br /&gt;請回到&lt;a href="Default.aspx"&gt;主頁面&lt;/a&gt;。</value>
+    <value>抱歉，處理您的請求時發生了錯誤。錯誤資訊已被記錄並將被研究。&lt;br /&gt;請回到&lt;a href="Default.aspx"&gt;首頁&lt;/a&gt;。</value>
   </data>
   <data name="lblErrorResource1.Text" xml:space="preserve">
     <value>系統錯誤</value>

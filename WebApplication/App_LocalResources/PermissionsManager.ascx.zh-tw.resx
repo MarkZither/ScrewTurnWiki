@@ -118,28 +118,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAddResource1.Text" xml:space="preserve">
-    <value>Add</value>
+    <value>新增</value>
   </data>
   <data name="btnAddResource1.ToolTip" xml:space="preserve">
-    <value>Add the selected subject</value>
+    <value>新增選中的主題</value>
   </data>
   <data name="btnRemoveResource1.Text" xml:space="preserve">
-    <value>Remove</value>
+    <value>移除</value>
   </data>
   <data name="btnRemoveResource1.ToolTip" xml:space="preserve">
-    <value>Remove entried for the selected subject</value>
+    <value>移除選中的主題</value>
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Permissions</value>
+    <value>保存許可權</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save this Subject's permissions</value>
+    <value>保存此主題的許可權</value>
   </data>
   <data name="btnSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>搜尋</value>
   </data>
   <data name="btnSearchResource1.ToolTip" xml:space="preserve">
-    <value>Search for a User or Group to add</value>
+    <value>搜尋要添加的使用者或群組</value>
   </data>
   <data name="lblAddResultResource1.Text" xml:space="preserve">
     <value />
@@ -148,7 +148,7 @@
     <value />
   </data>
   <data name="lblPermissionsForResource1.Text" xml:space="preserve">
-    <value>Permissions for:</value>
+    <value>許可權：</value>
   </data>
   <data name="lblSaveResultResource1.Text" xml:space="preserve">
     <value />
@@ -160,7 +160,7 @@
     <value />
   </data>
   <data name="lblSubjectsResource1.Text" xml:space="preserve">
-    <value>User Accounts and User Groups</value>
+    <value>使用者帳戶和使用者群組</value>
   </data>
   <data name="lstFoundSubjectsResource1.ToolTip" xml:space="preserve">
     <value />

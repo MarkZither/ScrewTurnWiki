@@ -130,7 +130,7 @@
     <value />
   </data>
   <data name="chkDeleteMessageRepliesResource1.Text" xml:space="preserve">
-    <value>刪除消息接受者</value>
+    <value>刪除消息的回覆</value>
   </data>
   <data name="chkDeleteMessageRepliesResource1.ToolTip" xml:space="preserve">
     <value />
@@ -139,12 +139,12 @@
     <value />
   </data>
   <data name="lblDeleteMessageDescriptionResource1.Text" xml:space="preserve">
-    <value>點擊“刪除”按鈕刪除選中的消息</value>
+    <value>要刪除選中的消息，點擊“刪除”按鈕。</value>
   </data>
   <data name="lblDeleteMessageResource1.Text" xml:space="preserve">
     <value>刪除消息</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>未命名頁面</value>
+    <value>無標題頁面</value>
   </data>
 </root>

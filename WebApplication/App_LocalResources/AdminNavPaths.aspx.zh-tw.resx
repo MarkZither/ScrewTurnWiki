@@ -118,79 +118,79 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAddResource1.Text" xml:space="preserve">
-    <value>Add</value>
+    <value>添加</value>
   </data>
   <data name="btnAddResource1.ToolTip" xml:space="preserve">
-    <value>Add the selected Page to the list</value>
+    <value>添加選中的頁面到列表</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the Navigation Path list</value>
+    <value>取消並返回導航路徑列表</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Nav. Path</value>
+    <value>創建導航路徑</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Navigation Path</value>
+    <value>保存新導航路徑</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>刪除</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Navigation Path</value>
+    <value>刪除導航路徑</value>
   </data>
   <data name="btnDownResource1.Text" xml:space="preserve">
-    <value>Down</value>
+    <value>向下</value>
   </data>
   <data name="btnDownResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnNewNavPathResource1.Text" xml:space="preserve">
-    <value>New Nav. Path</value>
+    <value>新建導航路徑</value>
   </data>
   <data name="btnNewNavPathResource1.ToolTip" xml:space="preserve">
-    <value>Create a new Navigation Path</value>
+    <value>創建新導航路徑</value>
   </data>
   <data name="btnRemoveResource1.Text" xml:space="preserve">
-    <value>Remove</value>
+    <value>移除</value>
   </data>
   <data name="btnRemoveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Nav. Path</value>
+    <value>保存導航路徑</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>保存修改</value>
   </data>
   <data name="btnSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>搜索</value>
   </data>
   <data name="btnSearchResource1.ToolTip" xml:space="preserve">
-    <value>Search for a Page</value>
+    <value>搜索頁面</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>選擇</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>選擇</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUpResource1.Text" xml:space="preserve">
-    <value>Up</value>
+    <value>向上</value>
   </data>
   <data name="btnUpResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvName1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>名稱無效</value>
   </data>
   <data name="cvName1Resource1.Text" xml:space="preserve">
     <value />
@@ -199,7 +199,7 @@
     <value />
   </data>
   <data name="cvName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Navigation Path already exists</value>
+    <value>導航路徑已存在</value>
   </data>
   <data name="cvName2Resource1.Text" xml:space="preserve">
     <value />
@@ -208,25 +208,25 @@
     <value />
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Navigation Paths Details</value>
+    <value>導航路徑詳情</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>名稱</value>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>名稱</value>
   </data>
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
-    <value>Namespace</value>
+    <value>命名空間</value>
   </data>
   <data name="lblNavPathsResource1.Text" xml:space="preserve">
-    <value>Navigation Paths</value>
+    <value>導航路徑</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Pages</value>
+    <value>頁面</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>提供者</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -244,7 +244,7 @@
     <value />
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>管理</value>
   </data>
   <data name="pnlEditNavPathResource1.GroupingText" xml:space="preserve">
     <value />
@@ -259,7 +259,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>需要名稱</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />

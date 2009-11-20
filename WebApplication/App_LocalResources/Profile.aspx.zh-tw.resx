@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDiscussionMessagesInfoResource2.Text" xml:space="preserve">
-    <value>Receive an email notification whenever a &lt;b&gt;message&lt;/b&gt; is posted for a page in the following namespaces (only discussions you have access to):</value>
+    <value>當有&lt;b&gt;消息&lt;/b&gt;發佈在下列命名空間中的頁面時（僅限您可以訪問的討論），接收電子郵件通知：</value>
   </data>
   <data name="lblPageChangesInfoResource2.Text" xml:space="preserve">
-    <value>Receive an email notification whenever a &lt;b&gt;page&lt;/b&gt; in the following namespaces is updated (only pages you have access to):</value>
+    <value>當在下列命名空間中的&lt;b&gt;頁面&lt;/b&gt;更新時（僅限您可以訪問的頁面），接收電子郵件通知：</value>
   </data>
   <data name="lblNoChangesResource1.Text" xml:space="preserve">
-    <value>Current system settings do not allow any change to your personal information.</value>
+    <value>當前系統設置不允許對個人資訊作任何更改。</value>
   </data>
   <data name="pnlAccountResource1.GroupingText" xml:space="preserve">
     <value />
@@ -139,16 +139,16 @@
     <value />
   </data>
   <data name="btnSaveDisplayNameResource1.Text" xml:space="preserve">
-    <value>Save Display Name</value>
+    <value>保存顯示名稱</value>
   </data>
   <data name="btnSaveDisplayNameResource1.ToolTip" xml:space="preserve">
-    <value>Click here to save your Display Name</value>
+    <value>點擊這裏保存您的顯示名稱</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
-    <value>Display Name</value>
+    <value>顯示名稱</value>
   </data>
   <data name="lblEditEmailPasswordResource1.Text" xml:space="preserve">
-    <value>Edit Display Name, Email and Password</value>
+    <value>編輯顯示名稱、電子郵件位址和密碼</value>
   </data>
   <data name="lblSaveDisplayNameResultResource1.Text" xml:space="preserve">
     <value />
@@ -157,7 +157,7 @@
     <value />
   </data>
   <data name="rxvDisplayNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>顯示名稱無效</value>
   </data>
   <data name="rxvDisplayNameResource1.Text" xml:space="preserve">
     <value />
@@ -169,10 +169,10 @@
     <value />
   </data>
   <data name="txtDisplayNameResource1.ToolTip" xml:space="preserve">
-    <value>Type here a display name for your account</value>
+    <value>鍵入您帳戶的顯示名稱</value>
   </data>
   <data name="btnSaveLanguageResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
   </data>
   <data name="btnSaveLanguageResource1.ToolTip" xml:space="preserve">
     <value />
@@ -181,7 +181,7 @@
     <value />
   </data>
   <data name="lblGroupsResource1.Text" xml:space="preserve">
-    <value>You are member of the following groups:</value>
+    <value>您是下列組的成員：</value>
   </data>
   <data name="lblLanguageResultResource1.Text" xml:space="preserve">
     <value />
@@ -190,16 +190,16 @@
     <value />
   </data>
   <data name="lblLanguageTimeZoneResource1.Text" xml:space="preserve">
-    <value>Language and Time Zone</value>
+    <value>語言和時區</value>
   </data>
   <data name="btnSaveNotificationsResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
   </data>
   <data name="btnSaveNotificationsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email addresses are not equal</value>
+    <value>電子郵件位址不相符</value>
   </data>
   <data name="cvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -208,7 +208,7 @@
     <value />
   </data>
   <data name="cvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email addresses are not equal</value>
+    <value>電子郵件位址不相符</value>
   </data>
   <data name="cvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -217,7 +217,7 @@
     <value />
   </data>
   <data name="cvOldPasswordResource1.ErrorMessage" xml:space="preserve">
-    <value>Incorrect Password</value>
+    <value>密碼錯誤</value>
   </data>
   <data name="cvOldPasswordResource1.Text" xml:space="preserve">
     <value />
@@ -226,7 +226,7 @@
     <value />
   </data>
   <data name="cvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>密碼不相符</value>
   </data>
   <data name="cvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -235,7 +235,7 @@
     <value />
   </data>
   <data name="cvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>密碼不相符</value>
   </data>
   <data name="cvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -244,7 +244,7 @@
     <value />
   </data>
   <data name="lblNotificationsResource1.Text" xml:space="preserve">
-    <value>Email Notification Settings</value>
+    <value>電子郵件通知設置</value>
   </data>
   <data name="lblNotificationsResultResource1.Text" xml:space="preserve">
     <value />
@@ -271,7 +271,7 @@
     <value />
   </data>
   <data name="rfvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>需要電子郵件位址</value>
   </data>
   <data name="rfvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -280,7 +280,7 @@
     <value />
   </data>
   <data name="rfvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>需要電子郵件位址</value>
   </data>
   <data name="rfvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -289,7 +289,7 @@
     <value />
   </data>
   <data name="rfvOldPasswordResource1.ErrorMessage" xml:space="preserve">
-    <value>Old Password is required</value>
+    <value>需要舊密碼</value>
   </data>
   <data name="rfvOldPasswordResource1.Text" xml:space="preserve">
     <value />
@@ -298,7 +298,7 @@
     <value />
   </data>
   <data name="rfvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>需要密碼</value>
   </data>
   <data name="rfvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -307,7 +307,7 @@
     <value />
   </data>
   <data name="rfvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>需要密碼</value>
   </data>
   <data name="rfvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -316,7 +316,7 @@
     <value />
   </data>
   <data name="rxvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Email address</value>
+    <value>電子郵件位址無效</value>
   </data>
   <data name="rxvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -325,7 +325,7 @@
     <value />
   </data>
   <data name="rxvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>密碼無效</value>
   </data>
   <data name="rxvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -346,43 +346,43 @@
     <value />
   </data>
   <data name="btnSaveEmailResource1.Text" xml:space="preserve">
-    <value>保存Email</value>
+    <value>保存電子郵件位址</value>
   </data>
   <data name="btnSaveEmailResource1.ToolTip" xml:space="preserve">
-    <value>點擊這裏保存你的Email</value>
+    <value>點擊這裏保存您的電子郵件位址</value>
   </data>
   <data name="btnSavePasswordResource1.Text" xml:space="preserve">
     <value>保存密碼</value>
   </data>
   <data name="btnSavePasswordResource1.ToolTip" xml:space="preserve">
-    <value>點擊這裏保存你的密碼</value>
+    <value>點擊這裏保存您的密碼</value>
   </data>
   <data name="lblDeleteAccountInfoResource1.Text" xml:space="preserve">
-    <value>你通過先點擊“刪除帳戶”按鈕然後點擊“確定”按鈕進行確定以刪除帳戶。&lt;br /&gt;&lt;b&gt;警告&lt;/b&gt;：本操作不可逆。</value>
+    <value>您可以通過先點擊“刪除帳戶”按鈕然後點擊“確認”按鈕進行確定以刪除您的帳戶。&lt;br /&gt;&lt;b&gt;警告&lt;/b&gt;：此操作不可逆。</value>
   </data>
   <data name="lblDeleteAccountResource1.Text" xml:space="preserve">
     <value>刪除帳戶</value>
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>歡迎查看你的用戶概要：</value>
+    <value>歡迎訪問您的用戶概要，</value>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
-    <value>Email</value>
+    <value>電子郵件位址</value>
   </data>
   <data name="lblEmail2Resource1.Text" xml:space="preserve">
-    <value>Email （重複）</value>
+    <value>電子郵件位址（重複）</value>
   </data>
   <data name="lblInfoResource1.Text" xml:space="preserve">
-    <value>這裏你可以編輯你的概要設置，例如Email位址和密碼。但不能更改用戶名。</value>
+    <value>在這裏您可以編輯您的概要設置，例如電子郵件位址和密碼。您不能更改您的用戶名。</value>
   </data>
   <data name="lblOldPasswordResource1.Text" xml:space="preserve">
-    <value>原密碼</value>
+    <value>舊密碼</value>
   </data>
   <data name="lblPassword1Resource1.Text" xml:space="preserve">
     <value>密碼</value>
   </data>
   <data name="lblPassword2Resource1.Text" xml:space="preserve">
-    <value>密碼（重複)</value>
+    <value>密碼（重複）</value>
   </data>
   <data name="lblSaveEmailResultResource1.Text" xml:space="preserve">
     <value />
@@ -397,36 +397,36 @@
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>未命名頁面</value>
+    <value>無標題頁面</value>
   </data>
   <data name="txtEmail1Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtEmail1Resource1.ToolTip" xml:space="preserve">
-    <value>輸入你的Email位址</value>
+    <value>輸入您的電子郵件位址</value>
   </data>
   <data name="txtEmail2Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtEmail2Resource1.ToolTip" xml:space="preserve">
-    <value>重複你的Email地址</value>
+    <value>重複您的電子郵件位址</value>
   </data>
   <data name="txtOldPasswordResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtOldPasswordResource1.ToolTip" xml:space="preserve">
-    <value>輸入你當前的密碼</value>
+    <value>輸入您的當前密碼</value>
   </data>
   <data name="txtPassword1Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtPassword1Resource1.ToolTip" xml:space="preserve">
-    <value>輸入你的新密碼</value>
+    <value>輸入您的新密碼</value>
   </data>
   <data name="txtPassword2Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtPassword2Resource1.ToolTip" xml:space="preserve">
-    <value>重複你的新密碼</value>
+    <value>重複您的新密碼</value>
   </data>
 </root>

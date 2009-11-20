@@ -127,15 +127,15 @@
     <value />
   </data>
   <data name="lnkMainPageResource1.Text" xml:space="preserve">
-    <value>Main Page</value>
+    <value>首頁</value>
   </data>
   <data name="lnkMainPageResource1.ToolTip" xml:space="preserve">
-    <value>Go to the main page of the current namespace</value>
+    <value>轉到當前命名空間的首頁</value>
   </data>
   <data name="lnkPreviousPageResource1.Text" xml:space="preserve">
-    <value>« Back to previous page</value>
+    <value>« 返回上頁</value>
   </data>
   <data name="lnkPreviousPageResource1.ToolTip" xml:space="preserve">
-    <value>Go to the previous page</value>
+    <value>返回上頁</value>
   </data>
 </root>

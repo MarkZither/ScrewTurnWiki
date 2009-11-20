@@ -118,85 +118,85 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelResource2.Text" xml:space="preserve">
-    <value>Close</value>
+    <value>關閉</value>
   </data>
   <data name="btnCancelResource2.ToolTip" xml:space="preserve">
-    <value>Close this tolbox</value>
+    <value>關閉此工具箱</value>
   </data>
   <data name="lblRotateResource1.Text" xml:space="preserve">
-    <value>Rotation</value>
+    <value>旋轉</value>
   </data>
   <data name="chkNewNameResource2.Text" xml:space="preserve">
-    <value>Save as new file</value>
+    <value>保存為新檔</value>
   </data>
   <data name="chkNewNameResource2.ToolTip" xml:space="preserve">
-    <value>If not selected, the original file is overwritten</value>
+    <value>如果未選中，原始檔將被覆蓋</value>
   </data>
   <data name="rdoJpegHighResource2.Text" xml:space="preserve">
     <value>JPEG 100%</value>
   </data>
   <data name="rdoJpegHighResource2.ToolTip" xml:space="preserve">
-    <value>JPEG format, full quality</value>
+    <value>JPEG 格式，最高品質</value>
   </data>
   <data name="rdoJpegMediumResource2.Text" xml:space="preserve">
     <value>JPEG 60%</value>
   </data>
   <data name="rdoJpegMediumResource2.ToolTip" xml:space="preserve">
-    <value>JPEG format, medium quality</value>
+    <value>JPEG 格式，中等品質</value>
   </data>
   <data name="rdoPercentageResource2.Text" xml:space="preserve">
-    <value>Resize by scale</value>
+    <value>按比例重新調整大小</value>
   </data>
   <data name="rdoPercentageResource2.ToolTip" xml:space="preserve">
-    <value>Resize the image specifying a scale</value>
+    <value>按指定比例重新調整圖像大小</value>
   </data>
   <data name="rdoPixelResource2.Text" xml:space="preserve">
-    <value>Resize by absolute size</value>
+    <value>按絕對大小重新調整大小</value>
   </data>
   <data name="rdoPixelResource2.ToolTip" xml:space="preserve">
-    <value>Resize the image specifying the size in pixels</value>
+    <value>按指定大小（以圖元為單位）重新調整圖像大小</value>
   </data>
   <data name="rdoPngResource2.ToolTip" xml:space="preserve">
-    <value>PNG format (alpha channel is preserved)</value>
+    <value>PNG 格式（保留 alpha 通道）</value>
   </data>
   <data name="txtPercentageResource2.Text" xml:space="preserve">
     <value>100</value>
   </data>
   <data name="txtPercentageResource2.ToolTip" xml:space="preserve">
-    <value>Resize scale (percentage)</value>
+    <value>重新調整大小比例（百分比）</value>
   </data>
   <data name="rdoPngResource2.Text" xml:space="preserve">
     <value>PNG</value>
   </data>
   <data name="btnPreviewResource1.Text" xml:space="preserve">
-    <value>Update Preview</value>
+    <value>更新預覽</value>
   </data>
   <data name="btnPreviewResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save the modified Image</value>
+    <value>保存修改後的圖像</value>
   </data>
   <data name="chkAspectRatioResource1.Text" xml:space="preserve">
-    <value>Maintain Aspect Ratio</value>
+    <value>保持比例</value>
   </data>
   <data name="chkAspectRatioResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="imgPreviewResource1.AlternateText" xml:space="preserve">
-    <value>Image Preview</value>
+    <value>圖像預覽</value>
   </data>
   <data name="imgPreviewResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblCurrentSizeInfoResource1.Text" xml:space="preserve">
-    <value>Current size: </value>
+    <value>當前大小：</value>
   </data>
   <data name="lblCurrentSizePixelsResource1.Text" xml:space="preserve">
-    <value> pixels</value>
+    <value>圖像素</value>
   </data>
   <data name="lblCurrentSizeResource1.Text" xml:space="preserve">
     <value />
@@ -205,7 +205,7 @@
     <value />
   </data>
   <data name="lblOptionsResource1.Text" xml:space="preserve">
-    <value>Image Resize Options</value>
+    <value>圖像重新調整大小選項</value>
   </data>
   <data name="lblOptionsResource1.ToolTip" xml:space="preserve">
     <value />
@@ -217,13 +217,13 @@
     <value />
   </data>
   <data name="lblScalePostResource1.Text" xml:space="preserve">
-    <value>%)</value>
+    <value>%）</value>
   </data>
   <data name="lblScalePostResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblScalePreResource1.Text" xml:space="preserve">
-    <value>(Scale: </value>
+    <value>（比例：</value>
   </data>
   <data name="lblScalePreResource1.ToolTip" xml:space="preserve">
     <value />
@@ -235,16 +235,16 @@
     <value />
   </data>
   <data name="lblSizePixelsResource1.Text" xml:space="preserve">
-    <value> pixels</value>
+    <value>圖像素</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Image Editor</value>
+    <value>圖像編輯器</value>
   </data>
   <data name="txtHeightResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtHeightResource1.ToolTip" xml:space="preserve">
-    <value>Height</value>
+    <value>高度</value>
   </data>
   <data name="txtNewNameResource1.Text" xml:space="preserve">
     <value />
@@ -256,6 +256,6 @@
     <value />
   </data>
   <data name="txtWidthResource1.ToolTip" xml:space="preserve">
-    <value>Width</value>
+    <value>寬度</value>
   </data>
 </root>

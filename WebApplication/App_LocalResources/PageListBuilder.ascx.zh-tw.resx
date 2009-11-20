@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAddPageResource1.Text" xml:space="preserve">
-    <value>Add</value>
+    <value>新增</value>
   </data>
   <data name="btnAddPageResource1.ToolTip" xml:space="preserve">
-    <value>Add the selected Page to the list</value>
+    <value>將選中的頁面新增到列表</value>
   </data>
   <data name="btnRemoveResource1.Text" xml:space="preserve">
-    <value>Remove</value>
+    <value>移除</value>
   </data>
   <data name="btnRemoveResource1.ToolTip" xml:space="preserve">
-    <value>Remove the selected page from the list</value>
+    <value>從列表中移除選中的頁面</value>
   </data>
   <data name="btnSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>搜尋</value>
   </data>
   <data name="btnSearchResource1.ToolTip" xml:space="preserve">
-    <value>Search for a Page</value>
+    <value>搜尋頁面</value>
   </data>
   <data name="lstAvailablePageResource1.ToolTip" xml:space="preserve">
     <value />

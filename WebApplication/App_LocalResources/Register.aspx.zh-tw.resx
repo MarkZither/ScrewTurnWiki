@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnRegisterResource1.Text" xml:space="preserve">
-    <value>Create Account</value>
+    <value>建立帳號</value>
   </data>
   <data name="btnRegisterResource1.ToolTip" xml:space="preserve">
-    <value>Click here to create your Account</value>
+    <value>點擊這裏建立您的帳號</value>
   </data>
   <data name="cvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emails are not equal</value>
+    <value>電子郵件位址不相符</value>
   </data>
   <data name="cvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -133,7 +133,7 @@
     <value />
   </data>
   <data name="cvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emails are not equal</value>
+    <value>電子郵件位址不相符</value>
   </data>
   <data name="cvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -142,7 +142,7 @@
     <value />
   </data>
   <data name="cvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>密碼不相符</value>
   </data>
   <data name="cvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -151,7 +151,7 @@
     <value />
   </data>
   <data name="cvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>密碼不相符</value>
   </data>
   <data name="cvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -160,7 +160,7 @@
     <value />
   </data>
   <data name="cvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username already exists</value>
+    <value>使用者名稱已存在</value>
   </data>
   <data name="cvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -172,25 +172,25 @@
     <value />
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Control Text (case sensitive)</value>
+    <value>驗證碼（大小寫敏感）：</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
-    <value>Display Name</value>
+    <value>顯示名稱</value>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
-    <value>Email</value>
+    <value>電子郵件位址</value>
   </data>
   <data name="lblEmail2Resource1.Text" xml:space="preserve">
-    <value>Email (repeat)</value>
+    <value>電子郵件位址（重複）</value>
   </data>
   <data name="lblPassword1Resource1.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>密碼</value>
   </data>
   <data name="lblPassword2Resource1.Text" xml:space="preserve">
-    <value>Password (repeat)</value>
+    <value>密碼（重複）</value>
   </data>
   <data name="lblRegisterDescriptionResource1.Text" xml:space="preserve">
-    <value>Here you can create a new Account for this Wiki.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: all the fields are mandatory. The Email address will not be published in any way, but it will be visible to the Administrators.</value>
+    <value>在這裏您可以創建新帳戶。&lt;br /&gt;&lt;b&gt;注意&lt;/b&gt;：所有區域都是必填的。電子郵件位址不會以任何形式被公佈，但對管理員可見。</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -199,13 +199,13 @@
     <value />
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Create a new Account</value>
+    <value>創建新帳戶</value>
   </data>
   <data name="lblUsernameResource1.Text" xml:space="preserve">
-    <value>Username</value>
+    <value>用戶名</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
+    <value>無標題頁面</value>
   </data>
   <data name="pnlRegisterResource1.GroupingText" xml:space="preserve">
     <value />
@@ -214,7 +214,7 @@
     <value />
   </data>
   <data name="rfvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>需要電子郵件位址</value>
   </data>
   <data name="rfvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -223,7 +223,7 @@
     <value />
   </data>
   <data name="rfvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>需要電子郵件位址</value>
   </data>
   <data name="rfvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -232,7 +232,7 @@
     <value />
   </data>
   <data name="rfvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>需要密碼</value>
   </data>
   <data name="rfvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -241,7 +241,7 @@
     <value />
   </data>
   <data name="rfvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>需要密碼</value>
   </data>
   <data name="rfvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -250,7 +250,7 @@
     <value />
   </data>
   <data name="rfvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username is required</value>
+    <value>需要用戶名</value>
   </data>
   <data name="rfvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -259,7 +259,7 @@
     <value />
   </data>
   <data name="rxvDisplayNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>顯示名稱無效</value>
   </data>
   <data name="rxvDisplayNameResource1.Text" xml:space="preserve">
     <value />
@@ -268,7 +268,7 @@
     <value />
   </data>
   <data name="rxvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Email</value>
+    <value>電子郵件位址無效</value>
   </data>
   <data name="rxvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -277,7 +277,7 @@
     <value />
   </data>
   <data name="rxvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>密碼無效</value>
   </data>
   <data name="rxvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -286,7 +286,7 @@
     <value />
   </data>
   <data name="rxvUserNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Username</value>
+    <value>用戶名無效</value>
   </data>
   <data name="rxvUserNameResource1.Text" xml:space="preserve">
     <value />
@@ -298,36 +298,36 @@
     <value />
   </data>
   <data name="txtDisplayNameResource1.ToolTip" xml:space="preserve">
-    <value>Type here a display name for your account</value>
+    <value>鍵入您帳戶的顯示名稱</value>
   </data>
   <data name="txtEmail1Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtEmail1Resource1.ToolTip" xml:space="preserve">
-    <value>Type here your Email address</value>
+    <value>鍵入您的電子郵件位址</value>
   </data>
   <data name="txtEmail2Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtEmail2Resource1.ToolTip" xml:space="preserve">
-    <value>Repeat your Email address</value>
+    <value>重複您的電子郵件位址</value>
   </data>
   <data name="txtPassword1Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtPassword1Resource1.ToolTip" xml:space="preserve">
-    <value>Type here your Password</value>
+    <value>輸入您的密碼</value>
   </data>
   <data name="txtPassword2Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtPassword2Resource1.ToolTip" xml:space="preserve">
-    <value>Repeat your Password</value>
+    <value>重複您的密碼</value>
   </data>
   <data name="txtUsernameResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtUsernameResource1.ToolTip" xml:space="preserve">
-    <value>Type here your Username</value>
+    <value>輸入您的使用者名稱</value>
   </data>
 </root>

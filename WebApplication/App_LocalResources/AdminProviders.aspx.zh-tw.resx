@@ -118,121 +118,121 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblMigrationInfoResource2" xml:space="preserve">
-    <value>&lt;b&gt;Note 1&lt;/b&gt;: always perform a full backup of all your data before performing a migration.&lt;br /&gt;&lt;b&gt;Note 2&lt;/b&gt;: migrations usually take several minutes to complete: during this time, do not perform any other activity in the wiki, and do not close this page.&lt;br /&gt;&lt;b&gt;Note 3&lt;/b&gt;: the destination provider should be completely empty: if it contains any data, it might cause consistency issues. Refer to the target provider's documentation for details.&lt;br /&gt;&lt;b&gt;Timeouts&lt;/b&gt;: it is strongly suggested that you increase the executionTimeout parameter in web.config before migrating data.</value>
+    <value>&lt;b&gt;注意 1&lt;/b&gt;：總是在執行遷移之前對您的所有資料進行完整備份。&lt;br /&gt;&lt;b&gt;注意 2&lt;/b&gt;：遷移通常需要數分鐘來完成：在這段時間內，不要在維基中進行任何其他活動，並且不要關閉本頁。&lt;br /&gt;&lt;b&gt;注意 3&lt;/b&gt;：目標提供這應該是完全空的：如果它包含任何資料，可能會引起一致性問題。參閱目標提供商的說明文件以獲取詳情。&lt;br /&gt;&lt;b&gt;超時&lt;/b&gt;：強烈建議您在遷移資料之前增加 web.config 中 executionTimeout 參數的值。</value>
   </data>
   <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">
-    <value>Auto-update Providers</value>
+    <value>自動更新提供者</value>
   </data>
   <data name="btnAutoUpdateProvidersResource1.ToolTip" xml:space="preserve">
-    <value>Automatically update all installed providers, of all types</value>
+    <value>自動更新已安裝的所有提供者，包括所有類型</value>
   </data>
   <data name="lblCannotDisableResource1.Text" xml:space="preserve">
-    <value>Cannot disable the provider because it is the default provider or,&lt;br /&gt;in case of a Pages Provider, it manages the default page of the root namespace</value>
+    <value>無法禁用提供者，因為它是默認提供者，&lt;br /&gt;或者它是頁面提供者並管理根命名空間的默認頁面</value>
   </data>
   <data name="lblCannotDisableResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblUpdateStatusResource1.Text" xml:space="preserve">
-    <value>Update Status</value>
+    <value>更新狀態</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Deselect the Provider</value>
+    <value>取消選擇提供者</value>
   </data>
   <data name="btnCopySettingsResource1.Text" xml:space="preserve">
-    <value>Copy</value>
+    <value>複製</value>
   </data>
   <data name="btnCopySettingsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnDeleteDllResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>刪除</value>
   </data>
   <data name="btnDeleteDllResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnDisableResource1.Text" xml:space="preserve">
-    <value>Disable</value>
+    <value>禁用</value>
   </data>
   <data name="btnDisableResource1.ToolTip" xml:space="preserve">
-    <value>Disable the Provider</value>
+    <value>禁用提供者</value>
   </data>
   <data name="btnEnableResource1.Text" xml:space="preserve">
-    <value>Enable</value>
+    <value>啟用</value>
   </data>
   <data name="btnEnableResource1.ToolTip" xml:space="preserve">
-    <value>Enable the Provider</value>
+    <value>啟用提供者</value>
   </data>
   <data name="btnMigrateFilesResource1.Text" xml:space="preserve">
-    <value>Migrate</value>
+    <value>遷移</value>
   </data>
   <data name="btnMigrateFilesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnMigratePagesResource1.Text" xml:space="preserve">
-    <value>Migrate</value>
+    <value>遷移</value>
   </data>
   <data name="btnMigratePagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnMigrateUsersResource1.Text" xml:space="preserve">
-    <value>Migrate</value>
+    <value>遷移</value>
   </data>
   <data name="btnMigrateUsersResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveDefaultProvidersResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
   </data>
   <data name="btnSaveDefaultProvidersResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save the Configuration String</value>
+    <value>保存配置字串</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>選擇</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>選擇</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUnloadResource1.Text" xml:space="preserve">
-    <value>Unload</value>
+    <value>卸載</value>
   </data>
   <data name="btnUnloadResource1.ToolTip" xml:space="preserve">
-    <value>Unloads the Provider</value>
+    <value>卸載提供者</value>
   </data>
   <data name="btnUploadResource1.Text" xml:space="preserve">
-    <value>Upload</value>
+    <value>上傳</value>
   </data>
   <data name="btnUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblAuthorResource1.Text" xml:space="preserve">
-    <value>Author</value>
+    <value>作者</value>
   </data>
   <data name="lblConfigHelpResource1.Text" xml:space="preserve">
-    <value>Help</value>
+    <value>説明</value>
   </data>
   <data name="lblConfigurationStringTitleResource1.Text" xml:space="preserve">
-    <value>Configuration String</value>
+    <value>配置字串</value>
   </data>
   <data name="lblCopySettingsInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: in order to be detected, the destination Provider must be uploaded using the upload tool.&lt;br /&gt;Log and recent changes will not be copied.</value>
+    <value>&lt;b&gt;注意&lt;/b&gt;：為了使之能被檢測到，必須使用上傳工具上傳目標提供者。&lt;br /&gt;日誌和最近更改不會被複製。</value>
   </data>
   <data name="lblCopySettingsResource1.Text" xml:space="preserve">
-    <value>Copy Settings and related data</value>
+    <value>複製設置和相關資料</value>
   </data>
   <data name="lblCopySettingsResultResource1.Text" xml:space="preserve">
     <value />
@@ -241,13 +241,13 @@
     <value />
   </data>
   <data name="lblDataMigrationResource1.Text" xml:space="preserve">
-    <value>Data Migration</value>
+    <value>數據遷移</value>
   </data>
   <data name="lblDefaultProvCacheResource1.Text" xml:space="preserve">
-    <value>Cache Provider</value>
+    <value>快取提供者</value>
   </data>
   <data name="lblDefaultProvFilesResource1.Text" xml:space="preserve">
-    <value>Files Provider</value>
+    <value>檔提供者</value>
   </data>
   <data name="lblDefaultProvidersResultResource1.Text" xml:space="preserve">
     <value />
@@ -256,16 +256,16 @@
     <value />
   </data>
   <data name="lblDefaultProvidersTitleResource1.Text" xml:space="preserve">
-    <value>Default Providers</value>
+    <value>默認提供者</value>
   </data>
   <data name="lblDefaultProvPagesResource1.Text" xml:space="preserve">
-    <value>Pages Provider</value>
+    <value>頁面提供者</value>
   </data>
   <data name="lblDefaultProvUsersResource1.Text" xml:space="preserve">
-    <value>Users Provider</value>
+    <value>用戶提供者</value>
   </data>
   <data name="lblDisplayResource1.Text" xml:space="preserve">
-    <value>Display</value>
+    <value>顯示</value>
   </data>
   <data name="lblDllResultResource1.Text" xml:space="preserve">
     <value />
@@ -274,7 +274,7 @@
     <value />
   </data>
   <data name="lblMigrateFilesResource1.Text" xml:space="preserve">
-    <value>Migrate Files and related data</value>
+    <value>遷移檔和相關資料</value>
   </data>
   <data name="lblMigrateFilesResultResource1.Text" xml:space="preserve">
     <value />
@@ -283,7 +283,7 @@
     <value />
   </data>
   <data name="lblMigratePagesResource1.Text" xml:space="preserve">
-    <value>Migrate Pages and related data</value>
+    <value>遷移頁面和相關資料</value>
   </data>
   <data name="lblMigratePagesResultResource1.Text" xml:space="preserve">
     <value />
@@ -292,10 +292,10 @@
     <value />
   </data>
   <data name="lblMigrateUsersInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: migrating user accounts will reset all their passwords (an email notice will be sent to all users).</value>
+    <value>&lt;b&gt;注意&lt;/b&gt;：遷移用戶帳戶將重置所有密碼（電子郵件通知將發送給所有用戶）。</value>
   </data>
   <data name="lblMigrateUsersResource1.Text" xml:space="preserve">
-    <value>Migrate Users and related data</value>
+    <value>遷移用戶和相關資料</value>
   </data>
   <data name="lblMigrateUsersResultResource1.Text" xml:space="preserve">
     <value />
@@ -304,7 +304,7 @@
     <value />
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>名稱</value>
   </data>
   <data name="lblProviderConfigHelpResource1.Text" xml:space="preserve">
     <value />
@@ -319,7 +319,7 @@
     <value />
   </data>
   <data name="lblProvidersResource1.Text" xml:space="preserve">
-    <value>Providers</value>
+    <value>提供者</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -334,13 +334,13 @@
     <value />
   </data>
   <data name="lblUploadInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: removing a DLL won't disable the Providers it contains until the next wiki restart,&lt;br /&gt;but uploading a new DLL will automatically load the Providers it contains.</value>
+    <value>&lt;b&gt;注意&lt;/b&gt;：直至下次維基重新啟動，移除 DLL 不會禁用其包含的提供者，&lt;br /&gt;但上傳新 DLL 將會自動載入其包含的提供者。</value>
   </data>
   <data name="lblUploadNewDllResource1.Text" xml:space="preserve">
-    <value>Upload new DLL</value>
+    <value>上傳新 DLL</value>
   </data>
   <data name="lblUploadProvidersTitleResource1.Text" xml:space="preserve">
-    <value>Providers DLLs Management</value>
+    <value>管理提供者 DLLs </value>
   </data>
   <data name="lblUploadResultResource1.Text" xml:space="preserve">
     <value />
@@ -349,7 +349,7 @@
     <value />
   </data>
   <data name="lblVersionResource1.Text" xml:space="preserve">
-    <value>Ver.</value>
+    <value>版本</value>
   </data>
   <data name="lstDllsResource1.ToolTip" xml:space="preserve">
     <value />
@@ -376,7 +376,7 @@
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>管理</value>
   </data>
   <data name="pnlListResource1.GroupingText" xml:space="preserve">
     <value />
@@ -391,31 +391,31 @@
     <value />
   </data>
   <data name="rdoCacheResource1.Text" xml:space="preserve">
-    <value>Cache Providers</value>
+    <value>快取提供者</value>
   </data>
   <data name="rdoCacheResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoFilesResource1.Text" xml:space="preserve">
-    <value>Files Providers</value>
+    <value>檔提供供者</value>
   </data>
   <data name="rdoFilesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoFormatterResource1.Text" xml:space="preserve">
-    <value>Formatter Providers</value>
+    <value>格式器提供者</value>
   </data>
   <data name="rdoFormatterResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoPagesResource1.Text" xml:space="preserve">
-    <value>Pages Providers</value>
+    <value>頁面提供者</value>
   </data>
   <data name="rdoPagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoUsersResource1.Text" xml:space="preserve">
-    <value>Users Providers</value>
+    <value>用戶提供者</value>
   </data>
   <data name="rdoUsersResource1.ToolTip" xml:space="preserve">
     <value />

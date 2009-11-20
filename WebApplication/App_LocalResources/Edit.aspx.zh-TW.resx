@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnManualNameResource1.Text" xml:space="preserve">
-    <value>Specify page name manually...</value>
+    <value>手動指定頁面名稱...</value>
   </data>
   <data name="btnManualNameResource1.ToolTip" xml:space="preserve">
     <value />
@@ -127,100 +127,100 @@
     <value />
   </data>
   <data name="txtCategoryResource2.ToolTip" xml:space="preserve">
-    <value>Type the name of the category here</value>
+    <value>在這裏鍵入分類名稱</value>
   </data>
   <data name="txtCommentResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtCommentResource2.ToolTip" xml:space="preserve">
-    <value>Type a comment for this change here (optional)</value>
+    <value>在這裏鍵入編輯摘要（可選）</value>
   </data>
   <data name="txtDescriptionResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtDescriptionResource2.ToolTip" xml:space="preserve">
-    <value>Type the description for this page here (optional)</value>
+    <value>在這裏鍵入頁面描述（可選）</value>
   </data>
   <data name="txtKeywordsResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtKeywordsResource2.ToolTip" xml:space="preserve">
-    <value>Type the keywords for this page here, separated with commas (optional)</value>
+    <value>在這裏鍵入頁面關鍵字，用英文逗號分隔（可選）</value>
   </data>
   <data name="txtNameResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtNameResource2.ToolTip" xml:space="preserve">
-    <value>Type the name of the page here</value>
+    <value>在這裏鍵入頁面名稱</value>
   </data>
   <data name="txtTitleResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtTitleResource2.ToolTip" xml:space="preserve">
-    <value>Type the title of the page here</value>
+    <value>在這裏鍵入頁面標題</value>
   </data>
   <data name="btnAutoTemplateOKResource1.Text" xml:space="preserve">
-    <value>Close</value>
+    <value>關閉</value>
   </data>
   <data name="btnAutoTemplateOKResource1.ToolTip" xml:space="preserve">
-    <value>Close this message</value>
+    <value>關閉此消息</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelTemplateResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="btnCancelTemplateResource1.ToolTip" xml:space="preserve">
-    <value>Close the Templates toolbar</value>
+    <value>關閉範本工具欄</value>
   </data>
   <data name="btnCreateCategoryResource1.Text" xml:space="preserve">
-    <value>Create</value>
+    <value>創建</value>
   </data>
   <data name="btnCreateCategoryResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveAndContinueResource1.Text" xml:space="preserve">
-    <value>Save &amp; Continue</value>
+    <value>保存並繼續</value>
   </data>
   <data name="btnSaveAndContinueResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnTemplatesResource1.Text" xml:space="preserve">
-    <value>Content Templates...</value>
+    <value>內容範本...</value>
   </data>
   <data name="btnTemplatesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUseTemplateResource1.Text" xml:space="preserve">
-    <value>Use Template</value>
+    <value>使用範本</value>
   </data>
   <data name="btnUseTemplateResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template (replace current content)</value>
+    <value>使用此範本（替換當前內容）</value>
   </data>
   <data name="chkMinorChangeResource1.Text" xml:space="preserve">
-    <value>Minor Change (no backup)</value>
+    <value>小修改（不備份）</value>
   </data>
   <data name="chkMinorChangeResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkSaveAsDraftResource1.Text" xml:space="preserve">
-    <value>Save as Draft</value>
+    <value>保存為草稿</value>
   </data>
   <data name="chkSaveAsDraftResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvCategory1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>名稱無效</value>
   </data>
   <data name="cvCategory1Resource1.Text" xml:space="preserve">
     <value />
@@ -229,7 +229,7 @@
     <value />
   </data>
   <data name="cvCategory2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Category already exists</value>
+    <value>分類已存在</value>
   </data>
   <data name="cvCategory2Resource1.Text" xml:space="preserve">
     <value />
@@ -238,7 +238,7 @@
     <value />
   </data>
   <data name="cvName1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Page Name</value>
+    <value>頁面名稱無效</value>
   </data>
   <data name="cvName1Resource1.Text" xml:space="preserve">
     <value />
@@ -247,7 +247,7 @@
     <value />
   </data>
   <data name="cvName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Page already exists</value>
+    <value>頁面已存在</value>
   </data>
   <data name="cvName2Resource1.Text" xml:space="preserve">
     <value />
@@ -256,16 +256,16 @@
     <value />
   </data>
   <data name="lblApprovalRequiredInfoResource1.Text" xml:space="preserve">
-    <value>Your changes to this page will be saved in a draft and they will not be published until an editor or administrator approves them.</value>
+    <value>您對本頁的更改將被保存為草稿，在編輯或管理員認可之前不會被發佈。</value>
   </data>
   <data name="lblAttachmentManagerResource1.Text" xml:space="preserve">
-    <value>Page Attachments Management</value>
+    <value>頁面附件管理</value>
   </data>
   <data name="lblAutoTemplateResource1.Text" xml:space="preserve">
-    <value>The Content Template "##TEMPLATE##" was selected automatically. You can discard the content as well as select another Template using the link above.</value>
+    <value>內容範本 "##TEMPLATE##" 已被自動選擇。您可以捨棄內容或使用上面的鏈結選擇其他範本。</value>
   </data>
   <data name="lblCategoriesResource1.Text" xml:space="preserve">
-    <value>Page Categories</value>
+    <value>頁面分類</value>
   </data>
   <data name="lblCategoryResultResource1.Text" xml:space="preserve">
     <value />
@@ -274,40 +274,40 @@
     <value />
   </data>
   <data name="lblCommentResource1.Text" xml:space="preserve">
-    <value>Comment for this change</value>
+    <value>編輯摘要</value>
   </data>
   <data name="lblConcurrentEditingResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: this Page is being edited by another user</value>
+    <value>&lt;b&gt;警告&lt;/b&gt;：本頁面正被其他用戶編輯</value>
   </data>
   <data name="lblConcurrentEditingUsernameResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Meta Description</value>
+    <value>描述</value>
   </data>
   <data name="lblDraftInfo2Resource1.Text" xml:space="preserve">
-    <value>If you think this content is ready for display, simply unckeck the 'Save as Draft' checkbox near the 'Save' button. Note: drafts are not versioned.</value>
+    <value>如果您認為此內容已經可以顯示了，只需去除“保存為草稿”核取方塊（在“保存”按鈕附近）的勾選。注意：草稿不分版本。</value>
   </data>
   <data name="lblDraftInfoResource1.Text" xml:space="preserve">
-    <value>You are currently editing a previously saved &lt;b&gt;draft&lt;/b&gt; of this page, edited by &lt;b&gt;##USER##&lt;/b&gt; on &lt;b&gt;##DATETIME##&lt;/b&gt; (##VIEWCHANGES##).</value>
+    <value>您正在編輯一份以前保存的本頁&lt;b&gt;草稿&lt;/b&gt;，編輯者 &lt;b&gt;##USER##&lt;/b&gt;，編輯時間 &lt;b&gt;##DATETIME##&lt;/b&gt;（##VIEWCHANGES##）。</value>
   </data>
   <data name="lblEditNoticeResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblIpLoggedResource1.Text" xml:space="preserve">
-    <value>Since you are not logged in, your IP Address will be used as Username.</value>
+    <value>由於您沒有登錄，您的 IP 位址將被當作用戶名。</value>
   </data>
   <data name="lblKeywordsResource1.Text" xml:space="preserve">
-    <value>Meta Keywords (separate with commas)</value>
+    <value>關鍵字（用英文逗號分隔）</value>
   </data>
   <data name="lblMetaResource1.Text" xml:space="preserve">
-    <value>Meta Information</value>
+    <value>元信息</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Page Name (used for linking pages)</value>
+    <value>頁面名稱（用於鏈結頁面）</value>
   </data>
   <data name="lblNewCategoryResource1.Text" xml:space="preserve">
-    <value>New Category</value>
+    <value>新建分類</value>
   </data>
   <data name="lblRefreshLinkResource1.Text" xml:space="preserve">
     <value />
@@ -319,10 +319,10 @@
     <value />
   </data>
   <data name="lblSaveDangerousResource1.Text" xml:space="preserve">
-    <value>Saving this Page might result in a &lt;b&gt;data-loss&lt;/b&gt;.</value>
+    <value>保存此頁面可能會造成&lt;b&gt;資料丟失&lt;/b&gt;。</value>
   </data>
   <data name="lblSaveDisabledResource1.Text" xml:space="preserve">
-    <value>The Administrators don't allow to save this Page.</value>
+    <value>管理員不允許保存此頁面。</value>
   </data>
   <data name="lblSessionRefreshResource1.Text" xml:space="preserve">
     <value />
@@ -334,7 +334,7 @@
     <value />
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Page Title</value>
+    <value>頁面標題</value>
   </data>
   <data name="lblUnloadPageResource1.Text" xml:space="preserve">
     <value />
@@ -346,7 +346,7 @@
     <value />
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
-    <value>Title</value>
+    <value>標題</value>
   </data>
   <data name="pnlAnonymousResource1.GroupingText" xml:space="preserve">
     <value />
@@ -397,7 +397,7 @@
     <value />
   </data>
   <data name="rfvCategoryResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>需要名稱</value>
   </data>
   <data name="rfvCategoryResource1.Text" xml:space="preserve">
     <value />
@@ -406,7 +406,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>需要名稱</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />
@@ -415,7 +415,7 @@
     <value />
   </data>
   <data name="rfvTitleResource1.ErrorMessage" xml:space="preserve">
-    <value>Title is required</value>
+    <value>需要標題</value>
   </data>
   <data name="rfvTitleResource1.Text" xml:space="preserve">
     <value />

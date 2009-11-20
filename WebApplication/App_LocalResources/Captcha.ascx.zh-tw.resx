@@ -145,6 +145,6 @@
     <value />
   </data>
   <data name="txtCaptchaResource1.ToolTip" xml:space="preserve">
-    <value>Copy here the text displayed above (case sensitive)</value>
+    <value>填寫上面顯示的文字（大小寫區分）</value>
   </data>
 </root>

@@ -118,61 +118,61 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="chkFilesAndAttachmentsResource1.Text" xml:space="preserve">
-    <value>Search Files and Attachments</value>
+    <value>搜尋檔案和附件</value>
   </data>
   <data name="chkFilesAndAttachmentsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkAllNamespacesResource1.Text" xml:space="preserve">
-    <value>Search in all Namespaces and all Categories</value>
+    <value>在所有命名空間和分類中搜尋</value>
   </data>
   <data name="chkAllNamespacesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblInstructionsResource1.Text" xml:space="preserve">
-    <value>Here you can search through the pages of this Namespace, their attachments and the files uploaded to the system.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: the results will only display the items you have permissions to read.</value>
+    <value>在這裏您可以搜尋此命名空間中的頁面、頁面附件以及上傳到系統的檔。&lt;br /&gt;&lt;b&gt;注意&lt;/b&gt;：搜索結果只顯示您有閱讀許可權的項目。</value>
   </data>
   <data name="btnGoResource1.Text" xml:space="preserve">
-    <value>Go</value>
+    <value>搜索</value>
   </data>
   <data name="btnGoResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkUncategorizedPagesResource1.Text" xml:space="preserve">
-    <value>Uncategorized Pages</value>
+    <value>未分類頁面</value>
   </data>
   <data name="chkUncategorizedPagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblCategoryFilterResource1.Text" xml:space="preserve">
-    <value>Filter by Category</value>
+    <value>按分類篩選</value>
   </data>
   <data name="lblStatsResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Search Engine</value>
+    <value>搜索引擎</value>
   </data>
   <data name="lstCategoriesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Title</value>
+    <value>標題</value>
   </data>
   <data name="rdoAllWordsResource1.Text" xml:space="preserve">
-    <value>All words</value>
+    <value>全部字詞</value>
   </data>
   <data name="rdoAllWordsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoAtLeastOneWordResource1.Text" xml:space="preserve">
-    <value>At least one word</value>
+    <value>至少一個字詞</value>
   </data>
   <data name="rdoAtLeastOneWordResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoExactPhraseResource1.Text" xml:space="preserve">
-    <value>Exact phrase</value>
+    <value>完整字句</value>
   </data>
   <data name="rdoExactPhraseResource1.ToolTip" xml:space="preserve">
     <value />
