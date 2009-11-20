@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 
 namespace ScrewTurn.Wiki {
-	
+
 	/// <summary>
 	/// Implements reverse formatting methods (HTML->WikiMarkup).
 	/// </summary>
@@ -581,19 +581,22 @@ namespace ScrewTurn.Wiki {
 			//sb.Replace("\r\n<br />", "\r\n\r\n");
 			//sb.Replace("<br />", "{BR}\r\n");
 			buffer.Replace("<br />", "\r\n");
+
+			// Fix line breaks in IE
+			buffer.Replace("\r\n\r\n\r\n=====", "\r\n\r\n=====");
+			buffer.Replace("\r\n\r\n\r\n====", "\r\n\r\n====");
+			buffer.Replace("\r\n\r\n\r\n===", "\r\n\r\n===");
+			buffer.Replace("\r\n\r\n\r\n==", "\r\n\r\n==");
+			buffer.Replace("\r\n\r\n\r\n----", "\r\n\r\n----");
+			buffer.Replace("\r\n\r\n\r\n* ", "\r\n\r\n* ");
+			buffer.Replace("\r\n\r\n\r\n# ", "\r\n\r\n# ");
+
 			match = SingleNewLine.Match(buffer.ToString());
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				buffer.Insert(match.Index, "{BR}");
 				match = SingleNewLine.Match(buffer.ToString(), match.Index);
 			}
-
-			// Fix line breaks in IE
-			//sb.Replace("\r\n\r\n\r\n=====", "\r\n\r\n=====");
-			//sb.Replace("\r\n\r\n\r\n====", "\r\n\r\n====");
-			//sb.Replace("\r\n\r\n\r\n===", "\r\n\r\n===");
-			//sb.Replace("\r\n\r\n\r\n==", "\r\n\r\n==");
-			//sb.Replace("\r\n\r\n\r\n----", "\r\n\r\n----");
 
 			buffer.Replace("&lt;", "<");
 			buffer.Replace("&gt;", ">");
@@ -995,7 +998,7 @@ namespace ScrewTurn.Wiki {
 				string provider, page, file;
 				GetProviderAndFileAndPage(rawUrl, out provider, out page, out file);
 
-                if (provider == null) return "{UP" + (page != null ? "(" + page + ")" : "") + "}" + file;
+				if(provider == null) return "{UP" + (page != null ? "(" + page + ")" : "") + "}" + file;
 				else return "{UP:" + provider + (page != null ? "(" + page + ")" : "") + "}" + file;
 			}
 			else return rawUrl;
