@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
 using ScrewTurn.Wiki.PluginFramework;
+using System.Text;
 
 namespace ScrewTurn.Wiki {
 
@@ -23,7 +24,7 @@ namespace ScrewTurn.Wiki {
 			using(XmlWriter writer = XmlWriter.Create(Response.OutputStream)) {
 				writer.WriteStartDocument();
 
-				writer.WriteStartElement("urlset");
+				writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
 				writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
 				writer.WriteAttributeString("xsi", "schemaLocation", null, "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/09/sitemap.xsd");
 
