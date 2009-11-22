@@ -186,6 +186,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Messages.ja-JP.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.ja-JP.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Messages.pl-PL.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1376,6 +1381,48 @@
     <Content Include="App_LocalResources\PageListBuilder.ascx.uk-UA.resx" />
     <Content Include="App_LocalResources\PageListBuilder.ascx.zh-cn.resx" />
     <Content Include="App_LocalResources\PageListBuilder.ascx.zh-tw.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Admin.master.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Category.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Default.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Error.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.ja-JP.resx" />
+    <Content Include="App_LocalResources\History.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Login.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.ja-JP.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.ja-JP.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Post.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Register.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Search.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\User.aspx.ja-JP.resx" />
     <EmbeddedResource Include="Properties\Messages.cs-CZ.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -1409,6 +1456,10 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.it-IT.designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Messages.ja-JP.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.ja-JP.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.nb-NO.resx">
       <SubType>Designer</SubType>
