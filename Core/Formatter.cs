@@ -933,11 +933,18 @@ namespace ScrewTurn.Wiki {
 			// Sort by descending date/time
 			allChanges.Reverse();
 
+			Func<NamespaceInfo, string> getName = (ns) => {
+				if(ns == null) return null;
+				else return ns.Name;
+			};
+
+			string currentNamespaceName = getName(currentNamespace);
+
 			// Filter by namespace
 			if(!allNamespaces) {
 				allChanges.RemoveAll((c) => {
 					NamespaceInfo ns = Pages.FindNamespace(NameTools.GetNamespace(c.Page));
-					return ns != currentNamespace;
+					return getName(ns) != currentNamespaceName;
 				});
 			}
 
