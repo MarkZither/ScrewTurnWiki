@@ -765,7 +765,7 @@ namespace ScrewTurn.Wiki {
 
 			EmailTools.AsyncSendMassEmail(recipients, Settings.SenderEmail,
 				Settings.WikiTitle + " - " + title,
-				body.Replace("##PAGE##", title).Replace("##USER##", content.User).Replace("##DATETIME##",
+				body.Replace("##PAGE##", title).Replace("##USER##", author != null ? Users.GetDisplayName(author) : "anonymous").Replace("##DATETIME##",
 				Preferences.AlignWithServerTimezone(content.LastModified).ToString(Settings.DateTimeFormat)).Replace("##COMMENT##",
 				(string.IsNullOrEmpty(content.Comment) ? Exchanger.ResourceExchanger.GetResource("None") : content.Comment)).Replace("##LINK##",
 				Settings.MainUrl + Tools.UrlEncode(page.FullName) + Settings.PageExtension).Replace("##WIKITITLE##", Settings.WikiTitle),
@@ -887,12 +887,14 @@ namespace ScrewTurn.Wiki {
 					usersToNotify.Add(user);
 				}
 			}
-			usersToNotify.Add(new UserInfo("admin", "Administrator", Settings.ContactEmail,
-				true, DateTime.Now, null));
+			usersToNotify.Add(new UserInfo("admin", "Administrator", Settings.ContactEmail, true, DateTime.Now, null));
+
+			UserInfo actualUser = Users.FindUser(author);
+			string displayName = actualUser == null ? author : Users.GetDisplayName(actualUser);
 
 			string subject = Settings.WikiTitle + " - " + Exchanger.ResourceExchanger.GetResource("ApproveRejectDraft") + ": " + title;
 			string body = Settings.Provider.GetMetaDataItem(MetaDataItem.ApproveDraftMessage, null);
-			body = body.Replace("##PAGE##", title).Replace("##USER##", author).Replace("##DATETIME##",
+			body = body.Replace("##PAGE##", title).Replace("##USER##", displayName).Replace("##DATETIME##",
 				Preferences.AlignWithServerTimezone(DateTime.Now).ToString(Settings.DateTimeFormat)).Replace("##COMMENT##",
 				string.IsNullOrEmpty(comment) ? Exchanger.ResourceExchanger.GetResource("None") : comment).Replace("##LINK##",
 				Settings.MainUrl + UrlTools.BuildUrl("Edit.aspx?Page=", Tools.UrlEncode(currentPage.FullName))).Replace("##LINK2##",
