@@ -805,9 +805,16 @@ namespace ScrewTurn.Wiki {
 								firstClosedAfterLastOpen = balanced.IndexOf("}", lastOpen + 1);
 
 								if(firstClosedAfterLastOpen <= lastOpen) break; // Give up
-
+								
 								string internalSnippet = balanced.Substring(lastOpen, firstClosedAfterLastOpen - lastOpen + 1);
 								balanced = balanced.Remove(lastOpen, firstClosedAfterLastOpen - lastOpen + 1);
+
+								// This check allows to ignore special tags (especially Phase3)
+								if(!internalSnippet.ToLowerInvariant().StartsWith("{s:")) {
+								    internalSnippet = internalSnippet.Replace("{", "$$$$$$$$OPEN$$$$$$$$").Replace("}", "$$$$$$$$CLOSE$$$$$$$$");
+								    balanced = balanced.Insert(lastOpen, internalSnippet);
+								    continue;
+								}
 
 								string formattedInternalSnippet = FormatSnippet(internalSnippet, tocString);
 								string[] temp;
@@ -817,7 +824,7 @@ namespace ScrewTurn.Wiki {
 								balanced = balanced.Insert(lastOpen, formattedInternalSnippet);
 							} while(lastOpen != -1);
 
-							sb.Insert(match.Index, balanced);
+							sb.Insert(match.Index, balanced.Replace("$$$$$$$$OPEN$$$$$$$$", "{").Replace("$$$$$$$$CLOSE$$$$$$$$", "}"));
 						}
 					}
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
@@ -1316,13 +1323,16 @@ namespace ScrewTurn.Wiki {
 			string bigString = sb.ToString();
 
 			do {
+				int dummy = bigString.IndexOf("{", tempIndex + 1);
+				if(dummy != -1) openCount++;
 				tempIndex = bigString.IndexOf("}", tempIndex + 1);
-				if(tempIndex != -1) {
-					closeCount++;
-					if(closeCount == openCount) {
-						// Balanced
-						return bigString.Substring(index, tempIndex - index + 1);
-					}
+				if(tempIndex != -1) closeCount++;
+
+				tempIndex = Math.Max(dummy, tempIndex);
+
+				if(closeCount == openCount) {
+					// Balanced
+					return bigString.Substring(index, tempIndex - index + 1);
 				}
 			} while(tempIndex != -1 && tempIndex < bigString.Length - 1);
 
