@@ -842,6 +842,7 @@ namespace ScrewTurn.Wiki {
 				match = CommentRegex.Match(sb.ToString());
 				while(match.Success) {
 					sb.Remove(match.Index, match.Length);
+					sb.Insert(match.Index, " "); // This prevents the creation of additional blank lines
 					match = CommentRegex.Match(sb.ToString(), match.Index + 1);
 				}
 			}
