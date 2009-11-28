@@ -1145,7 +1145,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string UsernameRegex {
 			get {
-				return GetString(Provider.GetSetting("UsernameRegex"), @"^\w[\w\ !$@%^\.\(\)]{3,25}$");
+				return GetString(Provider.GetSetting("UsernameRegex"), @"^\w[\w\ !$@%^\.\(\)\-_]{3,25}$");
 			}
 			set {
 				Provider.SetSetting("UsernameRegex", value);
@@ -1157,7 +1157,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string PasswordRegex {
 			get {
-					return GetString(Provider.GetSetting("PasswordRegex"), @"^\w[\w~!@#$%^\(\)\[\]\{\}\.,=\-_\ ]{6,25}$");
+					return GetString(Provider.GetSetting("PasswordRegex"), @"^\w[\w~!@#$%^\(\)\[\]\{\}\.,=\-_\ ]{5,25}$");
 			}
 			set {
 				Provider.SetSetting("PasswordRegex", value);
