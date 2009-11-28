@@ -278,6 +278,9 @@ namespace ScrewTurn.Wiki {
 							// Check namespace
 							if(p != null && NameTools.GetNamespace(p.FullName) != currentNamespace) continue;
 
+							// Skip deleted pages as their category binding is unknown
+							if(p == null && useCat) continue;
+
 							// Write the item element
 							rss.WriteStartElement("item");
 							rss.WriteStartElement("title");
