@@ -699,6 +699,9 @@ namespace ScrewTurn.Wiki {
 				lblCategoryResult.Text = "";
 				lblCategoryResult.CssClass = "";
 
+				Page.Validate("category");
+				if(!Page.IsValid) return;
+
 				string fullName = NameTools.GetFullName(DetectNamespace(), txtCategory.Text);
 				Pages.CreateCategory(DetectNamespaceInfo(), txtCategory.Text, FindAppropriateProvider());
 
