@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki {
 		public const string MainPageContent = @"Welcome to '''{WIKITITLE}'''!{BR}
 This is the main page of your new ScrewTurn Wiki, created for you by the system.
 
-You should [Edit.aspx?Page=MainPage|edit this page] and customize the contents. You can also [Edit.aspx|create a new page] from scratch.
+You should edit this page, using the ''Edit'' button in the top-right corner of the screen. You can also create a new page, using the ''Create a new Page'' link in the sidebar on the left.
 
 If you need help, try to visit [http://www.screwturn.eu|our website] or [http://www.screwturn.eu/forum|our forum].
 
@@ -28,7 +28,7 @@ If you need help, try to visit [http://www.screwturn.eu|our website] or [http://
 		public const string MainPageContentForSubNamespace = @"Welcome to the '''{NAMESPACE}''' namespace of '''{WIKITITLE}'''!{BR}
 This is the main page of the namespace, created for you by the system.
 
-You should [Edit.aspx?Page={NAMESPACE}.MainPage|edit this page] and customize the contents. You can also [Edit.aspx|create a new page] from scratch.
+You should edit this page, using the ''Edit'' button in the top-right corner of the screen. You can also create a new page, using the ''Create a new Page'' link in the sidebar on the left.
 
 If you need help, try to visit [http://www.screwturn.eu|our website] or [http://www.screwturn.eu/forum|our forum].";
 
