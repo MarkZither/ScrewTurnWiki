@@ -229,6 +229,18 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		}
 
 		/// <summary>
+		/// Sanitizes a stiring from all unfriendly characters.
+		/// </summary>
+		/// <param name="input">The input string.</param>
+		/// <returns>The sanitized result.</returns>
+		private static string Sanitize(string input) {
+			StringBuilder sb = new StringBuilder(input);
+			sb.Replace("<", "&lt;");
+			sb.Replace(">", "&gt;");
+			return sb.ToString();
+		}
+
+		/// <summary>
 		/// Records a message to the System Log.
 		/// </summary>
 		/// <param name="message">The Log Message.</param>
@@ -253,8 +265,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			List<Parameter> parameters = new List<Parameter>(4);
 			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", DateTime.Now));
 			parameters.Add(new Parameter(ParameterType.Char, "EntryType", EntryTypeToChar(entryType)));
-			parameters.Add(new Parameter(ParameterType.String, "User", user));
-			parameters.Add(new Parameter(ParameterType.String, "Message", message));
+			parameters.Add(new Parameter(ParameterType.String, "User", Sanitize(user)));
+			parameters.Add(new Parameter(ParameterType.String, "Message", Sanitize(message)));
 
 			try {
 				DbCommand command = builder.GetCommand(connString, query, parameters);
