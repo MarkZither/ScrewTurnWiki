@@ -116,11 +116,11 @@ namespace ScrewTurn.Wiki {
 				Message msg = Pages.FindMessage(messages, int.Parse(Request["Edit"]));
 				Pages.ModifyMessage(page, int.Parse(Request["Edit"]), msg.Username, txtSubject.Text, DateTime.Now, content);
 			}
-			UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension, "?Discuss=1&NoRedirect=1"));
+			UrlTools.Redirect(page.FullName + Settings.PageExtension + "?Discuss=1&NoRedirect=1");
 		}
 
 		protected void btnCancel_Click(object sender, EventArgs e) {
-			UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension, "?Discuss=1&NoRedirect=1"));
+			UrlTools.Redirect(page.FullName + Settings.PageExtension + "?Discuss=1&NoRedirect=1");
 		}
 
 	}
