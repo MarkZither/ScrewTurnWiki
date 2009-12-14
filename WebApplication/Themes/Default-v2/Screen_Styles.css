@@ -222,6 +222,12 @@ pre {
 	border: solid 1px #DDDDDD;
 	overflow: auto;
 }
+html>body pre {
+	/* Fix for IE7 - unwanted horizontal scrollbar */
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding-bottom: expression(this.scrollWidth > this.offsetWidth ? 19 : 8);
+}
 
 table, div {
 	padding: 0px;
