@@ -2078,6 +2078,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="h">The string, usually a header (Hx).</param>
 		/// <returns>The anchor ID.</returns>
 		public static string BuildHAnchor(string h) {
+			// Remove any extra spaces around the heading title:
+			// '=== Title ===' results in '<a id="Title">' instead of '<a id="_Title_">'
+			if(h != null) h = h.Trim();
+
 			StringBuilder sb = new StringBuilder(StripWikiMarkup(h));
 			sb.Replace(" ", "_");
 			sb.Replace(".", "");
