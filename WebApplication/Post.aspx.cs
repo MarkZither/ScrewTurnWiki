@@ -86,6 +86,8 @@ namespace ScrewTurn.Wiki {
 		protected void btnSend_Click(object sender, EventArgs e) {
 			string content = editor.GetContent();
 
+			Page.Validate();
+
 			if(!Page.IsValid || content.Replace(" ", "").Length == 0 || txtSubject.Text.Replace(" ", "").Length == 0) {
 				lblResult.CssClass = "resulterror";
 				lblResult.Text = Properties.Messages.SubjectAndBodyNeeded;
