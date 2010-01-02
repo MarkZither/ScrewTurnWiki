@@ -18,7 +18,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private const int MaxParametersInQuery = 50;
 
 		private IAclManager aclManager;
-		private AclStorerBase aclStorer;
 
 		/// <summary>
 		/// Initializes the Storage Provider.
@@ -29,9 +28,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public new void Init(IHostV30 host, string config) {
 			base.Init(host, config);
 
-			aclManager = new StandardAclManager();
-			aclStorer = new SqlAclStorer(aclManager, LoadDataInternal, DeleteEntries, StoreEntries);
-			aclStorer.LoadData();
+			aclManager = new SqlAclManager(StoreEntry, DeleteEntries, RenameAclResource, RetrieveAllAclEntries, RetrieveAclEntriesForResource, RetrieveAclEntriesForSubject);
 		}
 
 		/// <summary>
@@ -1071,131 +1068,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		}
 
 		/// <summary>
-		/// Converts a <see cref="T:Value" /> to its corresponding character representation.
-		/// </summary>
-		/// <param name="value">The <see cref="T:Value" />.</param>
-		/// <returns>The character representation.</returns>
-		private static char AclEntryValueToChar(Value value) {
-			switch(value) {
-				case Value.Grant:
-					return 'G';
-				case Value.Deny:
-					return 'D';
-				default:
-					throw new NotSupportedException();
-			}
-		}
-
-		/// <summary>
-		/// Converts a character representation of a <see cref="T:Value" /> back to the enum value.
-		/// </summary>
-		/// <param name="c">The character representation.</param>
-		/// <returns>The <see cref="T:Value" />.</returns>
-		private static Value AclEntryValueFromChar(char c) {
-			switch(char.ToUpperInvariant(c)) {
-				case 'G':
-					return Value.Grant;
-				case 'D':
-					return Value.Deny;
-				default:
-					throw new NotSupportedException();
-			}
-		}
-
-		/// <summary>
-		/// Loads data from storage.
-		/// </summary>
-		/// <returns>The loaded ACL entries.</returns>
-		private AclEntry[] LoadDataInternal() {
-			ICommandBuilder builder = GetCommandBuilder();
-
-			// Sort order is not relevant
-			string query = QueryBuilder.NewQuery(builder).SelectFrom("AclEntry");
-
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
-
-			DbDataReader reader = ExecuteReader(command);
-
-			if(reader != null) {
-				List<AclEntry> result = new List<AclEntry>(50);
-
-				while(reader.Read()) {
-					result.Add(new AclEntry(reader["Resource"] as string, reader["Action"] as string, reader["Subject"] as string,
-						AclEntryValueFromChar(((string)reader["Value"])[0])));
-				}
-
-				CloseReader(command, reader);
-
-				return result.ToArray();
-			}
-			else return null;
-		}
-
-		/// <summary>
-		/// Deletes some entries.
-		/// </summary>
-		/// <param name="entries">The entries to delete.</param>
-		private void DeleteEntries(AclEntry[] entries) {
-			ICommandBuilder builder = GetCommandBuilder();
-			DbConnection connection = builder.GetConnection(connString);
-			DbTransaction transaction = BeginTransaction(connection);
-
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			foreach(AclEntry entry in entries) {
-				string query = queryBuilder.DeleteFrom("AclEntry");
-				query = queryBuilder.Where(query, "Resource", WhereOperator.Equals, "Resource");
-				query = queryBuilder.AndWhere(query, "Action", WhereOperator.Equals, "Action");
-				query = queryBuilder.AndWhere(query, "Subject", WhereOperator.Equals, "Subject");
-
-				List<Parameter> parameters = new List<Parameter>(3);
-				parameters.Add(new Parameter(ParameterType.String, "Resource", entry.Resource));
-				parameters.Add(new Parameter(ParameterType.String, "Action", entry.Action));
-				parameters.Add(new Parameter(ParameterType.String, "Subject", entry.Subject));
-
-				DbCommand command = builder.GetCommand(transaction, query, parameters);
-
-				if(ExecuteNonQuery(command, false) != 1) {
-					RollbackTransaction(transaction);
-					return;
-				}
-			}
-
-			CommitTransaction(transaction);
-		}
-
-		/// <summary>
-		/// Stores some entries.
-		/// </summary>
-		/// <param name="entries">The entries to store.</param>
-		private void StoreEntries(AclEntry[] entries) {
-			ICommandBuilder builder = GetCommandBuilder();
-			DbConnection connection = builder.GetConnection(connString);
-			DbTransaction transaction = BeginTransaction(connection);
-
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			foreach(AclEntry entry in entries) {
-				string query = queryBuilder.InsertInto("AclEntry", new string[] { "Resource", "Action", "Subject", "Value" }, new string[] { "Resource", "Action", "Subject", "Value" });
-				
-				List<Parameter> parameters = new List<Parameter>(3);
-				parameters.Add(new Parameter(ParameterType.String, "Resource", entry.Resource));
-				parameters.Add(new Parameter(ParameterType.String, "Action", entry.Action));
-				parameters.Add(new Parameter(ParameterType.String, "Subject", entry.Subject));
-				parameters.Add(new Parameter(ParameterType.Char, "Value", AclEntryValueToChar(entry.Value)));
-
-				DbCommand command = builder.GetCommand(transaction, query, parameters);
-
-				if(ExecuteNonQuery(command, false) != 1) {
-					RollbackTransaction(transaction);
-					return;
-				}
-			}
-
-			CommitTransaction(transaction);
-		}
-
-		/// <summary>
 		/// Stores the outgoing links of a page, overwriting existing data.
 		/// </summary>
 		/// <param name="page">The full name of the page.</param>
@@ -1426,6 +1298,243 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			else RollbackTransaction(transaction);
 
 			return somethingUpdated || rows > 0;
+		}
+
+		#endregion
+
+		#region AclManager backend methods
+
+		/// <summary>
+		/// Converts a <see cref="T:Value" /> to its corresponding character representation.
+		/// </summary>
+		/// <param name="value">The <see cref="T:Value" />.</param>
+		/// <returns>The character representation.</returns>
+		private static char AclEntryValueToChar(Value value) {
+			switch(value) {
+				case Value.Grant:
+					return 'G';
+				case Value.Deny:
+					return 'D';
+				default:
+					throw new NotSupportedException();
+			}
+		}
+
+		/// <summary>
+		/// Converts a character representation of a <see cref="T:Value" /> back to the enum value.
+		/// </summary>
+		/// <param name="c">The character representation.</param>
+		/// <returns>The <see cref="T:Value" />.</returns>
+		private static Value AclEntryValueFromChar(char c) {
+			switch(char.ToUpperInvariant(c)) {
+				case 'G':
+					return Value.Grant;
+				case 'D':
+					return Value.Deny;
+				default:
+					throw new NotSupportedException();
+			}
+		}
+
+		/// <summary>
+		/// Retrieves all ACL entries.
+		/// </summary>
+		/// <returns>The ACL entries.</returns>
+		private AclEntry[] RetrieveAllAclEntries() {
+			ICommandBuilder builder = GetCommandBuilder();
+
+			// Sort order is not relevant
+			string query = QueryBuilder.NewQuery(builder).SelectFrom("AclEntry");
+
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
+
+			DbDataReader reader = ExecuteReader(command);
+
+			if(reader != null) {
+				List<AclEntry> result = new List<AclEntry>(50);
+
+				while(reader.Read()) {
+					result.Add(new AclEntry(reader["Resource"] as string, reader["Action"] as string, reader["Subject"] as string,
+						AclEntryValueFromChar(((string)reader["Value"])[0])));
+				}
+
+				CloseReader(command, reader);
+
+				return result.ToArray();
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Retrieves all ACL entries for a resource.
+		/// </summary>
+		/// <param name="resource">The resource.</param>
+		/// <returns>The ACL entries for the resource.</returns>
+		private AclEntry[] RetrieveAclEntriesForResource(string resource) {
+			ICommandBuilder builder = GetCommandBuilder();
+
+			QueryBuilder queryBuilder = new QueryBuilder(builder);
+
+			// Sort order is not relevant
+			string query = queryBuilder.SelectFrom("AclEntry");
+			query = queryBuilder.Where(query, "Resource", WhereOperator.Equals, "Resource");
+
+			List<Parameter> parameters = new List<Parameter>(1);
+			parameters.Add(new Parameter(ParameterType.String, "Resource", resource));
+
+			DbCommand command = builder.GetCommand(connString, query, parameters);
+
+			DbDataReader reader = ExecuteReader(command);
+
+			if(reader != null) {
+				List<AclEntry> result = new List<AclEntry>(50);
+
+				while(reader.Read()) {
+					result.Add(new AclEntry(reader["Resource"] as string, reader["Action"] as string, reader["Subject"] as string,
+						AclEntryValueFromChar(((string)reader["Value"])[0])));
+				}
+
+				CloseReader(command, reader);
+
+				return result.ToArray();
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Retrieves all ACL entries for a subject.
+		/// </summary>
+		/// <param name="subject">The subject.</param>
+		/// <returns>The ACL entries for the subject.</returns>
+		private AclEntry[] RetrieveAclEntriesForSubject(string subject) {
+			ICommandBuilder builder = GetCommandBuilder();
+
+			QueryBuilder queryBuilder = new QueryBuilder(builder);
+
+			// Sort order is not relevant
+			string query = queryBuilder.SelectFrom("AclEntry");
+			query = queryBuilder.Where(query, "Subject", WhereOperator.Equals, "Subject");
+
+			List<Parameter> parameters = new List<Parameter>(1);
+			parameters.Add(new Parameter(ParameterType.String, "Subject", subject));
+
+			DbCommand command = builder.GetCommand(connString, query, parameters);
+
+			DbDataReader reader = ExecuteReader(command);
+
+			if(reader != null) {
+				List<AclEntry> result = new List<AclEntry>(50);
+
+				while(reader.Read()) {
+					result.Add(new AclEntry(reader["Resource"] as string, reader["Action"] as string, reader["Subject"] as string,
+						AclEntryValueFromChar(((string)reader["Value"])[0])));
+				}
+
+				CloseReader(command, reader);
+
+				return result.ToArray();
+			}
+			else return null;
+		}
+
+		/// <summary>
+		/// Deletes some ACL entries.
+		/// </summary>
+		/// <param name="entries">The entries to delete.</param>
+		/// <returns><c>true</c> if one or more entries were deleted, <c>false</c> otherwise.</returns>
+		private bool DeleteEntries(AclEntry[] entries) {
+			ICommandBuilder builder = GetCommandBuilder();
+			DbConnection connection = builder.GetConnection(connString);
+			DbTransaction transaction = BeginTransaction(connection);
+
+			QueryBuilder queryBuilder = new QueryBuilder(builder);
+
+			foreach(AclEntry entry in entries) {
+				string query = queryBuilder.DeleteFrom("AclEntry");
+				query = queryBuilder.Where(query, "Resource", WhereOperator.Equals, "Resource");
+				query = queryBuilder.AndWhere(query, "Action", WhereOperator.Equals, "Action");
+				query = queryBuilder.AndWhere(query, "Subject", WhereOperator.Equals, "Subject");
+
+				List<Parameter> parameters = new List<Parameter>(3);
+				parameters.Add(new Parameter(ParameterType.String, "Resource", entry.Resource));
+				parameters.Add(new Parameter(ParameterType.String, "Action", entry.Action));
+				parameters.Add(new Parameter(ParameterType.String, "Subject", entry.Subject));
+
+				DbCommand command = builder.GetCommand(transaction, query, parameters);
+
+				if(ExecuteNonQuery(command, false) <= 0) {
+					RollbackTransaction(transaction);
+					return false;
+				}
+			}
+
+			CommitTransaction(transaction);
+
+			return true;
+		}
+
+		/// <summary>
+		/// Stores a ACL entry.
+		/// </summary>
+		/// <param name="entry">The entry to store.</param>
+		/// <returns><c>true</c> if the entry was stored, <c>false</c> otherwise.</returns>
+		private bool StoreEntry(AclEntry entry) {
+			ICommandBuilder builder = GetCommandBuilder();
+			DbConnection connection = builder.GetConnection(connString);
+			DbTransaction transaction = BeginTransaction(connection);
+
+			QueryBuilder queryBuilder = new QueryBuilder(builder);
+
+			string query = queryBuilder.InsertInto("AclEntry", new string[] { "Resource", "Action", "Subject", "Value" }, new string[] { "Resource", "Action", "Subject", "Value" });
+
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Resource", entry.Resource));
+			parameters.Add(new Parameter(ParameterType.String, "Action", entry.Action));
+			parameters.Add(new Parameter(ParameterType.String, "Subject", entry.Subject));
+			parameters.Add(new Parameter(ParameterType.Char, "Value", AclEntryValueToChar(entry.Value)));
+
+			DbCommand command = builder.GetCommand(transaction, query, parameters);
+
+			if(ExecuteNonQuery(command, false) != 1) {
+				RollbackTransaction(transaction);
+				return false;
+			}
+
+			CommitTransaction(transaction);
+
+			return true;
+		}
+
+		/// <summary>
+		/// Renames a ACL resource.
+		/// </summary>
+		/// <param name="resource">The resource to rename.</param>
+		/// <param name="newName">The new name of the resource.</param>
+		/// <returns><c>true</c> if one or more entries weere updated, <c>false</c> otherwise.</returns>
+		private bool RenameAclResource(string resource, string newName) {
+			ICommandBuilder builder = GetCommandBuilder();
+			DbConnection connection = builder.GetConnection(connString);
+			DbTransaction transaction = BeginTransaction(connection);
+
+			QueryBuilder queryBuilder = new QueryBuilder(builder);
+
+			string query = queryBuilder.Update("AclEntry", new[] { "Resource" }, new[] { "ResourceNew" });
+			query = queryBuilder.Where(query, "Resource", WhereOperator.Equals, "ResourceOld");
+
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "ResourceNew", newName));
+			parameters.Add(new Parameter(ParameterType.String, "ResourceOld", resource));
+
+			DbCommand command = builder.GetCommand(transaction, query, parameters);
+
+			if(ExecuteNonQuery(command, false) <= 0) {
+				RollbackTransaction(transaction);
+				return false;
+			}
+
+			CommitTransaction(transaction);
+
+			return true;
 		}
 
 		#endregion

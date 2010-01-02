@@ -65,8 +65,8 @@
     <Compile Include="..\SqlProvidersCommon\QueryBuilder.cs">
       <Link>SqlProvidersCommon\QueryBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\SqlProvidersCommon\SqlAclStorer.cs">
-      <Link>SqlProvidersCommon\SqlAclStorer.cs</Link>
+    <Compile Include="..\SqlProvidersCommon\SqlAclManager.cs">
+      <Link>SqlProvidersCommon\SqlAclManager.cs</Link>
     </Compile>
     <Compile Include="..\SqlProvidersCommon\SqlClassBase.cs">
       <Link>SqlProvidersCommon\SqlClassBase.cs</Link>

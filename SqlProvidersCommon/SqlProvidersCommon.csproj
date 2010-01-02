@@ -48,7 +48,7 @@
       <Link>AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="IIndexConnector.cs" />
-    <Compile Include="SqlAclStorer.cs" />
+    <Compile Include="SqlAclManager.cs" />
     <Compile Include="SqlClassBase.cs" />
     <Compile Include="SqlFilesStorageProviderBase.cs" />
     <Compile Include="SqlIndex.cs" />

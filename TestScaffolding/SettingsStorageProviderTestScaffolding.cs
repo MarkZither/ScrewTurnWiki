@@ -579,7 +579,21 @@ namespace ScrewTurn.Wiki.Tests {
 			prov = GetProvider();
 			Collectors.SettingsProvider = prov;
 
-			prov.AclManager.DeleteEntry("Res", "Action", "U.User");
+			Assert.IsTrue(prov.AclManager.RenameResource("Res", "NewName"), "RenameResource should return true");
+
+			entries = prov.AclManager.RetrieveAllEntries();
+			Assert.AreEqual(1, entries.Length, "Wrong entry count");
+
+			Assert.AreEqual("NewName", entries[0].Resource, "Wrong resource");
+			Assert.AreEqual("Action", entries[0].Action, "Wrong action");
+			Assert.AreEqual("U.User", entries[0].Subject, "Wrong subject");
+			Assert.AreEqual(Value.Grant, entries[0].Value, "Wrong value");
+
+			prov = null;
+			prov = GetProvider();
+			Collectors.SettingsProvider = prov;
+
+			Assert.IsTrue(prov.AclManager.DeleteEntry("NewName", "Action", "U.User"), "DeleteEntry should return true");
 
 			prov = null;
 			prov = GetProvider();
