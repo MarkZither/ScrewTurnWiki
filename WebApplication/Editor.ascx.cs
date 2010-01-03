@@ -267,18 +267,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="content">The content.</param>
 		/// <param name="useVisual"><c>true</c> if the visual editor must be used, <c>false</c> otherwise.</param>
 		public void SetContent(string content, bool useVisual) {
+			inWYSIWYG = useVisual;
+			lblWYSIWYG.Text = "";
 			txtMarkup.Text = content;
 			if(useVisual) btnVisual_Click(this, null);
 			else btnWikiMarkup_Click(this, null);
-			/*if(useVisual) {
-				txtMarkup.Text = content;
-				lblWYSIWYG.Text = content;
-				SelectTab(1);
-			}
-			else {
-				txtMarkup.Text = content;
-				SelectTab(0);
-			}*/
 		}
 
 		/// <summary>

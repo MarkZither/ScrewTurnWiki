@@ -59,19 +59,14 @@ namespace ScrewTurn.Wiki {
 
 			MetaDataItem item = ButtonMetaDataItemMapping[senderControl.ID];
 
-			string content = Settings.Provider.GetMetaDataItem(item, lstNamespace.SelectedValue);
-			editor.SetContent(content, Settings.UseVisualEditorAsDefault);
+			bool markupOnly = WikiMarkupOnlyItems.Contains(item);
 
-			if(WikiMarkupOnlyItems.Contains(item)) {
-				editor.VisualVisible = false;
-				editor.PreviewVisible = false;
-				editor.ToolbarVisible = false;
-			}
-			else {
-				editor.VisualVisible = true;
-				editor.PreviewVisible = true;
-				editor.ToolbarVisible = true;
-			}
+			string content = Settings.Provider.GetMetaDataItem(item, lstNamespace.SelectedValue);
+			editor.SetContent(content, !markupOnly && Settings.UseVisualEditorAsDefault);
+
+			editor.VisualVisible = !markupOnly;
+			editor.PreviewVisible = !markupOnly;
+			editor.ToolbarVisible = !markupOnly;
 
 			pnlList.Visible = false;
 			pnlEditor.Visible = true;
