@@ -423,7 +423,7 @@ namespace ScrewTurn.Wiki {
 
 				// [], [[]] and [[] can occur when empty links are processed
 				if(match.Value.Equals("[]") || match.Value.Equals("[[]]") || match.Value.Equals("[[]")) {
-					end += 2;
+					sb.Remove(match.Index, match.Length);
 					match = LinkRegex.Match(sb.ToString(), end);
 					continue; // Prevents formatting emtpy links
 				}
