@@ -176,6 +176,11 @@
     <Compile Include="PageListBuilder.ascx.designer.cs">
       <DependentUpon>PageListBuilder.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Messages.af-ZA.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.af-ZA.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Messages.da-DK.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1423,6 +1428,52 @@
     <Content Include="App_LocalResources\Search.aspx.ja-JP.resx" />
     <Content Include="App_LocalResources\Upload.aspx.ja-JP.resx" />
     <Content Include="App_LocalResources\User.aspx.ja-JP.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Admin.master.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Category.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Default.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Error.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.af-ZA.resx" />
+    <Content Include="App_LocalResources\History.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Login.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.af-ZA.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.af-ZA.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Post.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Register.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Search.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\User.aspx.af-ZA.resx" />
+    <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.cs-CZ.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
