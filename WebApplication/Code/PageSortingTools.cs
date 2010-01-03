@@ -73,7 +73,21 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private static char GetFirstChar(string value) {
-			return value.ToUpper(CultureInfo.CurrentCulture)[0];
+			if(string.IsNullOrEmpty(value)) return '0';
+
+			// First we normalize the value to separate diacritics
+			string normalized = value.ToUpper(CultureInfo.CurrentCulture).Normalize(System.Text.NormalizationForm.FormD);
+
+			int count = normalized.Length;
+			for(int i = 0; i < count; i++) {
+				char c = normalized[i];
+				if(CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark) {
+					// We return the first non-spacing mark
+					return c;
+				}
+			}
+
+			return '0';
 		}
 
 		/// <summary>
