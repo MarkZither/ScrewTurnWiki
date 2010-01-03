@@ -103,6 +103,7 @@ input.tabbuttonactive {
 	z-index: 1000;
 	-moz-border-radius: 0px;
 	-webkit-border-radius: 0px;
+	cursor: default;
 }
 input.tabbuttonactive:hover {
 	background-color: #F0F0F0;

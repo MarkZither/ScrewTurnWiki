@@ -72,16 +72,24 @@ namespace ScrewTurn.Wiki {
 			btnWikiMarkup.CssClass = "tabbutton";
 			btnVisual.CssClass = "tabbutton";
 			btnPreview.CssClass = "tabbutton";
+
+			btnWikiMarkup.Enabled = true;
+			btnVisual.Enabled = true;
+			btnPreview.Enabled = true;
+
 			mlvEditor.ActiveViewIndex = index;
 			switch(index) {
 				case 0:
 					btnWikiMarkup.CssClass = "tabbuttonactive";
+					btnWikiMarkup.Enabled = false;
 					break;
 				case 1:
 					btnVisual.CssClass = "tabbuttonactive";
+					btnVisual.Enabled = false;
 					break;
 				case 2:
 					btnPreview.CssClass = "tabbuttonactive";
+					btnPreview.Enabled = false;
 					break;
 			}
 			ViewState["Tab"] = index;
