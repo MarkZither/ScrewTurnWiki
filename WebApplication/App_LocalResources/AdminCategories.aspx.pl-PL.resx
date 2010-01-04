@@ -118,88 +118,88 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="rdoBulkAddResource2.Text" xml:space="preserve">
-    <value>Add selected categories to selected pages, preserving existing categories mapping</value>
+    <value>Dodaj wybrane kategorie do wybranych stron, zachowując istniejące mapowanie kategorii</value>
   </data>
   <data name="rdoBulkAddResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoBulkReplaceResource2.Text" xml:space="preserve">
-    <value>For selected pages, replace existing categories mapping with selected categories (selecting no categories causes the pages to be uncategorized)</value>
+    <value>Dla wybranych stron zastąp istniejące mapowanie wybranymi kategoriami (brak wybranych kategorii spowoduje, że strony nie będą posiadały żadnej kategorii)</value>
   </data>
   <data name="rdoBulkReplaceResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnBulkBackResource1.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>Powrót</value>
   </data>
   <data name="btnBulkBackResource1.ToolTip" xml:space="preserve">
-    <value>Back to the Category list</value>
+    <value>Powrót do listy kategorii</value>
   </data>
   <data name="btnBulkManageResource1.Text" xml:space="preserve">
-    <value>Bulk Manage</value>
+    <value>Zarządzanie hurtowe</value>
   </data>
   <data name="btnBulkManageResource1.ToolTip" xml:space="preserve">
-    <value>Manage categories binding for many pages at once</value>
+    <value>Zarządzaj powiązaniami kategorii dla wielu stron jednocześnie</value>
   </data>
   <data name="btnBulkSaveResouce1.Text" xml:space="preserve">
-    <value>Save Binding</value>
+    <value>Zapisz powiązanie</value>
   </data>
   <data name="btnBulkSaveResouce1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblBulkStep1Resource1.Text" xml:space="preserve">
-    <value>1. Select Pages</value>
+    <value>1. Wybierz Strony</value>
   </data>
   <data name="lblBulkStep2Resource1.Text" xml:space="preserve">
-    <value>2. Select Categories</value>
+    <value>2. Wybierz Kategorie</value>
   </data>
   <data name="lblBulkStep3Resource1.Text" xml:space="preserve">
-    <value>3. Save Binding</value>
+    <value>3. Zapisz Powiązanie</value>
   </data>
   <data name="btnBackResource1.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>Powrót</value>
   </data>
   <data name="btnBackResource1.ToolTip" xml:space="preserve">
-    <value>Back to the Category list</value>
+    <value>Powrót do listy kategorii</value>
   </data>
   <data name="btnDeleteCategoryResource1.Text" xml:space="preserve">
-    <value>Delete Category</value>
+    <value>Usuń Kategorię</value>
   </data>
   <data name="btnDeleteCategoryResource1.ToolTip" xml:space="preserve">
-    <value>Delete this Category</value>
+    <value>Usuń tą Kategorię</value>
   </data>
   <data name="btnMergeResource1.Text" xml:space="preserve">
-    <value>Merge</value>
+    <value>Scal</value>
   </data>
   <data name="btnMergeResource1.ToolTip" xml:space="preserve">
-    <value>Merges the Category</value>
+    <value>Scal Kategorię</value>
   </data>
   <data name="btnNewCategoryResource1.Text" xml:space="preserve">
-    <value>Create</value>
+    <value>Stwórz</value>
   </data>
   <data name="btnNewCategoryResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRenameResource1.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Zmień nazwę</value>
   </data>
   <data name="btnRenameResource1.ToolTip" xml:space="preserve">
-    <value>Rename the Category</value>
+    <value>Zmień nazwę Kategorii</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Wyberz</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Select this Category</value>
+    <value>Wybierz Kategorię</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Wyberz</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Select this Category</value>
+    <value>Wybierz Kategorię</value>
   </data>
   <data name="cvNewCategoryResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Category Name</value>
+    <value>Niepoprawna nazwa Kategorii</value>
   </data>
   <data name="cvNewCategoryResource1.Text" xml:space="preserve">
     <value />
@@ -208,7 +208,7 @@
     <value />
   </data>
   <data name="cvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Category Name</value>
+    <value>Niepoprawna nazwa Kategorii</value>
   </data>
   <data name="cvNewNameResource1.Text" xml:space="preserve">
     <value />
@@ -217,13 +217,13 @@
     <value />
   </data>
   <data name="lblCategoriesResource1.Text" xml:space="preserve">
-    <value>Categories</value>
+    <value>Kategorie</value>
   </data>
   <data name="lblCurrentCategoryResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblDeleteCategoryResource1.Text" xml:space="preserve">
-    <value>Delete Category</value>
+    <value>Usuń Kategorię</value>
   </data>
   <data name="lblDeleteResultResource1.Text" xml:space="preserve">
     <value />
@@ -232,13 +232,13 @@
     <value />
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Category Operations</value>
+    <value>Operacje Kategorii</value>
   </data>
   <data name="lblMergeCategoryTitleResource1.Text" xml:space="preserve">
-    <value>Merge Category</value>
+    <value>Scal Kategorię</value>
   </data>
   <data name="lblMergeIntoResource1.Text" xml:space="preserve">
-    <value>Merge into</value>
+    <value>Scal w</value>
   </data>
   <data name="lblMergeResultResource1.Text" xml:space="preserve">
     <value />
@@ -247,13 +247,13 @@
     <value />
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nazwa</value>
   </data>
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
-    <value>Namespace</value>
+    <value>Sekcja</value>
   </data>
   <data name="lblNewCategoryResource1.Text" xml:space="preserve">
-    <value>New Category</value>
+    <value>Nowa Kategoria</value>
   </data>
   <data name="lblNewCategoryResultResource1.Text" xml:space="preserve">
     <value />
@@ -262,16 +262,16 @@
     <value />
   </data>
   <data name="lblNewNameResource1.Text" xml:space="preserve">
-    <value>New Name</value>
+    <value>Nowa Nazwa</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Pages</value>
+    <value>Strony</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
     <value>Provider</value>
   </data>
   <data name="lblRenameCategoryTitleResource1.Text" xml:space="preserve">
-    <value>Rename Category</value>
+    <value>Zmień nazwę Kategorii</value>
   </data>
   <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
@@ -286,7 +286,7 @@
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administracja</value>
   </data>
   <data name="pnlEditCategoryResource1.GroupingText" xml:space="preserve">
     <value />
@@ -301,7 +301,7 @@
     <value />
   </data>
   <data name="rfvNewCategoryResource1.ErrorMessage" xml:space="preserve">
-    <value>Category Name is required</value>
+    <value>Nazwa Kategorii jest wymagana</value>
   </data>
   <data name="rfvNewCategoryResource1.Text" xml:space="preserve">
     <value />
@@ -310,7 +310,7 @@
     <value />
   </data>
   <data name="rfvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>New Name is required</value>
+    <value>Nowa nazwa jest wymagana</value>
   </data>
   <data name="rfvNewNameResource1.Text" xml:space="preserve">
     <value />

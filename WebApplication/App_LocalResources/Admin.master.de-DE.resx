@@ -121,85 +121,99 @@
     <value>Administration</value>
   </data>
   <data name="lblBrowserSupportResource1.Text" xml:space="preserve">
-    <value>Your Browser might present problems with this Page (Internet Explorer 7+ and Firefox 3+ are suggested).</value>
+    <value>Ihr Browser könnte probleme haben beim Anzeigen dieser Seiten. IE 7 oder höher, respektive Firefox 3 und höher wird empfohlen.</value>
+    <comment>Your Browser might present problems with this Page (Internet Explorer 7+ and Firefox 3+ are suggested).</comment>
   </data>
   <data name="lblBrowserSupportResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblHomeLinkResource1.Text" xml:space="preserve">
-    <value>Main Page</value>
+    <value>Hauptseite</value>
+    <comment>Main Page</comment>
   </data>
   <data name="lblStringsResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectAccountsResource1.Text" xml:space="preserve">
-    <value>Accounts</value>
+    <value>Benutzerkonten</value>
+    <comment>Accounts</comment>
   </data>
   <data name="lnkSelectAccountsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectAdminHomeResource1.Text" xml:space="preserve">
-    <value>Admin Home</value>
+    <value>Administrator Home</value>
+    <comment>Admin Home</comment>
   </data>
   <data name="lnkSelectAdminHomeResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectCategoriesResource1.Text" xml:space="preserve">
-    <value>Categories</value>
+    <value>Kategorien</value>
+    <comment>Categories</comment>
   </data>
   <data name="lnkSelectCategoriesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectConfigResource1.Text" xml:space="preserve">
-    <value>Configuration</value>
+    <value>Konfiguration</value>
+    <comment>Configuration</comment>
   </data>
   <data name="lnkSelectConfigResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectContentResource1.Text" xml:space="preserve">
-    <value>Content Editing</value>
+    <value>Bearbeiten von Inhalten</value>
+    <comment>Content Editing</comment>
   </data>
   <data name="lnkSelectContentResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectGroupsResource1.Text" xml:space="preserve">
-    <value>User Groups</value>
+    <value>Benutzergruppen</value>
+    <comment>User Groups</comment>
   </data>
   <data name="lnkSelectGroupsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectLogResource1.Text" xml:space="preserve">
-    <value>System Log</value>
+    <value>Systemprotokoll</value>
+    <comment>System Log</comment>
   </data>
   <data name="lnkSelectLogResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectNamespacesResource1.Text" xml:space="preserve">
-    <value>Namespaces</value>
+    <value>Namensräume</value>
+    <comment>Namespaces</comment>
   </data>
   <data name="lnkSelectNamespacesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectNavPathsResource1.Text" xml:space="preserve">
-    <value>Nav. Paths</value>
+    <value>Navigationspfade</value>
+    <comment>Nav. Paths</comment>
   </data>
   <data name="lnkSelectNavPathsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectPagesResource1.Text" xml:space="preserve">
-    <value>Wiki Pages</value>
+    <value>Wikiseiten</value>
+    <comment>Wiki Pages</comment>
   </data>
   <data name="lnkSelectPagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectProvidersResource1.Text" xml:space="preserve">
-    <value>Providers</value>
+    <value>Provider</value>
+    <comment>Providers</comment>
   </data>
   <data name="lnkSelectProvidersResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectSnippetsResource1.Text" xml:space="preserve">
-    <value>Snippets/Templates</value>
+    <value>Snippets / Vorlagen</value>
+    <comment>Snippets/Templates</comment>
   </data>
   <data name="lnkSelectSnippetsResource1.ToolTip" xml:space="preserve">
     <value />

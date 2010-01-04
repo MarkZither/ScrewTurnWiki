@@ -118,79 +118,99 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAddResource1.Text" xml:space="preserve">
-    <value>Add</value>
+    <value>Hinzufügen</value>
+    <comment>Add</comment>
   </data>
   <data name="btnAddResource1.ToolTip" xml:space="preserve">
-    <value>Add the selected Page to the list</value>
+    <value>Ausgewählte Seite zur Liste hinzufügen</value>
+    <comment>Add the selected Page to the list</comment>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the Navigation Path list</value>
+    <value>Abbrechen und zur Navigationspfad-Liste zurückkehren</value>
+    <comment>Cancel and return to the Navigation Path list</comment>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Nav. Path</value>
+    <value>Navigationspfad erstellen</value>
+    <comment>Create Nav. Path</comment>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Navigation Path</value>
+    <value>neuer Navigationspfad speichern</value>
+    <comment>Save the new Navigation Path</comment>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Löschen</value>
+    <comment>Delete</comment>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Navigation Path</value>
+    <value>Navigationspfad löschen</value>
+    <comment>Delete the Navigation Path</comment>
   </data>
   <data name="btnDownResource1.Text" xml:space="preserve">
-    <value>Down</value>
+    <value>runter</value>
+    <comment>Down</comment>
   </data>
   <data name="btnDownResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnNewNavPathResource1.Text" xml:space="preserve">
-    <value>New Nav. Path</value>
+    <value>Neuer Navigationspfad</value>
+    <comment>New Nav. Path</comment>
   </data>
   <data name="btnNewNavPathResource1.ToolTip" xml:space="preserve">
-    <value>Create a new Navigation Path</value>
+    <value>neuer Navigationspfad erstellen</value>
+    <comment>Create a new Navigation Path</comment>
   </data>
   <data name="btnRemoveResource1.Text" xml:space="preserve">
-    <value>Remove</value>
+    <value>Entfernen</value>
+    <comment>Remove</comment>
   </data>
   <data name="btnRemoveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Nav. Path</value>
+    <value>Navigationspfad speichern</value>
+    <comment>Save Nav. Path</comment>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>Änderungen speichern</value>
+    <comment>Save modifications</comment>
   </data>
   <data name="btnSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>Suchen</value>
+    <comment>Search</comment>
   </data>
   <data name="btnSearchResource1.ToolTip" xml:space="preserve">
-    <value>Search for a Page</value>
+    <value>Eine Seite suchen</value>
+    <comment>Search for a Page</comment>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Auswählen</value>
+    <comment>Select</comment>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Auswählen</value>
+    <comment>Select</comment>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUpResource1.Text" xml:space="preserve">
-    <value>Up</value>
+    <value>hoch</value>
+    <comment>Up</comment>
   </data>
   <data name="btnUpResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvName1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>Ungültiger Name</value>
+    <comment>Invalid Name</comment>
   </data>
   <data name="cvName1Resource1.Text" xml:space="preserve">
     <value />
@@ -199,7 +219,8 @@
     <value />
   </data>
   <data name="cvName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Navigation Path already exists</value>
+    <value>Der Navigationspfad exisitert bereits</value>
+    <comment>Navigation Path already exists</comment>
   </data>
   <data name="cvName2Resource1.Text" xml:space="preserve">
     <value />
@@ -208,25 +229,32 @@
     <value />
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Navigation Paths Details</value>
+    <value>Navigationspfad-Details</value>
+    <comment>Navigation Paths Details</comment>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
     <value>Name</value>
+    <comment>Name</comment>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
     <value>Name</value>
+    <comment>Name</comment>
   </data>
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
-    <value>Namespace</value>
+    <value>Namensraum</value>
+    <comment>Namespace</comment>
   </data>
   <data name="lblNavPathsResource1.Text" xml:space="preserve">
-    <value>Navigation Paths</value>
+    <value>Navigationspfade</value>
+    <comment>Navigation Paths</comment>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Pages</value>
+    <value>Seiten</value>
+    <comment>Pages</comment>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
     <value>Provider</value>
+    <comment>Provider</comment>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -245,6 +273,7 @@
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
     <value>Administration</value>
+    <comment>Administration</comment>
   </data>
   <data name="pnlEditNavPathResource1.GroupingText" xml:space="preserve">
     <value />
@@ -259,7 +288,8 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>Name wird benötigt</value>
+    <comment>Name is required</comment>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />

@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnSaveNewPasswordResource1.Text" xml:space="preserve">
-    <value>Save New Password</value>
+    <value>Zapisz nowe hasło</value>
   </data>
   <data name="btnSaveNewPasswordResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvNewPasswordsResource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>Hasła nie są jednakowe</value>
   </data>
   <data name="cvNewPasswordsResource1.Text" xml:space="preserve">
     <value />
@@ -136,25 +136,25 @@
     <value />
   </data>
   <data name="lblNewPassword1Resource1.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>Hasło</value>
   </data>
   <data name="lblNewPassword2Resource1.Text" xml:space="preserve">
-    <value>Password (repeat)</value>
+    <value>Hasło (powtórz)</value>
   </data>
   <data name="lblResetPassword2InfoResource1.Text" xml:space="preserve">
-    <value>Please enter your new password twice.</value>
+    <value>Wprowadź dwukrotnie nowe hasło</value>
   </data>
   <data name="lblResetPassword2Resource1.Text" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>Resetuj hasło</value>
   </data>
   <data name="lblResetPasswordInformationResource1.Text" xml:space="preserve">
-    <value>If you forgot your Password, please insert your Username &lt;b&gt;or&lt;/b&gt; Email address, then click on the Reset Password button.&lt;br /&gt;You will receive an email with a link to reset your password.</value>
+    <value> Jeśli zapomniałeś swojego hasła, wprowadź swoją nazwę użytkownika &lt;b&gt;lub&lt;/b&gt; adres Email, a następnie klikniej przycisk Resetuj hasło.&lt;br /&gt;Otrzymasz wiadomość email z odnośnikiem do zresetowania hasła.</value>
   </data>
   <data name="lblResultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rfvNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>Hasło jest wymagane</value>
   </data>
   <data name="rfvNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -163,7 +163,7 @@
     <value />
   </data>
   <data name="rfvNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>Hasło jest wymagane</value>
   </data>
   <data name="rfvNewPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -172,7 +172,7 @@
     <value />
   </data>
   <data name="rxNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Nieprawidłowe hasło</value>
   </data>
   <data name="rxNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -181,7 +181,7 @@
     <value />
   </data>
   <data name="rxNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Nieprawidłowe hasło</value>
   </data>
   <data name="rxNewPassword2Resource1.Text" xml:space="preserve">
     <value />

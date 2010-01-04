@@ -118,7 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnManualNameResource1.Text" xml:space="preserve">
-    <value>Specify page name manually...</value>
+    <value>Seitenname selber bestimmen...</value>
+    <comment>Specify page name manually...</comment>
   </data>
   <data name="btnManualNameResource1.ToolTip" xml:space="preserve">
     <value />
@@ -127,100 +128,120 @@
     <value />
   </data>
   <data name="txtCategoryResource2.ToolTip" xml:space="preserve">
-    <value>Type the name of the category here</value>
+    <value>Name der Kategorie hier eingeben</value>
+    <comment>Type the name of the category here</comment>
   </data>
   <data name="txtCommentResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtCommentResource2.ToolTip" xml:space="preserve">
-    <value>Type a comment for this change here (optional)</value>
+    <value>Kommentar zu diser Änderung hier eingeben (optional)</value>
+    <comment>Type a comment for this change here (optional)</comment>
   </data>
   <data name="txtDescriptionResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtDescriptionResource2.ToolTip" xml:space="preserve">
-    <value>Type the description for this page here (optional)</value>
+    <value>Beschreibung zu diser Seite hier eingeben (optional)</value>
+    <comment>Type the description for this page here (optional)</comment>
   </data>
   <data name="txtKeywordsResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtKeywordsResource2.ToolTip" xml:space="preserve">
-    <value>Type the keywords for this page here, separated with commas (optional)</value>
+    <value>Schlüsselwörter zu dieser Seite, mit Komma getrennt hier eingeben (optional)</value>
+    <comment>Type the keywords for this page here, separated with commas (optional)</comment>
   </data>
   <data name="txtNameResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtNameResource2.ToolTip" xml:space="preserve">
-    <value>Type the name of the page here</value>
+    <value>Name der Seite hier eingeben</value>
+    <comment>Type the name of the page here</comment>
   </data>
   <data name="txtTitleResource2.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtTitleResource2.ToolTip" xml:space="preserve">
-    <value>Type the title of the page here</value>
+    <value>Titel der Seite hier eingeben</value>
+    <comment>Type the title of the page here</comment>
   </data>
   <data name="btnAutoTemplateOKResource1.Text" xml:space="preserve">
-    <value>Close</value>
+    <value>Schliessen</value>
+    <comment>Close</comment>
   </data>
   <data name="btnAutoTemplateOKResource1.ToolTip" xml:space="preserve">
-    <value>Close this message</value>
+    <value>Diese Mitteilung schliessen</value>
+    <comment>Close this message</comment>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelTemplateResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelTemplateResource1.ToolTip" xml:space="preserve">
-    <value>Close the Templates toolbar</value>
+    <value>Vorlagensymbolleiste schliessen</value>
+    <comment>Close the Templates toolbar</comment>
   </data>
   <data name="btnCreateCategoryResource1.Text" xml:space="preserve">
-    <value>Create</value>
+    <value>Erstellen</value>
+    <comment>Create</comment>
   </data>
   <data name="btnCreateCategoryResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveAndContinueResource1.Text" xml:space="preserve">
-    <value>Save &amp; Continue</value>
+    <value>Speichern und weiter</value>
+    <comment>Save &amp; Continue</comment>
   </data>
   <data name="btnSaveAndContinueResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>Speichern</value>
+    <comment>Save</comment>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnTemplatesResource1.Text" xml:space="preserve">
-    <value>Content Templates...</value>
+    <value>Inhaltsvorlagen...</value>
+    <comment>Content Templates...</comment>
   </data>
   <data name="btnTemplatesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUseTemplateResource1.Text" xml:space="preserve">
-    <value>Use Template</value>
+    <value>Vorlage verwenden</value>
+    <comment>Use Template</comment>
   </data>
   <data name="btnUseTemplateResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template (replace current content)</value>
+    <value>Diese Vorlage verwenden (ersetzt aktuellen inhalt)</value>
+    <comment>Use this Template (replace current content)</comment>
   </data>
   <data name="chkMinorChangeResource1.Text" xml:space="preserve">
-    <value>Minor Change (no backup)</value>
+    <value>Geringfügige Änderung (keine Sicherung erstellen)</value>
+    <comment>Minor Change (no backup)</comment>
   </data>
   <data name="chkMinorChangeResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkSaveAsDraftResource1.Text" xml:space="preserve">
-    <value>Save as Draft</value>
+    <value>Als Entwurf speichern</value>
+    <comment>Save as Draft</comment>
   </data>
   <data name="chkSaveAsDraftResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvCategory1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>ungültiger Name</value>
+    <comment>Invalid Name</comment>
   </data>
   <data name="cvCategory1Resource1.Text" xml:space="preserve">
     <value />
@@ -229,7 +250,8 @@
     <value />
   </data>
   <data name="cvCategory2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Category already exists</value>
+    <value>Kategorie exisitert bereits</value>
+    <comment>Category already exists</comment>
   </data>
   <data name="cvCategory2Resource1.Text" xml:space="preserve">
     <value />
@@ -238,7 +260,8 @@
     <value />
   </data>
   <data name="cvName1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Page Name</value>
+    <value>Ungültiger Seitenname</value>
+    <comment>Invalid Page Name</comment>
   </data>
   <data name="cvName1Resource1.Text" xml:space="preserve">
     <value />
@@ -247,7 +270,8 @@
     <value />
   </data>
   <data name="cvName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Page already exists</value>
+    <value>Seite existiert bereits</value>
+    <comment>Page already exists</comment>
   </data>
   <data name="cvName2Resource1.Text" xml:space="preserve">
     <value />
@@ -256,16 +280,20 @@
     <value />
   </data>
   <data name="lblApprovalRequiredInfoResource1.Text" xml:space="preserve">
-    <value>Your changes to this page will be saved in a draft and they will not be published until an editor or administrator approves them.</value>
+    <value>Die Änderungen an dieser Seite werden als Entwurf gespeichert und werden nicht herausgegeben, bis sie von einem Editor oder Administrator freigegeben werden.</value>
+    <comment>Your changes to this page will be saved in a draft and they will not be published until an editor or administrator approves them.</comment>
   </data>
   <data name="lblAttachmentManagerResource1.Text" xml:space="preserve">
-    <value>Page Attachments Management</value>
+    <value>Seitenanhänge verwalten</value>
+    <comment>Page Attachments Management</comment>
   </data>
   <data name="lblAutoTemplateResource1.Text" xml:space="preserve">
-    <value>The Content Template "##TEMPLATE##" was selected automatically. You can discard the content as well as select another Template using the link above.</value>
+    <value>Die Vorlage "##TEMPLATE##" wurde automatisch angewendet. Sie können den Inhalt verwerfen oder durch klicken vom Link oben eine andere Vorlage auswählen.</value>
+    <comment>The Content Template "##TEMPLATE##" was selected automatically. You can discard the content as well as select another Template using the link above.</comment>
   </data>
   <data name="lblCategoriesResource1.Text" xml:space="preserve">
-    <value>Page Categories</value>
+    <value>Seiten-Kategorien</value>
+    <comment>Page Categories</comment>
   </data>
   <data name="lblCategoryResultResource1.Text" xml:space="preserve">
     <value />
@@ -274,40 +302,50 @@
     <value />
   </data>
   <data name="lblCommentResource1.Text" xml:space="preserve">
-    <value>Comment for this change</value>
+    <value>Kommentar für diese Änderung</value>
+    <comment>Comment for this change</comment>
   </data>
   <data name="lblConcurrentEditingResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: this Page is being edited by another user</value>
+    <value>&lt;b&gt;Achtung&lt;/b&gt;: Diese Seite wird gerade von einem anderen Benutzer bearbeitet!</value>
+    <comment>&lt;b&gt;Warning&lt;/b&gt;: this Page is being edited by another user</comment>
   </data>
   <data name="lblConcurrentEditingUsernameResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Meta Description</value>
+    <value>Meta Beschreibung</value>
+    <comment>Meta Description</comment>
   </data>
   <data name="lblDraftInfo2Resource1.Text" xml:space="preserve">
-    <value>If you think this content is ready for display, simply unckeck the 'Save as Draft' checkbox near the 'Save' button. Note: drafts are not versioned.</value>
+    <value>Wenn die Seite bereit ist zur Herausgabe, einfach die Kontrollbox 'Als Entwurf speichern' neben dem 'Speichern' Knopf abwählen. &lt;br / &gt;Hinweis: Entwürfe werden nicht versioniert.</value>
+    <comment>If you think this content is ready for display, simply unckeck the 'Save as Draft' checkbox near the 'Save' button. Note: drafts are not versioned.</comment>
   </data>
   <data name="lblDraftInfoResource1.Text" xml:space="preserve">
-    <value>You are currently editing a previously saved &lt;b&gt;draft&lt;/b&gt; of this page, edited by &lt;b&gt;##USER##&lt;/b&gt; on &lt;b&gt;##DATETIME##&lt;/b&gt; (##VIEWCHANGES##).</value>
+    <value>Sie bearbeiten eine von  &lt;b&gt;##USER##&lt;/b&gt; am &lt;b&gt;##DATETIME##&lt;/b&gt; als &lt;b&gt;Entwurf&lt;/b&gt; gespeicherte Seite. (##VIEWCHANGES##).</value>
+    <comment>You are currently editing a previously saved &lt;b&gt;draft&lt;/b&gt; of this page, edited by &lt;b&gt;##USER##&lt;/b&gt; on &lt;b&gt;##DATETIME##&lt;/b&gt; (##VIEWCHANGES##).</comment>
   </data>
   <data name="lblEditNoticeResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblIpLoggedResource1.Text" xml:space="preserve">
-    <value>Since you are not logged in, your IP Address will be used as Username.</value>
+    <value>Da Sie nicht eingelogt sind, wird Ihre IP-Adresse als Benutzername Protokolliert.</value>
+    <comment>Since you are not logged in, your IP Address will be used as Username.</comment>
   </data>
   <data name="lblKeywordsResource1.Text" xml:space="preserve">
-    <value>Meta Keywords (separate with commas)</value>
+    <value>Meta Schlüsselwörter (getrennt durch Komma)</value>
+    <comment>Meta Keywords (separate with commas)</comment>
   </data>
   <data name="lblMetaResource1.Text" xml:space="preserve">
     <value>Meta Information</value>
+    <comment>Meta Information</comment>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Page Name (used for linking pages)</value>
+    <value>Seitenname (wird zur Verlinkung verwendet)</value>
+    <comment>Page Name (used for linking pages)</comment>
   </data>
   <data name="lblNewCategoryResource1.Text" xml:space="preserve">
-    <value>New Category</value>
+    <value>Neue Kategorie</value>
+    <comment>New Category</comment>
   </data>
   <data name="lblRefreshLinkResource1.Text" xml:space="preserve">
     <value />
@@ -319,10 +357,12 @@
     <value />
   </data>
   <data name="lblSaveDangerousResource1.Text" xml:space="preserve">
-    <value>Saving this Page might result in a &lt;b&gt;data-loss&lt;/b&gt;.</value>
+    <value>Speichern dieser Seite kann zu &lt;b&gt;Datenverlust &lt;/b&gt; führen.</value>
+    <comment>Saving this Page might result in a &lt;b&gt;data-loss&lt;/b&gt;.</comment>
   </data>
   <data name="lblSaveDisabledResource1.Text" xml:space="preserve">
-    <value>The Administrators don't allow to save this Page.</value>
+    <value>Der Administrator verhindert ein Speichern dieser Seite.</value>
+    <comment>The Administrators don't allow to save this Page.</comment>
   </data>
   <data name="lblSessionRefreshResource1.Text" xml:space="preserve">
     <value />
@@ -334,7 +374,8 @@
     <value />
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Page Title</value>
+    <value>Seitentitel</value>
+    <comment>Page Title</comment>
   </data>
   <data name="lblUnloadPageResource1.Text" xml:space="preserve">
     <value />
@@ -346,7 +387,8 @@
     <value />
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titel</value>
+    <comment>Title</comment>
   </data>
   <data name="pnlAnonymousResource1.GroupingText" xml:space="preserve">
     <value />
@@ -397,7 +439,8 @@
     <value />
   </data>
   <data name="rfvCategoryResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>Name ist erforderlich</value>
+    <comment>Name is required</comment>
   </data>
   <data name="rfvCategoryResource1.Text" xml:space="preserve">
     <value />
@@ -406,7 +449,8 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>Name ist erforderlich</value>
+    <comment>Name is required</comment>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />
@@ -415,7 +459,8 @@
     <value />
   </data>
   <data name="rfvTitleResource1.ErrorMessage" xml:space="preserve">
-    <value>Title is required</value>
+    <value>Titel ist erforderlich</value>
+    <comment>Title is required</comment>
   </data>
   <data name="rfvTitleResource1.Text" xml:space="preserve">
     <value />

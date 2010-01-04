@@ -118,139 +118,168 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelAnchorResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelAnchorResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelFileLinkResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelFileLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelImageResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelImageResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelLinkResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelPageLinkResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelPageLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkAnchorResource1.Text" xml:space="preserve">
     <value>OK</value>
+    <comment>OK</comment>
   </data>
   <data name="btnOkAnchorResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkFileLinkResource1.Text" xml:space="preserve">
     <value>OK</value>
+    <comment>OK</comment>
   </data>
   <data name="btnOkFileLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkImageResource1.Text" xml:space="preserve">
     <value>OK</value>
+    <comment>OK</comment>
   </data>
   <data name="btnOkImageResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkLinkResource1.Text" xml:space="preserve">
     <value>OK</value>
+    <comment>OK</comment>
   </data>
   <data name="btnOkLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnOkPageLinkResource1.Text" xml:space="preserve">
     <value>OK</value>
+    <comment>OK</comment>
   </data>
   <data name="btnOkPageLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkFileNWResource1.Text" xml:space="preserve">
-    <value>Open link in new window</value>
+    <value>Link in einem neuen Fenster öffnen</value>
+    <comment>Open link in new window</comment>
   </data>
   <data name="chkFileNWResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkFilesAttachmentsResource1.Text" xml:space="preserve">
-    <value>Browse Page Attachments</value>
+    <value>Seiten-Anhänge durchsuchen</value>
+    <comment>Browse Page Attachments</comment>
   </data>
   <data name="chkFilesAttachmentsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkImageAttachmentsResource1.Text" xml:space="preserve">
-    <value>Browse Page Attachments</value>
+    <value>Seiten-Anhänge durchsuchen</value>
+    <comment>Browse Page Attachments</comment>
   </data>
   <data name="chkImageAttachmentsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkImageNWResource1.Text" xml:space="preserve">
-    <value>Open link in new window</value>
+    <value>Link in einem neuen Fesnter öffnen</value>
+    <comment>Open link in new window</comment>
   </data>
   <data name="chkImageNWResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkLinkNWResource1.Text" xml:space="preserve">
-    <value>Open link in new window</value>
+    <value>Link in einem neuen Fesnter öffnen</value>
+    <comment>Open link in new window</comment>
   </data>
   <data name="chkLinkNWResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkPageNWResource1.Text" xml:space="preserve">
-    <value>Open link in new window</value>
+    <value>Link in einem neuen Fesnter öffnen</value>
+    <comment>Open link in new window</comment>
   </data>
   <data name="chkPageNWResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblAnchorIDResource1.Text" xml:space="preserve">
-    <value>Anchor ID (required)</value>
+    <value>Anker-ID (erforderlich)</value>
+    <comment>Anchor ID (required)</comment>
   </data>
   <data name="lblAnchorTitleResource1.Text" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>Link-Titel (optional)</value>
+    <comment>Link Title (optional)</comment>
   </data>
   <data name="lblExistingAnchorsResource1.Text" xml:space="preserve">
-    <value>Link to:</value>
+    <value>Link nach:</value>
+    <comment>Link to:</comment>
   </data>
   <data name="lblFilePathResource1.Text" xml:space="preserve">
-    <value>File Path (required)</value>
+    <value>Pfad zur Datei (erforderlich)</value>
+    <comment>File Path (required)</comment>
   </data>
   <data name="lblFileTitleResource1.Text" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>Verknüpfungs-Titel (optional)</value>
+    <comment>Link Title (optional)</comment>
   </data>
   <data name="lblImageDescrResource1.Text" xml:space="preserve">
-    <value>Description (optional)</value>
+    <value>Beschreibung (optional)</value>
+    <comment>Description (optional)</comment>
   </data>
   <data name="lblImageLinkResource1.Text" xml:space="preserve">
-    <value>Link (optional)</value>
+    <value>Verknüpfung (optional)</value>
+    <comment>Link (optional)</comment>
   </data>
   <data name="lblImagePathResource1.Text" xml:space="preserve">
-    <value>Image Path/URL (required)</value>
+    <value>Bild-Pfad / URL (erforderlich)</value>
+    <comment>Image Path/URL (required)</comment>
   </data>
   <data name="lblInsertAnchorResource1.Text" xml:space="preserve">
-    <value>Insert:</value>
+    <value>Einfügen:</value>
+    <comment>Insert:</comment>
   </data>
   <data name="lblLinkTitleResource1.Text" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>Verknüpfungs-Titel (optional)</value>
+    <comment>Link Title (optional)</comment>
   </data>
   <data name="lblLinkUrlResource1.Text" xml:space="preserve">
-    <value>Link URL or Email address (required)</value>
+    <value>Verknüpfungs-URL oder Emailadresse (erforderlich)</value>
+    <comment>Link URL or Email address (required)</comment>
   </data>
   <data name="lblPageNameResource1.Text" xml:space="preserve">
-    <value>Page Name (required)</value>
+    <value>Seitenname (erforderlich)</value>
+    <comment>Page Name (required)</comment>
   </data>
   <data name="lblPageTitleResource1.Text" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>Verknüpfungs-Titel (optional)</value>
+    <comment>Link Title (optional)</comment>
   </data>
   <data name="lblStringsResource1.Text" xml:space="preserve">
     <value />
@@ -266,6 +295,7 @@
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
     <value>ScrewTurn Wiki</value>
+    <comment>ScrewTurn Wiki</comment>
   </data>
   <data name="pnlAnchorLinkResource1.GroupingText" xml:space="preserve">
     <value />
@@ -280,25 +310,29 @@
     <value />
   </data>
   <data name="rdoAnchorLinkResource1.Text" xml:space="preserve">
-    <value>Link to an existing Anchor</value>
+    <value>Verknüpfung zu einem existierenden Anker</value>
+    <comment>Link to an existing Anchor</comment>
   </data>
   <data name="rdoAnchorLinkResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoImageAutoResource1.Text" xml:space="preserve">
-    <value>Auto</value>
+    <value>automatisch</value>
+    <comment>Auto</comment>
   </data>
   <data name="rdoImageAutoResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoImageInlineResource1.Text" xml:space="preserve">
-    <value>Inline</value>
+    <value>In Reihe</value>
+    <comment>Inline ??</comment>
   </data>
   <data name="rdoImageInlineResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoImageLeftResource1.Text" xml:space="preserve">
-    <value>Align Left</value>
+    <value>Links ausrichten</value>
+    <comment>Align Left</comment>
   </data>
   <data name="rdoImageLeftResource1.ToolTip" xml:space="preserve">
     <value />
@@ -307,22 +341,26 @@
     <value />
   </data>
   <data name="rdoImageLinkResource1.ToolTip" xml:space="preserve">
-    <value>Check this to select the linked image using the browser</value>
+    <value>Wähle diese Option, um das verknüpfte Bild mit dem Browser zu selektieren</value>
+    <comment>Check this to select the linked image using the browser</comment>
   </data>
   <data name="rdoImagePathResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="rdoImagePathResource1.ToolTip" xml:space="preserve">
-    <value>Check this to select the image using the browser</value>
+    <value>Wähle diese Option, um das Bild mit dem Browser zu selektieren</value>
+    <comment>Check this to select the image using the browser</comment>
   </data>
   <data name="rdoImageRightResource1.Text" xml:space="preserve">
-    <value>Align Right</value>
+    <value>Rechts ausrichten</value>
+    <comment>Align Right</comment>
   </data>
   <data name="rdoImageRightResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoNewAnchorResource1.Text" xml:space="preserve">
-    <value>New Anchor</value>
+    <value>Neuer Anker</value>
+    <comment>New Anchor</comment>
   </data>
   <data name="rdoNewAnchorResource1.ToolTip" xml:space="preserve">
     <value />

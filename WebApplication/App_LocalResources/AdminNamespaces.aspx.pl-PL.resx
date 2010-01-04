@@ -118,97 +118,97 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnBackResource1.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>Wróć</value>
   </data>
   <data name="btnBackResource1.ToolTip" xml:space="preserve">
-    <value>Back to the Namespace list</value>
+    <value>Wróć na listę Sekcji</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Anuluj</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the Namespace list</value>
+    <value>Anuluj i wróć na listę Sekcji</value>
   </data>
   <data name="btnConfirmDeletionResource1.Text" xml:space="preserve">
-    <value>Confirm Namespace Deletion</value>
+    <value>Potwierdź usunięcie Sekcji</value>
   </data>
   <data name="btnConfirmDeletionResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Namespace</value>
+    <value>Stwórz Sekcję</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Namespace</value>
+    <value>Zapisz nową Sekcję</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Usuń</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Namespace</value>
+    <value>Usuń Sekcję</value>
   </data>
   <data name="btnNewNamespaceResource1.Text" xml:space="preserve">
-    <value>New Namespace</value>
+    <value>Nowa Sekcja</value>
   </data>
   <data name="btnNewNamespaceResource1.ToolTip" xml:space="preserve">
-    <value>Create a new Namespace</value>
+    <value>Stwórz nową Sekcję</value>
   </data>
   <data name="btnNormalResource1.Text" xml:space="preserve">
-    <value>Normal</value>
+    <value>Normalna</value>
   </data>
   <data name="btnNormalResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template</value>
+    <value>Użyj tego szablonu</value>
   </data>
   <data name="btnPermsResource1.Text" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Upoważnienia</value>
   </data>
   <data name="btnPermsResource1.ToolTip" xml:space="preserve">
-    <value>Manage permissions for this Namespace</value>
+    <value>Zarządzaj upoważnieniami dla tej Sekcji</value>
   </data>
   <data name="btnPermsResource2.Text" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Upoważnienia</value>
   </data>
   <data name="btnPermsResource2.ToolTip" xml:space="preserve">
-    <value>Manage permissions for this Namespace</value>
+    <value>Zarządzaj upoważnieniami dla tej Sekcji</value>
   </data>
   <data name="btnPrivateResource1.Text" xml:space="preserve">
-    <value>Private</value>
+    <value>Prywatna</value>
   </data>
   <data name="btnPrivateResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template</value>
+    <value>Użyj tego szablonu</value>
   </data>
   <data name="btnPublicResource1.Text" xml:space="preserve">
-    <value>Public</value>
+    <value>Publiczna</value>
   </data>
   <data name="btnPublicResource1.ToolTip" xml:space="preserve">
-    <value>Use this Template</value>
+    <value>Użyj tego szablonu</value>
   </data>
   <data name="btnRenameResource1.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Zmień nazwę</value>
   </data>
   <data name="btnRenameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Namespace</value>
+    <value>Zapisz Sekcję</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>Zachowaj zmiany</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Wybierz</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Select this Namespace for editing</value>
+    <value>Wybierz tą Sekcję do edycji</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Wybierz</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Select this Namespace for editing</value>
+    <value>Wybierz tą Sekcję do edycji</value>
   </data>
   <data name="cvName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>Nieprawidłowa nazwa</value>
   </data>
   <data name="cvName2Resource1.Text" xml:space="preserve">
     <value />
@@ -217,7 +217,7 @@
     <value />
   </data>
   <data name="cvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Namespace already exists</value>
+    <value>Taka Sekcja już istnieje</value>
   </data>
   <data name="cvNameResource1.Text" xml:space="preserve">
     <value />
@@ -226,7 +226,7 @@
     <value />
   </data>
   <data name="cvNewName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>Nieprawidłowa nazwa</value>
   </data>
   <data name="cvNewName2Resource1.Text" xml:space="preserve">
     <value />
@@ -235,7 +235,7 @@
     <value />
   </data>
   <data name="cvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Namespace already exists</value>
+    <value>Taka Sekcja już istnieje</value>
   </data>
   <data name="cvNewNameResource1.Text" xml:space="preserve">
     <value />
@@ -244,61 +244,61 @@
     <value />
   </data>
   <data name="lblCategoriesResource1.Text" xml:space="preserve">
-    <value>Categories</value>
+    <value>Kategorie</value>
   </data>
   <data name="lblConfirmDeletionResource1.Text" xml:space="preserve">
-    <value>Are you sure you want to premanently delete the selected Namespace? Doing so, all the data contained in it will be lost.</value>
+    <value>Czy jesteś pewny, że chcesz całkowicie usunąć wybraną Sekcję? Jeśli to zrobisz, wszystkie zawarte w niej dane zostaną utracone.</value>
   </data>
   <data name="lblDefaultPageInfoResource1.Text" xml:space="preserve">
-    <value>The default page will be created automatically with name 'MainPage'.</value>
+    <value>Zostanie stworzona domyślna strona z nazwą "StronaGłówna".</value>
   </data>
   <data name="lblDefaultPageInfoResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblDefaultPageResource1.Text" xml:space="preserve">
-    <value>Default Page</value>
+    <value>Domyśłna strona</value>
   </data>
   <data name="lblDefaultPageResource2.Text" xml:space="preserve">
-    <value>Default Page</value>
+    <value>Domyślna strona</value>
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Namespace Details</value>
+    <value>Szczegóły Sekcji</value>
   </data>
   <data name="lblInheritanceInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: sub-namespaces always inherit permissions from the &lt;b&gt;root&lt;/b&gt; namespace.&lt;br /&gt;Changing the permissions in the &lt;b&gt;root&lt;/b&gt; namespace does not change the permissions explicitly set in sub-namespaces.</value>
+    <value>&lt;b&gt;Uwaga&lt;/b&gt;: podsekcje zawsze przyjmują upoważnienia od sekcji &lt;b&gt;root&lt;/b&gt;.&lt;br /&gt; Zmiana upoważnień sekcji &lt;b&gt;root&lt;/b&gt; nie powoduje zmian upoważnień wprowadzonych w poszczególnych podsekcji.</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nazwa</value>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nazwa</value>
   </data>
   <data name="lblNamespaceNameResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblNamespacePermissionsResource1.Text" xml:space="preserve">
-    <value>Namespace Permissions</value>
+    <value>Upoważnienia Sekcji</value>
   </data>
   <data name="lblNamespacesResource1.Text" xml:space="preserve">
-    <value>Namespaces</value>
+    <value>Sekcje</value>
   </data>
   <data name="lblNewNameResource1.Text" xml:space="preserve">
-    <value>New Name</value>
+    <value>Nowa Nazwa</value>
   </data>
   <data name="lblNormalInfoResource1.Text" xml:space="preserve">
-    <value>Registered Users can &lt;b&gt;edit&lt;/b&gt; and &lt;b&gt;create&lt;/b&gt; pages and &lt;b&gt;manage&lt;/b&gt; categories.</value>
+    <value>Zarejestrowani użytkownicy mogą &lt;b&gt;edytować&lt;/b&gt; i &lt;b&gt;tworzyć&lt;/b&gt; strony oraz &lt;b&gt;zarządzać&lt;/b&gt; kategoriami.</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Pages</value>
+    <value>Strony</value>
   </data>
   <data name="lblPermissionsTemplatesInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: setting a template will replace all existing permissions for the default user groups.</value>
+    <value>&lt;b&gt;Ostrzeżenie&lt;/b&gt;: ustawienie szablonu spowoduje zastąpienie wszystkich istniejących upoważnień dla domyślnych grup użytkowników.</value>
   </data>
   <data name="lblPermissionsTemplatesResource1.Text" xml:space="preserve">
-    <value>Permissions Templates</value>
+    <value>Szablony upoważnień</value>
   </data>
   <data name="lblPrivateInfoResource1.Text" xml:space="preserve">
-    <value>Only registered users can &lt;b&gt;view&lt;/b&gt; pages (and also &lt;b&gt;create&lt;/b&gt; and &lt;b&gt;edit&lt;/b&gt; them as well as &lt;b&gt;manage&lt;/b&gt; categories).</value>
+    <value>Tylko zarejestrowani użytkownicy mogą &lt;b&gt;oglądać&lt;/b&gt; strony (a także &lt;b&gt;tworzyć&lt;/b&gt; i &lt;b&gt;edytować&lt;/b&gt;je jak również &lt;b&gt;zarządzać&lt;/b&gt; kategoriami).</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
     <value>Provider</value>
@@ -307,13 +307,13 @@
     <value>Provider</value>
   </data>
   <data name="lblPublicInfoResource1.Text" xml:space="preserve">
-    <value>Anyone, including anonymous users, can &lt;b&gt;edit&lt;/b&gt; pages, registered users can also &lt;b&gt;create&lt;/b&gt; pages and &lt;b&gt;manage&lt;/b&gt; categories.</value>
+    <value>Każdy, włącznie z użytkownikami anonimowymi, może &lt;b&gt;edytować&lt;/b&gt; strony, zarejestrowani użytkownicy mogą także &lt;b&gt;tworzyć&lt;/b&gt; strony i &lt;b&gt;zarządać&lt;/b&gt; kategoriami</value>
   </data>
   <data name="lblRenameInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: renaming a namespace will break all existing inter-namespace links.</value>
+    <value>&lt;b&gt;Ostrzeżenie&lt;/b&gt;: zmiana nazwy Sekcji spowoduje uszkodzenie wszystkich istniejących odnośników pomiędzy Sekcjami.</value>
   </data>
   <data name="lblRenameResource1.Text" xml:space="preserve">
-    <value>Rename this Namespace</value>
+    <value>Zmień nazwę Sekcji</value>
   </data>
   <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
@@ -328,10 +328,10 @@
     <value />
   </data>
   <data name="lblThemeResource1.Text" xml:space="preserve">
-    <value>Theme</value>
+    <value>Motyw</value>
   </data>
   <data name="lblThemeResource2.Text" xml:space="preserve">
-    <value>Theme</value>
+    <value>Motyw</value>
   </data>
   <data name="lstDefaultPageResource1.ToolTip" xml:space="preserve">
     <value />
@@ -340,7 +340,7 @@
     <value />
   </data>
   <data name="PageResource3.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administracja</value>
   </data>
   <data name="pnlDeleteResource1.GroupingText" xml:space="preserve">
     <value />
@@ -367,7 +367,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>Nazwa jest wymagana</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />
@@ -376,7 +376,7 @@
     <value />
   </data>
   <data name="rfvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>New Name is required</value>
+    <value>Nowa nazwa jest wymagana</value>
   </data>
   <data name="rfvNewNameResource1.Text" xml:space="preserve">
     <value />

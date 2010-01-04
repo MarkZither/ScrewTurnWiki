@@ -121,55 +121,55 @@
     <value>&lt;div class='warning' style='float: right;'&gt;You are now editing a snippet. After you are done,&lt;br /&gt;it is &lt;b&gt;strongly&lt;/b&gt; suggested to rebuild the search engine index in the &lt;i&gt;Admin Home&lt;/i&gt; page.&lt;/div&gt;</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Anuluj</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the items list</value>
+    <value>Anuluj i wróć na listę Wstawek</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Item</value>
+    <value>Stwórz obiekt</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Item</value>
+    <value>Stwórz nowy obiekt</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Usuń</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Item</value>
+    <value>Usuń ten obiekt</value>
   </data>
   <data name="btnNewSnippetResource1.Text" xml:space="preserve">
-    <value>New Snippet</value>
+    <value>Nowa Wstawka</value>
   </data>
   <data name="btnNewSnippetResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnNewTemplateResource1.Text" xml:space="preserve">
-    <value>New Template</value>
+    <value>Nowy Szablon</value>
   </data>
   <data name="btnNewTemplateResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Item</value>
+    <value>Zapisz element</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>Zapisz zmiany</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Wybierz</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Edit or delete this item</value>
+    <value>Edytuj lub usuń ten obiekt</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Wybierz</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Edit or delete this item</value>
+    <value>Edytuj lub usuń ten obiekt</value>
   </data>
   <data name="cvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Snippet Name</value>
+    <value>Nieprawidłowa nazwa Wstawki</value>
   </data>
   <data name="cvNameResource1.Text" xml:space="preserve">
     <value />
@@ -178,19 +178,19 @@
     <value />
   </data>
   <data name="lblEditTitleSnippetResource1.Text" xml:space="preserve">
-    <value>Snippet Details</value>
+    <value>Szczegóły Wstawki</value>
   </data>
   <data name="lblEditTitleTemplateResource1.Text" xml:space="preserve">
-    <value>Template Details</value>
+    <value>Szczegóły Szablonu</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nazwa</value>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nazwa</value>
   </data>
   <data name="lblParametersResource1.Text" xml:space="preserve">
-    <value>Params</value>
+    <value>Parametry</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
     <value>Provider</value>
@@ -205,13 +205,13 @@
     <value />
   </data>
   <data name="lblSnippetsTemplatesResource1.Text" xml:space="preserve">
-    <value>Snippets and Templates</value>
+    <value>Wstawki i Szablony</value>
   </data>
   <data name="lblTypeResource1.Text" xml:space="preserve">
-    <value>Type</value>
+    <value>Typ</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administracja</value>
   </data>
   <data name="pnlEditElementResource1.GroupingText" xml:space="preserve">
     <value />
@@ -226,7 +226,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>Nazwa jest wymagana</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />

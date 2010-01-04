@@ -119,165 +119,218 @@
   </resheader>
   <data name="btnCopyFromResource1.Text" xml:space="preserve">
     <value>Go</value>
+    <comment>Go</comment>
   </data>
   <data name="btnCopyFromResource1.ToolTip" xml:space="preserve">
-    <value>Copy the content of the same layout area from the selected Namespace</value>
+    <value>Inhalt vom selben Layout-Bereich des selektierten Namensraum koppieren</value>
+    <comment>Copy the content of the same layout area from the selected Namespace</comment>
   </data>
   <data name="lblCopyFromResource1.Text" xml:space="preserve">
-    <value>Copy content from:</value>
+    <value>Inhalt koppieren von:</value>
+    <comment>Copy content from:</comment>
   </data>
   <data name="btnAccessDeniedNoticeResource1.Text" xml:space="preserve">
-    <value>Access Denied Notice (Global)</value>
+    <value>Zugriff Verweigert (Global)</value>
+    <comment>Access Denied Notice (Global)</comment>
   </data>
   <data name="btnAccessDeniedNoticeResource1.ToolTip" xml:space="preserve">
-    <value>Edit</value>
+    <value>Bearbeiten</value>
+    <comment>Edit</comment>
   </data>
   <data name="btnAccountActivationMessageResource1.Text" xml:space="preserve">
-    <value>Account Activation Message (Global)</value>
+    <value>Konto aktivierungs Mitteilung (Global)</value>
+    <comment>Account Activation Message (Global)</comment>
   </data>
   <data name="btnAccountActivationMessageResource1.ToolTip" xml:space="preserve">
-    <value>Edit</value>
+    <value>Bearbeiten</value>
+    <comment>Edit</comment>
   </data>
   <data name="btnApproveDraftMessageResource1.Text" xml:space="preserve">
-    <value>Approve Draft Message (Global)</value>
+    <value>Entwurf Bestätigen Mitteilung (Global)</value>
+    <comment>Approve Draft Message (Global)</comment>
   </data>
   <data name="btnApproveDraftMessageResource1.ToolTip" xml:space="preserve">
-    <value>Edit</value>
+    <value>Bearbeiten</value>
+    <comment>Edit</comment>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return</value>
+    <value>Abbrechen und Zurück</value>
+    <comment>Cancel and return</comment>
   </data>
   <data name="btnDiscussionChangeMessageResource1.Text" xml:space="preserve">
-    <value>Discussion Change Message (Global)</value>
+    <value>Diskussion wechseln Mitteilung (Global)</value>
+    <comment>Discussion Change Message (Global)</comment>
   </data>
   <data name="btnDiscussionChangeMessageResource1.ToolTip" xml:space="preserve">
-    <value>Edit</value>
+    <value>Bearbeiten</value>
+    <comment>Edit</comment>
   </data>
   <data name="btnEditingPageNoticeResource1.Text" xml:space="preserve">
-    <value>Editing Page Notice (Namespace-specific)</value>
+    <value>Seitenbearbeitungsmitteilung (Namensraum speziefisch)</value>
+    <comment>Editing Page Notice (Namespace-specific)</comment>
   </data>
   <data name="btnEditingPageNoticeResource1.ToolTip" xml:space="preserve">
-    <value>Edit</value>
+    <value>Bearbeiten</value>
+    <comment>Edit</comment>
   </data>
   <data name="btnFooterResource1.Text" xml:space="preserve">
-    <value>Footer</value>
+    <value>Seitenfuss</value>
+    <comment>Footer ??</comment>
   </data>
   <data name="btnFooterResource1.ToolTip" xml:space="preserve">
-    <value>Edit the global footer</value>
+    <value>Globaler Seitenfuss bearbeiten</value>
+    <comment>Edit the global footer</comment>
   </data>
   <data name="btnHeaderResource1.Text" xml:space="preserve">
-    <value>Header</value>
+    <value>Seitenkopf</value>
+    <comment>Header ??</comment>
   </data>
   <data name="btnHeaderResource1.ToolTip" xml:space="preserve">
-    <value>Edit the global header</value>
+    <value>Globaler Seitenkopf bearbeiten</value>
+    <comment>Edit the global header</comment>
   </data>
   <data name="btnHtmlHeadResource1.Text" xml:space="preserve">
-    <value>HTML Head</value>
+    <value>HTML Kopfbereich</value>
+    <comment>HTML Head</comment>
   </data>
   <data name="btnHtmlHeadResource1.ToolTip" xml:space="preserve">
-    <value>Edit the HTML Head tag</value>
+    <value>HTML Kopfbereich bearbeiten</value>
+    <comment>Edit the HTML Head tag</comment>
   </data>
   <data name="btnLoginNoticeResource1.Text" xml:space="preserve">
-    <value>Login Notice (Global)</value>
+    <value>Login Mitteilung (Global)</value>
+    <comment>Login Notice (Global)</comment>
   </data>
   <data name="btnLoginNoticeResource1.ToolTip" xml:space="preserve">
-    <value>Edit</value>
+    <value>Bearbeiten</value>
+    <comment>Edit</comment>
   </data>
   <data name="btnPageChangeMessageResource1.Text" xml:space="preserve">
-    <value>Page Change Message (Global)</value>
+    <value>Seitenwechsel Mitteilung (Global)</value>
+    <comment>Page Change Message (Global)</comment>
   </data>
   <data name="btnPageChangeMessageResource1.ToolTip" xml:space="preserve">
-    <value>Edit</value>
+    <value>Bearbeiten</value>
+    <comment>Edit</comment>
   </data>
   <data name="btnPageFooterResource1.Text" xml:space="preserve">
-    <value>Page Footer</value>
+    <value>Seitenfuss</value>
+    <comment>Page Footer</comment>
   </data>
   <data name="btnPageFooterResource1.ToolTip" xml:space="preserve">
-    <value>Edit the page footer</value>
+    <value>Seitenfuss bearbeiten</value>
+    <comment>Edit the page footer</comment>
   </data>
   <data name="btnPageHeaderResource1.Text" xml:space="preserve">
-    <value>Page Header</value>
+    <value>Seitenkopf</value>
+    <comment>Page Header</comment>
   </data>
   <data name="btnPageHeaderResource1.ToolTip" xml:space="preserve">
-    <value>Edit the page header</value>
+    <value>Seitenkopf bearbeiten</value>
+    <comment>Edit the page header</comment>
   </data>
   <data name="btnPasswordResetProcedureMessageResource1.Text" xml:space="preserve">
-    <value>Password Reset Procedure Message (Global)</value>
+    <value>Mitteilung Passwort-Rücksetzungsprozedur (Global)</value>
+    <comment>Password Reset Procedure Message (Global)</comment>
   </data>
   <data name="btnPasswordResetProcedureMessageResource1.ToolTip" xml:space="preserve">
-    <value>Edit</value>
+    <value>Bearbeiten</value>
+    <comment>Edit</comment>
   </data>
   <data name="btnRegisterNoticeResource1.Text" xml:space="preserve">
-    <value>Register Notice (Global)</value>
+    <value>Registrierungsmitteilung (Global)</value>
+    <comment>Register Notice (Global)</comment>
   </data>
   <data name="btnRegisterNoticeResource1.ToolTip" xml:space="preserve">
-    <value>Edit</value>
+    <value>Bearbeiten</value>
+    <comment>Edit</comment>
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>Speichern</value>
+    <comment>Save</comment>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save the content</value>
+    <value>Inhalt Speichern</value>
+    <comment>Save the content</comment>
   </data>
   <data name="btnSidebarResource1.Text" xml:space="preserve">
-    <value>Sidebar</value>
+    <value>Seitenleiste</value>
+    <comment>Sidebar</comment>
   </data>
   <data name="btnSidebarResource1.ToolTip" xml:space="preserve">
-    <value>Edit the sidebar (menu)</value>
+    <value>Seitenleiste bearbeiten (menu)</value>
+    <comment>Edit the sidebar (menu)</comment>
   </data>
   <data name="lblAccessDeniedNoticeInfoResource1.Text" xml:space="preserve">
-    <value>The message replacing the information at the top of the access denied page (if not empty).</value>
+    <value>Mitteilung die anstelle der Information oben auf der 'Zugriff verweigert'- Seite angezeigt wird (nur wenn nicht leer).</value>
+    <comment>The message replacing the information at the top of the access denied page (if not empty).</comment>
   </data>
   <data name="lblAccountActivationMessageInfoResource1.Text" xml:space="preserve">
-    <value>The email message sent to a newly registered user that have to activate her account.</value>
+    <value>Email-Mitteilung die an einen frisch registrierten Benutzer gesendet wird, welcher sein Konto noch aktivieren muss.</value>
+    <comment>The email message sent to a newly registered user that have to activate her account.</comment>
   </data>
   <data name="lblApproveDraftMessageInfoResource1.Text" xml:space="preserve">
-    <value>The email message sent to editor/administrators when a page draft requires approval.</value>
+    <value>Email-Mitteilung die an den Editor/Administrator gesendet wird, wenn ein Seitenentwurf bestätigt werden muss.</value>
+    <comment>The email message sent to editor/administrators when a page draft requires approval.</comment>
   </data>
   <data name="lblContentResource1.Text" xml:space="preserve">
-    <value>Content Editing</value>
+    <value>Inhalt bearbeiten</value>
+    <comment>Content Editing</comment>
   </data>
   <data name="lblDiscussionChangeMessageInfoResource1.Text" xml:space="preserve">
-    <value>The email message sent to users when a new message is poste to a discussion.</value>
+    <value>Email-Mitteilung die an die Benutzer gesendet wird, wenn eine neue Mitteilung zu einer Diskussion hinzugefügt wurde.</value>
+    <comment>The email message sent to users when a new message is poste to a discussion.</comment>
   </data>
   <data name="lblEditingPageNoticeInfoResource1.Text" xml:space="preserve">
-    <value>The message displayed on top of the editing page.</value>
+    <value>Mitteilung oben auf der Bearbeitungsseite.</value>
+    <comment>The message displayed on top of the editing page.</comment>
   </data>
   <data name="lblInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: the actual layout of your current theme might differ from the one displayed here.</value>
+    <value>&lt;b&gt;Beachte&lt;/b&gt;: Das tatsächliche Layout kann von dem hier angezeigten abweichen.</value>
+    <comment>&lt;b&gt;Note&lt;/b&gt;: the actual layout of your current theme might differ from the one displayed here.</comment>
   </data>
   <data name="lblLoginNoticeInfoResource1.Text" xml:space="preserve">
-    <value>The message replacing the information at the top of the login screen (if not empty).</value>
+    <value>Mitteilung die anstelle der Information oben auf der Anmeldungsseite angezeigt wird (nur wenn nicht leer).</value>
+    <comment>The message replacing the information at the top of the login screen (if not empty).</comment>
   </data>
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
-    <value>Namespace</value>
+    <value>Namensraum</value>
+    <comment>Namespace</comment>
   </data>
   <data name="lblOtherResource1.Text" xml:space="preserve">
-    <value>Other Elements</value>
+    <value>Andere Elemente</value>
+    <comment>Other Elements</comment>
   </data>
   <data name="lblPageChangeMessageInfoResource1.Text" xml:space="preserve">
-    <value>The email message sent to users when a page is modified.</value>
+    <value>Email-Mitteilung die an die Benutzer gesendet wird wenn eine Seite bearbeitet wurde</value>
+    <comment>The email message sent to users when a page is modified.</comment>
   </data>
   <data name="lblPageContentResource1.Text" xml:space="preserve">
-    <value>Page Content</value>
+    <value>Seiteninhalt</value>
+    <comment>Page Content</comment>
   </data>
   <data name="lblPageLayoutResource1.Text" xml:space="preserve">
-    <value>Page Layout Elements (Namespace-Specific)</value>
+    <value>Seiten-Layoutelemente (Namensraum speziefisch)</value>
+    <comment>Page Layout Elements (Namespace-Specific)</comment>
   </data>
   <data name="lblPasswordResetProcedureMessageInfoResource1.Text" xml:space="preserve">
-    <value>The email message sent to when a user want to reset her password.</value>
+    <value>Email-Mitteilung die an Benutzer gesendet wird, die das Passwort zurücksetzen wollen.</value>
+    <comment>The email message sent to when a user want to reset her password.</comment>
   </data>
   <data name="lblRegisterNoticeInfoResource1.Text" xml:space="preserve">
-    <value>The message replacing the information at the top of the register screen (if not empty).</value>
+    <value>Mitteilung die anstelle der Information oben auf der Registrierungsseite angezeigt wird (nur wenn nicht leer).</value>
+    <comment>The message replacing the information at the top of the register screen (if not empty).</comment>
   </data>
   <data name="lstNamespaceResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
     <value>Administration</value>
+    <comment>Administration</comment>
   </data>
   <data name="pnlEditorResource1.GroupingText" xml:space="preserve">
     <value />

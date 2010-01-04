@@ -121,22 +121,26 @@
     <value />
   </data>
   <data name="btnBiggerMarkupVisualResource3.ToolTip" xml:space="preserve">
-    <value>Increase editor size</value>
+    <value>Editor vergrössern</value>
+    <comment>Increase editor size</comment>
   </data>
   <data name="btnSmallerMarkupVisualResource3.AlternateText" xml:space="preserve">
     <value />
   </data>
   <data name="btnSmallerMarkupVisualResource3.ToolTip" xml:space="preserve">
-    <value>Decrease editor size</value>
+    <value>Editor verkleinern</value>
+    <comment>Decrease editor size</comment>
   </data>
   <data name="btnBiggerMarkupResource3.AlternateText" xml:space="preserve">
     <value />
   </data>
   <data name="btnBiggerMarkupResource3.ToolTip" xml:space="preserve">
-    <value>Increase editor size</value>
+    <value>Editor vergrössern</value>
+    <comment>Increase editor size</comment>
   </data>
   <data name="btnPreviewResource3.Text" xml:space="preserve">
-    <value>Preview</value>
+    <value>Vorschau</value>
+    <comment>Preview</comment>
   </data>
   <data name="btnPreviewResource3.ToolTip" xml:space="preserve">
     <value />
@@ -145,16 +149,19 @@
     <value />
   </data>
   <data name="btnSmallerMarkupResource3.ToolTip" xml:space="preserve">
-    <value>Decrease editor size</value>
+    <value>Editor verkleinern</value>
+    <comment>Decrease editor size</comment>
   </data>
   <data name="btnVisualResource3.Text" xml:space="preserve">
-    <value>Visual</value>
+    <value>Visuell</value>
+    <comment>Visual</comment>
   </data>
   <data name="btnVisualResource3.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnWikiMarkupResource3.Text" xml:space="preserve">
-    <value>WikiMarkup</value>
+    <value>Wikitext (Wiki Markup)</value>
+    <comment>WikiMarkup</comment>
   </data>
   <data name="btnWikiMarkupResource3.ToolTip" xml:space="preserve">
     <value />
@@ -163,7 +170,8 @@
     <value />
   </data>
   <data name="lblPreviewWarningResource3.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: this is only a preview. The content was not saved.</value>
+    <value>&lt;b&gt;Achtung&lt;/b&gt;: Dies ist nur eine Vorschau. Der Inhalt wurde nicht gespeichert.</value>
+    <comment>&lt;b&gt;Warning&lt;/b&gt;: this is only a preview. The content was not saved.</comment>
   </data>
   <data name="lblPreviewWarningResource3.ToolTip" xml:space="preserve">
     <value />

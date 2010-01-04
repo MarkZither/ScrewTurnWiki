@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnSendResource1.Text" xml:space="preserve">
-    <value>Send</value>
+    <value>Wyślij</value>
   </data>
   <data name="btnSendResource1.ToolTip" xml:space="preserve">
     <value />
@@ -130,13 +130,13 @@
     <value />
   </data>
   <data name="lblMessageInfoResource1.Text" xml:space="preserve">
-    <value>You can send an email message to this user. &lt;b&gt;Note&lt;/b&gt;: your email address won't be disclosed.</value>
+    <value>Możesz wysłać wiadomośc email to tego użytkownika. &lt;b&gt;Uwaga&lt;/b&gt;: twój adres email nie zostanie  ujawniony.</value>
   </data>
   <data name="lblMessageTitleResource1.Text" xml:space="preserve">
-    <value>Send a Message</value>
+    <value>Wyślij wiadomość</value>
   </data>
   <data name="lblNoActivityResource1.Text" xml:space="preserve">
-    <value>&lt;i&gt;No recent activity&lt;/i&gt;</value>
+    <value>&lt;i&gt;Brak aktywności w ostatnim czasie&lt;/i&gt;</value>
   </data>
   <data name="lblRecentActivityResource1.Text" xml:space="preserve">
     <value />
@@ -148,13 +148,13 @@
     <value />
   </data>
   <data name="lblSubjectResource1.Text" xml:space="preserve">
-    <value>Subject</value>
+    <value>Temat</value>
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>##NAME## - User's Details</value>
+    <value>##NAME## - Szczegóły użytkownika</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Tytuł</value>
   </data>
   <data name="pnlMessageResource1.GroupingText" xml:space="preserve">
     <value />
@@ -163,7 +163,7 @@
     <value />
   </data>
   <data name="rfvBodyResource1.ErrorMessage" xml:space="preserve">
-    <value>Body is required</value>
+    <value>Treść jest wymagana</value>
   </data>
   <data name="rfvBodyResource1.Text" xml:space="preserve">
     <value />
@@ -172,7 +172,7 @@
     <value />
   </data>
   <data name="rfvSubjectResource1.ErrorMessage" xml:space="preserve">
-    <value>Subject is required</value>
+    <value>Temat jest wymagany</value>
   </data>
   <data name="rfvSubjectResource1.Text" xml:space="preserve">
     <value />

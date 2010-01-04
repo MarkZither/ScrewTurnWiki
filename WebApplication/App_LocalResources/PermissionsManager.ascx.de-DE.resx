@@ -118,28 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAddResource1.Text" xml:space="preserve">
-    <value>Add</value>
+    <value>Hinzufügen</value>
+    <comment>Add</comment>
   </data>
   <data name="btnAddResource1.ToolTip" xml:space="preserve">
-    <value>Add the selected subject</value>
+    <value>Ausgewählter Betreff hinzufügen</value>
+    <comment>Add the selected subject</comment>
   </data>
   <data name="btnRemoveResource1.Text" xml:space="preserve">
-    <value>Remove</value>
+    <value>Entfernen</value>
+    <comment>Remove</comment>
   </data>
   <data name="btnRemoveResource1.ToolTip" xml:space="preserve">
-    <value>Remove entried for the selected subject</value>
+    <value>Einträge für den ausgewählten Betreff entfernen</value>
+    <comment>Remove entried for the selected subject</comment>
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Permissions</value>
+    <value>Berechtigungen speichern</value>
+    <comment>Save Permissions</comment>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save this Subject's permissions</value>
+    <value>Die Berechtigungen dieses Betreffs speichern</value>
+    <comment>Save this Subject's permissions</comment>
   </data>
   <data name="btnSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>Suchen</value>
+    <comment>Search</comment>
   </data>
   <data name="btnSearchResource1.ToolTip" xml:space="preserve">
-    <value>Search for a User or Group to add</value>
+    <value>Benutzer oder Gruppen suchen</value>
+    <comment>Search for a User or Group to add</comment>
   </data>
   <data name="lblAddResultResource1.Text" xml:space="preserve">
     <value />
@@ -148,7 +156,8 @@
     <value />
   </data>
   <data name="lblPermissionsForResource1.Text" xml:space="preserve">
-    <value>Permissions for:</value>
+    <value>Berechtigungen für:</value>
+    <comment>Permissions for:</comment>
   </data>
   <data name="lblSaveResultResource1.Text" xml:space="preserve">
     <value />
@@ -160,7 +169,8 @@
     <value />
   </data>
   <data name="lblSubjectsResource1.Text" xml:space="preserve">
-    <value>User Accounts and User Groups</value>
+    <value>Benutzerkonten und Benutzergruppen</value>
+    <comment>User Accounts and User Groups</comment>
   </data>
   <data name="lstFoundSubjectsResource1.ToolTip" xml:space="preserve">
     <value />

@@ -118,31 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDiscussionMessagesInfoResource2.Text" xml:space="preserve">
-    <value>Receive an email notification whenever a &lt;b&gt;message&lt;/b&gt; is posted for a page in the following namespaces (only discussions you have access to):</value>
+    <value>Otrzymuj email z powiadomieniem gdy nowa &lt;b&gt;wypowiedź&lt;/b&gt; zostanie dodana do strony w następujących sekcjach (tylko dyskusje, do których masz dostęp):</value>
   </data>
   <data name="lblPageChangesInfoResource2.Text" xml:space="preserve">
-    <value>Receive an email notification whenever a &lt;b&gt;page&lt;/b&gt; in the following namespaces is updated (only pages you have access to):</value>
+    <value>Orzymuj email z powiadomieniem gdy &lt;b&gt;strona&lt;/b&gt; w następujących sekcjach zostanie uaktualniona(tylko te strony, do których masz dostep)</value>
   </data>
   <data name="btnSaveDisplayNameResource1.Text" xml:space="preserve">
-    <value>Save Display Name</value>
+    <value>Zapisz nazwę wyświetlaną</value>
   </data>
   <data name="btnSaveDisplayNameResource1.ToolTip" xml:space="preserve">
-    <value>Click here to save your Display Name</value>
+    <value>Kliknij tu aby zapisać nazwę wyświetlaną</value>
   </data>
   <data name="btnSaveLanguageResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>Zapisz</value>
   </data>
   <data name="btnSaveLanguageResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveNotificationsResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>Zapisz</value>
   </data>
   <data name="btnSaveNotificationsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email addresses are not equal</value>
+    <value>Adresy e-mail nie sa jednakowe</value>
   </data>
   <data name="cvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -151,7 +151,7 @@
     <value />
   </data>
   <data name="cvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email addresses are not equal</value>
+    <value>Adresy e-mail nie sa jednakowe</value>
   </data>
   <data name="cvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -160,7 +160,7 @@
     <value />
   </data>
   <data name="cvOldPasswordResource1.ErrorMessage" xml:space="preserve">
-    <value>Incorrect Password</value>
+    <value>Nieprawidłowe hasło</value>
   </data>
   <data name="cvOldPasswordResource1.Text" xml:space="preserve">
     <value />
@@ -169,7 +169,7 @@
     <value />
   </data>
   <data name="cvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>Hasła są jednakowe</value>
   </data>
   <data name="cvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -178,7 +178,7 @@
     <value />
   </data>
   <data name="cvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>Hasła są jednakowe</value>
   </data>
   <data name="cvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -187,16 +187,16 @@
     <value />
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
-    <value>Display Name</value>
+    <value>Nazwa wyświetlana</value>
   </data>
   <data name="lblEditEmailPasswordResource1.Text" xml:space="preserve">
-    <value>Edit Display Name, Email and Password</value>
+    <value>Edytuj nazwę wyświetlaną, email i hasło</value>
   </data>
   <data name="lblGroupsListResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblGroupsResource1.Text" xml:space="preserve">
-    <value>You are member of the following groups:</value>
+    <value>Jesteś człownkiem następujących grup</value>
   </data>
   <data name="lblLanguageResultResource1.Text" xml:space="preserve">
     <value />
@@ -205,13 +205,13 @@
     <value />
   </data>
   <data name="lblLanguageTimeZoneResource1.Text" xml:space="preserve">
-    <value>Language and Time Zone</value>
+    <value>Język i strefa czasowa</value>
   </data>
   <data name="lblNoChangesResource1.Text" xml:space="preserve">
-    <value>Current system settings do not allow any change to your personal information.</value>
+    <value>Bieżące ustawienia systemu nie pozwalają na zmianę twoich danych osobistych.</value>
   </data>
   <data name="lblNotificationsResource1.Text" xml:space="preserve">
-    <value>Email Notification Settings</value>
+    <value>Ustawienia powiadomień email</value>
   </data>
   <data name="lblNotificationsResultResource1.Text" xml:space="preserve">
     <value />
@@ -256,7 +256,7 @@
     <value />
   </data>
   <data name="rfvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>Email jest wymagany</value>
   </data>
   <data name="rfvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -265,7 +265,7 @@
     <value />
   </data>
   <data name="rfvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>Email jest wymagany</value>
   </data>
   <data name="rfvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -274,7 +274,7 @@
     <value />
   </data>
   <data name="rfvOldPasswordResource1.ErrorMessage" xml:space="preserve">
-    <value>Old Password is required</value>
+    <value>Stare hasło jest wymagane</value>
   </data>
   <data name="rfvOldPasswordResource1.Text" xml:space="preserve">
     <value />
@@ -283,7 +283,7 @@
     <value />
   </data>
   <data name="rfvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>Hasło jest wymagane</value>
   </data>
   <data name="rfvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -292,7 +292,7 @@
     <value />
   </data>
   <data name="rfvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>Hasło jest wymagane</value>
   </data>
   <data name="rfvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -301,7 +301,7 @@
     <value />
   </data>
   <data name="rxvDisplayNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>Nieprawidłowa nazwa wyświetlana</value>
   </data>
   <data name="rxvDisplayNameResource1.Text" xml:space="preserve">
     <value />
@@ -310,7 +310,7 @@
     <value />
   </data>
   <data name="rxvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Email address</value>
+    <value>Nieprawidłowy adres email</value>
   </data>
   <data name="rxvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -319,7 +319,7 @@
     <value />
   </data>
   <data name="rxvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Nieprawidłowe hasło</value>
   </data>
   <data name="rxvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -331,7 +331,7 @@
     <value />
   </data>
   <data name="txtDisplayNameResource1.ToolTip" xml:space="preserve">
-    <value>Type here a display name for your account</value>
+    <value>Wpisz tutaj wyświetlaną nazwę twojego konta</value>
   </data>
   <data name="btnConfirmResource1.Text" xml:space="preserve">
     <value>Zatwierdź</value>

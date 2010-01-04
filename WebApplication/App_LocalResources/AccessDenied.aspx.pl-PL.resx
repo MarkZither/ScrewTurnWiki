@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Nie masz uprawnień umożliwiających oglądanie tej strony.</value>
+    <value>Nie masz uprawnień wymaganych do oglądania tej strony.</value>
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Dostęp zabroniony</value>
+    <value>Brak dostępu</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
     <value>Strona niezatytułowana</value>

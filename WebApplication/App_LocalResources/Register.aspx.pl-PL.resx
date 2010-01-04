@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="cvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emails are not equal</value>
+    <value>Adresy email nie są jednakowe</value>
   </data>
   <data name="cvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -127,7 +127,7 @@
     <value />
   </data>
   <data name="cvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emails are not equal</value>
+    <value>Adresy email nie są jednakowe</value>
   </data>
   <data name="cvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -136,7 +136,7 @@
     <value />
   </data>
   <data name="cvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>Hasła nie są jednakowe</value>
   </data>
   <data name="cvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -145,7 +145,7 @@
     <value />
   </data>
   <data name="cvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>Hasła nie są jednakowe</value>
   </data>
   <data name="cvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -154,7 +154,7 @@
     <value />
   </data>
   <data name="cvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username already exists</value>
+    <value>Ta nazwa użytkownika już istnieje</value>
   </data>
   <data name="cvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -166,7 +166,7 @@
     <value />
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
-    <value>Display Name</value>
+    <value>Nazwa wyświetlana</value>
   </data>
   <data name="lblResultResource1.ToolTip" xml:space="preserve">
     <value />
@@ -178,7 +178,7 @@
     <value />
   </data>
   <data name="rfvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>Email jest wymagany</value>
   </data>
   <data name="rfvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -187,7 +187,7 @@
     <value />
   </data>
   <data name="rfvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>Email jest wymagany</value>
   </data>
   <data name="rfvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -196,7 +196,7 @@
     <value />
   </data>
   <data name="rfvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>Hasło jest wymagane</value>
   </data>
   <data name="rfvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -205,7 +205,7 @@
     <value />
   </data>
   <data name="rfvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>Hasło jest wymagane</value>
   </data>
   <data name="rfvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -214,7 +214,7 @@
     <value />
   </data>
   <data name="rfvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username is required</value>
+    <value>Nazwa użytkownika jest wymagana</value>
   </data>
   <data name="rfvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -223,7 +223,7 @@
     <value />
   </data>
   <data name="rxvDisplayNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>Nieprawidłowa nazwa użytkownika</value>
   </data>
   <data name="rxvDisplayNameResource1.Text" xml:space="preserve">
     <value />
@@ -232,7 +232,7 @@
     <value />
   </data>
   <data name="rxvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Email</value>
+    <value>Nieprawidłowy email</value>
   </data>
   <data name="rxvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -241,7 +241,7 @@
     <value />
   </data>
   <data name="rxvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Nieprawidłowe hasło</value>
   </data>
   <data name="rxvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -250,7 +250,7 @@
     <value />
   </data>
   <data name="rxvUserNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Username</value>
+    <value>Nieprawidłowa nazwa użytkownika</value>
   </data>
   <data name="rxvUserNameResource1.Text" xml:space="preserve">
     <value />
@@ -262,7 +262,7 @@
     <value />
   </data>
   <data name="txtDisplayNameResource1.ToolTip" xml:space="preserve">
-    <value>Type here a display name for your account</value>
+    <value>Wpisz tutaj wyświetlaną nazwę swojego konta</value>
   </data>
   <data name="btnRegisterResource1.Text" xml:space="preserve">
     <value>Utwórz konto</value>
@@ -271,7 +271,7 @@
     <value>Kliknij tutaj aby utworzyć swoje konto</value>
   </data>
   <data name="lblCaptchaResource1.Text" xml:space="preserve">
-    <value>Tekst kontrolny</value>
+    <value>Tekst kontrolny:</value>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
     <value>Adres e-mail</value>

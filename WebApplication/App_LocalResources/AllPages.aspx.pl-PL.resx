@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lnkCategoriesResource1.Text" xml:space="preserve">
-    <value>Page Categories</value>
+    <value>Kategorie </value>
   </data>
   <data name="lnkCategoriesResource1.ToolTip" xml:space="preserve">
-    <value>View all Page Categories</value>
+    <value>Zobacz wszystkie kategorie stron</value>
   </data>
   <data name="lnkSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>Szukaj</value>
   </data>
   <data name="lnkSearchResource1.ToolTip" xml:space="preserve">
-    <value>Perform a Search</value>
+    <value>Wykonaj wyszukiwanie</value>
   </data>
   <data name="pnlPageListResource1.GroupingText" xml:space="preserve">
     <value />

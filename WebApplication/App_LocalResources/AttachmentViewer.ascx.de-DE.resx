@@ -119,8 +119,10 @@
   </resheader>
   <data name="lblNameResource1.Text" xml:space="preserve">
     <value>Name</value>
+    <comment>Name</comment>
   </data>
   <data name="lblSizeResource1.Text" xml:space="preserve">
-    <value>Size</value>
+    <value>Grösse</value>
+    <comment>Size</comment>
   </data>
 </root>

@@ -118,70 +118,87 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblNoUploadResource1.Text" xml:space="preserve">
-    <value>&lt;br /&gt;Save the page before uploading</value>
+    <value>&lt;br /&gt;Seite speichern vor dem Hochladen</value>
+    <comment>&lt;br /&gt;Save the page before uploading</comment>
   </data>
   <data name="lblNoUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblDownloadsResource1.Text" xml:space="preserve">
-    <value>Downloads</value>
+    <value>Anzahl herunterladungen</value>
+    <comment>Downloads</comment>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Löschen</value>
+    <comment>Delete</comment>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete this Attachment</value>
+    <value>Diesen Anhang löschen</value>
+    <comment>Delete this Attachment</comment>
   </data>
   <data name="btnDeleteResource2.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Löschen</value>
+    <comment>Delete</comment>
   </data>
   <data name="btnDeleteResource2.ToolTip" xml:space="preserve">
-    <value>Delete this Attachment</value>
+    <value>Diesen Anhang löschen</value>
+    <comment>Delete this Attachment</comment>
   </data>
   <data name="btnRefreshResource1.Text" xml:space="preserve">
-    <value>Refresh</value>
+    <value>Aktualisieren</value>
+    <comment>Refresh</comment>
   </data>
   <data name="btnRefreshResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRenameResource2.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Umbenennen</value>
+    <comment>Rename</comment>
   </data>
   <data name="btnRenameResource2.ToolTip" xml:space="preserve">
-    <value>Rename this Attachment</value>
+    <value>Diesen Anhang umbenennen</value>
+    <comment>Rename this Attachment</comment>
   </data>
   <data name="btnRenameResource3.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Umbenennen</value>
+    <comment>Rename</comment>
   </data>
   <data name="btnRenameResource3.ToolTip" xml:space="preserve">
-    <value>Rename this Attachment</value>
+    <value>Diesen Anhang umbenennen</value>
+    <comment>Rename this Attachment</comment>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
     <value>Name</value>
+    <comment>Name</comment>
   </data>
   <data name="lblSizeResource1.Text" xml:space="preserve">
-    <value>Size</value>
+    <value>Grösse</value>
+    <comment>Size</comment>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRenameResource1.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Umbenennen</value>
+    <comment>Rename</comment>
   </data>
   <data name="btnRenameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUploadResource1.Text" xml:space="preserve">
-    <value>Upload</value>
+    <value>Hochladen</value>
+    <comment>Upload</comment>
   </data>
   <data name="btnUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkOverwriteResource1.Text" xml:space="preserve">
-    <value>Overwrite existing attachment</value>
+    <value>Bestehenden Anhang überschreiben</value>
+    <comment>Overwrite existing attachment</comment>
   </data>
   <data name="chkOverwriteResource1.ToolTip" xml:space="preserve">
     <value />
@@ -196,7 +213,8 @@
     <value />
   </data>
   <data name="lblRenameResource1.Text" xml:space="preserve">
-    <value>Rename file/directory</value>
+    <value>Datei/Ordner umbenennen</value>
+    <comment>Rename file/directory</comment>
   </data>
   <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
@@ -208,7 +226,8 @@
     <value />
   </data>
   <data name="lblUploadFilesInfoResource1.Text" xml:space="preserve">
-    <value>You can upload attachments for the current Page up to $1. Allowed file types are: $2.</value>
+    <value>An die aktuelle Seite können Anhänge bis zu $1 hochgeladen werden. Zugelassene Dateitypen sind: $2</value>
+    <comment>You can upload attachments for the current Page up to $1. Allowed file types are: $2.</comment>
   </data>
   <data name="lblUploadResultResource1.Text" xml:space="preserve">
     <value />

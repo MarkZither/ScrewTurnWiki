@@ -118,112 +118,112 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblMigrationInfoResource2" xml:space="preserve">
-    <value>&lt;b&gt;Note 1&lt;/b&gt;: always perform a full backup of all your data before performing a migration.&lt;br /&gt;&lt;b&gt;Note 2&lt;/b&gt;: migrations usually take several minutes to complete: during this time, do not perform any other activity in the wiki, and do not close this page.&lt;br /&gt;&lt;b&gt;Note 3&lt;/b&gt;: the destination provider should be completely empty: if it contains any data, it might cause consistency issues. Refer to the target provider's documentation for details.&lt;br /&gt;&lt;b&gt;Timeouts&lt;/b&gt;: it is strongly suggested that you increase the executionTimeout parameter in web.config before migrating data.</value>
+    <value>&lt;b&gt;Uwaga 1&lt;/b&gt;: zawsze wykonuj pełną kopię zapasową wszystkich danych przez wykonaniem migracji.&lt;br /&gt;&lt;b&gt;Uwaga 2&lt;/b&gt;: ukończenie migracji z rerguły zabiera kilka minut: w tym czasie nie podejmu jżadnych innych działań na wiki i nie zamykaj tej strony.&lt;br /&gt;&lt;b&gt;Uwaga 3&lt;/b&gt;: docelowy provider powinien być całkowicie pusty: jeśli zawiera jakiekolwiek dane, migracja może spowodować niespójność. Po szczegóły zajrzyj do dokumentacji provider'a.&lt;br /&gt;&lt;b&gt;Timeout'y&lt;/b&gt;: jest mocno zalecane aby zwiększyć wartość parametru executionTimeout w pliku web.config przed rozpoczęciem migracji.</value>
   </data>
   <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">
-    <value>Auto-update Providers</value>
+    <value>Auto-update Providerów</value>
   </data>
   <data name="btnAutoUpdateProvidersResource1.ToolTip" xml:space="preserve">
-    <value>Automatically update all installed providers, of all types</value>
+    <value>Automatycznie uaktualniaj wszystkie zainstalowane Providery, wszystkich typów</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Anuluj</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Deselect the Provider</value>
+    <value>Odznacz Providera</value>
   </data>
   <data name="btnCopySettingsResource1.Text" xml:space="preserve">
-    <value>Copy</value>
+    <value>Kopiuj</value>
   </data>
   <data name="btnCopySettingsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnDeleteDllResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Usuń</value>
   </data>
   <data name="btnDeleteDllResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnDisableResource1.Text" xml:space="preserve">
-    <value>Disable</value>
+    <value>Wyłącz</value>
   </data>
   <data name="btnDisableResource1.ToolTip" xml:space="preserve">
-    <value>Disable the Provider</value>
+    <value>Wyłącz Providera</value>
   </data>
   <data name="btnEnableResource1.Text" xml:space="preserve">
-    <value>Enable</value>
+    <value>Włącz</value>
   </data>
   <data name="btnEnableResource1.ToolTip" xml:space="preserve">
-    <value>Enable the Provider</value>
+    <value>Włącz Providera</value>
   </data>
   <data name="btnMigrateFilesResource1.Text" xml:space="preserve">
-    <value>Migrate</value>
+    <value>Migruj</value>
   </data>
   <data name="btnMigrateFilesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnMigratePagesResource1.Text" xml:space="preserve">
-    <value>Migrate</value>
+    <value>Migruj</value>
   </data>
   <data name="btnMigratePagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnMigrateUsersResource1.Text" xml:space="preserve">
-    <value>Migrate</value>
+    <value>Migruj</value>
   </data>
   <data name="btnMigrateUsersResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveDefaultProvidersResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>Zapisz</value>
   </data>
   <data name="btnSaveDefaultProvidersResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>Zapisz</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save the Configuration String</value>
+    <value>Zapisz ciąg konfiguracyjny</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Wybierz</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Wybierz</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUnloadResource1.Text" xml:space="preserve">
-    <value>Unload</value>
+    <value>Odładuj</value>
   </data>
   <data name="btnUnloadResource1.ToolTip" xml:space="preserve">
-    <value>Unloads the Provider</value>
+    <value>Odładuj Providera</value>
   </data>
   <data name="btnUploadResource1.Text" xml:space="preserve">
-    <value>Upload</value>
+    <value>Załaduj</value>
   </data>
   <data name="btnUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblAuthorResource1.Text" xml:space="preserve">
-    <value>Author</value>
+    <value>Autor</value>
   </data>
   <data name="lblConfigHelpResource1.Text" xml:space="preserve">
-    <value>Help</value>
+    <value>Pomoc</value>
   </data>
   <data name="lblConfigurationStringTitleResource1.Text" xml:space="preserve">
-    <value>Configuration String</value>
+    <value>Ciąg konfiguracyjny</value>
   </data>
   <data name="lblCopySettingsInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: in order to be detected, the destination Provider must be uploaded using the upload tool.&lt;br /&gt;Log and recent changes will not be copied.</value>
+    <value>&lt;b&gt;Uwaga&lt;/b&gt;: aby zostać wykrytym, docelowy Provider musi zostać załadowany za pomocą narządzia ładowania.&lt;br /&gt;Log i ostatnie zmiany nie będą kopiowane.</value>
   </data>
   <data name="lblCopySettingsResource1.Text" xml:space="preserve">
-    <value>Copy Settings and related data</value>
+    <value>Skopiuj ustawienia i powiązane dane</value>
   </data>
   <data name="lblCopySettingsResultResource1.Text" xml:space="preserve">
     <value />
@@ -232,13 +232,13 @@
     <value />
   </data>
   <data name="lblDataMigrationResource1.Text" xml:space="preserve">
-    <value>Data Migration</value>
+    <value>Migracja danych</value>
   </data>
   <data name="lblDefaultProvCacheResource1.Text" xml:space="preserve">
-    <value>Cache Provider</value>
+    <value>Provider cache'u</value>
   </data>
   <data name="lblDefaultProvFilesResource1.Text" xml:space="preserve">
-    <value>Files Provider</value>
+    <value>Provider plików</value>
   </data>
   <data name="lblDefaultProvidersResultResource1.Text" xml:space="preserve">
     <value />
@@ -247,16 +247,16 @@
     <value />
   </data>
   <data name="lblDefaultProvidersTitleResource1.Text" xml:space="preserve">
-    <value>Default Providers</value>
+    <value>Domyślne provider'y</value>
   </data>
   <data name="lblDefaultProvPagesResource1.Text" xml:space="preserve">
-    <value>Pages Provider</value>
+    <value>Provider stron</value>
   </data>
   <data name="lblDefaultProvUsersResource1.Text" xml:space="preserve">
-    <value>Users Provider</value>
+    <value>Provider użytkowników</value>
   </data>
   <data name="lblDisplayResource1.Text" xml:space="preserve">
-    <value>Display</value>
+    <value>Wyświetl</value>
   </data>
   <data name="lblDllResultResource1.Text" xml:space="preserve">
     <value />
@@ -265,7 +265,7 @@
     <value />
   </data>
   <data name="lblMigrateFilesResource1.Text" xml:space="preserve">
-    <value>Migrate Files and related data</value>
+    <value>Migruj pliki i powiązane dane</value>
   </data>
   <data name="lblMigrateFilesResultResource1.Text" xml:space="preserve">
     <value />
@@ -274,7 +274,7 @@
     <value />
   </data>
   <data name="lblMigratePagesResource1.Text" xml:space="preserve">
-    <value>Migrate Pages and related data</value>
+    <value>Migruj strony i powiązane dane</value>
   </data>
   <data name="lblMigratePagesResultResource1.Text" xml:space="preserve">
     <value />
@@ -283,10 +283,10 @@
     <value />
   </data>
   <data name="lblMigrateUsersInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: migrating user accounts will reset all their passwords (an email notice will be sent to all users).</value>
+    <value>&lt;b&gt;Uwaga&lt;/b&gt;: migracja kont użytkowników zresetuje ich hasła (email zostanie wysłany do wszystkich uzytkowników).</value>
   </data>
   <data name="lblMigrateUsersResource1.Text" xml:space="preserve">
-    <value>Migrate Users and related data</value>
+    <value>Migruj uzytkowników i powiązane dane</value>
   </data>
   <data name="lblMigrateUsersResultResource1.Text" xml:space="preserve">
     <value />
@@ -295,7 +295,7 @@
     <value />
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nawa</value>
   </data>
   <data name="lblProviderConfigHelpResource1.Text" xml:space="preserve">
     <value />
@@ -310,7 +310,7 @@
     <value />
   </data>
   <data name="lblProvidersResource1.Text" xml:space="preserve">
-    <value>Providers</value>
+    <value>Providery</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -325,13 +325,13 @@
     <value />
   </data>
   <data name="lblUploadInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: removing a DLL won't disable the Providers it contains until the next wiki restart,&lt;br /&gt;but uploading a new DLL will automatically load the Providers it contains.</value>
+    <value>&lt;b&gt;Uwaga&lt;/b&gt;: usunięcie pliku DLL nie wyłączy zawartych w nich Providerów aż do następnego restartu,&lt;br /&gt;lecz załadowanie nowego pliku DLL automatycznie załaduje zawarte w nich Provider'y.</value>
   </data>
   <data name="lblUploadNewDllResource1.Text" xml:space="preserve">
-    <value>Upload new DLL</value>
+    <value>Załaduj nowy plik DLL</value>
   </data>
   <data name="lblUploadProvidersTitleResource1.Text" xml:space="preserve">
-    <value>Providers DLLs Management</value>
+    <value>Zarządzania bibliotekami DLL Providerów</value>
   </data>
   <data name="lblUploadResultResource1.Text" xml:space="preserve">
     <value />
@@ -340,7 +340,7 @@
     <value />
   </data>
   <data name="lblVersionResource1.Text" xml:space="preserve">
-    <value>Ver.</value>
+    <value>Wer.</value>
   </data>
   <data name="lstDllsResource1.ToolTip" xml:space="preserve">
     <value />
@@ -367,7 +367,7 @@
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administracja</value>
   </data>
   <data name="pnlListResource1.GroupingText" xml:space="preserve">
     <value />
@@ -382,31 +382,31 @@
     <value />
   </data>
   <data name="rdoCacheResource1.Text" xml:space="preserve">
-    <value>Cache Providers</value>
+    <value>Providery Cache'u</value>
   </data>
   <data name="rdoCacheResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoFilesResource1.Text" xml:space="preserve">
-    <value>Files Providers</value>
+    <value>Providery plików</value>
   </data>
   <data name="rdoFilesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoFormatterResource1.Text" xml:space="preserve">
-    <value>Formatter Providers</value>
+    <value>Providery formatowania</value>
   </data>
   <data name="rdoFormatterResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoPagesResource1.Text" xml:space="preserve">
-    <value>Pages Providers</value>
+    <value>Providery stron</value>
   </data>
   <data name="rdoPagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoUsersResource1.Text" xml:space="preserve">
-    <value>Users Providers</value>
+    <value>Providery użytkowników</value>
   </data>
   <data name="rdoUsersResource1.ToolTip" xml:space="preserve">
     <value />
@@ -421,10 +421,10 @@
     <value />
   </data>
   <data name="lblUpdateStatusResource1.Text" xml:space="preserve">
-    <value>Update Status</value>
+    <value>Status update'u</value>
   </data>
   <data name="lblCannotDisableResource1.Text" xml:space="preserve">
-    <value>Cannot disable the provider because it is the default provider or,&lt;br /&gt;in case of a Pages Provider, it manages the default page of the root namespace</value>
+    <value>Nie można wyłączyć provider'a, ponieważ jest on domyślny lub,&lt;br /&gt;w przypadku Providera Stron, zarządza on domyślną stroną w sekcji root</value>
   </data>
   <data name="lblCannotDisableResource1.ToolTip" xml:space="preserve">
     <value />

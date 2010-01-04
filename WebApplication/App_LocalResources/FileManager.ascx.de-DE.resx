@@ -118,16 +118,20 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDirectoryNameResource1.Text" xml:space="preserve">
-    <value>Directory Name</value>
+    <value>Ordnername</value>
+    <comment>Directory Name</comment>
   </data>
   <data name="lblManagePermissionsResource1.Text" xml:space="preserve">
-    <value>Manage Permissions</value>
+    <value>Berechtigungen verwalten</value>
+    <comment>Manage Permissions</comment>
   </data>
   <data name="lblNewDirectoryTitleResource1.Text" xml:space="preserve">
-    <value>Create New Directory</value>
+    <value>Ordner erstellen</value>
+    <comment>Create New Directory</comment>
   </data>
   <data name="lblNoListResource1.Text" xml:space="preserve">
-    <value>You cannot list the contents of this directory.</value>
+    <value>Inhalt dieses Ordners kann nicht angezeigt werden.</value>
+    <comment>You cannot list the contents of this directory.</comment>
   </data>
   <data name="lblNoListResource1.ToolTip" xml:space="preserve">
     <value />
@@ -151,40 +155,52 @@
     <value />
   </data>
   <data name="lblDownloadsResource1.Text" xml:space="preserve">
-    <value>Downloads</value>
+    <value>herunterladungen</value>
+    <comment>Downloads</comment>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Löschen</value>
+    <comment>Delete</comment>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete this Item</value>
+    <value>Diese Datei löschen</value>
+    <comment>Delete this Item</comment>
   </data>
   <data name="btnDeleteResource2.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Löschen</value>
+    <comment>Delete</comment>
   </data>
   <data name="btnDeleteResource2.ToolTip" xml:space="preserve">
-    <value>Delete this Item</value>
+    <value>Diese Datei löschen</value>
+    <comment>Delete this Item</comment>
   </data>
   <data name="btnRenameResource2.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Umbenennen</value>
+    <comment>Rename</comment>
   </data>
   <data name="btnRenameResource2.ToolTip" xml:space="preserve">
-    <value>Rename this Item</value>
+    <value>Diese Datei umbenennen</value>
+    <comment>Rename this Item</comment>
   </data>
   <data name="btnRenameResource3.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Umbenennen</value>
+    <comment>Rename</comment>
   </data>
   <data name="btnRenameResource3.ToolTip" xml:space="preserve">
-    <value>Rename this Item</value>
+    <value>Diese Datei umbenennen</value>
+    <comment>Rename this Item</comment>
   </data>
   <data name="lblLinkResource1.Text" xml:space="preserve">
     <value>Link</value>
+    <comment>Link</comment>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
     <value>Name</value>
+    <comment>Name</comment>
   </data>
   <data name="lblSizeResource1.Text" xml:space="preserve">
-    <value>Size</value>
+    <value>Grösse</value>
+    <comment>Size</comment>
   </data>
   <data name="lnkDirResource1.ToolTip" xml:space="preserve">
     <value />
@@ -193,31 +209,36 @@
     <value />
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnNewDirectoryResource1.Text" xml:space="preserve">
-    <value>Create</value>
+    <value>Erstellen</value>
+    <comment>Create</comment>
   </data>
   <data name="btnNewDirectoryResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRenameResource1.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Umbenennen</value>
+    <comment>Rename</comment>
   </data>
   <data name="btnRenameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUploadResource1.Text" xml:space="preserve">
-    <value>Upload</value>
+    <value>Hochladen</value>
+    <comment>Upload</comment>
   </data>
   <data name="btnUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkOverwriteResource1.Text" xml:space="preserve">
-    <value>Overwrite existing file</value>
+    <value>Exisitierende Datei überschreiben</value>
+    <comment>Overwrite existing file</comment>
   </data>
   <data name="chkOverwriteResource1.ToolTip" xml:space="preserve">
     <value />
@@ -238,7 +259,8 @@
     <value />
   </data>
   <data name="lblRenameResource1.Text" xml:space="preserve">
-    <value>Rename file/directory</value>
+    <value>Datei/Ordner umbenennen</value>
+    <comment>Rename file/directory</comment>
   </data>
   <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
@@ -248,6 +270,7 @@
   </data>
   <data name="lblRootResource1.Text" xml:space="preserve">
     <value>/</value>
+    <comment>/</comment>
   </data>
   <data name="lblRootResource1.ToolTip" xml:space="preserve">
     <value />
@@ -256,10 +279,12 @@
     <value />
   </data>
   <data name="lblUploadFilesInfoResource1.Text" xml:space="preserve">
-    <value>You can upload files up to $1. Allowed file types are: $2.</value>
+    <value>Es können Anhänge bis zu $1 hochgeladen werden. Zugelassene Dateitypen sind: $2</value>
+    <comment>You can upload files up to $1. Allowed file types are: $2.</comment>
   </data>
   <data name="lblUploadFilesResource1.Text" xml:space="preserve">
-    <value>Upload Files</value>
+    <value>Dateien Hochladen</value>
+    <comment>Upload Files</comment>
   </data>
   <data name="lblUploadResultResource1.Text" xml:space="preserve">
     <value />
@@ -269,9 +294,11 @@
   </data>
   <data name="lnkRootResource1.Text" xml:space="preserve">
     <value>[..]</value>
+    <comment>[..]</comment>
   </data>
   <data name="lnkRootResource1.ToolTip" xml:space="preserve">
     <value>/</value>
+    <comment>/</comment>
   </data>
   <data name="lstProvidersResource1.ToolTip" xml:space="preserve">
     <value />

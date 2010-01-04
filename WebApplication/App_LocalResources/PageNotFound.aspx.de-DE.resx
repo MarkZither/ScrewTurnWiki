@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Der angeforderte Eintrag wurde nicht gefunden.</value>
+    <value>Die angeforderte Seite wurde nicht gefunden.</value>
     <comment>The Page you requested was not found.</comment>
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Eintrag nicht gefunden</value>
+    <value>Seite nicht gefunden</value>
     <comment>Page Not Found</comment>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
+    <value>Seite ohne Titel</value>
     <comment>Untitled Page</comment>
   </data>
 </root>

@@ -118,16 +118,20 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lnkCategoriesResource1.Text" xml:space="preserve">
-    <value>Page Categories</value>
+    <value>Seiten Kategorien</value>
+    <comment>Page Categories</comment>
   </data>
   <data name="lnkCategoriesResource1.ToolTip" xml:space="preserve">
-    <value>View all Page Categories</value>
+    <value>Alle Seitenkategorien anzeigen</value>
+    <comment>View all Page Categories</comment>
   </data>
   <data name="lnkSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>Suchen</value>
+    <comment>Search</comment>
   </data>
   <data name="lnkSearchResource1.ToolTip" xml:space="preserve">
-    <value>Perform a Search</value>
+    <value>Suchen...</value>
+    <comment>Perform a Search</comment>
   </data>
   <data name="pnlPageListResource1.GroupingText" xml:space="preserve">
     <value />
@@ -136,12 +140,15 @@
     <value />
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>The list of all pages contained in the current namespace.</value>
+    <value>Liste mit allen Seiten die in diesem Namensraum enthalten sind.</value>
+    <comment>The list of all pages contained in the current namespace.</comment>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Page Index</value>
+    <value>Seitenindex</value>
+    <comment>Page Index</comment>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
+    <value>Unbenannte Seite</value>
+    <comment>Untitled Page</comment>
   </data>
 </root>

@@ -121,55 +121,70 @@
     <value>&lt;div class='warning' style='float: right;'&gt;You are now editing a snippet. After you are done,&lt;br /&gt;it is &lt;b&gt;strongly&lt;/b&gt; suggested to rebuild the search engine index in the &lt;i&gt;Admin Home&lt;/i&gt; page.&lt;/div&gt;</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
+    <comment>Cancel</comment>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the items list</value>
+    <value>Abbrechen und zur Liste zurückkehren</value>
+    <comment>Cancel and return to the items list</comment>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Item</value>
+    <value>Element erstellen</value>
+    <comment>Create Item</comment>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Item</value>
+    <value>Das neue Element speichern</value>
+    <comment>Save the new Item</comment>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Löschen</value>
+    <comment>Delete</comment>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Item</value>
+    <value>Element löschen</value>
+    <comment>Delete the Item</comment>
   </data>
   <data name="btnNewSnippetResource1.Text" xml:space="preserve">
-    <value>New Snippet</value>
+    <value>Neues Snippet</value>
+    <comment>New Snippet</comment>
   </data>
   <data name="btnNewSnippetResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnNewTemplateResource1.Text" xml:space="preserve">
-    <value>New Template</value>
+    <value>Neue Vorlage</value>
+    <comment>New Template</comment>
   </data>
   <data name="btnNewTemplateResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Item</value>
+    <value>Elemt speichern</value>
+    <comment>Save Item</comment>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>Änderungen speichern</value>
+    <comment>Save modifications</comment>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Auswählen</value>
+    <comment>Select</comment>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Edit or delete this item</value>
+    <value>Dieses Element bearbeiten oder löschen</value>
+    <comment>Edit or delete this item</comment>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Auswählen</value>
+    <comment>Select</comment>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Edit or delete this item</value>
+    <value>Dieses Element bearbeiten oder löschen</value>
+    <comment>Edit or delete this item</comment>
   </data>
   <data name="cvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Snippet Name</value>
+    <value>Ungültiger Snippetname</value>
+    <comment>Invalid Snippet Name</comment>
   </data>
   <data name="cvNameResource1.Text" xml:space="preserve">
     <value />
@@ -178,25 +193,32 @@
     <value />
   </data>
   <data name="lblEditTitleSnippetResource1.Text" xml:space="preserve">
-    <value>Snippet Details</value>
+    <value>Snippet-Details</value>
+    <comment>Snippet Details</comment>
   </data>
   <data name="lblEditTitleTemplateResource1.Text" xml:space="preserve">
-    <value>Template Details</value>
+    <value>Vorlagendetails</value>
+    <comment>Template Details</comment>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
     <value>Name</value>
+    <comment>Name</comment>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
     <value>Name</value>
+    <comment>Name</comment>
   </data>
   <data name="lblParametersResource1.Text" xml:space="preserve">
-    <value>Params</value>
+    <value>Parameter</value>
+    <comment>Params</comment>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
     <value>Provider</value>
+    <comment>Provider</comment>
   </data>
   <data name="lblProviderResource2.Text" xml:space="preserve">
     <value>Provider</value>
+    <comment>Provider</comment>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -205,13 +227,16 @@
     <value />
   </data>
   <data name="lblSnippetsTemplatesResource1.Text" xml:space="preserve">
-    <value>Snippets and Templates</value>
+    <value>Snippets und Vorlagen</value>
+    <comment>Snippets and Templates</comment>
   </data>
   <data name="lblTypeResource1.Text" xml:space="preserve">
-    <value>Type</value>
+    <value>Typ</value>
+    <comment>Type</comment>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
     <value>Administration</value>
+    <comment>Administration</comment>
   </data>
   <data name="pnlEditElementResource1.GroupingText" xml:space="preserve">
     <value />
@@ -226,7 +251,8 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>Name wird benötigt</value>
+    <comment>Name is required</comment>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />
