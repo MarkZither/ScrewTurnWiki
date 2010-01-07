@@ -52,8 +52,16 @@ namespace ScrewTurn.Wiki {
 					else if(un == AnonymousUsername) return Users.GetAnonymousAccount();
 					else {
 						current = Users.FindUser(un);
-						if(current != null) SessionCache.SetCurrentUser(sessionId, current);
-						return current;
+						if(current != null) {
+							SessionCache.SetCurrentUser(sessionId, current);
+							return current;
+						}
+						else {
+							// Username is invalid
+							Session.Clear();
+							Session.Abandon();
+							return null;
+						}
 					}
 				}
 			}

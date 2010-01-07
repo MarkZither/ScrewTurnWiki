@@ -151,7 +151,7 @@ namespace ScrewTurn.Wiki {
 				providerSelector.Enabled = false;
 				btnCreate.Visible = false;
 				btnSave.Visible = true;
-				btnDelete.Visible = true;
+				btnDelete.Visible = user.Username != SessionFacade.CurrentUsername;
 				rfvPassword1.Enabled = false;
 				cvUsername.Enabled = false;
 				lblPasswordInfo.Visible = true;

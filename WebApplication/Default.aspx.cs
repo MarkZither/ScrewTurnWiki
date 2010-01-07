@@ -627,16 +627,18 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void SetupEmailNotification() {
 			if(SessionFacade.LoginKey != null && SessionFacade.CurrentUsername != "admin") {
-				bool pageChanges;
-				bool discussionMessages;
+				bool pageChanges = false;
+				bool discussionMessages = false;
 
-				UserInfo user = Users.FindUser(SessionFacade.CurrentUsername);
-				if(user.Provider.UsersDataReadOnly) {
+				UserInfo user = SessionFacade.GetCurrentUser();
+				if(user != null && user.Provider.UsersDataReadOnly) {
 					btnEmailNotification.Visible = false;
 					return;
 				}
 
-				Users.GetEmailNotification(user, currentPage, out pageChanges, out discussionMessages);
+				if(user != null) {
+					Users.GetEmailNotification(user, currentPage, out pageChanges, out discussionMessages);
+				}
 
 				bool active = false;
 				if(discussMode) {
@@ -659,11 +661,13 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnEmailNotification_Click(object sender, EventArgs e) {
-			bool pageChanges;
-			bool discussionMessages;
+			bool pageChanges = false;
+			bool discussionMessages = false;
 
-			UserInfo user = Users.FindUser(SessionFacade.CurrentUsername);
-			Users.GetEmailNotification(user, currentPage, out pageChanges, out discussionMessages);
+			UserInfo user = SessionFacade.GetCurrentUser();
+			if(user != null) {
+				Users.GetEmailNotification(user, currentPage, out pageChanges, out discussionMessages);
+			}
 
 			if(discussMode) {
 				Users.SetEmailNotification(user, currentPage, pageChanges, !discussionMessages);
