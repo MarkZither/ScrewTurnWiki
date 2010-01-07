@@ -118,85 +118,85 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnBulkDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Supprimer</value>
   </data>
   <data name="btnBulkDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete old inactive accounts now</value>
+    <value>Supprimer d'anciens comptes inactifs maintenant</value>
   </data>
   <data name="lblBulkDeleteResource1.Text" xml:space="preserve">
-    <value>Delete all &lt;b&gt;inactive&lt;/b&gt; accounts older than &lt;b&gt;1 month&lt;/b&gt;.&lt;br /&gt;Please backup your data before proceeding.</value>
+    <value>Supprimer tous les comptes &lt;b&gt;inactifs&lt;/b&gt; plus vieux que &lt;b&gt;1 mois&lt;/b&gt;.&lt;br /&gt;Veuillez faire une copie de sûreté de vos données avant de procéder.</value>
   </data>
   <data name="lblBulkDeleteTitleResource1.Text" xml:space="preserve">
-    <value>Bulk Delete</value>
+    <value>Suppression de masse</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Annuler</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the Account list</value>
+    <value>Annuler et retourner à la liste de comptes</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Account</value>
+    <value>Créer un compte</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Account</value>
+    <value>Sauvegarder le nouveau compte</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Supprimer</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Account</value>
+    <value>Supprimer le compte</value>
   </data>
   <data name="btnFilterResource1.AlternateText" xml:space="preserve">
     <value />
   </data>
   <data name="btnFilterResource1.ToolTip" xml:space="preserve">
-    <value>Apply Filter</value>
+    <value>Appliquer le filtre</value>
   </data>
   <data name="btnNewUserResource1.Text" xml:space="preserve">
-    <value>New User</value>
+    <value>Nouvel utilisateur</value>
   </data>
   <data name="btnNewUserResource1.ToolTip" xml:space="preserve">
-    <value>Create a new User</value>
+    <value>Créer un nouvel utilisateur</value>
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Account</value>
+    <value>Sauvegarder le compte</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>Sauvegarder les modifications</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Sélectionner</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Select this Account</value>
+    <value>Sélectionner ce compte</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Sélectionner</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Select this Account</value>
+    <value>Sélectionner ce compte</value>
   </data>
   <data name="chkActiveResource1.Text" xml:space="preserve">
-    <value>Active Accounts</value>
+    <value>Comptes actifs</value>
   </data>
   <data name="chkActiveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkInactiveResource1.Text" xml:space="preserve">
-    <value>Inactive Accounts</value>
+    <value>Comptes inactifs</value>
   </data>
   <data name="chkInactiveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkSetActiveResource1.Text" xml:space="preserve">
-    <value>Active</value>
+    <value>Actif</value>
   </data>
   <data name="chkSetActiveResource1.ToolTip" xml:space="preserve">
-    <value>If checked, allows the user to login</value>
+    <value>Lorsque coché, permet à l'utilisateur de se connecter</value>
   </data>
   <data name="cvPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords must be equal</value>
+    <value>Les mots de passes doivent être égaux</value>
   </data>
   <data name="cvPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -205,7 +205,7 @@
     <value />
   </data>
   <data name="cvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username already in use</value>
+    <value>Nom d'utilisateur déjà utilisé</value>
   </data>
   <data name="cvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -214,55 +214,55 @@
     <value />
   </data>
   <data name="lblAccountsResource1.Text" xml:space="preserve">
-    <value>User Accounts</value>
+    <value>Comptes utilisateur</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
-    <value>Display Name</value>
+    <value>Nom affiché</value>
   </data>
   <data name="lblDisplayNameResource2.Text" xml:space="preserve">
-    <value>Display Name</value>
+    <value>Nom affiché</value>
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Account Details</value>
+    <value>Détails du compte</value>
   </data>
   <data name="lblEmailResource1.Text" xml:space="preserve">
-    <value>Email</value>
+    <value>Courriel</value>
   </data>
   <data name="lblEmailResource2.Text" xml:space="preserve">
-    <value>Email</value>
+    <value>Courriel</value>
   </data>
   <data name="lblFilterResource1.Text" xml:space="preserve">
-    <value>Display: </value>
+    <value>Affichage: </value>
   </data>
   <data name="lblGlobalPermissionsResource1.Text" xml:space="preserve">
-    <value>Global Permissions</value>
+    <value>Permissions globales</value>
   </data>
   <data name="lblMemberOfResource1.Text" xml:space="preserve">
-    <value>Member of</value>
+    <value>Membre de</value>
   </data>
   <data name="lblMembershipResource1.Text" xml:space="preserve">
-    <value>Group Membership</value>
+    <value>Abonnement de groupe</value>
   </data>
   <data name="lblPassword1Resource1.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>Mot de passe</value>
   </data>
   <data name="lblPassword2Resource1.Text" xml:space="preserve">
-    <value>Password (repeat)</value>
+    <value>Mot de passe(répéter)</value>
   </data>
   <data name="lblPasswordInfoResource1.Text" xml:space="preserve">
-    <value>Leave Password fields blank to keep the current password.</value>
+    <value>Laissez les champs de mot de passe vide pour garder le mot de passe courrant.</value>
   </data>
   <data name="lblPasswordInfoResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Fournisseur</value>
   </data>
   <data name="lblProviderResource2.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Fournisseur</value>
   </data>
   <data name="lblRegDateTimeResource1.Text" xml:space="preserve">
-    <value>Reg. Date/Time</value>
+    <value>Date/Heure d'enreg.</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -271,10 +271,10 @@
     <value />
   </data>
   <data name="lblUsernameResource1.Text" xml:space="preserve">
-    <value>Username</value>
+    <value>Nom d'utilisateur</value>
   </data>
   <data name="lblUsernameResource2.Text" xml:space="preserve">
-    <value>Username</value>
+    <value>Nom d'utilisateur</value>
   </data>
   <data name="lstGroupsResource1.ToolTip" xml:space="preserve">
     <value />
@@ -301,7 +301,7 @@
     <value />
   </data>
   <data name="revDisplayNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>Nom affiché invalide</value>
   </data>
   <data name="revDisplayNameResource1.Text" xml:space="preserve">
     <value />
@@ -310,7 +310,7 @@
     <value />
   </data>
   <data name="revEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Email</value>
+    <value>Courriel invalide</value>
   </data>
   <data name="revEmailResource1.Text" xml:space="preserve">
     <value />
@@ -319,7 +319,7 @@
     <value />
   </data>
   <data name="revPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Mot de passe invalide</value>
   </data>
   <data name="revPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -328,7 +328,7 @@
     <value />
   </data>
   <data name="revUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Username</value>
+    <value>Nom d'utilisateur invalide</value>
   </data>
   <data name="revUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -337,7 +337,7 @@
     <value />
   </data>
   <data name="rfvEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Email is required</value>
+    <value>Le courriel est requis</value>
   </data>
   <data name="rfvEmailResource1.Text" xml:space="preserve">
     <value />
@@ -346,7 +346,7 @@
     <value />
   </data>
   <data name="rfvPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>Le mot de passe est requis</value>
   </data>
   <data name="rfvPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -355,7 +355,7 @@
     <value />
   </data>
   <data name="rfvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Username is required</value>
+    <value>Le nom d'utilisateur est requis</value>
   </data>
   <data name="rfvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -379,7 +379,7 @@
     <value />
   </data>
   <data name="txtFilterResource1.ToolTip" xml:space="preserve">
-    <value>Filter Accounts by Username</value>
+    <value>Filtrer les comptes par nom d'utilisateur</value>
   </data>
   <data name="txtPassword1Resource1.Text" xml:space="preserve">
     <value />

@@ -118,127 +118,127 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnSendBulkEmailResource1.Text" xml:space="preserve">
-    <value>Send Bulk Email</value>
+    <value>Envoyer un courriel de masse</value>
   </data>
   <data name="btnSendBulkEmailResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvGroupsResource1.ErrorMessage" xml:space="preserve">
-    <value>You must select at least one group</value>
+    <value>Vous devez sélectionner au moins un groupe</value>
   </data>
   <data name="lblBulkEmailInfoResource1.Text" xml:space="preserve">
-    <value>You can send an email message to all users of one or more groups.</value>
+    <value>Vous pouvez envoyer un message courriel à tous les utilisateurs d'un ou plusieurs groupes.</value>
   </data>
   <data name="lblBulkEmailResource1.Text" xml:space="preserve">
-    <value>Mass Email</value>
+    <value>Courriel de masse</value>
   </data>
   <data name="lblSubjectResource1.Text" xml:space="preserve">
-    <value>Subject</value>
+    <value>Sujet</value>
   </data>
   <data name="rfvBodyResource1.ErrorMessage" xml:space="preserve">
-    <value>Body is required</value>
+    <value>Le corps du courriel est requis</value>
   </data>
   <data name="rfvSubjectResource1.ErrorMessage" xml:space="preserve">
-    <value>Subject is required</value>
+    <value>Le sujet est requis</value>
   </data>
   <data name="btnShutdownConfirmResource2.Text" xml:space="preserve">
-    <value>Shutdown Application</value>
+    <value>Fermer l'application</value>
   </data>
   <data name="btnShutdownConfirmResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRebuildPageLinksResource1.Text" xml:space="preserve">
-    <value>Rebuild Page Links</value>
+    <value>Reconstruire la page de liens</value>
   </data>
   <data name="btnRebuildPageLinksResource1.ToolTip" xml:space="preserve">
-    <value>Rebuild the links structure</value>
+    <value>Reconstruire la structure des liens</value>
   </data>
   <data name="lblOrphanPagesInfoPostResource1.Text" xml:space="preserve">
-    <value>orphan pages in the wiki</value>
+    <value>pages orphelines dans le wiki</value>
   </data>
   <data name="lblOrphanPagesInfoPreResource1.Text" xml:space="preserve">
-    <value>There seem to be </value>
+    <value>Il semble y avoir</value>
   </data>
   <data name="lblOrphanPagesInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: a page is considered an &lt;i&gt;orphan&lt;/i&gt; when it has no incoming links from other pages.</value>
+    <value>&lt;b&gt;Note&lt;/b&gt;: une page est considérée comme&lt;i&gt;orpheline&lt;/i&gt; quand il n'y a aucun lien entrant d'une autre page.</value>
   </data>
   <data name="lblOrphanPagesResource1.Text" xml:space="preserve">
-    <value>Orphan Pages</value>
+    <value>Pages orphelines</value>
   </data>
   <data name="lblRebuildPageLinksInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding page links might take some time. Please do not close this screen while the links are being rebuilt.</value>
+    <value>&lt;b&gt;Attention&lt;/b&gt;: reconstruire l'index de recherche peut prendre un certain temps. Veuillez ne pas fermer cet fenêtre pendant que l'index est reconstruit.</value>
   </data>
   <data name="lnkPagesResource1.Text" xml:space="preserve">
-    <value>see Pages</value>
+    <value>voir les pages</value>
   </data>
   <data name="lnkPagesResource1.ToolTip" xml:space="preserve">
-    <value>Go to the Pages administration tab</value>
+    <value>Aller à l'onglet d'administration des pages</value>
   </data>
   <data name="btnClearCacheResource1.Text" xml:space="preserve">
-    <value>Clear Cache</value>
+    <value>Effacer la cache</value>
   </data>
   <data name="btnClearCacheResource1.ToolTip" xml:space="preserve">
-    <value>Clears the Cache</value>
+    <value>Efface la cache</value>
   </data>
   <data name="btnRebuildResource1.Text" xml:space="preserve">
-    <value>Rebuild</value>
+    <value>Reconstruire</value>
   </data>
   <data name="btnRebuildResource1.ToolTip" xml:space="preserve">
-    <value>Rebuild this index</value>
+    <value>Reconstruire cet index</value>
   </data>
   <data name="btnRebuildResource2.Text" xml:space="preserve">
-    <value>Rebuild</value>
+    <value>Reconstruire</value>
   </data>
   <data name="btnRebuildResource2.ToolTip" xml:space="preserve">
-    <value>Rebuild this index</value>
+    <value>Reconstruire cet index</value>
   </data>
   <data name="lblAdminHomeResource1.Text" xml:space="preserve">
-    <value>Administration Home</value>
+    <value>Accueil administration</value>
   </data>
   <data name="lblAppShutdownInfoResource1.Text" xml:space="preserve">
-    <value>You can force a shutdown-and-restart cycle of the Web Application. You will be asked to confirm the restart twice, then the Web Application will restart at the first subsequent request.&lt;br /&gt;&lt;b&gt;Warning&lt;/b&gt;: all the open sessions will be lost, and users may experience errors.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: the restart will affect only this Web Application.</value>
+    <value>Vous pouvez forcer un cycle de redémarrage de l'application web. On vous demandera de confirmer le redémarrage par deux fois, ensuite l'application web redémarrera à la première requête suivante.&lt;br /&gt;&lt;b&gt;Avertissement&lt;/b&gt;: tous les sessions ouvertes seront perdues et il est possible que les utilisateurs soient confrontés à des erreurs.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: le redémarrage n'affectera que cette application web.</value>
   </data>
   <data name="lblAppShutdownResource1.Text" xml:space="preserve">
-    <value>Web Application Shutdown</value>
+    <value>Fermeture de l'application web</value>
   </data>
   <data name="lblDocCountResource1.Text" xml:space="preserve">
-    <value>Docs</value>
+    <value>Documents</value>
   </data>
   <data name="lblIndexStatusResource1.Text" xml:space="preserve">
-    <value>Search Index Status</value>
+    <value>Statut de la recherche indexée</value>
   </data>
   <data name="lblLinkedInResource1.Text" xml:space="preserve">
-    <value>Linked in</value>
+    <value>Lié</value>
   </data>
   <data name="lblMissingPagesResource1.Text" xml:space="preserve">
-    <value>Missing Pages</value>
+    <value>Pages manquantes</value>
   </data>
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
-    <value>Namespace</value>
+    <value>Espace de nom</value>
   </data>
   <data name="lblOccurrenceCountResource1.Text" xml:space="preserve">
-    <value>Matches</value>
+    <value>Correspondances</value>
   </data>
   <data name="lblPageResource1.Text" xml:space="preserve">
-    <value>Page Name</value>
+    <value>Nom de la page</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
-    <value>Provider</value>
+    <value>Fournisseur</value>
   </data>
   <data name="lblRebuildIndexInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. After the index is rebuilt, it is recommended to restart the application.</value>
+    <value>&lt;b&gt;Attention&lt;/b&gt;: reconstruire l'index de recherche peut prendre un certain temps. Veuillez ne pas fermer cet fenêtre pendant que l'index est reconstruit. Une fois l'index reconstruit, il est recommandé de redémarer l'application.</value>
   </data>
   <data name="lblSizeResource1.Text" xml:space="preserve">
-    <value>Size</value>
+    <value>Taille</value>
   </data>
   <data name="lblStatusResource1.Text" xml:space="preserve">
-    <value>Status</value>
+    <value>Statut</value>
   </data>
   <data name="lblSystemStatusContentResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblWordCountResource1.Text" xml:space="preserve">
-    <value>Words</value>
+    <value>Mots</value>
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
     <value>Administration</value>

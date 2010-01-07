@@ -139,10 +139,10 @@
     <value>Sujet</value>
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Poster un Message</value>
+    <value>Poster un message</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
+    <value>Page sans titre</value>
   </data>
   <data name="txtSubjectResource1.Text" xml:space="preserve">
     <value />

@@ -142,10 +142,10 @@
     <value />
   </data>
   <data name="lblByResource1.Text" xml:space="preserve">
-    <value> by </value>
+    <value>par</value>
   </data>
   <data name="lblCategorizedAsResource1.Text" xml:space="preserve">
-    <value>Categorized as </value>
+    <value>Catégorisé comme</value>
   </data>
   <data name="lblDiscussedPageResource1.Text" xml:space="preserve">
     <value />
@@ -166,7 +166,7 @@
     <value />
   </data>
   <data name="lblModifiedResource1.Text" xml:space="preserve">
-    <value>Modified on </value>
+    <value>Modifié le</value>
   </data>
   <data name="lblNavigationPathsResource1.Text" xml:space="preserve">
     <value />
@@ -178,7 +178,7 @@
     <value />
   </data>
   <data name="lblPageDiscussionForResource1.Text" xml:space="preserve">
-    <value>Page discussion for </value>
+    <value>Discussion de page pour</value>
   </data>
   <data name="lblPageTitleResource1.Text" xml:space="preserve">
     <value />
@@ -208,7 +208,7 @@
     <value />
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titre</value>
   </data>
   <data name="pnlPageInfoResource1.GroupingText" xml:space="preserve">
     <value />

@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnNoLimitResource1.Text" xml:space="preserve">
-    <value>Display all</value>
+    <value>Tout afficher</value>
   </data>
   <data name="btnNoLimitResource1.ToolTip" xml:space="preserve">
-    <value>Display all log entries (might take a few seconds)</value>
+    <value>Afficher toutes les entrées de log (peut prendre quelques secondes)</value>
   </data>
   <data name="lblLimitResource1.Text" xml:space="preserve">
-    <value>Currently displaying only 100 log entries &amp;mdash;</value>
+    <value>100 entrées de log seulement sont affichées &amp;mdash;</value>
   </data>
   <data name="btnClearLogResource1.Text" xml:space="preserve">
-    <value>Clear Log</value>
+    <value>Effacer le log</value>
   </data>
   <data name="btnClearLogResource1.ToolTip" xml:space="preserve">
-    <value>Clear the system log</value>
+    <value>Effacer le log système</value>
   </data>
   <data name="chkErrorsResource1.Text" xml:space="preserve">
-    <value>Errors</value>
+    <value>Erreurs</value>
   </data>
   <data name="chkErrorsResource1.ToolTip" xml:space="preserve">
     <value />
@@ -145,25 +145,25 @@
     <value />
   </data>
   <data name="chkWarningsResource1.Text" xml:space="preserve">
-    <value>Warnings</value>
+    <value>Avertissements</value>
   </data>
   <data name="chkWarningsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblDateTimeResource1.Text" xml:space="preserve">
-    <value>Date/Time</value>
+    <value>Date/Heure</value>
   </data>
   <data name="lblFilterResource1.Text" xml:space="preserve">
-    <value>Display: </value>
+    <value>Affichage: </value>
   </data>
   <data name="lblLogResource1.Text" xml:space="preserve">
-    <value>System Log</value>
+    <value>Log système</value>
   </data>
   <data name="lblMessageResource1.Text" xml:space="preserve">
     <value>Message</value>
   </data>
   <data name="lblUserResource1.Text" xml:space="preserve">
-    <value>User</value>
+    <value>Utilisateur</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
     <value>Administration</value>

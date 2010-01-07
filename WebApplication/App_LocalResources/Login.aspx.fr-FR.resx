@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnSaveNewPasswordResource1.Text" xml:space="preserve">
-    <value>Save New Password</value>
+    <value>Sauvegarder le nouveau mot de passe</value>
   </data>
   <data name="btnSaveNewPasswordResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvNewPasswordsResource1.ErrorMessage" xml:space="preserve">
-    <value>Passwords are not equal</value>
+    <value>Les mots de passe ne sont pas égaux</value>
   </data>
   <data name="cvNewPasswordsResource1.Text" xml:space="preserve">
     <value />
@@ -136,28 +136,28 @@
     <value />
   </data>
   <data name="lblNewPassword1Resource1.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>Mot de passe</value>
   </data>
   <data name="lblNewPassword2Resource1.Text" xml:space="preserve">
-    <value>Password (repeat)</value>
+    <value>mot de passe (répéter)</value>
   </data>
   <data name="lblOrResource1.Text" xml:space="preserve">
-    <value>or</value>
+    <value>ou</value>
   </data>
   <data name="lblResetPassword2InfoResource1.Text" xml:space="preserve">
-    <value>Please enter your new password twice.</value>
+    <value>Veuillez saisir votre nouveau mot de passe deux fois.</value>
   </data>
   <data name="lblResetPassword2Resource1.Text" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>Réinitialisation du mot de passe </value>
   </data>
   <data name="lblResetPasswordInformationResource1.Text" xml:space="preserve">
-    <value>If you forgot your Password, please insert your Username &lt;b&gt;or&lt;/b&gt; Email address, then click on the Reset Password button.&lt;br /&gt;You will receive an email with a link to reset your password.</value>
+    <value>Si vous avez oublié votre mot de passe, veuillez écrire votre nom d'utilisateur &lt;b&gt;ou&lt;/b&gt; adresse courriel, et cliquer sur le bouton Réinitialisation du mot de passe.&lt;br /&gt;Vous recevrez un courriel contenant un lien pour réinitialiser votre mot de passe.</value>
   </data>
   <data name="lblResultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rfvNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>Le mot de passe est requis</value>
   </data>
   <data name="rfvNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -166,7 +166,7 @@
     <value />
   </data>
   <data name="rfvNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
+    <value>Le mot de passe est requis</value>
   </data>
   <data name="rfvNewPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -175,7 +175,7 @@
     <value />
   </data>
   <data name="rxNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Mot de passe invalide</value>
   </data>
   <data name="rxNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -184,7 +184,7 @@
     <value />
   </data>
   <data name="rxNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Mot de passe invalide</value>
   </data>
   <data name="rxNewPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -217,7 +217,7 @@
     <value>Cliquer pour vous déconnecter</value>
   </data>
   <data name="btnResetPasswordResource1.Text" xml:space="preserve">
-    <value>Remise à zéro du Mot de Passe </value>
+    <value>Réinitialisation du mot de passe </value>
   </data>
   <data name="btnResetPasswordResource1.ToolTip" xml:space="preserve">
     <value />
@@ -232,7 +232,7 @@
     <value>Vous pouvez vous connecter au Wiki ici. Vous pouvez modifier ou créer des pages. Si vous êtes un Administrateur, vous pouvez effectuer les tâches prévues.&lt;br /&gt;Vous n’avez pas de compte ? Vous pouvez &lt;a href="Register.aspx" title="Créer un nouveau compte"&gt;en créer un&lt;/a&gt;.</value>
   </data>
   <data name="lblEmailResetResource1.Text" xml:space="preserve">
-    <value>E-mail</value>
+    <value>Courriel</value>
   </data>
   <data name="lblLogoutResource1.Text" xml:space="preserve">
     <value>vous êtes maintenant connecté. Pour vous déconnecter, cliquez le bouton Déconnexion.</value>
@@ -241,7 +241,7 @@
     <value>Mot de Passe</value>
   </data>
   <data name="lblResetPasswordResource1.Text" xml:space="preserve">
-    <value>Remise à zéro du Mot de Passe</value>
+    <value>Réinitialisation du mot de passe </value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -250,10 +250,10 @@
     <value>Connexion</value>
   </data>
   <data name="lblUsernameResetResource1.Text" xml:space="preserve">
-    <value>Nom Utilisateur</value>
+    <value>Nom d'utilisateur</value>
   </data>
   <data name="lblUsernameResource1.Text" xml:space="preserve">
-    <value>Nom Utilisateur</value>
+    <value>Nom d'utilisateur</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
     <value>Page sans titre</value>
@@ -280,6 +280,6 @@
     <value />
   </data>
   <data name="txtUsernameResource1.ToolTip" xml:space="preserve">
-    <value>Tapez ici votre Nom Utilisateur</value>
+    <value>Tapez ici votre nom d'utilisateur</value>
   </data>
 </root>
