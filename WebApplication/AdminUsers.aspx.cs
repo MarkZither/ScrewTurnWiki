@@ -190,6 +190,7 @@ namespace ScrewTurn.Wiki {
 		private void ResetEditor() {
 			txtUsername.Text = "";
 			txtUsername.Enabled = true;
+			txtDisplayName.Text = "";
 			txtEmail.Text = "";
 			chkSetActive.Checked = true;
 			providerSelector.Enabled = true;
