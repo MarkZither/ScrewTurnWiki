@@ -68,6 +68,7 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="RssFeedDisplay.cs" />
     <Compile Include="DownloadCounter.cs" />
     <Compile Include="MultilanguageContentPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
