@@ -83,11 +83,11 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 						XmlNode itemTitle = node.SelectNodes("/rss/channel/item/title")[0];
 						XmlNode itemLink = node.SelectNodes("/rss/channel/item/link")[0];
 						XmlNode itemContent = node.SelectNodes("/rss/channel/item/description")[0];
-						String itemContentStr = StripHtml(itemContent.InnerText);
+						string itemContentStr = StripHtml(itemContent.InnerText);
 						itemContentStr = (itemContentStr.Length > 350 && itemContentStr.Substring(347, 5) != "[...]") ? itemContentStr.Substring(0, itemContentStr.IndexOf(" ", 345)) + " [...]" : itemContentStr;
 						result = @"<div class=""rssfeed"">
 									<span class=""rsstitle"">
-									 <a href=""" + itemLink.InnerText + @""" target=""_blank"" >" + itemTitle.InnerText + @"</a>
+									 <a href=""" + itemLink.InnerText + @""" title=""" + itemTitle.InnerText + @""">" + itemTitle.InnerText + @"</a>
 									</span>
 									<br />
 									<span class=""rsscontent"">" + itemContentStr + @"</span>
