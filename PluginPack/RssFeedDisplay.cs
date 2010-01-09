@@ -18,10 +18,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		private IHostV30 _host;
 		private string _config;
 		private bool _enableLogging = true;
-		private static readonly ComponentInformation Info = new ComponentInformation("RSS Feed Display Plugin", "ScrewTurn Software", "3.0.1.453", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RssFeedDisplay.txt");
+		private static readonly ComponentInformation Info = new ComponentInformation("RSS Feed Display Plugin", "ScrewTurn Software", "3.0.1.454", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RssFeedDisplay.txt");
 
-		private static readonly Regex RssRegex = new Regex(@"{RSS:http://(.+?)}",
-			RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		private static readonly Regex RssRegex = new Regex(@"{(RSS|Twitter):(.+?)}",
+			RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
 		/// <summary>
 		/// Specifies whether or not to execute Phase 1.
@@ -66,7 +66,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 			try {
 
-				KeyValuePair<int, string> block = FindAndRemoveFirstOccurrence(buffer);
+				KeyValuePair<int, Match> block = FindAndRemoveFirstOccurrence(buffer);
 
 				while(block.Key != -1) {
 					string blockHash = block.Value.ToString();
@@ -78,20 +78,35 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 					}
 
 					if(result == null) {
-						XmlDocument feedXml = GetXml(block.Value.ToString().Substring(5, block.Value.ToString().Length - 6));
+						bool isTwitter = block.Value.Groups[1].Value.ToLowerInvariant() == "twitter";
+						XmlDocument feedXml = GetXml(block.Value.Groups[2].Value);
 						XmlNode node = feedXml.DocumentElement;
 						XmlNode itemTitle = node.SelectNodes("/rss/channel/item/title")[0];
 						XmlNode itemLink = node.SelectNodes("/rss/channel/item/link")[0];
 						XmlNode itemContent = node.SelectNodes("/rss/channel/item/description")[0];
 						string itemContentStr = StripHtml(itemContent.InnerText);
-						itemContentStr = (itemContentStr.Length > 350 && itemContentStr.Substring(347, 5) != "[...]") ? itemContentStr.Substring(0, itemContentStr.IndexOf(" ", 345)) + " [...]" : itemContentStr;
-						result = @"<div class=""rssfeed"">
-									<span class=""rsstitle"">
-									 <a href=""" + itemLink.InnerText + @""" title=""" + itemTitle.InnerText + @""">" + itemTitle.InnerText + @"</a>
-									</span>
-									<br />
-									<span class=""rsscontent"">" + itemContentStr + @"</span>
-								   </div>";
+						itemContentStr = (itemContentStr.Length > 350 && itemContentStr.Substring(347, 5) != "[...]") ? itemContentStr.Substring(0, itemContentStr.IndexOf(" ", 345) + 1) + " [...]" : itemContentStr;
+						if(itemContentStr.Length <= 1) itemContentStr = StripHtml(itemContent.InnerText);
+
+						if(isTwitter) {
+							string tweet = itemTitle.InnerText;
+							tweet = tweet.Substring(tweet.IndexOf(":") + 2);
+							result = @"<div class=""twitterfeed"">
+										<span class=""tweet"">
+										 <a href=""" + itemLink.InnerText + @""" title=""Go to this Tweet"">" + tweet + @"</a>
+										</span>
+									   </div>";
+						}
+						else {
+							result = @"<div class=""rssfeed"">
+										<span class=""rsstitle"">
+										 <a href=""" + itemLink.InnerText + @""" title=""" + itemTitle.InnerText + @""">" + itemTitle.InnerText + @"</a>
+										</span>
+										<br />
+										<span class=""rsscontent"">" + itemContentStr + @"</span>
+									   </div>";
+						}
+
 						if(System.Web.HttpContext.Current != null) {
 							System.Web.HttpContext.Current.Cache.Add(blockHash, result, null, DateTime.Now.AddMinutes(60),
 								System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
@@ -105,7 +120,6 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			}
 			catch(Exception ex) {
 				LogWarning(string.Format("Exception occurred: {0}", ex.Message));
-				return null;
 			}
 			return buffer.ToString();
 		}
@@ -127,7 +141,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 						results.LoadXml(xmlString);
 					}
 					catch {
-						LogWarning("Received Unexpected Response from Unfuddle Server.");
+						LogWarning("Received Unexpected Response from server.");
 					}
 				}
 				return results;
@@ -143,16 +157,16 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// </summary>
 		/// <param name="buffer">The buffer.</param>
 		/// <returns>The index->content data.</returns>
-		private static KeyValuePair<int, string> FindAndRemoveFirstOccurrence(StringBuilder buffer) {
+		private static KeyValuePair<int, Match> FindAndRemoveFirstOccurrence(StringBuilder buffer) {
 			Match match = RssRegex.Match(buffer.ToString());
 
 			if(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 
-				return new KeyValuePair<int, string>(match.Index, match.Value);
+				return new KeyValuePair<int, Match>(match.Index, match);
 			}
 
-			return new KeyValuePair<int, string>(-1, null);
+			return new KeyValuePair<int, Match>(-1, null);
 		}
 
 		/// <summary>
@@ -221,7 +235,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// Gets a brief summary of the configuration string format, in HTML. Returns <c>null</c> if no configuration is needed.
 		/// </summary>
 		public string ConfigHelpHtml {
-			get { return null; }
+			get { return "Specify <i>nolog</i> for disabling warning log messages."; }
 		}
 
 	}
