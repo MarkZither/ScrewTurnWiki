@@ -29,22 +29,22 @@
 		<anthem:DropDownList ID="lstProviders" runat="server" AutoPostBack="True" OnSelectedIndexChanged="lstProviders_SelectedIndexChanged" meta:resourcekey="lstProvidersResource1" />
 		<anthem:LinkButton ID="lnkRoot" runat="server" Text="[..]" ToolTip="/" OnClick="lnkRoot_Click" meta:resourcekey="lnkRootResource1" />
 		<anthem:Label ID="lblRoot" runat="server" Text="/" meta:resourcekey="lblRootResource1" />
-		<anthem:PlaceHolder ID="plhDirectory" runat="server" AutoUpdateAfterCallBack="True" UpdateAfterCallBack="True" />
+		<anthem:PlaceHolder ID="plhDirectory" runat="server" AutoUpdateAfterCallBack="True" />
 	</div>
 
-	<anthem:Panel ID="pnlRename" runat="server" Visible="False" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlRenameResource1" UpdateAfterCallBack="True">
+	<anthem:Panel ID="pnlRename" runat="server" Visible="False" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlRenameResource1">
 		<div id="ItemRenameDiv">
 			<h3 class="separator"><asp:Literal ID="lblRename" runat="server" Text="Rename file/directory" meta:resourcekey="lblRenameResource1" /></h3>
 			<anthem:Label ID="lblItem" runat="server" meta:resourcekey="lblItemResource1" /><br />
 			<anthem:TextBox ID="txtNewName" runat="server" Width="200px" meta:resourcekey="txtNewNameResource1" /><br />
 			<anthem:Button ID="btnRename" runat="server" Text="Rename" OnClick="btnRename_Click" meta:resourcekey="btnRenameResource1" />
 			<anthem:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" meta:resourcekey="btnCancelResource1" />
-			<anthem:Label ID="lblRenameResult" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="lblRenameResultResource1" UpdateAfterCallBack="True" />
+			<anthem:Label ID="lblRenameResult" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="lblRenameResultResource1" />
 		</div>
 	</anthem:Panel>
 
 	<anthem:Repeater ID="rptItems" runat="server" AutoUpdateAfterCallBack="True"
-		OnDataBinding="rptItems_DataBinding" OnItemCommand="rptItems_ItemCommand" UpdateAfterCallBack="True">
+		OnDataBinding="rptItems_DataBinding" OnItemCommand="rptItems_ItemCommand">
 		<HeaderTemplate>
 			<table id="FileManagerTable" class="generic" cellpadding="0" cellspacing="0">
 				<thead>
@@ -104,22 +104,22 @@
 	</anthem:Repeater>
 	<br />
 	<anthem:Label ID="lblNoList" runat="server" CssClass="resulterror" Text="You cannot list the contents of this directory." Visible="False" 
-		AutoUpdateAfterCallBack="True" meta:resourcekey="lblNoListResource1" UpdateAfterCallBack="True" />
+		AutoUpdateAfterCallBack="True" meta:resourcekey="lblNoListResource1" />
 
 </div>
 
 <div id="FileManagementControlsDiv">
-<anthem:Panel ID="pnlNewDirectory" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlNewDirectoryResource1" UpdateAfterCallBack="True">
+<anthem:Panel ID="pnlNewDirectory" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlNewDirectoryResource1">
 	<div id="NewDirectoryDiv">
 		<h3 class="separator"><asp:Literal ID="lblNewDirectoryTitle" runat="server" Text="Create New Directory" EnableViewState="False" meta:resourcekey="lblNewDirectoryTitleResource1" /></h3>
 		<asp:Literal ID="lblDirectoryName" runat="server" Text="Directory Name" EnableViewState="False" meta:resourcekey="lblDirectoryNameResource1" /><br />
-		<anthem:TextBox ID="txtNewDirectoryName" runat="server" meta:resourcekey="txtNewDirectoryNameResource1" UpdateAfterCallBack="True" />
+		<anthem:TextBox ID="txtNewDirectoryName" runat="server" meta:resourcekey="txtNewDirectoryNameResource1" />
 		<anthem:Button ID="btnNewDirectory" runat="server" Text="Create" OnClick="btnNewDirectory_Click" meta:resourcekey="btnNewDirectoryResource1" />
-		<anthem:Label ID="lblNewDirectoryResult" runat="server" meta:resourcekey="lblNewDirectoryResultResource1" UpdateAfterCallBack="True" />
+		<anthem:Label ID="lblNewDirectoryResult" runat="server" meta:resourcekey="lblNewDirectoryResultResource1" />
 	</div>
 </anthem:Panel>
 	
-<anthem:Panel ID="pnlUpload" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlUploadResource1" UpdateAfterCallBack="True">
+<anthem:Panel ID="pnlUpload" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlUploadResource1">
 	<div id="UploadDiv">
 		<h3 class="separator"><asp:Literal ID="lblUploadFiles" runat="server" Text="Upload Files" EnableViewState="False" meta:resourcekey="lblUploadFilesResource1" /></h3>
 		<p class="small"><asp:Literal ID="lblUploadFilesInfo" runat="server" Text="You can upload files up to $1. Allowed file types are: $2." 
@@ -138,7 +138,7 @@
 
 <div class="cleanupright"></div>
 
-<anthem:Panel ID="pnlPermissions" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlPermissionsResource1" UpdateAfterCallBack="True">
+<anthem:Panel ID="pnlPermissions" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlPermissionsResource1">
 	<div id="PermissionsDiv">
 		<h3 class="separator"><asp:Literal ID="lblManagePermissions" runat="server" Text="Manage Permissions" EnableViewState="False" 
 			meta:resourcekey="lblManagePermissionsResource1" /></h3>

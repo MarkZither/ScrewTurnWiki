@@ -130,6 +130,7 @@ namespace ScrewTurn.Wiki {
 			CurrentDirectory = "/";
 
 			DetectPermissions();
+			SetupControlsForPermissions();
 
 			rptItems.DataBind();
 			PopulateBreadcrumb();
@@ -345,6 +346,7 @@ namespace ScrewTurn.Wiki {
 			CurrentDirectory += name + "/";
 
 			DetectPermissions();
+			SetupControlsForPermissions();
 
 			rptItems.DataBind();
 			PopulateBreadcrumb();
@@ -384,6 +386,7 @@ namespace ScrewTurn.Wiki {
 				CurrentDirectory = lnk.CommandArgument;
 
 				DetectPermissions();
+				SetupControlsForPermissions();
 
 				rptItems.DataBind();
 				PopulateBreadcrumb();
