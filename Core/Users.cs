@@ -228,6 +228,8 @@ namespace ScrewTurn.Wiki {
 		public static bool RemoveUser(UserInfo user) {
 			if(user.Provider.UserAccountsReadOnly) return false;
 
+			RemovePermissions(user);
+			
 			bool done = user.Provider.RemoveUser(user);
 			if(done) {
 				Log.LogEntry("User " + user.Username + " removed", EntryType.General, Log.SystemUsername);
@@ -237,6 +239,85 @@ namespace ScrewTurn.Wiki {
 			else {
 				Log.LogEntry("User deletion failed for " + user.Username, EntryType.Error, Log.SystemUsername);
 				return false;
+			}
+		}
+
+		/// <summary>
+		/// Lists all directories in a provider, including the root.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <returns>The directories.</returns>
+		private static List<string> ListDirectories(IFilesStorageProviderV30 provider) {
+			List<string> directories = new List<string>(50);
+			directories.Add("/");
+
+			ListDirectoriesRecursive(provider, "/", directories);
+
+			return directories;
+		}
+
+		private static void ListDirectoriesRecursive(IFilesStorageProviderV30 provider, string current, List<string> output) {
+			foreach(string dir in provider.ListDirectories(current)) {
+				output.Add(dir);
+				ListDirectoriesRecursive(provider, dir, output);
+			}
+		}
+
+		/// <summary>
+		/// Removes all permissions for a user.
+		/// </summary>
+		/// <param name="user">The user.</param>
+		private static void RemovePermissions(UserInfo user) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(string dir in ListDirectories(prov)) {
+					AuthWriter.RemoveEntriesForDirectory(user, prov, dir);
+				}
+			}
+
+			AuthWriter.RemoveEntriesForGlobals(user);
+
+			AuthWriter.RemoveEntriesForNamespace(user, null);
+			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+				foreach(PageInfo page in prov.GetPages(null)) {
+					AuthWriter.RemoveEntriesForPage(user, page);
+				}
+
+				foreach(NamespaceInfo nspace in prov.GetNamespaces()) {
+					AuthWriter.RemoveEntriesForNamespace(user, nspace);
+
+					foreach(PageInfo page in prov.GetPages(nspace)) {
+						AuthWriter.RemoveEntriesForPage(user, page);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Removes all permissions for a group.
+		/// </summary>
+		/// <param name="group">The group.</param>
+		private static void RemovePermissions(UserGroup group) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(string dir in ListDirectories(prov)) {
+					AuthWriter.RemoveEntriesForDirectory(group, prov, dir);
+				}
+			}
+
+			AuthWriter.RemoveEntriesForGlobals(group);
+
+			AuthWriter.RemoveEntriesForNamespace(group, null);
+			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+				foreach(PageInfo page in prov.GetPages(null)) {
+					AuthWriter.RemoveEntriesForPage(group, page);
+				}
+
+				foreach(NamespaceInfo nspace in prov.GetNamespaces()) {
+					AuthWriter.RemoveEntriesForNamespace(group, nspace);
+
+					foreach(PageInfo page in prov.GetPages(nspace)) {
+						AuthWriter.RemoveEntriesForPage(group, page);
+					}
+				}
 			}
 		}
 
@@ -414,6 +495,8 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the user group is removed, <c>false</c> otherwise.</returns>
 		public static bool RemoveUserGroup(UserGroup group) {
 			if(group.Provider.UserGroupsReadOnly) return false;
+
+			RemovePermissions(group);
 
 			bool done = group.Provider.RemoveUserGroup(group);
 
