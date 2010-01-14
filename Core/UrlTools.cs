@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Text;
 
@@ -16,8 +17,19 @@ namespace ScrewTurn.Wiki {
 		/// Properly routes the current virtual request to a physical ASP.NET page.
 		/// </summary>
 		public static void RouteCurrentRequest() {
+			string physicalPath = null;
+
+			try {
+				physicalPath = HttpContext.Current.Request.PhysicalPath;
+			}
+			catch(ArgumentException) {
+				// Illegal characters in path
+				HttpContext.Current.Response.Redirect("~/PageNotFound.aspx");
+				return;
+			}
+
 			// Extract the physical page name, e.g. MainPage, Edit or Category
-			string pageName = Path.GetFileNameWithoutExtension(HttpContext.Current.Request.PhysicalPath);
+			string pageName = Path.GetFileNameWithoutExtension(physicalPath);
 			// Exctract the extension, e.g. .ashx or .aspx
 			string ext = Path.GetExtension(HttpContext.Current.Request.PhysicalPath).ToLowerInvariant();
 			// Remove trailing dot, .ashx -> ashx
