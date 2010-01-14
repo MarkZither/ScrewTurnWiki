@@ -643,6 +643,7 @@ namespace ScrewTurn.Wiki {
 				DumpUserGroups(result.ToArray());
 
 				groupsCache = null;
+				usersCache = null;
 
 				return result.Count == allGroups.Length - 1;
 			}

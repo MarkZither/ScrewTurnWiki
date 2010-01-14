@@ -94,10 +94,13 @@ namespace ScrewTurn.Wiki {
 				if(groups == null || groups.Length == 0) {
 					UserInfo current = GetCurrentUser();
 					if(current != null) {
-						groups = new UserGroup[current.Groups.Length];
-						for(int i = 0; i < groups.Length; i++) {
-							groups[i] = Users.FindUserGroup(current.Groups[i]);
+						// This check is necessary because after group deletion the session might contain outdated data
+						List<UserGroup> temp = new List<UserGroup>(current.Groups.Length);
+						for(int i = 0; i < current.Groups.Length; i++) {
+							UserGroup tempGroup = Users.FindUserGroup(current.Groups[i]);
+							if(tempGroup != null) temp.Add(tempGroup);
 						}
+						groups = temp.ToArray();
 					}
 					else {
 						groups = new UserGroup[] { Users.FindUserGroup(Settings.AnonymousGroup) };
