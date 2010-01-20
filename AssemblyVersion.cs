@@ -1,9 +1,9 @@
 
 using System.Reflection;
 
-[assembly: AssemblyCompany("Dario Solera")]
+[assembly: AssemblyCompany("Threeplicate Srl")]
 [assembly: AssemblyProduct("ScrewTurn Wiki")]
-[assembly: AssemblyCopyright("Copyright © Dario Solera 2006-2010")]
+[assembly: AssemblyCopyright("Copyright © Threeplicate Srl 2006-2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -16,5 +16,5 @@ using System.Reflection;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("3.0.1.458")]
-[assembly: AssemblyFileVersion("3.0.1.458")]
+[assembly: AssemblyVersion("3.0.1.459")]
+[assembly: AssemblyFileVersion("3.0.1.459")]
