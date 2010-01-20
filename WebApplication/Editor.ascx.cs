@@ -157,7 +157,7 @@ namespace ScrewTurn.Wiki {
             //if last view was WYSIWYG take text from WYSIWYG to Preview
             //in both cases I need to synchronize WYSIWYG and Markup view
             if(inWYSIWYG) {
-                lblPreview.Text = lblWYSIWYG.Text;
+				lblPreview.Text = lblWYSIWYG.Text.Replace("&lt;", "<").Replace("&gt;", ">");
                 txtMarkup.Text = ReverseFormatter.ReverseFormat(lblWYSIWYG.Text);
             }
             else {

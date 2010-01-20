@@ -655,6 +655,7 @@ namespace ScrewTurn.Wiki {
 
 				targetNamespace.DefaultPage = localPage;
 				DumpNamespaces(allNamespaces);
+				namespacesCache = null;
 
 				return new NamespaceInfo(targetNamespace.Name, this, targetNamespace.DefaultPage);
 			}
