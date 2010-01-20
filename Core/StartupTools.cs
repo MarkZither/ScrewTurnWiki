@@ -68,39 +68,34 @@ namespace ScrewTurn.Wiki {
 			ISettingsStorageProviderV30 ssp = ProviderLoader.LoadSettingsStorageProvider(WebConfigurationManager.AppSettings["SettingsStorageProvider"]);
 			ssp.Init(Host.Instance, GetSettingsStorageProviderConfiguration());
 			Collectors.SettingsProvider = ssp;
-			//Settings.Instance = new Settings(ssp);
 
 			if(!(ssp is SettingsStorageProvider)) {
 				// Update DLLs from public\Plugins
 				UpdateDllsIntoSettingsProvider(ssp, ProviderLoader.SettingsStorageProviderAssemblyName);
 			}
 
-			// Initialize authorization managers
-			//AuthReader.Instance = new AuthReader(Settings.Provider);
-			//AuthWriter.Instance = new AuthWriter(Settings.Provider);
-			//AuthChecker.Instance = new AuthChecker(Settings.Provider);
-
-			if(ssp.GetMetaDataItem(MetaDataItem.AccountActivationMessage, null) == "")
-				ssp.SetMetaDataItem(MetaDataItem.AccountActivationMessage, null, Defaults.AccountActivationMessageContent);
-			if(ssp.GetMetaDataItem(MetaDataItem.EditNotice, null) == "")
-				ssp.SetMetaDataItem(MetaDataItem.EditNotice, null, Defaults.EditNoticeContent);
-			if(ssp.GetMetaDataItem(MetaDataItem.Footer, null) == "")
-				ssp.SetMetaDataItem(MetaDataItem.Footer, null, Defaults.FooterContent);
-			if(ssp.GetMetaDataItem(MetaDataItem.Header, null) == "")
-				ssp.SetMetaDataItem(MetaDataItem.Header, null, Defaults.HeaderContent);
-			if(ssp.GetMetaDataItem(MetaDataItem.PasswordResetProcedureMessage, null) == "")
-				ssp.SetMetaDataItem(MetaDataItem.PasswordResetProcedureMessage, null, Defaults.PasswordResetProcedureMessageContent);
-			if(ssp.GetMetaDataItem(MetaDataItem.Sidebar, null) == "")
-				ssp.SetMetaDataItem(MetaDataItem.Sidebar, null, Defaults.SidebarContent);
-			if(ssp.GetMetaDataItem(MetaDataItem.PageChangeMessage, null) == "")
-				ssp.SetMetaDataItem(MetaDataItem.PageChangeMessage, null, Defaults.PageChangeMessage);
-			if(ssp.GetMetaDataItem(MetaDataItem.DiscussionChangeMessage, null) == "")
-				ssp.SetMetaDataItem(MetaDataItem.DiscussionChangeMessage, null, Defaults.DiscussionChangeMessage);
-			if(ssp.GetMetaDataItem(MetaDataItem.ApproveDraftMessage, null) == "") {
-				ssp.SetMetaDataItem(MetaDataItem.ApproveDraftMessage, null, Defaults.ApproveDraftMessage);
+			if(ssp.IsFirstApplicationStart()) {
+				if(ssp.GetMetaDataItem(MetaDataItem.AccountActivationMessage, null) == "")
+					ssp.SetMetaDataItem(MetaDataItem.AccountActivationMessage, null, Defaults.AccountActivationMessageContent);
+				if(ssp.GetMetaDataItem(MetaDataItem.EditNotice, null) == "")
+					ssp.SetMetaDataItem(MetaDataItem.EditNotice, null, Defaults.EditNoticeContent);
+				if(ssp.GetMetaDataItem(MetaDataItem.Footer, null) == "")
+					ssp.SetMetaDataItem(MetaDataItem.Footer, null, Defaults.FooterContent);
+				if(ssp.GetMetaDataItem(MetaDataItem.Header, null) == "")
+					ssp.SetMetaDataItem(MetaDataItem.Header, null, Defaults.HeaderContent);
+				if(ssp.GetMetaDataItem(MetaDataItem.PasswordResetProcedureMessage, null) == "")
+					ssp.SetMetaDataItem(MetaDataItem.PasswordResetProcedureMessage, null, Defaults.PasswordResetProcedureMessageContent);
+				if(ssp.GetMetaDataItem(MetaDataItem.Sidebar, null) == "")
+					ssp.SetMetaDataItem(MetaDataItem.Sidebar, null, Defaults.SidebarContent);
+				if(ssp.GetMetaDataItem(MetaDataItem.PageChangeMessage, null) == "")
+					ssp.SetMetaDataItem(MetaDataItem.PageChangeMessage, null, Defaults.PageChangeMessage);
+				if(ssp.GetMetaDataItem(MetaDataItem.DiscussionChangeMessage, null) == "")
+					ssp.SetMetaDataItem(MetaDataItem.DiscussionChangeMessage, null, Defaults.DiscussionChangeMessage);
+				if(ssp.GetMetaDataItem(MetaDataItem.ApproveDraftMessage, null) == "") {
+					ssp.SetMetaDataItem(MetaDataItem.ApproveDraftMessage, null, Defaults.ApproveDraftMessage);
+				}
 			}
 
-			// Load MIME Types
 			MimeTypes.Init();
 
 			// Load Providers
@@ -189,22 +184,6 @@ namespace ScrewTurn.Wiki {
 				Settings.DefaultCacheProvider = typeof(CacheProvider).FullName;
 				Collectors.TryEnable(Settings.DefaultCacheProvider);
 			}
-
-			// Load Snippets and templates
-			//Snippets.Instance = new Snippets();
-			//Templates.Instance = new Templates();
-
-			// Load Pages
-			//Pages.Instance = new Pages();
-
-			// Load Nav. Paths
-			//NavigationPaths.Instance = new NavigationPaths();
-
-			// Create Collisions class
-			//Collisions.Instance = new Collisions();
-
-			// Create Redirections class
-			//Redirections.Instance = new Redirections();
 
 			// Create the Main Page, if needed
 			if(Pages.FindPage(Settings.DefaultPage) == null) CreateMainPage();

@@ -20,6 +20,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private IAclManager aclManager;
 
 		/// <summary>
+		/// Holds a value indicating whether the application was started for the first time.
+		/// </summary>
+		protected bool isFirstStart = false;
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
@@ -1298,6 +1303,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			else RollbackTransaction(transaction);
 
 			return somethingUpdated || rows > 0;
+		}
+
+		/// <summary>
+		/// Determines whether the application was started for the first time.
+		/// </summary>
+		/// <returns><c>true</c> if the application was started for the first time, <c>false</c> otherwise.</returns>
+		public bool IsFirstApplicationStart() {
+			return isFirstStart;
 		}
 
 		#endregion

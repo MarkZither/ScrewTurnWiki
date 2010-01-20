@@ -142,6 +142,10 @@ namespace ScrewTurn.Wiki.Tests {
 			throw new NotImplementedException();
 		}
 
+		public bool IsFirstApplicationStart() {
+			throw new NotImplementedException();
+		}
+
 	}
 
 }

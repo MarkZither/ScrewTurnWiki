@@ -59,6 +59,8 @@ namespace ScrewTurn.Wiki {
 		private bool bulkUpdating = false;
 		private Dictionary<string, string> configData = null;
 
+		private bool isFirstStart = false;
+
 		private string GetFullPath(string name) {
 			return Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), name);
 		}
@@ -95,6 +97,7 @@ namespace ScrewTurn.Wiki {
 
 			if(!File.Exists(GetFullPath(ConfigFile))) {
 				File.Create(GetFullPath(ConfigFile)).Close();
+				isFirstStart = true;
 			}
 
 			if(!File.Exists(GetFullPath(RecentChangesFile))) {
@@ -1232,6 +1235,14 @@ namespace ScrewTurn.Wiki {
 
 				return replacedSomething;
 			}
+		}
+
+		/// <summary>
+		/// Determines whether the application was started for the first time.
+		/// </summary>
+		/// <returns><c>true</c> if the application was started for the first time, <c>false</c> otherwise.</returns>
+		public bool IsFirstApplicationStart() {
+			return isFirstStart;
 		}
 
 	}

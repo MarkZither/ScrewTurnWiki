@@ -237,6 +237,12 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentException">If <paramref name="oldName"/> or <paramref name="newName"/> are empty.</exception>
 		bool UpdateOutgoingLinksForRename(string oldName, string newName);
 
+		/// <summary>
+		/// Determines whether the application was started for the first time.
+		/// </summary>
+		/// <returns><c>true</c> if the application was started for the first time, <c>false</c> otherwise.</returns>
+		bool IsFirstApplicationStart();
+
 	}
 
 	/// <summary>
