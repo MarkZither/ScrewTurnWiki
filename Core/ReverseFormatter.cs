@@ -94,12 +94,20 @@ namespace ScrewTurn.Wiki {
 			buffer.Replace("<STRONG>", "<b>");
 			buffer.Replace("</strong>", "</b>");
 			buffer.Replace("</STRONG>", "</b>");
+			buffer.Replace("<P>", "<p>");
+			buffer.Replace("</P>", "</p>");
 
 			buffer.Replace("&amp;amp;", "&amp;");
 
 			// Escape square brackets, otherwise they're interpreted as links
 			buffer.Replace("[", "&#91;");
 			buffer.Replace("]", "&#93;");
+
+			// #469: IE seems to randomly add this stuff
+			buffer.Replace("<p>&nbsp;</p>\r\n", "<br />");
+
+			buffer.Replace("<p>", "");
+			buffer.Replace("</p>", "");
 
 			// Temporarily replace <br /> in <pre> tags
 			match = PreRegex.Match(buffer.ToString());
@@ -571,15 +579,7 @@ namespace ScrewTurn.Wiki {
 				match = BoxRegex.Match(buffer.ToString(), match.Index + 1);
 			}
 
-			buffer.Replace("<P>", "");
-			buffer.Replace("</P>", "<br />");
-			buffer.Replace("<p>", "");
-			buffer.Replace("</p>", "<br />");
-
 			// <br />
-			//sb.Replace("<br /><br />", "\r\n\r\n");
-			//sb.Replace("\r\n<br />", "\r\n\r\n");
-			//sb.Replace("<br />", "{BR}\r\n");
 			buffer.Replace("<br />", "\r\n");
 
 			// Fix line breaks in IE
