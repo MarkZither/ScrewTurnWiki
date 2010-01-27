@@ -120,6 +120,8 @@ namespace ScrewTurn.Wiki {
 		}
 		
 		protected void cvUsername_ServerValidate(object source, ServerValidateEventArgs args) {
+			txtUsername.Text = txtUsername.Text.Trim();
+
 			if(txtUsername.Text.ToLowerInvariant().Equals("admin") || txtUsername.Text.ToLowerInvariant().Equals("guest")) {
 				args.IsValid = false;
 			}

@@ -266,6 +266,8 @@ namespace ScrewTurn.Wiki {
 		protected void btnCreate_Click(object sender, EventArgs e) {
 			if(!Page.IsValid) return;
 
+			txtUsername.Text = txtUsername.Text.Trim();
+
 			lblResult.CssClass = "";
 			lblResult.Text = "";
 

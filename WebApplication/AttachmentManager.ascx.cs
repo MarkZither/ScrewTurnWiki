@@ -262,6 +262,8 @@ namespace ScrewTurn.Wiki {
 			if(canDelete) {
 				lblRenameResult.Text = "";
 
+				txtNewName.Text = txtNewName.Text.Trim();
+
 				// Ensure that the extension is not changed (security)
 				string previousExtension = Path.GetExtension(lblItem.Text);
 				string newExtension = Path.GetExtension(txtNewName.Text);
@@ -273,6 +275,8 @@ namespace ScrewTurn.Wiki {
 				if(newExtension.ToLowerInvariant() != previousExtension.ToLowerInvariant()) {
 					txtNewName.Text += previousExtension;
 				}
+
+				txtNewName.Text = txtNewName.Text.Trim();
 
 				bool done = true;
 				if(txtNewName.Text.ToLowerInvariant() != lblItem.Text.ToLowerInvariant()) {

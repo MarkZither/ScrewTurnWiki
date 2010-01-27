@@ -321,6 +321,8 @@ namespace ScrewTurn.Wiki {
 			ResizeImage();
 			bool done = false;
 
+			txtNewName.Text = txtNewName.Text.Trim();
+
 			string targetName = chkNewName.Checked ? txtNewName.Text : Path.GetFileName(file);
 			bool overwrite = !chkNewName.Checked;
 

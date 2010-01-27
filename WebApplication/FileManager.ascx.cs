@@ -461,6 +461,9 @@ namespace ScrewTurn.Wiki {
 		protected void btnRename_Click(object sender, EventArgs e) {
 			lblRenameResult.Text = "";
 			bool done = false;
+
+			txtNewName.Text = txtNewName.Text.Trim();
+
 			if(lblItem.Text.EndsWith("/")) {
 				if(canDeleteDirs) {
 					MovePermissions(CurrentDirectory + lblItem.Text, CurrentDirectory + txtNewName.Text);
@@ -486,6 +489,8 @@ namespace ScrewTurn.Wiki {
 					if(newExtension.ToLowerInvariant() != previousExtension.ToLowerInvariant()) {
 						txtNewName.Text += previousExtension;
 					}
+
+					txtNewName.Text = txtNewName.Text.Trim();
 
 					done = true;
 					if(txtNewName.Text.ToLowerInvariant() != lblItem.Text.ToLowerInvariant()) {
@@ -519,6 +524,8 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnNewDirectory_Click(object sender, EventArgs e) {
 			if(canCreateDirs) {
+				txtNewDirectoryName.Text = txtNewDirectoryName.Text.Trim();
+
 				lblNewDirectoryResult.Text = "";
 				txtNewDirectoryName.Text = txtNewDirectoryName.Text.Trim('/');
 				AuthWriter.ClearEntriesForDirectory(provider, CurrentDirectory + txtNewDirectoryName.Text + "/");

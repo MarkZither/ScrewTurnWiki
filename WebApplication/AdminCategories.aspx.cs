@@ -47,6 +47,8 @@ namespace ScrewTurn.Wiki {
 			lblNewCategoryResult.CssClass = "";
 			lblNewCategoryResult.Text = "";
 
+			txtNewCategory.Text = txtNewCategory.Text.Trim();
+
 			Page.Validate("newcat");
 			if(!Page.IsValid) return;
 

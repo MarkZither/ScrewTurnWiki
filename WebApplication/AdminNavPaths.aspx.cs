@@ -216,6 +216,8 @@ namespace ScrewTurn.Wiki {
 		protected void btnCreate_Click(object sender, EventArgs e) {
 			if(!CanManagePagesInCurrentNamespace()) return;
 
+			txtName.Text = txtName.Text.Trim();
+
 			if(!Page.IsValid) return;
 
 			if(lstPages.Items.Count == 0) {

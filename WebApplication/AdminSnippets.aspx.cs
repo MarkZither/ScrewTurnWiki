@@ -132,6 +132,8 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsValid) return;
 
+			txtName.Text = txtName.Text.Trim();
+
 			if(txtCurrentElement.Value == "S") CreateSnippet();
 			else CreateTemplate();
 		}

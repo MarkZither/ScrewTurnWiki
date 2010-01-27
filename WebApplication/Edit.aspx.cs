@@ -497,6 +497,8 @@ namespace ScrewTurn.Wiki {
 				txtName.Text = GenerateAutoName(txtTitle.Text);
 			}
 
+			txtName.Text = txtName.Text.Trim();
+
 			Page.Validate("nametitle");
 			Page.Validate("captcha");
 			if(!Page.IsValid) {
@@ -707,6 +709,8 @@ namespace ScrewTurn.Wiki {
 			if(canManagePageCategories) {
 				lblCategoryResult.Text = "";
 				lblCategoryResult.CssClass = "";
+
+				txtCategory.Text = txtCategory.Text.Trim();
 
 				Page.Validate("category");
 				if(!Page.IsValid) return;

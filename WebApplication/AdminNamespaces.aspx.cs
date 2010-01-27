@@ -213,6 +213,8 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnCreate_Click(object sender, EventArgs e) {
+			txtName.Text = txtName.Text.Trim();
+
 			Page.Validate("namespace");
 			if(!Page.IsValid) return;
 
@@ -411,6 +413,8 @@ namespace ScrewTurn.Wiki {
 		protected void btnRename_Click(object sender, EventArgs e) {
 			lblRenameResult.CssClass = "";
 			lblRenameResult.Text = "";
+
+			txtNewName.Text = txtNewName.Text.Trim();
 
 			Page.Validate("rename");
 			if(!Page.IsValid) return;
