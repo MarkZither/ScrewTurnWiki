@@ -1761,7 +1761,8 @@ namespace ScrewTurn.Wiki {
 						}
 						else {
 							targetUrl += Settings.PageExtension;
-							targetUrl = Tools.UrlEncode(targetUrl);
+							// #468: Preserve ++ for ReverseFormatter
+							targetUrl = (bareBones && explicitNamespace ? "++" : "") + Tools.UrlEncode(targetUrl);
 						}
 
 						string fullName = "";

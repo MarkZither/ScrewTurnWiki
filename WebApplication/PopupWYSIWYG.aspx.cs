@@ -150,13 +150,16 @@ namespace ScrewTurn.Wiki {
 
 		protected List<TreeElement> ctPages_Populate(object sender, PopulateEventArgs e) {
 			List<TreeElement> result = new List<TreeElement>(100);
-			foreach(PageInfo pi in Pages.GetPages(Pages.FindNamespace(lstNamespace.SelectedValue))) {
+
+			NamespaceInfo selectedNamespace = Pages.FindNamespace(lstNamespace.SelectedValue);
+			NamespaceInfo currentNamespace = DetectNamespaceInfo();
+
+			foreach(PageInfo pi in Pages.GetPages(selectedNamespace)) {
 				PageContent cont = Content.GetPageContent(pi, true);
 				string formattedTitle = FormattingPipeline.PrepareTitle(cont.Title, false, FormattingContext.Other, pi);
 				string onClickJavascript = "javascript:";
 				// Populate the page title box if the title is different to the page name
-				if (pi.FullName != cont.Title)
-				{
+				if (pi.FullName != cont.Title) {
 					// Supply the page title to the Javascript that sets the page title on the page
 					// We can safely escape the \ character, but the " character is interpreted by the browser even if it is escaped to Javascript, so we can't allow it.
 					// The non-wysiwyg version escapes ' and replaces " with escaped ', but ' breaks the html insertion, so remove it altogether
@@ -164,13 +167,12 @@ namespace ScrewTurn.Wiki {
 					// breaking the drop-down.
 					onClickJavascript += "SetValue('txtPageTitle', '" + cont.Title.Replace("\\", "\\\\").Replace("'", "").Replace("\"", "").Replace("<", "") + "');";
 				}
-				else
-				{
+				else {
 					onClickJavascript += "SetValue('txtPageTitle', '');";
 				}
-				// Populate the page name
-				onClickJavascript += "return SetValue('txtPageName', '" + pi.FullName + "');";
-				TreeElement item = new TreeElement(pi.FullName, formattedTitle, onClickJavascript);
+				// Populate the page name (#468: add ++ to all ReverseFormatter to work)
+				onClickJavascript += "return SetValue('txtPageName', '" + (selectedNamespace != currentNamespace ? "++" : "") + pi.FullName + "');";
+				TreeElement item = new TreeElement((selectedNamespace != currentNamespace ? "++" : "") + pi.FullName, formattedTitle, onClickJavascript);
 				result.Add(item);
 			}
 			return result;

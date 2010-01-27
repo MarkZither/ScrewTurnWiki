@@ -234,7 +234,7 @@ namespace ScrewTurn.Wiki {
 				string insertion = "[";
 				if(match.Groups[2].Value == @"target=""_blank"" ") insertion += "^";
 				string decoded = UrlDecode(match.Groups[3].Value);
-				insertion += decoded;
+				insertion += (decoded.StartsWith("  ") ? "++" : "") + decoded.Trim();
 				if(match.Groups[6].Value != decoded) insertion += "|" + match.Groups[6].Value;
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
