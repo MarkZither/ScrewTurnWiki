@@ -15,7 +15,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		private IHostV30 host;
 		private string config;
-		private static readonly ComponentInformation info = new ComponentInformation("Pages Sandbox", "ScrewTurn Software", "3.0.0.180", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/PagesSandbox.txt");
+		private static readonly ComponentInformation info = new ComponentInformation("Pages Sandbox", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/PagesSandbox.txt");
 
 		private List<NamespaceInfo> allNamespaces = new List<NamespaceInfo>(5);
 

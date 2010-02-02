@@ -12,7 +12,7 @@ namespace ScrewTurn.Wiki {
 	public class CacheProvider : ICacheProviderV30 {
 
 		private readonly ComponentInformation _info =
-			new ComponentInformation("Local Cache Provider", "ScrewTurn Software", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			new ComponentInformation("Local Cache Provider", "Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
 
 		private IHostV30 _host;
 

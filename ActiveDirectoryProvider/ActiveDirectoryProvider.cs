@@ -357,7 +357,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
         /// TODO return and complete
         /// </summary>
         public ComponentInformation Information {
-            get { return new ComponentInformation("ActiveDirectoryProvider", "ScrewTurn Software", "3.0.1.417", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/ActiveDirectoryProvider.txt"); }
+            get { return new ComponentInformation("ActiveDirectoryProvider", "Threeplicate Srl", "3.0.1.417", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/ActiveDirectoryProvider.txt"); }
         }
 
         /// <summary>

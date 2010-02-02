@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki {
 		public static readonly string ProviderName = "Local Settings Provider";
 
 		private readonly ComponentInformation info =
-			new ComponentInformation(ProviderName, "ScrewTurn Software", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			new ComponentInformation(ProviderName, "Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
 
 		private IHostV30 host;
 

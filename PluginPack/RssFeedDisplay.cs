@@ -18,7 +18,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		private IHostV30 _host;
 		private string _config;
 		private bool _enableLogging = true;
-		private static readonly ComponentInformation Info = new ComponentInformation("RSS Feed Display Plugin", "ScrewTurn Software", "3.0.1.454", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RssFeedDisplay.txt");
+		private static readonly ComponentInformation Info = new ComponentInformation("RSS Feed Display Plugin", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RssFeedDisplay.txt");
 
 		private static readonly Regex RssRegex = new Regex(@"{(RSS|Twitter):(.+?)}",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
