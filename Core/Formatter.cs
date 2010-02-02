@@ -2255,7 +2255,7 @@ namespace ScrewTurn.Wiki {
                     thCloseIndex = thCloseIndex_temp;
                     thCloseIndex_temp = sb.ToString().IndexOf("</th>", thCloseIndex + 1);
                 }
-                while (thCloseIndex_temp != -1 && thCloseIndex_temp < sb.ToString().IndexOf("</tr>"));
+                while (thCloseIndex_temp != -1/* && thCloseIndex_temp < sb.ToString().IndexOf("</tr>") #443, but disables row-header support */);
                 
 				sb.Insert(thCloseIndex + 10, "</thead><tbody>");
 				sb.Insert(sb.Length - 8, "</tbody>");
