@@ -386,6 +386,9 @@ namespace ScrewTurn.Wiki {
 			return buffer.ToString().Trim('-');
 		}
 
+		// This regex is duplicated from Formatter.cs
+		private static readonly Regex FullCodeRegex = new Regex(@"@@.+?@@", RegexOptions.Compiled | RegexOptions.Singleline);
+
 		/// <summary>
 		/// Finds the start and end positions of a section of the content.
 		/// </summary>
@@ -395,6 +398,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="len">The length of the section.</param>
 		/// <param name="anchor">The anchor ID of the section.</param>
 		private static void ExtractSection(string content, int section, out int start, out int len, out string anchor) {
+			// HACK: @@...@@ escapes headers: must reproduce behavior here
+			Match m = FullCodeRegex.Match(content);
+			while(m.Success) {
+				string newContent = m.Value.Replace("=", "$"); // Do not alter positions
+				content = content.Remove(m.Index, m.Length);
+				content = content.Insert(m.Index, newContent);
+				m = FullCodeRegex.Match(content, m.Index + m.Length - 1);
+			}
+
 			List<HPosition> hPos = Formatter.DetectHeaders(content);
 			start = 0;
 			len = content.Length;
