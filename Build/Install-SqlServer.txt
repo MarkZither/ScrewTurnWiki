@@ -54,6 +54,8 @@ minor adjustments.
     (the data providers, if the connection string is correct, will automatically create the required 
     tables in the database).
 
+ 9. Login using "admin" and the password you entered in the web.config file.
+
 
 Updating From a Previous v3 Release
 -----------------------------------

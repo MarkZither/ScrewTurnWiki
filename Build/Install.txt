@@ -44,6 +44,8 @@ minor adjustments.
 
  6. Navigate to the Web Site or Application using a web browser and verify that everything works properly.
 
+ 7. Login using "admin" and the password you entered in the web.config file.
+
 
 Updating From a Previous v3 Release
 -----------------------------------
