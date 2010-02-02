@@ -286,6 +286,25 @@
 					<!--
 						document.getElementById("btnOkPageLink").onclick = ProcessPageLink;
 						document.getElementById("btnCancelPageLink").onclick = CancelAll;
+
+						$(function() {
+							$("#<%= txtPageName.ClientID %>").keyup(function() {
+								var value = $("#<%= txtPageName.ClientID %>").val().toLowerCase();
+								$("div.treecontainer a.menulink").each(function() {
+									var elem = $(this);
+									var match = elem.attr("title").toLowerCase().indexOf(value) != -1;
+									elem.css("display", match ? "" : "none");
+								});
+							});
+							$("#<%= txtPageTitle.ClientID %>").keyup(function() {
+								var value = $("#<%= txtPageTitle.ClientID %>").val().toLowerCase();
+								$("div.treecontainer a.menulink").each(function() {
+									var elem = $(this);
+									var match = elem.text().toLowerCase().indexOf(value) != -1;
+									elem.css("display", match ? "" : "none");
+								});
+							});
+						});
 					// -->
 					</script>
 				
