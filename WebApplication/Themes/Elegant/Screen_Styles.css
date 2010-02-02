@@ -250,6 +250,7 @@ tr.tableheader td, th {
 	margin: 0px;
 	padding: 2px 5px 2px 5px;
 	border-bottom: solid 1px #999999;
+	white-space: nowrap;
 }
 
 tr.tablerow td {

@@ -180,7 +180,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append(@""" title=""");
 			sb.Append(Properties.Messages.SortByDate);
 			sb.Append(@""">");
-			sb.Append(Properties.Messages.CreatedOn.Replace(" ", "&nbsp;"));
+			sb.Append(Properties.Messages.CreatedOn);
 			sb.Append((reverse && sortBy.Equals("creation") ? " &uarr;" : ""));
 			sb.Append((!reverse && sortBy.Equals("creation") ? " &darr;" : ""));
 			sb.Append("</a></th>");
@@ -195,7 +195,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append(@""" title=""");
 			sb.Append(Properties.Messages.SortByDate);
 			sb.Append(@""">");
-			sb.Append(Properties.Messages.ModifiedOn.Replace(" ", "&nbsp;"));
+			sb.Append(Properties.Messages.ModifiedOn);
 			sb.Append((reverse && sortBy.Equals("date") ? " &uarr;" : ""));
 			sb.Append((!reverse && sortBy.Equals("date") ? " &darr;" : ""));
 			sb.Append("</a></th>");
@@ -210,7 +210,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append(@""" title=""");
 			sb.Append(Properties.Messages.SortByUser);
 			sb.Append(@""">");
-			sb.Append(Properties.Messages.CreatedBy.Replace(" ", "&nbsp;"));
+			sb.Append(Properties.Messages.CreatedBy);
 			sb.Append((reverse && sortBy.Equals("creator") ? " &uarr;" : ""));
 			sb.Append((!reverse && sortBy.Equals("creator") ? " &darr;" : ""));
 			sb.Append("</a></th>");
@@ -225,7 +225,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append(@""" title=""");
 			sb.Append(Properties.Messages.SortByUser);
 			sb.Append(@""">");
-			sb.Append(Properties.Messages.ModifiedBy.Replace(" ", "&nbsp;"));
+			sb.Append(Properties.Messages.ModifiedBy);
 			sb.Append((reverse && sortBy.Equals("user") ? " &uarr;" : ""));
 			sb.Append((!reverse && sortBy.Equals("user") ? " &darr;" : ""));
 			sb.Append("</a></th>");
@@ -292,12 +292,12 @@ namespace ScrewTurn.Wiki {
 
 					// Creation date/time
 					sb.Append(@"<td>");
-					sb.Append(Preferences.AlignWithTimezone(pageList[i].CreationDateTime).ToString(Settings.DateTimeFormat).Replace(" ", "&nbsp;") + "&nbsp;");
+					sb.Append(Preferences.AlignWithTimezone(pageList[i].CreationDateTime).ToString(Settings.DateTimeFormat) + "&nbsp;");
 					sb.Append("</td>");
 
 					// Mod. date/time
 					sb.Append(@"<td>");
-					sb.Append(Preferences.AlignWithTimezone(pageList[i].ModificationDateTime).ToString(Settings.DateTimeFormat).Replace(" ", "&nbsp;") + "&nbsp;");
+					sb.Append(Preferences.AlignWithTimezone(pageList[i].ModificationDateTime).ToString(Settings.DateTimeFormat) + "&nbsp;");
 					sb.Append("</td>");
 
 					// Creator
