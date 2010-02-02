@@ -539,7 +539,7 @@ namespace ScrewTurn.Wiki {
 			List<string> added = new List<string>(5);
 
 			for(int i = 0; i < matches.Count; i++) {
-				if(!added.Contains(matches[i].Text)) {
+				if(matches[i].Text.Length > 1 && !added.Contains(matches[i].Text)) {
 					buffer.Append(Tools.UrlEncode(matches[i].Text));
 					if(i != matches.Count - 1) buffer.Append(",");
 					added.Add(matches[i].Text);
