@@ -191,6 +191,15 @@
 		if(__GetServerElementById("btnNewCategory")) {
 		    __GetServerElementById("btnNewCategory").onclick = __SetSubmitted;
 		}
+
+		$(function() {
+			$("#<%= txtTitle.ClientID %>").focus().keydown(function(event) {
+				if(event.keyCode == 9 /* TAB */) {
+					event.preventDefault();
+					__FocusEditorWindow();
+				}
+			});
+		});
 	// -->
     </script>
 	

@@ -26,9 +26,14 @@
     
     <script type="text/javascript">
     <!--
-        var subj = __GetServerElementById("txtSubject");
-        if(subj.value == "") subj.focus();
-        else __GetServerElementById("txtBody").focus();
+    	$(function() {
+    		$("#<%= txtSubject.ClientID %>").focus().keydown(function(event) {
+    			if(event.keyCode == 9 /* TAB */) {
+    				event.preventDefault();
+    				__FocusEditorWindow();
+    			}
+    		});
+    	});
     // -->
     </script>
 

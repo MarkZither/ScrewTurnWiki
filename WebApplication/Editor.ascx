@@ -114,6 +114,11 @@
     		if(elem) elem.style["height"] = cookieValue;
     	}
     }
+
+    function __FocusEditorWindow() {
+    	$("#<%= txtMarkup.ClientID %>").focus();
+    	$("#iframe").focus();
+    }
 // -->
 </script>
 
