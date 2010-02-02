@@ -122,8 +122,9 @@ namespace ScrewTurn.Wiki {
 			
 			lblDiscussLink.Visible = !discussMode && !viewCodeMode && canViewDiscussion;
 			if(lblDiscussLink.Visible) {
-				lblDiscussLink.Text = string.Format(@"<a id=""DiscussLink"" title=""{0}"" href=""?Discuss=1"">{1} ({2})</a>",
-					Properties.Messages.Discuss, Properties.Messages.Discuss, Pages.GetMessageCount(currentPage));
+				lblDiscussLink.Text = string.Format(@"<a id=""DiscussLink"" title=""{0}"" href=""{3}?Discuss=1"">{1} ({2})</a>",
+					Properties.Messages.Discuss, Properties.Messages.Discuss, Pages.GetMessageCount(currentPage),
+					UrlTools.BuildUrl(NameTools.GetLocalName(currentPage.FullName), Settings.PageExtension));
 			}
 
 			lblEditLink.Visible = Settings.EnablePageToolbar && !discussMode && !viewCodeMode && canEdit;
@@ -137,8 +138,9 @@ namespace ScrewTurn.Wiki {
 			if(Settings.EnablePageToolbar && Settings.EnableViewPageCodeFeature) {
 				lblViewCodeLink.Visible = !discussMode && !viewCodeMode && !canEdit;
 				if(lblViewCodeLink.Visible) {
-					lblViewCodeLink.Text = string.Format(@"<a id=""ViewCodeLink"" title=""{0}"" href=""?Code=1"">{1}</a>",
-						Properties.Messages.ViewPageCode, Properties.Messages.ViewPageCode);
+					lblViewCodeLink.Text = string.Format(@"<a id=""ViewCodeLink"" title=""{0}"" href=""{2}?Code=1"">{1}</a>",
+						Properties.Messages.ViewPageCode, Properties.Messages.ViewPageCode,
+						UrlTools.BuildUrl(NameTools.GetLocalName(currentPage.FullName), Settings.PageExtension));
 				}
 			}
 			else lblViewCodeLink.Visible = false;
