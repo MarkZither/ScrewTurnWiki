@@ -78,7 +78,7 @@
     }
 
     function insertBreak() {
-        insertHTML('<h1 style="border-bottom: 1px solid rgb(153, 153, 153);"> </h1>');
+        insertHTML('<h1 class="separator"> </h1>\n');
     }
 
     function insertList(listTag) {
