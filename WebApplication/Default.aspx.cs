@@ -467,23 +467,24 @@ namespace ScrewTurn.Wiki {
 			StringBuilder buffer = new StringBuilder(300);
 
 			buffer.AppendFormat(@"<div id=""{0}"" style=""display: none;"" class=""pageoutgoinglinksmenu"" onmouseover=""javascript:return __CancelHideTimer();"" onmouseout=""javascript:return __HideDropDown('{0}');"">", id);
-			bool pageAdded = false;
+			int count = 0;
 			foreach(string link in outgoingLinks) {
 				PageInfo target = Pages.FindPage(link);
 				if(target != null) {
-					pageAdded = true;
+					count++;
 					PageContent cont = Content.GetPageContent(target, true);
 
 					string title = FormattingPipeline.PrepareTitle(cont.Title, false, FormattingContext.PageContent, currentPage);
 
 					buffer.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"">{2}</a>", link, Settings.PageExtension, title, title);
 				}
+				if(count >= 20) break;
 			}
 			buffer.Append("</div>");
 
 			sb.Insert(0, buffer.ToString());
 
-			if(pageAdded) return id;
+			if(count > 0) return id;
 			else return null;
 		}
 
