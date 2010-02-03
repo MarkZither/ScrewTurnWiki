@@ -2836,7 +2836,7 @@ namespace ScrewTurn.Wiki {
 						List<string> tempPages = new List<string>(pages.Length);
 
 						for(int k = 0; k < pages.Length; k++) {
-							if(pages[i].Provider == this) {
+							if(pages[k].Provider == this) {
 								tempPages.Add(pages[k].FullName);
 							}
 						}
