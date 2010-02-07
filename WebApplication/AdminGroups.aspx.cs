@@ -108,7 +108,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void cvName_ServerValidate(object sender, ServerValidateEventArgs e) {
-			e.IsValid = Users.FindUser(txtName.Text) == null;
+			e.IsValid = Users.FindUserGroup(txtName.Text) == null;
 		}
 
 		protected void btnNewGroup_Click(object sender, EventArgs e) {
