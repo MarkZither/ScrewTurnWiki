@@ -95,7 +95,7 @@ namespace ScrewTurn.Wiki {
 		/// Gets the Email validation Regex.
 		/// </summary>
 		public static string EmailRegex {
-			get { return @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})$"; }
+			get { return @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,5}|[0-9]{1,3})$"; }
 		}
 
 		/// <summary>
@@ -116,7 +116,6 @@ namespace ScrewTurn.Wiki {
 		/// Gets the SMTP Server validation Regex.
 		/// </summary>
 		public static string SmtpServerRegex {
-			//get { return @"^(?:[a-zA-Z0-9_\-]{1,63}\.?)+(?:[a-zA-Z]{2,})|(?=\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})[0-2]*[0-9]*[0-9]+\.[0-2]*[0-9]*[0-9]+\.[0-2]*[0-9]*[0-9]+\.[0-2]*[0-9]*[0-9]+$"; }
 			get { return @"^[A-Za-z0-9\.\-_]+$"; }
 		}
 
