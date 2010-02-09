@@ -36,7 +36,7 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex BoxRegex = new Regex(@"\(\(\(.+?\)\)\)", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex ExtendedUpRegex = new Regex(@"\{up((\:|\().+?)?\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		//private static readonly Regex UpRegex = new Regex(@"\{up\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		private static readonly Regex SpecialTagRegex = new Regex(@"\{(wikititle|wikiversion|mainurl|rsspage|themepath|clear|br|top|searchbox|pagecount|cloud|orphans|wanted|namespacelist)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		private static readonly Regex SpecialTagRegex = new Regex(@"\{(wikititle|wikiversion|mainurl|rsspage|themepath|clear|br|top|searchbox|pagecount|pagecount\(\*\)|cloud|orphans|wanted|namespacelist)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		//private static readonly Regex CloudRegex = new Regex(@"\{cloud\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		//private static readonly Regex NamespaceRegex = new Regex(@"\{namespace\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		//private static readonly Regex NamespaceListRegex = new Regex(@"\{namespacelist\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
@@ -328,6 +328,9 @@ namespace ScrewTurn.Wiki {
 								break;
 							case "PAGECOUNT":
 								sb.Insert(match.Index, Pages.GetPages(DetectNamespaceInfo(current)).Count.ToString());
+								break;
+							case "PAGECOUNT(*)":
+								sb.Insert(match.Index, Pages.GetGlobalPageCount().ToString());
 								break;
 							case "ORPHANS":
 								if(!forIndexing) sb.Insert(match.Index, BuildOrphanedPagesList(DetectNamespaceInfo(current), context, current));
