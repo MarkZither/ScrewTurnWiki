@@ -105,7 +105,6 @@ namespace ScrewTurn.Wiki {
 			// Print header
 			sb.Append(@"<div class=""messageheader"">");
 			//sb.AppendFormat(@"<a id=""MSG_{0}""></a>", message.ID);
-			sb.AppendFormat(@"<a id=""{0}"" href=""#{0}"" title=""Permalink"">&#0182;</a> ", Tools.GetMessageIdForAnchor(message.DateTime));
 
 			if(!currentPage.Provider.ReadOnly) {
 				// Print reply/edit/delete buttons only if provider is not read-only
@@ -144,6 +143,9 @@ namespace ScrewTurn.Wiki {
 				sb.Append("</div>");
 			}
 
+			sb.Append(@"<div>");
+			sb.AppendFormat(@"<a id=""{0}"" href=""#{0}"" title=""Permalink"">&#0182;</a> ", Tools.GetMessageIdForAnchor(message.DateTime));
+
 			// Print subject
 			if(message.Subject.Length > 0) {
 				sb.Append(@"<span class=""messagesubject"">");
@@ -159,6 +161,8 @@ namespace ScrewTurn.Wiki {
 			sb.Append(" ");
 			sb.Append(Users.UserLink(message.Username));
 			sb.Append("</span>");
+
+			sb.Append("</div>");
 
 			sb.Append("</div>");
 
