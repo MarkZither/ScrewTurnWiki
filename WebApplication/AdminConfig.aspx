@@ -600,8 +600,8 @@
 		</div>
 		
 		<div class="featurecontainer">
-		    <asp:Literal ID="lblUsernameRegEx" Text="Regular Expression for validating username" runat="server" EnableViewState="false"
-		    meta:resourcekey="lblUsernameRegExResource1" /><br />
+		    <asp:Literal ID="lblUsernameRegEx" Text="Regular Expression for validating usernames and group names" runat="server" EnableViewState="false"
+		    meta:resourcekey="lblUsernameRegExResource2" /><br />
 		    <anthem:TextBox ID="txtUsernameRegEx" runat="server" CssClass="configlarge" 
 				    meta:resourcekey="txtUsernameRegExResource1" />
 				    <anthem:CustomValidator ID="cvUsernameRegEx" runat="server" Display="Dynamic" CssClass="resulterror"
@@ -611,8 +611,8 @@
 		</div>
 		
 		<div class="featurecontainer">
-		    <asp:Literal ID="lblPasswordRegEx" Text="Regular Expression for validating password" runat="server" EnableViewState="false"
-		    meta:resourcekey="lblPasswordRegExResource1" /><br />
+		    <asp:Literal ID="lblPasswordRegEx" Text="Regular Expression for validating passwords" runat="server" EnableViewState="false"
+		    meta:resourcekey="lblPasswordRegExResource2" /><br />
 		    <anthem:TextBox ID="txtPasswordRegEx" runat="server" CssClass="configlarge" 
 				    meta:resourcekey="txtPasswordRegExResource1" />
 			<anthem:CustomValidator ID="cvPasswordRegEx" runat="server" Display="Dynamic" CssClass="resulterror"

@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblMigrationInfoResource2" xml:space="preserve">
+  <data name="lblMigrationInfoResource2.Text" xml:space="preserve">
     <value>&lt;b&gt;Uwaga 1&lt;/b&gt;: zawsze wykonuj pełną kopię zapasową wszystkich danych przez wykonaniem migracji.&lt;br /&gt;&lt;b&gt;Uwaga 2&lt;/b&gt;: ukończenie migracji z rerguły zabiera kilka minut: w tym czasie nie podejmu jżadnych innych działań na wiki i nie zamykaj tej strony.&lt;br /&gt;&lt;b&gt;Uwaga 3&lt;/b&gt;: docelowy provider powinien być całkowicie pusty: jeśli zawiera jakiekolwiek dane, migracja może spowodować niespójność. Po szczegóły zajrzyj do dokumentacji provider'a.&lt;br /&gt;&lt;b&gt;Timeout'y&lt;/b&gt;: jest mocno zalecane aby zwiększyć wartość parametru executionTimeout w pliku web.config przed rozpoczęciem migracji.</value>
   </data>
   <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">

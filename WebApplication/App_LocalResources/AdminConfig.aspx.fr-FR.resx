@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblUsernameRegExResource2.Text" xml:space="preserve">
+    <value>Regular Expression for validating usernames and group names</value>
+  </data>
+  <data name="lblPasswordRegExResource2.Text" xml:space="preserve">
+    <value>Regular Expression for validating passwords</value>
+  </data>
   <data name="chkEnableSectionAnchorsResource1.Text" xml:space="preserve">
     <value>Afficher les ancres pour les sections de la page</value>
   </data>
@@ -137,12 +143,6 @@
   </data>
   <data name="lblExtensionsAllowedForUploadResource2.Text" xml:space="preserve">
     <value>Extensions de fichier permises pour le téléversement(séparer par une virgule, '*' pour tous les types)</value>
-  </data>
-  <data name="lblUsernameRegExResource1.Text" xml:space="preserve">
-    <value>Expression régulière pour valider le nom d'utilisateur</value>
-  </data>
-  <data name="lblPasswordRegExResource1.Text" xml:space="preserve">
-    <value>Expressions régulières pour la validation du mot de passe</value>
   </data>
   <data name="lblRssFeedsModeResource1.Text" xml:space="preserve">
     <value>Mode de service de Flux RSS Feeds</value>

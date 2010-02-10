@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblMigrationInfoResource2" xml:space="preserve">
+  <data name="lblMigrationInfoResource2.Text" xml:space="preserve">
     <value>&lt;b&gt;Примечание 1&lt;/b&gt;: всегда выполняйте полное сохранение данных до начала миграции.&lt;br /&gt;&lt;b&gt;Примечание 2&lt;/b&gt;: миграция происходит в течение некоторого времени до полной загрузки данных: в это время, не выполняйте никаких действий в Wiki и не закрывайте эту страницу.&lt;br /&gt;&lt;b&gt;Примечание 3&lt;/b&gt;: значение провайдера должно быть незаполненным: если такое заполнить любыми данными это может привести к зацикливанию. В отношении деталей настройки обращайтесь к документации конкретного провайдера.&lt;br /&gt;&lt;b&gt;Таймауты&lt;/b&gt;: настоятельно рекомендуем увеличить значение параметра Timeout в web.config до начала процесса миграции данных.</value>
   </data>
   <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">

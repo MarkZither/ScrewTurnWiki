@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblMigrationInfoResource2" xml:space="preserve">
+  <data name="lblMigrationInfoResource2.Text" xml:space="preserve">
     <value>&lt;b&gt;Figyelem&lt;/b&gt;: migráció előtt a ments le minden adatot!&lt;br /&gt;A migráció több percet igénybe vehet: ezidő alatt ne csinálj mást, és ne zárd be ezt az oldalt!</value>
   </data>
   <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">

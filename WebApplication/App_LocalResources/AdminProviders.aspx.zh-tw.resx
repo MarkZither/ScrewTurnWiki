@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblMigrationInfoResource2" xml:space="preserve">
+  <data name="lblMigrationInfoResource2.Text" xml:space="preserve">
     <value>&lt;b&gt;注意 1&lt;/b&gt;：總是在執行遷移之前對您的所有資料進行完整備份。&lt;br /&gt;&lt;b&gt;注意 2&lt;/b&gt;：遷移通常需要數分鐘來完成：在這段時間內，不要在維基中進行任何其他活動，並且不要關閉本頁。&lt;br /&gt;&lt;b&gt;注意 3&lt;/b&gt;：目標提供這應該是完全空的：如果它包含任何資料，可能會引起一致性問題。參閱目標提供商的說明文件以獲取詳情。&lt;br /&gt;&lt;b&gt;超時&lt;/b&gt;：強烈建議您在遷移資料之前增加 web.config 中 executionTimeout 參數的值。</value>
   </data>
   <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">

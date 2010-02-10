@@ -1059,11 +1059,11 @@
   <data name="ListItemResource44.Value" xml:space="preserve">
     <value>Disabled</value>
   </data>
-  <data name="lblUsernameRegExResource1.Text" xml:space="preserve">
-    <value>Regular Expression for validating username</value>
+  <data name="lblUsernameRegExResource2.Text" xml:space="preserve">
+    <value>Regular Expression for validating usernames and group names</value>
   </data>
-  <data name="lblPasswordRegExResource1.Text" xml:space="preserve">
-    <value>Regular Expression for validating password</value>
+  <data name="lblPasswordRegExResource2.Text" xml:space="preserve">
+    <value>Regular Expression for validating passwords</value>
   </data>
   <data name="chkAutoGeneratePageNamesResource1.Text" xml:space="preserve">
     <value>Auto-Generate Page Names in Editor by default</value>

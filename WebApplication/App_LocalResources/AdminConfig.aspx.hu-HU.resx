@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblUsernameRegExResource2.Text" xml:space="preserve">
+    <value>Regular Expression for validating usernames and group names</value>
+  </data>
+  <data name="lblPasswordRegExResource2.Text" xml:space="preserve">
+    <value>Regular Expression for validating passwords</value>
+  </data>
   <data name="chkEnableSectionAnchorsResource1.Text" xml:space="preserve">
     <value>Display anchors for pages' sections</value>
   </data>
@@ -137,12 +143,6 @@
   </data>
   <data name="lblExtensionsAllowedForUploadResource2.Text" xml:space="preserve">
     <value>Megengedett fájltipusok feltöltéskor (vesszővel elválasztott, '*' a bármilyen típus)</value>
-  </data>
-  <data name="lblUsernameRegExResource1.Text" xml:space="preserve">
-    <value>Reguláris kifejezés a felhasználónév ellenőrzésére</value>
-  </data>
-  <data name="lblPasswordRegExResource1.Text" xml:space="preserve">
-    <value>Reguláris kifejezés a jelszó ellenőrzésére</value>
   </data>
   <data name="lblRssFeedsModeResource1.Text" xml:space="preserve">
     <value>RSS Feed mód</value>

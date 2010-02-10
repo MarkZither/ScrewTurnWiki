@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblMigrationInfoResource2" xml:space="preserve">
+  <data name="lblMigrationInfoResource2.Text" xml:space="preserve">
     <value>&lt;b&gt;Nota 1&lt;/b&gt;: realiza siempre un backup completo antes de realizar una migración de datos.&lt;br /&gt;&lt;b&gt;Nota 2&lt;/b&gt;: las migraciones suelen conllevar varios minutos hasta completar: Durante ese tiempo, no realicen ninguna otra actividad en el wiki, y no cierres esta página.&lt;br /&gt;&lt;b&gt;Nota 3&lt;/b&gt;: el proveedor de destino debería estar completamente vacío: sin contuviese datos, podrían presentarse inconsistencias. Consulta la documentación del proveedor de destinopara más detalles.&lt;br /&gt;&lt;b&gt;Timeouts&lt;/b&gt;: se recomienda encarecidamente que se incremente el parámetro executionTimeout en el fichero web.config antes de migrar los datos.</value>
   </data>
   <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">
