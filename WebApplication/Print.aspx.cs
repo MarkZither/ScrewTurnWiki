@@ -56,6 +56,8 @@ namespace ScrewTurn.Wiki {
 					(from c in Pages.GetCategoriesForPage(page)
 					 select NameTools.GetLocalName(c.FullName)).ToArray();
 
+				UserInfo user = Users.FindUser(content.User);
+
 				sb.Append(@"<h1 class=""pagetitle"">");
 				sb.Append(title);
 				sb.Append("</h1>");
@@ -63,7 +65,7 @@ namespace ScrewTurn.Wiki {
 					Properties.Messages.ModifiedOn,
 					Preferences.AlignWithTimezone(content.LastModified).ToString(Settings.DateTimeFormat),
 					Properties.Messages.By,
-					Users.GetDisplayName(Users.FindUser(content.User)),
+					user != null ? Users.GetDisplayName(user) : content.User,
 					Properties.Messages.CategorizedAs,
 					categories.Length == 0 ? Properties.Messages.Uncategorized : string.Join(", ", categories));
 				sb.Append(Content.GetFormattedPageContent(page, true));
