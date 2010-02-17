@@ -48,7 +48,7 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex HRRegex = new Regex(@"(?<=(\n|^))(\ )*----(\ )*\n", RegexOptions.Compiled);
 		//private static readonly Regex SnippetRegex = new Regex(@"\{S(\:|\|)(.+?)(\|(.+?))*}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex SnippetRegex = new Regex(@"\{s\:(.+?)(\|.*?)*\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
-		private static readonly Regex ClassicSnippetVerifier = new Regex(@"\|\ ?[a-z0-9]+\ ?\=", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		private static readonly Regex ClassicSnippetVerifier = new Regex(@"\|\ *[\w\d]+\ *\=", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex TableRegex = new Regex(@"\{\|(\ [^\n]*)?\n.+?\|\}", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex IndentRegex = new Regex(@"(?<=(\n|^))\:+(\ )?.+?\n", RegexOptions.Compiled);
 		private static readonly Regex EscRegex = new Regex(@"\<esc\>(.|\n|\r)*?\<\/esc\>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
@@ -786,10 +786,17 @@ namespace ScrewTurn.Wiki {
 							// If the snippet is malformed this can explode
 							balanced = ExpandToBalanceBrackets(sb, match.Index, match.Value);
 						}
-						catch {
-							balanced = match.Value;
+						catch { }
+						
+						if(balanced == null) {
+							// Replace brackets with escaped values so that the snippets regex does not trigger anymore
+							sb.Replace("{", "&#123;", match.Index, match.Length);
+							sb.Replace("}", "&#125;", match.Index, match.Length);
+							break; // Give up
 						}
-						sb.Remove(match.Index, balanced.Length);
+						else {
+							sb.Remove(match.Index, balanced.Length);
+						}
 
 						if(balanced.IndexOf("}") == balanced.Length - 1) {
 							// Single-level snippet
@@ -808,7 +815,7 @@ namespace ScrewTurn.Wiki {
 								lastOpen = balanced.LastIndexOf("{");
 								firstClosedAfterLastOpen = balanced.IndexOf("}", lastOpen + 1);
 
-								if(firstClosedAfterLastOpen <= lastOpen) break; // Give up
+								if(lastOpen < 0 || firstClosedAfterLastOpen <= lastOpen) break; // Give up
 								
 								string internalSnippet = balanced.Substring(lastOpen, firstClosedAfterLastOpen - lastOpen + 1);
 								balanced = balanced.Remove(lastOpen, firstClosedAfterLastOpen - lastOpen + 1);
