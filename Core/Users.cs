@@ -657,6 +657,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="username">The username.</param>
 		public static void NotifyLogout(string username) {
+			if(string.IsNullOrEmpty(username)) return;
+
 			UserInfo user = FindUser(username);
 			if(user != null) {
 				IUsersStorageProviderV30 prov = user.Provider as IUsersStorageProviderV30;
