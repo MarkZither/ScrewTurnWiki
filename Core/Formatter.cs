@@ -1,14 +1,15 @@
 
 using System;
-using System.Configuration;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.SessionState;
-using System.Diagnostics;
 using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki {
@@ -36,7 +37,7 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex BoxRegex = new Regex(@"\(\(\(.+?\)\)\)", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex ExtendedUpRegex = new Regex(@"\{up((\:|\().+?)?\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		//private static readonly Regex UpRegex = new Regex(@"\{up\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		private static readonly Regex SpecialTagRegex = new Regex(@"\{(wikititle|wikiversion|mainurl|rsspage|themepath|clear|br|top|searchbox|pagecount|pagecount\(\*\)|cloud|orphans|wanted|namespacelist)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		private static readonly Regex SpecialTagRegex = new Regex(@"\{(wikititle|wikiversion|mainurl|rsspage|themepath|clear|br|top|searchbox|pagecount|pagecount\(\*\)|categories|cloud|orphans|wanted|namespacelist)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		//private static readonly Regex CloudRegex = new Regex(@"\{cloud\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		//private static readonly Regex NamespaceRegex = new Regex(@"\{namespace\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		//private static readonly Regex NamespaceListRegex = new Regex(@"\{namespacelist\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
@@ -278,6 +279,7 @@ namespace ScrewTurn.Wiki {
 			}*/
 
 			if(!bareBones) {
+				NamespaceInfo ns = DetectNamespaceInfo(current);
 				match = SpecialTagRegex.Match(sb.ToString());
 				while(match.Success) {
 					if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
@@ -316,11 +318,19 @@ namespace ScrewTurn.Wiki {
 							case "SEARCHBOX":
 								string textBoxId = "SB" + Guid.NewGuid().ToString("N");
 
-								NamespaceInfo ns = DetectNamespaceInfo(current);
 								string nsstring = ns != null ? NameTools.GetFullName(ns.Name, "Search") + ".aspx" : "Search.aspx";
 								string doSearchFunction = "<nowiki><nobr><script type=\"text/javascript\"><!--\r\n" + @"function _DoSearch_" + textBoxId + "() { document.location = '" + nsstring + @"?AllNamespaces=1&FilesAndAttachments=1&Query=' + encodeURI(document.getElementById('" + textBoxId + "').value); }" + "\r\n// -->\r\n</script>";
 								sb.Insert(match.Index, doSearchFunction +
 									@"<input class=""txtsearchbox"" type=""text"" id=""" + textBoxId + @""" onkeydown=""javascript:var keycode; if(window.event) keycode = event.keyCode; else keycode = event.which; if(keycode == 10 || keycode == 13) { _DoSearch_" + textBoxId + @"(); return false; }"" /> <big><a href=""#"" onclick=""javascript:_DoSearch_" + textBoxId + @"(); return false;"">&raquo;</a></big></nowiki></nobr>");
+								break;
+							case "CATEGORIES":
+								List<CategoryInfo> cats = Pages.GetCategories(ns);
+								string pageName = ns != null ? NameTools.GetFullName(ns.Name, "AllPages") + ".aspx" : "AllPages.aspx";
+								pageName += "?Cat=";
+								string categories = "<ul><li>" + string.Join("</li><li>",
+									(from c in cats
+									 select "<a href=\"" + pageName + Tools.UrlEncode(c.FullName) + "\">" + NameTools.GetLocalName(c.FullName) + "</a>").ToArray()) + "</li></ul>";
+								sb.Insert(match.Index, categories);
 								break;
 							case "CLOUD":
 								string cloud = BuildCloud(DetectNamespaceInfo(current));
