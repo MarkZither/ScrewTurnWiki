@@ -41,7 +41,12 @@ namespace ScrewTurn.Wiki {
 
 			// Extract the current namespace, if any
 			string nspace = GetCurrentNamespace() + "";
-			if(!string.IsNullOrEmpty(nspace)) pageName = pageName.Substring(nspace.Length + 1); // Trim Namespace. from pageName
+			if(!string.IsNullOrEmpty(nspace)) {
+				// Verify that namespace exists
+				if(Pages.FindNamespace(nspace) == null) HttpContext.Current.Response.Redirect("~/PageNotFound.aspx?Page=" + pageName);
+			}
+			// Trim Namespace. from pageName
+			if(!string.IsNullOrEmpty(nspace)) pageName = pageName.Substring(nspace.Length + 1);
 
 			string queryString = ""; // Empty or begins with ampersand, not question mark
 			try {
