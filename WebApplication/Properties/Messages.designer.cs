@@ -934,6 +934,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change Comment.
+        /// </summary>
+        public static string ChangeComment {
+            get {
+                return ResourceManager.GetString("ChangeComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click to enable email notifications for this page.
         /// </summary>
         public static string ClickToEnableEmailNotifications {
@@ -2640,6 +2649,24 @@ namespace ScrewTurn.Wiki.Properties {
         public static string MessageTitle {
             get {
                 return ResourceManager.GetString("MessageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meta Description.
+        /// </summary>
+        public static string MetaDescription {
+            get {
+                return ResourceManager.GetString("MetaDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meta Keywords.
+        /// </summary>
+        public static string MetaKeywords {
+            get {
+                return ResourceManager.GetString("MetaKeywords", resourceCulture);
             }
         }
         

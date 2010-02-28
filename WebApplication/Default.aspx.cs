@@ -328,8 +328,8 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Prints the keywords in a CSV list.
 		/// </summary>
-		/// <param name="keywords"></param>
-		/// <returns></returns>
+		/// <param name="keywords">The keywords.</param>
+		/// <returns>The list.</returns>
 		private string PrintKeywords(string[] keywords) {
 			StringBuilder sb = new StringBuilder(50);
 			for(int i = 0; i < keywords.Length; i++) {
@@ -700,6 +700,19 @@ namespace ScrewTurn.Wiki {
 					sb.Append(@"<textarea style=""width: 98%; height: 500px;"" readonly=""true"">");
 					sb.Append(Server.HtmlEncode(currentContent.Content));
 					sb.Append("</textarea>");
+					sb.Append("<br /><br />");
+					sb.Append(Properties.Messages.MetaKeywords);
+					sb.Append(": <b>");
+					sb.Append(PrintKeywords(currentContent.Keywords));
+					sb.Append("</b><br />");
+					sb.Append(Properties.Messages.MetaDescription);
+					sb.Append(": <b>");
+					sb.Append(currentContent.Description);
+					sb.Append("</b><br />");
+					sb.Append(Properties.Messages.ChangeComment);
+					sb.Append(": <b>");
+					sb.Append(currentContent.Comment);
+					sb.Append("</b>");
 					literal.Text = sb.ToString();
 					plhContent.Controls.Add(literal);
 				}
