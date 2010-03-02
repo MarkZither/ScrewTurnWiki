@@ -2572,15 +2572,13 @@ namespace ScrewTurn.Wiki {
 		/// <param name="username">The username.</param>
 		/// <returns>The link.</returns>
 		private static string GetLanguageLink(string username) {
-			UserInfo user = Users.FindUser(username);
-
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append("<a href=\"");
 			sb.Append(UrlTools.BuildUrl("Language.aspx"));
 			sb.Append("\" class=\"systemlink\" title=\"");
 			sb.Append(Exchanger.ResourceExchanger.GetResource("SelectYourLanguage"));
 			sb.Append("\">");
-			sb.Append(user != null ? Users.GetDisplayName(user) : username);
+			sb.Append(username);
 			sb.Append("</a>");
 			return sb.ToString();
 		}
