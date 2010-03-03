@@ -47,7 +47,7 @@ namespace ScrewTurn.Wiki {
 					SetupSession(null);
 				}
 			}
-			else if(HttpContext.Current.Session[Logout] == null) { // Check for filtered autologin
+			else if(SessionFacade.LoginKey == null && HttpContext.Current.Session[Logout] == null) { // Check for filtered autologin
 				// If no cookie is available, try to autologin through providers
 				UserInfo user = Users.TryAutoLogin(HttpContext.Current);
 				if(user != null) {
