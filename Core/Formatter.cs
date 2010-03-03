@@ -36,18 +36,13 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex PreRegex = new Regex(@"\{\{\{\{.+?\}\}\}\}", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex BoxRegex = new Regex(@"\(\(\(.+?\)\)\)", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex ExtendedUpRegex = new Regex(@"\{up((\:|\().+?)?\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		//private static readonly Regex UpRegex = new Regex(@"\{up\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex SpecialTagRegex = new Regex(@"\{(wikititle|wikiversion|mainurl|rsspage|themepath|clear|br|top|searchbox|pagecount|pagecount\(\*\)|categories|cloud|orphans|wanted|namespacelist)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-		//private static readonly Regex CloudRegex = new Regex(@"\{cloud\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-		//private static readonly Regex NamespaceRegex = new Regex(@"\{namespace\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-		//private static readonly Regex NamespaceListRegex = new Regex(@"\{namespacelist\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex Phase3SpecialTagRegex = new Regex(@"\{(username|pagename|loginlogout|namespace|namespacedropdown|incoming|outgoing)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex RecentChangesRegex = new Regex(@"\{recentchanges(\(\*\))?\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex ListRegex = new Regex(@"(?<=(\n|^))((\*|\#)+(\ )?.+?\n)+((?=\n)|\z)", RegexOptions.Compiled | RegexOptions.Singleline); // Singleline to matche list elements on multiple lines
 		private static readonly Regex TocRegex = new Regex(@"\{toc\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex TransclusionRegex = new Regex(@"\{T(\:|\|).+\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex HRRegex = new Regex(@"(?<=(\n|^))(\ )*----(\ )*\n", RegexOptions.Compiled);
-		//private static readonly Regex SnippetRegex = new Regex(@"\{S(\:|\|)(.+?)(\|(.+?))*}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex SnippetRegex = new Regex(@"\{s\:(.+?)(\|.*?)*\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
 		private static readonly Regex ClassicSnippetVerifier = new Regex(@"\|\ *[\w\d]+\ *\=", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex TableRegex = new Regex(@"\{\|(\ [^\n]*)?\n.+?\|\}", RegexOptions.Compiled | RegexOptions.Singleline);
@@ -56,7 +51,6 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex SignRegex = new Regex(@"§§\(.+?\)§§", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		// This regex is duplicated in Edit.aspx.cs
 		private static readonly Regex FullCodeRegex = new Regex(@"@@.+?@@", RegexOptions.Compiled | RegexOptions.Singleline);
-		//private static readonly Regex UsernameRegex = new Regex(@"\{username\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex JavascriptRegex = new Regex(@"\<script.*?\>.*?\<\/script\>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.CultureInvariant);
 		private static readonly Regex CommentRegex = new Regex(@"(?<!(\<script.*?\>[\s\n]*))\<\!\-\-.*?\-\-\>(?!([\s\n]*\<\/script\>))", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.CultureInvariant);
 
