@@ -403,8 +403,18 @@ namespace ScrewTurn.Wiki {
 				while(match.Success) {
 					if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
 						sb.Remove(match.Index, match.Length);
-						PageInfo info = Pages.FindPage(match.Value.Substring(3, match.Value.Length - 4));
-						if(info != null && info != current) { // Avoid circular transclusion!
+						string pageName = match.Value.Substring(3, match.Value.Length - 4);
+						if(pageName.StartsWith("++")) pageName = pageName.Substring(2);
+						else {
+							// Add current namespace, if not present
+							string tsNamespace = NameTools.GetNamespace(pageName);
+							string currentNamespace = current != null ? NameTools.GetNamespace(current.FullName) : null;
+							if(string.IsNullOrEmpty(tsNamespace) && !string.IsNullOrEmpty(currentNamespace)) {
+								pageName = NameTools.GetFullName(currentNamespace, pageName);
+							}
+						}
+						PageInfo info = Pages.FindPage(pageName);
+						if(info != null && (current != null && info.FullName != current.FullName)) { // Avoid circular transclusion!
 							dummy = new StringBuilder();
 							dummy.Append(@"<div class=""transcludedpage"">");
 							dummy.Append(FormattingPipeline.FormatWithPhase1And2(Content.GetPageContent(info, true).Content,
