@@ -127,7 +127,7 @@
     <value>Meta Keywords</value>
   </data>
   <data name="AutoUpdateAvailable" xml:space="preserve">
-    <value>automatische aktualisierung verfügbar</value>
+    <value>automatische Aktualisierung verfügbar</value>
     <comment>Auto-update available</comment>
   </data>
   <data name="NAccountsDeleted" xml:space="preserve">
@@ -139,15 +139,15 @@
     <comment>formatted</comment>
   </data>
   <data name="NoPagesToMigrate" xml:space="preserve">
-    <value>Keine Seiten zum migrieren</value>
+    <value>Keine Seiten zu migrieren</value>
     <comment>No pages to migrate</comment>
   </data>
   <data name="NoProvidersToUpdate" xml:space="preserve">
-    <value>Keine Provider zum aktualisieren</value>
+    <value>Keine Provider zu aktualisieren</value>
     <comment>No Providers to update</comment>
   </data>
   <data name="ProvidersUpdated" xml:space="preserve">
-    <value>Provider aktualisiert. Das wiki muss neu gestartet werden (Admin Home tab)</value>
+    <value>Provider aktualisiert. Das Wiki muss neu gestartet werden (siehe Registerkarte Verwaltung)</value>
     <comment>Providers updated, please restart the wiki (Admin Home tab)</comment>
   </data>
   <data name="BulkMigrationCompleted" xml:space="preserve">
@@ -155,19 +155,19 @@
     <comment>Bulk migration completed</comment>
   </data>
   <data name="BulkMigrationCompletedWithErrors" xml:space="preserve">
-    <value>Massenmigration mit Fehlern abgeschlossen, überprüfen Sie die Protokolldatei!</value>
+    <value>Massenmigration mit Fehlern abgeschlossen. Bitte prüfen Sie die Protokolldatei.</value>
     <comment>Bulk migration completed with errors, check the log</comment>
   </data>
   <data name="BulkRebindCompleted" xml:space="preserve">
-    <value>Massenwiderverbindung abgeschlossen</value>
+    <value>Massenwiederverbindung abgeschlossen</value>
     <comment>Bulk rebind completed</comment>
   </data>
   <data name="NoCategories" xml:space="preserve">
-    <value>Keine Kategorie selektiert</value>
+    <value>Keine Kategorie ausgewählt</value>
     <comment>No Categories selected</comment>
   </data>
   <data name="NoPages" xml:space="preserve">
-    <value>Keine Seiten zum neuverbinden</value>
+    <value>Keine Seiten zum Neuverbinden</value>
     <comment>No Pages to rebind</comment>
   </data>
   <data name="InvalidFileName" xml:space="preserve">
@@ -179,15 +179,15 @@
     <comment>Ordered List</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
-    <value>unsortierte Liste</value>
+    <value>Unsortierte Liste</value>
     <comment>Unordered List</comment>
   </data>
   <data name="LinkToThisSection" xml:space="preserve">
-    <value>Einen Link auf diese Sektion erstellen</value>
+    <value>Verknüpfung zu diesem Abschnitt</value>
     <comment>Link to this Section</comment>
   </data>
   <data name="NoBr" xml:space="preserve">
-    <value>NoBR tag</value>
+    <value>NoBR-Tag</value>
     <comment>?? NoBR tag</comment>
   </data>
   <data name="SelectAndDelete" xml:space="preserve">
@@ -195,7 +195,7 @@
     <comment>Select and delete</comment>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Fehler!</value>
+    <value>Fehler</value>
     <comment>Error</comment>
   </data>
   <data name="NewVersion" xml:space="preserve">
@@ -211,19 +211,19 @@
     <comment>Could not migrate Page</comment>
   </data>
   <data name="DiscussionsRss" xml:space="preserve">
-    <value>Diskussionen RSS</value>
+    <value>Diskussionen-RSS</value>
     <comment>Discussions RSS</comment>
   </data>
   <data name="RssForThisCategoryDiscussion" xml:space="preserve">
-    <value>Änderungsbenachrichtigungen für die Diskussionen in dieser Kategorie (RSS 2.0)</value>
+    <value>Änderungsbenachrichtigungen für Diskussionen in dieser Kategorie (RSS 2.0)</value>
     <comment>Update notifications for this Category's Discussions (RSS 2.0)</comment>
   </data>
   <data name="CodeEscaped" xml:space="preserve">
-    <value>Aus Block Code ausgestiegen</value>
+    <value>Code-Block</value>
     <comment>?? Escaped Block Code</comment>
   </data>
   <data name="HR" xml:space="preserve">
-    <value>Horizontaler Lineal</value>
+    <value>Horizontale Linie</value>
     <comment>Horizontal Ruler</comment>
   </data>
   <data name="Snippets" xml:space="preserve">
@@ -235,14 +235,14 @@
     <comment>Special Symbols</comment>
   </data>
   <data name="WrapperBox" xml:space="preserve">
-    <value>Wrapper Box</value>
+    <value>Mit Rahmen umgeben</value>
   </data>
   <data name="UserTitle" xml:space="preserve">
     <value>Benutzerdetails</value>
     <comment>User's Details</comment>
   </data>
   <data name="CouldNotSaveDisplayName" xml:space="preserve">
-    <value>Der Anzeigename kann nicht gespeichert werden</value>
+    <value>Der Anzeigename konnte nicht gespeichert werden</value>
     <comment>Could not save Display Name</comment>
   </data>
   <data name="DisplayNameSaved" xml:space="preserve">
@@ -254,7 +254,7 @@
     <comment>##USER## deleted a message on the discussion of ##PAGE##.</comment>
   </data>
   <data name="UserDeletedPage" xml:space="preserve">
-    <value>##USER## hat ##PAGE## gelöscht.</value>
+    <value>##USER## hat die Seite ##PAGE## gelöscht.</value>
     <comment>##USER## deleted the page ##PAGE##.</comment>
   </data>
   <data name="UserEditedMessage" xml:space="preserve">
@@ -266,15 +266,15 @@
     <comment>##USER## posted a message on the discussion of ##PAGE##.</comment>
   </data>
   <data name="UserRenamedPage" xml:space="preserve">
-    <value>##USER## hat ##PAGE## umbenannt.</value>
+    <value>##USER## hat die Seite ##PAGE## umbenannt.</value>
     <comment>##USER## renamed the page ##PAGE##.</comment>
   </data>
   <data name="UserRolledBackPage" xml:space="preserve">
-    <value>##USER## hat ##PAGE## zurückgesetzt.</value>
+    <value>##USER## hat die Seite ##PAGE## zurückgesetzt.</value>
     <comment>##USER## rolled back the page ##PAGE##.</comment>
   </data>
   <data name="UserUpdatedPage" xml:space="preserve">
-    <value>##USER##  hat ##PAGE## aktualisiert.</value>
+    <value>##USER## hat die Seite ##PAGE## aktualisiert.</value>
     <comment>##USER## updated the page ##PAGE##.</comment>
   </data>
   <data name="CreateThisPage" xml:space="preserve">
@@ -302,7 +302,7 @@
     <comment>Preferences saved</comment>
   </data>
   <data name="GoToYourProfile" xml:space="preserve">
-    <value>Geh zum Profil</value>
+    <value>Zum Profil</value>
     <comment>Go to your Profile</comment>
   </data>
   <data name="Guest" xml:space="preserve">
@@ -318,7 +318,7 @@
     <comment>Namespace renamed</comment>
   </data>
   <data name="SelectTemplate" xml:space="preserve">
-    <value>Vorlage auswählen</value>
+    <value>Vorlage auswählen...</value>
     <comment>Select Template...</comment>
   </data>
   <data name="Action_Man_Snips_Temps" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>Could not delete template</comment>
   </data>
   <data name="CouldNotSaveTemplate" xml:space="preserve">
-    <value>Vorlage kann nicht gespeichert werden</value>
+    <value>Vorlage konnte nicht gespeichert werden</value>
     <comment>Could not save Template</comment>
   </data>
   <data name="Snippet" xml:space="preserve">
@@ -374,11 +374,11 @@
     <comment>Modified on</comment>
   </data>
   <data name="AMessageWasSentCheckInbox" xml:space="preserve">
-    <value>Eine Mitteilung wurde an Ihre Emailadresse gesendet, bitte überprüfen Sie ihre Mailbox.</value>
+    <value>Eine Mitteilung wurde an Ihre E-Mail-Adresse gesendet, bitte prüfen Sie Ihr E-Mail-Postfach.</value>
     <comment>A message was sent to your email address, please check your inbox.</comment>
   </data>
   <data name="NewPasswordSavedPleaseLogin" xml:space="preserve">
-    <value>Neues Passwort gespeichert, bitte erneut &lt;a href="Login.aspx" title="Login"&gt;Anmelden&lt;/a&gt;</value>
+    <value>Neues Passwort gespeichert, bitte erneut &lt;a href="Login.aspx" title="Login"&gt;anmelden&lt;/a&gt;</value>
     <comment>New password saved, please &lt;a href="Login.aspx" title="Login"&gt;Login&lt;/a&gt;</comment>
   </data>
   <data name="ResetPassword" xml:space="preserve">
@@ -406,7 +406,7 @@
     <comment>?? Discussion Updates</comment>
   </data>
   <data name="RecentDiscussionUpdates" xml:space="preserve">
-    <value>Diskussionen mit den neusten Einträgen</value>
+    <value>Kürzlich aktualisierte Diskussionen</value>
     <comment>Recent Discussion Updates</comment>
   </data>
   <data name="ApproveRejectDraft" xml:space="preserve">
@@ -430,19 +430,19 @@
     <comment>Manage Permissions</comment>
   </data>
   <data name="NotificationsStatusSaved" xml:space="preserve">
-    <value>Notifikationsstatus gespeichert</value>
+    <value>Benachrichtungseinstellungen gespeichert</value>
     <comment>Notification status saved</comment>
   </data>
   <data name="NoConfigurationRequired" xml:space="preserve">
-    <value>Für diesen Provider wird keine Konfiguration benötigt</value>
+    <value>Für diesen Provider ist keine Konfiguration erforderlich</value>
     <comment>No configuration is required for this provider</comment>
   </data>
   <data name="DataCopied" xml:space="preserve">
-    <value>Daten kopiert, bitte ändern Sie den aktiven Storage Provider in der web.config Datei.</value>
+    <value>Daten kopiert, bitte ändern Sie den aktiven Storage Provider in der Datei web.config.</value>
     <comment>Data copied, please change the active Settings Storage Provider in the web.config file</comment>
   </data>
   <data name="DataMigrated" xml:space="preserve">
-    <value>Daten migration abgeschlossen. Bitte starten Sie die Webapplikation neu</value>
+    <value>Datenmigration abgeschlossen. Bitte starten Sie die Webanwendung neu.</value>
     <comment>Data migrated, please recycle the web application</comment>
   </data>
   <data name="DllAlreadyExists" xml:space="preserve">
@@ -450,7 +450,7 @@
     <comment>DLL already exists</comment>
   </data>
   <data name="LoadedProviders" xml:space="preserve">
-    <value>Geladene ### Provider</value>
+    <value>### Provider geladen</value>
     <comment>Loaded ### Providers</comment>
   </data>
   <data name="VoidOrInvalidFile" xml:space="preserve">
@@ -470,7 +470,7 @@
     <comment>Default Providers saved</comment>
   </data>
   <data name="ProviderRejectedConfiguration" xml:space="preserve">
-    <value>Provider konfigurtion abgelehnt</value>
+    <value>Der Provider hat die Konfigurationsdaten abgelehnt</value>
     <comment>The Provider rejected the Configuration data</comment>
   </data>
   <data name="CouldNotCreateNavPath" xml:space="preserve">
@@ -482,7 +482,7 @@
     <comment>Could not delete Navigation Path</comment>
   </data>
   <data name="CouldNotSaveNavPath" xml:space="preserve">
-    <value>Navigationspfad kann nicht gespeichert werden</value>
+    <value>Navigationspfad konnte nicht gespeichert werden</value>
     <comment>Could not save Navigation Path</comment>
   </data>
   <data name="NavPathCreated" xml:space="preserve">
@@ -498,11 +498,11 @@
     <comment>none</comment>
   </data>
   <data name="ClickToEnableEmailNotifications" xml:space="preserve">
-    <value>Klicken um die Email-Notifikation für diese Seite zu aktivieren</value>
+    <value>E-Mail-Benachrichtungen für diese Seite aktivieren</value>
     <comment>Click to enable email notifications for this page</comment>
   </data>
   <data name="EmailNotificationsAreActive" xml:space="preserve">
-    <value>Emailbenachrichtigung ist aktiviert für diese Seite - klicken zum deaktivieren</value>
+    <value>E-Mail-Benachrichtung für diese Seite deaktivieren</value>
     <comment>Email notifications are active for this page - click to disable</comment>
   </data>
   <data name="CouldNotApproveDraft" xml:space="preserve">
@@ -526,7 +526,7 @@
     <comment>View changes</comment>
   </data>
   <data name="DiffingPageTitle" xml:space="preserve">
-    <value>Differenzen von &lt;i&gt;##PAGETITLE##&lt;/i&gt;, der Revisionen &lt;i&gt;##REV1##&lt;/i&gt; und &lt;i&gt;##REV2##&lt;/i&gt;</value>
+    <value>Unterschiede von &lt;i&gt;##PAGETITLE##&lt;/i&gt; zwischen Version &lt;i&gt;##REV1##&lt;/i&gt; und &lt;i&gt;##REV2##&lt;/i&gt;</value>
     <comment>Diffing &lt;i&gt;##PAGETITLE##&lt;/i&gt;, at revisions &lt;i&gt;##REV1##&lt;/i&gt; and &lt;i&gt;##REV2##&lt;/i&gt;</comment>
   </data>
   <data name="CouldNotCreateSnippet" xml:space="preserve">
@@ -538,7 +538,7 @@
     <comment>Could not delete Snippet</comment>
   </data>
   <data name="CouldNotSaveSnippet" xml:space="preserve">
-    <value>Snippet kann nicht gespeichert werden</value>
+    <value>Snippet konnte nicht gespeichert werden</value>
     <comment>Could not save Snippet</comment>
   </data>
   <data name="SnippetCreated" xml:space="preserve">
@@ -566,7 +566,7 @@
     <comment>Could not rename Category</comment>
   </data>
   <data name="CategoryAlreadyExists" xml:space="preserve">
-    <value>Kategorie ist schon vorhanden</value>
+    <value>Kategorie ist bereits vorhanden</value>
     <comment>Category already exists</comment>
   </data>
   <data name="CouldNotCreateCategory" xml:space="preserve">
@@ -586,11 +586,11 @@
     <comment>Rollback this Page to the previous version</comment>
   </data>
   <data name="Administrate" xml:space="preserve">
-    <value>administrieren</value>
+    <value>verwalten</value>
     <comment>Administrate</comment>
   </data>
   <data name="AdministrateThisPage" xml:space="preserve">
-    <value>Diese Seite administrieren</value>
+    <value>Diese Seite verwalten</value>
     <comment>Administrate this Page</comment>
   </data>
   <data name="Permissions" xml:space="preserve">
@@ -610,7 +610,7 @@
     <comment>Administration Tools</comment>
   </data>
   <data name="ViewPageHistory" xml:space="preserve">
-    <value>Bearbeitungshistroy der Seite anzeien</value>
+    <value>Bearbeitungsverlauf der Seite anzeigen</value>
     <comment>View Page edit history</comment>
   </data>
   <data name="Action_Man_Disc" xml:space="preserve">
@@ -634,7 +634,7 @@
     <comment>All Messages deleted</comment>
   </data>
   <data name="CouldNotDeleteOneOrMoreMessages" xml:space="preserve">
-    <value>eine oder mehrere Mitteilungen konnten nicht gelöscht werden</value>
+    <value>Eine oder mehrere Mitteilungen konnten nicht gelöscht werden</value>
     <comment>Could not delete one or more Messages</comment>
   </data>
   <data name="CouldNotDeletePageBackups" xml:space="preserve">
@@ -654,15 +654,15 @@
     <comment>Could not rename Page</comment>
   </data>
   <data name="PageRenamedCouldNotCreateShadowPage" xml:space="preserve">
-    <value>Seite umbenannt, erstellen der 'shadow-Page' fehlgeschlagen</value>
+    <value>Seite umbenannt, erstellen der Schattenseite fehlgeschlagen</value>
     <comment>Page renamed, but could not create shadow Page</comment>
   </data>
   <data name="PageRenamedCouldNotSetShadowPageContent" xml:space="preserve">
-    <value>Seite umbenannt, Inhalt der 'Shadow-Page' konnte nicht gesetzt werden</value>
+    <value>Seite umbenannt, Inhalt der Schattenseite konnte nicht gesetzt werden</value>
     <comment>Page renamed, but could not set the content for the shadow Page</comment>
   </data>
   <data name="GoToPageHistory" xml:space="preserve">
-    <value>Gehe zum Seitenverlauf</value>
+    <value>Gehe zum Bearbeitungsverlauf</value>
     <comment>Go to Page History</comment>
   </data>
   <data name="GoToPageDiscussion" xml:space="preserve">
@@ -670,7 +670,7 @@
     <comment>Go to Page Discussion</comment>
   </data>
   <data name="GoToPage" xml:space="preserve">
-    <value>Geh zur Seite</value>
+    <value>Gehe zur Seite</value>
     <comment>Go to Page</comment>
   </data>
   <data name="CouldNotDeletePermissions" xml:space="preserve">
@@ -678,71 +678,71 @@
     <comment>Could not delete permissions</comment>
   </data>
   <data name="GroupCreatedCouldNotStorePermissions" xml:space="preserve">
-    <value>Gruppe erstellt, speichern der Berechtigungen fehlgeschlagen!</value>
+    <value>Gruppe erstellt, Speichern der Berechtigungen fehlgeschlagen.</value>
     <comment>Group created, but could not store permissions</comment>
   </data>
   <data name="GroupSavedCouldNotDeleteOldPermissions" xml:space="preserve">
-    <value>Gruppe gespeichert, löschen der alten Berechtigungen fehlgeschlagen!</value>
+    <value>Gruppe gespeichert, Löschen der vorigen Berechtigungen fehlgeschlagen.</value>
     <comment>Group saved, but could not delete old permissions</comment>
   </data>
   <data name="GroupSavedCouldNotStoreNewPermissions" xml:space="preserve">
-    <value>Gruppe gespeichert, speichern der neuen Berechtigungen fehlgeschlagen!</value>
+    <value>Gruppe gespeichert, Speichern der neuen Berechtigungen fehlgeschlagen.</value>
     <comment>Group saved, but could not store new permissions</comment>
   </data>
   <data name="PermissionsDeletedCouldNotDeleteGroup" xml:space="preserve">
-    <value>Berechtigungen gelöscht, löschen der Gruppe fehlgeschlagen!</value>
+    <value>Berechtigungen gelöscht, Löschen der Gruppe fehlgeschlagen.</value>
     <comment>Permissions deleted, but could not delete Group</comment>
   </data>
   <data name="CouldNotSetNamespaceDefaultPage" xml:space="preserve">
-    <value>Die Standardseite für den Namensraum kann nicht gesetzt werden</value>
+    <value>Die Standardseite für den Namensraum konnte nicht gesetzt werden</value>
     <comment>Could not set the Default Page for the Namespace</comment>
   </data>
   <data name="CouldNotSetNamespaceTheme" xml:space="preserve">
-    <value>Das Design für den Namensraum kann nicht gesetzt werden</value>
+    <value>Das Theme für den Namensraum konnte nicht gesetzt werden</value>
     <comment>Could not set the Theme for the Namespace</comment>
   </data>
   <data name="NamespaceCreatedCouldNotCreateDefaultPage" xml:space="preserve">
-    <value>Namensraum erstellt, erstellen der Standardseite fehlgeschlagen!</value>
+    <value>Namensraum erstellt, Erstellen der Standardseite fehlgeschlagen.</value>
     <comment>Namespace created, but could not create the default Page</comment>
   </data>
   <data name="NamespaceCreatedCouldNotSetDefaultPage" xml:space="preserve">
-    <value>Namensraum erstellt, setzen der Stadardseite fehlgeschlagen!</value>
+    <value>Namensraum erstellt, Setzen der Standardseite fehlgeschlagen.</value>
     <comment>Namespace created, but could not set its default Page</comment>
   </data>
   <data name="NamespaceCreatedCouldNotSetTheme" xml:space="preserve">
-    <value>Namensraum gespeichert, setzen des Motivs fehlgeschlagen</value>
+    <value>Namensraum gespeichert, Setzen des Themes fehlgeschlagen.</value>
     <comment>Namespace saved, but could not set its Theme</comment>
   </data>
   <data name="NamespaceCreatedCouldNotStoreDefaultPageContent" xml:space="preserve">
-    <value>Namensraum erstellt, speichern des Inhalts der Stadartseite fehlgeschlagen!</value>
+    <value>Namensraum erstellt, Speichern des Inhalts der Standardseite fehlgeschlagen.</value>
     <comment>Namespace created, but could not store the default Page content</comment>
   </data>
   <data name="UserCreatedCouldNotStoreGroupMembership" xml:space="preserve">
-    <value>Benutzer erstellt, speichern der Gruppenzugehörigkeit fehlgeschlagen!</value>
+    <value>Benutzer erstellt, Speichern der Gruppenzugehörigkeit fehlgeschlagen.</value>
     <comment>User created, but could not store Group membership</comment>
   </data>
   <data name="UserCreatedCouldNotStorePermissions" xml:space="preserve">
-    <value>Benutzer erstellt, speichern der Berechtigungen fehlgeschlagen!</value>
+    <value>Benutzer erstellt, Speichern der Berechtigungen fehlgeschlagen.</value>
     <comment>User created, but could not store Permissions</comment>
   </data>
   <data name="UserUpdatedCouldNotDeleteOldPermissions" xml:space="preserve">
-    <value>Der Benutzer hat Berechtigungen geändert, löschen der alten fehlgeschlagen!</value>
+    <value>Der Benutzer hat Berechtigungen geändert, Löschen der vorigen Berechtigungen fehlgeschlagen.</value>
     <comment>User updated, but could not delete old Permissions</comment>
   </data>
   <data name="UserUpdatedCouldNotStoreGroupMembership" xml:space="preserve">
-    <value>Der Benutzer hat die Gruppenzugehörigkeit geändert, speichern ist fehlgeschlagen!</value>
+    <value>Der Benutzer hat die Gruppenzugehörigkeit geändert, Speichern ist fehlgeschlagen.</value>
     <comment>User updated, but could not store Group membership</comment>
   </data>
   <data name="UserUpdatedCouldNotStoreNewPermissions" xml:space="preserve">
-    <value>Der Benutzer hat die Berechtigungen geändert, speichern ist fehlgeschlagen!</value>
+    <value>Der Benutzer hat die Berechtigungen geändert, Speichern ist fehlgeschlagen.</value>
     <comment>User updated, but could not store new Permissions</comment>
   </data>
   <data name="PermissionsAndGroupMembershipDeletedCouldNotDeleteUser" xml:space="preserve">
-    <value>Berechtigungen und Guppenzugehörigkeit gelöscht, löschen des Benutzers fehlgeschlagen!</value>
+    <value>Berechtigungen und Guppenzugehörigkeit gelöscht, Löschen des Benutzers fehlgeschlagen.</value>
     <comment>Permissions and Group membership deleted, but could not delete User</comment>
   </data>
   <data name="PermissionsDeletedCouldNotDeleteUser" xml:space="preserve">
-    <value>Berechtigungen gelöscht, löschen des Benutzer fehlgeschlagen!</value>
+    <value>Berechtigungen gelöscht, Löschen des Benutzer fehlgeschlagen.</value>
     <comment>Permissions deleted, but could not delete User</comment>
   </data>
   <data name="CouldNotDeleteNamespace" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>Namespace saved</comment>
   </data>
   <data name="CouldNotStorePermissions" xml:space="preserve">
-    <value>Die Berechtigungen können nicht gespeichert werden</value>
+    <value>Berechtigungen konnten nicht gespeichert werden</value>
     <comment>Could not store permissions</comment>
   </data>
   <data name="Group" xml:space="preserve">
@@ -821,7 +821,7 @@
     <comment>Manage Categories</comment>
   </data>
   <data name="Action_Man_1Pg" xml:space="preserve">
-    <value>Seite Verwalten</value>
+    <value>Seite verwalten</value>
     <comment>Manage Page</comment>
   </data>
   <data name="Action_Man_Acc" xml:space="preserve">
@@ -901,7 +901,7 @@
     <comment>Could not create Group</comment>
   </data>
   <data name="CouldNotUpdateGroup" xml:space="preserve">
-    <value>Konnte Gruppe nicht aktualisieren</value>
+    <value>Gruppe konnte nicht aktualisiert werden</value>
     <comment>Could not update group</comment>
   </data>
   <data name="GroupCreated" xml:space="preserve">
@@ -917,15 +917,15 @@
     <comment>Group updated</comment>
   </data>
   <data name="CouldNotSaveFile" xml:space="preserve">
-    <value>Datei kann nicht gespeichert werden</value>
+    <value>Datei konnte nicht gespeichert werden</value>
     <comment>Could not save file</comment>
   </data>
   <data name="NoSimilarPages" xml:space="preserve">
-    <value>Keine Seiten mit ähnlichem Namen oder Titel gefunden</value>
+    <value>Keine Seiten mit ähnlichem Namen oder Titel gefunden.</value>
     <comment>There are no Pages with similar name or title.</comment>
   </data>
   <data name="SearchStats" xml:space="preserve">
-    <value>Die Suche, durch &lt;b&gt;{0}&lt;/b&gt; (&lt;b&gt;{1} Dokument(e) &lt;/b&gt; und &lt;b&gt;{2} Wörter&lt;/b&gt;), hat &lt;b&gt;{3:N1} Sekunden &lt;/b&gt; gedauert und hat folgende &lt;b&gt;{4} Ergebnisse&lt;/b&gt; zurückgegeben.</value>
+    <value>Die Suche über &lt;b&gt;{0}&lt;/b&gt; (&lt;b&gt;{1} Dokument(e) &lt;/b&gt; und &lt;b&gt;{2} Wörter&lt;/b&gt;) hat &lt;b&gt;{3:N1} Sekunden &lt;/b&gt; gedauert und folgende &lt;b&gt;{4} Ergebnisse&lt;/b&gt;.</value>
     <comment>This search, performed through &lt;b&gt;{0}&lt;/b&gt; (&lt;b&gt;{1} documents&lt;/b&gt;, &lt;b&gt;{2} words&lt;/b&gt;), completed in &lt;b&gt;{3:N1} seconds&lt;/b&gt; and yielded &lt;b&gt;{4} results&lt;/b&gt;.</comment>
   </data>
   <data name="InvalidDisplayName" xml:space="preserve">
@@ -937,7 +937,7 @@
     <comment>Could not create User</comment>
   </data>
   <data name="CouldNotUpdateUser" xml:space="preserve">
-    <value>Konnte Benutzer nicht aktualisieren</value>
+    <value>Benutzer konte nicht aktualisiert werden</value>
     <comment>Could not update User</comment>
   </data>
   <data name="UserCreated" xml:space="preserve">
@@ -957,7 +957,7 @@
     <comment>Could not create Namespace</comment>
   </data>
   <data name="InvalidNamespaceName" xml:space="preserve">
-    <value>Ungültiger Namensraum Bezeichnung</value>
+    <value>Ungültige Namensraumbezeichnung</value>
     <comment>Invalid Namespace name</comment>
   </data>
   <data name="NamespaceCreated" xml:space="preserve">
@@ -965,7 +965,7 @@
     <comment>Namespace created</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Schliessen</value>
+    <value>Schließen</value>
     <comment>Close</comment>
   </data>
   <data name="Attachments" xml:space="preserve">
@@ -973,7 +973,7 @@
     <comment>Attachments</comment>
   </data>
   <data name="ThereAreAttachments" xml:space="preserve">
-    <value>Diese Seite hat angehängte Dateien</value>
+    <value>Diese Seite besitzt Anhänge</value>
     <comment>There are files attached to this page</comment>
   </data>
   <data name="NoSnippets" xml:space="preserve">
@@ -981,7 +981,7 @@
     <comment>No Snippets</comment>
   </data>
   <data name="LinkTitleOptional" xml:space="preserve">
-    <value>Link Titel (freiwillig)</value>
+    <value>Link-Titel (optional)</value>
     <comment>Link Title (optional)</comment>
   </data>
   <data name="UpLevel" xml:space="preserve">
@@ -989,11 +989,11 @@
     <comment>Up one level</comment>
   </data>
   <data name="CannotRenameItem" xml:space="preserve">
-    <value>Das selektierte Onjekt kann nicht umbenannt werden</value>
+    <value>Das ausgewählte Objekt konnte nicht umbenannt werden</value>
     <comment>Cannot rename the selected item</comment>
   </data>
   <data name="CannotStoreFile" xml:space="preserve">
-    <value>Datei kann nicht gespeichert werden</value>
+    <value>Datei konnte nicht gespeichert werden</value>
     <comment>Cannot store the file</comment>
   </data>
   <data name="CannotCreateNewDirectory" xml:space="preserve">
@@ -1001,23 +1001,23 @@
     <comment>Cannot create new directory</comment>
   </data>
   <data name="DiffColorKey" xml:space="preserve">
-    <value>Farbschlüssel: &lt;span style="background-color: #88CC33;"&gt;hinzugefügter Text&lt;/span&gt; / &lt;span style="background-color: #FFDF66;"&gt;gelöschter Text&lt;/span&gt;.</value>
+    <value>Legende: &lt;span style="background-color: #88CC33;"&gt;hinzugefügter Text&lt;/span&gt; / &lt;span style="background-color: #FFDF66;"&gt;gelöschter Text&lt;/span&gt;.</value>
     <comment>Color key: &lt;span style="background-color: #88CC33;"&gt;added text&lt;/span&gt; / &lt;span style="background-color: #FFDF66;"&gt;removed text&lt;/span&gt;.</comment>
   </data>
   <data name="EarlierThisMonth" xml:space="preserve">
-    <value>diesen Monat</value>
+    <value>Diesen Monat</value>
     <comment>Earlier this month</comment>
   </data>
   <data name="EarlierThisWeek" xml:space="preserve">
-    <value>diese Woche</value>
+    <value>Diese Woche</value>
     <comment>Earlier this week</comment>
   </data>
   <data name="LastMonth" xml:space="preserve">
-    <value>letzten Monat</value>
+    <value>Letzten Monat</value>
     <comment>Last month</comment>
   </data>
   <data name="Older" xml:space="preserve">
-    <value>älter</value>
+    <value>Älter</value>
     <comment>Older</comment>
   </data>
   <data name="Today" xml:space="preserve">
@@ -1029,7 +1029,7 @@
     <comment>Yesterday</comment>
   </data>
   <data name="LoginNoticeFile" xml:space="preserve">
-    <value>Datei für Anmeldenotitz</value>
+    <value>Datei für Anmeldehinweis</value>
     <comment>Login Notice File</comment>
   </data>
   <data name="MayBeInaccurate" xml:space="preserve">
@@ -1041,35 +1041,35 @@
     <comment>Redirected from</comment>
   </data>
   <data name="ThisPageRedirectsTo" xml:space="preserve">
-    <value>Dieser Eintrag verweist auf</value>
+    <value>Diese Seite verweist auf</value>
     <comment>This Page redirects to</comment>
   </data>
   <data name="PageFooterFile" xml:space="preserve">
-    <value>SeitenFuss Datei</value>
+    <value>Seitenfuß-Datei</value>
     <comment>Page Footer File</comment>
   </data>
   <data name="PageHeaderFile" xml:space="preserve">
-    <value>SeitenKopf Datei</value>
+    <value>Seitenkopf-Datei</value>
     <comment>Page Header File</comment>
   </data>
   <data name="EnterTitleAndUrl" xml:space="preserve">
-    <value>Bitte geben Sie den Titel und die URL an.</value>
+    <value>Bitte geben Sie den Titel und den URL an.</value>
     <comment>You must enter both the Title and the URL.</comment>
   </data>
   <data name="HideBreadcrumbsTrail" xml:space="preserve">
-    <value>Hier klicken um die Brotkrümelnavigation abzuschalten</value>
+    <value>Brotkrümelnavigation ausblenden</value>
     <comment>Click here to hide the Breadcrumbs Trail</comment>
   </data>
   <data name="ViewBreadcrumbsTrail" xml:space="preserve">
-    <value>Hier klicken um die Brotkrümelnavigation komplett darzustellen</value>
+    <value>Brotkrümelnavigation vollständig anzeigen</value>
     <comment>Click here to view the complete Breadcrumbs Trail</comment>
   </data>
   <data name="ServerUptime" xml:space="preserve">
-    <value>Server Betriebszeit</value>
+    <value>Server-Betriebszeit</value>
     <comment>Server Uptime</comment>
   </data>
   <data name="FullView" xml:space="preserve">
-    <value>Komplette Ansicht (öffnet in seperatem Fenster)</value>
+    <value>Komplette Ansicht in seperatem Fenster öffnen</value>
     <comment>Full View (new Window)</comment>
   </data>
   <data name="Preview" xml:space="preserve">
@@ -1077,19 +1077,19 @@
     <comment>Preview</comment>
   </data>
   <data name="FileLink" xml:space="preserve">
-    <value>Link auf eine lokale Datei</value>
+    <value>Verknüpfung zu einer lokalen Datei</value>
     <comment>Link a local File</comment>
   </data>
   <data name="InvalidMaxLogSize" xml:space="preserve">
-    <value>Ungültige maximale Protokollgröße: der Wert muß ziwschen 8 und 10,240 KB liegen</value>
+    <value>Ungültige maximale Protokollgröße: der Wert muss zwischen 8 und 10.240 KB liegen</value>
     <comment>Invalid Max Log size: it must be greater than 8 and smaller than 10,240 KB</comment>
   </data>
   <data name="RssForThisCategory" xml:space="preserve">
-    <value>Änderungsbenachrichtigungen für diese Kategorie (RSS 2.0)</value>
+    <value>Änderungen in dieser Kategorie (RSS 2.0)</value>
     <comment>Update notifications for this Category (RSS 2.0)</comment>
   </data>
   <data name="PageSaved" xml:space="preserve">
-    <value>Die Seite wurde gespeichert</value>
+    <value>Seite gespeichert</value>
     <comment>Page saved</comment>
   </data>
   <data name="UserAccountSaved" xml:space="preserve">
@@ -1097,7 +1097,7 @@
     <comment>User Account saved</comment>
   </data>
   <data name="ConfigurationString" xml:space="preserve">
-    <value>Konfigurationstext</value>
+    <value>Konfigurationsdaten</value>
     <comment>Configuration String</comment>
   </data>
   <data name="LocatedIn" xml:space="preserve">
@@ -1109,7 +1109,7 @@
     <comment>Insert a Snippet</comment>
   </data>
   <data name="PageDoesNotExistInProvider" xml:space="preserve">
-    <value>Die Seite ##PAGENAME## existiert im aktuellen Provider nicht</value>
+    <value>Die Seite ##PAGENAME## existiert nicht im aktuellen Provider</value>
     <comment>The Page ##PAGENAME## does not exist in the current Provider</comment>
   </data>
   <data name="Or" xml:space="preserve">
@@ -1125,11 +1125,11 @@
     <comment>Configuration Wizard</comment>
   </data>
   <data name="ExternalLink" xml:space="preserve">
-    <value>Externer Link</value>
+    <value>Externe Verknüpfung</value>
     <comment>External Link</comment>
   </data>
   <data name="PageLink" xml:space="preserve">
-    <value>Link auf eine Seite</value>
+    <value>Verknüpfung zu einer Seite</value>
     <comment>Link a Page</comment>
   </data>
   <data name="ThePageHasBeenDeletedBy" xml:space="preserve">
@@ -1153,7 +1153,7 @@
     <comment>Discussion for</comment>
   </data>
   <data name="RssForThisDiscussion" xml:space="preserve">
-    <value>Änderungsbenachrichtigungen für diese Diskussion (RSS 2.0)</value>
+    <value>Änderungen dieser Diskussion (RSS 2.0)</value>
     <comment>Update notifications for this Discussion (RSS 2.0)</comment>
   </data>
   <data name="CannotUnloadDefaultProvider" xml:space="preserve">
@@ -1177,11 +1177,11 @@
     <comment>Access Denied</comment>
   </data>
   <data name="AdminTitle" xml:space="preserve">
-    <value>Administration</value>
+    <value>Verwaltung</value>
     <comment>Administration</comment>
   </data>
   <data name="AllPagesTitle" xml:space="preserve">
-    <value>Wiki Index</value>
+    <value>Wiki-Index</value>
     <comment>Wiki Index</comment>
   </data>
   <data name="CategoryTitle" xml:space="preserve">
@@ -1201,7 +1201,7 @@
     <comment>Error</comment>
   </data>
   <data name="HistoryTitle" xml:space="preserve">
-    <value>Eintragsverlauf</value>
+    <value>Bearbeitungsverlauf</value>
     <comment>Page History</comment>
   </data>
   <data name="LoginTitle" xml:space="preserve">
@@ -1237,7 +1237,7 @@
     <comment>Create Account</comment>
   </data>
   <data name="SearchTitle" xml:space="preserve">
-    <value>Suchmaschine</value>
+    <value>Suche</value>
     <comment>Search Engine</comment>
   </data>
   <data name="UploadTitle" xml:space="preserve">
@@ -1245,15 +1245,15 @@
     <comment>File Management</comment>
   </data>
   <data name="MassEmailSent" xml:space="preserve">
-    <value>Massen-Email gesendet (Übertragung kann etwas dauern)</value>
+    <value>Massen-E-Mail gesendet. Die Übertragung kann etwas dauern.</value>
     <comment>Mass Email sent (delivering could require a while)</comment>
   </data>
   <data name="InvalidPort" xml:space="preserve">
-    <value>Ungültiger Port (der Wert muß zwischen 1 und 65535 liegen)</value>
+    <value>Ungültiger Port. Wert muss zwischen 1 und 65535 liegen</value>
     <comment>Invalid Port (must be between 1 and 65535)</comment>
   </data>
   <data name="UsernameIsRequired" xml:space="preserve">
-    <value>Der Benutzername fü den SMTP Zugang wird benötigt wenn ein Passwort hinterlegt ist.</value>
+    <value>Der Benutzername für den SMTP-Server wird benötigt wenn ein Passwort hinterlegt ist.</value>
     <comment>SMTP Username is required if you specify a Password</comment>
   </data>
   <data name="Reply" xml:space="preserve">
@@ -1277,7 +1277,7 @@
     <comment>Discuss</comment>
   </data>
   <data name="NoMessages" xml:space="preserve">
-    <value>Keine Mitteilung zu dieser Seite... Sei der Erste!</value>
+    <value>Keine Mitteilung zu dieser Seite. Sei der Erste!</value>
     <comment>No Messages for this Page. Be the first!</comment>
   </data>
   <data name="SubjectAndBodyNeeded" xml:space="preserve">
@@ -1325,11 +1325,11 @@
     <comment>Disabled</comment>
   </data>
   <data name="InactiveUsers" xml:space="preserve">
-    <value>Inaktiv</value>
+    <value>deaktiviert</value>
     <comment>Referred to the count of inactive users, for example Users: 8 (3 inactive)</comment>
   </data>
   <data name="ProviderConfigurationSaved" xml:space="preserve">
-    <value>Provider Konfigurationsdaten gespeichert</value>
+    <value>Provider-Konfigurationsdaten gespeichert</value>
     <comment>Provider Configuration data saved</comment>
   </data>
   <data name="ProviderNotFound" xml:space="preserve">
@@ -1341,23 +1341,23 @@
     <comment>The Page has been updated by</comment>
   </data>
   <data name="CouldRequireLogin" xml:space="preserve">
-    <value>könnten eine Anmeldung erfordern</value>
+    <value>könnte eine Anmeldung erfordern</value>
     <comment>could require login</comment>
   </data>
   <data name="RequiredField" xml:space="preserve">
-    <value>Ein benötigtes Feld wurde nicht gefüllt</value>
+    <value>Ein erforderliches Feld wurde nicht ausgefüllt</value>
     <comment>Missing required field</comment>
   </data>
   <data name="ActivationAdmin" xml:space="preserve">
-    <value>Ihr Benutzerkonto muß erst durch einen Administrator aktiviiert werden bevor Sie sich anmleden können.</value>
+    <value>Nachdem Ihr Benutzerkonto durch einen Administrator bestätigt wurde, können Sie sich anmelden.</value>
     <comment>Your Account will need to be approved by an Administrator before you can login.</comment>
   </data>
   <data name="ActivationAuto" xml:space="preserve">
-    <value>Ihr Benutzerkonto wird direkt nach der Registirierung aktiviert.</value>
+    <value>Ihr Benutzerkonto wird direkt nach der Registrierung aktiviert.</value>
     <comment>Your Account will be active right afer the registration.</comment>
   </data>
   <data name="ActivationEmail" xml:space="preserve">
-    <value>Sie müssen Ihr Benutzerkonto binnen 24 Stunden aktivieren. Folgen Sie dazu den Anweisungen die an Ihre Mail-Adresse gesandt wird.</value>
+    <value>Sie müssen Ihr Benutzerkonto binnen 24 Stunden aktivieren. Folgen Sie dazu den Anweisungen die an Ihre E-Mail-Adresse gesendet wird.</value>
     <comment>You must activate your Account within 24 hours, following the instructions that you'll receive via Email.</comment>
   </data>
   <data name="Print" xml:space="preserve">
@@ -1365,7 +1365,7 @@
     <comment>Print</comment>
   </data>
   <data name="PrinterFriendlyVersion" xml:space="preserve">
-    <value>Version zum Drucken</value>
+    <value>Druckversion</value>
     <comment>Printer friendly version</comment>
   </data>
   <data name="InvalidFileType" xml:space="preserve">
@@ -1385,7 +1385,7 @@
     <comment>Pages of the Category</comment>
   </data>
   <data name="InvalidNavPath" xml:space="preserve">
-    <value>Ungültiger Navigationspfad: mindestens zwei Einträge müssen angegeben werden</value>
+    <value>Ungültiger Navigationspfad: Mindestens zwei Seiten müssen angegeben werden</value>
     <comment>Invalid Navigation Path: at least 2 Pages must be specified</comment>
   </data>
   <data name="InvalidNavPathName" xml:space="preserve">
@@ -1413,11 +1413,11 @@
     <comment>Previous Page</comment>
   </data>
   <data name="NC" xml:space="preserve">
-    <value>k.K.</value>
+    <value>(keine)</value>
     <comment>It means 'not categorized' n/c</comment>
   </data>
   <data name="InvalidBackupNumber" xml:space="preserve">
-    <value>Ungültige Zahl: die Eingabe muß größer oder gleich Null sein (leer lassen deaktiviert das automatische löschen von Backups) </value>
+    <value>Ungültige Zahl: die Eingabe muss größer oder gleich 0 sein. Keine Eingabe deaktiviert das automatische Löschen von Backups.</value>
     <comment>Invalid number: it must be greater or equal to zero (leave blank to disable automatic Backup deletion)</comment>
   </data>
   <data name="Forbidden" xml:space="preserve">
@@ -1461,11 +1461,11 @@
     <comment>Escape</comment>
   </data>
   <data name="FileManagement" xml:space="preserve">
-    <value>Dateiverwaltung (öffnet in seperatem Fenster)</value>
+    <value>Dateiverwaltung in seperatem Fenster öffnen</value>
     <comment>File Management (new window)</comment>
   </data>
   <data name="HtmlHeadFile" xml:space="preserve">
-    <value>HTML Kopf Datei</value>
+    <value>HTML-Kopf-Datei</value>
     <comment>HTML Head File</comment>
   </data>
   <data name="InvalidCategoryName" xml:space="preserve">
@@ -1477,15 +1477,15 @@
     <comment>Invalid Snippet Name</comment>
   </data>
   <data name="NoPagesInThisCategory" xml:space="preserve">
-    <value>In dieser Kategorie gibt es noch keine Einträge</value>
+    <value>In dieser Kategorie gibt es keine Seiten</value>
     <comment>No Pages were found in this Category</comment>
   </data>
   <data name="PerformASearch" xml:space="preserve">
-    <value>Suche durchführen</value>
+    <value>Suchen</value>
     <comment>perform a search</comment>
   </data>
   <data name="Revision" xml:space="preserve">
-    <value>Revision</value>
+    <value>Version</value>
     <comment>Revision</comment>
   </data>
   <data name="SnippetAlreadyExists" xml:space="preserve">
@@ -1493,7 +1493,7 @@
     <comment>Snippet already exists</comment>
   </data>
   <data name="SnippetDeleted" xml:space="preserve">
-    <value>Snippet wurde gelöscht </value>
+    <value>Snippet wurde gelöscht</value>
     <comment>Snipped deleted</comment>
   </data>
   <data name="SnippetNotFound" xml:space="preserve">
@@ -1509,7 +1509,7 @@
     <comment>Uncategorized</comment>
   </data>
   <data name="UncategorizedPages" xml:space="preserve">
-    <value>Nicht kategorisierte Einträge</value>
+    <value>Nicht kategorisierte Seiten</value>
     <comment>Uncategorized Pages</comment>
   </data>
   <data name="ViewPageCode" xml:space="preserve">
@@ -1529,7 +1529,7 @@
     <comment>Your Account has been successfully activated. Please login.</comment>
   </data>
   <data name="AccountActivation" xml:space="preserve">
-    <value>Benutzerkonto Aktivierung</value>
+    <value>Benutzerkonto-Aktivierung</value>
     <comment>Account Activation</comment>
   </data>
   <data name="AccountActivationMessageFile" xml:space="preserve">
@@ -1541,7 +1541,7 @@
     <comment>Account is already active</comment>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Ihr Benutzerkonto wurde erfolgreich erstellt.</value>
+    <value>Das Benutzerkonto wurde erfolgreich erstellt.</value>
     <comment>Account created successfully</comment>
   </data>
   <data name="AccountNotActivated" xml:space="preserve">
@@ -1561,15 +1561,15 @@
     <comment>Anchor</comment>
   </data>
   <data name="AnchorId" xml:space="preserve">
-    <value>Sprungmarken ID</value>
+    <value>Sprungmarken-ID</value>
     <comment>Anchor ID</comment>
   </data>
   <data name="AnchorLink" xml:space="preserve">
-    <value>Sprungmarken Link</value>
+    <value>Verknüpfung auf Sprungmarke</value>
     <comment>Anchor Link</comment>
   </data>
   <data name="AnchorTitle" xml:space="preserve">
-    <value>Sprungmarken Bezeichnung</value>
+    <value>Sprungmarken-Bezeichnung</value>
     <comment>Anchor Title</comment>
   </data>
   <data name="Auto" xml:space="preserve">
@@ -1577,7 +1577,7 @@
     <comment>Auto</comment>
   </data>
   <data name="BackToHistory" xml:space="preserve">
-    <value>Zurück zu der Seitenverlauf</value>
+    <value>Zurück zum Bearbeitungsverlauf</value>
     <comment>Back to Page History</comment>
   </data>
   <data name="Bigger" xml:space="preserve">
@@ -1589,7 +1589,7 @@
     <comment>Bold</comment>
   </data>
   <data name="Box" xml:space="preserve">
-    <value>Box</value>
+    <value>Rahmen</value>
     <comment>Box</comment>
   </data>
   <data name="By" xml:space="preserve">
@@ -1601,7 +1601,7 @@
     <comment>Cached Pages</comment>
   </data>
   <data name="CodeBlock" xml:space="preserve">
-    <value>Block Code</value>
+    <value>Code-Block</value>
     <comment>?? Block Code</comment>
   </data>
   <data name="CodeInline" xml:space="preserve">
@@ -1621,7 +1621,7 @@
     <comment>Are you sure you want to proceed?</comment>
   </data>
   <data name="CreateNewPage" xml:space="preserve">
-    <value>Neuer Eintrag</value>
+    <value>Neue Seite erstellen</value>
     <comment>Create a new Page</comment>
   </data>
   <data name="CreatePage" xml:space="preserve">
@@ -1641,7 +1641,7 @@
     <comment>Delete</comment>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Herunterladen</value>
     <comment>Download</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -1653,7 +1653,7 @@
     <comment>Editing File</comment>
   </data>
   <data name="EditNoticeFile" xml:space="preserve">
-    <value>Hinweis beim Editieren einer Seite</value>
+    <value>Hinweis beim Bearbeiten einer Seite</value>
     <comment>Edit Notice File</comment>
   </data>
   <data name="EditPage" xml:space="preserve">
@@ -1665,11 +1665,11 @@
     <comment>Edit this Page</comment>
   </data>
   <data name="EmailSaved" xml:space="preserve">
-    <value>Emailadresse wurde gespeichert</value>
+    <value>E-Mail-Adresse wurde gespeichert</value>
     <comment>Email address saved</comment>
   </data>
   <data name="EmailsNotEqual" xml:space="preserve">
-    <value>Die Emailadressen stimmen nicht überein</value>
+    <value>Die E-Mail-Adressen stimmen nicht überein</value>
     <comment>Emails are not equal</comment>
   </data>
   <data name="ErrorDeletingFile" xml:space="preserve">
@@ -1697,7 +1697,7 @@
     <comment>The File is too big</comment>
   </data>
   <data name="FileVoid" xml:space="preserve">
-    <value>Der Dateiname ist unzulässig</value>
+    <value>Der Dateiname ist ungültig</value>
     <comment>The Filename is void</comment>
   </data>
   <data name="FooterFile" xml:space="preserve">
@@ -1717,7 +1717,7 @@
     <comment>H3</comment>
   </data>
   <data name="H4" xml:space="preserve">
-    <value>H4 (sparsam verwenden)</value>
+    <value>H4</value>
     <comment>H4 (use sparingly)</comment>
   </data>
   <data name="HeaderFile" xml:space="preserve">
@@ -1745,7 +1745,7 @@
     <comment>Image - Align Auto</comment>
   </data>
   <data name="ImageBigUrl" xml:space="preserve">
-    <value>URL zu einer größeren Version des Bildes/Link URL (optional)</value>
+    <value>URL zu einer größeren Version des Bildes (optional)</value>
     <comment>Big Image URL (optional)</comment>
   </data>
   <data name="ImageInline" xml:space="preserve">
@@ -1769,47 +1769,47 @@
     <comment>Image URL</comment>
   </data>
   <data name="InvalidCacheCutSize" xml:space="preserve">
-    <value>Ungültige maximale Cache Größe: Der Wert muß eine ganze Zahl (ohne Nachkommastellen) größer als 0 sein und kleiner als die Cache Größe</value>
+    <value>Ungültige maximale Cache Cut-Größe: Der Wert muss eine ganze Zahl (ohne Nachkommastellen), größer als 0 und kleiner als die Cache-Größe sein</value>
     <comment>Invalid Cache Cut size: it must be an integer greater than 0 and smaller than Cache size</comment>
   </data>
   <data name="InvalidCacheSize" xml:space="preserve">
-    <value>Ungültige Cachegröße: Der Wert muß eine ganze Zahl (ohne Nachkommastellen) größer als 0 sein</value>
+    <value>Ungültige Cache-Größe: Der Wert muss eine ganze Zahl (ohne Nachkommastellen) und größer als 0 sein</value>
     <comment>Invalid Cache size: it must be an integer greater than 0</comment>
   </data>
   <data name="InvalidContactEmail" xml:space="preserve">
-    <value>Ungültige Kontakt Email</value>
+    <value>Ungültige Kontakt E-Mail-Adresse</value>
     <comment>Invalid Contact Email</comment>
   </data>
   <data name="InvalidDateTimeFormat" xml:space="preserve">
-    <value>Ungültiges Datumsformat, bitte geben Sie ein gültiges .NET Format ein</value>
+    <value>Ungültiges Datumsformat, bitte geben Sie ein gültiges .NET-Format ein</value>
     <comment>Invalid Date/Time format: it must be a valid .NET pattern</comment>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Ungültige Emailadresse</value>
+    <value>Ungültige E-Mail-Adresse</value>
     <comment>Invalid Email address</comment>
   </data>
   <data name="InvalidFileAccessTries" xml:space="preserve">
-    <value>Ungültige Anzahl Versuche Dateien zu öffnen: Der Wert muß eine ganze Zahl (ohne Nachkommastellen) größer als 0 sein</value>
+    <value>Ungültige Anzahl für Versuche zum Öffnen von Dateien: Der Wert muss eine ganze Zahl (ohne Nachkommastellen) und größer als 0 sein</value>
     <comment>Invalid File Access tries: it must be an integer greater than 0</comment>
   </data>
   <data name="InvalidFileAccessTryDelay" xml:space="preserve">
-    <value>Ungültige Wartezeit zwischen den Versuchen: Der Wert muß eine ganze Zahl (ohne Nachkommastellen) größer als 0 sein</value>
+    <value>Ungültige Wartezeit zwischen den Versuchen: Der Wert muss eine ganze Zahl (ohne Nachkommastellen) und größer als 0 sein</value>
     <comment>Invalid File Access try Delay: it must be an integer greater than 0</comment>
   </data>
   <data name="InvalidMainUrl" xml:space="preserve">
-    <value>Ungültige Hauptadresse: die Eingabe muß eine komplette URL sund unf mit einem Schrägstich (  / ) enden.</value>
+    <value>Ungültige Hauptadresse: Die Eingabe muß eine vollständige URL sein und mit einem Schrägstich (/) enden.</value>
     <comment>Invalid Main URL: it must be a complete URL and end with a slash</comment>
   </data>
   <data name="InvalidMaxFileSize" xml:space="preserve">
-    <value>Ungültige maximale Größe für hochladbare Dateien: Der Wert muß eine ganze Zahl (ohne Nachkommastellen) zwischen 1 und 20480 sein</value>
+    <value>Ungültige maximale Größe für hochladbare Dateien: Der Wert muss eine ganze Zahl (ohne Nachkommastellen) sein und zwischen 1 und 20.480 liegen</value>
     <comment>Invalid Max file size: it must be greater than zero and smaller than 20480 KB</comment>
   </data>
   <data name="InvalidPageName" xml:space="preserve">
-    <value>Ugültiger Seitenname</value>
+    <value>Ungültiger Seitenname</value>
     <comment>Invalid Page Name</comment>
   </data>
   <data name="InvalidPageTitle" xml:space="preserve">
-    <value>Ugültiger Titel für die Seite</value>
+    <value>Ungültiger Seitentitel</value>
     <comment>Invalid Page Title</comment>
   </data>
   <data name="InvalidPassword" xml:space="preserve">
@@ -1817,19 +1817,19 @@
     <comment>Invalid Password</comment>
   </data>
   <data name="InvalidSenderEmail" xml:space="preserve">
-    <value>Ungültige Absender Emailadresse</value>
+    <value>Ungültige Absender-E-Mail-Adresse</value>
     <comment>Invalid Sender Email</comment>
   </data>
   <data name="InvalidSmtpServer" xml:space="preserve">
-    <value>Ungültiger SMTP Server</value>
+    <value>Ungültiger SMTP-Server</value>
     <comment>Invalid SMTP Server</comment>
   </data>
   <data name="InvalidUsername" xml:space="preserve">
-    <value>Ungültiger Benutzername: Ein Benutzername muss aus mindestens 4 Zeichen bestehen. Die Eingabe von Buchstaben, Zahlen, Leerezeichen und Punkt ist zulässig. Die Bezeichnungen 'admin' oder 'guest' dürfen nicht verwendet werden.</value>
+    <value>Ungültiger Benutzername: Ein Benutzername muss aus mindestens 4 Zeichen bestehen. Die Eingabe von Buchstaben, Zahlen, Leerzeichen und Punkt ist zulässig. Die Bezeichnungen 'admin' oder 'guest' dürfen nicht verwendet werden.</value>
     <comment>Invalid Username: it must be long at least 4 characters, and not contain the word 'admin' nor 'guest', and use letters, numbers, space and dot.</comment>
   </data>
   <data name="InvalidWikiTitle" xml:space="preserve">
-    <value>Ungültiger Wikititel: Der Name darf keinen Absatz oder Zeichnvorschub enthalten.</value>
+    <value>Ungültiger Wiki-Titel: Der Name darf keinen Absatz oder Zeilenvorschub enthalten.</value>
     <comment>Invalid Wiki Title: it cannot be empty and cannot include carriage return nor line feed characters</comment>
   </data>
   <data name="Italic" xml:space="preserve">
@@ -1841,11 +1841,11 @@
     <comment>Line Break (single)</comment>
   </data>
   <data name="LinkTitle" xml:space="preserve">
-    <value>Link</value>
+    <value>Verknüpfung</value>
     <comment>Link Title</comment>
   </data>
   <data name="LinkUrl" xml:space="preserve">
-    <value>Link URL</value>
+    <value>verknüpfte URL</value>
     <comment>Link URL</comment>
   </data>
   <data name="LogDiskUsage" xml:space="preserve">
@@ -1853,7 +1853,7 @@
     <comment>Log Disk space usage</comment>
   </data>
   <data name="LoggedAsAdmin" xml:space="preserve">
-    <value>Sie sind derzeit mit dem admin Benutzerkonto angemeldet. Das editieren dieses Profils ist nicht möglich.</value>
+    <value>Sie sind derzeit mit dem eingebauten Administratorkonto angemeldet. Das Bearbeiten dieses Profils ist nicht möglich.</value>
     <comment>You are currently logged in with the built-in admin account, therefore you cannot edit your profile.</comment>
   </data>
   <data name="Login" xml:space="preserve">
@@ -1893,7 +1893,7 @@
     <comment>No Files</comment>
   </data>
   <data name="NoWiki" xml:space="preserve">
-    <value>NoWiki tag</value>
+    <value>NoWiki-Tag</value>
     <comment>?? NoWiki tag</comment>
   </data>
   <data name="OlderRevision" xml:space="preserve">
@@ -1921,7 +1921,7 @@
     <comment>Page deleted</comment>
   </data>
   <data name="PageHistory" xml:space="preserve">
-    <value>Seitenverlauf</value>
+    <value>Bearbeitungsverlauf</value>
     <comment>Page History</comment>
   </data>
   <data name="PageLocked" xml:space="preserve">
@@ -1965,7 +1965,7 @@
     <comment>Page Title</comment>
   </data>
   <data name="PageUpdates" xml:space="preserve">
-    <value>Seiten aktualisierungen</value>
+    <value>Seitenaktualisierungen</value>
     <comment>Page Updates</comment>
   </data>
   <data name="PasswordResetMessageFile" xml:space="preserve">
@@ -1993,23 +1993,23 @@
     <comment>Recent Page updates</comment>
   </data>
   <data name="RegistrationDisabled" xml:space="preserve">
-    <value>Das erstellen von Benutzerkontos ist deaktiviert.</value>
+    <value>Das Erstellen von Benutzerkonten ist deaktiviert.</value>
     <comment>Account creation is disabled.</comment>
   </data>
   <data name="RollbackCompleted" xml:space="preserve">
-    <value>Änderungen wurden Rückgängig gemacht</value>
+    <value>Änderungen wurden rückgängig gemacht</value>
     <comment>Rollback completed</comment>
   </data>
   <data name="RssForTheWiki" xml:space="preserve">
-    <value>Änderungsbenachrichtigungen für das ganze Wiki (RSS 2.0)</value>
+    <value>Änderungen des gesamten Wikis (RSS 2.0)</value>
     <comment>Update notifications for the whole Wiki (RSS 2.0)</comment>
   </data>
   <data name="RssForThisPage" xml:space="preserve">
-    <value>Änderungsbenachrichtigungen für diesen Eintrag (RSS 2.0)</value>
+    <value>Änderungen dieser Seite (RSS 2.0)</value>
     <comment>Update notifications for this Page (RSS 2.0)</comment>
   </data>
   <data name="ScriptDetected" xml:space="preserve">
-    <value>Ein unzulässiges SCRIPT tag wurde im Inhalt entdeckt</value>
+    <value>Ein unzulässiges Script-Tag wurde im Inhalt entdeckt</value>
     <comment>Unallowed SCRIPT tag detected in the content</comment>
   </data>
   <data name="Search" xml:space="preserve">
@@ -2049,11 +2049,11 @@
     <comment>Striked</comment>
   </data>
   <data name="Subscript" xml:space="preserve">
-    <value>Anmelden</value>
+    <value>Tiefgestellt</value>
     <comment>Subscript</comment>
   </data>
   <data name="Superscript" xml:space="preserve">
-    <value>Superscript</value>
+    <value>Hochgestellt</value>
     <comment>Superscript</comment>
   </data>
   <data name="TableOfContents" xml:space="preserve">
@@ -2065,15 +2065,15 @@
     <comment>Temp files Disk space usage</comment>
   </data>
   <data name="TextareaSize" xml:space="preserve">
-    <value>Texteingabe</value>
+    <value>Textfeld-Größe</value>
     <comment>Textarea Size</comment>
   </data>
   <data name="ThisIsAPreview" xml:space="preserve">
-    <value>&lt;b&gt;Achtung:&lt;/b&gt; dies ist nur eine Vorschau, bitte drücken Sie die Schaltfläche &lt;i&gt;Speichere Eintrag&lt;/i&gt; um die Änderungen zu übernehmen!</value>
+    <value>&lt;b&gt;Achtung:&lt;/b&gt; Dies ist nur eine Vorschau, bitte klicken Sie auf die Schaltfläche &lt;i&gt;Speicher&lt;/i&gt; um die Änderungen zu übernehmen.</value>
     <comment>&lt;b&gt;Warning&lt;/b&gt;: this is only a preview! You must click on the Save button to save the changes!</comment>
   </data>
   <data name="ThisPageIsLocked" xml:space="preserve">
-    <value>Dieser Eintrag ist gesperrt und kann nur durch einen Administrator geändert werden.</value>
+    <value>Diese Seite ist gesperrt und kann nur von einem Administrator bearbeitet werden.</value>
     <comment>This Page is locked, therefore it can be edited by the Administrators only.</comment>
   </data>
   <data name="Top" xml:space="preserve">
@@ -2081,7 +2081,7 @@
     <comment>Top</comment>
   </data>
   <data name="TotalDiskUsage" xml:space="preserve">
-    <value>Total verwendeter Fetsplattenspeicherplatz</value>
+    <value>Gesamter verwendeter Festplattenspeicherplatz</value>
     <comment>Total Disk space usage</comment>
   </data>
   <data name="Type" xml:space="preserve">
@@ -2105,7 +2105,7 @@
     <comment>User activated</comment>
   </data>
   <data name="UserCount" xml:space="preserve">
-    <value>Benutzeranzahl</value>
+    <value>Anzahl Benutzer</value>
     <comment>User Count</comment>
   </data>
   <data name="UserDeactivated" xml:space="preserve">
@@ -2137,11 +2137,11 @@
     <comment>Viewing File</comment>
   </data>
   <data name="ViewList" xml:space="preserve">
-    <value>Wechsle zur Listenansicht</value>
+    <value>Zur Listenansicht wechseln</value>
     <comment>View List</comment>
   </data>
   <data name="ViewTree" xml:space="preserve">
-    <value>Wechsele zur Baumansicht</value>
+    <value>Zur Baumansicht wechseln</value>
     <comment>View Tree</comment>
   </data>
   <data name="WikiUpToDate" xml:space="preserve">
@@ -2149,11 +2149,11 @@
     <comment>Your Wiki is up-to-date</comment>
   </data>
   <data name="WikiVersion" xml:space="preserve">
-    <value>Wiki Version</value>
+    <value>Wiki-Version</value>
     <comment>Wiki Version</comment>
   </data>
   <data name="WrongControlText" xml:space="preserve">
-    <value>Die Eingabe des Kontrollbildes war falsch bitte versuchen Sie es erneut.</value>
+    <value>Die Eingabe des Kontrollbildes war falsch. Bitte versuchen Sie es erneut.</value>
     <comment>Wrong Control Text</comment>
   </data>
   <data name="WrongParameters" xml:space="preserve">

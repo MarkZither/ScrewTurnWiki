@@ -126,7 +126,7 @@
     <comment>Click here to create your Account</comment>
   </data>
   <data name="cvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emailadressen sind nicht identisch</value>
+    <value>E-Mail-Adressen sind nicht identisch</value>
     <comment>Emails are not equal</comment>
   </data>
   <data name="cvEmail1Resource1.Text" xml:space="preserve">
@@ -136,7 +136,7 @@
     <value />
   </data>
   <data name="cvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emailadressen sind nicht identisch</value>
+    <value>E-Mail-Adressen sind nicht identisch</value>
     <comment>Emails are not equal</comment>
   </data>
   <data name="cvEmail2Resource1.Text" xml:space="preserve">
@@ -187,11 +187,11 @@
     <comment>Display Name</comment>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
-    <value>Emailadresse</value>
+    <value>E-Mail-Adresse</value>
     <comment>Email</comment>
   </data>
   <data name="lblEmail2Resource1.Text" xml:space="preserve">
-    <value>Emailadresse (wiederholung)</value>
+    <value>E-Mail-Adresse (wiederholung)</value>
     <comment>Email (repeat)</comment>
   </data>
   <data name="lblPassword1Resource1.Text" xml:space="preserve">
@@ -203,7 +203,7 @@
     <comment>Password (repeat)</comment>
   </data>
   <data name="lblRegisterDescriptionResource1.Text" xml:space="preserve">
-    <value>Hier können Sie ein neues Benutzerkonto für dieses Wiki erstellen.&lt;br /&gt;&lt;b&gt;Hinweis&lt;/b&gt;: Alle Felder müssen ausgefüllt werden. Die Emailadresse wird in keiner weise Publik gemacht, wird aber für Administratoren sichtbar sein.</value>
+    <value>Hier können Sie ein neues Benutzerkonto für dieses Wiki erstellen.&lt;br /&gt;&lt;b&gt;Hinweis&lt;/b&gt;: Alle Felder müssen ausgefüllt werden. Die E-Mail-Adresse wird in keiner weise Publik gemacht, wird aber für Administratoren sichtbar sein.</value>
     <comment>Here you can create a new Account for this Wiki.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: all the fields are mandatory. The Email address will not be published in any way, but it will be visible to the Administrators.</comment>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
@@ -231,7 +231,7 @@
     <value />
   </data>
   <data name="rfvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emailadresse ist erfoderlich</value>
+    <value>E-Mail-Adresse ist erfoderlich</value>
     <comment>Email is required</comment>
   </data>
   <data name="rfvEmail1Resource1.Text" xml:space="preserve">
@@ -241,7 +241,7 @@
     <value />
   </data>
   <data name="rfvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Emailadresse ist erfoderlich</value>
+    <value>E-Mail-Adresse ist erfoderlich</value>
     <comment>Email is required</comment>
   </data>
   <data name="rfvEmail2Resource1.Text" xml:space="preserve">
@@ -291,7 +291,7 @@
     <value />
   </data>
   <data name="rxvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Ungültige Emailadresse</value>
+    <value>Ungültige E-Mail-Adresse</value>
     <comment>Invalid Email</comment>
   </data>
   <data name="rxvEmail1Resource1.Text" xml:space="preserve">
@@ -331,14 +331,14 @@
     <value />
   </data>
   <data name="txtEmail1Resource1.ToolTip" xml:space="preserve">
-    <value>Hier Ihre Emailadresse eingeben</value>
+    <value>Hier Ihre E-Mail-Adresse eingeben</value>
     <comment>Type here your Email address</comment>
   </data>
   <data name="txtEmail2Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtEmail2Resource1.ToolTip" xml:space="preserve">
-    <value>Die Emailadresse wiederholt eingeben</value>
+    <value>Die E-Mail-Adresse wiederholt eingeben</value>
     <comment>Repeat your Email address</comment>
   </data>
   <data name="txtPassword1Resource1.Text" xml:space="preserve">
