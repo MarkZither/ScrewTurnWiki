@@ -635,6 +635,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="loginKey">The login key.</param>
 		/// <returns>The correct UserInfo object, or <c>null</c>.</returns>
 		public static UserInfo TryCookieLogin(string username, string loginKey) {
+			if(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(loginKey)) return null;
+
 			if(username == "admin" && loginKey == ComputeLoginKey(username, Settings.ContactEmail, DateTime.MinValue)) {
 				// Just return, no notification to providers because the "admin" account is fictitious
 				return GetAdministratorAccount();
