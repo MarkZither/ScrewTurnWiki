@@ -109,14 +109,13 @@ namespace ScrewTurn.Wiki {
 		protected void btnGo_Click(object sender, EventArgs e) {
 			// Redirect firing the search
 			string query = ScrewTurn.Wiki.SearchEngine.Tools.RemoveDiacriticsAndPunctuation(txtQuery.Text, false);
-			if(query.Length > 0) {
-				UrlTools.Redirect(UrlTools.BuildUrl("Search.aspx?Query=", Tools.UrlEncode(txtQuery.Text),
-					"&SearchUncategorized=", chkUncategorizedPages.Checked ? "1" : "0",
-					"&Categories=", GetCategories(),
-					"&Mode=", GetMode(),
-					chkAllNamespaces.Checked ? "&AllNamespaces=1" : "",
-					chkFilesAndAttachments.Checked ? "&FilesAndAttachments=1" : ""));
-			}
+
+			UrlTools.Redirect(UrlTools.BuildUrl("Search.aspx?Query=", Tools.UrlEncode(txtQuery.Text),
+				"&SearchUncategorized=", chkUncategorizedPages.Checked ? "1" : "0",
+				"&Categories=", GetCategories(),
+				"&Mode=", GetMode(),
+				chkAllNamespaces.Checked ? "&AllNamespaces=1" : "",
+				chkFilesAndAttachments.Checked ? "&FilesAndAttachments=1" : ""));
 		}
 
 		/// <summary>
