@@ -88,6 +88,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="username">The username.</param>
 		/// <returns>The user, or <c>null</c>.</returns>
 		public static UserInfo FindUser(string username) {
+			if(string.IsNullOrEmpty(username)) return null;
+
 			if(username == "admin") return GetAdministratorAccount();
 
 			// Try default provider first
@@ -545,10 +547,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="newWindow">A value indicating whether to open the link in a new window.</param>
 		/// <returns>The User link.</returns>
 		public static string UserLink(string username, bool newWindow) {
+			if(string.IsNullOrEmpty(username)) return "???";
+
 			if(username != null && (username.EndsWith("+" + Log.SystemUsername) || username == Log.SystemUsername)) return username;
 
 			UserInfo u = FindUser(username);
-			if(u == null && username.Equals("admin")) u = new UserInfo("admin", null, Settings.ContactEmail, true, DateTime.Now, null);
 			if(u != null) {
 				return @"<a " +
 					(newWindow ? "target=\"_blank\" " : "") +
