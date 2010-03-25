@@ -327,6 +327,7 @@
     <a href="#" onclick="javascript:return InsertMarkup('{SEARCHBOX}');" class="menulink">{SearchBox}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{PAGENAME}');" class="menulink">{PageName}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{NAMESPACE}');" class="menulink">{Namespace}</a>
+    <a href="#" onclick="javascript:return InsertMarkup('{CATEGORIES}');" class="menulink">{Categories}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{NAMESPACEDROPDOWN}');" class="menulink">{NamespaceDropDown}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{NAMESPACELIST}');" class="menulink">{NamespaceList}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{ORPHANS}');" class="menulink">{Orphans}</a>
