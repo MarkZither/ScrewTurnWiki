@@ -47,6 +47,7 @@ namespace ScrewTurn.Wiki {
 
 				currentPages = GetAllPages();
 				pageSelector.ItemCount = currentPages.Count;
+				pageSelector.PageSize = PageSize;
 
 				string p = Request["Page"];
 				if(!int.TryParse(p, out selectedPage)) selectedPage = 0;

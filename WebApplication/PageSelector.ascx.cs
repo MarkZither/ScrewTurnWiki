@@ -113,7 +113,9 @@ namespace ScrewTurn.Wiki {
 			for(int i = 0; i < pageCount - 1; i++) {
 				result.Add(new ItemBlockRow(i, i * pageSize, pageSize, selectedPage == i));
 			}
-			result.Add(new ItemBlockRow(pageCount - 1, (pageCount - 1) * pageSize, lastPageSize, selectedPage == pageCount - 1));
+			if(itemCount > (pageCount - 1) * pageSize) {
+				result.Add(new ItemBlockRow(pageCount - 1, (pageCount - 1) * pageSize, lastPageSize, selectedPage == pageCount - 1));
+			}
 
 			// Don't display anything if there is only one page
 			if(result.Count > 1) {
