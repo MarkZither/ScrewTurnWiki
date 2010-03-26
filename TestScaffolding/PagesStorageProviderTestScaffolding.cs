@@ -361,6 +361,7 @@ namespace ScrewTurn.Wiki.Tests {
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 			CategoryInfo cat1 = prov.AddCategory(null, "Category1");
 			CategoryInfo cat2 = prov.AddCategory(null, "Category2");
+			CategoryInfo cat1ns = prov.AddCategory(ns.Name, "Category1");
 			CategoryInfo cat3 = prov.AddCategory(ns.Name, "Category3");
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
@@ -443,14 +444,15 @@ namespace ScrewTurn.Wiki.Tests {
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 			CategoryInfo cat1 = prov.AddCategory(null, "Category1");
-			CategoryInfo cat2 = prov.AddCategory(ns.Name, "Category2");
+			CategoryInfo cat2 = prov.AddCategory(null, "Category2");
+			CategoryInfo cat2ns = prov.AddCategory(ns.Name, "Category2");
 			CategoryInfo cat3 = prov.AddCategory(ns.Name, "Category3");
 
 			PageInfo page = prov.AddPage(ns.Name, "Page", DateTime.Now);
 			prov.ModifyPage(page, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
 			prov.ModifyPage(page, "Title0", "NUnit0", DateTime.Now, "Comment0", "Content0", null, null, SaveMode.Backup);
 			prov.ModifyPage(page, "Title1", "NUnit1", DateTime.Now, "Comment1", "Content1", null, null, SaveMode.Backup);
-			prov.RebindPage(page, new string[] { cat2.FullName });
+			prov.RebindPage(page, new string[] { cat2ns.FullName });
 			prov.AddMessage(page, "NUnit", "Test", DateTime.Now, "Body", -1);
 
 			PageInfo moved = prov.MovePage(page, null, true);
@@ -529,6 +531,7 @@ namespace ScrewTurn.Wiki.Tests {
 			NamespaceInfo ns2 = prov.AddNamespace("Namespace2");
 			CategoryInfo cat1 = prov.AddCategory(ns1.Name, "Category1");
 			CategoryInfo cat2 = prov.AddCategory(ns1.Name, "Category2");
+			CategoryInfo cat2ns2 = prov.AddCategory(ns2.Name, "Category2");
 			CategoryInfo cat3 = prov.AddCategory(ns2.Name, "Category3");
 
 			PageInfo page = prov.AddPage(ns1.Name, "Page", DateTime.Now);
