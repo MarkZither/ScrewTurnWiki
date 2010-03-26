@@ -84,11 +84,11 @@ namespace ScrewTurn.Wiki {
 			string temp = Request["Feature"];
 			string feature = "", parms = "";
 			if(temp.Contains("$")) {
-				feature = temp.Substring(0, temp.IndexOf("$")).ToLower();
+				feature = temp.Substring(0, temp.IndexOf("$")).ToLowerInvariant();
 				parms = temp.Substring(temp.IndexOf("$") + 1);
 			}
 			else {
-				feature = temp.ToLower();
+				feature = temp.ToLowerInvariant();
 			}
 
 			switch(feature) {
@@ -289,7 +289,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private bool IsImage(string name) {
-			string ext = System.IO.Path.GetExtension(name.ToLower());
+			string ext = System.IO.Path.GetExtension(name.ToLowerInvariant());
 			return ext == ".jpg" || ext == ".jpeg" || ext == ".gif" || ext == ".png" || ext == ".tif" || ext == ".tiff";
 		}
 

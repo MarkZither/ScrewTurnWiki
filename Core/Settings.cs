@@ -604,8 +604,8 @@ namespace ScrewTurn.Wiki {
 				string virtualDirectory = HttpContext.Current.Request.ApplicationPath;
 				// We need to convert the case of the virtual directory to that used in the url
 				// Return the virtual directory as is if we can't find it in the URL
-				if (requestUrl.ToLower().Contains(virtualDirectory.ToLower())) {
-					return requestUrl.Substring(requestUrl.ToLower().IndexOf(virtualDirectory.ToLower()),virtualDirectory.Length);
+				if(requestUrl.ToLowerInvariant().Contains(virtualDirectory.ToLowerInvariant())) {
+					return requestUrl.Substring(requestUrl.ToLowerInvariant().IndexOf(virtualDirectory.ToLowerInvariant()), virtualDirectory.Length);
 				}
 				return virtualDirectory;
 			}

@@ -787,7 +787,7 @@ namespace ScrewTurn.Wiki {
 			btnCancelTemplate_Click(sender, e);
 			// If there's a category matching the selected template name, select it automatically
 			for (int i = 0; i < lstCategories.Items.Count; i++)	{
-				if (lstCategories.Items[i].Value.ToLower().Trim() == lstTemplates.SelectedValue.ToLower().Trim()) {
+				if(lstCategories.Items[i].Value.ToLowerInvariant().Trim() == lstTemplates.SelectedValue.ToLowerInvariant().Trim()) {
 					lstCategories.Items[i].Selected = true;
 				}
 			}

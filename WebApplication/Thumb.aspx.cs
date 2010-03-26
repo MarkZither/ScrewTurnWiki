@@ -56,7 +56,7 @@ namespace ScrewTurn.Wiki {
 
 			string size = Request["Size"];
 			if(string.IsNullOrEmpty(size)) size = "small";
-			size = size.ToLower();
+			size = size.ToLowerInvariant();
 
 			// Verify permissions
 			bool canDownload = false;

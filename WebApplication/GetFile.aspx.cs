@@ -96,7 +96,7 @@ namespace ScrewTurn.Wiki {
 			string mime = "";
 			try {
 				string ext = Path.GetExtension(filename);
-				if(ext.StartsWith(".")) ext = ext.Substring(1).ToLower(); // Remove trailing dot
+				if(ext.StartsWith(".")) ext = ext.Substring(1).ToLowerInvariant(); // Remove trailing dot
 				mime = GetMimeType(ext);
 			}
 			catch {

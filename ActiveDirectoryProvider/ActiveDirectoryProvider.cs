@@ -743,7 +743,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		/// </summary>
 		/// <value>The information</value>
 		public ComponentInformation Information {
-			get { return new ComponentInformation("Active Directory Provider", "Threeplicate Srl", "3.0.2.509", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/ADProv/ADProv.txt"); }
+			get { return new ComponentInformation("Active Directory Provider", "Threeplicate Srl", "3.0.2.518", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/ADProv/ADProv.txt"); }
 		}
 
 
@@ -861,7 +861,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 						continue;
 					}
 
-					string key = configEntry[0].Trim().ToLower();
+					string key = configEntry[0].Trim().ToLowerInvariant();
 					string value = configEntry[1].Trim();
 
 					switch(key) {
