@@ -95,6 +95,18 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Checks the path.
+		/// </summary>
+		/// <param name="path">The path to be checked.</param>
+		/// <param name="begin">The expected beginning of the path.</param>
+		/// <exception cref="InvalidOperationException">If <paramref name="path"/> does not begin with <paramref name="begin"/> or contains "\.." or "..\".</exception>
+		private string CheckPath(string path, string begin) {
+			if(!path.StartsWith(begin) || path.Contains(Path.DirectorySeparatorChar + "..") || path.Contains(".." + Path.DirectorySeparatorChar))
+				throw new InvalidOperationException();
+			return path;
+		}
+
+		/// <summary>
 		/// Builds a full path from a provider-specific partial path.
 		/// </summary>
 		/// <param name="partialPath">The partial path.</param>
@@ -104,8 +116,8 @@ namespace ScrewTurn.Wiki {
 		private string BuildFullPath(string partialPath) {
 			if(partialPath == null) partialPath = "";
 			partialPath = partialPath.Replace("/", Path.DirectorySeparatorChar.ToString()).TrimStart(Path.DirectorySeparatorChar);
-			string up = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), UploadDirectory);
-			return Path.Combine(up, partialPath); // partialPath CANNOT start with "\" -> Path.Combine does not work
+			string up = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), UploadDirectory);			
+			return CheckPath(Path.Combine(up, partialPath), up); // partialPath CANNOT start with "\" -> Path.Combine does not work
 		}
 
 		/// <summary>
@@ -119,7 +131,7 @@ namespace ScrewTurn.Wiki {
 			if(partialPath == null) partialPath = "";
 			partialPath = partialPath.Replace("/", Path.DirectorySeparatorChar.ToString()).TrimStart(Path.DirectorySeparatorChar);
 			string up = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), AttachmentsDirectory);
-			return Path.Combine(up, partialPath); // partialPath CANNOT start with "\" -> Path.Combine does not work
+			return CheckPath(Path.Combine(up, partialPath), up); // partialPath CANNOT start with "\" -> Path.Combine does not work
 		}
 
 		/// <summary>
