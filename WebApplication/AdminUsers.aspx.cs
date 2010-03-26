@@ -30,7 +30,7 @@ namespace ScrewTurn.Wiki {
 
 			revUsername.ValidationExpression = Settings.UsernameRegex;
 			revDisplayName.ValidationExpression = Settings.DisplayNameRegex;
-			revPassword1.ValidationExpression = Settings.UsernameRegex;
+			revPassword1.ValidationExpression = Settings.PasswordRegex;
 			revEmail.ValidationExpression = Settings.EmailRegex;
 
 			if(!Page.IsPostBack) {
