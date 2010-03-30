@@ -13,6 +13,7 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public static class ReverseFormatter {
 
+		private static readonly Regex WebkitDivRegex = new Regex(@"(<div>)((.|\n|\r)*?)(</div>)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex BoldRegex = new Regex(@"(<b>)((.|\n|\r)*?)(</b>)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex ItalicRegex = new Regex(@"(<i>)((.|\n|\r)*?)(</i>)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex UnderlineRegex = new Regex(@"(<u>)((.|\n|\r)*?)(</u>)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
@@ -139,6 +140,15 @@ namespace ScrewTurn.Wiki {
 					match.Value.Substring(5, match.Length - 11).Replace("&amp;", "&").Replace("&#91;", "[").Replace("&#93;", "]") +
 					"@@");
 				match = PreRegex.Match(buffer.ToString(), match.Index + 1);
+			}
+
+			// WebkitDivRegex
+			// Remove all div added by webkit and replace them with \r\n.
+			match = WebkitDivRegex.Match(buffer.ToString());
+			while(match.Success) {
+				buffer.Remove(match.Index, match.Length);
+				buffer.Insert(match.Index, "\r\n" + match.Groups[2].Value);
+				match = WebkitDivRegex.Match(buffer.ToString(), match.Index + 1);
 			}
 
 			// Bold

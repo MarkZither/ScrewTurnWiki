@@ -32,11 +32,11 @@
 		    iframe.document.designMode='On';
 	    } else {
 		    iframe = document.getElementById('iframe').contentWindow;
-		    iframe.focus();
 		    iframe.document.designMode='On';
 		    iframe.document.execCommand('styleWithCSS',false,false);
 		    iframe.document.execCommand('backcolor', false, 'white');
 		    try { // This seems to throw an exception in Firefox
+		    	iframe.focus();
 		    	iframe.document.execCommand('inserthtml', false, document.getElementById(VisualControl).value);
 		    } catch(ex) { }
 	    }
