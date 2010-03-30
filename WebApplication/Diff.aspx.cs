@@ -54,6 +54,7 @@ namespace ScrewTurn.Wiki {
 			if(int.TryParse(Request["Rev1"], out rev1)) {
 				rev1Content = Pages.GetBackupContent(page, rev1);
 				rev1Text = rev1.ToString();
+				if(rev1 >= 0 && rev1Content == null && Pages.GetBackupContent(page, rev1 - 1) != null) rev1Content = Content.GetPageContent(page, false);
 				if(rev1Content == null) Redirect();
 			}
 			else {
@@ -68,6 +69,7 @@ namespace ScrewTurn.Wiki {
 			if(int.TryParse(Request["Rev2"], out rev2)) {
 				rev2Content = Pages.GetBackupContent(page, rev2);
 				rev2Text = rev2.ToString();
+				if(rev2 >= 0 && rev2Content == null && Pages.GetBackupContent(page, rev2 - 1) != null) rev2Content = Content.GetPageContent(page, false);
 				if(rev2Content == null) Redirect();
 			}
 			else {
