@@ -36,6 +36,20 @@ namespace ScrewTurn.Wiki {
 		/// <param name="change">The change.</param>
 		/// <param name="descr">The description (optional).</param>
 		public static void AddChange(string page, string title, string messageSubject, DateTime dateTime, string user, Change change, string descr) {
+			RecentChange[] allChanges = GetAllChanges();
+			if(allChanges.Length > 0) {
+				RecentChange lastChange = allChanges[allChanges.Length - 1];
+				if(lastChange.Page == page && lastChange.Title == title &&
+					lastChange.MessageSubject == messageSubject + "" &&
+					lastChange.User == user &&
+					lastChange.Change == change &&
+					(dateTime - lastChange.DateTime).TotalMinutes <= 60) {
+
+					// Skip this change
+					return;
+				}
+			}
+
 			Settings.Provider.AddRecentChange(page, title, messageSubject, dateTime, user, change, descr);
 		}
 
