@@ -194,7 +194,7 @@ namespace ScrewTurn.Wiki {
 			else this.revision = revision.ToString();
 			title = FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, content.PageInfo);
 			savedOn = Preferences.AlignWithTimezone(content.LastModified).ToString(Settings.DateTimeFormat);
-			savedBy = content.User;
+			savedBy = Users.UserLink(content.User);
 			comment = content.Comment;
 			this.canRollback = canRollback;
 		}
