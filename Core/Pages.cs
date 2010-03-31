@@ -801,7 +801,11 @@ namespace ScrewTurn.Wiki {
 			}
 			if(canEditWithApproval && canEdit) canEditWithApproval = false;
 
-			if(canEdit && !string.IsNullOrEmpty(Settings.IpHostFilter))
+			bool isAdminstrator = false;
+			foreach(string group in groups) {
+				if(group == Settings.AdministratorsGroup) isAdminstrator = true;
+			}
+			if(canEdit && !string.IsNullOrEmpty(Settings.IpHostFilter) && !isAdminstrator)
 				canEdit = VerifyIpHostFilter();
 		}
 
@@ -835,9 +839,9 @@ namespace ScrewTurn.Wiki {
 				// If we match, then the user is in the filter, return false.
 				var regex = new Regex(regExpression, options);
 				if(regex.IsMatch(hostAddress))
-					return false;
+					return true;
 			}
-			return true; // Made it here, then all is well, return true.
+			return false;
 		}
 
 		/// <summary>
