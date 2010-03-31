@@ -2470,7 +2470,7 @@
   <ItemGroup>
     <Content Include="Images\Editor\OL.png" />
     <Content Include="Images\Editor\UL.png" />
-    <Content Include="JS\jquery-1.4.1.min.js" />
+    <Content Include="JS\jquery-1.4.2.min.js" />
     <Content Include="JS\SearchHighlight.js" />
     <Content Include="PageListBuilder.ascx" />
     <Content Include="Sitemap.aspx" />
