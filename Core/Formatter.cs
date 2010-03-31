@@ -1702,7 +1702,11 @@ namespace ScrewTurn.Wiki {
 				sb.Append(@"<a");
 				if(!isImage) sb.Append(@" class=""emaillink""");
 				if(blank) sb.Append(@" target=""_blank""");
-				sb.Append(@" href=""mailto:");
+				if(targetUrl.StartsWith(@"mailto:")) {
+					sb.Append(@" href=""");
+				} else {
+					sb.Append(@" href=""mailto:");
+				}
 				sb.Append(Tools.ObfuscateText(targetUrl.Replace("&amp;", "%26"))); // Trick to let ampersands work in email addresses
 				sb.Append(@""" title=""");
 				if(!isImage && title.Length > 0) sb.Append(nstripped);
