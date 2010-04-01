@@ -83,7 +83,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 						int words = 350;
 
 						if(block.Value.Groups.Count > 3) {
-							analizeSettings(block.Value.Groups[4].Value, out entries, out newWindow, out words);
+							AnalyzeSettings(block.Value.Groups[4].Value, out entries, out newWindow, out words);
 						}
 
 						if(isTwitter) {
@@ -144,7 +144,14 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			return buffer.ToString();
 		}
 
-		private void analizeSettings(string settingString, out int entries, out bool newWindow, out int words) {
+		/// <summary>
+		/// Analizes the settings string.
+		/// </summary>
+		/// <param name="settingString">The setting string.</param>
+		/// <param name="entries">The number of entries.</param>
+		/// <param name="newWindow">The newWindow value.</param>
+		/// <param name="words">The max number of words.</param>
+		private void AnalyzeSettings(string settingString, out int entries, out bool newWindow, out int words) {
 			entries = 1;
 			newWindow = true;
 			words = 350;
