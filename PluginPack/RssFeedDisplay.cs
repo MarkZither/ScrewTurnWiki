@@ -18,9 +18,9 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		private IHostV30 _host;
 		private string _config;
 		private bool _enableLogging = true;
-		private static readonly ComponentInformation Info = new ComponentInformation("RSS Feed Display Plugin", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RssFeedDisplay.txt");
+		private static readonly ComponentInformation Info = new ComponentInformation("RSS Feed Display Plugin", "Threeplicate Srl", "3.0.2.528", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RssFeedDisplay.txt");
 
-		private static readonly Regex RssRegex = new Regex(@"{(RSS|Twitter):(.+?)}",
+		private static readonly Regex RssRegex = new Regex(@"{(RSS|Twitter):(.+?)(\|(.+?))?}",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
 		/// <summary>
@@ -65,7 +65,6 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			StringBuilder buffer = new StringBuilder(raw);
 
 			try {
-
 				KeyValuePair<int, Match> block = FindAndRemoveFirstOccurrence(buffer);
 
 				while(block.Key != -1) {
@@ -79,33 +78,54 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 					if(result == null) {
 						bool isTwitter = block.Value.Groups[1].Value.ToLowerInvariant() == "twitter";
-						XmlDocument feedXml = GetXml(block.Value.Groups[2].Value);
-						XmlNode node = feedXml.DocumentElement;
-						XmlNode itemTitle = node.SelectNodes("/rss/channel/item/title")[0];
-						XmlNode itemLink = node.SelectNodes("/rss/channel/item/link")[0];
-						XmlNode itemContent = node.SelectNodes("/rss/channel/item/description")[0];
-						string itemContentStr = StripHtml(itemContent.InnerText);
-						itemContentStr = (itemContentStr.Length > 350 && itemContentStr.Substring(347, 5) != "[...]") ? itemContentStr.Substring(0, itemContentStr.IndexOf(" ", 345) + 1) + " [...]" : itemContentStr;
-						if(itemContentStr.Length <= 1) itemContentStr = StripHtml(itemContent.InnerText);
+						int entries = 1;
+						bool newWindow = true;
+						int words = 350;
+
+						if(block.Value.Groups.Count > 3) {
+							analizeSettings(block.Value.Groups[4].Value, out entries, out newWindow, out words);
+						}
 
 						if(isTwitter) {
-							string tweet = itemTitle.InnerText;
-							tweet = tweet.Substring(tweet.IndexOf(":") + 2);
-							result = @"<div class=""twitterfeed"">
-										<span class=""tweet"">
-										 <a href=""" + itemLink.InnerText + @""" title=""Go to this Tweet"">" + tweet + @"</a>
-										</span>
-									   </div>";
+							result = @"<div class=""twitterfeed"">";
 						}
 						else {
-							result = @"<div class=""rssfeed"">
+							result = @"<div class=""rssfeed"">";
+						}
+						XmlDocument feedXml = GetXml(block.Value.Groups[2].Value);
+						XmlNode node = feedXml.DocumentElement;
+						for(int i = 0; i < entries; i++) {
+							XmlNode itemTitle = node.SelectNodes("/rss/channel/item/title")[i];
+							if(itemTitle != null) {
+								XmlNode itemLink = node.SelectNodes("/rss/channel/item/link")[i];
+								XmlNode itemContent = node.SelectNodes("/rss/channel/item/description")[i];
+								string itemContentStr = StripHtml(itemContent.InnerText);
+								itemContentStr = (itemContentStr.Length > words && itemContentStr.Substring(words - 3, 5) != "[...]") ? itemContentStr.Substring(0, itemContentStr.IndexOf(" ", words - 5) + 1) + " [...]" : itemContentStr;
+								if(itemContentStr.Length <= 1) itemContentStr = StripHtml(itemContent.InnerText);
+
+								if(isTwitter) {
+									string tweet = itemTitle.InnerText;
+									tweet = tweet.Substring(tweet.IndexOf(":") + 2);
+									result += @"<div class=""tweet"">
+										 <a href=""" + itemLink.InnerText + @""" title=""Go to this Tweet""";
+									if(newWindow) result += @" target=""_blank""";
+									result += @">" + tweet + @"</a>
+										</div>";
+								}
+								else {
+									result += @"<div class=""rssentry"">
 										<span class=""rsstitle"">
-										 <a href=""" + itemLink.InnerText + @""" title=""" + itemTitle.InnerText + @""">" + itemTitle.InnerText + @"</a>
+										<a href=""" + itemLink.InnerText + @""" title=""" + itemTitle.InnerText + @"""";
+									if(newWindow) result += @" target=""_blank""";
+									result += @">" + itemTitle.InnerText + @"</a>
 										</span>
 										<br />
 										<span class=""rsscontent"">" + itemContentStr + @"</span>
-									   </div>";
+										</div>";
+								}
+							}
 						}
+						result += @"</div>";
 
 						if(System.Web.HttpContext.Current != null) {
 							System.Web.HttpContext.Current.Cache.Add(blockHash, result, null, DateTime.Now.AddMinutes(60),
@@ -122,6 +142,52 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 				LogWarning(string.Format("Exception occurred: {0}", ex.Message));
 			}
 			return buffer.ToString();
+		}
+
+		private void analizeSettings(string settingString, out int entries, out bool newWindow, out int words) {
+			entries = 1;
+			newWindow = true;
+			words = 350;
+
+			String[] settings = settingString.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+			foreach(string set in settings) {
+				string key = set.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries)[0].Trim().ToLowerInvariant();
+				string value = set.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries)[1].Trim().ToLowerInvariant();
+				if(key == "entries") {
+					try {
+						entries = Int32.Parse(value);
+					}
+					catch(ArgumentNullException) {
+						throw new ArgumentNullException("entries setting could not be null.");
+						//LogWarning("entries setting could not be null.");
+					}
+					catch(FormatException) {
+						throw new FormatException("entries setting is not a valid integer.");
+					}
+				}
+				else if(key == "newwindow") {
+					if(value == "true" || value == "1" || value == "yes") {
+						newWindow = true;
+					}
+					else if(value == "false" || value == "0" || value == "no") {
+						newWindow = false;
+					}
+					else {
+						throw new FormatException("newWindow setting is not a valid value. Use: true/false or 1/0 or yes/no.");
+					}
+				}
+				else if(key == "words") {
+					try {
+						words = Int32.Parse(value);
+					}
+					catch(ArgumentNullException) {
+						throw new ArgumentNullException("words setting could not be null.");
+					}
+					catch(FormatException) {
+						throw new FormatException("words setting is not a valid integer.");
+					}
+				}
+			}
 		}
 
 		/// <summary>
