@@ -201,6 +201,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.pl-PL.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Messages.pt-PT.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.pt-PT.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Messages.ro-RO.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -535,11 +540,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Properties\Messages.pt-BR.designer.cs">
-      <DependentUpon>Messages.pt-BR.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Properties\Messages.ru-RU.designer.cs">
       <DependentUpon>Messages.ru-RU.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -655,9 +655,6 @@
     <Content Include="App_LocalResources\AccessDenied.aspx.nl-NL.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\AccessDenied.aspx.pt-BR.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_LocalResources\AccessDenied.aspx.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -701,9 +698,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\AllPages.aspx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\AllPages.aspx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\AllPages.aspx.resx">
@@ -751,9 +745,6 @@
     <Content Include="App_LocalResources\Captcha.ascx.nl-NL.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\Captcha.ascx.pt-BR.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_LocalResources\Captcha.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -797,9 +788,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\Category.aspx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\Category.aspx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\Category.aspx.resx">
@@ -847,9 +835,6 @@
     <Content Include="App_LocalResources\Error.aspx.nl-NL.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\Error.aspx.pt-BR.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_LocalResources\Error.aspx.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -893,9 +878,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\History.aspx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\History.aspx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\History.aspx.resx">
@@ -943,9 +925,6 @@
     <Content Include="App_LocalResources\Login.aspx.nl-NL.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\Login.aspx.pt-BR.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_LocalResources\Login.aspx.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -989,9 +968,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\NavPath.aspx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\NavPath.aspx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\NavPath.aspx.resx">
@@ -1039,9 +1015,6 @@
     <Content Include="App_LocalResources\Operation.aspx.nl-NL.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\Operation.aspx.pt-BR.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_LocalResources\Operation.aspx.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -1085,9 +1058,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\PageNotFound.aspx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\PageNotFound.aspx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\PageNotFound.aspx.resx">
@@ -1135,9 +1105,6 @@
     <Content Include="App_LocalResources\Post.aspx.nl-NL.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\Post.aspx.pt-BR.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_LocalResources\Post.aspx.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -1181,9 +1148,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\Profile.aspx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\Profile.aspx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\Profile.aspx.resx">
@@ -1231,9 +1195,6 @@
     <Content Include="App_LocalResources\Register.aspx.nl-NL.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\Register.aspx.pt-BR.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_LocalResources\Register.aspx.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -1277,9 +1238,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\Upload.aspx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\Upload.aspx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\Upload.aspx.resx">
@@ -1377,7 +1335,6 @@
     <Content Include="App_LocalResources\PageListBuilder.ascx.nb-NO.resx" />
     <Content Include="App_LocalResources\PageListBuilder.ascx.nl-NL.resx" />
     <Content Include="App_LocalResources\PageListBuilder.ascx.pl-PL.resx" />
-    <Content Include="App_LocalResources\PageListBuilder.ascx.pt-BR.resx" />
     <Content Include="App_LocalResources\PageListBuilder.ascx.ro-RO.resx" />
     <Content Include="App_LocalResources\PageListBuilder.ascx.ru-RU.resx" />
     <Content Include="App_LocalResources\PageListBuilder.ascx.sk-SK.resx" />
@@ -1470,6 +1427,48 @@
     <Content Include="App_LocalResources\Search.aspx.af-ZA.resx" />
     <Content Include="App_LocalResources\Upload.aspx.af-ZA.resx" />
     <Content Include="App_LocalResources\User.aspx.af-ZA.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Admin.master.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Category.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Default.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Error.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.pt-PT.resx" />
+    <Content Include="App_LocalResources\History.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Login.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.pt-PT.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.pt-PT.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Post.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Register.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Search.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\User.aspx.pt-PT.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>
@@ -1526,10 +1525,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.pl-PL.designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Messages.pt-BR.resx">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="Properties\Messages.pt-PT.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Messages.pt-BR.designer.cs</LastGenOutput>
+      <LastGenOutput>Messages.pt-PT.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1631,7 +1629,6 @@
     <Content Include="App_LocalResources\User.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\User.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\User.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\User.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\User.aspx.resx" />
     <Content Include="App_LocalResources\MasterPageSA.Master.ro-RO.resx" />
     <Content Include="App_LocalResources\MasterPageSA.Master.ru-RU.resx" />
@@ -1650,7 +1647,6 @@
     <Content Include="App_LocalResources\MasterPageSA.Master.it-IT.resx" />
     <Content Include="App_LocalResources\MasterPageSA.Master.nb-NO.resx" />
     <Content Include="App_LocalResources\MasterPageSA.Master.nl-NL.resx" />
-    <Content Include="App_LocalResources\MasterPageSA.Master.pt-BR.resx" />
     <Content Include="App_LocalResources\MasterPageSA.Master.resx" />
     <Content Include="App_LocalResources\AdminProviders.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminProviders.aspx.ru-RU.resx" />
@@ -1669,7 +1665,6 @@
     <Content Include="App_LocalResources\AdminProviders.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminProviders.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminProviders.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminProviders.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminProviders.aspx.resx" />
     <Content Include="App_LocalResources\AdminContent.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminContent.aspx.ru-RU.resx" />
@@ -1688,7 +1683,6 @@
     <Content Include="App_LocalResources\AdminContent.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminContent.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminContent.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminContent.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminContent.aspx.resx" />
     <Content Include="App_LocalResources\AdminNavPaths.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminNavPaths.aspx.ru-RU.resx" />
@@ -1707,7 +1701,6 @@
     <Content Include="App_LocalResources\AdminNavPaths.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminNavPaths.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminNavPaths.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminNavPaths.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminNavPaths.aspx.resx" />
     <Content Include="App_LocalResources\AdminConfig.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminConfig.aspx.ru-RU.resx" />
@@ -1726,7 +1719,6 @@
     <Content Include="App_LocalResources\AdminConfig.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminConfig.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminConfig.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminConfig.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminConfig.aspx.resx" />
     <Content Include="App_LocalResources\AdminLog.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminLog.aspx.ru-RU.resx" />
@@ -1745,7 +1737,6 @@
     <Content Include="App_LocalResources\AdminLog.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminLog.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminLog.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminLog.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminLog.aspx.resx" />
     <Content Include="App_LocalResources\AdminSnippets.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminSnippets.aspx.ru-RU.resx" />
@@ -1764,7 +1755,6 @@
     <Content Include="App_LocalResources\AdminSnippets.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminSnippets.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminSnippets.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminSnippets.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminSnippets.aspx.resx" />
     <Content Include="App_LocalResources\AdminCategories.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminCategories.aspx.ru-RU.resx" />
@@ -1783,7 +1773,6 @@
     <Content Include="App_LocalResources\AdminCategories.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminCategories.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminCategories.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminCategories.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminCategories.aspx.resx" />
     <Content Include="App_LocalResources\Default.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\Default.aspx.ru-RU.resx" />
@@ -1802,7 +1791,6 @@
     <Content Include="App_LocalResources\Default.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\Default.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\Default.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\Default.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\Default.aspx.resx" />
     <Content Include="App_LocalResources\PermissionsManager.ascx.cs-CZ.resx" />
     <Content Include="App_LocalResources\PermissionsManager.ascx.da-DK.resx" />
@@ -1813,7 +1801,6 @@
     <Content Include="App_LocalResources\PermissionsManager.ascx.it-IT.resx" />
     <Content Include="App_LocalResources\PermissionsManager.ascx.nb-NO.resx" />
     <Content Include="App_LocalResources\PermissionsManager.ascx.nl-NL.resx" />
-    <Content Include="App_LocalResources\PermissionsManager.ascx.pt-BR.resx" />
     <Content Include="App_LocalResources\PermissionsManager.ascx.resx" />
     <Content Include="App_LocalResources\PermissionsManager.ascx.ro-RO.resx" />
     <Content Include="App_LocalResources\PermissionsManager.ascx.ru-RU.resx" />
@@ -1832,7 +1819,6 @@
     <Content Include="App_LocalResources\Edit.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\Edit.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\Edit.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\Edit.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\Edit.aspx.resx" />
     <Content Include="App_LocalResources\Edit.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\Edit.aspx.ru-RU.resx" />
@@ -1851,7 +1837,6 @@
     <Content Include="App_LocalResources\AclActionsSelector.ascx.it-IT.resx" />
     <Content Include="App_LocalResources\AclActionsSelector.ascx.nb-NO.resx" />
     <Content Include="App_LocalResources\AclActionsSelector.ascx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AclActionsSelector.ascx.pt-BR.resx" />
     <Content Include="App_LocalResources\AclActionsSelector.ascx.resx" />
     <Content Include="App_LocalResources\AclActionsSelector.ascx.ro-RO.resx" />
     <Content Include="App_LocalResources\AclActionsSelector.ascx.ru-RU.resx" />
@@ -1870,7 +1855,6 @@
     <Content Include="App_LocalResources\Admin.master.it-IT.resx" />
     <Content Include="App_LocalResources\Admin.master.nb-NO.resx" />
     <Content Include="App_LocalResources\Admin.master.nl-NL.resx" />
-    <Content Include="App_LocalResources\Admin.master.pt-BR.resx" />
     <Content Include="App_LocalResources\Admin.master.resx" />
     <Content Include="App_LocalResources\Admin.master.ro-RO.resx" />
     <Content Include="App_LocalResources\Admin.master.ru-RU.resx" />
@@ -1889,7 +1873,6 @@
     <Content Include="App_LocalResources\AdminGroups.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminGroups.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminGroups.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminGroups.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminGroups.aspx.resx" />
     <Content Include="App_LocalResources\AdminGroups.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminGroups.aspx.ru-RU.resx" />
@@ -1908,7 +1891,6 @@
     <Content Include="App_LocalResources\AdminHome.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminHome.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminHome.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminHome.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminHome.aspx.resx" />
     <Content Include="App_LocalResources\AdminHome.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminHome.aspx.ru-RU.resx" />
@@ -1927,7 +1909,6 @@
     <Content Include="App_LocalResources\AdminNamespaces.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminNamespaces.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminNamespaces.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminNamespaces.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminNamespaces.aspx.resx" />
     <Content Include="App_LocalResources\AdminNamespaces.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminNamespaces.aspx.ru-RU.resx" />
@@ -1946,7 +1927,6 @@
     <Content Include="App_LocalResources\AdminPages.aspx.resx" />
     <Content Include="App_LocalResources\AdminPages.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminPages.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminPages.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminPages.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminPages.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminPages.aspx.ru-RU.resx" />
@@ -1965,7 +1945,6 @@
     <Content Include="App_LocalResources\AdminUsers.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\AdminUsers.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\AdminUsers.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\AdminUsers.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\AdminUsers.aspx.resx" />
     <Content Include="App_LocalResources\AdminUsers.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AdminUsers.aspx.ru-RU.resx" />
@@ -2037,7 +2016,6 @@
     <Content Include="App_LocalResources\ImageEditor.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\ImageEditor.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\ImageEditor.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\ImageEditor.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\ImageEditor.aspx.resx" />
     <Content Include="App_LocalResources\Search.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\Search.aspx.ru-RU.resx" />
@@ -2054,7 +2032,6 @@
     <Content Include="App_LocalResources\Search.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\Search.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\Search.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\Search.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\Search.aspx.resx" />
     <Content Include="App_LocalResources\AccessDenied.aspx.ro-RO.resx" />
     <Content Include="App_LocalResources\AllPages.aspx.ro-RO.resx" />
@@ -2119,9 +2096,6 @@
     <Content Include="App_LocalResources\Editor.ascx.nl-NL.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\Editor.ascx.pt-BR.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_LocalResources\PopupWYSIWYG.aspx.ru-RU.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -2148,7 +2122,6 @@
     <Content Include="App_LocalResources\PopupWYSIWYG.aspx.it-IT.resx" />
     <Content Include="App_LocalResources\PopupWYSIWYG.aspx.nb-NO.resx" />
     <Content Include="App_LocalResources\PopupWYSIWYG.aspx.nl-NL.resx" />
-    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\PopupWYSIWYG.aspx.resx" />
     <Content Include="App_LocalResources\AttachmentManager.ascx.cs-CZ.resx">
       <SubType>Designer</SubType>
@@ -2172,9 +2145,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\AttachmentManager.ascx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\AttachmentManager.ascx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\AttachmentManager.ascx.ru-RU.resx">
@@ -2217,9 +2187,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\AttachmentViewer.ascx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\AttachmentViewer.ascx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\AttachmentViewer.ascx.ru-RU.resx">
@@ -2282,9 +2249,6 @@
     <Content Include="App_LocalResources\FileManager.ascx.nl-NL.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_LocalResources\FileManager.ascx.pt-BR.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="App_LocalResources\Popup.aspx.ru-RU.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -2325,9 +2289,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\Popup.aspx.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_LocalResources\Popup.aspx.pt-BR.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\Popup.aspx.resx">
