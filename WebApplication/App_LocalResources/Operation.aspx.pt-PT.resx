@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelDeleteMessageResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Cancelar</value>
   </data>
   <data name="btnCancelDeleteMessageResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnDeleteMessageResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Eliminar</value>
   </data>
   <data name="btnDeleteMessageResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkDeleteMessageRepliesResource1.Text" xml:space="preserve">
-    <value>Delete Message's replies</value>
+    <value>Eliminar Respostas da Mensagen</value>
   </data>
   <data name="chkDeleteMessageRepliesResource1.ToolTip" xml:space="preserve">
     <value />
@@ -139,12 +139,12 @@
     <value />
   </data>
   <data name="lblDeleteMessageDescriptionResource1.Text" xml:space="preserve">
-    <value>To delete the selected message, click on the Delete button.</value>
+    <value>Para eliminar a mensagem selecionada, clique no botão.</value>
   </data>
   <data name="lblDeleteMessageResource1.Text" xml:space="preserve">
-    <value>Delete Message</value>
+    <value>Eliminar Mensagem</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
+    <value>Página sem Título</value>
   </data>
 </root>

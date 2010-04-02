@@ -118,43 +118,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnPreviewResource1.Text" xml:space="preserve">
-    <value>Update Preview</value>
+    <value>Actualizar Pré-visualização</value>
   </data>
   <data name="btnPreviewResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save</value>
+    <value>Guardar</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save the modified Image</value>
+    <value>Guardar Imagem Modificada</value>
   </data>
   <data name="chkAspectRatioResource1.Text" xml:space="preserve">
-    <value>Maintain Aspect Ratio</value>
+    <value>Manter Proporção</value>
   </data>
   <data name="chkAspectRatioResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkNewNameResource2.Text" xml:space="preserve">
-    <value>Save as new file</value>
+    <value>Guardar como novo </value>
   </data>
   <data name="chkNewNameResource2.ToolTip" xml:space="preserve">
-    <value>If not selected, the original file is overwritten</value>
+    <value>Se não for seleccionado, o ficheiro original é substituído</value>
   </data>
   <data name="imgPreviewResource1.AlternateText" xml:space="preserve">
-    <value>Image Preview</value>
+    <value>Pré-visualização de Imagem</value>
   </data>
   <data name="imgPreviewResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelResource2.Text" xml:space="preserve">
-    <value>Close</value>
+    <value>Fechar</value>
   </data>
   <data name="lblCurrentSizeInfoResource1.Text" xml:space="preserve">
-    <value>Current size: </value>
+    <value>Tamanho actual: </value>
   </data>
   <data name="lblCurrentSizePixelsResource1.Text" xml:space="preserve">
-    <value> pixels</value>
+    <value>pixels</value>
   </data>
   <data name="lblCurrentSizeResource1.Text" xml:space="preserve">
     <value />
@@ -163,7 +163,7 @@
     <value />
   </data>
   <data name="lblOptionsResource1.Text" xml:space="preserve">
-    <value>Image Resize Options</value>
+    <value>Opções de redimensionar imagem  </value>
   </data>
   <data name="lblOptionsResource1.ToolTip" xml:space="preserve">
     <value />
@@ -181,7 +181,7 @@
     <value />
   </data>
   <data name="lblScalePreResource1.Text" xml:space="preserve">
-    <value>(Scale: </value>
+    <value>(Escala: </value>
   </data>
   <data name="lblScalePreResource1.ToolTip" xml:space="preserve">
     <value />
@@ -193,43 +193,43 @@
     <value />
   </data>
   <data name="lblSizePixelsResource1.Text" xml:space="preserve">
-    <value> pixels</value>
+    <value>pixeis</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Image Editor</value>
+    <value>Editor de Imagem</value>
   </data>
   <data name="rdoJpegHighResource2.Text" xml:space="preserve">
     <value>JPEG 100%</value>
   </data>
   <data name="rdoJpegHighResource2.ToolTip" xml:space="preserve">
-    <value>JPEG format, full quality</value>
+    <value>formato JPEG, qualidade máxima</value>
   </data>
   <data name="rdoJpegMediumResource2.Text" xml:space="preserve">
     <value>JPEG 60%</value>
   </data>
   <data name="rdoJpegMediumResource2.ToolTip" xml:space="preserve">
-    <value>JPEG format, medium quality</value>
+    <value>formato JPEG, qualidade média</value>
   </data>
   <data name="rdoPercentageResource2.Text" xml:space="preserve">
-    <value>Resize by scale</value>
+    <value>Redimensionar por escala</value>
   </data>
   <data name="rdoPercentageResource2.ToolTip" xml:space="preserve">
-    <value>Resize the image specifying a scale</value>
+    <value>Redimensionar imagem especificando uma escala</value>
   </data>
   <data name="rdoPixelResource2.Text" xml:space="preserve">
-    <value>Resize by absolute size</value>
+    <value>Redimensionar com tamanho absoluto</value>
   </data>
   <data name="rdoPixelResource2.ToolTip" xml:space="preserve">
-    <value>Resize the image specifying the size in pixels</value>
+    <value>Redimensionar imagem especificando o tamanho em pixeis</value>
   </data>
   <data name="rdoPngResource2.ToolTip" xml:space="preserve">
-    <value>PNG format (alpha channel is preserved)</value>
+    <value>Formato PNG (canal alfa é preservado)</value>
   </data>
   <data name="txtHeightResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtHeightResource1.ToolTip" xml:space="preserve">
-    <value>Height</value>
+    <value>Altura</value>
   </data>
   <data name="txtNewNameResource1.Text" xml:space="preserve">
     <value />
@@ -241,21 +241,21 @@
     <value>100</value>
   </data>
   <data name="txtPercentageResource2.ToolTip" xml:space="preserve">
-    <value>Resize scale (percentage)</value>
+    <value>Escala de Redimensionamento (%)</value>
   </data>
   <data name="txtWidthResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtWidthResource1.ToolTip" xml:space="preserve">
-    <value>Width</value>
+    <value>Largura</value>
   </data>
   <data name="btnCancelResource2.ToolTip" xml:space="preserve">
-    <value>Close this tolbox</value>
+    <value>Fechar a Ferramenta</value>
   </data>
   <data name="rdoPngResource2.Text" xml:space="preserve">
     <value>PNG</value>
   </data>
   <data name="lblRotateResource1.Text" xml:space="preserve">
-    <value>Rotation</value>
+    <value>Rotação</value>
   </data>
 </root>

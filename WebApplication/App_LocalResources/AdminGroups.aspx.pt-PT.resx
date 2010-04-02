@@ -118,49 +118,49 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Cancelar</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the Group list</value>
+    <value>Cancelar e Voltar à lista de Grupos</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Group</value>
+    <value>Criar Grupo</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Group</value>
+    <value>Guardar Novo grupo</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Apagar</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Group</value>
+    <value>Eliminar Grupo</value>
   </data>
   <data name="btnNewGroupResource1.Text" xml:space="preserve">
-    <value>New Group</value>
+    <value>Novo Grupo</value>
   </data>
   <data name="btnNewGroupResource1.ToolTip" xml:space="preserve">
-    <value>Create a new User Group</value>
+    <value>Criar  Grupo de Utilizadores</value>
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Group</value>
+    <value>Guardar Grupo</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>Guardar Alterações</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleccionar</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Select this User Group</value>
+    <value>Seleccionar Grupo de Utilizadores</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleccionar</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Select this User Group</value>
+    <value>Seleccionar Grupo de Utilizadores</value>
   </data>
   <data name="cvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name already in use</value>
+    <value>Nome já existente</value>
   </data>
   <data name="cvNameResource1.Text" xml:space="preserve">
     <value />
@@ -169,25 +169,25 @@
     <value />
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Description</value>
+    <value>Descrição</value>
   </data>
   <data name="lblDescriptionResource2.Text" xml:space="preserve">
-    <value>Description</value>
+    <value>Descrição</value>
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Group Details</value>
+    <value>Detalhes d Grupo</value>
   </data>
   <data name="lblGlobalPermissionsResource1.Text" xml:space="preserve">
-    <value>Global Permissions</value>
+    <value>Permissões Gerais</value>
   </data>
   <data name="lblGroupsResource1.Text" xml:space="preserve">
-    <value>User Groups</value>
+    <value>Grupos de Utilizadores</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nome</value>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nome</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
     <value>Provider</value>
@@ -202,10 +202,10 @@
     <value />
   </data>
   <data name="lblUsersResource1.Text" xml:space="preserve">
-    <value>Users</value>
+    <value>Utilizadores</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administração</value>
   </data>
   <data name="pnlEditGroupResource1.GroupingText" xml:space="preserve">
     <value />
@@ -226,7 +226,7 @@
     <value />
   </data>
   <data name="revNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>Nome Inválido</value>
   </data>
   <data name="revNameResource1.Text" xml:space="preserve">
     <value />
@@ -235,7 +235,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>Nome é obrigatório</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />

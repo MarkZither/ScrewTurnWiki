@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>The list of all pages contained in the current namespace.</value>
+    <value>Lista de todas as páginas contidas no namespace actual.</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Page Index</value>
+    <value>Índice da Página</value>
   </data>
   <data name="lnkCategoriesResource1.Text" xml:space="preserve">
-    <value>Page Categories</value>
+    <value>Categorias da Página</value>
   </data>
   <data name="lnkCategoriesResource1.ToolTip" xml:space="preserve">
-    <value>View all Page Categories</value>
+    <value>Ver todas as categorias da Página</value>
   </data>
   <data name="lnkSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>Procurar</value>
   </data>
   <data name="lnkSearchResource1.ToolTip" xml:space="preserve">
-    <value>Perform a Search</value>
+    <value>Executar Pesquisa</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
+    <value>Pagina sem Título</value>
   </data>
   <data name="pnlPageListResource1.GroupingText" xml:space="preserve">
     <value />

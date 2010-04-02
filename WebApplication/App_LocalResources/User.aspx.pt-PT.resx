@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnSendResource1.Text" xml:space="preserve">
-    <value>Send</value>
+    <value>Enviar</value>
   </data>
   <data name="btnSendResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblActivityResource1.Text" xml:space="preserve">
-    <value>Recent activity by this user:</value>
+    <value>Actividades recentes do utilizador:</value>
   </data>
   <data name="lblGravatarResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblMessageInfoResource1.Text" xml:space="preserve">
-    <value>You can send an email message to this user. &lt;b&gt;Note&lt;/b&gt;: your email address won't be disclosed.</value>
+    <value>Pode enviar uma mensagem por e-mail para este utilizador. &lt;b&gt;Note&lt;/b&gt;: o endereço de email não será divulgado.</value>
   </data>
   <data name="lblMessageTitleResource1.Text" xml:space="preserve">
-    <value>Send a Message</value>
+    <value>Enviar Mensagem</value>
   </data>
   <data name="lblNoActivityResource1.Text" xml:space="preserve">
-    <value>&lt;i&gt;No recent activity&lt;/i&gt;</value>
+    <value>&lt;i&gt;Sem actividades recentes&lt;/i&gt;</value>
   </data>
   <data name="lblRecentActivityResource1.Text" xml:space="preserve">
     <value />
@@ -148,13 +148,13 @@
     <value />
   </data>
   <data name="lblSubjectResource1.Text" xml:space="preserve">
-    <value>Subject</value>
+    <value>Assunto</value>
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>##NAME## - User's Details</value>
+    <value>##NAME## -detalhes de utilizador</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Título</value>
   </data>
   <data name="pnlMessageResource1.GroupingText" xml:space="preserve">
     <value />
@@ -163,7 +163,7 @@
     <value />
   </data>
   <data name="rfvBodyResource1.ErrorMessage" xml:space="preserve">
-    <value>Body is required</value>
+    <value>Corpo é obrigatório</value>
   </data>
   <data name="rfvBodyResource1.Text" xml:space="preserve">
     <value />
@@ -172,7 +172,7 @@
     <value />
   </data>
   <data name="rfvSubjectResource1.ErrorMessage" xml:space="preserve">
-    <value>Subject is required</value>
+    <value>Assunto é obrigatório</value>
   </data>
   <data name="rfvSubjectResource1.Text" xml:space="preserve">
     <value />

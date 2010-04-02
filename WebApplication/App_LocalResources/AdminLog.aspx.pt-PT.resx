@@ -118,54 +118,54 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnClearLogResource1.Text" xml:space="preserve">
-    <value>Clear Log</value>
+    <value>Limpar Log</value>
   </data>
   <data name="btnClearLogResource1.ToolTip" xml:space="preserve">
-    <value>Clear the system log</value>
+    <value>Limpar log do sistema</value>
   </data>
   <data name="chkErrorsResource1.Text" xml:space="preserve">
-    <value>Errors</value>
+    <value>Erros</value>
   </data>
   <data name="chkErrorsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkMessagesResource1.Text" xml:space="preserve">
-    <value>Messages</value>
+    <value>Mensagens</value>
   </data>
   <data name="chkMessagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkWarningsResource1.Text" xml:space="preserve">
-    <value>Warnings</value>
+    <value>Avisos</value>
   </data>
   <data name="chkWarningsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblDateTimeResource1.Text" xml:space="preserve">
-    <value>Date/Time</value>
+    <value>Data/Hora</value>
   </data>
   <data name="lblFilterResource1.Text" xml:space="preserve">
-    <value>Display: </value>
+    <value>Mostrar:</value>
   </data>
   <data name="lblLogResource1.Text" xml:space="preserve">
-    <value>System Log</value>
+    <value>Log d sistema</value>
   </data>
   <data name="lblMessageResource1.Text" xml:space="preserve">
-    <value>Message</value>
+    <value>Mensagem</value>
   </data>
   <data name="lblUserResource1.Text" xml:space="preserve">
-    <value>User</value>
+    <value>Utilizador</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administração</value>
   </data>
   <data name="btnNoLimitResource1.Text" xml:space="preserve">
-    <value>Display all</value>
+    <value>Mostrar Todos</value>
   </data>
   <data name="btnNoLimitResource1.ToolTip" xml:space="preserve">
-    <value>Display all log entries (might take a few seconds)</value>
+    <value>Mostrar todas as entradas de log (pode demorar alguns segundos)</value>
   </data>
   <data name="lblLimitResource1.Text" xml:space="preserve">
-    <value>Currently displaying only 100 log entries &amp;mdash;</value>
+    <value>Atualmente mostra apenas 100 entradas de log&amp;mdash;</value>
   </data>
 </root>

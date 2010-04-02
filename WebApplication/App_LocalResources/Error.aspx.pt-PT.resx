@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblAdminResource1.Text" xml:space="preserve">
-    <value>Exception Details</value>
+    <value>Detalhes das Excepções</value>
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>We're sorry, an error occurred while processing your request. The error information has been registered and it will be investigated.&lt;br /&gt;Please restart from the &lt;a href="Default.aspx"&gt;Main Page&lt;/a&gt;.</value>
+    <value>Ocorreu um erro ao processar o pedido. As informação do erro foi registrada e será investigada.&lt;br /&gt;Por favor, reinicie a partir da &lt;a href="Default.aspx"&gt;Página Principal&lt;/a&gt;.</value>
   </data>
   <data name="lblErrorResource1.Text" xml:space="preserve">
-    <value>System Error</value>
+    <value>Erro de Sistema</value>
   </data>
   <data name="lblExceptionResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
+    <value>Página sem Título</value>
   </data>
   <data name="pnlExceptionResource1.GroupingText" xml:space="preserve">
     <value />

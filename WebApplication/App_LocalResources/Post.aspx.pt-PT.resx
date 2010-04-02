@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Cancelar</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSendResource1.Text" xml:space="preserve">
-    <value>Send</value>
+    <value>Enviar</value>
   </data>
   <data name="btnSendResource1.ToolTip" xml:space="preserve">
     <value />
@@ -136,13 +136,13 @@
     <value />
   </data>
   <data name="lblSubjectResource1.Text" xml:space="preserve">
-    <value>Subject</value>
+    <value>Assunto</value>
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Post a Message</value>
+    <value>Enviar a Mensagem</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
+    <value>Página sem Título</value>
   </data>
   <data name="txtSubjectResource1.Text" xml:space="preserve">
     <value />

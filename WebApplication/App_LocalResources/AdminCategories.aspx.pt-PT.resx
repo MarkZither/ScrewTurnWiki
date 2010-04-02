@@ -118,49 +118,49 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnBackResource1.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>Voltar</value>
   </data>
   <data name="btnBackResource1.ToolTip" xml:space="preserve">
-    <value>Back to the Category list</value>
+    <value>Voltar à Lista de Categorias</value>
   </data>
   <data name="btnDeleteCategoryResource1.Text" xml:space="preserve">
-    <value>Delete Category</value>
+    <value>Eliminar Categoria</value>
   </data>
   <data name="btnDeleteCategoryResource1.ToolTip" xml:space="preserve">
-    <value>Delete this Category</value>
+    <value>Eliminar Esta Categoria</value>
   </data>
   <data name="btnMergeResource1.Text" xml:space="preserve">
-    <value>Merge</value>
+    <value>Juntar</value>
   </data>
   <data name="btnMergeResource1.ToolTip" xml:space="preserve">
-    <value>Merges the Category</value>
+    <value>Juntar Categoria</value>
   </data>
   <data name="btnNewCategoryResource1.Text" xml:space="preserve">
-    <value>Create</value>
+    <value>Criar</value>
   </data>
   <data name="btnNewCategoryResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRenameResource1.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Alterar o Nome</value>
   </data>
   <data name="btnRenameResource1.ToolTip" xml:space="preserve">
-    <value>Rename the Category</value>
+    <value>Alterar Nome  Categoria</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Selecionar</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
-    <value>Select this Category</value>
+    <value>Seleccionar esta Categoria</value>
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Selecionar</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Select this Category</value>
+    <value>Seleccionar esta Categoria</value>
   </data>
   <data name="cvNewCategoryResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Category Name</value>
+    <value>Nome de Categoria Inválido</value>
   </data>
   <data name="cvNewCategoryResource1.Text" xml:space="preserve">
     <value />
@@ -169,7 +169,7 @@
     <value />
   </data>
   <data name="cvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Category Name</value>
+    <value>Nome de Categoria Inválido</value>
   </data>
   <data name="cvNewNameResource1.Text" xml:space="preserve">
     <value />
@@ -178,13 +178,13 @@
     <value />
   </data>
   <data name="lblCategoriesResource1.Text" xml:space="preserve">
-    <value>Categories</value>
+    <value>Categorias</value>
   </data>
   <data name="lblCurrentCategoryResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblDeleteCategoryResource1.Text" xml:space="preserve">
-    <value>Delete Category</value>
+    <value>Eliminar Categoria</value>
   </data>
   <data name="lblDeleteResultResource1.Text" xml:space="preserve">
     <value />
@@ -193,13 +193,13 @@
     <value />
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Category Operations</value>
+    <value>Operações de Categoria</value>
   </data>
   <data name="lblMergeCategoryTitleResource1.Text" xml:space="preserve">
-    <value>Merge Category</value>
+    <value>Juntar Categoria</value>
   </data>
   <data name="lblMergeIntoResource1.Text" xml:space="preserve">
-    <value>Merge into</value>
+    <value>Juntar </value>
   </data>
   <data name="lblMergeResultResource1.Text" xml:space="preserve">
     <value />
@@ -208,13 +208,13 @@
     <value />
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nome</value>
   </data>
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
     <value>Namespace</value>
   </data>
   <data name="lblNewCategoryResource1.Text" xml:space="preserve">
-    <value>New Category</value>
+    <value>Nova Categoria</value>
   </data>
   <data name="lblNewCategoryResultResource1.Text" xml:space="preserve">
     <value />
@@ -223,16 +223,16 @@
     <value />
   </data>
   <data name="lblNewNameResource1.Text" xml:space="preserve">
-    <value>New Name</value>
+    <value>Novo Nome</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Pages</value>
+    <value>Páginas</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
     <value>Provider</value>
   </data>
   <data name="lblRenameCategoryTitleResource1.Text" xml:space="preserve">
-    <value>Rename Category</value>
+    <value>Renomear Categoria</value>
   </data>
   <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
@@ -247,7 +247,7 @@
     <value />
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administração</value>
   </data>
   <data name="pnlEditCategoryResource1.GroupingText" xml:space="preserve">
     <value />
@@ -262,7 +262,7 @@
     <value />
   </data>
   <data name="rfvNewCategoryResource1.ErrorMessage" xml:space="preserve">
-    <value>Category Name is required</value>
+    <value>É necessário o Nome da Categoria</value>
   </data>
   <data name="rfvNewCategoryResource1.Text" xml:space="preserve">
     <value />
@@ -271,7 +271,7 @@
     <value />
   </data>
   <data name="rfvNewNameResource1.ErrorMessage" xml:space="preserve">
-    <value>New Name is required</value>
+    <value>É Necessário Novo Nome</value>
   </data>
   <data name="rfvNewNameResource1.Text" xml:space="preserve">
     <value />
@@ -292,40 +292,40 @@
     <value />
   </data>
   <data name="btnBulkBackResource1.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>Voltar</value>
   </data>
   <data name="btnBulkBackResource1.ToolTip" xml:space="preserve">
-    <value>Back to the Category list</value>
+    <value>Voltar à Lista de Categorias</value>
   </data>
   <data name="btnBulkManageResource1.Text" xml:space="preserve">
-    <value>Bulk Manage</value>
+    <value>Gestão do Bulk</value>
   </data>
   <data name="btnBulkManageResource1.ToolTip" xml:space="preserve">
-    <value>Manage categories binding for many pages at once</value>
+    <value>Gerir categorias ligadas a várias Páginas</value>
   </data>
   <data name="btnBulkSaveResouce1.Text" xml:space="preserve">
-    <value>Save Binding</value>
+    <value>Salvar Ligação</value>
   </data>
   <data name="btnBulkSaveResouce1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblBulkStep1Resource1.Text" xml:space="preserve">
-    <value>1. Select Pages</value>
+    <value>1. Selecionar Páginas</value>
   </data>
   <data name="lblBulkStep2Resource1.Text" xml:space="preserve">
-    <value>2. Select Categories</value>
+    <value>2. Selecionar Categorias</value>
   </data>
   <data name="lblBulkStep3Resource1.Text" xml:space="preserve">
-    <value>3. Save Binding</value>
+    <value>3. Guardar Ligações</value>
   </data>
   <data name="rdoBulkAddResource2.Text" xml:space="preserve">
-    <value>Add selected categories to selected pages, preserving existing categories mapping</value>
+    <value>Adicionar categorias seleccionadas às Páginas seleccionadas, presevando as categorias existentes</value>
   </data>
   <data name="rdoBulkAddResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoBulkReplaceResource2.Text" xml:space="preserve">
-    <value>For selected pages, replace existing categories mapping with selected categories (selecting no categories causes the pages to be uncategorized)</value>
+    <value>Para Páginas Seleccionadas, substituir o mapa de categorias existentes pelo das categorias seleccionadas (a não selecção de categorias faz com que as páginas nao fiquem categorizadas)</value>
   </data>
   <data name="rdoBulkReplaceResource2.ToolTip" xml:space="preserve">
     <value />

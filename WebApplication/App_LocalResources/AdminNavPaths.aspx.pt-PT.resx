@@ -118,79 +118,79 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAddResource1.Text" xml:space="preserve">
-    <value>Add</value>
+    <value>Adicionar</value>
   </data>
   <data name="btnAddResource1.ToolTip" xml:space="preserve">
-    <value>Add the selected Page to the list</value>
+    <value>Adicionar Página selecionada à lista</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Cancelar</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Cancel and return to the Navigation Path list</value>
+    <value>Cancelar e voltar a lista de Directórios de Navegação</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Create Nav. Path</value>
+    <value>Criar Dir de Navegação</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
-    <value>Save the new Navigation Path</value>
+    <value>Guardar novo Directório de Navegação</value>
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Eliminar</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete the Navigation Path</value>
+    <value>Eliminar  Directório de Navegação</value>
   </data>
   <data name="btnDownResource1.Text" xml:space="preserve">
-    <value>Down</value>
+    <value>Descer</value>
   </data>
   <data name="btnDownResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnNewNavPathResource1.Text" xml:space="preserve">
-    <value>New Nav. Path</value>
+    <value>Novo Dir de Navegação</value>
   </data>
   <data name="btnNewNavPathResource1.ToolTip" xml:space="preserve">
-    <value>Create a new Navigation Path</value>
+    <value>Criar novo Directório de Navegação</value>
   </data>
   <data name="btnRemoveResource1.Text" xml:space="preserve">
-    <value>Remove</value>
+    <value>Remover</value>
   </data>
   <data name="btnRemoveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Nav. Path</value>
+    <value>Guardar Dir. Nav.</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save modifications</value>
+    <value>Guardar Alterações</value>
   </data>
   <data name="btnSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>Procura</value>
   </data>
   <data name="btnSearchResource1.ToolTip" xml:space="preserve">
-    <value>Search for a Page</value>
+    <value>Procurar uma Página</value>
   </data>
   <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleccionar</value>
   </data>
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleccionar</value>
   </data>
   <data name="btnSelectResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUpResource1.Text" xml:space="preserve">
-    <value>Up</value>
+    <value>Subir</value>
   </data>
   <data name="btnUpResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvName1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Name</value>
+    <value>Nome Inválido</value>
   </data>
   <data name="cvName1Resource1.Text" xml:space="preserve">
     <value />
@@ -199,7 +199,7 @@
     <value />
   </data>
   <data name="cvName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Navigation Path already exists</value>
+    <value>Directório de Navavegação ja existente</value>
   </data>
   <data name="cvName2Resource1.Text" xml:space="preserve">
     <value />
@@ -208,22 +208,22 @@
     <value />
   </data>
   <data name="lblEditTitleResource1.Text" xml:space="preserve">
-    <value>Navigation Paths Details</value>
+    <value>Detalhes Directórios Navegação</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nome</value>
   </data>
   <data name="lblNameResource2.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Nome</value>
   </data>
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
     <value>Namespace</value>
   </data>
   <data name="lblNavPathsResource1.Text" xml:space="preserve">
-    <value>Navigation Paths</value>
+    <value>Directórios de Navegação</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
-    <value>Pages</value>
+    <value>Páginas</value>
   </data>
   <data name="lblProviderResource1.Text" xml:space="preserve">
     <value>Provider</value>
@@ -244,7 +244,7 @@
     <value />
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
-    <value>Administration</value>
+    <value>Administração</value>
   </data>
   <data name="pnlEditNavPathResource1.GroupingText" xml:space="preserve">
     <value />
@@ -259,7 +259,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Name is required</value>
+    <value>Nome é obrgatório</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />

@@ -121,16 +121,16 @@
     <value />
   </data>
   <data name="btnBiggerMarkupResource3.ToolTip" xml:space="preserve">
-    <value>Increase editor size</value>
+    <value>Aumentar tamanho do Editor</value>
   </data>
   <data name="btnBiggerMarkupVisualResource3.AlternateText" xml:space="preserve">
     <value />
   </data>
   <data name="btnBiggerMarkupVisualResource3.ToolTip" xml:space="preserve">
-    <value>Increase editor size</value>
+    <value>Aumentar tamanho do Editor</value>
   </data>
   <data name="btnPreviewResource3.Text" xml:space="preserve">
-    <value>Preview</value>
+    <value>Pré-visualizar</value>
   </data>
   <data name="btnPreviewResource3.ToolTip" xml:space="preserve">
     <value />
@@ -139,13 +139,13 @@
     <value />
   </data>
   <data name="btnSmallerMarkupResource3.ToolTip" xml:space="preserve">
-    <value>Decrease editor size</value>
+    <value>Diminuir tamanho do Editor</value>
   </data>
   <data name="btnSmallerMarkupVisualResource3.AlternateText" xml:space="preserve">
     <value />
   </data>
   <data name="btnSmallerMarkupVisualResource3.ToolTip" xml:space="preserve">
-    <value>Decrease editor size</value>
+    <value>Diminuir tamanho do Editor</value>
   </data>
   <data name="btnVisualResource3.Text" xml:space="preserve">
     <value>Visual</value>
@@ -163,7 +163,7 @@
     <value />
   </data>
   <data name="lblPreviewWarningResource3.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: this is only a preview. The content was not saved.</value>
+    <value>&lt;b&gt;Warning&lt;/b&gt;: isto é apenas uma pré-visualização. Os conteúdos não foram guardados.</value>
   </data>
   <data name="lblPreviewWarningResource3.ToolTip" xml:space="preserve">
     <value />
