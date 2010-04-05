@@ -186,7 +186,7 @@ namespace ScrewTurn.Wiki {
 
 							// Write the remaining elements
 							BuildAuthorTag(rss, messages[i].Username);
-							rss.WriteElementString("pubDate", content.LastModified.ToUniversalTime().ToString("R"));
+							rss.WriteElementString("pubDate", messages[i].DateTime.ToUniversalTime().ToString("R"));
 							rss.WriteStartElement("guid");
 							rss.WriteAttributeString("isPermaLink", "false");
 							rss.WriteString(GetGuid(page.FullName + "-" + messages[i].ID.ToString(), messages[i].DateTime));
