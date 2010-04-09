@@ -1163,6 +1163,20 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the last page indexing.
+		/// </summary>
+		/// <value>The last page indexing DateTime.</value>
+		public static DateTime LastPageIndexing {
+			get {
+				return DateTime.ParseExact(GetString(Provider.GetSetting("LastPageIndexing"), DateTime.Now.AddYears(-10).ToString("yyyyMMddHHmmss")),
+					"yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+			}
+			set {
+				Provider.SetSetting("LastPageIndexing", value.ToString("yyyyMMddHHmmss"));
+			}
+		}
+
 		#endregion
 
 		/// <summary>

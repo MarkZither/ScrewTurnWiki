@@ -189,6 +189,25 @@ namespace ScrewTurn.Wiki {
 			if(Pages.FindPage(Settings.DefaultPage) == null) CreateMainPage();
 
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername);
+
+			System.Threading.ThreadPool.QueueUserWorkItem(ignored => {
+				if((DateTime.Now - Settings.LastPageIndexing).TotalDays > 7) {
+					Settings.LastPageIndexing = DateTime.Now;
+					System.Threading.Thread.Sleep(10000);
+					using(MemoryStream ms = new MemoryStream()) {
+						using(StreamWriter wr = new System.IO.StreamWriter(ms)) {
+							System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
+							foreach(var provider in Collectors.PagesProviderCollector.AllProviders) {
+								if(!provider.ReadOnly) {
+									Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+									provider.RebuildIndex();
+									Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+								}
+							}
+						}
+					}
+				}
+			});
 		}
 
 		/// <summary>

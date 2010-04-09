@@ -80,6 +80,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets the current HTTP Context object.
 		/// </summary>
+		/// <remarks>The context might not be valid when doing an index rebuild (see <see cref="ForIndexing"/>).</remarks>
 		public HttpContext HttpContext {
 			get { return httpContext; }
 		}
