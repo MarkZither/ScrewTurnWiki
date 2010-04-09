@@ -2369,27 +2369,6 @@ namespace ScrewTurn.Wiki {
 
 			Match match;
 
-			// Format {CLOUD} tag (it has to be in Phase3 because on page rebind the cache is not cleared)
-			// --> When rebidning a page, the cache is now cleared
-			/*match = CloudRegex.Match(sb.ToString());
-			string cloudMarkup = BuildCloud(DetectNamespaceInfo(current));
-			while(match.Success) {
-				sb.Remove(match.Index, match.Length);
-				sb.Insert(match.Index, cloudMarkup);
-				match = CloudRegex.Match(sb.ToString(), match.Index + cloudMarkup.Length);
-			}*/
-
-			// Format {NAMESPACE} tag
-			// --> Now processed with {INCOMING/OUTGOING}
-			/*string ns = Tools.DetectCurrentNamespace();
-			if(string.IsNullOrEmpty(ns)) ns = "&lt;root&gt;";
-			match = NamespaceRegex.Match(sb.ToString());
-			while(match.Success) {
-				sb.Remove(match.Index, match.Length);
-				sb.Insert(match.Index, ns);
-				match = NamespaceRegex.Match(sb.ToString(), match.Index + 11);
-			}*/
-
 			// Format other Phase3 special tags
 			match = Phase3SpecialTagRegex.Match(sb.ToString());
 			while(match.Success) {
@@ -2477,7 +2456,7 @@ namespace ScrewTurn.Wiki {
 				match = SignRegex.Match(sb.ToString());
 			}
 
-			// Transclusion (intra-Wiki)
+			// Transclusion
 			match = TransclusionRegex.Match(sb.ToString());
 			while(match.Success) {
 				sb.Remove(match.Index, match.Length);
@@ -2492,12 +2471,13 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 				PageInfo info = Pages.FindPage(pageName);
-				string currentUsername = SessionFacade.GetCurrentUsername();
-				string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
-				bool canView = AuthChecker.CheckActionForPage(info, Actions.ForPages.ReadPage, currentUsername, currentGroups);
-				if(canView) {
-					if(info != null && (current != null && info.FullName != current.FullName)) { // Avoid circular transclusion!
+				if(info != null && (current != null && info.FullName != current.FullName)) { // Avoid circular transclusion!
+					string currentUsername = SessionFacade.GetCurrentUsername();
+					string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+
+					bool canView = AuthChecker.CheckActionForPage(info, Actions.ForPages.ReadPage, currentUsername, currentGroups);
+					if(canView) {
 						dummy = new StringBuilder();
 						dummy.Append(@"<div class=""transcludedpage"">");
 						dummy.Append(FormattingPipeline.FormatWithPhase3(
@@ -2508,14 +2488,15 @@ namespace ScrewTurn.Wiki {
 						sb.Insert(match.Index, dummy.ToString());
 					}
 					else {
-						string formatterErrorString = @"<b style=""color: #FF0000;"">FORMATTER ERROR (Transcluded inexistent page or this same page)</b>";
+						string formatterErrorString = @"<b style=""color: #FF0000;"">PERMISSION ERROR (You are not allowed to see transcluded page)</b>";
 						sb.Insert(match.Index, formatterErrorString);
 					}
 				}
 				else {
-					string formatterErrorString = @"<b style=""color: #FF0000;"">PERMISSION ERROR (You are not allowed to see transcluded page)</b>";
+					string formatterErrorString = @"<b style=""color: #FF0000;"">FORMATTER ERROR (Transcluded inexistent page or this same page)</b>";
 					sb.Insert(match.Index, formatterErrorString);
 				}
+
 
 				match = TransclusionRegex.Match(sb.ToString());
 			}
