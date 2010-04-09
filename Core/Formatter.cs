@@ -278,73 +278,75 @@ namespace ScrewTurn.Wiki {
 				while(match.Success) {
 					if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
 						sb.Remove(match.Index, match.Length);
-						switch(match.Value.Substring(1, match.Value.Length - 2).ToUpperInvariant()) {
-							case "WIKITITLE":
-								sb.Insert(match.Index, Settings.WikiTitle);
-								break;
-							case "WIKIVERSION":
-								sb.Insert(match.Index, Settings.WikiVersion);
-								break;
-							case "MAINURL":
-								sb.Insert(match.Index, Settings.MainUrl);
-								break;
-							case "RSSPAGE":
-								if(current != null) {
-									sb.Insert(match.Index, @"<a href=""" +
-										UrlTools.BuildUrl("RSS.aspx?Page=", Tools.UrlEncode(current.FullName)) +
-										@""" title=""" + Exchanger.ResourceExchanger.GetResource("RssForThisPage") + @"""><img src=""" +
-										Settings.GetThemePath(Tools.DetectCurrentNamespace()) + @"Images/RSS.png"" alt=""RSS"" /></a>");
-								}
-								break;
-							case "THEMEPATH":
-								sb.Insert(match.Index, Settings.GetThemePath(Tools.DetectCurrentNamespace()));
-								break;
-							case "CLEAR":
-								sb.Insert(match.Index, @"<div style=""clear: both;""></div>");
-								break;
-							case "BR":
-								//if(!AreSingleLineBreaksToBeProcessed()) sb.Insert(match.Index, "<br />");
-								sb.Insert(match.Index, "<br />");
-								break;
-							case "TOP":
-								sb.Insert(match.Index, @"<a href=""#PageTop"">" + Exchanger.ResourceExchanger.GetResource("Top") + "</a>");
-								break;
-							case "SEARCHBOX":
-								string textBoxId = "SB" + Guid.NewGuid().ToString("N");
+						if(!forIndexing) {
+							switch(match.Value.Substring(1, match.Value.Length - 2).ToUpperInvariant()) {
+								case "WIKITITLE":
+									sb.Insert(match.Index, Settings.WikiTitle);
+									break;
+								case "WIKIVERSION":
+									sb.Insert(match.Index, Settings.WikiVersion);
+									break;
+								case "MAINURL":
+									sb.Insert(match.Index, Settings.MainUrl);
+									break;
+								case "RSSPAGE":
+									if(current != null) {
+										sb.Insert(match.Index, @"<a href=""" +
+											UrlTools.BuildUrl("RSS.aspx?Page=", Tools.UrlEncode(current.FullName)) +
+											@""" title=""" + Exchanger.ResourceExchanger.GetResource("RssForThisPage") + @"""><img src=""" +
+											Settings.GetThemePath(Tools.DetectCurrentNamespace()) + @"Images/RSS.png"" alt=""RSS"" /></a>");
+									}
+									break;
+								case "THEMEPATH":
+									sb.Insert(match.Index, Settings.GetThemePath(Tools.DetectCurrentNamespace()));
+									break;
+								case "CLEAR":
+									sb.Insert(match.Index, @"<div style=""clear: both;""></div>");
+									break;
+								case "BR":
+									//if(!AreSingleLineBreaksToBeProcessed()) sb.Insert(match.Index, "<br />");
+									sb.Insert(match.Index, "<br />");
+									break;
+								case "TOP":
+									sb.Insert(match.Index, @"<a href=""#PageTop"">" + Exchanger.ResourceExchanger.GetResource("Top") + "</a>");
+									break;
+								case "SEARCHBOX":
+									string textBoxId = "SB" + Guid.NewGuid().ToString("N");
 
-								string nsstring = ns != null ? NameTools.GetFullName(ns.Name, "Search") + ".aspx" : "Search.aspx";
-								string doSearchFunction = "<nowiki><nobr><script type=\"text/javascript\"><!--\r\n" + @"function _DoSearch_" + textBoxId + "() { document.location = '" + nsstring + @"?AllNamespaces=1&FilesAndAttachments=1&Query=' + encodeURI(document.getElementById('" + textBoxId + "').value); }" + "\r\n// -->\r\n</script>";
-								sb.Insert(match.Index, doSearchFunction +
-									@"<input class=""txtsearchbox"" type=""text"" id=""" + textBoxId + @""" onkeydown=""javascript:var keycode; if(window.event) keycode = event.keyCode; else keycode = event.which; if(keycode == 10 || keycode == 13) { _DoSearch_" + textBoxId + @"(); return false; }"" /> <big><a href=""#"" onclick=""javascript:_DoSearch_" + textBoxId + @"(); return false;"">&raquo;</a></big></nowiki></nobr>");
-								break;
-							case "CATEGORIES":
-								List<CategoryInfo> cats = Pages.GetCategories(ns);
-								string pageName = ns != null ? NameTools.GetFullName(ns.Name, "AllPages") + ".aspx" : "AllPages.aspx";
-								pageName += "?Cat=";
-								string categories = "<ul><li>" + string.Join("</li><li>",
-									(from c in cats
-									 select "<a href=\"" + pageName + Tools.UrlEncode(c.FullName) + "\">" + NameTools.GetLocalName(c.FullName) + "</a>").ToArray()) + "</li></ul>";
-								sb.Insert(match.Index, categories);
-								break;
-							case "CLOUD":
-								string cloud = BuildCloud(DetectNamespaceInfo(current));
-								sb.Insert(match.Index, cloud);
-								break;
-							case "PAGECOUNT":
-								sb.Insert(match.Index, Pages.GetPages(DetectNamespaceInfo(current)).Count.ToString());
-								break;
-							case "PAGECOUNT(*)":
-								sb.Insert(match.Index, Pages.GetGlobalPageCount().ToString());
-								break;
-							case "ORPHANS":
-								if(!forIndexing) sb.Insert(match.Index, BuildOrphanedPagesList(DetectNamespaceInfo(current), context, current));
-								break;
-							case "WANTED":
-								sb.Insert(match.Index, BuildWantedPagesList(DetectNamespaceInfo(current)));
-								break;
-							case "NAMESPACELIST":
-								sb.Insert(match.Index, BuildNamespaceList());
-								break;
+									string nsstring = ns != null ? NameTools.GetFullName(ns.Name, "Search") + ".aspx" : "Search.aspx";
+									string doSearchFunction = "<nowiki><nobr><script type=\"text/javascript\"><!--\r\n" + @"function _DoSearch_" + textBoxId + "() { document.location = '" + nsstring + @"?AllNamespaces=1&FilesAndAttachments=1&Query=' + encodeURI(document.getElementById('" + textBoxId + "').value); }" + "\r\n// -->\r\n</script>";
+									sb.Insert(match.Index, doSearchFunction +
+										@"<input class=""txtsearchbox"" type=""text"" id=""" + textBoxId + @""" onkeydown=""javascript:var keycode; if(window.event) keycode = event.keyCode; else keycode = event.which; if(keycode == 10 || keycode == 13) { _DoSearch_" + textBoxId + @"(); return false; }"" /> <big><a href=""#"" onclick=""javascript:_DoSearch_" + textBoxId + @"(); return false;"">&raquo;</a></big></nowiki></nobr>");
+									break;
+								case "CATEGORIES":
+									List<CategoryInfo> cats = Pages.GetCategories(ns);
+									string pageName = ns != null ? NameTools.GetFullName(ns.Name, "AllPages") + ".aspx" : "AllPages.aspx";
+									pageName += "?Cat=";
+									string categories = "<ul><li>" + string.Join("</li><li>",
+										(from c in cats
+										 select "<a href=\"" + pageName + Tools.UrlEncode(c.FullName) + "\">" + NameTools.GetLocalName(c.FullName) + "</a>").ToArray()) + "</li></ul>";
+									sb.Insert(match.Index, categories);
+									break;
+								case "CLOUD":
+									string cloud = BuildCloud(DetectNamespaceInfo(current));
+									sb.Insert(match.Index, cloud);
+									break;
+								case "PAGECOUNT":
+									sb.Insert(match.Index, Pages.GetPages(DetectNamespaceInfo(current)).Count.ToString());
+									break;
+								case "PAGECOUNT(*)":
+									sb.Insert(match.Index, Pages.GetGlobalPageCount().ToString());
+									break;
+								case "ORPHANS":
+									sb.Insert(match.Index, BuildOrphanedPagesList(DetectNamespaceInfo(current), context, current));
+									break;
+								case "WANTED":
+									sb.Insert(match.Index, BuildWantedPagesList(DetectNamespaceInfo(current)));
+									break;
+								case "NAMESPACELIST":
+									sb.Insert(match.Index, BuildNamespaceList());
+									break;
+							}
 						}
 					}
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
