@@ -41,7 +41,7 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex RecentChangesRegex = new Regex(@"\{recentchanges(\(\*\))?\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex ListRegex = new Regex(@"(?<=(\n|^))((\*|\#)+(\ )?.+?\n)+((?=\n)|\z)", RegexOptions.Compiled | RegexOptions.Singleline); // Singleline to matche list elements on multiple lines
 		private static readonly Regex TocRegex = new Regex(@"\{toc\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-		private static readonly Regex TransclusionRegex = new Regex(@"\{T(\:|\|).+\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		private static readonly Regex TransclusionRegex = new Regex(@"\{T(\:|\|).+?\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex HRRegex = new Regex(@"(?<=(\n|^))(\ )*----(\ )*\n", RegexOptions.Compiled);
 		private static readonly Regex SnippetRegex = new Regex(@"\{s\:(.+?)(\|.*?)*\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
 		private static readonly Regex ClassicSnippetVerifier = new Regex(@"\|\ *[\w\d]+\ *\=", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -396,38 +396,6 @@ namespace ScrewTurn.Wiki {
 			// Replace \n with BR was here
 
 			ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
-
-			// Transclusion (intra-Wiki)
-			if(!bareBones) {
-				match = TransclusionRegex.Match(sb.ToString());
-				while(match.Success) {
-					if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
-						sb.Remove(match.Index, match.Length);
-						string pageName = match.Value.Substring(3, match.Value.Length - 4);
-						if(pageName.StartsWith("++")) pageName = pageName.Substring(2);
-						else {
-							// Add current namespace, if not present
-							string tsNamespace = NameTools.GetNamespace(pageName);
-							string currentNamespace = current != null ? NameTools.GetNamespace(current.FullName) : null;
-							if(string.IsNullOrEmpty(tsNamespace) && !string.IsNullOrEmpty(currentNamespace)) {
-								pageName = NameTools.GetFullName(currentNamespace, pageName);
-							}
-						}
-						PageInfo info = Pages.FindPage(pageName);
-						if(info != null && (current != null && info.FullName != current.FullName)) { // Avoid circular transclusion!
-							dummy = new StringBuilder();
-							dummy.Append(@"<div class=""transcludedpage"">");
-							dummy.Append(FormattingPipeline.FormatWithPhase1And2(Content.GetPageContent(info, true).Content,
-								forIndexing, FormattingContext.TranscludedPageContent, info));
-							dummy.Append("</div>");
-							sb.Insert(match.Index, dummy.ToString());
-						}
-						else sb.Insert(match.Index, @"<b style=""color: #FF0000;"">FORMATTER ERROR (Transcluded inexistent page or this same page)</b>");
-					}
-					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
-					match = TransclusionRegex.Match(sb.ToString(), end);
-				}
-			}
 
 			List<string> attachments = new List<string>();
 
@@ -2507,14 +2475,48 @@ namespace ScrewTurn.Wiki {
 				match = SignRegex.Match(sb.ToString());
 			}
 
-			// --> Now processed with other phase3 tags
-			/*match = UsernameRegex.Match(sb.ToString());
+			// Transclusion (intra-Wiki)
+			match = TransclusionRegex.Match(sb.ToString());
 			while(match.Success) {
 				sb.Remove(match.Index, match.Length);
-				if(SessionFacade.LoginKey != null) sb.Insert(match.Index, GetProfileLink(SessionFacade.CurrentUser.Username));
-				else sb.Insert(match.Index, Exchanger.ResourceExchanger.GetResource("Guest"));
-				match = UsernameRegex.Match(sb.ToString());
-			}*/
+				string pageName = match.Value.Substring(3, match.Value.Length - 4);
+				if(pageName.StartsWith("++")) pageName = pageName.Substring(2);
+				else {
+					// Add current namespace, if not present
+					string tsNamespace = NameTools.GetNamespace(pageName);
+					string currentNamespace = current != null ? NameTools.GetNamespace(current.FullName) : null;
+					if(string.IsNullOrEmpty(tsNamespace) && !string.IsNullOrEmpty(currentNamespace)) {
+						pageName = NameTools.GetFullName(currentNamespace, pageName);
+					}
+				}
+				PageInfo info = Pages.FindPage(pageName);
+				string currentUsername = SessionFacade.GetCurrentUsername();
+				string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+
+				bool canView = AuthChecker.CheckActionForPage(info, Actions.ForPages.ReadPage, currentUsername, currentGroups);
+				if(canView) {
+					if(info != null && (current != null && info.FullName != current.FullName)) { // Avoid circular transclusion!
+						dummy = new StringBuilder();
+						dummy.Append(@"<div class=""transcludedpage"">");
+						dummy.Append(FormattingPipeline.FormatWithPhase3(
+							FormattingPipeline.FormatWithPhase1And2(Content.GetPageContent(info, true).Content,
+							false, FormattingContext.TranscludedPageContent, info),
+							FormattingContext.TranscludedPageContent, info));
+						dummy.Append("</div>");
+						sb.Insert(match.Index, dummy.ToString());
+					}
+					else {
+						string formatterErrorString = @"<b style=""color: #FF0000;"">FORMATTER ERROR (Transcluded inexistent page or this same page)</b>";
+						sb.Insert(match.Index, formatterErrorString);
+					}
+				}
+				else {
+					string formatterErrorString = @"<b style=""color: #FF0000;"">PERMISSION ERROR (You are not allowed to see transcluded page)</b>";
+					sb.Insert(match.Index, formatterErrorString);
+				}
+
+				match = TransclusionRegex.Match(sb.ToString());
+			}
 
 			return sb.ToString();
 		}
