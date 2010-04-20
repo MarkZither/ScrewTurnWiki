@@ -4,11 +4,6 @@
         <name>Anthem</name>
     </assembly>
     <members>
-        <member name="T:Anthem.WebPartZone">
-            <summary>
-            Creates an updatable control in the Web Parts control set for hosting WebPart controls on a Web page. 
-            </summary>
-        </member>
         <member name="T:Anthem.IUpdatableControl">
             <summary>
             Controls that implement this interface can have their HTML
@@ -46,51 +41,33 @@
                 </code>
             </example>
         </member>
-        <member name="M:Anthem.WebPartZone.OnPreRender(System.EventArgs)">
+        <member name="T:Anthem.Image">
             <summary>
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:Anthem.WebPartZone.MinimizeWebPart(System.Web.UI.WebControls.WebParts.WebPart)">
-            <summary>
-            Excecutes <see cref="M:System.Web.UI.WebControls.WebParts.WebPartZoneBase.MinimizeWebPart(System.Web.UI.WebControls.WebParts.WebPart)"/>, 
-            then sets <see cref="P:Anthem.WebPartZone.UpdateAfterCallBack"/> to true.
+            Creates an updatable control that displays an image on a Web page. 
             </summary>
         </member>
-        <member name="M:Anthem.WebPartZone.RestoreWebPart(System.Web.UI.WebControls.WebParts.WebPart)">
-            <summary>
-            Excecutes <see cref="M:System.Web.UI.WebControls.WebParts.WebPartZoneBase.RestoreWebPart(System.Web.UI.WebControls.WebParts.WebPart)"/>, 
-            then sets <see cref="P:Anthem.WebPartZone.UpdateAfterCallBack"/> to true.
-            </summary>
-        </member>
-        <member name="M:Anthem.WebPartZone.CloseWebPart(System.Web.UI.WebControls.WebParts.WebPart)">
-            <summary>
-            Excecutes <see cref="M:System.Web.UI.WebControls.WebParts.WebPartZoneBase.CloseWebPart(System.Web.UI.WebControls.WebParts.WebPart)"/>, 
-            then sets <see cref="P:Anthem.WebPartZone.UpdateAfterCallBack"/> to true.
-            </summary>
-        </member>
-        <member name="M:Anthem.WebPartZone.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.Image.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.WebPartZone.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.Image.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.WebPartZone.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.Image.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.WebPartZone.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.Image.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.WebPartZone.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.Image.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -102,10 +79,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.WebPartZone.UpdateAfterCallBack">
+        <member name="P:Anthem.Image.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.WebPartZone.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.Image.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -118,7 +95,7 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.WebPartZone.Visible">
+        <member name="P:Anthem.Image.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
@@ -127,9 +104,9 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.RadioButton">
+        <member name="T:Anthem.GridView">
             <summary>
-            Creates an updatable radio button control. 
+            Creates an updatable control that displays the values of a data source in a table where each column represents a field and each row represents a record. The GridView control allows you to select, sort, and edit these items using callbacks.
             </summary>
         </member>
         <member name="T:Anthem.ICallBackControl">
@@ -199,286 +176,6 @@
             then this property is ignored.
             </remarks>
         </member>
-        <member name="M:Anthem.RadioButton.OnPreRender(System.EventArgs)">
-            <summary>
-            Use OnPreRender. AddAttributesToRender is not called in ASP.NET 1.1.
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:Anthem.RadioButton.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.RadioButton.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.RadioButton.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.RadioButton.AutoCallBack">
-            <summary>
-            Gets or sets a value indicating whether the Checkbox state automatically calls back to
-            the server when clicked. Mimics the AutoPostBack property.
-            </summary>
-        </member>
-        <member name="P:Anthem.RadioButton.CallBackCancelledFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.RadioButton.PreCallBackFunction"/>.
-            </summary>
-        </member>
-        <member name="P:Anthem.RadioButton.EnableCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control uses callbacks; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="P:Anthem.RadioButton.EnabledDuringCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control is enabled; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-            <remarks>Not all HTML elements support this property.</remarks>
-        </member>
-        <member name="P:Anthem.RadioButton.PostCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client after the callback
-            response is received.
-            </summary>
-            <remarks>
-            The callback response is passed into the PostCallBackFunction as the one and only
-            parameter.
-            </remarks>
-            <example>
-            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
-            function AfterCallBack(result) {
-              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
-                alert(result.error);
-              }
-            }
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.RadioButton.PreCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client before the callback
-            is made.
-            </summary>
-            <remarks>The function should return false on the client to cancel the callback.</remarks>
-        </member>
-        <member name="P:Anthem.RadioButton.TextDuringCallBack">
-            <summary>Gets or sets the text to display on the client during the callback.</summary>
-            <remarks>
-            If the HTML element that invoked the callback has a text value (such as &lt;input
-            type="button" value="Run"&gt;) then the text of the element is updated during the
-            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
-            If the element does not have a text value, and if there is no associated &lt;label&gt;,
-            then this property is ignored.
-            </remarks>
-        </member>
-        <member name="P:Anthem.RadioButton.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.RadioButton.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.RadioButton.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.RadioButton.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.RadioButton.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.HyperLink">
-            <summary>
-            Creates an updatable control that displays a link to another Web page. 
-            </summary>
-        </member>
-        <member name="M:Anthem.HyperLink.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.HyperLink.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.HyperLink.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.HyperLink.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.HyperLink.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.HyperLink.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.HyperLink.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.HyperLink.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.ValidationSummary">
-            <summary>
-            Creates an updatable control that displays a summary of all validation errors inline on a Web page, in a message box, or both.
-            </summary>
-        </member>
-        <member name="M:Anthem.ValidationSummary.OnPreRender(System.EventArgs)">
-            <summary>
-            If ShowMessageBox=true, use Anthem.Manager to display the validation
-            summary in a javascript alert.
-            </summary>
-            <param name="e"></param>
-        </member>
-        <member name="M:Anthem.ValidationSummary.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.ValidationSummary.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.ValidationSummary.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.ValidationSummary.EnableCallBackScript">
-            <summary>
-            Gets or sets a value which indicates whether the control should display the validation summary as a client-side alert.
-            </summary>
-            <value><strong>true</strong> if the control should display the validation summary on the client after a callback; otherwise, <strong>false</strong>. The default is <strong>true</strong>.</value>
-        </member>
-        <member name="P:Anthem.ValidationSummary.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.ValidationSummary.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.ValidationSummary.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.ValidationSummary.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.ValidationSummary.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.DataList">
-            <summary>
-            An updatable data bound list control that displays items using templates.
-            </summary>
-            <remarks>
-                Builtin commands (Edit, Delete, etc.) will use callbacks if
-                <see cref="P:Anthem.DataList.EnableCallBack"/> is <strong>true</strong>. Child controls will use
-                callbacks if <see cref="P:Anthem.DataList.AddCallBacks"/> is <strong>true</strong>.
-            </remarks>
-        </member>
         <member name="T:Anthem.ICallBackContainerControl">
             <summary>
             Controls that implement this interface act as a container for
@@ -498,6 +195,762 @@
             </value>
             <remarks>
             Only controls that <see cref="T:Anthem.Manager"/> recognizes will be converted.
+            </remarks>
+        </member>
+        <member name="M:Anthem.GridView.OnDataPropertyChanged">
+            <summary>
+            Excecutes <see cref="M:System.Web.UI.WebControls.GridView.OnDataPropertyChanged"/>, 
+            then sets <see cref="P:Anthem.GridView.UpdateAfterCallBack"/> to true.
+            </summary>
+        </member>
+        <member name="M:Anthem.GridView.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.GridView.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.GridView.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.GridView.CallBackCancelledFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client if the callback is
+            cancelled. See <see cref="P:Anthem.GridView.PreCallBackFunction"/>.
+            </summary>
+        </member>
+        <member name="P:Anthem.GridView.EnableCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control uses callbacks; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="P:Anthem.GridView.EnabledDuringCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control is enabled; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+            <remarks>Not all HTML elements support this property.</remarks>
+        </member>
+        <member name="P:Anthem.GridView.PostCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client after the callback
+            response is received.
+            </summary>
+            <remarks>
+            The callback response is passed into the PostCallBackFunction as the one and only
+            parameter.
+            </remarks>
+            <example>
+            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
+            function AfterCallBack(result) {
+              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
+                alert(result.error);
+              }
+            }
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.GridView.PreCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client before the callback
+            is made.
+            </summary>
+            <remarks>The function should return false on the client to cancel the callback.</remarks>
+        </member>
+        <member name="P:Anthem.GridView.TextDuringCallBack">
+            <summary>Gets or sets the text to display on the client during the callback.</summary>
+            <remarks>
+            If the HTML element that invoked the callback has a text value (such as &lt;input
+            type="button" value="Run"&gt;) then the text of the element is updated during the
+            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
+            If the element does not have a text value, and if there is no associated &lt;label&gt;,
+            then this property is ignored.
+            </remarks>
+        </member>
+        <member name="P:Anthem.GridView.AddCallBacks">
+            <summary>
+            Gets or sets a value indicating whether the control should convert child control postbacks into callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control should convert child control postbacks to
+            callbacks; otherwise, <strong>false</strong>. The default is
+            <strong>true</strong>.
+            </value>
+            <remarks>
+            Only controls that <see cref="T:Anthem.Manager"/> recognizes will be converted.
+            </remarks>
+        </member>
+        <member name="P:Anthem.GridView.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.GridView.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.GridView.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.GridView.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.GridView.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.RangeValidator">
+            <summary>
+            Creates an updatable control that checks whether the value of an input control is within a specified range of values.
+            </summary>
+        </member>
+        <member name="M:Anthem.RangeValidator.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.RangeValidator.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.RangeValidator.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.RangeValidator.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.RangeValidator.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.RangeValidator.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.RangeValidator.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.RangeValidator.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.ImageButton">
+            <summary>
+            Creates an updatable control that displays an image and responds to mouse clicks on the image using callbacks.
+            </summary>
+        </member>
+        <member name="M:Anthem.ImageButton.AddAttributesToRender(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Adds the <strong>onclick</strong> attribute to invoke a callback from the client, then renders
+            the attributes of the control to the output stream.
+            </summary>
+        </member>
+        <member name="M:Anthem.ImageButton.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.ImageButton.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.ImageButton.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.ImageButton.ImageUrlDuringCallBack">
+            <summary>Gets or sets the url of the image to display on the client during the callback.</summary>
+            <remarks>
+            If the HTML element that invoked the callback is an &lt;image&gt; then the src property of the
+            element is updated during the callback to the value of ImageUrlDuringCallBack, otherwise the 
+            associated &lt;label&gt; text is updated during the callback.
+            If the element is not an &lt;image&gt;, and if there is no associated &lt;label&gt;,
+            then this property is ignored.
+            </remarks>
+        </member>
+        <member name="P:Anthem.ImageButton.CallBackCancelledFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client if the callback is
+            cancelled. See <see cref="P:Anthem.ImageButton.PreCallBackFunction"/>.
+            </summary>
+        </member>
+        <member name="P:Anthem.ImageButton.EnableCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control uses callbacks; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="P:Anthem.ImageButton.EnabledDuringCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control is enabled; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+            <remarks>Not all HTML elements support this property.</remarks>
+        </member>
+        <member name="P:Anthem.ImageButton.PostCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client after the callback
+            response is received.
+            </summary>
+            <remarks>
+            The callback response is passed into the PostCallBackFunction as the one and only
+            parameter.
+            </remarks>
+            <example>
+            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
+            function AfterCallBack(result) {
+              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
+                alert(result.error);
+              }
+            }
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.ImageButton.PreCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client before the callback
+            is made.
+            </summary>
+            <remarks>The function should return false on the client to cancel the callback.</remarks>
+        </member>
+        <member name="P:Anthem.ImageButton.TextDuringCallBack">
+            <summary>Gets or sets the text to display on the client during the callback.</summary>
+            <remarks>
+            If the HTML element that invoked the callback has a text value (such as &lt;input
+            type="button" value="Run"&gt;) then the text of the element is updated during the
+            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
+            If the element does not have a text value, and if there is no associated &lt;label&gt;,
+            then this property is ignored.
+            </remarks>
+        </member>
+        <member name="P:Anthem.ImageButton.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.ImageButton.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.ImageButton.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.ImageButton.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.ImageButton.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.Timer">
+            <summary>
+            Creates an updatable timer control.
+            </summary>
+        </member>
+        <member name="M:Anthem.Timer.DoTick">
+            <summary>
+            This method is called by the Timer control each time the timer expires.
+            </summary>
+        </member>
+        <member name="M:Anthem.Timer.StartTimer">
+            <summary>
+            Starts the timer.
+            </summary>
+        </member>
+        <member name="M:Anthem.Timer.StopTimer">
+            <summary>
+            Stops the timer.
+            </summary>
+        </member>
+        <member name="M:Anthem.Timer.OnTick(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:Anthem.Timer.Tick"/> event.
+            </summary>
+        </member>
+        <member name="M:Anthem.Timer.OnPreRender(System.EventArgs)">
+            <summary>
+            Registers the client side script for the control.
+            </summary>
+        </member>
+        <member name="M:Anthem.Timer.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="P:Anthem.Timer.Enabled">
+            <summary>
+            True if the timer is enabled on the client. The timer will continue to call the
+            DoTick method while it is enabled.
+            </summary>
+        </member>
+        <member name="P:Anthem.Timer.Interval">
+            <summary>
+            The number of milliseconds between each call to DoTick.
+            </summary>
+        </member>
+        <member name="E:Anthem.Timer.Tick">
+            <summary>
+            Occurs when the timer expires.
+            </summary>
+        </member>
+        <member name="P:Anthem.Timer.Visible">
+            <summary>
+            Visible is inherited from Control, but ignored by Timer.
+            </summary>
+        </member>
+        <member name="T:Anthem.Calendar">
+            <summary>
+            Displays an updatable single-month calendar that allows the user to select dates and move to the next or previous month using callbacks.
+            </summary>
+        </member>
+        <member name="M:Anthem.Calendar.OnSelectionChanged">
+            <summary>
+            Excecutes <see cref="M:System.Web.UI.WebControls.Calendar.OnSelectionChanged"/>, 
+            then sets <see cref="P:Anthem.Calendar.UpdateAfterCallBack"/> to true.
+            </summary>
+        </member>
+        <member name="M:Anthem.Calendar.OnVisibleMonthChanged(System.DateTime,System.DateTime)">
+            <summary>
+            Excecutes <see cref="M:System.Web.UI.WebControls.Calendar.OnVisibleMonthChanged(System.DateTime,System.DateTime)"/>, 
+            then sets <see cref="P:Anthem.Calendar.UpdateAfterCallBack"/> to true.
+            </summary>
+        </member>
+        <member name="M:Anthem.Calendar.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.Calendar.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.Calendar.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.Calendar.CallBackCancelledFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client if the callback is
+            cancelled. See <see cref="P:Anthem.Calendar.PreCallBackFunction"/>.
+            </summary>
+        </member>
+        <member name="P:Anthem.Calendar.EnableCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control uses callbacks; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="P:Anthem.Calendar.EnabledDuringCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control is enabled; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+            <remarks>Not all HTML elements support this property.</remarks>
+        </member>
+        <member name="P:Anthem.Calendar.PostCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client after the callback
+            response is received.
+            </summary>
+            <remarks>
+            The callback response is passed into the PostCallBackFunction as the one and only
+            parameter.
+            </remarks>
+            <example>
+            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
+            function AfterCallBack(result) {
+              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
+                alert(result.error);
+              }
+            }
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.Calendar.PreCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client before the callback
+            is made.
+            </summary>
+            <remarks>The function should return false on the client to cancel the callback.</remarks>
+        </member>
+        <member name="P:Anthem.Calendar.TextDuringCallBack">
+            <summary>Gets or sets the text to display on the client during the callback.</summary>
+            <remarks>
+            If the HTML element that invoked the callback has a text value (such as &lt;input
+            type="button" value="Run"&gt;) then the text of the element is updated during the
+            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
+            If the element does not have a text value, and if there is no associated &lt;label&gt;,
+            then this property is ignored.
+            </remarks>
+        </member>
+        <member name="P:Anthem.Calendar.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.Calendar.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.Calendar.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.Calendar.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.Calendar.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.CustomValidator">
+            <summary>
+            Creates an updatable control that performs user-defined validation on an input control.
+            </summary>
+        </member>
+        <member name="M:Anthem.CustomValidator.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.CustomValidator.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.CustomValidator.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.CustomValidator.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.CustomValidator.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.CustomValidator.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.CustomValidator.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.CustomValidator.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.DropDownList">
+            <summary>
+            Creates an updatable control that allows the user to select a single item from a drop-down list.
+            </summary>
+        </member>
+        <member name="M:Anthem.DropDownList.AddAttributesToRender(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Adds the <strong>onchange</strong> attribute to invoke a callback from the client, then renders
+            the attributes of the control to the output stream.
+            </summary>
+        </member>
+        <member name="M:Anthem.DropDownList.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.DropDownList.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.DropDownList.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.DropDownList.AutoCallBack">
+            <summary>
+            Gets or sets a value indicating whether the Checkbox state automatically calls back to
+            the server when clicked. Mimics the AutoPostBack property.
+            </summary>
+        </member>
+        <member name="P:Anthem.DropDownList.Items">
+            <summary>
+            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
+            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
+            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
+            </summary>
+        </member>
+        <member name="P:Anthem.DropDownList.CallBackCancelledFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client if the callback is
+            cancelled. See <see cref="P:Anthem.DropDownList.PreCallBackFunction"/>.
+            </summary>
+        </member>
+        <member name="P:Anthem.DropDownList.EnableCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control uses callbacks; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="P:Anthem.DropDownList.EnabledDuringCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control is enabled; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+            <remarks>Not all HTML elements support this property.</remarks>
+        </member>
+        <member name="P:Anthem.DropDownList.PostCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client after the callback
+            response is received.
+            </summary>
+            <remarks>
+            The callback response is passed into the PostCallBackFunction as the one and only
+            parameter.
+            </remarks>
+            <example>
+            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
+            function AfterCallBack(result) {
+              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
+                alert(result.error);
+              }
+            }
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.DropDownList.PreCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client before the callback
+            is made.
+            </summary>
+            <remarks>The function should return false on the client to cancel the callback.</remarks>
+        </member>
+        <member name="P:Anthem.DropDownList.TextDuringCallBack">
+            <summary>Gets or sets the text to display on the client during the callback.</summary>
+            <remarks>
+            If the HTML element that invoked the callback has a text value (such as &lt;input
+            type="button" value="Run"&gt;) then the text of the element is updated during the
+            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
+            If the element does not have a text value, and if there is no associated &lt;label&gt;,
+            then this property is ignored.
+            </remarks>
+        </member>
+        <member name="P:Anthem.DropDownList.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.DropDownList.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.DropDownList.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.DropDownList.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.DropDownList.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.View">
+            <summary>
+            Represents a control that acts as a container for a group of controls within a <see cref="T:Anthem.MultiView"/> control.
+            </summary>
+        </member>
+        <member name="T:Anthem.DataList">
+            <summary>
+            An updatable data bound list control that displays items using templates.
+            </summary>
+            <remarks>
+                Builtin commands (Edit, Delete, etc.) will use callbacks if
+                <see cref="P:Anthem.DataList.EnableCallBack"/> is <strong>true</strong>. Child controls will use
+                callbacks if <see cref="P:Anthem.DataList.AddCallBacks"/> is <strong>true</strong>.
             </remarks>
         </member>
         <member name="M:Anthem.DataList.OnCancelCommand(System.Web.UI.WebControls.DataListCommandEventArgs)">
@@ -950,36 +1403,61 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.PlaceHolder">
+        <member name="T:Anthem.RadioButtonList">
             <summary>
-            Creates an updatable container for dynamically added server controls on the Web page. 
+            Creates an updatable list control that encapsulates a group of radio button controls.
             </summary>
         </member>
-        <member name="M:Anthem.PlaceHolder.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.RadioButtonList.OnSelectedIndexChanged(System.EventArgs)">
+            <summary>
+            Excecutes <see cref="M:System.Web.UI.WebControls.BaseDataList.OnSelectedIndexChanged(System.EventArgs)"/>, 
+            then sets <see cref="P:Anthem.RadioButtonList.UpdateAfterCallBack"/> to true.
+            </summary>
+        </member>
+        <member name="M:Anthem.RadioButtonList.RenderItem(System.Web.UI.WebControls.ListItemType,System.Int32,System.Web.UI.WebControls.RepeatInfo,System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Adds the <strong>onclick</strong> attribute to each item to invoke a callback from the client, 
+            then renders the item.
+            </summary>
+        </member>
+        <member name="M:Anthem.RadioButtonList.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.PlaceHolder.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.RadioButtonList.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.PlaceHolder.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.RadioButtonList.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.PlaceHolder.CallBackCancelledFunction">
+        <member name="P:Anthem.RadioButtonList.AutoCallBack">
             <summary>
-            Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.PlaceHolder.PreCallBackFunction"/>.
+            Gets or sets a value indicating whether the Checkbox state automatically calls back to
+            the server when clicked. Mimics the AutoPostBack property.
             </summary>
         </member>
-        <member name="P:Anthem.PlaceHolder.EnableCallBack">
+        <member name="P:Anthem.RadioButtonList.Items">
+            <summary>
+            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
+            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
+            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
+            </summary>
+        </member>
+        <member name="P:Anthem.RadioButtonList.CallBackCancelledFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client if the callback is
+            cancelled. See <see cref="P:Anthem.RadioButtonList.PreCallBackFunction"/>.
+            </summary>
+        </member>
+        <member name="P:Anthem.RadioButtonList.EnableCallBack">
             <summary>
             Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
             </summary>
@@ -988,7 +1466,7 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="P:Anthem.PlaceHolder.EnabledDuringCallBack">
+        <member name="P:Anthem.RadioButtonList.EnabledDuringCallBack">
             <summary>
             Gets or sets a value indicating whether the control is enabled on the client during callbacks.
             </summary>
@@ -998,7 +1476,7 @@
             </value>
             <remarks>Not all HTML elements support this property.</remarks>
         </member>
-        <member name="P:Anthem.PlaceHolder.PostCallBackFunction">
+        <member name="P:Anthem.RadioButtonList.PostCallBackFunction">
             <summary>
             Gets or sets the javascript function to execute on the client after the callback
             response is received.
@@ -1017,14 +1495,14 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.PlaceHolder.PreCallBackFunction">
+        <member name="P:Anthem.RadioButtonList.PreCallBackFunction">
             <summary>
             Gets or sets the javascript function to execute on the client before the callback
             is made.
             </summary>
             <remarks>The function should return false on the client to cancel the callback.</remarks>
         </member>
-        <member name="P:Anthem.PlaceHolder.TextDuringCallBack">
+        <member name="P:Anthem.RadioButtonList.TextDuringCallBack">
             <summary>Gets or sets the text to display on the client during the callback.</summary>
             <remarks>
             If the HTML element that invoked the callback has a text value (such as &lt;input
@@ -1034,23 +1512,10 @@
             then this property is ignored.
             </remarks>
         </member>
-        <member name="P:Anthem.PlaceHolder.AddCallBacks">
-            <summary>
-            Gets or sets a value indicating whether the control should convert child control postbacks into callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control should convert child control postbacks to
-            callbacks; otherwise, <strong>false</strong>. The default is
-            <strong>true</strong>.
-            </value>
-            <remarks>
-            Only controls that <see cref="T:Anthem.Manager"/> recognizes will be converted.
-            </remarks>
-        </member>
-        <member name="P:Anthem.PlaceHolder.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.RadioButtonList.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.PlaceHolder.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.RadioButtonList.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -1062,10 +1527,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.PlaceHolder.UpdateAfterCallBack">
+        <member name="P:Anthem.RadioButtonList.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.PlaceHolder.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.RadioButtonList.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -1078,7 +1543,218 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.PlaceHolder.Visible">
+        <member name="P:Anthem.RadioButtonList.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.CheckBoxList">
+            <summary>
+            Creates an updatable multi selection check box group that can be dynamically created by binding the control to a data source. Uses callbacks if <see cref="P:Anthem.CheckBoxList.AutoCallBack"/> is <strong>true</strong>.
+            </summary>
+        </member>
+        <member name="M:Anthem.CheckBoxList.OnPreRender(System.EventArgs)">
+            <summary>
+            Adds the <strong>onclick</strong> attribute to invoke a callback from the client.
+            </summary>
+        </member>
+        <member name="M:Anthem.CheckBoxList.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.CheckBoxList.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.CheckBoxList.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.CheckBoxList.AutoCallBack">
+            <summary>
+            Gets or sets a value indicating whether the Checkbox state automatically calls back to
+            the server when clicked. Mimics the AutoPostBack property.
+            </summary>
+        </member>
+        <member name="P:Anthem.CheckBoxList.Items">
+            <summary>
+            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
+            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
+            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
+            </summary>
+        </member>
+        <member name="P:Anthem.CheckBoxList.CallBackCancelledFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client if the callback is
+            cancelled. See <see cref="P:Anthem.CheckBoxList.PreCallBackFunction"/>.
+            </summary>
+        </member>
+        <member name="P:Anthem.CheckBoxList.EnableCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control uses callbacks; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="P:Anthem.CheckBoxList.EnabledDuringCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control is enabled; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+            <remarks>Not all HTML elements support this property.</remarks>
+        </member>
+        <member name="P:Anthem.CheckBoxList.PostCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client after the callback
+            response is received.
+            </summary>
+            <remarks>
+            The callback response is passed into the PostCallBackFunction as the one and only
+            parameter.
+            </remarks>
+            <example>
+            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
+            function AfterCallBack(result) {
+              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
+                alert(result.error);
+              }
+            }
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.CheckBoxList.PreCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client before the callback
+            is made.
+            </summary>
+            <remarks>The function should return false on the client to cancel the callback.</remarks>
+        </member>
+        <member name="P:Anthem.CheckBoxList.TextDuringCallBack">
+            <summary>Gets or sets the text to display on the client during the callback.</summary>
+            <remarks>
+            If the HTML element that invoked the callback has a text value (such as &lt;input
+            type="button" value="Run"&gt;) then the text of the element is updated during the
+            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
+            If the element does not have a text value, and if there is no associated &lt;label&gt;,
+            then this property is ignored.
+            </remarks>
+        </member>
+        <member name="P:Anthem.CheckBoxList.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.CheckBoxList.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.CheckBoxList.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.CheckBoxList.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.CheckBoxList.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.MultiView">
+            <summary>
+            Creates an updatable control that acts as a container for a group of <see cref="T:Anthem.View"/> controls.
+            </summary>
+        </member>
+        <member name="M:Anthem.MultiView.OnActiveViewChanged(System.EventArgs)">
+            <summary>
+                Raises the <see cref="E:System.Web.UI.WebControls.MultiView.ActiveViewChanged"/>
+                event and sets <see cref="P:Anthem.MultiView.UpdateAfterCallBack"/> to <strong>true</strong>.
+            </summary>
+        </member>
+        <member name="M:Anthem.MultiView.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.MultiView.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.MultiView.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.MultiView.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.MultiView.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.MultiView.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.MultiView.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.MultiView.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
@@ -1563,33 +2239,107 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.CompareValidator">
+        <member name="T:Anthem.BulletedList">
             <summary>
-            Creates an updatable control that compares the value entered by the user in an input control with the value entered in another input control, or with a constant value.
+            Creates an updatable control that generates a list of items in a bulletd format.
             </summary>
         </member>
-        <member name="M:Anthem.CompareValidator.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.BulletedList.AddAttributesToRender(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Adds the <strong>onclick</strong> attribute to invoke a callback from the client, then renders
+            the attributes of the control to the output stream.
+            </summary>
+        </member>
+        <member name="M:Anthem.BulletedList.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.CompareValidator.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.BulletedList.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.CompareValidator.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.BulletedList.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.CompareValidator.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.BulletedList.Items">
+            <summary>
+            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
+            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
+            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
+            </summary>
+        </member>
+        <member name="P:Anthem.BulletedList.CallBackCancelledFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client if the callback is
+            cancelled. See <see cref="P:Anthem.BulletedList.PreCallBackFunction"/>.
+            </summary>
+        </member>
+        <member name="P:Anthem.BulletedList.EnableCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control uses callbacks; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="P:Anthem.BulletedList.EnabledDuringCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control is enabled; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+            <remarks>Not all HTML elements support this property.</remarks>
+        </member>
+        <member name="P:Anthem.BulletedList.PostCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client after the callback
+            response is received.
+            </summary>
+            <remarks>
+            The callback response is passed into the PostCallBackFunction as the one and only
+            parameter.
+            </remarks>
+            <example>
+            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
+            function AfterCallBack(result) {
+              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
+                alert(result.error);
+              }
+            }
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.BulletedList.PreCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client before the callback
+            is made.
+            </summary>
+            <remarks>The function should return false on the client to cancel the callback.</remarks>
+        </member>
+        <member name="P:Anthem.BulletedList.TextDuringCallBack">
+            <summary>Gets or sets the text to display on the client during the callback.</summary>
+            <remarks>
+            If the HTML element that invoked the callback has a text value (such as &lt;input
+            type="button" value="Run"&gt;) then the text of the element is updated during the
+            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
+            If the element does not have a text value, and if there is no associated &lt;label&gt;,
+            then this property is ignored.
+            </remarks>
+        </member>
+        <member name="P:Anthem.BulletedList.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.CompareValidator.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.BulletedList.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -1601,10 +2351,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.CompareValidator.UpdateAfterCallBack">
+        <member name="P:Anthem.BulletedList.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.CompareValidator.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.BulletedList.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -1617,7 +2367,299 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.CompareValidator.Visible">
+        <member name="P:Anthem.BulletedList.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.HiddenField">
+            <summary>
+            Creates an updatable hidden field used to store a non-displayed value.
+            </summary>
+        </member>
+        <member name="M:Anthem.HiddenField.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.HiddenField.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.HiddenField.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.HiddenField.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.HiddenField.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.HiddenField.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.HiddenField.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.HiddenField.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.DetailsView">
+            <summary>
+            Creates an updatable control that displays the values of a single record from a data source in a table, where each data row represents a field of the record. The <strong>DetailsView</strong> control allows you to edit, delete, and insert records using callbacks.
+            </summary>
+        </member>
+        <member name="M:Anthem.DetailsView.OnDataPropertyChanged">
+            <summary>
+            Excecutes <see cref="M:System.Web.UI.WebControls.DataBoundControl.OnDataPropertyChanged"/>, 
+            then sets <see cref="P:Anthem.DetailsView.UpdateAfterCallBack"/> to true.
+            </summary>
+        </member>
+        <member name="M:Anthem.DetailsView.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.DetailsView.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.DetailsView.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.DetailsView.CallBackCancelledFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client if the callback is
+            cancelled. See <see cref="P:Anthem.DetailsView.PreCallBackFunction"/>.
+            </summary>
+        </member>
+        <member name="P:Anthem.DetailsView.EnableCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control uses callbacks; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="P:Anthem.DetailsView.EnabledDuringCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control is enabled; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+            <remarks>Not all HTML elements support this property.</remarks>
+        </member>
+        <member name="P:Anthem.DetailsView.PostCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client after the callback
+            response is received.
+            </summary>
+            <remarks>
+            The callback response is passed into the PostCallBackFunction as the one and only
+            parameter.
+            </remarks>
+            <example>
+            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
+            function AfterCallBack(result) {
+              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
+                alert(result.error);
+              }
+            }
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.DetailsView.PreCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client before the callback
+            is made.
+            </summary>
+            <remarks>The function should return false on the client to cancel the callback.</remarks>
+        </member>
+        <member name="P:Anthem.DetailsView.TextDuringCallBack">
+            <summary>Gets or sets the text to display on the client during the callback.</summary>
+            <remarks>
+            If the HTML element that invoked the callback has a text value (such as &lt;input
+            type="button" value="Run"&gt;) then the text of the element is updated during the
+            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
+            If the element does not have a text value, and if there is no associated &lt;label&gt;,
+            then this property is ignored.
+            </remarks>
+        </member>
+        <member name="P:Anthem.DetailsView.AddCallBacks">
+            <summary>
+            Gets or sets a value indicating whether the control should convert child control postbacks into callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control should convert child control postbacks to
+            callbacks; otherwise, <strong>false</strong>. The default is
+            <strong>true</strong>.
+            </value>
+            <remarks>
+            Only controls that <see cref="T:Anthem.Manager"/> recognizes will be converted.
+            </remarks>
+        </member>
+        <member name="P:Anthem.DetailsView.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.DetailsView.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.DetailsView.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.DetailsView.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.DetailsView.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="T:Anthem.WebPartZone">
+            <summary>
+            Creates an updatable control in the Web Parts control set for hosting WebPart controls on a Web page. 
+            </summary>
+        </member>
+        <member name="M:Anthem.WebPartZone.OnPreRender(System.EventArgs)">
+            <summary>
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Anthem.WebPartZone.MinimizeWebPart(System.Web.UI.WebControls.WebParts.WebPart)">
+            <summary>
+            Excecutes <see cref="M:System.Web.UI.WebControls.WebParts.WebPartZoneBase.MinimizeWebPart(System.Web.UI.WebControls.WebParts.WebPart)"/>, 
+            then sets <see cref="P:Anthem.WebPartZone.UpdateAfterCallBack"/> to true.
+            </summary>
+        </member>
+        <member name="M:Anthem.WebPartZone.RestoreWebPart(System.Web.UI.WebControls.WebParts.WebPart)">
+            <summary>
+            Excecutes <see cref="M:System.Web.UI.WebControls.WebParts.WebPartZoneBase.RestoreWebPart(System.Web.UI.WebControls.WebParts.WebPart)"/>, 
+            then sets <see cref="P:Anthem.WebPartZone.UpdateAfterCallBack"/> to true.
+            </summary>
+        </member>
+        <member name="M:Anthem.WebPartZone.CloseWebPart(System.Web.UI.WebControls.WebParts.WebPart)">
+            <summary>
+            Excecutes <see cref="M:System.Web.UI.WebControls.WebParts.WebPartZoneBase.CloseWebPart(System.Web.UI.WebControls.WebParts.WebPart)"/>, 
+            then sets <see cref="P:Anthem.WebPartZone.UpdateAfterCallBack"/> to true.
+            </summary>
+        </member>
+        <member name="M:Anthem.WebPartZone.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.WebPartZone.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.WebPartZone.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.WebPartZone.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.WebPartZone.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.WebPartZone.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.WebPartZone.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.WebPartZone.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
@@ -1762,61 +2804,48 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.MethodAttribute">
+        <member name="T:Anthem.RadioButton">
             <summary>
-            Applying this attribute to your public methods makes it possible
-            to invoke them from JavaScript in your client pages.
+            Creates an updatable radio button control. 
             </summary>
         </member>
-        <member name="T:Anthem.DropDownList">
+        <member name="M:Anthem.RadioButton.OnPreRender(System.EventArgs)">
             <summary>
-            Creates an updatable control that allows the user to select a single item from a drop-down list.
+            Use OnPreRender. AddAttributesToRender is not called in ASP.NET 1.1.
             </summary>
+            <param name="e"></param>
         </member>
-        <member name="M:Anthem.DropDownList.AddAttributesToRender(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Adds the <strong>onchange</strong> attribute to invoke a callback from the client, then renders
-            the attributes of the control to the output stream.
-            </summary>
-        </member>
-        <member name="M:Anthem.DropDownList.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.RadioButton.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.DropDownList.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.RadioButton.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.DropDownList.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.RadioButton.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.DropDownList.AutoCallBack">
+        <member name="P:Anthem.RadioButton.AutoCallBack">
             <summary>
             Gets or sets a value indicating whether the Checkbox state automatically calls back to
             the server when clicked. Mimics the AutoPostBack property.
             </summary>
         </member>
-        <member name="P:Anthem.DropDownList.Items">
-            <summary>
-            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
-            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
-            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
-            </summary>
-        </member>
-        <member name="P:Anthem.DropDownList.CallBackCancelledFunction">
+        <member name="P:Anthem.RadioButton.CallBackCancelledFunction">
             <summary>
             Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.DropDownList.PreCallBackFunction"/>.
+            cancelled. See <see cref="P:Anthem.RadioButton.PreCallBackFunction"/>.
             </summary>
         </member>
-        <member name="P:Anthem.DropDownList.EnableCallBack">
+        <member name="P:Anthem.RadioButton.EnableCallBack">
             <summary>
             Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
             </summary>
@@ -1825,7 +2854,7 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="P:Anthem.DropDownList.EnabledDuringCallBack">
+        <member name="P:Anthem.RadioButton.EnabledDuringCallBack">
             <summary>
             Gets or sets a value indicating whether the control is enabled on the client during callbacks.
             </summary>
@@ -1835,7 +2864,7 @@
             </value>
             <remarks>Not all HTML elements support this property.</remarks>
         </member>
-        <member name="P:Anthem.DropDownList.PostCallBackFunction">
+        <member name="P:Anthem.RadioButton.PostCallBackFunction">
             <summary>
             Gets or sets the javascript function to execute on the client after the callback
             response is received.
@@ -1854,14 +2883,14 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.DropDownList.PreCallBackFunction">
+        <member name="P:Anthem.RadioButton.PreCallBackFunction">
             <summary>
             Gets or sets the javascript function to execute on the client before the callback
             is made.
             </summary>
             <remarks>The function should return false on the client to cancel the callback.</remarks>
         </member>
-        <member name="P:Anthem.DropDownList.TextDuringCallBack">
+        <member name="P:Anthem.RadioButton.TextDuringCallBack">
             <summary>Gets or sets the text to display on the client during the callback.</summary>
             <remarks>
             If the HTML element that invoked the callback has a text value (such as &lt;input
@@ -1871,10 +2900,10 @@
             then this property is ignored.
             </remarks>
         </member>
-        <member name="P:Anthem.DropDownList.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.RadioButton.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.DropDownList.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.RadioButton.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -1886,10 +2915,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.DropDownList.UpdateAfterCallBack">
+        <member name="P:Anthem.RadioButton.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.DropDownList.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.RadioButton.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -1902,7 +2931,7 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.DropDownList.Visible">
+        <member name="P:Anthem.RadioButton.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
@@ -1911,39 +2940,33 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.MultiView">
+        <member name="T:Anthem.AdRotator">
             <summary>
-            Creates an updatable control that acts as a container for a group of <see cref="T:Anthem.View"/> controls.
+            Displays an updatable advertisement banner on a web page.
             </summary>
         </member>
-        <member name="M:Anthem.MultiView.OnActiveViewChanged(System.EventArgs)">
-            <summary>
-                Raises the <see cref="E:System.Web.UI.WebControls.MultiView.ActiveViewChanged"/>
-                event and sets <see cref="P:Anthem.MultiView.UpdateAfterCallBack"/> to <strong>true</strong>.
-            </summary>
-        </member>
-        <member name="M:Anthem.MultiView.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.AdRotator.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.MultiView.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.AdRotator.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.MultiView.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.AdRotator.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.MultiView.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.AdRotator.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.MultiView.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.AdRotator.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -1955,10 +2978,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.MultiView.UpdateAfterCallBack">
+        <member name="P:Anthem.AdRotator.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.MultiView.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.AdRotator.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -1971,150 +2994,7 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.MultiView.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.ListBox">
-            <summary>
-            Creates an updatable list box control that allows single or multiple item selection.
-            </summary>
-        </member>
-        <member name="M:Anthem.ListBox.AddAttributesToRender(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Adds the <strong>onchange</strong> attribute to invoke a callback from the client, then renders
-            the attributes of the control to the output stream.
-            </summary>
-        </member>
-        <member name="M:Anthem.ListBox.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.ListBox.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.ListBox.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.ListBox.AutoCallBack">
-            <summary>
-            Gets or sets a value indicating whether the Checkbox state automatically calls back to
-            the server when clicked. Mimics the AutoPostBack property.
-            </summary>
-        </member>
-        <member name="P:Anthem.ListBox.Items">
-            <summary>
-            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
-            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
-            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
-            </summary>
-        </member>
-        <member name="P:Anthem.ListBox.CallBackCancelledFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.ListBox.PreCallBackFunction"/>.
-            </summary>
-        </member>
-        <member name="P:Anthem.ListBox.EnableCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control uses callbacks; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="P:Anthem.ListBox.EnabledDuringCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control is enabled; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-            <remarks>Not all HTML elements support this property.</remarks>
-        </member>
-        <member name="P:Anthem.ListBox.PostCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client after the callback
-            response is received.
-            </summary>
-            <remarks>
-            The callback response is passed into the PostCallBackFunction as the one and only
-            parameter.
-            </remarks>
-            <example>
-            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
-            function AfterCallBack(result) {
-              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
-                alert(result.error);
-              }
-            }
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.ListBox.PreCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client before the callback
-            is made.
-            </summary>
-            <remarks>The function should return false on the client to cancel the callback.</remarks>
-        </member>
-        <member name="P:Anthem.ListBox.TextDuringCallBack">
-            <summary>Gets or sets the text to display on the client during the callback.</summary>
-            <remarks>
-            If the HTML element that invoked the callback has a text value (such as &lt;input
-            type="button" value="Run"&gt;) then the text of the element is updated during the
-            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
-            If the element does not have a text value, and if there is no associated &lt;label&gt;,
-            then this property is ignored.
-            </remarks>
-        </member>
-        <member name="P:Anthem.ListBox.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.ListBox.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.ListBox.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.ListBox.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.ListBox.Visible">
+        <member name="P:Anthem.AdRotator.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
@@ -2260,33 +3140,113 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.RangeValidator">
+        <member name="T:Anthem.ListBox">
             <summary>
-            Creates an updatable control that checks whether the value of an input control is within a specified range of values.
+            Creates an updatable list box control that allows single or multiple item selection.
             </summary>
         </member>
-        <member name="M:Anthem.RangeValidator.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.ListBox.AddAttributesToRender(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Adds the <strong>onchange</strong> attribute to invoke a callback from the client, then renders
+            the attributes of the control to the output stream.
+            </summary>
+        </member>
+        <member name="M:Anthem.ListBox.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.RangeValidator.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.ListBox.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.RangeValidator.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.ListBox.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.RangeValidator.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.ListBox.AutoCallBack">
+            <summary>
+            Gets or sets a value indicating whether the Checkbox state automatically calls back to
+            the server when clicked. Mimics the AutoPostBack property.
+            </summary>
+        </member>
+        <member name="P:Anthem.ListBox.Items">
+            <summary>
+            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
+            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
+            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
+            </summary>
+        </member>
+        <member name="P:Anthem.ListBox.CallBackCancelledFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client if the callback is
+            cancelled. See <see cref="P:Anthem.ListBox.PreCallBackFunction"/>.
+            </summary>
+        </member>
+        <member name="P:Anthem.ListBox.EnableCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control uses callbacks; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
+        <member name="P:Anthem.ListBox.EnabledDuringCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control is enabled; otherwise,
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+            <remarks>Not all HTML elements support this property.</remarks>
+        </member>
+        <member name="P:Anthem.ListBox.PostCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client after the callback
+            response is received.
+            </summary>
+            <remarks>
+            The callback response is passed into the PostCallBackFunction as the one and only
+            parameter.
+            </remarks>
+            <example>
+            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
+            function AfterCallBack(result) {
+              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
+                alert(result.error);
+              }
+            }
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.ListBox.PreCallBackFunction">
+            <summary>
+            Gets or sets the javascript function to execute on the client before the callback
+            is made.
+            </summary>
+            <remarks>The function should return false on the client to cancel the callback.</remarks>
+        </member>
+        <member name="P:Anthem.ListBox.TextDuringCallBack">
+            <summary>Gets or sets the text to display on the client during the callback.</summary>
+            <remarks>
+            If the HTML element that invoked the callback has a text value (such as &lt;input
+            type="button" value="Run"&gt;) then the text of the element is updated during the
+            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
+            If the element does not have a text value, and if there is no associated &lt;label&gt;,
+            then this property is ignored.
+            </remarks>
+        </member>
+        <member name="P:Anthem.ListBox.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.RangeValidator.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.ListBox.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -2298,10 +3258,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.RangeValidator.UpdateAfterCallBack">
+        <member name="P:Anthem.ListBox.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.RangeValidator.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.ListBox.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -2314,7 +3274,7 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.RangeValidator.Visible">
+        <member name="P:Anthem.ListBox.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
@@ -2599,146 +3559,6 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.ImageButton">
-            <summary>
-            Creates an updatable control that displays an image and responds to mouse clicks on the image using callbacks.
-            </summary>
-        </member>
-        <member name="M:Anthem.ImageButton.AddAttributesToRender(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Adds the <strong>onclick</strong> attribute to invoke a callback from the client, then renders
-            the attributes of the control to the output stream.
-            </summary>
-        </member>
-        <member name="M:Anthem.ImageButton.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.ImageButton.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.ImageButton.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.ImageButton.ImageUrlDuringCallBack">
-            <summary>Gets or sets the url of the image to display on the client during the callback.</summary>
-            <remarks>
-            If the HTML element that invoked the callback is an &lt;image&gt; then the src property of the
-            element is updated during the callback to the value of ImageUrlDuringCallBack, otherwise the 
-            associated &lt;label&gt; text is updated during the callback.
-            If the element is not an &lt;image&gt;, and if there is no associated &lt;label&gt;,
-            then this property is ignored.
-            </remarks>
-        </member>
-        <member name="P:Anthem.ImageButton.CallBackCancelledFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.ImageButton.PreCallBackFunction"/>.
-            </summary>
-        </member>
-        <member name="P:Anthem.ImageButton.EnableCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control uses callbacks; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="P:Anthem.ImageButton.EnabledDuringCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control is enabled; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-            <remarks>Not all HTML elements support this property.</remarks>
-        </member>
-        <member name="P:Anthem.ImageButton.PostCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client after the callback
-            response is received.
-            </summary>
-            <remarks>
-            The callback response is passed into the PostCallBackFunction as the one and only
-            parameter.
-            </remarks>
-            <example>
-            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
-            function AfterCallBack(result) {
-              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
-                alert(result.error);
-              }
-            }
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.ImageButton.PreCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client before the callback
-            is made.
-            </summary>
-            <remarks>The function should return false on the client to cancel the callback.</remarks>
-        </member>
-        <member name="P:Anthem.ImageButton.TextDuringCallBack">
-            <summary>Gets or sets the text to display on the client during the callback.</summary>
-            <remarks>
-            If the HTML element that invoked the callback has a text value (such as &lt;input
-            type="button" value="Run"&gt;) then the text of the element is updated during the
-            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
-            If the element does not have a text value, and if there is no associated &lt;label&gt;,
-            then this property is ignored.
-            </remarks>
-        </member>
-        <member name="P:Anthem.ImageButton.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.ImageButton.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.ImageButton.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.ImageButton.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.ImageButton.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
         <member name="T:Anthem.FileUpload">
             <summary>
             Creates an updatable text box control and a browse button that allow users to select a file to upload to the server.
@@ -2802,112 +3622,46 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.CheckBoxList">
+        <member name="T:Anthem.ValidationSummary">
             <summary>
-            Creates an updatable multi selection check box group that can be dynamically created by binding the control to a data source. Uses callbacks if <see cref="P:Anthem.CheckBoxList.AutoCallBack"/> is <strong>true</strong>.
+            Creates an updatable control that displays a summary of all validation errors inline on a Web page, in a message box, or both.
             </summary>
         </member>
-        <member name="M:Anthem.CheckBoxList.OnPreRender(System.EventArgs)">
+        <member name="M:Anthem.ValidationSummary.OnPreRender(System.EventArgs)">
             <summary>
-            Adds the <strong>onclick</strong> attribute to invoke a callback from the client.
+            If ShowMessageBox=true, use Anthem.Manager to display the validation
+            summary in a javascript alert.
             </summary>
+            <param name="e"></param>
         </member>
-        <member name="M:Anthem.CheckBoxList.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.ValidationSummary.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.CheckBoxList.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.ValidationSummary.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.CheckBoxList.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.ValidationSummary.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.CheckBoxList.AutoCallBack">
+        <member name="P:Anthem.ValidationSummary.EnableCallBackScript">
             <summary>
-            Gets or sets a value indicating whether the Checkbox state automatically calls back to
-            the server when clicked. Mimics the AutoPostBack property.
+            Gets or sets a value which indicates whether the control should display the validation summary as a client-side alert.
             </summary>
+            <value><strong>true</strong> if the control should display the validation summary on the client after a callback; otherwise, <strong>false</strong>. The default is <strong>true</strong>.</value>
         </member>
-        <member name="P:Anthem.CheckBoxList.Items">
-            <summary>
-            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
-            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
-            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
-            </summary>
-        </member>
-        <member name="P:Anthem.CheckBoxList.CallBackCancelledFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.CheckBoxList.PreCallBackFunction"/>.
-            </summary>
-        </member>
-        <member name="P:Anthem.CheckBoxList.EnableCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control uses callbacks; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="P:Anthem.CheckBoxList.EnabledDuringCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control is enabled; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-            <remarks>Not all HTML elements support this property.</remarks>
-        </member>
-        <member name="P:Anthem.CheckBoxList.PostCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client after the callback
-            response is received.
-            </summary>
-            <remarks>
-            The callback response is passed into the PostCallBackFunction as the one and only
-            parameter.
-            </remarks>
-            <example>
-            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
-            function AfterCallBack(result) {
-              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
-                alert(result.error);
-              }
-            }
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.CheckBoxList.PreCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client before the callback
-            is made.
-            </summary>
-            <remarks>The function should return false on the client to cancel the callback.</remarks>
-        </member>
-        <member name="P:Anthem.CheckBoxList.TextDuringCallBack">
-            <summary>Gets or sets the text to display on the client during the callback.</summary>
-            <remarks>
-            If the HTML element that invoked the callback has a text value (such as &lt;input
-            type="button" value="Run"&gt;) then the text of the element is updated during the
-            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
-            If the element does not have a text value, and if there is no associated &lt;label&gt;,
-            then this property is ignored.
-            </remarks>
-        </member>
-        <member name="P:Anthem.CheckBoxList.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.ValidationSummary.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.CheckBoxList.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.ValidationSummary.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -2919,10 +3673,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.CheckBoxList.UpdateAfterCallBack">
+        <member name="P:Anthem.ValidationSummary.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.CheckBoxList.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.ValidationSummary.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -2935,7 +3689,7 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.CheckBoxList.Visible">
+        <member name="P:Anthem.ValidationSummary.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
@@ -2943,11 +3697,6 @@
             	<strong>true</strong> if the control is rendered on the client; otherwise
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
-        </member>
-        <member name="T:Anthem.View">
-            <summary>
-            Represents a control that acts as a container for a group of controls within a <see cref="T:Anthem.MultiView"/> control.
-            </summary>
         </member>
         <member name="T:Anthem.RegularExpressionValidator">
             <summary>
@@ -3012,49 +3761,36 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.BulletedList">
+        <member name="T:Anthem.PlaceHolder">
             <summary>
-            Creates an updatable control that generates a list of items in a bulletd format.
+            Creates an updatable container for dynamically added server controls on the Web page. 
             </summary>
         </member>
-        <member name="M:Anthem.BulletedList.AddAttributesToRender(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Adds the <strong>onclick</strong> attribute to invoke a callback from the client, then renders
-            the attributes of the control to the output stream.
-            </summary>
-        </member>
-        <member name="M:Anthem.BulletedList.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.PlaceHolder.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.BulletedList.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.PlaceHolder.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.BulletedList.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.PlaceHolder.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.BulletedList.Items">
-            <summary>
-            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
-            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
-            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
-            </summary>
-        </member>
-        <member name="P:Anthem.BulletedList.CallBackCancelledFunction">
+        <member name="P:Anthem.PlaceHolder.CallBackCancelledFunction">
             <summary>
             Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.BulletedList.PreCallBackFunction"/>.
+            cancelled. See <see cref="P:Anthem.PlaceHolder.PreCallBackFunction"/>.
             </summary>
         </member>
-        <member name="P:Anthem.BulletedList.EnableCallBack">
+        <member name="P:Anthem.PlaceHolder.EnableCallBack">
             <summary>
             Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
             </summary>
@@ -3063,7 +3799,7 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="P:Anthem.BulletedList.EnabledDuringCallBack">
+        <member name="P:Anthem.PlaceHolder.EnabledDuringCallBack">
             <summary>
             Gets or sets a value indicating whether the control is enabled on the client during callbacks.
             </summary>
@@ -3073,7 +3809,7 @@
             </value>
             <remarks>Not all HTML elements support this property.</remarks>
         </member>
-        <member name="P:Anthem.BulletedList.PostCallBackFunction">
+        <member name="P:Anthem.PlaceHolder.PostCallBackFunction">
             <summary>
             Gets or sets the javascript function to execute on the client after the callback
             response is received.
@@ -3092,14 +3828,14 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.BulletedList.PreCallBackFunction">
+        <member name="P:Anthem.PlaceHolder.PreCallBackFunction">
             <summary>
             Gets or sets the javascript function to execute on the client before the callback
             is made.
             </summary>
             <remarks>The function should return false on the client to cancel the callback.</remarks>
         </member>
-        <member name="P:Anthem.BulletedList.TextDuringCallBack">
+        <member name="P:Anthem.PlaceHolder.TextDuringCallBack">
             <summary>Gets or sets the text to display on the client during the callback.</summary>
             <remarks>
             If the HTML element that invoked the callback has a text value (such as &lt;input
@@ -3109,10 +3845,23 @@
             then this property is ignored.
             </remarks>
         </member>
-        <member name="P:Anthem.BulletedList.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.PlaceHolder.AddCallBacks">
+            <summary>
+            Gets or sets a value indicating whether the control should convert child control postbacks into callbacks.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control should convert child control postbacks to
+            callbacks; otherwise, <strong>false</strong>. The default is
+            <strong>true</strong>.
+            </value>
+            <remarks>
+            Only controls that <see cref="T:Anthem.Manager"/> recognizes will be converted.
+            </remarks>
+        </member>
+        <member name="P:Anthem.PlaceHolder.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.BulletedList.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.PlaceHolder.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -3124,10 +3873,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.BulletedList.UpdateAfterCallBack">
+        <member name="P:Anthem.PlaceHolder.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.BulletedList.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.PlaceHolder.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -3140,7 +3889,7 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.BulletedList.Visible">
+        <member name="P:Anthem.PlaceHolder.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
@@ -3148,6 +3897,12 @@
             	<strong>true</strong> if the control is rendered on the client; otherwise
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
+        </member>
+        <member name="T:Anthem.MethodAttribute">
+            <summary>
+            Applying this attribute to your public methods makes it possible
+            to invoke them from JavaScript in your client pages.
+            </summary>
         </member>
         <member name="T:Anthem.FormView">
             <summary>
@@ -3292,6 +4047,69 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
+        <member name="T:Anthem.CompareValidator">
+            <summary>
+            Creates an updatable control that compares the value entered by the user in an input control with the value entered in another input control, or with a constant value.
+            </summary>
+        </member>
+        <member name="M:Anthem.CompareValidator.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Renders the server control wrapped in an additional element so that the
+            element.innerHTML can be updated after a callback.
+            </summary>
+        </member>
+        <member name="M:Anthem.CompareValidator.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
+            with <see cref="T:Anthem.Manager"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
+        </member>
+        <member name="M:Anthem.CompareValidator.RenderControl(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Forces the server control to output content and trace information.
+            </summary>
+        </member>
+        <member name="P:Anthem.CompareValidator.AutoUpdateAfterCallBack">
+            <summary>
+            Gets or sets a value indicating whether the control should be updated after each callback.
+            Also see <see cref="P:Anthem.CompareValidator.UpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used declaratively as shown here.">
+            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.CompareValidator.UpdateAfterCallBack">
+            <summary>
+            Gets or sets a value which indicates whether the control should be updated after the current callback.
+            Also see <see cref="P:Anthem.CompareValidator.AutoUpdateAfterCallBack"/>.
+            </summary>
+            <value>
+            	<strong>true</strong> if the the control should be updated; otherwise,
+            <strong>false</strong>. The default is <strong>false</strong>.
+            </value>
+            <example>
+            	<code lang="CS" description="This is normally used in server code as shown here.">
+            this.Label = "Count = " + count;
+            this.Label.UpdateAfterCallBack = true;
+                </code>
+            </example>
+        </member>
+        <member name="P:Anthem.CompareValidator.Visible">
+            <summary>
+            Overrides the Visible property so that Anthem.Manager can track the visibility.
+            </summary>
+            <value>
+            	<strong>true</strong> if the control is rendered on the client; otherwise
+            <strong>false</strong>. The default is <strong>true</strong>.
+            </value>
+        </member>
         <member name="T:Anthem.Button">
             <summary>
             Displays an updatable push button control on the web page that uses callbacks.
@@ -3422,33 +4240,33 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.AdRotator">
+        <member name="T:Anthem.RequiredFieldValidator">
             <summary>
-            Displays an updatable advertisement banner on a web page.
+            Creates an updatable control that makes the associated input control a required field.
             </summary>
         </member>
-        <member name="M:Anthem.AdRotator.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.RequiredFieldValidator.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.AdRotator.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.RequiredFieldValidator.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.AdRotator.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.RequiredFieldValidator.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.AdRotator.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.RequiredFieldValidator.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.AdRotator.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.RequiredFieldValidator.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -3460,10 +4278,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.AdRotator.UpdateAfterCallBack">
+        <member name="P:Anthem.RequiredFieldValidator.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.AdRotator.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.RequiredFieldValidator.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -3476,7 +4294,7 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.AdRotator.Visible">
+        <member name="P:Anthem.RequiredFieldValidator.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
@@ -3670,69 +4488,6 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.CustomValidator">
-            <summary>
-            Creates an updatable control that performs user-defined validation on an input control.
-            </summary>
-        </member>
-        <member name="M:Anthem.CustomValidator.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.CustomValidator.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.CustomValidator.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.CustomValidator.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.CustomValidator.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.CustomValidator.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.CustomValidator.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.CustomValidator.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
         <member name="T:Anthem.Label">
             <summary>
             Creates an updatable label control, which displays text on a Web page.
@@ -3796,33 +4551,33 @@
             <strong>false</strong>. The default is <strong>true</strong>.
             </value>
         </member>
-        <member name="T:Anthem.Image">
+        <member name="T:Anthem.HyperLink">
             <summary>
-            Creates an updatable control that displays an image on a Web page. 
+            Creates an updatable control that displays a link to another Web page. 
             </summary>
         </member>
-        <member name="M:Anthem.Image.Render(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.HyperLink.Render(System.Web.UI.HtmlTextWriter)">
             <summary>
             Renders the server control wrapped in an additional element so that the
             element.innerHTML can be updated after a callback.
             </summary>
         </member>
-        <member name="M:Anthem.Image.OnLoad(System.EventArgs)">
+        <member name="M:Anthem.HyperLink.OnLoad(System.EventArgs)">
             <summary>
             Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
             with <see cref="T:Anthem.Manager"/>.
             </summary>
             <param name="e">A <see cref="T:System.EventArgs"/>.</param>
         </member>
-        <member name="M:Anthem.Image.RenderControl(System.Web.UI.HtmlTextWriter)">
+        <member name="M:Anthem.HyperLink.RenderControl(System.Web.UI.HtmlTextWriter)">
             <summary>
             Forces the server control to output content and trace information.
             </summary>
         </member>
-        <member name="P:Anthem.Image.AutoUpdateAfterCallBack">
+        <member name="P:Anthem.HyperLink.AutoUpdateAfterCallBack">
             <summary>
             Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.Image.UpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.HyperLink.UpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -3834,10 +4589,10 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.Image.UpdateAfterCallBack">
+        <member name="P:Anthem.HyperLink.UpdateAfterCallBack">
             <summary>
             Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.Image.AutoUpdateAfterCallBack"/>.
+            Also see <see cref="P:Anthem.HyperLink.AutoUpdateAfterCallBack"/>.
             </summary>
             <value>
             	<strong>true</strong> if the the control should be updated; otherwise,
@@ -3850,762 +4605,7 @@
                 </code>
             </example>
         </member>
-        <member name="P:Anthem.Image.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.GridView">
-            <summary>
-            Creates an updatable control that displays the values of a data source in a table where each column represents a field and each row represents a record. The GridView control allows you to select, sort, and edit these items using callbacks.
-            </summary>
-        </member>
-        <member name="M:Anthem.GridView.OnDataPropertyChanged">
-            <summary>
-            Excecutes <see cref="M:System.Web.UI.WebControls.GridView.OnDataPropertyChanged"/>, 
-            then sets <see cref="P:Anthem.GridView.UpdateAfterCallBack"/> to true.
-            </summary>
-        </member>
-        <member name="M:Anthem.GridView.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.GridView.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.GridView.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.GridView.CallBackCancelledFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.GridView.PreCallBackFunction"/>.
-            </summary>
-        </member>
-        <member name="P:Anthem.GridView.EnableCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control uses callbacks; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="P:Anthem.GridView.EnabledDuringCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control is enabled; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-            <remarks>Not all HTML elements support this property.</remarks>
-        </member>
-        <member name="P:Anthem.GridView.PostCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client after the callback
-            response is received.
-            </summary>
-            <remarks>
-            The callback response is passed into the PostCallBackFunction as the one and only
-            parameter.
-            </remarks>
-            <example>
-            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
-            function AfterCallBack(result) {
-              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
-                alert(result.error);
-              }
-            }
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.GridView.PreCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client before the callback
-            is made.
-            </summary>
-            <remarks>The function should return false on the client to cancel the callback.</remarks>
-        </member>
-        <member name="P:Anthem.GridView.TextDuringCallBack">
-            <summary>Gets or sets the text to display on the client during the callback.</summary>
-            <remarks>
-            If the HTML element that invoked the callback has a text value (such as &lt;input
-            type="button" value="Run"&gt;) then the text of the element is updated during the
-            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
-            If the element does not have a text value, and if there is no associated &lt;label&gt;,
-            then this property is ignored.
-            </remarks>
-        </member>
-        <member name="P:Anthem.GridView.AddCallBacks">
-            <summary>
-            Gets or sets a value indicating whether the control should convert child control postbacks into callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control should convert child control postbacks to
-            callbacks; otherwise, <strong>false</strong>. The default is
-            <strong>true</strong>.
-            </value>
-            <remarks>
-            Only controls that <see cref="T:Anthem.Manager"/> recognizes will be converted.
-            </remarks>
-        </member>
-        <member name="P:Anthem.GridView.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.GridView.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.GridView.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.GridView.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.GridView.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.RequiredFieldValidator">
-            <summary>
-            Creates an updatable control that makes the associated input control a required field.
-            </summary>
-        </member>
-        <member name="M:Anthem.RequiredFieldValidator.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.RequiredFieldValidator.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.RequiredFieldValidator.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.RequiredFieldValidator.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.RequiredFieldValidator.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.RequiredFieldValidator.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.RequiredFieldValidator.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.RequiredFieldValidator.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.RadioButtonList">
-            <summary>
-            Creates an updatable list control that encapsulates a group of radio button controls.
-            </summary>
-        </member>
-        <member name="M:Anthem.RadioButtonList.OnSelectedIndexChanged(System.EventArgs)">
-            <summary>
-            Excecutes <see cref="M:System.Web.UI.WebControls.BaseDataList.OnSelectedIndexChanged(System.EventArgs)"/>, 
-            then sets <see cref="P:Anthem.RadioButtonList.UpdateAfterCallBack"/> to true.
-            </summary>
-        </member>
-        <member name="M:Anthem.RadioButtonList.RenderItem(System.Web.UI.WebControls.ListItemType,System.Int32,System.Web.UI.WebControls.RepeatInfo,System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Adds the <strong>onclick</strong> attribute to each item to invoke a callback from the client, 
-            then renders the item.
-            </summary>
-        </member>
-        <member name="M:Anthem.RadioButtonList.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.RadioButtonList.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.RadioButtonList.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.RadioButtonList.AutoCallBack">
-            <summary>
-            Gets or sets a value indicating whether the Checkbox state automatically calls back to
-            the server when clicked. Mimics the AutoPostBack property.
-            </summary>
-        </member>
-        <member name="P:Anthem.RadioButtonList.Items">
-            <summary>
-            Override Items collection to force PersistenceMode.InnerProperty. This will cause the control to
-            wrap the ListItems inside of an &lt;Items&gt; tag which the Visual Studio designer will validate.
-            If you don't do this, the designer will complain that the "Element 'ListItem' is not a known element."
-            </summary>
-        </member>
-        <member name="P:Anthem.RadioButtonList.CallBackCancelledFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.RadioButtonList.PreCallBackFunction"/>.
-            </summary>
-        </member>
-        <member name="P:Anthem.RadioButtonList.EnableCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control uses callbacks; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="P:Anthem.RadioButtonList.EnabledDuringCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control is enabled; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-            <remarks>Not all HTML elements support this property.</remarks>
-        </member>
-        <member name="P:Anthem.RadioButtonList.PostCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client after the callback
-            response is received.
-            </summary>
-            <remarks>
-            The callback response is passed into the PostCallBackFunction as the one and only
-            parameter.
-            </remarks>
-            <example>
-            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
-            function AfterCallBack(result) {
-              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
-                alert(result.error);
-              }
-            }
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.RadioButtonList.PreCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client before the callback
-            is made.
-            </summary>
-            <remarks>The function should return false on the client to cancel the callback.</remarks>
-        </member>
-        <member name="P:Anthem.RadioButtonList.TextDuringCallBack">
-            <summary>Gets or sets the text to display on the client during the callback.</summary>
-            <remarks>
-            If the HTML element that invoked the callback has a text value (such as &lt;input
-            type="button" value="Run"&gt;) then the text of the element is updated during the
-            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
-            If the element does not have a text value, and if there is no associated &lt;label&gt;,
-            then this property is ignored.
-            </remarks>
-        </member>
-        <member name="P:Anthem.RadioButtonList.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.RadioButtonList.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.RadioButtonList.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.RadioButtonList.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.RadioButtonList.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.Calendar">
-            <summary>
-            Displays an updatable single-month calendar that allows the user to select dates and move to the next or previous month using callbacks.
-            </summary>
-        </member>
-        <member name="M:Anthem.Calendar.OnSelectionChanged">
-            <summary>
-            Excecutes <see cref="M:System.Web.UI.WebControls.Calendar.OnSelectionChanged"/>, 
-            then sets <see cref="P:Anthem.Calendar.UpdateAfterCallBack"/> to true.
-            </summary>
-        </member>
-        <member name="M:Anthem.Calendar.OnVisibleMonthChanged(System.DateTime,System.DateTime)">
-            <summary>
-            Excecutes <see cref="M:System.Web.UI.WebControls.Calendar.OnVisibleMonthChanged(System.DateTime,System.DateTime)"/>, 
-            then sets <see cref="P:Anthem.Calendar.UpdateAfterCallBack"/> to true.
-            </summary>
-        </member>
-        <member name="M:Anthem.Calendar.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.Calendar.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.Calendar.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.Calendar.CallBackCancelledFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.Calendar.PreCallBackFunction"/>.
-            </summary>
-        </member>
-        <member name="P:Anthem.Calendar.EnableCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control uses callbacks; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="P:Anthem.Calendar.EnabledDuringCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control is enabled; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-            <remarks>Not all HTML elements support this property.</remarks>
-        </member>
-        <member name="P:Anthem.Calendar.PostCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client after the callback
-            response is received.
-            </summary>
-            <remarks>
-            The callback response is passed into the PostCallBackFunction as the one and only
-            parameter.
-            </remarks>
-            <example>
-            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
-            function AfterCallBack(result) {
-              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
-                alert(result.error);
-              }
-            }
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.Calendar.PreCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client before the callback
-            is made.
-            </summary>
-            <remarks>The function should return false on the client to cancel the callback.</remarks>
-        </member>
-        <member name="P:Anthem.Calendar.TextDuringCallBack">
-            <summary>Gets or sets the text to display on the client during the callback.</summary>
-            <remarks>
-            If the HTML element that invoked the callback has a text value (such as &lt;input
-            type="button" value="Run"&gt;) then the text of the element is updated during the
-            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
-            If the element does not have a text value, and if there is no associated &lt;label&gt;,
-            then this property is ignored.
-            </remarks>
-        </member>
-        <member name="P:Anthem.Calendar.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.Calendar.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.Calendar.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.Calendar.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.Calendar.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.Timer">
-            <summary>
-            Creates an updatable timer control.
-            </summary>
-        </member>
-        <member name="M:Anthem.Timer.DoTick">
-            <summary>
-            This method is called by the Timer control each time the timer expires.
-            </summary>
-        </member>
-        <member name="M:Anthem.Timer.StartTimer">
-            <summary>
-            Starts the timer.
-            </summary>
-        </member>
-        <member name="M:Anthem.Timer.StopTimer">
-            <summary>
-            Stops the timer.
-            </summary>
-        </member>
-        <member name="M:Anthem.Timer.OnTick(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:Anthem.Timer.Tick"/> event.
-            </summary>
-        </member>
-        <member name="M:Anthem.Timer.OnPreRender(System.EventArgs)">
-            <summary>
-            Registers the client side script for the control.
-            </summary>
-        </member>
-        <member name="M:Anthem.Timer.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="P:Anthem.Timer.Enabled">
-            <summary>
-            True if the timer is enabled on the client. The timer will continue to call the
-            DoTick method while it is enabled.
-            </summary>
-        </member>
-        <member name="P:Anthem.Timer.Interval">
-            <summary>
-            The number of milliseconds between each call to DoTick.
-            </summary>
-        </member>
-        <member name="E:Anthem.Timer.Tick">
-            <summary>
-            Occurs when the timer expires.
-            </summary>
-        </member>
-        <member name="P:Anthem.Timer.Visible">
-            <summary>
-            Visible is inherited from Control, but ignored by Timer.
-            </summary>
-        </member>
-        <member name="T:Anthem.HiddenField">
-            <summary>
-            Creates an updatable hidden field used to store a non-displayed value.
-            </summary>
-        </member>
-        <member name="M:Anthem.HiddenField.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.HiddenField.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.HiddenField.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.HiddenField.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.HiddenField.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.HiddenField.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.HiddenField.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.HiddenField.Visible">
-            <summary>
-            Overrides the Visible property so that Anthem.Manager can track the visibility.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control is rendered on the client; otherwise
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="T:Anthem.DetailsView">
-            <summary>
-            Creates an updatable control that displays the values of a single record from a data source in a table, where each data row represents a field of the record. The <strong>DetailsView</strong> control allows you to edit, delete, and insert records using callbacks.
-            </summary>
-        </member>
-        <member name="M:Anthem.DetailsView.OnDataPropertyChanged">
-            <summary>
-            Excecutes <see cref="M:System.Web.UI.WebControls.DataBoundControl.OnDataPropertyChanged"/>, 
-            then sets <see cref="P:Anthem.DetailsView.UpdateAfterCallBack"/> to true.
-            </summary>
-        </member>
-        <member name="M:Anthem.DetailsView.Render(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Renders the server control wrapped in an additional element so that the
-            element.innerHTML can be updated after a callback.
-            </summary>
-        </member>
-        <member name="M:Anthem.DetailsView.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event and registers the control
-            with <see cref="T:Anthem.Manager"/>.
-            </summary>
-            <param name="e">A <see cref="T:System.EventArgs"/>.</param>
-        </member>
-        <member name="M:Anthem.DetailsView.RenderControl(System.Web.UI.HtmlTextWriter)">
-            <summary>
-            Forces the server control to output content and trace information.
-            </summary>
-        </member>
-        <member name="P:Anthem.DetailsView.CallBackCancelledFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client if the callback is
-            cancelled. See <see cref="P:Anthem.DetailsView.PreCallBackFunction"/>.
-            </summary>
-        </member>
-        <member name="P:Anthem.DetailsView.EnableCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control uses callbacks instead of postbacks to post data to the server.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control uses callbacks; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-        </member>
-        <member name="P:Anthem.DetailsView.EnabledDuringCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control is enabled on the client during callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control is enabled; otherwise,
-            <strong>false</strong>. The default is <strong>true</strong>.
-            </value>
-            <remarks>Not all HTML elements support this property.</remarks>
-        </member>
-        <member name="P:Anthem.DetailsView.PostCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client after the callback
-            response is received.
-            </summary>
-            <remarks>
-            The callback response is passed into the PostCallBackFunction as the one and only
-            parameter.
-            </remarks>
-            <example>
-            	<code lang="JScript" description="This example shows a PostCallBackFunction that displays the error if there is one.">
-            function AfterCallBack(result) {
-              if (result.error != null &amp;&amp; result.error.length &gt; 0) {
-                alert(result.error);
-              }
-            }
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.DetailsView.PreCallBackFunction">
-            <summary>
-            Gets or sets the javascript function to execute on the client before the callback
-            is made.
-            </summary>
-            <remarks>The function should return false on the client to cancel the callback.</remarks>
-        </member>
-        <member name="P:Anthem.DetailsView.TextDuringCallBack">
-            <summary>Gets or sets the text to display on the client during the callback.</summary>
-            <remarks>
-            If the HTML element that invoked the callback has a text value (such as &lt;input
-            type="button" value="Run"&gt;) then the text of the element is updated during the
-            callback, otherwise the associated &lt;label&gt; text is updated during the callback.
-            If the element does not have a text value, and if there is no associated &lt;label&gt;,
-            then this property is ignored.
-            </remarks>
-        </member>
-        <member name="P:Anthem.DetailsView.AddCallBacks">
-            <summary>
-            Gets or sets a value indicating whether the control should convert child control postbacks into callbacks.
-            </summary>
-            <value>
-            	<strong>true</strong> if the control should convert child control postbacks to
-            callbacks; otherwise, <strong>false</strong>. The default is
-            <strong>true</strong>.
-            </value>
-            <remarks>
-            Only controls that <see cref="T:Anthem.Manager"/> recognizes will be converted.
-            </remarks>
-        </member>
-        <member name="P:Anthem.DetailsView.AutoUpdateAfterCallBack">
-            <summary>
-            Gets or sets a value indicating whether the control should be updated after each callback.
-            Also see <see cref="P:Anthem.DetailsView.UpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used declaratively as shown here.">
-            &lt;anthem:Label id="label" runat="server" AutoUpdateAfterCallBack="true" /&gt;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.DetailsView.UpdateAfterCallBack">
-            <summary>
-            Gets or sets a value which indicates whether the control should be updated after the current callback.
-            Also see <see cref="P:Anthem.DetailsView.AutoUpdateAfterCallBack"/>.
-            </summary>
-            <value>
-            	<strong>true</strong> if the the control should be updated; otherwise,
-            <strong>false</strong>. The default is <strong>false</strong>.
-            </value>
-            <example>
-            	<code lang="CS" description="This is normally used in server code as shown here.">
-            this.Label = "Count = " + count;
-            this.Label.UpdateAfterCallBack = true;
-                </code>
-            </example>
-        </member>
-        <member name="P:Anthem.DetailsView.Visible">
+        <member name="P:Anthem.HyperLink.Visible">
             <summary>
             Overrides the Visible property so that Anthem.Manager can track the visibility.
             </summary>
