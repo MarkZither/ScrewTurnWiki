@@ -45,6 +45,10 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 			"<ul>" +
 			"<li>AutomaticMail=example.com</li>" +
 			"</ul>" +
+			"Case insensitive login (optional):" +
+			"<ul>" +
+			"<li>CaseInsensitive</li>" +
+			"</ul>" +
 			"Comments start with a semicolon \";\".";
 
 		private IHostV30 m_Host;
@@ -58,6 +62,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 			public string Username;
 			public string Password;
 			public string AutomaticMail;
+			public bool CaseInsensitive;
 
 			private Dictionary<string, string[]> GroupMap = new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -412,6 +417,17 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 				if(user != null)
 					return user;
 
+
+				if(m_Config.CaseInsensitive) {
+					UserInfo[] all = StorageProvider.GetUsers();
+
+					int userIndex = Array.BinarySearch(all, new UserInfo(username, null, null, true, DateTime.MinValue, null), new UsernameComparer());
+
+					if(userIndex >= 0)
+						return all[userIndex];
+				}
+
+
 				// Active Directory Attributes
 				//
 				// http://msdn.microsoft.com/en-us/library/ms683980(VS.85).aspx
@@ -743,7 +759,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		/// </summary>
 		/// <value>The information</value>
 		public ComponentInformation Information {
-			get { return new ComponentInformation("Active Directory Provider", "Threeplicate Srl", "3.0.2.518", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/ADProv/ADProv.txt"); }
+			get { return new ComponentInformation("Active Directory Provider", "Threeplicate Srl", "3.0.2.534", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/ADProv/ADProv.txt"); }
 		}
 
 
@@ -852,6 +868,11 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 						continue;
 
 					string[] configEntry = remainingConfigLine.Split(new[] { '=' }, 2);
+
+					if(configEntry.Length == 1 && configEntry[0].ToLowerInvariant() == "caseinsensitive") {
+						newConfig.CaseInsensitive = true;
+						continue;
+					}
 
 					if(configEntry.Length != 2) {
 						LogEntry(LogEntryType.Error,
