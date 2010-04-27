@@ -23,6 +23,8 @@ Other configuration options are:
     queries Active Directory as the specified user on the domain
 - DefaultEmail=example.com
     In case the user doesn't have an email address in his ActiveDirectory profile, sets the email to a predefined value in the form displayname@example.com
+- CaseInsensitive
+    login username is case insensitive
 
 To activate automatic login with your Active Directory credentials, you have to configure your IIS server to enable "Windows Authentication" and to disable "Anonymous Authentication".
 You have also to modify the web.config file and add the following string inside the <system.web> section:
