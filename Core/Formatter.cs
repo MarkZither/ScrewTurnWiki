@@ -262,16 +262,6 @@ namespace ScrewTurn.Wiki {
 				match = ExtendedUpRegex.Match(sb.ToString(), end);
 			}
 
-			/*match = UpRegex.Match(sb.ToString());
-			while(match.Success) {
-				if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
-					sb.Remove(match.Index, match.Length);
-					sb.Insert(match.Index, UpReplacement);
-				}
-				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
-				match = UpRegex.Match(sb.ToString(), end);
-			}*/
-
 			if(!bareBones) {
 				NamespaceInfo ns = DetectNamespaceInfo(current);
 				match = SpecialTagRegex.Match(sb.ToString());
@@ -304,7 +294,6 @@ namespace ScrewTurn.Wiki {
 									sb.Insert(match.Index, @"<div style=""clear: both;""></div>");
 									break;
 								case "BR":
-									//if(!AreSingleLineBreaksToBeProcessed()) sb.Insert(match.Index, "<br />");
 									sb.Insert(match.Index, "<br />");
 									break;
 								case "TOP":
@@ -2038,7 +2027,6 @@ namespace ScrewTurn.Wiki {
 			sb.Append(@"<div id=""Toc"">");
 			sb.Append("<p><br />");
 			for(int i = 0; i < hPos.Count; i++) {
-				//Debug.WriteLine(i.ToString() + " " + hPos[i].Index.ToString() + ": " + hPos[i].Level);
 				switch(hPos[i].Level) {
 					case 1:
 						break;
