@@ -2470,20 +2470,27 @@ namespace ScrewTurn.Wiki {
 						pageName = NameTools.GetFullName(currentNamespace, pageName);
 					}
 				}
-				PageInfo info = Pages.FindPage(pageName);
+				PageInfo transcludedPage = Pages.FindPage(pageName);
 
-				if(info != null && (current != null && info.FullName != current.FullName)) { // Avoid circular transclusion!
+				// Avoid circular transclusion
+				bool transclusionAllowed =
+					transcludedPage != null &&
+						(current != null &&
+						 transcludedPage.FullName != current.FullName ||
+						 context != FormattingContext.PageContent && context != FormattingContext.TranscludedPageContent);
+
+				if(transclusionAllowed) {
 					string currentUsername = SessionFacade.GetCurrentUsername();
 					string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
-					bool canView = AuthChecker.CheckActionForPage(info, Actions.ForPages.ReadPage, currentUsername, currentGroups);
+					bool canView = AuthChecker.CheckActionForPage(transcludedPage, Actions.ForPages.ReadPage, currentUsername, currentGroups);
 					if(canView) {
 						dummy = new StringBuilder();
 						dummy.Append(@"<div class=""transcludedpage"">");
 						dummy.Append(FormattingPipeline.FormatWithPhase3(
-							FormattingPipeline.FormatWithPhase1And2(Content.GetPageContent(info, true).Content,
-							false, FormattingContext.TranscludedPageContent, info),
-							FormattingContext.TranscludedPageContent, info));
+							FormattingPipeline.FormatWithPhase1And2(Content.GetPageContent(transcludedPage, true).Content,
+							false, FormattingContext.TranscludedPageContent, transcludedPage),
+							FormattingContext.TranscludedPageContent, transcludedPage));
 						dummy.Append("</div>");
 						sb.Insert(match.Index, dummy.ToString());
 					}
