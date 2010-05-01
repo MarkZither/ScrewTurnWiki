@@ -2070,7 +2070,7 @@ namespace ScrewTurn.Wiki {
 			// '=== Title ===' results in '<a id="Title">' instead of '<a id="_Title_">'
 			if(h != null) h = h.Trim();
 
-			StringBuilder sb = new StringBuilder(StripWikiMarkup(h));
+			StringBuilder sb = new StringBuilder(StripWikiMarkup(StripHtml(h)));
 			sb.Replace(" ", "_");
 			sb.Replace(".", "");
 			sb.Replace(",", "");
