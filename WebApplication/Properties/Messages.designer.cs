@@ -673,6 +673,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Insert a new anchor or a link to an existing anchor.
+        /// </summary>
+        public static string AnchorTitle2 {
+            get {
+                return ResourceManager.GetString("AnchorTitle2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approve/Reject Draft.
         /// </summary>
         public static string ApproveRejectDraft {
@@ -741,6 +750,15 @@ namespace ScrewTurn.Wiki.Properties {
         public static string Bold {
             get {
                 return ResourceManager.GetString("Bold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Style selected text as bold.
+        /// </summary>
+        public static string BoldTitle {
+            get {
+                return ResourceManager.GetString("BoldTitle", resourceCulture);
             }
         }
         
@@ -979,6 +997,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set selected text as a block of code.
+        /// </summary>
+        public static string CodeEscapedTitle {
+            get {
+                return ResourceManager.GetString("CodeEscapedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inline Code.
         /// </summary>
         public static string CodeInline {
@@ -988,11 +1015,29 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set selected text as inline code.
+        /// </summary>
+        public static string CodeInlineTitle {
+            get {
+                return ResourceManager.GetString("CodeInlineTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string Comment {
             get {
                 return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set selected text as comment (hidden from the rendered page output).
+        /// </summary>
+        public static string CommentTitle {
+            get {
+                return ResourceManager.GetString("CommentTitle", resourceCulture);
             }
         }
         
@@ -1762,11 +1807,29 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wrap selected text in an &apos;escape&apos; block that escapes all wiki- and HTML-related characters.
+        /// </summary>
+        public static string EscapeTitle {
+            get {
+                return ResourceManager.GetString("EscapeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to External Link.
         /// </summary>
         public static string ExternalLink {
             get {
                 return ResourceManager.GetString("ExternalLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a link to a website or email address.
+        /// </summary>
+        public static string ExternalLinkTitle {
+            get {
+                return ResourceManager.GetString("ExternalLinkTitle", resourceCulture);
             }
         }
         
@@ -1785,6 +1848,15 @@ namespace ScrewTurn.Wiki.Properties {
         public static string FileLink {
             get {
                 return ResourceManager.GetString("FileLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a link to a file or attachment.
+        /// </summary>
+        public static string FileLinkTitle {
+            get {
+                return ResourceManager.GetString("FileLinkTitle", resourceCulture);
             }
         }
         
@@ -2014,11 +2086,29 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set selected text as level-1 header.
+        /// </summary>
+        public static string H1Title {
+            get {
+                return ResourceManager.GetString("H1Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to H2.
         /// </summary>
         public static string H2 {
             get {
                 return ResourceManager.GetString("H2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set selected text as level-2 header.
+        /// </summary>
+        public static string H2Title {
+            get {
+                return ResourceManager.GetString("H2Title", resourceCulture);
             }
         }
         
@@ -2032,11 +2122,29 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set selected text as level-3 header.
+        /// </summary>
+        public static string H3Title {
+            get {
+                return ResourceManager.GetString("H3Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to H4 (use sparingly).
         /// </summary>
         public static string H4 {
             get {
                 return ResourceManager.GetString("H4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set selected text as level-4 header.
+        /// </summary>
+        public static string H4Title {
+            get {
+                return ResourceManager.GetString("H4Title", resourceCulture);
             }
         }
         
@@ -2100,6 +2208,15 @@ namespace ScrewTurn.Wiki.Properties {
         public static string HR {
             get {
                 return ResourceManager.GetString("HR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a horizontal ruler (separator).
+        /// </summary>
+        public static string HRTitle {
+            get {
+                return ResourceManager.GetString("HRTitle", resourceCulture);
             }
         }
         
@@ -2172,6 +2289,15 @@ namespace ScrewTurn.Wiki.Properties {
         public static string ImageTitle {
             get {
                 return ResourceManager.GetString("ImageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a picture in the page.
+        /// </summary>
+        public static string ImageTitle2 {
+            get {
+                return ResourceManager.GetString("ImageTitle2", resourceCulture);
             }
         }
         
@@ -2455,6 +2581,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Style selected text as italic.
+        /// </summary>
+        public static string ItalicTitle {
+            get {
+                return ResourceManager.GetString("ItalicTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last modified Page.
         /// </summary>
         public static string LastModifiedPage {
@@ -2487,6 +2622,15 @@ namespace ScrewTurn.Wiki.Properties {
         public static string LineBreak {
             get {
                 return ResourceManager.GetString("LineBreak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a single line break.
+        /// </summary>
+        public static string LineBreakTitle {
+            get {
+                return ResourceManager.GetString("LineBreakTitle", resourceCulture);
             }
         }
         
@@ -2896,6 +3040,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wrap selected text in a &apos;nobr&apos; block, that ignores line breaks.
+        /// </summary>
+        public static string NoBrTitle {
+            get {
+                return ResourceManager.GetString("NoBrTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Categories selected.
         /// </summary>
         public static string NoCategories {
@@ -3013,6 +3166,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wrap selected text in a &apos;nowiki&apos; block, that ignores WikiMarkup.
+        /// </summary>
+        public static string NoWikiTitle {
+            get {
+                return ResourceManager.GetString("NoWikiTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string OK {
@@ -3094,6 +3256,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Insert an ordered list or wrap selected text in an ordered list (1, 2, 3, ...).
+        /// </summary>
+        public static string OrderedListTitle {
+            get {
+                return ResourceManager.GetString("OrderedListTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Page already exists.
         /// </summary>
         public static string PageAlreadyExists {
@@ -3171,6 +3342,15 @@ namespace ScrewTurn.Wiki.Properties {
         public static string PageLink {
             get {
                 return ResourceManager.GetString("PageLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert a link to a wiki page.
+        /// </summary>
+        public static string PageLinkTitle {
+            get {
+                return ResourceManager.GetString("PageLinkTitle", resourceCulture);
             }
         }
         
@@ -3931,6 +4111,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View existing snippets and insert one in the page.
+        /// </summary>
+        public static string SnippetsTitle {
+            get {
+                return ResourceManager.GetString("SnippetsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sort by Date and Time.
         /// </summary>
         public static string SortByDate {
@@ -3967,11 +4156,29 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View special tags and insert one in the page.
+        /// </summary>
+        public static string SpecialTagsTitle {
+            get {
+                return ResourceManager.GetString("SpecialTagsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Striked.
         /// </summary>
         public static string Striked {
             get {
                 return ResourceManager.GetString("Striked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Style selected text as strike-through.
+        /// </summary>
+        public static string StrikedTitle {
+            get {
+                return ResourceManager.GetString("StrikedTitle", resourceCulture);
             }
         }
         
@@ -3994,6 +4201,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set selected text as subscript.
+        /// </summary>
+        public static string SubscriptTitle {
+            get {
+                return ResourceManager.GetString("SubscriptTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Superscript.
         /// </summary>
         public static string Superscript {
@@ -4003,11 +4219,29 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set selected text as superscript.
+        /// </summary>
+        public static string SuperscriptTitle {
+            get {
+                return ResourceManager.GetString("SuperscriptTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Special Symbols.
         /// </summary>
         public static string Symbols {
             get {
                 return ResourceManager.GetString("Symbols", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View and insert special symbols.
+        /// </summary>
+        public static string SymbolsTitle {
+            get {
+                return ResourceManager.GetString("SymbolsTitle", resourceCulture);
             }
         }
         
@@ -4228,11 +4462,29 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Underline selected text.
+        /// </summary>
+        public static string UnderlinedTitle {
+            get {
+                return ResourceManager.GetString("UnderlinedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unordered List.
         /// </summary>
         public static string UnorderedList {
             get {
                 return ResourceManager.GetString("UnorderedList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert an unordered list or wrap selected text in an unordered list (bullet points).
+        /// </summary>
+        public static string UnorderedListTitle {
+            get {
+                return ResourceManager.GetString("UnorderedListTitle", resourceCulture);
             }
         }
         
@@ -4611,6 +4863,15 @@ namespace ScrewTurn.Wiki.Properties {
         public static string WrapperBox {
             get {
                 return ResourceManager.GetString("WrapperBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap selected text in a &apos;box&apos;.
+        /// </summary>
+        public static string WrapperBoxTitle {
+            get {
+                return ResourceManager.GetString("WrapperBoxTitle", resourceCulture);
             }
         }
         

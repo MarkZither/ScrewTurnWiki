@@ -117,6 +117,93 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AnchorTitle2" xml:space="preserve">
+    <value>Inserisci un'ancora o un collegamento ad un ancora esistente</value>
+  </data>
+  <data name="BoldTitle" xml:space="preserve">
+    <value>Imposta il testo selezionato in grassetto</value>
+  </data>
+  <data name="CodeEscapedTitle" xml:space="preserve">
+    <value>Imposta il testo selezionato come blocco di codice</value>
+  </data>
+  <data name="CodeInlineTitle" xml:space="preserve">
+    <value>Imposta il codice selezionato come codice 'inline'</value>
+  </data>
+  <data name="CommentTitle" xml:space="preserve">
+    <value>Imposta il testo selezionato come commento (nascosto nell'output della pagina)</value>
+  </data>
+  <data name="EscapeTitle" xml:space="preserve">
+    <value>Racchiudi il testo selezionato in un blocco 'escape' che fa l'escape di tutti i caratteri wiki e HTML</value>
+  </data>
+  <data name="ExternalLinkTitle" xml:space="preserve">
+    <value>Inserisci un collegamento ad un sito web o email</value>
+  </data>
+  <data name="FileLinkTitle" xml:space="preserve">
+    <value>Inserisci un collegamento ad un file o allegato</value>
+  </data>
+  <data name="H1Title" xml:space="preserve">
+    <value>Imposta il testo selezionato come titolo di livello 1</value>
+  </data>
+  <data name="H2Title" xml:space="preserve">
+    <value>Imposta il testo selezionato come titolo di livello 2</value>
+  </data>
+  <data name="H3Title" xml:space="preserve">
+    <value>Imposta il testo selezionato come titolo di livello 3</value>
+  </data>
+  <data name="H4Title" xml:space="preserve">
+    <value>Imposta il testo selezionato come titolo di livello 4</value>
+  </data>
+  <data name="HRTitle" xml:space="preserve">
+    <value>Inserisci una riga orizzontale (separatore)</value>
+  </data>
+  <data name="ImageTitle2" xml:space="preserve">
+    <value>Inserisci un'immagine nella pagina</value>
+  </data>
+  <data name="ItalicTitle" xml:space="preserve">
+    <value>Imposta il testo selezionato in corsivo</value>
+  </data>
+  <data name="LineBreakTitle" xml:space="preserve">
+    <value>Inserisci un'interruzione di riga (singola)</value>
+  </data>
+  <data name="NoBrTitle" xml:space="preserve">
+    <value>Racchiudi il testo selezionato in un blocco 'nobr' che ignora i ritorni a capo</value>
+  </data>
+  <data name="NoWikiTitle" xml:space="preserve">
+    <value>Racchiudi il testo selezionato in un blocco 'nowiki' che ignora il WikiMarkup</value>
+  </data>
+  <data name="OrderedListTitle" xml:space="preserve">
+    <value>Inserisci una lista ordinata o racchiudi il testo selezionato in una lista ordinata (1, 2, 3, ...)</value>
+  </data>
+  <data name="PageLinkTitle" xml:space="preserve">
+    <value>Inserisci un collegamento ad una pagina</value>
+  </data>
+  <data name="SnippetsTitle" xml:space="preserve">
+    <value>Visualizza gli snippet esistenti ed inseriscine uno nella pagina</value>
+  </data>
+  <data name="SpecialTagsTitle" xml:space="preserve">
+    <value>Visualizza i tag speciali ed inseriscine uno nella pagina</value>
+  </data>
+  <data name="StrikedTitle" xml:space="preserve">
+    <value>Style selected text as strike-through</value>
+  </data>
+  <data name="SubscriptTitle" xml:space="preserve">
+    <value>Imposta il testo selezionato come pedice</value>
+  </data>
+  <data name="SuperscriptTitle" xml:space="preserve">
+    <value>Imposta il testo selezionato come apice</value>
+  </data>
+  <data name="SymbolsTitle" xml:space="preserve">
+    <value>Visualizza ed inserisci simboli speciali</value>
+  </data>
+  <data name="UnderlinedTitle" xml:space="preserve">
+    <value>Sottolinea il testo selezionato</value>
+  </data>
+  <data name="UnorderedListTitle" xml:space="preserve">
+    <value>Inserisci una lista non ordinata o racchiudi il testo selezionato in una lista non ordinata</value>
+  </data>
+  <data name="WrapperBoxTitle" xml:space="preserve">
+    <value>Racchiudi il testo selezionato in un 'box'</value>
+  </data>
   <data name="ChangeComment" xml:space="preserve">
     <value>Commento alla modifica</value>
   </data>
@@ -170,7 +257,7 @@
     <value>Lista non ordinata</value>
   </data>
   <data name="LinkToThisSection" xml:space="preserve">
-    <value>Link to this Section</value>
+    <value>Collegamento a questa sezione</value>
   </data>
   <data name="NoBr" xml:space="preserve">
     <value>NoBR tag</value>
@@ -371,7 +458,7 @@
     <value>La DLL esiste già</value>
   </data>
   <data name="LoadedProviders" xml:space="preserve">
-    <value>Loaded ### Providers</value>
+    <value>Caricati ### provider</value>
   </data>
   <data name="VoidOrInvalidFile" xml:space="preserve">
     <value>File non valido o vuoto</value>
@@ -731,7 +818,7 @@
     <value>Questa ricerca, effettuata su &lt;b&gt;{0}&lt;/b&gt; (&lt;b&gt;{1} documenti&lt;/b&gt;, &lt;b&gt;{2} parole&lt;/b&gt;), è stata completata in &lt;b&gt;{3:N1} secondi&lt;/b&gt; ed ha prodotto &lt;b&gt;{4} risultati&lt;/b&gt;.</value>
   </data>
   <data name="InvalidDisplayName" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>Nome visualizzato non valido</value>
   </data>
   <data name="CouldNotCreateUser" xml:space="preserve">
     <value>Impossibile creare l'utente</value>
@@ -770,7 +857,7 @@
     <value>Nessuno snippet.</value>
   </data>
   <data name="LinkTitleOptional" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>Titolo collegamento (facoltativo)</value>
   </data>
   <data name="UpLevel" xml:space="preserve">
     <value>Su di un livello</value>
@@ -1223,7 +1310,7 @@
     <value>Blocco di Codice</value>
   </data>
   <data name="CodeInline" xml:space="preserve">
-    <value>Codice in linea</value>
+    <value>Codice 'inline'</value>
   </data>
   <data name="ConfigSaved" xml:space="preserve">
     <value>Configurazione salvata con successo</value>
@@ -1454,7 +1541,7 @@
     <value>La Pagina esiste già</value>
   </data>
   <data name="PageBackupsDeleted" xml:space="preserve">
-    <value>Backups della Pagina eliminati</value>
+    <value>Backup della Pagina eliminati</value>
   </data>
   <data name="PageDeleted" xml:space="preserve">
     <value>Pagina eliminata</value>

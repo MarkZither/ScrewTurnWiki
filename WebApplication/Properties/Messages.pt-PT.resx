@@ -117,6 +117,93 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AnchorTitle2" xml:space="preserve">
+    <value>Insert a new anchor or a link to an existing anchor</value>
+  </data>
+  <data name="BoldTitle" xml:space="preserve">
+    <value>Style selected text as bold</value>
+  </data>
+  <data name="CodeEscapedTitle" xml:space="preserve">
+    <value>Set selected text as a block of code</value>
+  </data>
+  <data name="CodeInlineTitle" xml:space="preserve">
+    <value>Set selected text as inline code</value>
+  </data>
+  <data name="CommentTitle" xml:space="preserve">
+    <value>Set selected text as comment (hidden from the rendered page output)</value>
+  </data>
+  <data name="EscapeTitle" xml:space="preserve">
+    <value>Wrap selected text in an 'escape' block that escapes all wiki- and HTML-related characters</value>
+  </data>
+  <data name="ExternalLinkTitle" xml:space="preserve">
+    <value>Insert a link to a website or email address</value>
+  </data>
+  <data name="FileLinkTitle" xml:space="preserve">
+    <value>Insert a link to a file or attachment</value>
+  </data>
+  <data name="H1Title" xml:space="preserve">
+    <value>Set selected text as level-1 header</value>
+  </data>
+  <data name="H2Title" xml:space="preserve">
+    <value>Set selected text as level-2 header</value>
+  </data>
+  <data name="H3Title" xml:space="preserve">
+    <value>Set selected text as level-3 header</value>
+  </data>
+  <data name="H4Title" xml:space="preserve">
+    <value>Set selected text as level-4 header</value>
+  </data>
+  <data name="HRTitle" xml:space="preserve">
+    <value>Insert a horizontal ruler (separator)</value>
+  </data>
+  <data name="ImageTitle2" xml:space="preserve">
+    <value>Insert a picture in the page</value>
+  </data>
+  <data name="ItalicTitle" xml:space="preserve">
+    <value>Style selected text as italic</value>
+  </data>
+  <data name="LineBreakTitle" xml:space="preserve">
+    <value>Insert a single line break</value>
+  </data>
+  <data name="NoBrTitle" xml:space="preserve">
+    <value>Wrap selected text in a 'nobr' block, that ignores line breaks</value>
+  </data>
+  <data name="NoWikiTitle" xml:space="preserve">
+    <value>Wrap selected text in a 'nowiki' block, that ignores WikiMarkup</value>
+  </data>
+  <data name="OrderedListTitle" xml:space="preserve">
+    <value>Insert an ordered list or wrap selected text in an ordered list (1, 2, 3, ...)</value>
+  </data>
+  <data name="PageLinkTitle" xml:space="preserve">
+    <value>Insert a link to a wiki page</value>
+  </data>
+  <data name="SnippetsTitle" xml:space="preserve">
+    <value>View existing snippets and insert one in the page</value>
+  </data>
+  <data name="SpecialTagsTitle" xml:space="preserve">
+    <value>View special tags and insert one in the page</value>
+  </data>
+  <data name="StrikedTitle" xml:space="preserve">
+    <value>Style selected text as strike-through</value>
+  </data>
+  <data name="SubscriptTitle" xml:space="preserve">
+    <value>Set selected text as subscript</value>
+  </data>
+  <data name="SuperscriptTitle" xml:space="preserve">
+    <value>Set selected text as superscript</value>
+  </data>
+  <data name="SymbolsTitle" xml:space="preserve">
+    <value>View and insert special symbols</value>
+  </data>
+  <data name="UnderlinedTitle" xml:space="preserve">
+    <value>Underline selected text</value>
+  </data>
+  <data name="UnorderedListTitle" xml:space="preserve">
+    <value>Insert an unordered list or wrap selected text in an unordered list (bullet points)</value>
+  </data>
+  <data name="WrapperBoxTitle" xml:space="preserve">
+    <value>Wrap selected text in a 'box'</value>
+  </data>
   <data name="AccessDeniedTitle" xml:space="preserve">
     <value>Acesso Negado</value>
   </data>
