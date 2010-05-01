@@ -2424,9 +2424,30 @@ namespace ScrewTurn.Wiki {
 				if(canEdit || canEditWithApproval) {
 					sb.Replace(EditSectionPlaceHolder, Exchanger.ResourceExchanger.GetResource("Edit"));
 				}
-				else sb.Replace(EditSectionPlaceHolder, "");
 			}
-			else sb.Replace(EditSectionPlaceHolder, "");
+			
+			// Remove all placeholders left in the page and their wrapping link
+			try {
+				int editSectionPhIdx = 0;
+				do {
+					string tempString = sb.ToString();
+					editSectionPhIdx = tempString.IndexOf(EditSectionPlaceHolder);
+					if(editSectionPhIdx >= 0) {
+						// Find first '<' before index, and first '>' after index
+						int openingIndex = editSectionPhIdx;
+						while(openingIndex > 0 && tempString[openingIndex] != '<') {
+							openingIndex--;
+						}
+						int closingIndex = tempString.IndexOf('>', editSectionPhIdx);
+
+						sb.Remove(openingIndex, closingIndex - openingIndex + 1);
+					}
+				} while(editSectionPhIdx >= 0);
+			}
+			catch {
+				// Just in case
+				sb.Replace(EditSectionPlaceHolder, "");
+			}
 
 			match = SignRegex.Match(sb.ToString());
 			while(match.Success) {
