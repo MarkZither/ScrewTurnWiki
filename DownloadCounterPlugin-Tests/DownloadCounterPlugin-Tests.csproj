@@ -8,8 +8,8 @@
     <ProjectGuid>{DEA4E4AA-7452-4598-8277-A7F5D6DE4985}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DownloadCounterPlugin_Tests</RootNamespace>
-    <AssemblyName>DownloadCounterPlugin-Tests</AssemblyName>
+    <RootNamespace>ScrewTurn.Wiki.Plugins.PluginPack.Tests</RootNamespace>
+    <AssemblyName>ScrewTurn.Wiki.Plugins.PluginPack.DownloadCounterPlugin.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
