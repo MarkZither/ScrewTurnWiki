@@ -66,7 +66,7 @@
 		<MakeDir Directories="@(WebAppOutput_SqlServer_PublicDirectory_Plugins)" />
 		
 		<!-- Plugins Assemblies -->
-		<CreateItem Include="Temp\PluginPack.dll;Temp\SqlServerProviders.dll;Temp\ActiveDirectoryProvider.dll">
+		<CreateItem Include="Temp\SqlServerProviders.dll;Temp\ActiveDirectoryProvider.dll;Temp\*Plugin.dll">
 			<Output ItemName="BuiltPlugins" TaskParameter="Include" />
 		</CreateItem>
 		<Copy SourceFiles="@(BuiltPlugins)" DestinationFolder=".\Artifacts\Plugins\" />

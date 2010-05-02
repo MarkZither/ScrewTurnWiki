@@ -14,7 +14,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		private IHostV30 host;
 		private string config;
-		private ComponentInformation info = new ComponentInformation("Multilanguage Content Plugin", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/Multilanguage.txt");
+		private ComponentInformation info = new ComponentInformation("Multilanguage Content Plugin", "Threeplicate Srl", "3.0.1.472", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/Multilanguage2.txt");
 
 		private string defaultLanguage = "en-us";
 		private bool displayWarning = false;

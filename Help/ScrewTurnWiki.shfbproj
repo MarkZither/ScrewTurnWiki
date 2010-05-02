@@ -17,24 +17,29 @@
     <OutputPath>..\Help\</OutputPath>
     <HtmlHelpName>ScrewTurnWiki</HtmlHelpName>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\AclEngine\AclEngine.csproj" xmlns="" />
-<DocumentationSource sourceFile="..\ActiveDirectoryProvider\ActiveDirectoryProvider.csproj" xmlns="" />
-<DocumentationSource sourceFile="..\Core\Core.csproj" xmlns="" />
-<DocumentationSource sourceFile="..\PluginFramework\PluginFramework.csproj" xmlns="" />
-<DocumentationSource sourceFile="..\PluginPack\PluginPack.csproj" xmlns="" />
-<DocumentationSource sourceFile="..\SearchEngine\SearchEngine.csproj" xmlns="" />
-<DocumentationSource sourceFile="..\SqlProvidersCommon\SqlProvidersCommon.csproj" xmlns="" />
-<DocumentationSource sourceFile="..\SqlServerProviders\SqlServerProviders.csproj" xmlns="" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\AclEngine\AclEngine.csproj" />
+<DocumentationSource sourceFile="..\ActiveDirectoryProvider\ActiveDirectoryProvider.csproj" />
+<DocumentationSource sourceFile="..\Core\Core.csproj" />
+<DocumentationSource sourceFile="..\DownloadCounterPlugin\DownloadCounterPlugin.csproj" />
+<DocumentationSource sourceFile="..\FootnotesPlugin\FootnotesPlugin.csproj" />
+<DocumentationSource sourceFile="..\MultilanguageContentPlugin\MultilanguageContentPlugin.csproj" />
+<DocumentationSource sourceFile="..\PluginFramework\PluginFramework.csproj" />
+<DocumentationSource sourceFile="..\RssFeedDisplayPlugin\RssFeedDisplayPlugin.csproj" />
+<DocumentationSource sourceFile="..\SearchEngine\SearchEngine.csproj" />
+<DocumentationSource sourceFile="..\SqlProvidersCommon\SqlProvidersCommon.csproj" />
+<DocumentationSource sourceFile="..\SqlServerProviders\SqlServerProviders.csproj" />
+<DocumentationSource sourceFile="..\UnfuddleTicketsPlugin\UnfuddleTicketsPlugin.csproj" /></DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="ScrewTurn.Wiki.AclEngine" isDocumented="True">Namespace containing ACL Engine types.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="ScrewTurn.Wiki.ImportWiki" isDocumented="False" />
-<NamespaceSummaryItem name="ScrewTurn.Wiki.PluginFramework" isDocumented="True">Namespace containing Plugin Framework types.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="ScrewTurn.Wiki.Plugins.ActiveDirectory" isDocumented="True">Namespace containing Active Directory Provider types.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="ScrewTurn.Wiki.Plugins.PluginPack" isDocumented="True">Namespace containing Plugin Pack types.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="ScrewTurn.Wiki.Plugins.SqlCommon" isDocumented="True">Namespace containing SQL Common types.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="ScrewTurn.Wiki.Plugins.SqlServer" isDocumented="True">Namespace containing SQL Server types.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="ScrewTurn.Wiki.SearchEngine" isDocumented="True">Namespace containing Search Engine types.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="ScrewTurn.Wiki" isDocumented="True">Root ScrewTurn Wiki namespace.</NamespaceSummaryItem></NamespaceSummaries>
+      <NamespaceSummaryItem name="ScrewTurn.Wiki.ImportWiki" isDocumented="False" />
+      <NamespaceSummaryItem name="ScrewTurn.Wiki.PluginFramework" isDocumented="True">Namespace containing Plugin Framework types.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ScrewTurn.Wiki.Plugins.ActiveDirectory" isDocumented="True">Namespace containing Active Directory Provider types.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ScrewTurn.Wiki.Plugins.PluginPack" isDocumented="True">Namespace containing Plugin Pack types.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ScrewTurn.Wiki.Plugins.SqlCommon" isDocumented="True">Namespace containing SQL Common types.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ScrewTurn.Wiki.Plugins.SqlServer" isDocumented="True">Namespace containing SQL Server types.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ScrewTurn.Wiki.SearchEngine" isDocumented="True">Namespace containing Search Engine types.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ScrewTurn.Wiki" isDocumented="True">Root ScrewTurn Wiki namespace.</NamespaceSummaryItem>
+    </NamespaceSummaries>
     <ProjectSummary>API documentation for ScrewTurn Wiki version 3.0.</ProjectSummary>
     <CopyrightHref>http://www.screwturn.eu</CopyrightHref>
     <CopyrightText>Copyright %28C%29 2006-2010 Threeplicate Srl. All rights reserved.</CopyrightText>

@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		private IHostV30 _host;
 		private string _config;
 		private bool _enableLogging = true;
-		private static readonly ComponentInformation Info = new ComponentInformation("Download Counter Plugin", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/DownloadCounter.txt");
+		private static readonly ComponentInformation Info = new ComponentInformation("Download Counter Plugin", "Threeplicate Srl", "3.0.1.472", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/DownloadCounter2.txt");
 
 		private static readonly Regex XmlRegex = new Regex(@"\<countDownloads(.+?)\>(.+?)\<\/countDownloads\>",
 			RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
