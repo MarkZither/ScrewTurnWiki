@@ -28,10 +28,11 @@ namespace ScrewTurn.Wiki {
 				writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
 				writer.WriteAttributeString("xsi", "schemaLocation", null, "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/09/sitemap.xsd");
 
-				foreach(PageInfo page in Pages.GetPages(null)) {
-					if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
-						SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) {
+				string user = SessionFacade.GetCurrentUsername();
+				string[] groups = SessionFacade.GetCurrentGroupNames();
 
+				foreach(PageInfo page in Pages.GetPages(null)) {
+					if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
 						WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == rootDefault, writer);
 					}
 				}
@@ -39,9 +40,7 @@ namespace ScrewTurn.Wiki {
 					string nspaceDefault = nspace.DefaultPage.FullName.ToLowerInvariant();
 
 					foreach(PageInfo page in Pages.GetPages(nspace)) {
-						if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
-							SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) {
-
+						if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
 							WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == nspaceDefault, writer);
 						}
 					}
