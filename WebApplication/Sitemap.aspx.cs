@@ -29,13 +29,21 @@ namespace ScrewTurn.Wiki {
 				writer.WriteAttributeString("xsi", "schemaLocation", null, "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/09/sitemap.xsd");
 
 				foreach(PageInfo page in Pages.GetPages(null)) {
-					WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == rootDefault, writer);
+					if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
+						SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) {
+
+						WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == rootDefault, writer);
+					}
 				}
 				foreach(NamespaceInfo nspace in Pages.GetNamespaces()) {
 					string nspaceDefault = nspace.DefaultPage.FullName.ToLowerInvariant();
 
 					foreach(PageInfo page in Pages.GetPages(nspace)) {
-						WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == nspaceDefault, writer);
+						if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
+							SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) {
+
+							WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == nspaceDefault, writer);
+						}
 					}
 				}
 
