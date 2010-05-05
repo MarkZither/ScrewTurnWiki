@@ -51,7 +51,7 @@ The ##WIKITITLE## Team.";
 		/// The default content of the edit notice.
 		/// </summary>
 		public const string EditNoticeContent = @"Please '''do not''' include contents covered by copyright without the explicit permission of the Author. Always preview the result before saving.{BR}
-If you are having trouble, please visit the [http://www.screwturn.eu/Help.aspx|Help section] at the [http://www.screwturn.eu|ScrewTurn Wiki Website].";
+If you are having trouble, please visit the [http://www.screwturn.eu/Help.ashx|Help section] at the [http://www.screwturn.eu|ScrewTurn Wiki Website].";
 
 		/// <summary>
 		/// The default content of the footer.
