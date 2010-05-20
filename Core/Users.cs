@@ -209,11 +209,14 @@ namespace ScrewTurn.Wiki {
 		public static bool ModifyUser(UserInfo user, string displayName, string password, string email, bool active) {
 			if(user.Provider.UserAccountsReadOnly) return false;
 
-			bool done = user.Provider.ModifyUser(user, displayName, password, email, active) != null;
+			UserInfo newUser = user.Provider.ModifyUser(user, displayName, password, email, active);
 
-			if(done) {
+			if(newUser != null) {
 				Log.LogEntry("User " + user.Username + " updated", EntryType.General, Log.SystemUsername);
-				Host.Instance.OnUserAccountActivity(user, UserAccountActivity.AccountModified);
+				Host.Instance.OnUserAccountActivity(newUser, UserAccountActivity.AccountModified);
+				if(user.Active != newUser.Active) {
+					Host.Instance.OnUserAccountActivity(newUser, newUser.Active ? UserAccountActivity.AccountActivated : UserAccountActivity.AccountDeactivated);
+				}
 				return true;
 			}
 			else {
