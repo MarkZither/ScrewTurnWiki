@@ -489,8 +489,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="size">The size to shrink the log to (in bytes).</param>
 		private void CutLog(int size) {
 			lock(this) {
-				// Contains the log messages from the newest to the oldest
+				// Contains the log messages from oldest to newest, and reverse the list
 				List<LogEntry> entries = new List<LogEntry>(GetLogEntries());
+				entries.Reverse();
 
 				FileInfo fi = new FileInfo(GetFullPath(LogFile));
 				int difference = (int)(fi.Length - size);
@@ -503,9 +504,7 @@ namespace ScrewTurn.Wiki {
 					toStore.Add(entries[i]);
 				}
 
-				// Reverse the temp list because entries contains the log messages
-				// starting from the newest to the oldest
-				toStore.Reverse();
+				toStore.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
 
 				StringBuilder sb = new StringBuilder();
 				// Type | DateTime | Message | User
@@ -556,6 +555,9 @@ namespace ScrewTurn.Wiki {
 					}
 					catch { }
 				}
+
+				result.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
+
 				return result.ToArray();
 			}
 		}
