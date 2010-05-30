@@ -1188,22 +1188,28 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The number of indexed words, including duplicates.</returns>
 		private int IndexPage(PageContent content) {
 			lock(this) {
-				string documentName = PageDocument.GetDocumentName(content.PageInfo);
+				try {
+					string documentName = PageDocument.GetDocumentName(content.PageInfo);
 
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(content.PageInfo, content.Title),
-					PageDocument.StandardTypeTag, content.LastModified);
+					DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(content.PageInfo, content.Title),
+						PageDocument.StandardTypeTag, content.LastModified);
 
-				// Store the document
-				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
-				int count = index.StoreDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent),
-					content.Keywords, host.PrepareContentForIndexing(content.PageInfo, content.Content), null);
+					// Store the document
+					// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
+					int count = index.StoreDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent),
+						content.Keywords, host.PrepareContentForIndexing(content.PageInfo, content.Content), null);
 
-				if(count == 0 && content.Content.Length > 0) {
-					host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
-						LogEntryType.Warning, null, this);
+					if(count == 0 && content.Content.Length > 0) {
+						host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
+							LogEntryType.Warning, null, this);
+					}
+
+					return count;
 				}
-
-				return count;
+				catch(Exception ex) {
+					host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this);
+					return 0;
+				}
 			}
 		}
 
@@ -2389,25 +2395,31 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The number of indexed words, including duplicates.</returns>
 		private int IndexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body) {
 			lock(this) {
-				// Trim "RE:" to avoid polluting the search engine index
-				if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
+				try {
+					// Trim "RE:" to avoid polluting the search engine index
+					if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
 
-				string documentName = MessageDocument.GetDocumentName(page, id);
+					string documentName = MessageDocument.GetDocumentName(page, id);
 
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(null, subject),
-					MessageDocument.StandardTypeTag, dateTime);
+					DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(null, subject),
+						MessageDocument.StandardTypeTag, dateTime);
 
-				// Store the document
-				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
-				int count = index.StoreDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null,
-					host.PrepareContentForIndexing(null, body), null);
+					// Store the document
+					// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
+					int count = index.StoreDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null,
+						host.PrepareContentForIndexing(null, body), null);
 
-				if(count == 0 && body.Length > 0) {
-					host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
-						LogEntryType.Warning, null, this);
+					if(count == 0 && body.Length > 0) {
+						host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
+							LogEntryType.Warning, null, this);
+					}
+
+					return count;
 				}
-
-				return count;
+				catch(Exception ex) {
+					host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this);
+					return 0;
+				}
 			}
 		}
 
