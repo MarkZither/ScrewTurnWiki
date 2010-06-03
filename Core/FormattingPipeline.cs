@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Web;
+using System.Threading;
 
 namespace ScrewTurn.Wiki {
 
@@ -65,7 +66,9 @@ namespace ScrewTurn.Wiki {
 						raw = provider.Format(raw, info, FormattingPhase.Phase1);
 					}
 					catch(Exception ex) {
-						Log.LogEntry("Provider " + provider.Information.Name + " failed to perform Phase1 (silently resuming from next provider): " + ex.ToString(), EntryType.Error, Log.SystemUsername);
+						if(!(ex is ThreadAbortException)) { // Consider Response.End()
+							Log.LogEntry("Provider " + provider.Information.Name + " failed to perform Phase1 (silently resuming from next provider): " + ex.ToString(), EntryType.Error, Log.SystemUsername);
+						}
 					}
 				}
 			}
@@ -79,7 +82,9 @@ namespace ScrewTurn.Wiki {
 						raw = provider.Format(raw, info, FormattingPhase.Phase2);
 					}
 					catch(Exception ex) {
-						Log.LogEntry("Provider " + provider.Information.Name + " failed to perform Phase2 (silently resuming from next provider): " + ex.ToString(), EntryType.Error, Log.SystemUsername);
+						if(!(ex is ThreadAbortException)) { // Consider Response.End()
+							Log.LogEntry("Provider " + provider.Information.Name + " failed to perform Phase2 (silently resuming from next provider): " + ex.ToString(), EntryType.Error, Log.SystemUsername);
+						}
 					}
 				}
 			}
@@ -109,7 +114,9 @@ namespace ScrewTurn.Wiki {
 						raw = provider.Format(raw, info, FormattingPhase.Phase3);
 					}
 					catch(Exception ex) {
-						Log.LogEntry("Provider " + provider.Information.Name + " failed to perform Phase3 (silently resuming from next provider): " + ex.ToString(), EntryType.Error, Log.SystemUsername);
+						if(!(ex is ThreadAbortException)) { // Consider Response.End()
+							Log.LogEntry("Provider " + provider.Information.Name + " failed to perform Phase3 (silently resuming from next provider): " + ex.ToString(), EntryType.Error, Log.SystemUsername);
+						}
 					}
 				}
 			}
