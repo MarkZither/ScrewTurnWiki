@@ -17,7 +17,10 @@ namespace ScrewTurn.Wiki {
 		/// Gets the current Session object.
 		/// </summary>
 		private static HttpSessionState Session {
-			get { return HttpContext.Current.Session; }
+			get {
+				if(HttpContext.Current == null) return null;
+				else return HttpContext.Current.Session;
+			}
 		}
 
 		/// <summary>
