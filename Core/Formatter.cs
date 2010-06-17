@@ -2393,15 +2393,16 @@ namespace ScrewTurn.Wiki {
 
 			sb.Replace(SectionLinkTextPlaceHolder, Exchanger.ResourceExchanger.GetResource("LinkToThisSection"));
 
-			match = RecentChangesRegex.Match(sb.ToString());
-			while(match.Success) {
-				sb.Remove(match.Index, match.Length);
-				string trimmedTag = match.Value.Trim('{', '}');
-				// If current page is null, assume root namespace
-				NamespaceInfo currentNamespace = null;
-				if(current != null) currentNamespace = Pages.FindNamespace(NameTools.GetNamespace(current.FullName));
-				sb.Insert(match.Index, BuildRecentChanges(currentNamespace, trimmedTag.EndsWith("(*)"), context, current));
+			if(current != null) {
 				match = RecentChangesRegex.Match(sb.ToString());
+				while(match.Success) {
+					sb.Remove(match.Index, match.Length);
+					string trimmedTag = match.Value.Trim('{', '}');
+					// If current page is null, assume root namespace
+					NamespaceInfo currentNamespace = currentNamespace = Pages.FindNamespace(NameTools.GetNamespace(current.FullName));
+					sb.Insert(match.Index, BuildRecentChanges(currentNamespace, trimmedTag.EndsWith("(*)"), context, current));
+					match = RecentChangesRegex.Match(sb.ToString());
+				}
 			}
 
 			match = null;
