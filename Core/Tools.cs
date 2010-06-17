@@ -235,6 +235,21 @@ namespace ScrewTurn.Wiki {
 			else return "";
 		}
 
+        /// <summary>
+        /// Gets the current culture.
+        /// </summary>
+		public static string CurrentCulture {
+			get { return CultureInfo.CurrentUICulture.Name; }
+		}
+
+        /// <summary>
+        /// Get the direction of the current culture.
+        /// </summary>
+        /// <returns><c>true</c> if the current culture is RTL, <c>false</c> otherwise.</returns>
+		public static bool IsRightToLeftCulture() {
+			return new CultureInfo(CurrentCulture).TextInfo.IsRightToLeft;
+		}
+
 		/// <summary>
 		/// Computes the Hash of a Username, mixing it with other data, in order to avoid illegal Account activations.
 		/// </summary>

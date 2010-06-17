@@ -70,6 +70,9 @@ namespace ScrewTurn.Wiki {
 				chkImageAttachments.Visible = currentPage != null;
 
 				SetupFeature();
+
+                // This applies text direction
+                DataBind();
 			}
 		}
 

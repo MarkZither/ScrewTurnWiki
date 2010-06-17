@@ -67,6 +67,16 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
+        /// <summary>
+        /// Gets direction of the application
+        /// </summary>
+		public static string Direction {
+			get {
+				if(Tools.IsRightToLeftCulture()) return "rtl";
+				else return "ltr";
+			}
+		}
+
 		/// <summary>
 		/// Gets the bytes of the MasterPassword.
 		/// </summary>
