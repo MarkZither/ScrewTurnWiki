@@ -118,788 +118,788 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnchorTitle2" xml:space="preserve">
-    <value>Insert a new anchor or a link to an existing anchor</value>
+    <value>Indsæt et nyt anker, eller link til et eksisterende anker.</value>
   </data>
   <data name="BoldTitle" xml:space="preserve">
-    <value>Style selected text as bold</value>
+    <value>Sæt valgte tekst til fed</value>
   </data>
   <data name="CodeEscapedTitle" xml:space="preserve">
-    <value>Set selected text as a block of code</value>
+    <value>Sæt valgte tekst som en blokkode</value>
   </data>
   <data name="CodeInlineTitle" xml:space="preserve">
-    <value>Set selected text as inline code</value>
+    <value>Sæt valgte tekst som en indsat kode</value>
   </data>
   <data name="CommentTitle" xml:space="preserve">
-    <value>Set selected text as comment (hidden from the rendered page output)</value>
+    <value>Sæt valgte tekst som kommentar (skjult ved visning af siden)</value>
   </data>
   <data name="EscapeTitle" xml:space="preserve">
-    <value>Wrap selected text in an 'escape' block that escapes all wiki- and HTML-related characters</value>
+    <value>Omkranser valgte tekst med en 'undviget' blok, der ignorerer alle wiki og HTML relaterede tegn</value>
   </data>
   <data name="ExternalLinkTitle" xml:space="preserve">
-    <value>Insert a link to a website or email address</value>
+    <value>Indsæt et link til en hjemmeside eller e-mailadrese</value>
   </data>
   <data name="FileLinkTitle" xml:space="preserve">
-    <value>Insert a link to a file or attachment</value>
+    <value>Indsæt et link til en fil eller vedhæftning</value>
   </data>
   <data name="H1Title" xml:space="preserve">
-    <value>Set selected text as level-1 header</value>
+    <value>Sæt valgte tekst til niveau 1 overskrift</value>
   </data>
   <data name="H2Title" xml:space="preserve">
-    <value>Set selected text as level-2 header</value>
+    <value>Sæt valgte tekst til niveau 2 overskrift</value>
   </data>
   <data name="H3Title" xml:space="preserve">
-    <value>Set selected text as level-3 header</value>
+    <value>Sæt valgte tekst til niveau 3 overskrift</value>
   </data>
   <data name="H4Title" xml:space="preserve">
-    <value>Set selected text as level-4 header</value>
+    <value>Sæt valgte tekst til niveau 4 overskrift</value>
   </data>
   <data name="HRTitle" xml:space="preserve">
-    <value>Insert a horizontal ruler (separator)</value>
+    <value>Insæt en horisontal linje (opdeling)</value>
   </data>
   <data name="ImageTitle2" xml:space="preserve">
-    <value>Insert a picture in the page</value>
+    <value>Indsæt et billede på siden</value>
   </data>
   <data name="ItalicTitle" xml:space="preserve">
-    <value>Style selected text as italic</value>
+    <value>Sæt valgte tekst til kursiv</value>
   </data>
   <data name="LineBreakTitle" xml:space="preserve">
-    <value>Insert a single line break</value>
+    <value>Indsæt et enkelt linjeskift</value>
   </data>
   <data name="NoBrTitle" xml:space="preserve">
-    <value>Wrap selected text in a 'nobr' block, that ignores line breaks</value>
+    <value>Omkrans den valgte tekst i en 'nobr' blok, som ignorerer linjeskift</value>
   </data>
   <data name="NoWikiTitle" xml:space="preserve">
-    <value>Wrap selected text in a 'nowiki' block, that ignores WikiMarkup</value>
+    <value>Omkrans den valgte tekst i en 'nowiki' blok, som ignorerer wikikoder</value>
   </data>
   <data name="OrderedListTitle" xml:space="preserve">
-    <value>Insert an ordered list or wrap selected text in an ordered list (1, 2, 3, ...)</value>
+    <value>Indsæt en nummereret liste eller omkrans den valgte tekst i en nummereret liste (1, 2, 3, ...)</value>
   </data>
   <data name="PageLinkTitle" xml:space="preserve">
-    <value>Insert a link to a wiki page</value>
+    <value>Indsæt et link til en wikiside</value>
   </data>
   <data name="SnippetsTitle" xml:space="preserve">
-    <value>View existing snippets and insert one in the page</value>
+    <value>Vis eksisterende kodestumper og indsæt en på siden</value>
   </data>
   <data name="SpecialTagsTitle" xml:space="preserve">
-    <value>View special tags and insert one in the page</value>
+    <value>Vis særlige mærkater og indsæt en på siden</value>
   </data>
   <data name="StrikedTitle" xml:space="preserve">
-    <value>Style selected text as strike-through</value>
+    <value>Sæt den valgte tekst som gennemstreget</value>
   </data>
   <data name="SubscriptTitle" xml:space="preserve">
-    <value>Set selected text as subscript</value>
+    <value>Sæt den valgte tekst som sænket skrift</value>
   </data>
   <data name="SuperscriptTitle" xml:space="preserve">
-    <value>Set selected text as superscript</value>
+    <value>Sæt den valgte tekst som hævet skrift</value>
   </data>
   <data name="SymbolsTitle" xml:space="preserve">
-    <value>View and insert special symbols</value>
+    <value>Vis og indsæt specielle symboler</value>
   </data>
   <data name="UnderlinedTitle" xml:space="preserve">
-    <value>Underline selected text</value>
+    <value>Understreg den valgte tekst</value>
   </data>
   <data name="UnorderedListTitle" xml:space="preserve">
-    <value>Insert an unordered list or wrap selected text in an unordered list (bullet points)</value>
+    <value>Indsæt en unummereret liste eller omkrans den valgte tekst i en unummereret liste (punktopstilling)</value>
   </data>
   <data name="WrapperBoxTitle" xml:space="preserve">
-    <value>Wrap selected text in a 'box'</value>
+    <value>Omkranser den valgte tekst i en 'boks'</value>
   </data>
   <data name="ChangeComment" xml:space="preserve">
-    <value>Change Comment</value>
+    <value>Ret kommentar</value>
   </data>
   <data name="MetaDescription" xml:space="preserve">
-    <value>Meta Description</value>
+    <value>Meta beskrivelse</value>
   </data>
   <data name="MetaKeywords" xml:space="preserve">
-    <value>Meta Keywords</value>
+    <value>Meta nøgleord</value>
   </data>
   <data name="AutoUpdateAvailable" xml:space="preserve">
-    <value>Auto-update available</value>
+    <value>Autoopdatering tilgængelig</value>
   </data>
   <data name="NAccountsDeleted" xml:space="preserve">
-    <value>$ accounts deleted</value>
-    <comment>As in "3 accounts deleted"</comment>
+    <value>$ konti slettet</value>
+    <comment>Som i "3 konti slettet"</comment>
   </data>
   <data name="Formatted" xml:space="preserve">
-    <value>formatted</value>
+    <value>formateret</value>
   </data>
   <data name="NoPagesToMigrate" xml:space="preserve">
-    <value>No pages to migrate</value>
+    <value>Der er ingen Ingen sider til flytning</value>
   </data>
   <data name="NoProvidersToUpdate" xml:space="preserve">
-    <value>No Providers to update</value>
+    <value>Der er ingen udbydere at opdatere</value>
   </data>
   <data name="ProvidersUpdated" xml:space="preserve">
-    <value>Providers updated, please restart the wiki (Admin Home tab)</value>
+    <value>Udbydere opdateret. Genstart venligst wiki'en (Admin hjem fane)</value>
   </data>
   <data name="BulkMigrationCompleted" xml:space="preserve">
-    <value>Bulk migration completed</value>
+    <value>Masseflytning færdig</value>
   </data>
   <data name="BulkMigrationCompletedWithErrors" xml:space="preserve">
-    <value>Bulk migration completed with errors, check the log</value>
+    <value>Masseoverførsel færdig, men med fejl. Kig i loggen</value>
   </data>
   <data name="BulkRebindCompleted" xml:space="preserve">
-    <value>Bulk rebind completed</value>
+    <value>Masseombinding færdig</value>
   </data>
   <data name="NoCategories" xml:space="preserve">
-    <value>No Categories selected</value>
+    <value>Ingen kategorier valgt</value>
   </data>
   <data name="NoPages" xml:space="preserve">
-    <value>No Pages to rebind</value>
+    <value>Der er ingen sider til ombinding</value>
   </data>
   <data name="InvalidFileName" xml:space="preserve">
-    <value>Invalid file name</value>
+    <value>Ugyldigt filnavn</value>
   </data>
   <data name="OrderedList" xml:space="preserve">
-    <value>Ordered List</value>
+    <value>Nummereret liste</value>
   </data>
   <data name="UnorderedList" xml:space="preserve">
-    <value>Unordered List</value>
+    <value>Unummereret liste</value>
   </data>
   <data name="LinkToThisSection" xml:space="preserve">
-    <value>Link to this Section</value>
+    <value>Link til denne sektion</value>
   </data>
   <data name="NoBr" xml:space="preserve">
-    <value>NoBR tag</value>
+    <value>NoBR mærkat</value>
   </data>
   <data name="SelectAndDelete" xml:space="preserve">
-    <value>Select and delete</value>
+    <value>Vælg og slet</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Fejl</value>
   </data>
   <data name="NewVersion" xml:space="preserve">
-    <value>New version:</value>
+    <value>Ny version:</value>
   </data>
   <data name="UpToDate" xml:space="preserve">
-    <value>Up-to-date</value>
+    <value>Opdateret</value>
   </data>
   <data name="CouldNotMigratePage" xml:space="preserve">
-    <value>Could not migrate Page</value>
+    <value>Side kunne ikke flyttes</value>
   </data>
   <data name="DiscussionsRss" xml:space="preserve">
-    <value>Discussions RSS</value>
+    <value>Debat RSS</value>
   </data>
   <data name="RssForThisCategoryDiscussion" xml:space="preserve">
-    <value>Update notifications for this Category's Discussions (RSS 2.0)</value>
+    <value>Opdateringsorientering for denne kategoris debat (RSS 2.0)</value>
   </data>
   <data name="CodeEscaped" xml:space="preserve">
-    <value>Escaped Block Code</value>
+    <value>Undviget blokkode</value>
   </data>
   <data name="HR" xml:space="preserve">
-    <value>Horizontal Ruler</value>
+    <value>Horisontal linje</value>
   </data>
   <data name="Snippets" xml:space="preserve">
-    <value>Snippets</value>
+    <value>Kodestumper</value>
   </data>
   <data name="Symbols" xml:space="preserve">
-    <value>Special Symbols</value>
+    <value>Specielle symboler</value>
   </data>
   <data name="WrapperBox" xml:space="preserve">
-    <value>Wrapper Box</value>
+    <value>Omkransningsboks</value>
   </data>
   <data name="UserTitle" xml:space="preserve">
-    <value>User's Details</value>
+    <value>Brugerinfo</value>
   </data>
   <data name="CouldNotSaveDisplayName" xml:space="preserve">
-    <value>Could not save Display Name</value>
+    <value>Visningsnavn kunne ikke gemmes</value>
   </data>
   <data name="DisplayNameSaved" xml:space="preserve">
-    <value>Display Name saved</value>
+    <value>Visningsnavn gemt</value>
   </data>
   <data name="UserDeletedMessage" xml:space="preserve">
-    <value>##USER## deleted a message on the discussion of ##PAGE##.</value>
+    <value>##USER## har slettet en besked i debatten for siden ##PAGE##.</value>
   </data>
   <data name="UserDeletedPage" xml:space="preserve">
-    <value>##USER## deleted the page ##PAGE##.</value>
+    <value>##USER## har slettet siden ##PAGE##.</value>
   </data>
   <data name="UserEditedMessage" xml:space="preserve">
-    <value>##USER## edited a message on the discussion of ##PAGE##.</value>
+    <value>##USER## har rettet en besked i debatten for siden ##PAGE##.</value>
   </data>
   <data name="UserPostedMessage" xml:space="preserve">
-    <value>##USER## posted a message on the discussion of ##PAGE##.</value>
+    <value>##USER## har postet en besked i debatten for siden ##PAGE##.</value>
   </data>
   <data name="UserRenamedPage" xml:space="preserve">
-    <value>##USER## renamed the page ##PAGE##.</value>
+    <value>##USER## har omdøbt siden ##PAGE##.</value>
   </data>
   <data name="UserRolledBackPage" xml:space="preserve">
-    <value>##USER## rolled back the page ##PAGE##.</value>
+    <value>##USER## har tilbageført siden ##PAGE##.</value>
   </data>
   <data name="UserUpdatedPage" xml:space="preserve">
-    <value>##USER## updated the page ##PAGE##.</value>
+    <value>##USER## har opdateret siden ##PAGE##.</value>
   </data>
   <data name="DiffingPageTitle" xml:space="preserve">
-    <value>Diffing &lt;i&gt;##PAGETITLE##&lt;/i&gt;, at revisions &lt;i&gt;##REV1##&lt;/i&gt; and &lt;i&gt;##REV2##&lt;/i&gt;</value>
+    <value>Viser ændringer for &lt;i&gt;##PAGETITLE##&lt;/i&gt;, i version &lt;i&gt;##REV1##&lt;/i&gt; og &lt;i&gt;##REV2##&lt;/i&gt;</value>
   </data>
   <data name="ProviderRejectedConfiguration" xml:space="preserve">
-    <value>The Provider rejected the Configuration data</value>
+    <value>Udbyderen har afvist konfigurationsdataet</value>
   </data>
   <data name="CannotRenameItem" xml:space="preserve">
-    <value>Cannot rename the selected item</value>
+    <value>Det valgte emne kan ikke omdøbes</value>
   </data>
   <data name="CannotStoreFile" xml:space="preserve">
-    <value>Cannot store the file</value>
+    <value>Filen kan ikke gemmes</value>
   </data>
   <data name="CannotCreateNewDirectory" xml:space="preserve">
-    <value>Cannot create new directory</value>
+    <value>Ny folder kan ikke oprettes</value>
   </data>
   <data name="UpLevel" xml:space="preserve">
-    <value>Up one level</value>
+    <value>Et niveau op</value>
   </data>
   <data name="LinkTitleOptional" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>Link title (valgfri)</value>
   </data>
   <data name="NoSnippets" xml:space="preserve">
-    <value>No Snippets</value>
+    <value>Ingen kodestumper</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Vedhæftninger</value>
   </data>
   <data name="ThereAreAttachments" xml:space="preserve">
-    <value>There are files attached to this page</value>
+    <value>Der er filer vedhæftet denne side</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Luk</value>
   </data>
   <data name="RootNamespace" xml:space="preserve">
-    <value>&lt;root&gt;</value>
+    <value>&lt;rod&gt;</value>
   </data>
   <data name="CouldNotCreateNamespace" xml:space="preserve">
-    <value>Could not create Namespace</value>
+    <value>Navnerum kunne ikke oprettes</value>
   </data>
   <data name="InvalidNamespaceName" xml:space="preserve">
-    <value>Invalid Namespace name</value>
+    <value>Ugyldigt navnerumsnavn</value>
   </data>
   <data name="NamespaceCreated" xml:space="preserve">
-    <value>Namespace created</value>
+    <value>Navnerum oprettet</value>
   </data>
   <data name="CouldNotCreateUser" xml:space="preserve">
-    <value>Could not create User</value>
+    <value>Bruger kunne ikke oprettes</value>
   </data>
   <data name="CouldNotUpdateUser" xml:space="preserve">
-    <value>Could not update User</value>
+    <value>Brugeren kunne ikke opdateres</value>
   </data>
   <data name="UserCreated" xml:space="preserve">
-    <value>User created</value>
+    <value>Bruger oprettet</value>
   </data>
   <data name="UserUpdated" xml:space="preserve">
-    <value>User updated</value>
+    <value>Bruger opdateret</value>
   </data>
   <data name="InvalidDisplayName" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>Ugyldigt visningsnavn</value>
   </data>
   <data name="NoSimilarPages" xml:space="preserve">
-    <value>There are no Pages with similar name or title.</value>
+    <value>Der er ingen sider med lignende navn eller titel.</value>
   </data>
   <data name="SearchStats" xml:space="preserve">
-    <value>This search, performed through &lt;b&gt;{0}&lt;/b&gt; (&lt;b&gt;{1} documents&lt;/b&gt;, &lt;b&gt;{2} words&lt;/b&gt;), completed in &lt;b&gt;{3:N1} seconds&lt;/b&gt; and yielded &lt;b&gt;{4} results&lt;/b&gt;.</value>
+    <value>Denne søgning, der ledte gennem &lt;b&gt;{0}&lt;/b&gt; (&lt;b&gt;{1} dokumenter&lt;/b&gt;, &lt;b&gt;{2} ord&lt;/b&gt;), tog &lt;b&gt;{3:N1} sekunder&lt;/b&gt; og fandt &lt;b&gt;{4} resultater&lt;/b&gt;.</value>
   </data>
   <data name="CouldNotCreateGroup" xml:space="preserve">
-    <value>Could not create Group</value>
+    <value>Gruppe kunne ikke oprettes</value>
   </data>
   <data name="CouldNotUpdateGroup" xml:space="preserve">
-    <value>Could not update group</value>
+    <value>Gruppen kunne ikke opdateres</value>
   </data>
   <data name="GroupCreated" xml:space="preserve">
-    <value>Group created</value>
+    <value>Gruppe oprettet</value>
   </data>
   <data name="GroupDeleted" xml:space="preserve">
-    <value>Group deleted</value>
+    <value>Gruppe slettet</value>
   </data>
   <data name="GroupUpdated" xml:space="preserve">
-    <value>Group updated</value>
+    <value>Gruppe opdateret</value>
   </data>
   <data name="CouldNotSaveFile" xml:space="preserve">
-    <value>Could not save file</value>
+    <value>Fil kunne ikke gemmes</value>
   </data>
   <data name="Action_Crt_Dirs" xml:space="preserve">
-    <value>Create Directories</value>
+    <value>Opret folder</value>
   </data>
   <data name="Action_Crt_Pg" xml:space="preserve">
-    <value>Create Pages</value>
+    <value>Opret sider</value>
   </data>
   <data name="Action_Del_1Attn" xml:space="preserve">
-    <value>Delete Attachments</value>
+    <value>Slet vedhæftninger</value>
   </data>
   <data name="Action_Del_Attn" xml:space="preserve">
-    <value>Delete Attachments</value>
+    <value>Slet vedhæftninger</value>
   </data>
   <data name="Action_Del_Dirs" xml:space="preserve">
-    <value>Delete Directories</value>
+    <value>Slet foldere</value>
   </data>
   <data name="Action_Del_Files" xml:space="preserve">
-    <value>Delete Files</value>
+    <value>Slet filer</value>
   </data>
   <data name="Action_Del_Pg" xml:space="preserve">
-    <value>Delete Pages</value>
+    <value>Slet sider</value>
   </data>
   <data name="Action_Down_1Attn" xml:space="preserve">
-    <value>Download Attachments</value>
+    <value>Download vedhæftninger</value>
   </data>
   <data name="Action_Down_Attn" xml:space="preserve">
-    <value>Download Attachments</value>
+    <value>Download vedhæftninger</value>
   </data>
   <data name="Action_Down_Files" xml:space="preserve">
-    <value>Download Files</value>
+    <value>Download filer</value>
   </data>
   <data name="Action_FullControl" xml:space="preserve">
-    <value>Full Control</value>
+    <value>Fuld kontrol</value>
   </data>
   <data name="Action_List" xml:space="preserve">
-    <value>List Contents</value>
+    <value>List indhold</value>
   </data>
   <data name="Action_Man_1Cat" xml:space="preserve">
-    <value>Manage Categories</value>
+    <value>Administrer kategorier</value>
   </data>
   <data name="Action_Man_1Pg" xml:space="preserve">
-    <value>Manage Page</value>
+    <value>Administrer side</value>
   </data>
   <data name="Action_Man_Acc" xml:space="preserve">
-    <value>Manage User Accounts</value>
+    <value>Administrer brugerkonti</value>
   </data>
   <data name="Action_Man_Cat" xml:space="preserve">
-    <value>Manage Categories</value>
+    <value>Administrer kategorier</value>
   </data>
   <data name="Action_Man_Conf" xml:space="preserve">
-    <value>Manage Configuration</value>
+    <value>Administrer konfiguration</value>
   </data>
   <data name="Action_Man_Files" xml:space="preserve">
-    <value>Manage Files and Directories</value>
+    <value>Administrer filer og foldere</value>
   </data>
   <data name="Action_Man_Grp" xml:space="preserve">
-    <value>Manage User Groups</value>
+    <value>Administrer brugergrupper</value>
   </data>
   <data name="Action_Man_MetaFiles" xml:space="preserve">
-    <value>Manage Meta-Files</value>
+    <value>Administrer metafiler</value>
   </data>
   <data name="Action_Man_NavPath" xml:space="preserve">
-    <value>Manage Navigation Paths</value>
+    <value>Administrer navigeringsstier</value>
   </data>
   <data name="Action_Man_Ns" xml:space="preserve">
-    <value>Manage Namespaces</value>
+    <value>Administrer navnerum</value>
   </data>
   <data name="Action_Man_Pg" xml:space="preserve">
-    <value>Manage Pages</value>
+    <value>Administrer sider</value>
   </data>
   <data name="Action_Man_PgCat" xml:space="preserve">
-    <value>Manage Pages and Categories</value>
+    <value>Administrer sider og kategorier</value>
   </data>
   <data name="Action_Man_Prov" xml:space="preserve">
-    <value>Manage Providers</value>
+    <value>Administrer udbydere</value>
   </data>
   <data name="Action_Man_Snips_Temps" xml:space="preserve">
-    <value>Manage Snippets and Templates</value>
+    <value>Administrer kodestumper og skabeloner</value>
   </data>
   <data name="Action_Mod_1Pg" xml:space="preserve">
-    <value>Modify Page</value>
+    <value>Ret side</value>
   </data>
   <data name="Action_Mod_Pg" xml:space="preserve">
-    <value>Modify Pages</value>
+    <value>Ret sider</value>
   </data>
   <data name="Action_Rd_1Pg" xml:space="preserve">
-    <value>Read Page</value>
+    <value>Læs side</value>
   </data>
   <data name="Action_Rd_Pg" xml:space="preserve">
-    <value>Read Pages</value>
+    <value>Læs sider</value>
   </data>
   <data name="Action_Up_1Attn" xml:space="preserve">
-    <value>Upload Attachments</value>
+    <value>Upload vedhæftninger</value>
   </data>
   <data name="Action_Up_Attn" xml:space="preserve">
-    <value>Upload Attachments</value>
+    <value>Upload vedhæftninger</value>
   </data>
   <data name="Action_Up_Files" xml:space="preserve">
-    <value>Upload Files</value>
+    <value>Upload filer</value>
   </data>
   <data name="GoToMainPage" xml:space="preserve">
-    <value>Go to the Main Page</value>
+    <value>Gå til forsiden</value>
   </data>
   <data name="Group" xml:space="preserve">
-    <value>Group</value>
+    <value>Gruppe</value>
   </data>
   <data name="CouldNotStorePermissions" xml:space="preserve">
-    <value>Could not store permissions</value>
+    <value>Rettighederne kunne ikke gemmes</value>
   </data>
   <data name="NamespaceSaved" xml:space="preserve">
-    <value>Namespace saved</value>
+    <value>Navnerum gemt</value>
   </data>
   <data name="CouldNotDeleteNamespace" xml:space="preserve">
-    <value>Could not delete Namespace</value>
+    <value>Navnerum kunne ikke slettes</value>
   </data>
   <data name="NamespaceDeleted" xml:space="preserve">
-    <value>Namespace deleted</value>
+    <value>Navnerum slettet</value>
   </data>
   <data name="CouldNotDeletePermissions" xml:space="preserve">
-    <value>Could not delete permissions</value>
+    <value>Rettigheder kunne ikke slettes</value>
   </data>
   <data name="GroupCreatedCouldNotStorePermissions" xml:space="preserve">
-    <value>Group created, but could not store permissions</value>
+    <value>Gruppe oprettet, men rettighederne kunne ikke gemmes</value>
   </data>
   <data name="GroupSavedCouldNotDeleteOldPermissions" xml:space="preserve">
-    <value>Group saved, but could not delete old permissions</value>
+    <value>Gruppe gemt, men de gamle rettigheder kunne ikke slettes</value>
   </data>
   <data name="GroupSavedCouldNotStoreNewPermissions" xml:space="preserve">
-    <value>Group saved, but could not store new permissions</value>
+    <value>Gruppe gemt, men de nye rettigheder kunne ikke gemmes</value>
   </data>
   <data name="PermissionsDeletedCouldNotDeleteGroup" xml:space="preserve">
-    <value>Permissions deleted, but could not delete Group</value>
+    <value>Rettigheder slettet, men gruppen kunne ikke slettes</value>
   </data>
   <data name="CouldNotSetNamespaceDefaultPage" xml:space="preserve">
-    <value>Could not set the Default Page for the Namespace</value>
+    <value>Standardsiden kunne ikke sættes for navnerummet</value>
   </data>
   <data name="CouldNotSetNamespaceTheme" xml:space="preserve">
-    <value>Could not set the Theme for the Namespace</value>
+    <value>Temaet kunne ikke sættes for navnerummet</value>
   </data>
   <data name="NamespaceCreatedCouldNotCreateDefaultPage" xml:space="preserve">
-    <value>Namespace created, but could not create the default Page</value>
+    <value>Navnerum oprettet, men standardsiden kunne ikke oprettes</value>
   </data>
   <data name="NamespaceCreatedCouldNotSetDefaultPage" xml:space="preserve">
-    <value>Namespace created, but could not set its default Page</value>
+    <value>Navnerum oprettet, men standardsiden kunne ikke sættes</value>
   </data>
   <data name="NamespaceCreatedCouldNotSetTheme" xml:space="preserve">
-    <value>Namespace saved, but could not set its Theme</value>
+    <value>Navnerum oprettet, men dets tema kunne ikke sættes</value>
   </data>
   <data name="NamespaceCreatedCouldNotStoreDefaultPageContent" xml:space="preserve">
-    <value>Namespace created, but could not store the default Page content</value>
+    <value>Navnerum oprettet, men standardssidens indhold kunne ikke gemmes</value>
   </data>
   <data name="UserCreatedCouldNotStoreGroupMembership" xml:space="preserve">
-    <value>User created, but could not store Group membership</value>
+    <value>Bruger oprettet, men gruppemedlemsskab kunne ikke gemmes</value>
   </data>
   <data name="UserCreatedCouldNotStorePermissions" xml:space="preserve">
-    <value>User created, but could not store Permissions</value>
+    <value>Bruger oprettet, men rettighederne kunne ikke gemmes</value>
   </data>
   <data name="UserUpdatedCouldNotDeleteOldPermissions" xml:space="preserve">
-    <value>User updated, but could not delete old Permissions</value>
+    <value>Bruger opdateret, men de gamle rettigheder kunne ikke slettes.</value>
   </data>
   <data name="UserUpdatedCouldNotStoreGroupMembership" xml:space="preserve">
-    <value>User updated, but could not store Group membership</value>
+    <value>Bruger opdateret, men gruppemedlemskab kunne ikke gemmes</value>
   </data>
   <data name="UserUpdatedCouldNotStoreNewPermissions" xml:space="preserve">
-    <value>User updated, but could not store new Permissions</value>
+    <value>Bruger opdateret, men de nye rettigheder kunne ikke gemmes</value>
   </data>
   <data name="PermissionsAndGroupMembershipDeletedCouldNotDeleteUser" xml:space="preserve">
-    <value>Permissions and Group membership deleted, but could not delete User</value>
+    <value>Rettigheder og gruppemedlemsskab slettet, men brugeren kunne ikke slettes</value>
   </data>
   <data name="PermissionsDeletedCouldNotDeleteUser" xml:space="preserve">
-    <value>Permissions deleted, but could not delete User</value>
+    <value>Rettigheder slettet, men brugeren kunne ikke slettes</value>
   </data>
   <data name="GoToPage" xml:space="preserve">
-    <value>Go to Page</value>
+    <value>Gå til side</value>
   </data>
   <data name="GoToPageDiscussion" xml:space="preserve">
-    <value>Go to Page Discussion</value>
+    <value>Gå til sidedebat</value>
   </data>
   <data name="GoToPageHistory" xml:space="preserve">
-    <value>Go to Page History</value>
+    <value>Gå til sidehistorik</value>
   </data>
   <data name="CouldNotRenamePage" xml:space="preserve">
-    <value>Could not rename Page</value>
+    <value>Side kunne ikke omdøbes</value>
   </data>
   <data name="PageRenamedCouldNotCreateShadowPage" xml:space="preserve">
-    <value>Page renamed, but could not create shadow Page</value>
+    <value>Side omdøbt, men skyggesiden kunne ikke oprettes</value>
   </data>
   <data name="PageRenamedCouldNotSetShadowPageContent" xml:space="preserve">
-    <value>Page renamed, but could not set the content for the shadow Page</value>
+    <value>Side omdømt, men skyggesidens indhold kunne ikke gemmes</value>
   </data>
   <data name="AllMessagesDeleted" xml:space="preserve">
-    <value>All Messages deleted</value>
+    <value>Alle beskeder slettet</value>
   </data>
   <data name="CouldNotDeleteOneOrMoreMessages" xml:space="preserve">
-    <value>Could not delete one or more Messages</value>
+    <value>En eller flere beskeder kunne ikke slettes</value>
   </data>
   <data name="CouldNotDeletePage" xml:space="preserve">
-    <value>Could not delete Page</value>
+    <value>Side kunne ikke slettes</value>
   </data>
   <data name="CouldNotDeletePageBackups" xml:space="preserve">
-    <value>Could not delete Page backups</value>
+    <value>Sidebackup kunne ikke slettes</value>
   </data>
   <data name="CouldNotRollbackPage" xml:space="preserve">
-    <value>Could not rollback Page</value>
+    <value>Sidehistorik kunne ikke tilbageføres</value>
   </data>
   <data name="PageRolledBack" xml:space="preserve">
-    <value>Page rolled back</value>
+    <value>Side tilbageført</value>
   </data>
   <data name="Action_Man_1Disc" xml:space="preserve">
-    <value>Manage Page discussion</value>
+    <value>Administrer sidedebat</value>
   </data>
   <data name="Action_Pst_1Disc" xml:space="preserve">
-    <value>Post messages in Page discussion</value>
+    <value>Post beskeder i sidedebat</value>
   </data>
   <data name="Action_Rd_1Disc" xml:space="preserve">
-    <value>Read Page discussion</value>
+    <value>Læs sidedebat</value>
   </data>
   <data name="Action_Man_Disc" xml:space="preserve">
-    <value>Manage Page discussions</value>
+    <value>Administrer sidedebatter</value>
   </data>
   <data name="Action_Pst_Disc" xml:space="preserve">
-    <value>Post messages in Page discussions</value>
+    <value>Post beskeder i sidedebatter</value>
   </data>
   <data name="Action_Rd_Disc" xml:space="preserve">
-    <value>Read Page discussions</value>
+    <value>Læs sidedebat</value>
   </data>
   <data name="ViewPageHistory" xml:space="preserve">
-    <value>View Page edit history</value>
+    <value>Vis sideopdateringshistorik</value>
   </data>
   <data name="Admin" xml:space="preserve">
     <value>Admin</value>
   </data>
   <data name="AdminTools" xml:space="preserve">
-    <value>Administration Tools</value>
+    <value>Administrationsværktøjer</value>
   </data>
   <data name="Administrate" xml:space="preserve">
-    <value>Administrate</value>
+    <value>Administrer</value>
   </data>
   <data name="AdministrateThisPage" xml:space="preserve">
-    <value>Administrate this Page</value>
+    <value>Administrate denne side</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Rettigheder</value>
   </data>
   <data name="SetPermissionsForThisPage" xml:space="preserve">
-    <value>Set permissions for this Page</value>
+    <value>Sæt rettigheder for denne side</value>
   </data>
   <data name="Rollback" xml:space="preserve">
-    <value>Rollback</value>
+    <value>Tilbagefør</value>
   </data>
   <data name="RollbackThisPage" xml:space="preserve">
-    <value>Rollback this Page to the previous version</value>
+    <value>Tilbagefør denne side til den tidligere version</value>
   </data>
   <data name="CategoryAlreadyExists" xml:space="preserve">
-    <value>Category already exists</value>
+    <value>Kategorien eksisterer allerede</value>
   </data>
   <data name="CategoryCreated" xml:space="preserve">
-    <value>Category created</value>
+    <value>Kategori oprettet</value>
   </data>
   <data name="CouldNotCreateCategory" xml:space="preserve">
-    <value>Could not create Category</value>
+    <value>Kategori kunne ikke oprettes</value>
   </data>
   <data name="CouldNotDeleteCategory" xml:space="preserve">
-    <value>Could not delete Category</value>
+    <value>Kategori kunne ikke slettes</value>
   </data>
   <data name="CouldNotMergeCategories" xml:space="preserve">
-    <value>Could not merge Categories</value>
+    <value>Kategorier kunne ikke sammenlægges</value>
   </data>
   <data name="CouldNotRenameCategory" xml:space="preserve">
-    <value>Could not rename Category</value>
+    <value>Kategori kunne ikke omdøbes</value>
   </data>
   <data name="GoToCategory" xml:space="preserve">
-    <value>Go to Category</value>
+    <value>Gå til kategori</value>
   </data>
   <data name="CouldNotCreateSnippet" xml:space="preserve">
-    <value>Could not create Snippet</value>
+    <value>Kodestump kunne ikke oprettes</value>
   </data>
   <data name="CouldNotDeleteSnippet" xml:space="preserve">
-    <value>Could not delete Snippet</value>
+    <value>Kodestump kunne ikke slettes</value>
   </data>
   <data name="CouldNotSaveSnippet" xml:space="preserve">
-    <value>Could not save Snippet</value>
+    <value>Kodestump kunne ikke gemmes</value>
   </data>
   <data name="Parameters" xml:space="preserve">
-    <value>Params</value>
+    <value>Parametre</value>
   </data>
   <data name="SnippetCreated" xml:space="preserve">
-    <value>Snippet created</value>
+    <value>Kodestump oprettet</value>
   </data>
   <data name="ViewChanges" xml:space="preserve">
-    <value>view changes</value>
+    <value>se ændringer</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Udkast</value>
   </data>
   <data name="CouldNotApproveDraft" xml:space="preserve">
-    <value>Could not approve draft</value>
+    <value>Udkast kunne ikke godkendes</value>
   </data>
   <data name="DraftApproved" xml:space="preserve">
-    <value>Draft approved and saved</value>
+    <value>Udkast godkendt og gemt</value>
   </data>
   <data name="DraftRejected" xml:space="preserve">
-    <value>Draft rejected and discarded</value>
+    <value>Udkast afvist og slettet</value>
   </data>
   <data name="ClickToEnableEmailNotifications" xml:space="preserve">
-    <value>Click to enable email notifications for this page</value>
+    <value>Klik for at aktivere orientering på e-mail ved rettelser af denne side</value>
   </data>
   <data name="EmailNotificationsAreActive" xml:space="preserve">
-    <value>Email notifications are active for this page - click to disable</value>
+    <value>Orientering på e-mail ved rettelser af denne side er aktiv. Klik for at deaktivere.</value>
   </data>
   <data name="None" xml:space="preserve">
-    <value>none</value>
+    <value>ingen</value>
   </data>
   <data name="CouldNotCreateNavPath" xml:space="preserve">
-    <value>Could not create Navigation Path</value>
+    <value>Navigationssti kunne ikke oprettes</value>
   </data>
   <data name="CouldNotDeleteNavPath" xml:space="preserve">
-    <value>Could not delete Navigation Path</value>
+    <value>Navigationssti kunne ikke slettes</value>
   </data>
   <data name="CouldNotSaveNavPath" xml:space="preserve">
-    <value>Could not save Navigation Path</value>
+    <value>Navigationssti kunne ikke gemmes</value>
   </data>
   <data name="NavPathCreated" xml:space="preserve">
-    <value>Navigation Path created</value>
+    <value>Navigationssti oprettet</value>
   </data>
   <data name="TheNavPathMustContain" xml:space="preserve">
-    <value>The Navigation Path must contain at least one Page</value>
+    <value>Navigationsstien skal indeholde mindst en side</value>
   </data>
   <data name="DefaultProvidersSaved" xml:space="preserve">
-    <value>Default Providers saved</value>
+    <value>Standard udbydere gemt</value>
   </data>
   <data name="CouldNotDeleteDll" xml:space="preserve">
-    <value>Could not delete DLL</value>
+    <value>DLL kunne ikke slettes</value>
   </data>
   <data name="DllAlreadyExists" xml:space="preserve">
-    <value>DLL already exists</value>
+    <value>DLL findes allerede </value>
   </data>
   <data name="DllDeleted" xml:space="preserve">
-    <value>DLL deleted</value>
+    <value>DLL slettet</value>
   </data>
   <data name="LoadedProviders" xml:space="preserve">
-    <value>Loaded ### Providers</value>
+    <value>Hentet ### udbydere</value>
   </data>
   <data name="VoidOrInvalidFile" xml:space="preserve">
-    <value>Void or invalid file</value>
+    <value>Ikke-eksisterende eller ugyldig fil</value>
   </data>
   <data name="DataCopied" xml:space="preserve">
-    <value>Data copied, please change the active Settings Storage Provider in the web.config file</value>
+    <value>Data kopieret. Ret venligst den aktive "Settings Storage Provider" i web.config filen</value>
   </data>
   <data name="DataMigrated" xml:space="preserve">
-    <value>Data migrated, please recycle the web application</value>
+    <value>Data flyttet. Genstart venligst webapplikationen</value>
   </data>
   <data name="NoConfigurationRequired" xml:space="preserve">
-    <value>No configuration is required for this provider</value>
+    <value>Ingen konfiguration er nødvendig for denne udbyder</value>
   </data>
   <data name="NotificationsStatusSaved" xml:space="preserve">
-    <value>Notification status saved</value>
+    <value>Orienteringsstatus gemt</value>
   </data>
   <data name="Action_Man_Perms" xml:space="preserve">
-    <value>Manage Permissions</value>
+    <value>Administrer rettigheder</value>
   </data>
   <data name="ApproveRejectDraft" xml:space="preserve">
-    <value>Approve/Reject Draft</value>
+    <value>Godkend/afvis udkast</value>
   </data>
   <data name="AMessageHasBeenDeletedBy" xml:space="preserve">
-    <value>A message with subject "##SUBJECT##" has been deleted by</value>
+    <value>En besked med emnet "##SUBJECT##" er blevet slettet af</value>
   </data>
   <data name="AMessageHasBeenEditedBy" xml:space="preserve">
-    <value>A message with subject "##SUBJECT##" has been edited by</value>
+    <value>En besked med emnet "##SUBJECT##" er blevet rettet af</value>
   </data>
   <data name="AMessageHasBeenPostedBy" xml:space="preserve">
-    <value>A message with subject "##SUBJECT##" has been posted by</value>
+    <value>En besked med emnet "##SUBJECT##" er blevet postet af</value>
   </data>
   <data name="Discussion" xml:space="preserve">
-    <value>Discussion</value>
+    <value>Debat</value>
   </data>
   <data name="DiscussionUpdates" xml:space="preserve">
-    <value>Discussion Updates</value>
+    <value>Debatopdateringer</value>
   </data>
   <data name="RecentDiscussionUpdates" xml:space="preserve">
-    <value>Recent Discussion Updates</value>
+    <value>Seneste debatopdateringer</value>
   </data>
   <data name="AMessageWasSentCheckInbox" xml:space="preserve">
-    <value>A message was sent to your email address, please check your inbox.</value>
+    <value>En besked er blevet sendt til din e-mailadresse. Check venligst din indbakke.</value>
   </data>
   <data name="NewPasswordSavedPleaseLogin" xml:space="preserve">
-    <value>New password saved, please &lt;a href="Login.aspx" title="Login"&gt;Login&lt;/a&gt;</value>
+    <value>Ny adgangskode gemt, du kan nu &lt;a href="Login.aspx" title="Log ind"&gt;logge ind&lt;/a&gt;</value>
   </data>
   <data name="ResetPassword" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>Nulsti adgangskode</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>Created by</value>
+    <value>Oprettet af</value>
   </data>
   <data name="CreatedOn" xml:space="preserve">
-    <value>Created on</value>
+    <value>Oprettet d. </value>
   </data>
   <data name="ModifiedBy" xml:space="preserve">
-    <value>Modified by</value>
+    <value>Rettet af</value>
   </data>
   <data name="ModifiedOn" xml:space="preserve">
-    <value>Modified on</value>
+    <value>Rettet d.</value>
   </data>
   <data name="CouldNotCreateTemplate" xml:space="preserve">
-    <value>Could not create Template</value>
+    <value>Skabelon kunne ikke oprettes</value>
   </data>
   <data name="CouldNotDeleteTemplate" xml:space="preserve">
-    <value>Could not delete template</value>
+    <value>Skabelon kunne ikke slettes</value>
   </data>
   <data name="CouldNotSaveTemplate" xml:space="preserve">
-    <value>Could not save Template</value>
+    <value>Skabelon kunne ikke gemmes</value>
   </data>
   <data name="Snippet" xml:space="preserve">
-    <value>Snippet</value>
+    <value>Kodestump</value>
   </data>
   <data name="Template" xml:space="preserve">
-    <value>Template</value>
+    <value>Skabelon</value>
   </data>
   <data name="TemplateCreated" xml:space="preserve">
-    <value>Template created</value>
+    <value>Skabelon oprettet</value>
   </data>
   <data name="TemplateDeleted" xml:space="preserve">
-    <value>Template deleted</value>
+    <value>Skabelon slettet</value>
   </data>
   <data name="TemplateSaved" xml:space="preserve">
-    <value>Template saved</value>
+    <value>Slabelon gemt</value>
   </data>
   <data name="SelectTemplate" xml:space="preserve">
-    <value>Select Template...</value>
+    <value>Vælg skabelon...</value>
   </data>
   <data name="CouldNotRenameNamespace" xml:space="preserve">
-    <value>Could not rename Namespace</value>
+    <value>Navnerum kunne ikke omdøbes</value>
   </data>
   <data name="NamespaceRenamed" xml:space="preserve">
-    <value>Namespace renamed</value>
+    <value>Navnerum omdøbt</value>
   </data>
   <data name="GoToYourProfile" xml:space="preserve">
-    <value>Go to your Profile</value>
+    <value>Gå til din profil</value>
   </data>
   <data name="Guest" xml:space="preserve">
-    <value>Guest</value>
+    <value>Gæst</value>
   </data>
   <data name="SelectYourLanguage" xml:space="preserve">
-    <value>Select your language</value>
+    <value>Vælg dit sprog</value>
   </data>
   <data name="PreferencesSaved" xml:space="preserve">
-    <value>Preferences saved</value>
+    <value>Indstillinger gemt</value>
   </data>
   <data name="Corrupted" xml:space="preserve">
-    <value>Corrupted</value>
+    <value>Defekt</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Ja</value>
   </data>
   <data name="CreateThisPage" xml:space="preserve">
-    <value>Create this Page</value>
+    <value>Opret denne side</value>
   </data>
   <data name="AccessDeniedTitle" xml:space="preserve">
     <value>Adgang nægtet</value>
   </data>
   <data name="AccountActivated" xml:space="preserve">
-    <value>Din konto er blevet aktiveret. Please login.</value>
+    <value>Din konto er blevet aktiveret. Du kan logge ind nu.</value>
   </data>
   <data name="AccountActivation" xml:space="preserve">
     <value>Kontoaktivering</value>
   </data>
   <data name="AccountActivationMessageFile" xml:space="preserve">
-    <value>Kontoaktivering Message File</value>
+    <value>Kontoaktivering beskedfil</value>
   </data>
   <data name="AccountAlreadyActive" xml:space="preserve">
-    <value>Kontoen er allerede aktive</value>
+    <value>Kontoen er allerede aktiv</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Konto oprettet</value>
+    <value>Kontoen er oprettet</value>
   </data>
   <data name="AccountNotActivated" xml:space="preserve">
-    <value>Kontoaktivering fejl</value>
+    <value>Fejl ved aktivering af konto</value>
   </data>
   <data name="AccountNotFound" xml:space="preserve">
-    <value>Konto blev ikke fundet</value>
+    <value>Konto ikke fundet</value>
   </data>
   <data name="ActivationAdmin" xml:space="preserve">
     <value>Din konto skal godkendes af en administrator, før du kan logge ind.</value>
   </data>
   <data name="ActivationAuto" xml:space="preserve">
-    <value>Din konto vil blive aktive lige efter registreringen.</value>
+    <value>Din konto vil blive aktiv lige efter registreringen.</value>
   </data>
   <data name="ActivationEmail" xml:space="preserve">
     <value>Du skal aktivere din konto inden for 24 timer, efter de anvisninger, som du modtager via e-mail.</value>
@@ -911,22 +911,22 @@
     <value>Administration</value>
   </data>
   <data name="AllPages" xml:space="preserve">
-    <value>Alle Sider</value>
+    <value>Alle sider</value>
   </data>
   <data name="AllPagesTitle" xml:space="preserve">
-    <value>Wiki Indeks</value>
+    <value>Wiki indeks</value>
   </data>
   <data name="Anchor" xml:space="preserve">
-    <value>Anchor</value>
+    <value>Anker</value>
   </data>
   <data name="AnchorId" xml:space="preserve">
-    <value>Anchor ID</value>
+    <value>Anker ID</value>
   </data>
   <data name="AnchorLink" xml:space="preserve">
-    <value>Anchor Link</value>
+    <value>Anker link</value>
   </data>
   <data name="AnchorTitle" xml:space="preserve">
-    <value>Anchor Titel</value>
+    <value>Anker titel</value>
   </data>
   <data name="Auto" xml:space="preserve">
     <value>Auto</value>
@@ -935,34 +935,34 @@
     <value>Tilbage</value>
   </data>
   <data name="BackToHistory" xml:space="preserve">
-    <value>Tilbage til Page History</value>
+    <value>Tilbage til sidehistorik</value>
   </data>
   <data name="Bigger" xml:space="preserve">
-    <value>Bigger</value>
+    <value>Større</value>
   </data>
   <data name="Bold" xml:space="preserve">
     <value>Fed</value>
   </data>
   <data name="Box" xml:space="preserve">
-    <value>Box</value>
+    <value>Boks</value>
   </data>
   <data name="By" xml:space="preserve">
-    <value>ved</value>
+    <value>af</value>
   </data>
   <data name="CachedPages" xml:space="preserve">
     <value>Sider i cache</value>
   </data>
   <data name="CannotDisableDefaultProvider" xml:space="preserve">
-    <value>Kan ikke deaktivere en standardpris Provider</value>
+    <value>En standardudbyder kan ikke deaktiveres</value>
   </data>
   <data name="CannotUnloadDefaultProvider" xml:space="preserve">
-    <value>Kan ikke losse en standardpris Provider</value>
+    <value>En standardudbyder kan ikke fjernes</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorier</value>
   </data>
   <data name="CategoriesMerged" xml:space="preserve">
-    <value>Kategorier fusionerede</value>
+    <value>Kategorier sammenlagt</value>
   </data>
   <data name="CategorizedAs" xml:space="preserve">
     <value>Kategoriseret som</value>
@@ -983,37 +983,37 @@
     <value>Kategorier</value>
   </data>
   <data name="CodeBlock" xml:space="preserve">
-    <value>Bloker Kode</value>
+    <value>Blokkode</value>
   </data>
   <data name="CodeInline" xml:space="preserve">
-    <value>Inline-koden</value>
+    <value>Indsat kode</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Hvordan</value>
+    <value>Kommentar</value>
   </data>
   <data name="ConfigSaved" xml:space="preserve">
     <value>Konfiguration gemt</value>
   </data>
   <data name="ConfigurationString" xml:space="preserve">
-    <value>Konfiguration String</value>
+    <value>Konfigurationsstreng</value>
   </data>
   <data name="ConfigValuesReset" xml:space="preserve">
-    <value>Konfigurations-indstillinger nulstilles til tidligere værdier</value>
+    <value>Konfigurationsindstillinger nulstilles til tidligere værdier</value>
   </data>
   <data name="ConfirmOperation" xml:space="preserve">
     <value>Er du sikker på at du vil fortsætte?</value>
   </data>
   <data name="CouldRequireLogin" xml:space="preserve">
-    <value>kunne kræve login</value>
+    <value>kan kræve login</value>
   </data>
   <data name="CreateNewPage" xml:space="preserve">
-    <value>Opret en ny side</value>
+    <value>Opret ny side</value>
   </data>
   <data name="CreatePage" xml:space="preserve">
     <value>Opret side</value>
   </data>
   <data name="CreateThePage" xml:space="preserve">
-    <value>skabe Page</value>
+    <value>Opret siden</value>
   </data>
   <data name="Current" xml:space="preserve">
     <value>Nuværende</value>
@@ -1022,7 +1022,7 @@
     <value>Nuværende version</value>
   </data>
   <data name="DateTime" xml:space="preserve">
-    <value>Date / Time</value>
+    <value>Dato/Tid</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Slet</value>
@@ -1040,10 +1040,10 @@
     <value>Diskuter</value>
   </data>
   <data name="DiscussionFor" xml:space="preserve">
-    <value>Diskussion for</value>
+    <value>Debat for</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Downloade</value>
+    <value>Download</value>
   </data>
   <data name="EarlierThisMonth" xml:space="preserve">
     <value>Tidligere i denne måned</value>
@@ -1052,25 +1052,25 @@
     <value>Tidligere i denne uge</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Redigér</value>
+    <value>Rediger</value>
   </data>
   <data name="EditingFile" xml:space="preserve">
-    <value>Redigere Fil</value>
+    <value>Rediger fil</value>
   </data>
   <data name="EditNoticeFile" xml:space="preserve">
-    <value>Rediger Notice File</value>
+    <value>Rediger meddelelsesfil</value>
   </data>
   <data name="EditPage" xml:space="preserve">
-    <value>Redigér side</value>
+    <value>Rediger side</value>
   </data>
   <data name="EditThisPage" xml:space="preserve">
     <value>Rediger denne side</value>
   </data>
   <data name="EditTitle" xml:space="preserve">
-    <value>Redigér</value>
+    <value>Rediger</value>
   </data>
   <data name="EmailSaved" xml:space="preserve">
-    <value>E-mail-adresse er gemt</value>
+    <value>E-mailadresse er gemt</value>
   </data>
   <data name="EmailsNotEqual" xml:space="preserve">
     <value>E-mails er ikke ens</value>
@@ -1085,10 +1085,10 @@
     <value>Fejl</value>
   </data>
   <data name="Escape" xml:space="preserve">
-    <value>Escape</value>
+    <value>Undviget</value>
   </data>
   <data name="ExternalLink" xml:space="preserve">
-    <value>Eksterne Link</value>
+    <value>Eksternt link</value>
   </data>
   <data name="FileAlreadyExists" xml:space="preserve">
     <value>Filen allerede findes</value>
@@ -1097,16 +1097,16 @@
     <value>Link til en lokal fil</value>
   </data>
   <data name="FileManagement" xml:space="preserve">
-    <value>File Management (nyt vindue)</value>
+    <value>Filadministration (nyt vindue)</value>
   </data>
   <data name="FileNotFound" xml:space="preserve">
-    <value>File not found</value>
+    <value>Fil ikke fundet</value>
   </data>
   <data name="FileSaved" xml:space="preserve">
     <value>Filen er gemt</value>
   </data>
   <data name="FilesDiskUsage" xml:space="preserve">
-    <value>Files Diskplads brug</value>
+    <value>Filers diskplads forbrug</value>
   </data>
   <data name="FileTooBig" xml:space="preserve">
     <value>Filen er for stor</value>
@@ -1115,10 +1115,10 @@
     <value>Filnavnet er ugyldigt</value>
   </data>
   <data name="FooterFile" xml:space="preserve">
-    <value>Footer File</value>
+    <value>Fodfil</value>
   </data>
   <data name="Forbidden" xml:space="preserve">
-    <value>Forbidden</value>
+    <value>Forbudt</value>
   </data>
   <data name="FullView" xml:space="preserve">
     <value>Fuld visning (nyt vindue)</value>
@@ -1136,10 +1136,10 @@
     <value>H4 (brug den sparsomt)</value>
   </data>
   <data name="HeaderFile" xml:space="preserve">
-    <value>Header File</value>
+    <value>Hovedfil</value>
   </data>
   <data name="HideBreadcrumbsTrail" xml:space="preserve">
-    <value>Klik her for at skjule brødkrummer Trail</value>
+    <value>Klik her for at skjule brødkrummer</value>
   </data>
   <data name="HidePreview" xml:space="preserve">
     <value>Skjul eksempel</value>
@@ -1148,94 +1148,94 @@
     <value>Skjul / Vis</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>Historie</value>
+    <value>Historik</value>
   </data>
   <data name="HistoryTitle" xml:space="preserve">
-    <value>Page History</value>
+    <value>Sidehistorik</value>
   </data>
   <data name="HtmlHeadFile" xml:space="preserve">
-    <value>HTML Head File</value>
+    <value>HTML hovedfil</value>
   </data>
   <data name="Image" xml:space="preserve">
-    <value>Image</value>
+    <value>Billede</value>
   </data>
   <data name="ImageAuto" xml:space="preserve">
-    <value>Image - Tilpasse Auto</value>
+    <value>Billede - automatisk justeret</value>
   </data>
   <data name="ImageBigUrl" xml:space="preserve">
-    <value>Big Billedwebadresse / Link URL (valgfri)</value>
+    <value>Stort billede URL / link URL (valgfri)</value>
   </data>
   <data name="ImageInline" xml:space="preserve">
-    <value>Image - Inline (ingen grænser)</value>
+    <value>Billede - indsat (ingen kant)</value>
   </data>
   <data name="ImageLeft" xml:space="preserve">
-    <value>Image - Venstrejusteret</value>
+    <value>Billede - venstrejusteret</value>
   </data>
   <data name="ImageRight" xml:space="preserve">
-    <value>Image - Højrejusteret</value>
+    <value>Billede - højrejusteret</value>
   </data>
   <data name="ImageTitle" xml:space="preserve">
-    <value>Billedets titel</value>
+    <value>Billedetitel</value>
   </data>
   <data name="ImageUrl" xml:space="preserve">
-    <value>Billedwebadresse</value>
+    <value>Billede URL</value>
   </data>
   <data name="InactiveUsers" xml:space="preserve">
-    <value>Inaktiv</value>
+    <value>Inaktive</value>
   </data>
   <data name="InsertSnippet" xml:space="preserve">
-    <value>Indsæt en Uddragsvisning</value>
+    <value>Indsæt en kodestump</value>
   </data>
   <data name="InvalidBackupNumber" xml:space="preserve">
-    <value>Ugyldigt antal: det skal være større eller lig med nul (orlov blank for at deaktivere automatiske Backup udgår)</value>
+    <value>Ugyldigt antal: Det skal være større eller lig med nul (efterlad blank for at deaktivere automatisk backupsletning)</value>
   </data>
   <data name="InvalidCacheCutSize" xml:space="preserve">
-    <value>Ugyldig Cache Cut størrelse: det skal være et heltal større end 0 og mindre end Cache størrelse</value>
+    <value>Ugyldig cache cut størrelse: Det skal være et heltal større end 0 og mindre end cache størrelse</value>
   </data>
   <data name="InvalidCacheSize" xml:space="preserve">
-    <value>Ugyldig Cache størrelse: det skal være et heltal større end 0</value>
+    <value>Ugyldig cache størrelse: Det skal være et heltal større end 0</value>
   </data>
   <data name="InvalidCategoryName" xml:space="preserve">
     <value>Ugyldigt kategorinavn</value>
   </data>
   <data name="InvalidContactEmail" xml:space="preserve">
-    <value>Ugyldig Kontakt Email</value>
+    <value>Ugyldig kontakt e-mail</value>
   </data>
   <data name="InvalidDateTimeFormat" xml:space="preserve">
-    <value>Ugyldig Date / Time format: det skal være et gyldigt. NET mønster</value>
+    <value>Ugyldigt Dato / Tid format: Det skal være et gyldigt .NET mønster</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Ugyldig e-mail adresse</value>
+    <value>Ugyldig e-mailadresse</value>
   </data>
   <data name="InvalidFileAccessTries" xml:space="preserve">
-    <value>Ugyldig fil Access forsøger: det skal være et heltal større end 0</value>
+    <value>Ugyldigt antal filtilgangsforsøg: Det skal være et heltal større end 0</value>
   </data>
   <data name="InvalidFileAccessTryDelay" xml:space="preserve">
-    <value>Ugyldig fil Access forsøger Frist: det skal være et heltal større end 0</value>
+    <value>Ugyldig filtilgangsforsøgsforsinkelse: Det skal være et heltal større end 0</value>
   </data>
   <data name="InvalidFileType" xml:space="preserve">
     <value>Ugyldig filtype</value>
   </data>
   <data name="InvalidMainUrl" xml:space="preserve">
-    <value>Ugyldig Main URL: det skal være en fuldstændig URL og slutte med en skråstreg</value>
+    <value>Ugyldig primær URL: Det skal være en fuldstændig URL og slutte med en skråstreg</value>
   </data>
   <data name="InvalidMaxFileSize" xml:space="preserve">
-    <value>Ugyldig Maks. filstørrelse: det skal være større end nul og mindre end 20.480 KB</value>
+    <value>Ugyldig maks. filstørrelse: Det skal være større end nul og mindre end 20.480 KB</value>
   </data>
   <data name="InvalidMaxLogSize" xml:space="preserve">
-    <value>Ugyldig Max Log størrelse: det skal være større end 8 og mindre end 10.240 KB</value>
+    <value>Ugyldig maks logstørrelse: Det skal være større end 8 og mindre end 10.240 KB</value>
   </data>
   <data name="InvalidNavPath" xml:space="preserve">
-    <value>Ugyldig Navigation Path: mindst 2 sider skal angives</value>
+    <value>Ugyldig navigationssti: Mindst 2 sider skal angives</value>
   </data>
   <data name="InvalidNavPathName" xml:space="preserve">
-    <value>Ugyldig Navigation Path Navn</value>
+    <value>Ugyldig navigationsstinavn</value>
   </data>
   <data name="InvalidPageName" xml:space="preserve">
-    <value>Ugyldig Page Name</value>
+    <value>Ugyldigt sidenavn</value>
   </data>
   <data name="InvalidPageTitle" xml:space="preserve">
-    <value>Ugyldig sidefejl Titel</value>
+    <value>Ugyldig sidetitel</value>
   </data>
   <data name="InvalidPassword" xml:space="preserve">
     <value>Ugyldig adgangskode</value>
@@ -1244,37 +1244,37 @@
     <value>Ugyldig port (skal være mellem 1 og 65535)</value>
   </data>
   <data name="InvalidSenderEmail" xml:space="preserve">
-    <value>Ugyldig Sender Email</value>
+    <value>Ugyldig afsendelsese-mail</value>
   </data>
   <data name="InvalidSmtpServer" xml:space="preserve">
     <value>Ugyldig SMTP Server</value>
   </data>
   <data name="InvalidSnippetName" xml:space="preserve">
-    <value>Ugyldig uddragsvisning Navn</value>
+    <value>Ugyldig kodestumpsnavn</value>
   </data>
   <data name="InvalidUsername" xml:space="preserve">
-    <value>Ugyldig Brugernavn: det skal være længe på mindst 4 tegn, og ikke indeholde ordet &amp;#39;admin&amp;#39; eller &amp;#39;gæst&amp;#39;, og bruge bogstaver, tal, mellemrum og dot.</value>
+    <value>Ugyldigt brugernavn: Det skal være på mindst 4 tegn, det må indeholde bogstaver, tal, mellemrum og punktum, men må ikke indeholde ordet "admin" eller "gæst".</value>
   </data>
   <data name="InvalidWikiTitle" xml:space="preserve">
-    <value>Ugyldig Wiki Titel: det kan ikke være tom og kan ikke omfatte returtegn eller linjeskift tegn</value>
+    <value>Ugyldig wikititel: Det må ikke være tomt og må ikke indeholde returtegn eller linjeskift tegn</value>
   </data>
   <data name="Italic" xml:space="preserve">
     <value>Kursiv</value>
   </data>
   <data name="LastModifiedPage" xml:space="preserve">
-    <value>Last modified Page</value>
+    <value>Sidst ændrede side</value>
   </data>
   <data name="LastMonth" xml:space="preserve">
     <value>Sidste måned</value>
   </data>
   <data name="LatestUser" xml:space="preserve">
-    <value>Seneste Bruger</value>
+    <value>Seneste bruger</value>
   </data>
   <data name="LineBreak" xml:space="preserve">
-    <value>Linjeskift (single)</value>
+    <value>Linjeskift (enkelt)</value>
   </data>
   <data name="LinkTitle" xml:space="preserve">
-    <value>Link Titel</value>
+    <value>Link titel</value>
   </data>
   <data name="LinkUrl" xml:space="preserve">
     <value>Link URL</value>
@@ -1283,31 +1283,31 @@
     <value>Beliggende i</value>
   </data>
   <data name="LogDiskUsage" xml:space="preserve">
-    <value>Log Diskplads brug</value>
+    <value>Log diskplads forbrug</value>
   </data>
   <data name="LoggedAsAdmin" xml:space="preserve">
-    <value>Du er i øjeblikket logget ind med det indbyggede i admin konto, derfor kan du ikke redigere din profil.</value>
+    <value>Du er i øjeblikket logget ind med den indbyggede i admin konto, og kan derfor ikke redigere din profil.</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Log ind</value>
   </data>
   <data name="LoginNoticeFile" xml:space="preserve">
-    <value>Login Notice File</value>
+    <value>Log ind meddelelsesfil</value>
   </data>
   <data name="LoginTitle" xml:space="preserve">
-    <value>Login / Logout</value>
+    <value>Log ind / Log ud</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Log ud</value>
   </data>
   <data name="LostPassword" xml:space="preserve">
     <value>Mistet adgangskode?</value>
   </data>
   <data name="MassEmailSent" xml:space="preserve">
-    <value>Masse Email sendt (levering kan kræve lidt tid)</value>
+    <value>Masse e-mail sendt (levering kan tage lidt tid)</value>
   </data>
   <data name="MayBeInaccurate" xml:space="preserve">
-    <value>Kan være unøjagtige</value>
+    <value>Kan være unøjagtig</value>
   </data>
   <data name="Message" xml:space="preserve">
     <value>Besked</value>
@@ -1319,10 +1319,10 @@
     <value>Skriv besked</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>Rettet</value>
   </data>
   <data name="NavPathAlreadyExists" xml:space="preserve">
-    <value>Navigation Path findes allerede</value>
+    <value>Navigationssti findes allerede</value>
   </data>
   <data name="NavPathDeleted" xml:space="preserve">
     <value>Navigationssti slettet</value>
@@ -1337,7 +1337,7 @@
     <value>Navigationsstier</value>
   </data>
   <data name="NC" xml:space="preserve">
-    <value>n / a</value>
+    <value>i/k</value>
   </data>
   <data name="NewerRevision" xml:space="preserve">
     <value>Nyere version</value>
@@ -1346,19 +1346,19 @@
     <value>Nyere version fundet</value>
   </data>
   <data name="NextPage" xml:space="preserve">
-    <value>Næste Side</value>
+    <value>Næste side</value>
   </data>
   <data name="NoFiles" xml:space="preserve">
     <value>Ingen filer</value>
   </data>
   <data name="NoMessages" xml:space="preserve">
-    <value>Ingen meddelelser for denne side. Være den første!</value>
+    <value>Der er ingen beskeder for denne side. Vær den første!</value>
   </data>
   <data name="NoPagesInThisCategory" xml:space="preserve">
     <value>Ingen sider blev fundet i denne kategori</value>
   </data>
   <data name="NoWiki" xml:space="preserve">
-    <value>Nowiki tag</value>
+    <value>Nowiki mærkat</value>
   </data>
   <data name="Older" xml:space="preserve">
     <value>Ældre</value>
@@ -1367,7 +1367,7 @@
     <value>Ældre version</value>
   </data>
   <data name="OnlineUsers" xml:space="preserve">
-    <value>Online Brugere</value>
+    <value>Online brugere</value>
   </data>
   <data name="OnlyDllFilesAllowed" xml:space="preserve">
     <value>Kun DLL-filer er tilladt</value>
@@ -1382,28 +1382,28 @@
     <value>eller</value>
   </data>
   <data name="PageAlreadyExists" xml:space="preserve">
-    <value>Page allerede findes</value>
+    <value>Siden findes allerede</value>
   </data>
   <data name="PageBackupsDeleted" xml:space="preserve">
-    <value>Page sikkerhedskopieringer slettet</value>
+    <value>Sidens backup er slettet</value>
   </data>
   <data name="PageDeleted" xml:space="preserve">
-    <value>Page slettet</value>
+    <value>Side slettet</value>
   </data>
   <data name="PageDiscussionCleared" xml:space="preserve">
-    <value>Page Discussion ryddes</value>
+    <value>Sidedebat ryddet</value>
   </data>
   <data name="PageDoesNotExistInProvider" xml:space="preserve">
-    <value>Siden ##PAGENAME## findes ikke ved denne Provider</value>
+    <value>Siden ##PAGENAME## findes ikke ved denne udbyder</value>
   </data>
   <data name="PageFooterFile" xml:space="preserve">
-    <value>Page Footer File</value>
+    <value>Side fodfil</value>
   </data>
   <data name="PageHeaderFile" xml:space="preserve">
-    <value>Page Header File</value>
+    <value>Side hovedfil</value>
   </data>
   <data name="PageHistory" xml:space="preserve">
-    <value>Page History</value>
+    <value>Sidehistorik</value>
   </data>
   <data name="PageLink" xml:space="preserve">
     <value>Link til en side</value>
@@ -1418,73 +1418,73 @@
     <value>Siden blev ikke fundet</value>
   </data>
   <data name="PagePublic" xml:space="preserve">
-    <value>Denne side er offentlige</value>
+    <value>Denne side er offentlig</value>
   </data>
   <data name="PageRenamed" xml:space="preserve">
-    <value>Page omdøbt</value>
+    <value>Side omdøbt</value>
   </data>
   <data name="PageRevision" xml:space="preserve">
-    <value>Page Revision</value>
+    <value>Sideversion</value>
   </data>
   <data name="PageSaved" xml:space="preserve">
     <value>Page gemt</value>
   </data>
   <data name="PagesDiskUsage" xml:space="preserve">
-    <value>Sider Diskplads brug</value>
+    <value>Siders diskpladsforbrug</value>
   </data>
   <data name="PageSetLocked" xml:space="preserve">
-    <value>Page indstillet til Locked</value>
+    <value>Side sat til låst</value>
   </data>
   <data name="PageSetNormal" xml:space="preserve">
-    <value>Page indstillet til Normal</value>
+    <value>Side sat til normal</value>
   </data>
   <data name="PageSetPublic" xml:space="preserve">
-    <value>Page indstillet til Offentlig</value>
+    <value>Side sat til offentlig</value>
   </data>
   <data name="PagesOfCategory" xml:space="preserve">
-    <value>Sider af kategori</value>
+    <value>Sider i kategorien</value>
   </data>
   <data name="PageTitle" xml:space="preserve">
-    <value>Page Titel</value>
+    <value>Sidetitel</value>
   </data>
   <data name="PageUpdates" xml:space="preserve">
-    <value>Page Opdateringer</value>
+    <value>Sideopdateringer</value>
   </data>
   <data name="PasswordResetMessageFile" xml:space="preserve">
-    <value>Nulstil adgangskode Message File</value>
+    <value>Adgangskodenulstilling beskedfil</value>
   </data>
   <data name="PasswordSaved" xml:space="preserve">
-    <value>Password gemt</value>
+    <value>Adgangskode gemt</value>
   </data>
   <data name="PasswordsNotEqual" xml:space="preserve">
-    <value>Passwords er ikke ens</value>
+    <value>Adgangskoder er ikke ens</value>
   </data>
   <data name="Paths" xml:space="preserve">
-    <value>Paths</value>
+    <value>Stier</value>
   </data>
   <data name="PerformASearch" xml:space="preserve">
-    <value>foretage en søgning</value>
+    <value>foretag en søgning</value>
   </data>
   <data name="PleaseSelectValidBackup" xml:space="preserve">
-    <value>Vælg en gyldig Backup</value>
+    <value>Vælg en gyldig backup</value>
   </data>
   <data name="Posted" xml:space="preserve">
-    <value>Indsendt</value>
+    <value>Postet</value>
   </data>
   <data name="PostMessage" xml:space="preserve">
     <value>Skriv en besked</value>
   </data>
   <data name="PostTitle" xml:space="preserve">
-    <value>Send indlæg</value>
+    <value>Post indlæg</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Eksempel</value>
   </data>
   <data name="PreviewCreated" xml:space="preserve">
-    <value>Preview oprettet, se nederst på denne side</value>
+    <value>Eksempel oprettet, se nederst på denne side</value>
   </data>
   <data name="PrevPage" xml:space="preserve">
-    <value>Forrige Side</value>
+    <value>Forrige side</value>
   </data>
   <data name="Print" xml:space="preserve">
     <value>Print</value>
@@ -1496,34 +1496,34 @@
     <value>Brugerprofil</value>
   </data>
   <data name="ProviderConfigurationSaved" xml:space="preserve">
-    <value>Provider Konfiguration data gemmes</value>
+    <value>Udbyderkonfigurationsdata gemt</value>
   </data>
   <data name="ProviderDisabled" xml:space="preserve">
-    <value>Provider handicappede</value>
+    <value>Udbyder deaktiveret</value>
   </data>
   <data name="ProviderEnabled" xml:space="preserve">
-    <value>Provider aktiveret</value>
+    <value>Udbyder aktiveret</value>
   </data>
   <data name="ProviderNotFound" xml:space="preserve">
     <value>Udbyderen ikke fundet</value>
   </data>
   <data name="ProviderUnloaded" xml:space="preserve">
-    <value>Provider losses</value>
+    <value>Udbyder udlæst</value>
   </data>
   <data name="RecentPageUpdates" xml:space="preserve">
-    <value>Seneste Page opdateringer</value>
+    <value>Seneste sideopdateringer</value>
   </data>
   <data name="RedirectedFrom" xml:space="preserve">
     <value>Omdirigeret fra</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Opdatér</value>
+    <value>Opdater</value>
   </data>
   <data name="RegisterTitle" xml:space="preserve">
     <value>Opret konto</value>
   </data>
   <data name="RegistrationDisabled" xml:space="preserve">
-    <value>Kontooprettelsesprocessen er deaktiveret.</value>
+    <value>Kontooprettelse er deaktiveret.</value>
   </data>
   <data name="Reply" xml:space="preserve">
     <value>Svar</value>
@@ -1532,100 +1532,100 @@
     <value>Påkrævet felt</value>
   </data>
   <data name="Revision" xml:space="preserve">
-    <value>Revision</value>
+    <value>Version</value>
   </data>
   <data name="RevisionComment" xml:space="preserve">
-    <value>Hvordan</value>
+    <value>Kommentar</value>
   </data>
   <data name="RollbackCompleted" xml:space="preserve">
-    <value>Rollback afsluttet</value>
+    <value>Tilbageføring fuldført</value>
   </data>
   <data name="RssForTheWiki" xml:space="preserve">
-    <value>Update anmeldelser for hele Wiki (RSS 2.0)</value>
+    <value>Opdatingsorientering for hele wiki'en (RSS 2.0)</value>
   </data>
   <data name="RssForThisCategory" xml:space="preserve">
-    <value>Update anmeldelser for denne kategori (RSS 2.0)</value>
+    <value>Opdateringsorientering for denne kategori (RSS 2.0)</value>
   </data>
   <data name="RssForThisDiscussion" xml:space="preserve">
-    <value>Update anmeldelser for denne diskussion (RSS 2.0)</value>
+    <value>Opdateringsorientering for denne debat (RSS 2.0)</value>
   </data>
   <data name="RssForThisPage" xml:space="preserve">
-    <value>Update anmeldelser for denne side (RSS 2.0)</value>
+    <value>Opdateringsorientering for denne side (RSS 2.0)</value>
   </data>
   <data name="ScriptDetected" xml:space="preserve">
-    <value>Unallowed script-tag afsløret i indholdet</value>
+    <value>Der er fundet et ikke-tilladt SCRIPT mærkat i indholdet</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Søgning</value>
   </data>
   <data name="SearchTitle" xml:space="preserve">
-    <value>Search Engine</value>
+    <value>Søgemaskine</value>
   </data>
   <data name="SendAMessage" xml:space="preserve">
     <value>Send en besked</value>
   </data>
   <data name="ServerUptime" xml:space="preserve">
-    <value>Server Uptime</value>
+    <value>Server oppetid</value>
   </data>
   <data name="SidebarFile" xml:space="preserve">
-    <value>Sidebjælke File</value>
+    <value>Sidebjælke fil</value>
   </data>
   <data name="Smaller" xml:space="preserve">
     <value>Mindre</value>
   </data>
   <data name="SnippetAlreadyExists" xml:space="preserve">
-    <value>Uddragsvisning allerede findes</value>
+    <value>Kodestump findes allerede</value>
   </data>
   <data name="SnippetDeleted" xml:space="preserve">
-    <value>Snipped slettet</value>
+    <value>Kodestump slettet</value>
   </data>
   <data name="SnippetNotFound" xml:space="preserve">
-    <value>Kodestykke ikke fundet</value>
+    <value>Kodestump ikke fundet</value>
   </data>
   <data name="SnippetSaved" xml:space="preserve">
-    <value>Uddragsvisning Gemte</value>
+    <value>Kodestump gemt</value>
   </data>
   <data name="SortByDate" xml:space="preserve">
-    <value>Sorter efter dato og klokkeslæt</value>
+    <value>Sorter efter dato og tid</value>
   </data>
   <data name="SortByTitle" xml:space="preserve">
-    <value>Sorter efter Titel</value>
+    <value>Sorter efter titel</value>
   </data>
   <data name="SortByUser" xml:space="preserve">
-    <value>Sorter efter Bruger</value>
+    <value>Sorter efter bruger</value>
   </data>
   <data name="SpecialTags" xml:space="preserve">
-    <value>Særlige Tags</value>
+    <value>Særlige mærkater</value>
   </data>
   <data name="Striked" xml:space="preserve">
-    <value>Striked</value>
+    <value>Gennemstreget</value>
   </data>
   <data name="SubjectAndBodyNeeded" xml:space="preserve">
-    <value>Du skal indtaste både emne og meddelelsens brødtekst.</value>
+    <value>Du skal indtaste både meddelelsens emne og indholdstekst.</value>
   </data>
   <data name="Subscript" xml:space="preserve">
-    <value>Subscript</value>
+    <value>Sænket skrift</value>
   </data>
   <data name="Superscript" xml:space="preserve">
-    <value>Hævet</value>
+    <value>Hævet skrift</value>
   </data>
   <data name="TableOfContents" xml:space="preserve">
     <value>Indholdsfortegnelse</value>
   </data>
   <data name="TempDiskUsage" xml:space="preserve">
-    <value>Temp filer Diskplads brug</value>
+    <value>Midlertidige filers diskpladsforbug</value>
   </data>
   <data name="TextareaSize" xml:space="preserve">
-    <value>Textarea Størrelse</value>
+    <value>Tekstområde størrelse</value>
   </data>
   <data name="ThePageHasBeenDeletedBy" xml:space="preserve">
     <value>Siden er blevet slettet af</value>
   </data>
   <data name="ThePageHasBeenRenamedBy" xml:space="preserve">
-    <value>Siden er blevet omdøbt ved</value>
+    <value>Siden er blevet omdøbt af</value>
   </data>
   <data name="ThePageHasBeenRolledBackBy" xml:space="preserve">
-    <value>Siden er blevet rullet tilbage af</value>
+    <value>Siden er blevet tilbageført af</value>
   </data>
   <data name="ThePageHasBeenUpdatedBy" xml:space="preserve">
     <value>Siden er opdateret af</value>
@@ -1634,7 +1634,7 @@
     <value>&lt;b&gt;Advarsel&lt;/b&gt;: Dette er kun et eksempel! Du skal klikke på knappen Gem for at gemme ændringerne!</value>
   </data>
   <data name="ThisPageIsLocked" xml:space="preserve">
-    <value>Denne side er låst, at det derfor kan redigeres af Kun administratorer.</value>
+    <value>Denne side er låst, og kan derfor redigeres af administratorer.</value>
   </data>
   <data name="ThisPageRedirectsTo" xml:space="preserve">
     <value>Denne side omdirigerer til</value>
@@ -1646,13 +1646,13 @@
     <value>Top</value>
   </data>
   <data name="TotalDiskUsage" xml:space="preserve">
-    <value>Total Diskplads brug</value>
+    <value>Total diskpladssforbrug</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
   <data name="UnallowedFileType" xml:space="preserve">
-    <value>Den fil, du uploadede er ikke en tilladt type</value>
+    <value>Den fil du uploadede er ikke af en tilladt type</value>
   </data>
   <data name="Uncategorized" xml:space="preserve">
     <value>Ukategoriserede</value>
@@ -1664,19 +1664,19 @@
     <value>Understregede</value>
   </data>
   <data name="UploadTitle" xml:space="preserve">
-    <value>File Management</value>
+    <value>Filadministration</value>
   </data>
   <data name="User" xml:space="preserve">
     <value>Bruger</value>
   </data>
   <data name="UserAccountSaved" xml:space="preserve">
-    <value>User Account gemt</value>
+    <value>Brugerkonto gemt</value>
   </data>
   <data name="UserActivated" xml:space="preserve">
     <value>Bruger aktiveret</value>
   </data>
   <data name="UserCount" xml:space="preserve">
-    <value>User Count</value>
+    <value>Bruger antal</value>
   </data>
   <data name="UserDeactivated" xml:space="preserve">
     <value>Bruger deaktiveret</value>
@@ -1685,58 +1685,58 @@
     <value>Bruger slettet</value>
   </data>
   <data name="UsernameAlreadyExists" xml:space="preserve">
-    <value>Brugernavn allerede findes, skal du vælge en anden</value>
+    <value>Brugernavn findes allerede - vælg venligst et andet</value>
   </data>
   <data name="UsernameIsRequired" xml:space="preserve">
-    <value>SMTP-brugernavn er påkrævet, hvis du angiver en adgangskode</value>
+    <value>SMTP brugernavn er påkrævet, hvis du angiver en adgangskode</value>
   </data>
   <data name="UserPromoted" xml:space="preserve">
     <value>Bruger forfremmet til administrator</value>
   </data>
   <data name="VersionCheckError" xml:space="preserve">
-    <value>Fejl ved hentning Version oplysninger</value>
+    <value>Fejl ved hentning af versionsoplysninger</value>
   </data>
   <data name="View" xml:space="preserve">
     <value>Se</value>
   </data>
   <data name="ViewBreadcrumbsTrail" xml:space="preserve">
-    <value>Klik her for at se den komplette brødkrummer Trail</value>
+    <value>Klik her for at se den komplette brødkrummesti</value>
   </data>
   <data name="ViewingFile" xml:space="preserve">
-    <value>Visning File</value>
+    <value>Visning af fil</value>
   </data>
   <data name="ViewList" xml:space="preserve">
-    <value>Vis Liste</value>
+    <value>Vis liste</value>
   </data>
   <data name="ViewPageCode" xml:space="preserve">
-    <value>Vis Page Kode</value>
+    <value>Vis sidekode</value>
   </data>
   <data name="ViewTree" xml:space="preserve">
-    <value>View Tree</value>
+    <value>Vis træ</value>
   </data>
   <data name="WereYouLookingFor" xml:space="preserve">
     <value>Var du på udkig efter en af disse sider?</value>
   </data>
   <data name="WikiUpToDate" xml:space="preserve">
-    <value>Din Wiki er up-to-date</value>
+    <value>Din wiki er fuldt opdateret</value>
   </data>
   <data name="WikiVersion" xml:space="preserve">
-    <value>Wiki Version</value>
+    <value>Wiki version</value>
   </data>
   <data name="Wizard" xml:space="preserve">
-    <value>Konfiguration Wizard</value>
+    <value>Konfigurationswizard</value>
   </data>
   <data name="WrongControlText" xml:space="preserve">
-    <value>Forkert Control Tekst</value>
+    <value>Forkert kontroltekst</value>
   </data>
   <data name="WrongParameters" xml:space="preserve">
     <value>Forkerte parametre</value>
   </data>
   <data name="WrongPassword" xml:space="preserve">
-    <value>Forkert password</value>
+    <value>Forkert adgangskode</value>
   </data>
   <data name="WrongUsernamePassword" xml:space="preserve">
-    <value>Forkert brugernavn og / eller password</value>
+    <value>Forkert brugernavn og / eller adgangskode</value>
   </data>
   <data name="Yesterday" xml:space="preserve">
     <value>I går</value>
