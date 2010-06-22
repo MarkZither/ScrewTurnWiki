@@ -30,9 +30,6 @@ namespace ScrewTurn.Wiki {
 			SetupButtons();
 
 			SetupButtonsVisibility();
-            
-            // This applies text direction
-            DataBind();
 		}
 
 		/// <summary>

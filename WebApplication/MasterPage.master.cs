@@ -35,9 +35,6 @@ namespace ScrewTurn.Wiki {
 			PrintSidebar();
 			PrintFooter();
 			PrintPageHeaderAndFooter();
-
-            // This applies text direction
-            DataBind();
 		}
 
 		/// <summary>

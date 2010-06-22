@@ -42,9 +42,6 @@ namespace ScrewTurn.Wiki {
 			Page.Title = FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page) + " - " + Settings.WikiTitle;
 
             PrintContent();
-
-			// This applies text direction
-			DataBind();
 		}
 
 		/// <summary>
