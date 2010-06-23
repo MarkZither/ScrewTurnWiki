@@ -191,6 +191,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Messages.fa-IR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.fa-IR.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Messages.ja-JP.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1469,6 +1474,48 @@
     <Content Include="App_LocalResources\Search.aspx.pt-PT.resx" />
     <Content Include="App_LocalResources\Upload.aspx.pt-PT.resx" />
     <Content Include="App_LocalResources\User.aspx.pt-PT.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Admin.master.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Category.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Default.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Error.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.fa-IR.resx" />
+    <Content Include="App_LocalResources\History.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Login.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.fa-IR.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.fa-IR.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Post.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Register.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Search.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\User.aspx.fa-IR.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>
@@ -1491,6 +1538,10 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.es-ES.designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Messages.fa-IR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.fa-IR.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.fr-FR.resx">
       <SubType>Designer</SubType>
