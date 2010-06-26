@@ -794,7 +794,7 @@
     <value>Seneste debatopdateringer</value>
   </data>
   <data name="AMessageWasSentCheckInbox" xml:space="preserve">
-    <value>En besked er blevet sendt til din e-mailadresse. Check venligst din indbakke.</value>
+    <value>En besked er blevet sendt til din e-mail-adresse. Check venligst din indbakke.</value>
   </data>
   <data name="NewPasswordSavedPleaseLogin" xml:space="preserve">
     <value>Ny adgangskode gemt, du kan nu &lt;a href="Login.aspx" title="Log ind"&gt;logge ind&lt;/a&gt;</value>
