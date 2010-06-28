@@ -112,106 +112,106 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnchorTitle2" xml:space="preserve">
-    <value>Insert a new anchor or a link to an existing anchor</value>
+    <value>Использовать новый Якорь, или связать с существующим</value>
   </data>
   <data name="BoldTitle" xml:space="preserve">
-    <value>Style selected text as bold</value>
+    <value>Выбрать стиль полужинрный для выделенного текста</value>
   </data>
   <data name="CodeEscapedTitle" xml:space="preserve">
-    <value>Set selected text as a block of code</value>
+    <value>Для выделенного текста выбрать стиль, как для блока стороннего кода</value>
   </data>
   <data name="CodeInlineTitle" xml:space="preserve">
-    <value>Set selected text as inline code</value>
+    <value>Установить стиль встроенный код для выделенного текста</value>
   </data>
   <data name="CommentTitle" xml:space="preserve">
-    <value>Set selected text as comment (hidden from the rendered page output)</value>
+    <value>Выделенный текст сделать комментарием (скрыто от пользователей страниц)</value>
   </data>
   <data name="EscapeTitle" xml:space="preserve">
-    <value>Wrap selected text in an 'escape' block that escapes all wiki- and HTML-related characters</value>
+    <value>Обернуть, выделенный текст в 'escape' блок, не отображаемый во всей wiki и HTML-связанных символах</value>
   </data>
   <data name="ExternalLinkTitle" xml:space="preserve">
-    <value>Insert a link to a website or email address</value>
+    <value>Вставьте ссылку на свой сайты или email-адрес</value>
   </data>
   <data name="FileLinkTitle" xml:space="preserve">
-    <value>Insert a link to a file or attachment</value>
+    <value>Вставьте ссылку на файл или вложение</value>
   </data>
   <data name="H1Title" xml:space="preserve">
-    <value>Set selected text as level-1 header</value>
+    <value>Выделенный текст сделать заголовком уровня-1</value>
   </data>
   <data name="H2Title" xml:space="preserve">
-    <value>Set selected text as level-2 header</value>
+    <value>Выделенный текст сделать заголовком уровня-2</value>
   </data>
   <data name="H3Title" xml:space="preserve">
-    <value>Set selected text as level-3 header</value>
+    <value>Выделенный текст сделать заголовком уровня-3</value>
   </data>
   <data name="H4Title" xml:space="preserve">
-    <value>Set selected text as level-4 header</value>
+    <value>Выделенный текст сделать заголовком уровня-4</value>
   </data>
   <data name="HRTitle" xml:space="preserve">
-    <value>Insert a horizontal ruler (separator)</value>
+    <value>Вставить горизонтальный разделитель (сепаратор)</value>
   </data>
   <data name="ImageTitle2" xml:space="preserve">
-    <value>Insert a picture in the page</value>
+    <value>Вставьте изображение в страницу</value>
   </data>
   <data name="ItalicTitle" xml:space="preserve">
-    <value>Style selected text as italic</value>
+    <value>Сделать выделенный текст наклонным</value>
   </data>
   <data name="LineBreakTitle" xml:space="preserve">
-    <value>Insert a single line break</value>
+    <value>Вставить один перевод каретки</value>
   </data>
   <data name="NoBrTitle" xml:space="preserve">
-    <value>Wrap selected text in a 'nobr' block, that ignores line breaks</value>
+    <value>Оберните выделенный текст в 'nobr' блок, с игнорированием переводов каретки</value>
   </data>
   <data name="NoWikiTitle" xml:space="preserve">
-    <value>Wrap selected text in a 'nowiki' block, that ignores WikiMarkup</value>
+    <value>Оберните выделенный текст в 'nowiki' блок, игнорирующий обработку WikiMarkup</value>
   </data>
   <data name="OrderedListTitle" xml:space="preserve">
-    <value>Insert an ordered list or wrap selected text in an ordered list (1, 2, 3, ...)</value>
+    <value>Вставьте упорядоченный список, либо оберните выделенный текст в такой список (1, 2,3, ...)</value>
   </data>
   <data name="PageLinkTitle" xml:space="preserve">
-    <value>Insert a link to a wiki page</value>
+    <value>Вставьте ссылку на страницу wiki</value>
   </data>
   <data name="SnippetsTitle" xml:space="preserve">
-    <value>View existing snippets and insert one in the page</value>
+    <value>Просмотр существующих сниппетов и вставка одного из них</value>
   </data>
   <data name="SpecialTagsTitle" xml:space="preserve">
-    <value>View special tags and insert one in the page</value>
+    <value>Просмотр специальных тегов и вставка одного из них</value>
   </data>
   <data name="StrikedTitle" xml:space="preserve">
-    <value>Style selected text as strike-through</value>
+    <value>Применить к выделенному тексту стиль перечёркнутый</value>
   </data>
   <data name="SubscriptTitle" xml:space="preserve">
-    <value>Set selected text as subscript</value>
+    <value>Отобразить выделенный текст, как верхний индекс</value>
   </data>
   <data name="SuperscriptTitle" xml:space="preserve">
-    <value>Set selected text as superscript</value>
+    <value>Отобразить выделенный текст, как нижний индекс</value>
   </data>
   <data name="SymbolsTitle" xml:space="preserve">
-    <value>View and insert special symbols</value>
+    <value>Просмотреть и вставить специальные символы</value>
   </data>
   <data name="UnderlinedTitle" xml:space="preserve">
-    <value>Underline selected text</value>
+    <value>Подчеркнуть выделенный текст</value>
   </data>
   <data name="UnorderedListTitle" xml:space="preserve">
-    <value>Insert an unordered list or wrap selected text in an unordered list (bullet points)</value>
+    <value>Вставьте неупорядоченный список, либо оберните в неупорядоченный список (bullet points), выделенный текст</value>
   </data>
   <data name="WrapperBoxTitle" xml:space="preserve">
-    <value>Wrap selected text in a 'box'</value>
+    <value>Вставьте, выделенный текст в 'box'</value>
   </data>
   <data name="ChangeComment" xml:space="preserve">
-    <value>Change Comment</value>
+    <value>Изменить комментарий</value>
   </data>
   <data name="MetaDescription" xml:space="preserve">
-    <value>Meta Description</value>
+    <value>Мета-тег Описание</value>
   </data>
   <data name="MetaKeywords" xml:space="preserve">
-    <value>Meta Keywords</value>
+    <value>Мета-тег Ключевые слова</value>
   </data>
   <data name="AutoUpdateAvailable" xml:space="preserve">
     <value>Автообновление доступно</value>
@@ -269,7 +269,7 @@
     <value>Страница не смогла мигрировать</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Ошибка</value>
   </data>
   <data name="NewVersion" xml:space="preserve">
     <value>Новая версия:</value>
@@ -281,7 +281,7 @@
     <value>RSS обсуждения</value>
   </data>
   <data name="RssForThisCategoryDiscussion" xml:space="preserve">
-    <value>Уведолмения об обновлениях в этой категории обсуждений (RSS 2.0)</value>
+    <value>Уведомления об обновлениях в этой категории обсуждений (RSS 2.0)</value>
   </data>
   <data name="CodeEscaped" xml:space="preserve">
     <value>Pre-блок</value>

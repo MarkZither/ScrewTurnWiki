@@ -112,106 +112,106 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnchorTitle2" xml:space="preserve">
-    <value>Insert a new anchor or a link to an existing anchor</value>
+    <value>Використати новий Якір, чи зв'язати з інсуючим</value>
   </data>
   <data name="BoldTitle" xml:space="preserve">
-    <value>Style selected text as bold</value>
+    <value>Стиль, що зробить текст жирним</value>
   </data>
   <data name="CodeEscapedTitle" xml:space="preserve">
-    <value>Set selected text as a block of code</value>
+    <value>Відобразити виділений текст, як блок коду</value>
   </data>
   <data name="CodeInlineTitle" xml:space="preserve">
-    <value>Set selected text as inline code</value>
+    <value>Відобразити виділений текст, як стрічку коду</value>
   </data>
   <data name="CommentTitle" xml:space="preserve">
-    <value>Set selected text as comment (hidden from the rendered page output)</value>
+    <value>Відображати виділений текст, як коментар (приховано від користувачів сторінок)</value>
   </data>
   <data name="EscapeTitle" xml:space="preserve">
-    <value>Wrap selected text in an 'escape' block that escapes all wiki- and HTML-related characters</value>
+    <value>Вставити виділений текст в 'escape' блок, що зачепить всю wiki та HTML-пов'язані символи</value>
   </data>
   <data name="ExternalLinkTitle" xml:space="preserve">
-    <value>Insert a link to a website or email address</value>
+    <value>Вставити поислання на персональний сайт чи свою email-адресу</value>
   </data>
   <data name="FileLinkTitle" xml:space="preserve">
-    <value>Insert a link to a file or attachment</value>
+    <value>Вставити посилання на файл чи приєднаний архів</value>
   </data>
   <data name="H1Title" xml:space="preserve">
-    <value>Set selected text as level-1 header</value>
+    <value>Змінити виділений текст на заголовок рівня-1</value>
   </data>
   <data name="H2Title" xml:space="preserve">
-    <value>Set selected text as level-2 header</value>
+    <value>Змінити виділений текст на заголовок рівня-2</value>
   </data>
   <data name="H3Title" xml:space="preserve">
-    <value>Set selected text as level-3 header</value>
+    <value>Змінити виділений текст на заголовок рівня-3</value>
   </data>
   <data name="H4Title" xml:space="preserve">
-    <value>Set selected text as level-4 header</value>
+    <value>Змінити виділений текст на заголовок рівня-4</value>
   </data>
   <data name="HRTitle" xml:space="preserve">
-    <value>Insert a horizontal ruler (separator)</value>
+    <value>Вставити горизонтальну лінію (сепаратор)</value>
   </data>
   <data name="ImageTitle2" xml:space="preserve">
-    <value>Insert a picture in the page</value>
+    <value>Вставити зображення в сторінку</value>
   </data>
   <data name="ItalicTitle" xml:space="preserve">
-    <value>Style selected text as italic</value>
+    <value>Визначити стиль, як похилий</value>
   </data>
   <data name="LineBreakTitle" xml:space="preserve">
-    <value>Insert a single line break</value>
+    <value>Вставити додатковий рядок</value>
   </data>
   <data name="NoBrTitle" xml:space="preserve">
-    <value>Wrap selected text in a 'nobr' block, that ignores line breaks</value>
+    <value>Вставити виділений текст у 'nobr' блок, що ігнорує переведення до нового рядку</value>
   </data>
   <data name="NoWikiTitle" xml:space="preserve">
-    <value>Wrap selected text in a 'nowiki' block, that ignores WikiMarkup</value>
+    <value>Вставити виділений текст у 'nowiki' блок, що ігнорує WikiMarkup</value>
   </data>
   <data name="OrderedListTitle" xml:space="preserve">
-    <value>Insert an ordered list or wrap selected text in an ordered list (1, 2, 3, ...)</value>
+    <value>Використувуйте упорядкований список, або ж оберніть виділений текст в упорядкований список (1,2,3, ...)</value>
   </data>
   <data name="PageLinkTitle" xml:space="preserve">
-    <value>Insert a link to a wiki page</value>
+    <value>Вставте посилання на сторінку wiki</value>
   </data>
   <data name="SnippetsTitle" xml:space="preserve">
-    <value>View existing snippets and insert one in the page</value>
+    <value>Переглянути існуючи сніпети та вставити один з них</value>
   </data>
   <data name="SpecialTagsTitle" xml:space="preserve">
-    <value>View special tags and insert one in the page</value>
+    <value>Переглянути спеціальні теги та використати один з них</value>
   </data>
   <data name="StrikedTitle" xml:space="preserve">
-    <value>Style selected text as strike-through</value>
+    <value>Обрати для виділеного тексту, стиль закреслений</value>
   </data>
   <data name="SubscriptTitle" xml:space="preserve">
-    <value>Set selected text as subscript</value>
+    <value>Виділений текст встановити, як нижній індекс</value>
   </data>
   <data name="SuperscriptTitle" xml:space="preserve">
-    <value>Set selected text as superscript</value>
+    <value>Виділений текст встановити, як верхній індекс</value>
   </data>
   <data name="SymbolsTitle" xml:space="preserve">
-    <value>View and insert special symbols</value>
+    <value>Переглянути та вставити спеціальні символи</value>
   </data>
   <data name="UnderlinedTitle" xml:space="preserve">
-    <value>Underline selected text</value>
+    <value>Підкреслити виділений текст</value>
   </data>
   <data name="UnorderedListTitle" xml:space="preserve">
-    <value>Insert an unordered list or wrap selected text in an unordered list (bullet points)</value>
+    <value>Вставити невпорядкований список, або обернути виділений текст у такий (bullet points)</value>
   </data>
   <data name="WrapperBoxTitle" xml:space="preserve">
-    <value>Wrap selected text in a 'box'</value>
+    <value>Обернути виділений текст в 'box'</value>
   </data>
   <data name="ChangeComment" xml:space="preserve">
-    <value>Change Comment</value>
+    <value>Змінити коментар</value>
   </data>
   <data name="MetaDescription" xml:space="preserve">
-    <value>Meta Description</value>
+    <value>Мета-тег Опис</value>
   </data>
   <data name="MetaKeywords" xml:space="preserve">
-    <value>Meta Keywords</value>
+    <value>Мета-тег Ключові Слова</value>
   </data>
   <data name="AutoUpdateAvailable" xml:space="preserve">
     <value>Автооновлення доступне</value>
@@ -269,7 +269,7 @@
     <value>Міграція Сторінки не відбулася</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Помилка</value>
   </data>
   <data name="NewVersion" xml:space="preserve">
     <value>Нова версія:</value>
