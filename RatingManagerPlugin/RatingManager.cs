@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 
 		private IHostV30 _host;
 		private bool _enableLogging = true;
-        private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "3.0.2.538", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RatingManager2.txt");
+        private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "3.0.2.555", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RatingManager2.txt");
 
 		private bool foundRatings = false;
 
