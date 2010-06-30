@@ -99,6 +99,19 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 			if(foundRatings) {
 				buffer.Append(@"<script type=""text/javascript"" src=""GetFile.aspx?file=" + defaultDirectoryName + jsFileName + @"""></script>");
 				buffer.Append(@"<link rel=""StyleSheet"" href=""GetFile.aspx?file=" + defaultDirectoryName + cssFileName + @""" type=""text/css"" />");
+				buffer.Append(@"<script type=""text/javascript""> <!--
+function GenerateStaticStars(rate, cssClass) {
+var string = '';
+var i = 0;
+for (i=0; i<rate; i++) {
+string +='<span class=""static-rating ' + cssClass + '""></span>';
+}
+for(i=rate; i<5; i++) {
+string +='<span class=""static-rating ui-rating-empty""></span>';
+}
+return string;
+}
+//--> </script>");
 				foundRatings = false;
 			}
 			return buffer.ToString();
@@ -175,19 +188,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 
 				}
 
-				result += @"<script type=""text/javascript""> <!--
-function GenerateStaticStars(rate, class) {
-var string = '';
-var i = 0;
-for (i=0; i<rate; i++) {
-string +='<span class=""static-rating ' + class + '""></span>';
-}
-for(i=rate; i<5; i++) {
-string +='<span class=""static-rating ui-rating-empty""></span>';
-}
-return string;
-}
-//--> </script>";
+				result += @"";
 
 				buffer.Insert(block.Key, result);
 
