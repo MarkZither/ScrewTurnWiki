@@ -132,9 +132,15 @@ namespace ScrewTurn.Wiki {
 
 			if(tempString.StartsWith("++")) return tempString.Substring(2);
 
-			string nspace = HttpContext.Current.Request["NS"];
-			if(string.IsNullOrEmpty(nspace)) nspace = null;
-			if(nspace == null) nspace = GetCurrentNamespace();
+			string nspace = null;
+			if(HttpContext.Current != null) {
+				// HttpContext.Current can be null when executing asynchronous tasks
+				// The point is that BuildUrl is called without namespace info only from the web application, so HttpContext is available in that case
+				// When the context is not available, in all cases BuildUrl is called by the formatter, that has already included namespace info in the URL
+				nspace = HttpContext.Current.Request["NS"];
+				if(string.IsNullOrEmpty(nspace)) nspace = null;
+				if(nspace == null) nspace = GetCurrentNamespace();
+			}
 			if(string.IsNullOrEmpty(nspace)) nspace = null;
 			else nspace = Pages.FindNamespace(nspace).Name;
 
