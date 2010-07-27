@@ -334,7 +334,7 @@
     <value />
   </data>
   <data name="lblUploadInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Bemærk&lt;/b&gt;: At fjerne en DLL vil ikke deaktivere de udbydere den indeholder før næste wiki genstart, men upload af en ny DLL vil automatisk hente de udbydere den indeholder.</value>
+    <value>&lt;b&gt;Bemærk&lt;/b&gt;: At fjerne en DLL vil ikke deaktivere de udbydere den indeholder før næste wiki genstart, men upload af en ny DLL vil automatisk hente de udbydere DLL' indeholder.</value>
   </data>
   <data name="lblUploadNewDllResource1.Text" xml:space="preserve">
     <value>Upload ny DLL</value>
@@ -409,7 +409,7 @@
     <value />
   </data>
   <data name="rdoPagesResource1.Text" xml:space="preserve">
-    <value>Pageudbydere</value>
+    <value>Sideudbydere</value>
   </data>
   <data name="rdoPagesResource1.ToolTip" xml:space="preserve">
     <value />

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblEditSnippetWarningResource1.Text" xml:space="preserve">
-    <value>&lt;div class='warning' style='float: right;'&gt;Du retter nu i en kodestump. Når du er færdig,&lt;br /&gt; anbefales det på det &lt;b&gt;kraftigste&lt;/b&gt; at du genopbygger søgeindekset på &lt;i&gt;Admin hjem&lt;/i&gt; siden.</value>
+    <value>&lt;div class='warning' style='float: right;'&gt;Du retter nu i en kodestump. Når du er færdig, anbefales det på det &lt;b&gt;kraftigste&lt;/b&gt; at du genopbygger søgeindekset på &lt;i&gt;Admin hjem&lt;/i&gt; siden.</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
     <value>Annuller</value>

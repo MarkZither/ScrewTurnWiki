@@ -250,7 +250,7 @@
     <value>Er du sikker på at du vil slette dette navnerum permanent? Hvis du gør det, vil alt data i det forsvinde.</value>
   </data>
   <data name="lblDefaultPageInfoResource1.Text" xml:space="preserve">
-    <value>Standardsiden vil automatisk blive oprettet med navnet 'Forside'.</value>
+    <value>Standardsiden vil automatisk blive oprettet med navnet 'MainPage'.</value>
   </data>
   <data name="lblDefaultPageInfoResource1.ToolTip" xml:space="preserve">
     <value />
@@ -265,7 +265,7 @@
     <value>Navnerumsdetaljer</value>
   </data>
   <data name="lblInheritanceInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Bemærk&lt;/b&gt;: Undernavnerum vil altid arve rettigheder fra &lt;b&gt;rod&lt;/b&gt; navnerummet.&lt;br /&gt;Ændring af rettigheder i &lt;b&gt;rod&lt;/b&gt; navnerummet, ændrer ikke rettigheder eksplicit sat i undernavnerum.</value>
+    <value>&lt;b&gt;Bemærk&lt;/b&gt;: Navnerum vil altid arve rettigheder fra &lt;b&gt;rod&lt;/b&gt; navnerummet.&lt;br /&gt;Ændring af rettigheder i &lt;b&gt;rod&lt;/b&gt; navnerummet, ændrer ikke rettigheder eksplicit sat i andre navnerum.</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
     <value>Navn</value>

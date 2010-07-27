@@ -136,7 +136,7 @@
     <value />
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Listen over alle sider i det nuværende navnerum.</value>
+    <value>Dette er en liste over alle sider i den valgte kategori i det nuværende navnerum.</value>
   </data>
   <data name="lblPagesResource1.Text" xml:space="preserve">
     <value>Sideindeks</value>

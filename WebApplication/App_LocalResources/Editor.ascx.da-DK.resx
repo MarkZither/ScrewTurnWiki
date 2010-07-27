@@ -136,7 +136,7 @@
     <value>Forstør redigeringsboks</value>
   </data>
   <data name="btnPreviewResource3.Text" xml:space="preserve">
-    <value>Eksempel</value>
+    <value>Eksempelvisning</value>
   </data>
   <data name="btnPreviewResource3.ToolTip" xml:space="preserve">
     <value />
@@ -163,7 +163,7 @@
     <value />
   </data>
   <data name="lblPreviewWarningResource3.Text" xml:space="preserve">
-    <value>&lt;b&gt;Advarsel&lt;/b&gt;: Dette er kun et eksempel. Indholdet er ikke blevet gemt endnu.</value>
+    <value>&lt;b&gt;Advarsel&lt;/b&gt;: Dette er kun en eksempelvisning. Indholdet er ikke blevet gemt endnu.</value>
   </data>
   <data name="lblPreviewWarningResource3.ToolTip" xml:space="preserve">
     <value />

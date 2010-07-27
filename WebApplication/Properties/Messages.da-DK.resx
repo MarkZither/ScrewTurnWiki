@@ -1070,7 +1070,7 @@
     <value>Rediger</value>
   </data>
   <data name="EmailSaved" xml:space="preserve">
-    <value>E-mailadresse er gemt</value>
+    <value>E-mail-adresse er gemt</value>
   </data>
   <data name="EmailsNotEqual" xml:space="preserve">
     <value>E-mails er ikke ens</value>
@@ -1205,7 +1205,7 @@
     <value>Ugyldigt Dato / Tid format: Det skal være et gyldigt .NET mønster</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Ugyldig e-mailadresse</value>
+    <value>Ugyldig e-mail-adresse</value>
   </data>
   <data name="InvalidFileAccessTries" xml:space="preserve">
     <value>Ugyldigt antal filtilgangsforsøg: Det skal være et heltal større end 0</value>
@@ -1655,7 +1655,7 @@
     <value>Den fil du uploadede er ikke af en tilladt type</value>
   </data>
   <data name="Uncategorized" xml:space="preserve">
-    <value>Ukategoriserede</value>
+    <value>Ukategoriseret</value>
   </data>
   <data name="UncategorizedPages" xml:space="preserve">
     <value>Ukategoriserede sider</value>

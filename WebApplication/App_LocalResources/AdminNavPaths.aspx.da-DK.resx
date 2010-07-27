@@ -130,7 +130,7 @@
     <value>Annuller og returner til navigationsstislisten</value>
   </data>
   <data name="btnCreateResource1.Text" xml:space="preserve">
-    <value>Opret nav.sti</value>
+    <value>Opret navigationssti</value>
   </data>
   <data name="btnCreateResource1.ToolTip" xml:space="preserve">
     <value>Gem den nye navigationssti</value>
@@ -148,7 +148,7 @@
     <value />
   </data>
   <data name="btnNewNavPathResource1.Text" xml:space="preserve">
-    <value>Ny nav.sti</value>
+    <value>Ny navigationssti</value>
   </data>
   <data name="btnNewNavPathResource1.ToolTip" xml:space="preserve">
     <value>Opret ny navigationssti</value>

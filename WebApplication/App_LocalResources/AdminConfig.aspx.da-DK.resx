@@ -316,7 +316,7 @@
     <value />
   </data>
   <data name="cvErrorsEmailsResource1.ErrorMessage" xml:space="preserve">
-    <value>Ugyldig e-mailadresse</value>
+    <value>Ugyldig e-mail-adresse</value>
   </data>
   <data name="cvErrorsEmailsResource1.Text" xml:space="preserve">
     <value />
@@ -346,7 +346,7 @@
     <value>Kontoaktiveringsindstilling</value>
   </data>
   <data name="lblAdvancedConfigResource1.Text" xml:space="preserve">
-    <value>Udviddet konfiguration</value>
+    <value>Udvidet konfiguration</value>
   </data>
   <data name="lblCacheCutSizeResource1.Text" xml:space="preserve">
     <value>Cache cut størrelse</value>
@@ -787,7 +787,7 @@
     <value />
   </data>
   <data name="revSenderEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Ugyldig e-mailadresse</value>
+    <value>Ugyldig e-mail-adresse</value>
   </data>
   <data name="revSenderEmailResource1.Text" xml:space="preserve">
     <value />

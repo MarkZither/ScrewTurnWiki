@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnSendBulkEmailResource1.Text" xml:space="preserve">
-    <value>Send masseemail</value>
+    <value>Send massee-mail</value>
   </data>
   <data name="btnSendBulkEmailResource1.ToolTip" xml:space="preserve">
     <value />
@@ -127,10 +127,10 @@
     <value>Du skal vælge mindst én gruppe</value>
   </data>
   <data name="lblBulkEmailInfoResource1.Text" xml:space="preserve">
-    <value>Du kan sende en email besked til alle brugere af en eller flere grupper</value>
+    <value>Du kan sende en e-mail til alle brugere af en eller flere grupper</value>
   </data>
   <data name="lblBulkEmailResource1.Text" xml:space="preserve">
-    <value>Masseemail</value>
+    <value>Massee-mail</value>
   </data>
   <data name="lblSubjectResource1.Text" xml:space="preserve">
     <value>Emne</value>
@@ -196,13 +196,13 @@
     <value>Administration hjem</value>
   </data>
   <data name="lblAppShutdownInfoResource1.Text" xml:space="preserve">
-    <value>Du kan gennemtvinge en lukning og genstart cyklus af webapplikationen. Du vil blive bedt om at bekræfte genstarten to gange, og så vil webapplikationen blive genstartet næste gang en side hentes.&lt;br /&gt;&lt;b&gt;Advarsel&lt;/b&gt;: Alle åbne sessioner vil blive tabt og brugere vil muligvis opleve fejl.&lt;br /&gt;&lt;b&gt;Bemærk&lt;/b&gt;: Genstarten vil kun påvirke denne webapplikation.</value>
+    <value>Du kan gennemtvinge en luknings- og genstartscyklus af webapplikationen. Du vil blive bedt om at bekræfte genstarten to gange, og så vil webapplikationen blive genstartet næste gang en side hentes.&lt;br /&gt;&lt;b&gt;Advarsel&lt;/b&gt;: Alle åbne sessioner vil blive tabt og brugere vil muligvis opleve fejl.&lt;br /&gt;&lt;b&gt;Bemærk&lt;/b&gt;: Genstarten vil kun påvirke denne webapplikation.</value>
   </data>
   <data name="lblAppShutdownResource1.Text" xml:space="preserve">
     <value>Lukning af webapplikation</value>
   </data>
   <data name="lblDocCountResource1.Text" xml:space="preserve">
-    <value>Doks</value>
+    <value>Dok.</value>
   </data>
   <data name="lblIndexStatusResource1.Text" xml:space="preserve">
     <value>Søgeindeks status</value>

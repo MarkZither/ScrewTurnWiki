@@ -148,7 +148,7 @@
     <value>Nulstil adgangskode</value>
   </data>
   <data name="lblResetPasswordInformationResource1.Text" xml:space="preserve">
-    <value>Hvis du har glemt din adgangskode, så indtast venligst dit brugernavn &lt;b&gt;eller&lt;/b&gt; din emailadresse, og klik på 'Nulstil adgangskode' knappen.&lt;br /&gt;Du vil modtage en email med et link, hvor du kan nulstille din adgangskode.</value>
+    <value>Hvis du har glemt din adgangskode, så indtast venligst dit brugernavn &lt;b&gt;eller&lt;/b&gt; din e-mail-adresse, og klik på 'Nulstil adgangskode' knappen.&lt;br /&gt;Du vil modtage en email med et link, hvor du kan nulstille din adgangskode.</value>
   </data>
   <data name="lblResultResource1.ToolTip" xml:space="preserve">
     <value />
@@ -217,7 +217,7 @@
     <value>Klik for at logge ud</value>
   </data>
   <data name="btnResetPasswordResource1.Text" xml:space="preserve">
-    <value>Nulstill adgangskode</value>
+    <value>Nulstil adgangskode</value>
   </data>
   <data name="btnResetPasswordResource1.ToolTip" xml:space="preserve">
     <value />
@@ -232,7 +232,7 @@
     <value>Her kan du logge ind på wiki'en. Har du ikke har en konto? Du kan &lt;a href="Register.aspx" title="Opret ny konto"&gt;oprette en konto her&lt;/a&gt;.</value>
   </data>
   <data name="lblEmailResetResource1.Text" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="lblLogoutResource1.Text" xml:space="preserve">
     <value>du er i øjeblikket logget ind. For at logge ud, skal du klikke på Log ud knappen.</value>
