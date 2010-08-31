@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAccessDeniedNoticeResource1.Text" xml:space="preserve">
     <value>Åtkomst nekad (Globalt)</value>
@@ -142,7 +142,7 @@
     <value>Avbryt och återgå</value>
   </data>
   <data name="btnDiscussionChangeMessageResource1.Text" xml:space="preserve">
-    <value>Diskussionmeddelande (Globalt)</value>
+    <value>Diskussionsmeddelande (Globalt)</value>
   </data>
   <data name="btnDiscussionChangeMessageResource1.ToolTip" xml:space="preserve">
     <value>Ändra</value>
@@ -223,16 +223,16 @@
     <value>Meddelande som visas längst upp på sidan för nekad åtkomst.</value>
   </data>
   <data name="lblAccountActivationMessageInfoResource1.Text" xml:space="preserve">
-    <value>Epostmeddelandet som skickas till en ny användare som måste aktivera sitt konto.</value>
+    <value>E-postmeddelandet som skickas till en ny användare som måste aktivera sitt konto.</value>
   </data>
   <data name="lblApproveDraftMessageInfoResource1.Text" xml:space="preserve">
-    <value>Epostmeddelande som skickas till administratör/moderator när ett utkast måste godkännas.</value>
+    <value>E-postmeddelande som skickas till administratör/moderator när ett utkast måste godkännas.</value>
   </data>
   <data name="lblContentResource1.Text" xml:space="preserve">
     <value>Innehåll</value>
   </data>
   <data name="lblDiscussionChangeMessageInfoResource1.Text" xml:space="preserve">
-    <value>Epostmeddelande som skickas till användare när ett nytt inlägg skrivs i en diskussionstråd.</value>
+    <value>E-postmeddelande som skickas till användare när ett nytt inlägg skrivs i en diskussionstråd.</value>
   </data>
   <data name="lblEditingPageNoticeInfoResource1.Text" xml:space="preserve">
     <value>Meddelande som visas längst upp när en sidas innehåll redigeras.</value>
@@ -250,7 +250,7 @@
     <value>Meddelanden</value>
   </data>
   <data name="lblPageChangeMessageInfoResource1.Text" xml:space="preserve">
-    <value>Epostmeddelande som skickas till användare när en sida ändrats.</value>
+    <value>E-postmeddelande som skickas till användare när en sida ändrats.</value>
   </data>
   <data name="lblPageContentResource1.Text" xml:space="preserve">
     <value>Sidinnehåll</value>
@@ -259,7 +259,7 @@
     <value>Sidlayout (namnrymdsspecifik)</value>
   </data>
   <data name="lblPasswordResetProcedureMessageInfoResource1.Text" xml:space="preserve">
-    <value>Epostmeddelande som skickas till en användare när denna vill återställa sitt lösenord.</value>
+    <value>E-postmeddelande som skickas till en användare när denna vill återställa sitt lösenord.</value>
   </data>
   <data name="lblRegisterNoticeInfoResource1.Text" xml:space="preserve">
     <value>Meddelande som visas vid registrering av konto.</value>

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccessDeniedTitle" xml:space="preserve">
     <value>Åtkomst nekad</value>
@@ -127,7 +127,7 @@
     <value>Kontoaktivering</value>
   </data>
   <data name="AccountActivationMessageFile" xml:space="preserve">
-    <value>Account Activation Message File</value>
+    <value>Meddelandefil för kontoaktivering</value>
   </data>
   <data name="AccountAlreadyActive" xml:space="preserve">
     <value>Konto är redan aktiverat</value>
@@ -145,10 +145,10 @@
     <value>Ditt konto måste godkännas av en administratör innan du kan logga in.</value>
   </data>
   <data name="ActivationAuto" xml:space="preserve">
-    <value>Ditt konto kommer att vara aktivt direkt efter registering.</value>
+    <value>Ditt konto kommer att vara aktivt direkt efter registrering.</value>
   </data>
   <data name="ActivationEmail" xml:space="preserve">
-    <value>Du måste aktivera ditt konto inom 24 timmar. Följ instruktionerna du får med epost.</value>
+    <value>Du måste aktivera ditt konto inom 24 timmar. Följ instruktionerna du får med e-post.</value>
   </data>
   <data name="AdminDowngraded" xml:space="preserve">
     <value>Administratör degraderad till användare</value>
@@ -178,7 +178,7 @@
     <value>Auto</value>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Gå tillbaka</value>
+    <value>Återgå</value>
   </data>
   <data name="BackToHistory" xml:space="preserve">
     <value>Återgå till sidhistoriken</value>
@@ -190,7 +190,7 @@
     <value>Fetstil</value>
   </data>
   <data name="Box" xml:space="preserve">
-    <value>Box</value>
+    <value>Omslagsruta</value>
   </data>
   <data name="By" xml:space="preserve">
     <value>av</value>
@@ -319,10 +319,10 @@
     <value>Redigera</value>
   </data>
   <data name="EmailSaved" xml:space="preserve">
-    <value>Epostadress sparad</value>
+    <value>E-postadress sparad</value>
   </data>
   <data name="EmailsNotEqual" xml:space="preserve">
-    <value>Epostadresser är inte identiska</value>
+    <value>E-postadresser är inte identiska</value>
   </data>
   <data name="EnterTitleAndUrl" xml:space="preserve">
     <value>Du måste ange både rubrik och url.</value>
@@ -449,13 +449,13 @@
     <value>Ogiltigt kategorinanm</value>
   </data>
   <data name="InvalidContactEmail" xml:space="preserve">
-    <value>Ogiltig epostadress</value>
+    <value>Ogiltig e-postadress</value>
   </data>
   <data name="InvalidDateTimeFormat" xml:space="preserve">
     <value>Ogilitgt datum-/tidsformat: det måste vara ett giltigt .NET-format</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Ogiltig epostadress</value>
+    <value>Ogiltig e-postadress</value>
   </data>
   <data name="InvalidFileAccessTries" xml:space="preserve">
     <value>Ogiltigt värde för filåtkomstförsök: det måste vara ett heltal större än noll</value>
@@ -476,10 +476,10 @@
     <value>Ogiltig max loggstorlek: den måste vara större än 8 och mindre än 10240 kB</value>
   </data>
   <data name="InvalidNavPath" xml:space="preserve">
-    <value>Ogiltig navigationssökväg: minst två sidor måste anges</value>
+    <value>Ogiltig sidföljd: minst två sidor måste anges</value>
   </data>
   <data name="InvalidNavPathName" xml:space="preserve">
-    <value>Ogiltigt namn på navigationssökväg</value>
+    <value>Ogiltigt namn på sidföljd</value>
   </data>
   <data name="InvalidPageName" xml:space="preserve">
     <value>Ogiltigt sidnamn</value>
@@ -494,7 +494,7 @@
     <value>Ogiltig port (måste vara mellan 1 och 65535)</value>
   </data>
   <data name="InvalidSenderEmail" xml:space="preserve">
-    <value>Ogiltig avsändarepostadress</value>
+    <value>Ogiltig avsändare-postadress</value>
   </data>
   <data name="InvalidSmtpServer" xml:space="preserve">
     <value>Ogiltig smtp-server</value>
@@ -566,25 +566,25 @@
     <value>Meddelande skickat</value>
   </data>
   <data name="MessageTitle" xml:space="preserve">
-    <value>Write Message</value>
+    <value>Skriv meddelande</value>
   </data>
   <data name="Modified" xml:space="preserve">
     <value>Ändrad</value>
   </data>
   <data name="NavPathAlreadyExists" xml:space="preserve">
-    <value>Navigationssökväg finns redan</value>
+    <value>Sidföljd finns redan</value>
   </data>
   <data name="NavPathDeleted" xml:space="preserve">
-    <value>Navigationssökväg borttagen</value>
+    <value>Sidföljd borttagen</value>
   </data>
   <data name="NavPathNotFound" xml:space="preserve">
-    <value>Navigationssökväg kunde inte hittas</value>
+    <value>Sidföljd kunde inte hittas</value>
   </data>
   <data name="NavPathSaved" xml:space="preserve">
-    <value>Navigationssökväg sparad</value>
+    <value>Sidfö sparad</value>
   </data>
   <data name="NavPathTitle" xml:space="preserve">
-    <value>Navigationssökvägar</value>
+    <value>Sidföljder</value>
   </data>
   <data name="NC" xml:space="preserve">
     <value>-</value>
@@ -712,7 +712,7 @@
     <value>Lösenord är inte identiska</value>
   </data>
   <data name="Paths" xml:space="preserve">
-    <value>Sökvägar</value>
+    <value>Sidföljder</value>
   </data>
   <data name="PerformASearch" xml:space="preserve">
     <value>utför en sökning</value>
@@ -808,7 +808,7 @@
     <value>Uppdateringsmeddelande för denna sida (RSS 2.0)</value>
   </data>
   <data name="ScriptDetected" xml:space="preserve">
-    <value>Otillåten SCRIPT-märkord funnen i innehållet</value>
+    <value>Otillåtet SCRIPT-märkord funnen i innehållet</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Sök</value>
@@ -1141,7 +1141,7 @@
     <value>Hantera metafiler</value>
   </data>
   <data name="Action_Man_NavPath" xml:space="preserve">
-    <value>Hantera navigationssökvägar</value>
+    <value>Hantera sidföljder</value>
   </data>
   <data name="Action_Man_Ns" xml:space="preserve">
     <value>Hantera namnrymder</value>
@@ -1384,28 +1384,28 @@
     <value>Utkast förkastat och kasserat</value>
   </data>
   <data name="ClickToEnableEmailNotifications" xml:space="preserve">
-    <value>Klicka för att aktivera epostmeddelanden från denna sida</value>
+    <value>Klicka för att aktivera e-postmeddelanden från denna sida</value>
   </data>
   <data name="EmailNotificationsAreActive" xml:space="preserve">
-    <value>Epostmeddelanden är aktiverade för denna sida - klicka för att avaktivera</value>
+    <value>E-postmeddelanden är aktiverade för denna sida - klicka för att avaktivera</value>
   </data>
   <data name="None" xml:space="preserve">
     <value>inga</value>
   </data>
   <data name="CouldNotCreateNavPath" xml:space="preserve">
-    <value>Kunde inte skapa navigationssökväg</value>
+    <value>Kunde inte skapa sidföljd</value>
   </data>
   <data name="CouldNotDeleteNavPath" xml:space="preserve">
-    <value>Kunde inte ta bort navigationssökväg</value>
+    <value>Kunde inte ta bort sidföljd</value>
   </data>
   <data name="CouldNotSaveNavPath" xml:space="preserve">
-    <value>Kunde inte spara navigationssökväg</value>
+    <value>Kunde inte spara sidföljd</value>
   </data>
   <data name="NavPathCreated" xml:space="preserve">
-    <value>Navigationssökväg skapad</value>
+    <value>Sidföljd skapad</value>
   </data>
   <data name="TheNavPathMustContain" xml:space="preserve">
-    <value>Navigationssökvägen måste innehålla minst en sida</value>
+    <value>Sidföljden måste innehålla minst en sida</value>
   </data>
   <data name="DefaultProvidersSaved" xml:space="preserve">
     <value>Standardleverantörer sparade</value>
@@ -1435,7 +1435,7 @@
     <value>Ingen konfiguration krävs för denna leverantör</value>
   </data>
   <data name="NotificationsStatusSaved" xml:space="preserve">
-    <value>Inställningar för epostskick sparade</value>
+    <value>Inställningar för e-postskick sparade</value>
   </data>
   <data name="Action_Man_Perms" xml:space="preserve">
     <value>Hantera rättigheter</value>
@@ -1462,7 +1462,7 @@
     <value>Senaste diskussionsuppdateringar</value>
   </data>
   <data name="AMessageWasSentCheckInbox" xml:space="preserve">
-    <value>Ett meddelande skickades till din epostadress; kontrollera din inkorg.</value>
+    <value>Ett meddelande skickades till din e-postadress; kontrollera din inkorg.</value>
   </data>
   <data name="NewPasswordSavedPleaseLogin" xml:space="preserve">
     <value>Nytt lösenord sparat, var god &lt;a href="Login.aspx" title="Login"&gt;logga in&lt;/a&gt;</value>
@@ -1603,7 +1603,7 @@
     <value>Aktuell</value>
   </data>
   <data name="SelectAndDelete" xml:space="preserve">
-    <value>Makera och ta bort</value>
+    <value>Markera och ta bort</value>
   </data>
   <data name="NoBr" xml:space="preserve">
     <value>NoBR-märkord</value>
@@ -1653,5 +1653,101 @@
   </data>
   <data name="AutoUpdateAvailable" xml:space="preserve">
     <value>Auto-uppdatering tillgänglig</value>
+  </data>
+  <data name="AnchorTitle2" xml:space="preserve">
+    <value>Infoga ett nytt bokmärke eller länka till ett existerande bokmärke</value>
+  </data>
+  <data name="BoldTitle" xml:space="preserve">
+    <value>Formatera markerad text med fetstil</value>
+  </data>
+  <data name="ChangeComment" xml:space="preserve">
+    <value>Ändra kommentar</value>
+  </data>
+  <data name="CodeEscapedTitle" xml:space="preserve">
+    <value>Formatera markerad text som ett kodavsnitt</value>
+  </data>
+  <data name="CodeInlineTitle" xml:space="preserve">
+    <value>Formatera markerad text som infogad kod</value>
+  </data>
+  <data name="CommentTitle" xml:space="preserve">
+    <value>Gör markerad text till en kommentar (syns inte när sidan visas)</value>
+  </data>
+  <data name="EscapeTitle" xml:space="preserve">
+    <value>Inneslut markerad text in ett block där alla tecken, även wiki- and HTML-relaterade, visas som de står</value>
+  </data>
+  <data name="ExternalLinkTitle" xml:space="preserve">
+    <value>Infoga webbplats- eller e-postadress</value>
+  </data>
+  <data name="FileLinkTitle" xml:space="preserve">
+    <value>Infoga länk till fil eller bilaga</value>
+  </data>
+  <data name="H1Title" xml:space="preserve">
+    <value>Formatera markerad text som rubrik i 1:a nivån</value>
+  </data>
+  <data name="H2Title" xml:space="preserve">
+    <value>Formatera markerad text som rubrik i 2:a nivån</value>
+  </data>
+  <data name="H3Title" xml:space="preserve">
+    <value>Formatera markerad text som rubrik i 3:e nivån</value>
+  </data>
+  <data name="H4Title" xml:space="preserve">
+    <value>Formatera markerad text som rubrik i 4:e nivån</value>
+  </data>
+  <data name="HRTitle" xml:space="preserve">
+    <value>Infoga horisontell avskiljare</value>
+  </data>
+  <data name="ImageTitle2" xml:space="preserve">
+    <value>Infoga bild på sidan</value>
+  </data>
+  <data name="ItalicTitle" xml:space="preserve">
+    <value>Formatera markerad text i kursiv stil</value>
+  </data>
+  <data name="LineBreakTitle" xml:space="preserve">
+    <value>Infoga en enkel radbrytning</value>
+  </data>
+  <data name="MetaDescription" xml:space="preserve">
+    <value>Metabeskrivning</value>
+  </data>
+  <data name="MetaKeywords" xml:space="preserve">
+    <value>Metanyckelord</value>
+  </data>
+  <data name="NoBrTitle" xml:space="preserve">
+    <value>Inneslut markerad text i 'nobr'-block, som ignorerar radbrytningar</value>
+  </data>
+  <data name="NoWikiTitle" xml:space="preserve">
+    <value>Inneslut markerad text i 'nowiki'-block, som ignorerar wikimärkord</value>
+  </data>
+  <data name="OrderedListTitle" xml:space="preserve">
+    <value>Infoga en numrerad lista eller inneslut markerad text i en numrerad lista (1, 2, 3, ...)</value>
+  </data>
+  <data name="PageLinkTitle" xml:space="preserve">
+    <value>Infoga länk till wikisida</value>
+  </data>
+  <data name="SnippetsTitle" xml:space="preserve">
+    <value>Visa existerande fragment och infoga en på sidan</value>
+  </data>
+  <data name="SpecialTagsTitle" xml:space="preserve">
+    <value>Visa specialtaggar och infoga en på sidan</value>
+  </data>
+  <data name="StrikedTitle" xml:space="preserve">
+    <value>Formatera markerad text med överstruken stil</value>
+  </data>
+  <data name="SubscriptTitle" xml:space="preserve">
+    <value>Formatera markerad text med nedsänkt stil</value>
+  </data>
+  <data name="SuperscriptTitle" xml:space="preserve">
+    <value>Formatera markerad text med upphöjd stil</value>
+  </data>
+  <data name="SymbolsTitle" xml:space="preserve">
+    <value>Visa och infoga särskilda symboler</value>
+  </data>
+  <data name="UnderlinedTitle" xml:space="preserve">
+    <value>Formatera markerad text med understruken stil</value>
+  </data>
+  <data name="UnorderedListTitle" xml:space="preserve">
+    <value>Infoga en punktlista eller inneslut markerad text i en punktlista</value>
+  </data>
+  <data name="WrapperBoxTitle" xml:space="preserve">
+    <value>Inneslut markerad text in en omslagsruta</value>
   </data>
 </root>

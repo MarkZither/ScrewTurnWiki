@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelResource1.Text" xml:space="preserve">
     <value>Avbryt</value>
@@ -274,7 +274,7 @@
     <value />
   </data>
   <data name="lblMigrateUsersInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Obs&lt;/b&gt;: flytt av användarkonton kommer att återställa alla lösenord (ett epostmeddelande skickas till alla användare).</value>
+    <value>&lt;b&gt;Obs&lt;/b&gt;: flytt av användarkonton kommer att återställa alla lösenord (ett e-postmeddelande skickas till alla användare).</value>
   </data>
   <data name="lblMigrateUsersResource1.Text" xml:space="preserve">
     <value>Flytta användare och relaterade data</value>
@@ -294,7 +294,7 @@
   <data name="lblProviderConfigHelpResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="A" xml:space="preserve">
+  <data name="lblProviderDllResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblProviderNameResource1.Text" xml:space="preserve">

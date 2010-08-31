@@ -112,34 +112,34 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAddResource1.Text" xml:space="preserve">
-    <value>Add</value>
+    <value>Lägg till</value>
   </data>
   <data name="btnAddResource1.ToolTip" xml:space="preserve">
-    <value>Add the selected subject</value>
+    <value>Lägg till markerad grupp/användare</value>
   </data>
   <data name="btnRemoveResource1.Text" xml:space="preserve">
-    <value>Remove</value>
+    <value>Ta bort</value>
   </data>
   <data name="btnRemoveResource1.ToolTip" xml:space="preserve">
-    <value>Remove entries for the selected subject</value>
+    <value>Ta bort värden för markerad grupp/användare</value>
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save Permissions</value>
+    <value>Spara rättigheter</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save this Subject's permissions</value>
+    <value>Spara rättigheter för denna grupp/användare</value>
   </data>
   <data name="btnSearchResource1.Text" xml:space="preserve">
-    <value>Search</value>
+    <value>Sök</value>
   </data>
   <data name="btnSearchResource1.ToolTip" xml:space="preserve">
-    <value>Search for a User or Group to add</value>
+    <value>Sök efter en grupp/användare att lägga till</value>
   </data>
   <data name="lblAddResultResource1.Text" xml:space="preserve">
     <value />
@@ -148,7 +148,7 @@
     <value />
   </data>
   <data name="lblPermissionsForResource1.Text" xml:space="preserve">
-    <value>Permissions for:</value>
+    <value>Rättigheter för:</value>
   </data>
   <data name="lblSaveResultResource1.Text" xml:space="preserve">
     <value />
@@ -160,7 +160,7 @@
     <value />
   </data>
   <data name="lblSubjectsResource1.Text" xml:space="preserve">
-    <value>User Accounts and User Groups</value>
+    <value>Användarkonton och -grupper</value>
   </data>
   <data name="lstFoundSubjectsResource1.ToolTip" xml:space="preserve">
     <value />

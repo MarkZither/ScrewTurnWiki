@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnPreviewResource1.Text" xml:space="preserve">
     <value>Uppdatera förhandsgranskning</value>
@@ -199,16 +199,16 @@
     <value>Bildredigerare</value>
   </data>
   <data name="rdoJpegHighResource2.Text" xml:space="preserve">
-    <value>Jpeg 100%</value>
+    <value>JPEG 100%</value>
   </data>
   <data name="rdoJpegHighResource2.ToolTip" xml:space="preserve">
-    <value>Jpeg-format, högsta kvalitet</value>
+    <value>JPEG-format, högsta kvalitet</value>
   </data>
   <data name="rdoJpegMediumResource2.Text" xml:space="preserve">
-    <value>Jpeg 60%</value>
+    <value>JPEG 60%</value>
   </data>
   <data name="rdoJpegMediumResource2.ToolTip" xml:space="preserve">
-    <value>Jpeg-format, normal kvalitet</value>
+    <value>JPEG-format, normal kvalitet</value>
   </data>
   <data name="rdoPercentageResource2.Text" xml:space="preserve">
     <value>Relativ skalning</value>
@@ -223,7 +223,7 @@
     <value>Skala om bilden till en specifik pixelhöjd/-bredd</value>
   </data>
   <data name="rdoPngResource2.ToolTip" xml:space="preserve">
-    <value>Png-format (alphakanalen bevaras)</value>
+    <value>PNG-format (alphakanalen bevaras)</value>
   </data>
   <data name="txtHeightResource1.Text" xml:space="preserve">
     <value />
@@ -253,7 +253,7 @@
     <value>Stäng detta verktygsfält</value>
   </data>
   <data name="rdoPngResource2.Text" xml:space="preserve">
-    <value>Png</value>
+    <value>PNG</value>
   </data>
   <data name="lblRotateResource1.Text" xml:space="preserve">
     <value>Rotation</value>

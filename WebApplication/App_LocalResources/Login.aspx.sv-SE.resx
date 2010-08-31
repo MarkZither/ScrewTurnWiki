@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnLoginResource1.Text" xml:space="preserve">
     <value>Logga in</value>
@@ -160,7 +160,7 @@
     <value>Här kan du logga in till wikin. Om du inte har ett konto kan du skapa &lt;a href="Register.aspx" title="Skapa nytt konto"&gt;ett bytt&lt;/a&gt;.</value>
   </data>
   <data name="lblEmailResetResource1.Text" xml:space="preserve">
-    <value>Epostadress</value>
+    <value>E-postadress</value>
   </data>
   <data name="lblLogoutResource1.Text" xml:space="preserve">
     <value>du är inloggad. För att logga ut, klicka på knappen Logga ut.</value>
@@ -187,7 +187,7 @@
     <value>Återställ lösenord</value>
   </data>
   <data name="lblResetPasswordInformationResource1.Text" xml:space="preserve">
-    <value>Om du glömt ditt lösenord, ange ditt användarnamn &lt;b&gt;eller&lt;/b&gt; din epostadress och klicka på Återställ lösenord.&lt;br /&gt;Ett epostmeddelande kommer att skickas till dig med en länk för att återställa ditt lösenord.</value>
+    <value>Om du glömt ditt lösenord, ange ditt användarnamn &lt;b&gt;eller&lt;/b&gt; din e-postadress och klicka på Återställ lösenord.&lt;br /&gt;Ett e-postmeddelande kommer att skickas till dig med en länk för att återställa ditt lösenord.</value>
   </data>
   <data name="lblResetPasswordResource1.Text" xml:space="preserve">
     <value>Återställ lösenord</value>

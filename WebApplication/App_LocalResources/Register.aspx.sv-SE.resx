@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnRegisterResource1.Text" xml:space="preserve">
     <value>Skapa konto</value>
@@ -124,7 +124,7 @@
     <value>Klicka här för att skapa ett nytt konto</value>
   </data>
   <data name="cvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Epostadresserna är inte identiska</value>
+    <value>E-postadresserna är inte identiska</value>
   </data>
   <data name="cvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -133,7 +133,7 @@
     <value />
   </data>
   <data name="cvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Epostadresserna är inte identiska</value>
+    <value>E-postadresserna är inte identiska</value>
   </data>
   <data name="cvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -178,10 +178,10 @@
     <value>Synligt namn</value>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
-    <value>Epostadress</value>
+    <value>E-postadress</value>
   </data>
   <data name="lblEmail2Resource1.Text" xml:space="preserve">
-    <value>Epostadress (bekräfta)</value>
+    <value>E-postadress (bekräfta)</value>
   </data>
   <data name="lblPassword1Resource1.Text" xml:space="preserve">
     <value>Lösenord</value>
@@ -190,7 +190,7 @@
     <value>Lösenord (bekräfta)</value>
   </data>
   <data name="lblRegisterDescriptionResource1.Text" xml:space="preserve">
-    <value>Här kan du skapa ett nytt konto för denna wiki.&lt;br /&gt;&lt;b&gt;Obs&lt;/b&gt;: alla fält är obligatoriska. Epostadressen kommer endast vara synlig för administratörer.</value>
+    <value>Här kan du skapa ett nytt konto för denna wiki.&lt;br /&gt;&lt;b&gt;Obs&lt;/b&gt;: alla fält är obligatoriska. E-postadressen kommer endast vara synlig för administratörer.</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -214,7 +214,7 @@
     <value />
   </data>
   <data name="rfvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Epost måste anges</value>
+    <value>E-post måste anges</value>
   </data>
   <data name="rfvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -223,7 +223,7 @@
     <value />
   </data>
   <data name="rfvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Epost måste anges</value>
+    <value>E-post måste anges</value>
   </data>
   <data name="rfvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -268,7 +268,7 @@
     <value />
   </data>
   <data name="rxvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Ogiltig epostadress</value>
+    <value>Ogiltig e-postadress</value>
   </data>
   <data name="rxvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -304,13 +304,13 @@
     <value />
   </data>
   <data name="txtEmail1Resource1.ToolTip" xml:space="preserve">
-    <value>Ange din epostadress</value>
+    <value>Ange din e-postadress</value>
   </data>
   <data name="txtEmail2Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtEmail2Resource1.ToolTip" xml:space="preserve">
-    <value>Bekräfta epostadress</value>
+    <value>Bekräfta e-postadress</value>
   </data>
   <data name="txtPassword1Resource1.Text" xml:space="preserve">
     <value />

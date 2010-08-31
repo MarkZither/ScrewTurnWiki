@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAutoWikiUrlResource1.Text" xml:space="preserve">
     <value>ta reda på automatiskt</value>
@@ -130,7 +130,7 @@
     <value />
   </data>
   <data name="chkAllowScriptTagsResource1.Text" xml:space="preserve">
-    <value>Tillåt SCRIPT-element i WikiMarkup</value>
+    <value>Tillåt SCRIPT-element i wikikod</value>
   </data>
   <data name="chkAllowScriptTagsResource1.ToolTip" xml:space="preserve">
     <value />
@@ -247,7 +247,7 @@
     <value />
   </data>
   <data name="cvErrorsEmailsResource1.ErrorMessage" xml:space="preserve">
-    <value>Ogiltig epostadress</value>
+    <value>Ogiltig e-postadress</value>
   </data>
   <data name="cvErrorsEmailsResource1.Text" xml:space="preserve">
     <value />
@@ -292,7 +292,7 @@
     <value>Konfiguration</value>
   </data>
   <data name="lblContactEmailResource1.Text" xml:space="preserve">
-    <value>Epostadress till kontaktperson</value>
+    <value>E-postadress till kontaktperson</value>
   </data>
   <data name="lblContentConfigResource1.Text" xml:space="preserve">
     <value>Innehållskonfiguration</value>
@@ -319,7 +319,7 @@
     <value>Standardgrupp för användare</value>
   </data>
   <data name="lblErrorsEmailsResource1.Text" xml:space="preserve">
-    <value>Epostadresser för utskick av felmeddelanden (separeras med komman)</value>
+    <value>E-postadresser för utskick av felmeddelanden (separeras med komman)</value>
   </data>
   <data name="lblExtensionsAllowedForUploadResource2.Text" xml:space="preserve">
     <value>Filändelser tillåtna för uppladdning (separeras med komman, '*' tillåter alla filändelser)</value>
@@ -385,7 +385,7 @@
     <value>Välj...</value>
   </data>
   <data name="lblSenderEmailResource1.Text" xml:space="preserve">
-    <value>Epostadress, avsändare</value>
+    <value>E-postadress, avsändare</value>
   </data>
   <data name="lblSmtpAuthenticationResource1.Text" xml:space="preserve">
     <value>SMTP-användarnamn och -lösenord</value>
@@ -397,7 +397,7 @@
     <value />
   </data>
   <data name="lblUsedForEmailCommunicationsResource1.Text" xml:space="preserve">
-    <value>används i epostmeddelanden</value>
+    <value>används i e-postmeddelanden</value>
   </data>
   <data name="lblWikiTitleResource1.Text" xml:space="preserve">
     <value>Wikins namn</value>
@@ -406,7 +406,7 @@
     <value>Wikins URL</value>
   </data>
   <data name="ListItemResource1.Text" xml:space="preserve">
-    <value>(GMT-12:00) International Date Line West</value>
+    <value>(GMT-12:00) Internationella datumlinjen</value>
   </data>
   <data name="ListItemResource1.Value" xml:space="preserve">
     <value>-720</value>
@@ -418,19 +418,19 @@
     <value>-210</value>
   </data>
   <data name="ListItemResource11.Text" xml:space="preserve">
-    <value>(GMT-03:00) Greenland</value>
+    <value>(GMT-03:00) Grönland</value>
   </data>
   <data name="ListItemResource11.Value" xml:space="preserve">
     <value>-180</value>
   </data>
   <data name="ListItemResource12.Text" xml:space="preserve">
-    <value>(GMT-02:00) Mid-Atlantic</value>
+    <value>(GMT-02:00) Sydgeorgien</value>
   </data>
   <data name="ListItemResource12.Value" xml:space="preserve">
     <value>-120</value>
   </data>
   <data name="ListItemResource13.Text" xml:space="preserve">
-    <value>(GMT-01:00) Azores</value>
+    <value>(GMT-01:00) Azorerna</value>
   </data>
   <data name="ListItemResource13.Value" xml:space="preserve">
     <value>-60</value>
@@ -442,19 +442,19 @@
     <value>0</value>
   </data>
   <data name="ListItemResource15.Text" xml:space="preserve">
-    <value>(GMT+01:00) Central European</value>
+    <value>(GMT+01:00) Centraleuropa</value>
   </data>
   <data name="ListItemResource15.Value" xml:space="preserve">
     <value>60</value>
   </data>
   <data name="ListItemResource16.Text" xml:space="preserve">
-    <value>(GMT+02:00) Eastern European</value>
+    <value>(GMT+02:00) Östeuropa</value>
   </data>
   <data name="ListItemResource16.Value" xml:space="preserve">
     <value>120</value>
   </data>
   <data name="ListItemResource17.Text" xml:space="preserve">
-    <value>(GMT+03:00) Moscow, Baghdad</value>
+    <value>(GMT+03:00) Moskva, Bagdad</value>
   </data>
   <data name="ListItemResource17.Value" xml:space="preserve">
     <value>180</value>
@@ -472,7 +472,7 @@
     <value>240</value>
   </data>
   <data name="ListItemResource2.Text" xml:space="preserve">
-    <value>(GMT-11:00) Midway Island, Samoa</value>
+    <value>(GMT-11:00) Midwayöarna, Samoa</value>
   </data>
   <data name="ListItemResource2.Value" xml:space="preserve">
     <value>-660</value>
@@ -490,13 +490,13 @@
     <value>300</value>
   </data>
   <data name="ListItemResource22.Text" xml:space="preserve">
-    <value>(GMT+05:30) India</value>
+    <value>(GMT+05:30) Indien</value>
   </data>
   <data name="ListItemResource22.Value" xml:space="preserve">
     <value>330</value>
   </data>
   <data name="ListItemResource23.Text" xml:space="preserve">
-    <value>(GMT+05:45) Kathmandu</value>
+    <value>(GMT+05:45) Katmandu</value>
   </data>
   <data name="ListItemResource23.Value" xml:space="preserve">
     <value>345</value>
@@ -520,7 +520,7 @@
     <value>420</value>
   </data>
   <data name="ListItemResource27.Text" xml:space="preserve">
-    <value>(GMT+08:00) China Coast, Western Australia</value>
+    <value>(GMT+08:00) Hongkong, Västra Australien</value>
   </data>
   <data name="ListItemResource27.Value" xml:space="preserve">
     <value>480</value>
@@ -532,7 +532,7 @@
     <value>540</value>
   </data>
   <data name="ListItemResource29.Text" xml:space="preserve">
-    <value>(GMT+09:30) Central Australia</value>
+    <value>(GMT+09:30) Centrala Australien</value>
   </data>
   <data name="ListItemResource29.Value" xml:space="preserve">
     <value>570</value>
@@ -544,25 +544,25 @@
     <value>-600</value>
   </data>
   <data name="ListItemResource30.Text" xml:space="preserve">
-    <value>(GMT+10:00) Eastern Australia</value>
+    <value>(GMT+10:00) Östra Australien</value>
   </data>
   <data name="ListItemResource30.Value" xml:space="preserve">
     <value>600</value>
   </data>
   <data name="ListItemResource31.Text" xml:space="preserve">
-    <value>(GMT+11:00) Magadan, Solomon Island</value>
+    <value>(GMT+11:00) Magadan, Solomonöarna</value>
   </data>
   <data name="ListItemResource31.Value" xml:space="preserve">
     <value>660</value>
   </data>
   <data name="ListItemResource32.Text" xml:space="preserve">
-    <value>(GMT+12:00) New Zealand, Fiji</value>
+    <value>(GMT+12:00) Nya Zeeland, Fiji</value>
   </data>
   <data name="ListItemResource32.Value" xml:space="preserve">
     <value>720</value>
   </data>
   <data name="ListItemResource33.Text" xml:space="preserve">
-    <value>(GMT+12:45) Chatham Island NZ</value>
+    <value>(GMT+12:45) Chathamöarna</value>
   </data>
   <data name="ListItemResource33.Value" xml:space="preserve">
     <value>765</value>
@@ -574,13 +574,13 @@
     <value>780</value>
   </data>
   <data name="ListItemResource35.Text" xml:space="preserve">
-    <value>(GMT+14:00) Christmas Islands</value>
+    <value>(GMT+14:00) Julön</value>
   </data>
   <data name="ListItemResource35.Value" xml:space="preserve">
     <value>840</value>
   </data>
   <data name="ListItemResource36.Text" xml:space="preserve">
-    <value>Användare måste aktivera konton via epost</value>
+    <value>Användare måste aktivera konton via e-post</value>
   </data>
   <data name="ListItemResource36.Value" xml:space="preserve">
     <value>EMAIL</value>
@@ -604,31 +604,31 @@
     <value>-540</value>
   </data>
   <data name="ListItemResource5.Text" xml:space="preserve">
-    <value>(GMT-08:00) Pacific</value>
+    <value>(GMT-08:00) Los Angeles, Vancouver</value>
   </data>
   <data name="ListItemResource5.Value" xml:space="preserve">
     <value>-480</value>
   </data>
   <data name="ListItemResource6.Text" xml:space="preserve">
-    <value>(GMT-07:00) Mountain</value>
+    <value>(GMT-07:00) Klippiga bergen</value>
   </data>
   <data name="ListItemResource6.Value" xml:space="preserve">
     <value>-420</value>
   </data>
   <data name="ListItemResource7.Text" xml:space="preserve">
-    <value>(GMT-06:00) Central</value>
+    <value>(GMT-06:00) Centrala USA, Costa Rica</value>
   </data>
   <data name="ListItemResource7.Value" xml:space="preserve">
     <value>-360</value>
   </data>
   <data name="ListItemResource8.Text" xml:space="preserve">
-    <value>(GMT-05:00) Eastern</value>
+    <value>(GMT-05:00) New York, Havanna</value>
   </data>
   <data name="ListItemResource8.Value" xml:space="preserve">
     <value>-300</value>
   </data>
   <data name="ListItemResource9.Text" xml:space="preserve">
-    <value>(GMT-04:00) Atlantic</value>
+    <value>(GMT-04:00) Venezuela, Falklandsöarna</value>
   </data>
   <data name="ListItemResource9.Value" xml:space="preserve">
     <value>-240</value>
@@ -703,7 +703,7 @@
     <value />
   </data>
   <data name="revContactEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Ogiltig epostadress</value>
+    <value>Ogiltig e-postadress</value>
   </data>
   <data name="revContactEmailResource1.Text" xml:space="preserve">
     <value />
@@ -721,7 +721,7 @@
     <value />
   </data>
   <data name="revSenderEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Ogiltig epostadress</value>
+    <value>Ogiltig e-postadress</value>
   </data>
   <data name="revSenderEmailResource1.Text" xml:space="preserve">
     <value />
@@ -766,7 +766,7 @@
     <value />
   </data>
   <data name="rfvContactEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Kontaktepostadress måste anges</value>
+    <value>Kontaktadress måste anges</value>
   </data>
   <data name="rfvContactEmailResource1.Text" xml:space="preserve">
     <value />
@@ -1051,7 +1051,7 @@
     <value>Sammanfattning</value>
   </data>
   <data name="ListItemResource43.Value" xml:space="preserve">
-    <value>Summary</value>
+    <value>Sammanfattning</value>
   </data>
   <data name="ListItemResource44.Text" xml:space="preserve">
     <value>Inaktiv (RSS-flöden är inaktiverade)</value>
@@ -1069,7 +1069,7 @@
     <value>Generera sidnamn automatisk som standard</value>
   </data>
   <data name="lblIpHostFilterResource1.Text" xml:space="preserve">
-    <value>Tillåt redigering för dessa ip-adresser (kommaseparerade, använd '*' som jokertecken, exempel: 192.168.1.*)</value>
+    <value>Tillåt redigering för dessa IP-adresser (kommaseparerade, använd '*' som jokertecken, exempel: 192.168.1.*)</value>
   </data>
   <data name="chkEnableSectionAnchorsResource1.Text" xml:space="preserve">
     <value>Visa bokmärken för sidsektioner</value>

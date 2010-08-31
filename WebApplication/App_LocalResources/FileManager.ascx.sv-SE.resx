@@ -112,61 +112,61 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Avbryt</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnDeleteResource1.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Ta bort</value>
   </data>
   <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
-    <value>Delete this Item</value>
+    <value>Ta bort denna fil</value>
   </data>
   <data name="btnDeleteResource2.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Ta bort</value>
   </data>
   <data name="btnDeleteResource2.ToolTip" xml:space="preserve">
-    <value>Delete this Item</value>
+    <value>Ta bort denna fil</value>
   </data>
   <data name="btnNewDirectoryResource1.Text" xml:space="preserve">
-    <value>Create</value>
+    <value>Skapa</value>
   </data>
   <data name="btnNewDirectoryResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRenameResource1.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Byt namn</value>
   </data>
   <data name="btnRenameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnRenameResource2.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Byt namn</value>
   </data>
   <data name="btnRenameResource2.ToolTip" xml:space="preserve">
-    <value>Rename this Item</value>
+    <value>Byt namn på denna fil</value>
   </data>
   <data name="btnRenameResource3.Text" xml:space="preserve">
-    <value>Rename</value>
+    <value>Byt namn</value>
   </data>
   <data name="btnRenameResource3.ToolTip" xml:space="preserve">
-    <value>Rename this Item</value>
+    <value>Byt namn på denna fil</value>
   </data>
   <data name="btnUploadResource1.Text" xml:space="preserve">
-    <value>Upload</value>
+    <value>Ladda upp</value>
   </data>
   <data name="btnUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkOverwriteResource1.Text" xml:space="preserve">
-    <value>Overwrite existing file</value>
+    <value>Ersätt befintlig fil</value>
   </data>
   <data name="chkOverwriteResource1.ToolTip" xml:space="preserve">
     <value />
@@ -175,10 +175,10 @@
     <value />
   </data>
   <data name="lblDirectoryNameResource1.Text" xml:space="preserve">
-    <value>Directory Name</value>
+    <value>Katalognamn</value>
   </data>
   <data name="lblDownloadsResource1.Text" xml:space="preserve">
-    <value>Downloads</value>
+    <value>Nerladdningar</value>
   </data>
   <data name="lblItemResource1.Text" xml:space="preserve">
     <value />
@@ -187,13 +187,13 @@
     <value />
   </data>
   <data name="lblLinkResource1.Text" xml:space="preserve">
-    <value>Link</value>
+    <value>Länk</value>
   </data>
   <data name="lblManagePermissionsResource1.Text" xml:space="preserve">
-    <value>Manage Permissions</value>
+    <value>Rättighetshantering</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Namn</value>
   </data>
   <data name="lblNewDirectoryResultResource1.Text" xml:space="preserve">
     <value />
@@ -202,16 +202,16 @@
     <value />
   </data>
   <data name="lblNewDirectoryTitleResource1.Text" xml:space="preserve">
-    <value>Create New Directory</value>
+    <value>Skapa ny katalog</value>
   </data>
   <data name="lblNoListResource1.Text" xml:space="preserve">
-    <value>You cannot list the contents of this directory.</value>
+    <value>Du kan inte visa innehållet i denna katalog.</value>
   </data>
   <data name="lblNoListResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblRenameResource1.Text" xml:space="preserve">
-    <value>Rename file/directory</value>
+    <value>Byt namn på fil/katalog</value>
   </data>
   <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
@@ -226,16 +226,16 @@
     <value />
   </data>
   <data name="lblSizeResource1.Text" xml:space="preserve">
-    <value>Size</value>
+    <value>Storlek</value>
   </data>
   <data name="lblStringsResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblUploadFilesInfoResource1.Text" xml:space="preserve">
-    <value>You can upload files up to $1. Allowed file types are: $2.</value>
+    <value>Du kan ladda upp filer upp till $1. Tillåtna filtyper är: $2.</value>
   </data>
   <data name="lblUploadFilesResource1.Text" xml:space="preserve">
-    <value>Upload Files</value>
+    <value>Ladda upp filer</value>
   </data>
   <data name="lblUploadResultResource1.Text" xml:space="preserve">
     <value />

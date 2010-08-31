@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnConfirmResource1.Text" xml:space="preserve">
     <value>Bekräfta</value>
@@ -136,10 +136,10 @@
     <value>Klicka här för att spara ditt synliga namn</value>
   </data>
   <data name="btnSaveEmailResource1.Text" xml:space="preserve">
-    <value>Spara epostadress</value>
+    <value>Spara e-postadress</value>
   </data>
   <data name="btnSaveEmailResource1.ToolTip" xml:space="preserve">
-    <value>Klicka här för att spara din epostadress</value>
+    <value>Klicka här för att spara din e-postadress</value>
   </data>
   <data name="btnSaveLanguageResource1.Text" xml:space="preserve">
     <value>Spara</value>
@@ -160,7 +160,7 @@
     <value>Klicka här för att spara ditt lösenord</value>
   </data>
   <data name="cvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Epostadresser är inte identiska</value>
+    <value>E-postadresser är inte identiska</value>
   </data>
   <data name="cvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -169,7 +169,7 @@
     <value />
   </data>
   <data name="cvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Epostadresser är inte identiska</value>
+    <value>E-postadresser är inte identiska</value>
   </data>
   <data name="cvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -214,19 +214,19 @@
     <value>Välkommen till din användarprofil, </value>
   </data>
   <data name="lblDiscussionMessagesInfoResource2.Text" xml:space="preserve">
-    <value>Underrätta mig via epost varje gång det skapas ett nytt &lt;b&gt;meddelande&lt;/b&gt; för en sida i följande namnrymder (endast diskussionstrådar du har tillgång till):</value>
+    <value>Underrätta mig via e-post varje gång det skapas ett nytt &lt;b&gt;meddelande&lt;/b&gt; för en sida i följande namnrymder (endast diskussionstrådar du har tillgång till):</value>
   </data>
   <data name="lblDisplayNameResource1.Text" xml:space="preserve">
     <value>Synligt namn</value>
   </data>
   <data name="lblEditEmailPasswordResource1.Text" xml:space="preserve">
-    <value>Ändra synligt namn, epostadress och lösenord</value>
+    <value>Ändra synligt namn, e-postadress och lösenord</value>
   </data>
   <data name="lblEmail1Resource1.Text" xml:space="preserve">
-    <value>Epostadress</value>
+    <value>E-postadress</value>
   </data>
   <data name="lblEmail2Resource1.Text" xml:space="preserve">
-    <value>Epostadress (bekräfta)</value>
+    <value>E-postadress (bekräfta)</value>
   </data>
   <data name="lblGroupsListResource1.Text" xml:space="preserve">
     <value />
@@ -235,7 +235,7 @@
     <value>Du är medlem i följande grupper:</value>
   </data>
   <data name="lblInfoResource1.Text" xml:space="preserve">
-    <value>Här kan du ändra din användarprofil, såsom epostadress och lösenord. Du kan inte ändra ditt användarnamn.</value>
+    <value>Här kan du ändra din användarprofil, såsom e-postadress och lösenord. Du kan inte ändra ditt användarnamn.</value>
   </data>
   <data name="lblLanguageResultResource1.Text" xml:space="preserve">
     <value />
@@ -250,7 +250,7 @@
     <value>Nuvarande systeminställningar förhindrar förändringar av din personliga information.</value>
   </data>
   <data name="lblNotificationsResource1.Text" xml:space="preserve">
-    <value>Inställningar för epostutskick</value>
+    <value>Inställningar för e-postutskick</value>
   </data>
   <data name="lblNotificationsResultResource1.Text" xml:space="preserve">
     <value />
@@ -262,7 +262,7 @@
     <value>Gammalt lösenord</value>
   </data>
   <data name="lblPageChangesInfoResource2.Text" xml:space="preserve">
-    <value>Underrätta mig via epost varje gång en &lt;b&gt;sida&lt;/b&gt; i följande namnrymder uppdateras (endast sidor du har tillgång till):</value>
+    <value>Underrätta mig via e-post varje gång en &lt;b&gt;sida&lt;/b&gt; i följande namnrymder uppdateras (endast sidor du har tillgång till):</value>
   </data>
   <data name="lblPassword1Resource1.Text" xml:space="preserve">
     <value>Lösenord</value>
@@ -322,7 +322,7 @@
     <value />
   </data>
   <data name="rfvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Epostadress måste anges</value>
+    <value>E-postadress måste anges</value>
   </data>
   <data name="rfvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -331,7 +331,7 @@
     <value />
   </data>
   <data name="rfvEmail2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Epostadress måste anges</value>
+    <value>E-postadress måste anges</value>
   </data>
   <data name="rfvEmail2Resource1.Text" xml:space="preserve">
     <value />
@@ -376,7 +376,7 @@
     <value />
   </data>
   <data name="rxvEmail1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Ogiltig epostadress</value>
+    <value>Ogiltig e-postadress</value>
   </data>
   <data name="rxvEmail1Resource1.Text" xml:space="preserve">
     <value />
@@ -403,13 +403,13 @@
     <value />
   </data>
   <data name="txtEmail1Resource1.ToolTip" xml:space="preserve">
-    <value>Ange din epostadress här</value>
+    <value>Ange din e-postadress här</value>
   </data>
   <data name="txtEmail2Resource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtEmail2Resource1.ToolTip" xml:space="preserve">
-    <value>Bekräfta din epostadress här</value>
+    <value>Bekräfta din e-postadress här</value>
   </data>
   <data name="txtOldPasswordResource1.Text" xml:space="preserve">
     <value />
