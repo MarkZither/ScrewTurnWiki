@@ -190,7 +190,7 @@
     <value>Rigenera</value>
   </data>
   <data name="btnRebuildResource2.ToolTip" xml:space="preserve">
-    <value>Rigenera</value>
+    <value>Rigenera l'indice</value>
   </data>
   <data name="lblAdminHomeResource1.Text" xml:space="preserve">
     <value>Home Amministrazione</value>
