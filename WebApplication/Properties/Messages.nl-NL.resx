@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnchorTitle2" xml:space="preserve">
     <value>Insert a new anchor or a link to an existing anchor</value>
@@ -124,7 +124,7 @@
     <value>Style selected text as bold</value>
   </data>
   <data name="CodeEscapedTitle" xml:space="preserve">
-    <value>Set selected text as a block of code</value>
+    <value>Zet geselecteerde tekst als een codeblok</value>
   </data>
   <data name="CodeInlineTitle" xml:space="preserve">
     <value>Set selected text as inline code</value>
@@ -136,25 +136,25 @@
     <value>Wrap selected text in an 'escape' block that escapes all wiki- and HTML-related characters</value>
   </data>
   <data name="ExternalLinkTitle" xml:space="preserve">
-    <value>Insert a link to a website or email address</value>
+    <value>Voeg een link naar website of email adres toe</value>
   </data>
   <data name="FileLinkTitle" xml:space="preserve">
-    <value>Insert a link to a file or attachment</value>
+    <value>Voeg een link naar bestand of attachment toe</value>
   </data>
   <data name="H1Title" xml:space="preserve">
-    <value>Set selected text as level-1 header</value>
+    <value>Maak van geselecteerde tekst een level-1 kop</value>
   </data>
   <data name="H2Title" xml:space="preserve">
-    <value>Set selected text as level-2 header</value>
+    <value>Maak van geselecteerde tekst een level-2 kop</value>
   </data>
   <data name="H3Title" xml:space="preserve">
-    <value>Set selected text as level-3 header</value>
+    <value>Maak van geselecteerde tekst een level-3 kop</value>
   </data>
   <data name="H4Title" xml:space="preserve">
-    <value>Set selected text as level-4 header</value>
+    <value>Maak van geselecteerde tekst een level-4 kop</value>
   </data>
   <data name="HRTitle" xml:space="preserve">
-    <value>Insert a horizontal ruler (separator)</value>
+    <value>Voeg horizontale lijn (scheidingslijn) toe</value>
   </data>
   <data name="ImageTitle2" xml:space="preserve">
     <value>Insert a picture in the page</value>
@@ -175,10 +175,10 @@
     <value>Insert an ordered list or wrap selected text in an ordered list (1, 2, 3, ...)</value>
   </data>
   <data name="PageLinkTitle" xml:space="preserve">
-    <value>Insert a link to a wiki page</value>
+    <value>Voeg een link naar een wiki pagina toe</value>
   </data>
   <data name="SnippetsTitle" xml:space="preserve">
-    <value>View existing snippets and insert one in the page</value>
+    <value>Bekijk bestaande fragmenten en voeg een toe op de pagina</value>
   </data>
   <data name="SpecialTagsTitle" xml:space="preserve">
     <value>View special tags and insert one in the page</value>
@@ -187,13 +187,13 @@
     <value>Style selected text as strike-through</value>
   </data>
   <data name="SubscriptTitle" xml:space="preserve">
-    <value>Set selected text as subscript</value>
+    <value>Geselecteerde tekst als subscript</value>
   </data>
   <data name="SuperscriptTitle" xml:space="preserve">
-    <value>Set selected text as superscript</value>
+    <value>Geselecteerde tekst als superscript</value>
   </data>
   <data name="SymbolsTitle" xml:space="preserve">
-    <value>View and insert special symbols</value>
+    <value>Bekijken en toevoegen van speciale symbolen</value>
   </data>
   <data name="UnderlinedTitle" xml:space="preserve">
     <value>Underline selected text</value>
@@ -205,7 +205,7 @@
     <value>Wrap selected text in a 'box'</value>
   </data>
   <data name="ChangeComment" xml:space="preserve">
-    <value>Change Comment</value>
+    <value>Wijzig Comment</value>
   </data>
   <data name="MetaDescription" xml:space="preserve">
     <value>Meta Description</value>
@@ -217,14 +217,14 @@
     <value>Auto-update available</value>
   </data>
   <data name="NAccountsDeleted" xml:space="preserve">
-    <value>$ accounts deleted</value>
+    <value>$ accounts verwijderd</value>
     <comment>As in "3 accounts deleted"</comment>
   </data>
   <data name="Formatted" xml:space="preserve">
-    <value>formatted</value>
+    <value>geformatteerd</value>
   </data>
   <data name="NoPagesToMigrate" xml:space="preserve">
-    <value>No pages to migrate</value>
+    <value>Geen pagina's om te migreren</value>
   </data>
   <data name="NoProvidersToUpdate" xml:space="preserve">
     <value>No Providers to update</value>
@@ -233,22 +233,22 @@
     <value>Providers updated, please restart the wiki (Admin Home tab)</value>
   </data>
   <data name="BulkMigrationCompleted" xml:space="preserve">
-    <value>Bulk migration completed</value>
+    <value>Bulk migratie afgerond</value>
   </data>
   <data name="BulkMigrationCompletedWithErrors" xml:space="preserve">
-    <value>Bulk migration completed with errors, check the log</value>
+    <value>Bulk migratie afgerond met fouten, controleer de log</value>
   </data>
   <data name="BulkRebindCompleted" xml:space="preserve">
-    <value>Bulk rebind completed</value>
+    <value>Bulk rebind afgerond</value>
   </data>
   <data name="NoCategories" xml:space="preserve">
-    <value>No Categories selected</value>
+    <value>Geen Categorieen  geselecteerd</value>
   </data>
   <data name="NoPages" xml:space="preserve">
     <value>No Pages to rebind</value>
   </data>
   <data name="InvalidFileName" xml:space="preserve">
-    <value>Invalid file name</value>
+    <value>Ongeldige bestandsnaam</value>
   </data>
   <data name="OrderedList" xml:space="preserve">
     <value>Ordered List</value>
@@ -257,7 +257,7 @@
     <value>Unordered List</value>
   </data>
   <data name="LinkToThisSection" xml:space="preserve">
-    <value>Link to this Section</value>
+    <value>Link naar deze Sectie</value>
   </data>
   <data name="NoBr" xml:space="preserve">
     <value>NoBR tag</value>
@@ -266,10 +266,10 @@
     <value>Select and delete</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Fout</value>
   </data>
   <data name="NewVersion" xml:space="preserve">
-    <value>New version:</value>
+    <value>Nieuwe versie:</value>
   </data>
   <data name="UpToDate" xml:space="preserve">
     <value>Up-to-date</value>
@@ -287,163 +287,163 @@
     <value>Escaped Block Code</value>
   </data>
   <data name="HR" xml:space="preserve">
-    <value>Horizontal Ruler</value>
+    <value>Horizontale Lijn</value>
   </data>
   <data name="Snippets" xml:space="preserve">
-    <value>Snippets</value>
+    <value>Fragmenten</value>
   </data>
   <data name="Symbols" xml:space="preserve">
-    <value>Special Symbols</value>
+    <value>Speciale Symbolen</value>
   </data>
   <data name="WrapperBox" xml:space="preserve">
     <value>Wrapper Box</value>
   </data>
   <data name="UserTitle" xml:space="preserve">
-    <value>User's Details</value>
+    <value>Gebruiker Details</value>
   </data>
   <data name="CouldNotSaveDisplayName" xml:space="preserve">
-    <value>Could not save Display Name</value>
+    <value>Kon niet weergavenaam hernoemen</value>
   </data>
   <data name="DisplayNameSaved" xml:space="preserve">
-    <value>Display Name saved</value>
+    <value>Weergavenaam bewaard</value>
   </data>
   <data name="UserDeletedMessage" xml:space="preserve">
     <value>##USER## deleted a message on the discussion of ##PAGE##.</value>
   </data>
   <data name="UserDeletedPage" xml:space="preserve">
-    <value>##USER## deleted the page ##PAGE##.</value>
+    <value>##USER## heeft de pagina  ##PAGE## verwijderd.</value>
   </data>
   <data name="UserEditedMessage" xml:space="preserve">
     <value>##USER## edited a message on the discussion of ##PAGE##.</value>
   </data>
   <data name="UserPostedMessage" xml:space="preserve">
-    <value>##USER## posted a message on the discussion of ##PAGE##.</value>
+    <value>##USER## plaatste een bericht op de discussie van ##PAGE##.</value>
   </data>
   <data name="UserRenamedPage" xml:space="preserve">
-    <value>##USER## renamed the page ##PAGE##.</value>
+    <value>##USER## heeft de pagina ##PAGE## hernoemd.</value>
   </data>
   <data name="UserRolledBackPage" xml:space="preserve">
-    <value>##USER## rolled back the page ##PAGE##.</value>
+    <value>##USER## heeft een eerdere versie tergezet van de pagina ##PAGE##.</value>
   </data>
   <data name="UserUpdatedPage" xml:space="preserve">
     <value>##USER## updated the page ##PAGE##.</value>
   </data>
   <data name="CreateThisPage" xml:space="preserve">
-    <value>Create this Page</value>
+    <value>Maak deze Pagina</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Ja</value>
   </data>
   <data name="Corrupted" xml:space="preserve">
-    <value>Corrupted</value>
+    <value>Corrupt</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="SelectYourLanguage" xml:space="preserve">
-    <value>Select your language</value>
+    <value>Kies uw taal</value>
   </data>
   <data name="PreferencesSaved" xml:space="preserve">
-    <value>Preferences saved</value>
+    <value>Voorkeuren bewaard</value>
   </data>
   <data name="GoToYourProfile" xml:space="preserve">
-    <value>Go to your Profile</value>
+    <value>Ga naar uw Profiel</value>
   </data>
   <data name="Guest" xml:space="preserve">
-    <value>Guest</value>
+    <value>Bezoeker</value>
   </data>
   <data name="CouldNotRenameNamespace" xml:space="preserve">
-    <value>Could not rename Namespace</value>
+    <value>Kon niet Namespace hernoemen</value>
   </data>
   <data name="NamespaceRenamed" xml:space="preserve">
-    <value>Namespace renamed</value>
+    <value>Namespace hernoemd</value>
   </data>
   <data name="SelectTemplate" xml:space="preserve">
     <value>Select Template...</value>
   </data>
   <data name="Action_Man_Snips_Temps" xml:space="preserve">
-    <value>Manage Snippets and Templates</value>
+    <value>Beheer Fragmenten en Templates</value>
   </data>
   <data name="CouldNotCreateTemplate" xml:space="preserve">
-    <value>Could not create Template</value>
+    <value>Kon Template niet maken </value>
   </data>
   <data name="CouldNotDeleteTemplate" xml:space="preserve">
-    <value>Could not delete template</value>
+    <value>Kon Fragment niet verwijderen</value>
   </data>
   <data name="CouldNotSaveTemplate" xml:space="preserve">
     <value>Could not save Template</value>
   </data>
   <data name="Snippet" xml:space="preserve">
-    <value>Snippet</value>
+    <value>Fragment</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Template</value>
   </data>
   <data name="TemplateCreated" xml:space="preserve">
-    <value>Template created</value>
+    <value>Template gemaakt</value>
   </data>
   <data name="TemplateDeleted" xml:space="preserve">
-    <value>Template deleted</value>
+    <value>Template verwijderd</value>
   </data>
   <data name="TemplateSaved" xml:space="preserve">
-    <value>Template saved</value>
+    <value>Template bewaard</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>Created by</value>
+    <value>Gemaakt door</value>
   </data>
   <data name="CreatedOn" xml:space="preserve">
-    <value>Created on</value>
+    <value>Gemaakt op</value>
   </data>
   <data name="ModifiedBy" xml:space="preserve">
-    <value>Modified by</value>
+    <value>Aangepast door</value>
   </data>
   <data name="ModifiedOn" xml:space="preserve">
-    <value>Modified on</value>
+    <value>Aangepast op</value>
   </data>
   <data name="AMessageWasSentCheckInbox" xml:space="preserve">
-    <value>A message was sent to your email address, please check your inbox.</value>
+    <value>Een  bericht is verzonden naar uw email addres, controleer s.v.p. uw inbox.</value>
   </data>
   <data name="NewPasswordSavedPleaseLogin" xml:space="preserve">
-    <value>New password saved, please &lt;a href="Login.aspx" title="Login"&gt;Login&lt;/a&gt;</value>
+    <value>Nieuw wachtwoord is bewaard, AUB &lt;a href="Login.aspx" title="Inloggen"&gt;Inloggen&lt;/a&gt;</value>
   </data>
   <data name="ResetPassword" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>Reset Wachtwoord </value>
   </data>
   <data name="AMessageHasBeenDeletedBy" xml:space="preserve">
-    <value>A message with subject "##SUBJECT##" has been deleted by</value>
+    <value>Een bericht met onderwerp "##SUBJECT##" is verwijderd door </value>
   </data>
   <data name="AMessageHasBeenEditedBy" xml:space="preserve">
-    <value>A message with subject "##SUBJECT##" has been edited by</value>
+    <value>Een bericht met onderwerp "##SUBJECT##" is bewerkt door </value>
   </data>
   <data name="AMessageHasBeenPostedBy" xml:space="preserve">
-    <value>A message with subject "##SUBJECT##" has been posted by</value>
+    <value>Een bericht met onderwerp "##SUBJECT##" is geplaatst door </value>
   </data>
   <data name="Discussion" xml:space="preserve">
-    <value>Discussion</value>
+    <value>Discussie</value>
   </data>
   <data name="DiscussionUpdates" xml:space="preserve">
-    <value>Discussion Updates</value>
+    <value>Discussie Updates</value>
   </data>
   <data name="RecentDiscussionUpdates" xml:space="preserve">
-    <value>Recent Discussion Updates</value>
+    <value>Recente Discussie Updates</value>
   </data>
   <data name="ApproveRejectDraft" xml:space="preserve">
-    <value>Approve/Reject Draft</value>
+    <value>Goedkeuren /Afwijzen Kladversie</value>
   </data>
   <data name="Action_Man_1Disc" xml:space="preserve">
-    <value>Manage Page discussion</value>
+    <value>Beheer Pagina discussie</value>
   </data>
   <data name="Action_Pst_1Disc" xml:space="preserve">
-    <value>Post messages in Page discussion</value>
+    <value>Plaats berichten in Pagina discussie</value>
   </data>
   <data name="Action_Rd_1Disc" xml:space="preserve">
-    <value>Read Page discussion</value>
+    <value>Lees Pagina discussie</value>
   </data>
   <data name="Action_Man_Perms" xml:space="preserve">
-    <value>Manage Permissions</value>
+    <value>Beheer Toegangsrechten</value>
   </data>
   <data name="NotificationsStatusSaved" xml:space="preserve">
-    <value>Notification status saved</value>
+    <value>Notificatie status bewaard</value>
   </data>
   <data name="NoConfigurationRequired" xml:space="preserve">
     <value>No configuration is required for this provider</value>
@@ -461,7 +461,7 @@
     <value>Loaded ### Providers</value>
   </data>
   <data name="VoidOrInvalidFile" xml:space="preserve">
-    <value>Void or invalid file</value>
+    <value>Niet bestaande of ongeldig bestand</value>
   </data>
   <data name="CouldNotDeleteDll" xml:space="preserve">
     <value>Could not delete DLL</value>
@@ -476,7 +476,7 @@
     <value>The Provider rejected the Configuration data</value>
   </data>
   <data name="CouldNotCreateNavPath" xml:space="preserve">
-    <value>Could not create Navigation Path</value>
+    <value>Kon Navigatie Pad niet maken</value>
   </data>
   <data name="CouldNotDeleteNavPath" xml:space="preserve">
     <value>Could not delete Navigation Path</value>
@@ -485,79 +485,79 @@
     <value>Could not save Navigation Path</value>
   </data>
   <data name="NavPathCreated" xml:space="preserve">
-    <value>Navigation Path created</value>
+    <value>Navigatiepad gemaakt</value>
   </data>
   <data name="TheNavPathMustContain" xml:space="preserve">
-    <value>The Navigation Path must contain at least one Page</value>
+    <value>Navigation Pad moet tenminste een Pagina bevatten</value>
   </data>
   <data name="None" xml:space="preserve">
     <value>none</value>
   </data>
   <data name="ClickToEnableEmailNotifications" xml:space="preserve">
-    <value>Click to enable email notifications for this page</value>
+    <value>Klik om email notificaties voor deze pagina in te stellen</value>
   </data>
   <data name="EmailNotificationsAreActive" xml:space="preserve">
-    <value>Email notifications are active for this page - click to disable</value>
+    <value>Email notificaties zijn ingesteld voor deze pagina - klik om het uit te zetten</value>
   </data>
   <data name="CouldNotApproveDraft" xml:space="preserve">
-    <value>Could not approve draft</value>
+    <value>Kon niet kladversie goedkeuren</value>
   </data>
   <data name="DraftApproved" xml:space="preserve">
-    <value>Draft approved and saved</value>
+    <value>kladversie goedgekeurd en bewaard</value>
   </data>
   <data name="DraftRejected" xml:space="preserve">
-    <value>Draft rejected and discarded</value>
+    <value>Kladversie afgewezen en niet bewaard</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Kladversie</value>
   </data>
   <data name="ViewChanges" xml:space="preserve">
-    <value>view changes</value>
+    <value>bekijk wijzigingen</value>
   </data>
   <data name="DiffingPageTitle" xml:space="preserve">
     <value>Diffing &lt;i&gt;##PAGETITLE##&lt;/i&gt;, at revisions &lt;i&gt;##REV1##&lt;/i&gt; and &lt;i&gt;##REV2##&lt;/i&gt;</value>
   </data>
   <data name="CouldNotCreateSnippet" xml:space="preserve">
-    <value>Could not create Snippet</value>
+    <value>Kon Fragment niet maken </value>
   </data>
   <data name="CouldNotDeleteSnippet" xml:space="preserve">
-    <value>Could not delete Snippet</value>
+    <value>Kon Fragment niet verwijderen</value>
   </data>
   <data name="CouldNotSaveSnippet" xml:space="preserve">
-    <value>Could not save Snippet</value>
+    <value>Kon niet Fragment bewaren</value>
   </data>
   <data name="SnippetCreated" xml:space="preserve">
-    <value>Snippet created</value>
+    <value>Fragment gemaakt</value>
   </data>
   <data name="Parameters" xml:space="preserve">
     <value>Params</value>
   </data>
   <data name="CouldNotDeleteCategory" xml:space="preserve">
-    <value>Could not delete Category</value>
+    <value>Kon Categorie niet verwijderen</value>
   </data>
   <data name="CouldNotMergeCategories" xml:space="preserve">
     <value>Could not merge Categories</value>
   </data>
   <data name="CategoryCreated" xml:space="preserve">
-    <value>Category created</value>
+    <value>Categorie gemaakt</value>
   </data>
   <data name="CouldNotRenameCategory" xml:space="preserve">
-    <value>Could not rename Category</value>
+    <value>Kon niet Categoriew hernoemen</value>
   </data>
   <data name="CategoryAlreadyExists" xml:space="preserve">
-    <value>Category already exists</value>
+    <value>Categorie bestaat al</value>
   </data>
   <data name="CouldNotCreateCategory" xml:space="preserve">
-    <value>Could not create Category</value>
+    <value>Kon niet Categorie maken</value>
   </data>
   <data name="GoToCategory" xml:space="preserve">
-    <value>Go to Category</value>
+    <value>Ga naar Categorie</value>
   </data>
   <data name="Rollback" xml:space="preserve">
-    <value>Rollback</value>
+    <value>Terugrollen</value>
   </data>
   <data name="RollbackThisPage" xml:space="preserve">
-    <value>Rollback this Page to the previous version</value>
+    <value>Rol deze pagina terug naar een eerdere versie</value>
   </data>
   <data name="Administrate" xml:space="preserve">
     <value>Administrate</value>
@@ -578,25 +578,25 @@
     <value>Administration Tools</value>
   </data>
   <data name="ViewPageHistory" xml:space="preserve">
-    <value>View Page edit history</value>
+    <value>Bekijk bewerk historie</value>
   </data>
   <data name="Action_Man_Disc" xml:space="preserve">
-    <value>Manage Page discussions</value>
+    <value>Beheer Pagina discussies</value>
   </data>
   <data name="Action_Pst_Disc" xml:space="preserve">
-    <value>Post messages in Page discussions</value>
+    <value>Plaats berichten in Pagina discussie</value>
   </data>
   <data name="Action_Rd_Disc" xml:space="preserve">
-    <value>Read Page discussions</value>
+    <value>Lees Pagina discussies</value>
   </data>
   <data name="CouldNotDeletePage" xml:space="preserve">
-    <value>Could not delete Page</value>
+    <value>Kon Pagina niet verwijderen</value>
   </data>
   <data name="AllMessagesDeleted" xml:space="preserve">
-    <value>All Messages deleted</value>
+    <value>Alle berichten verwijderd</value>
   </data>
   <data name="CouldNotDeleteOneOrMoreMessages" xml:space="preserve">
-    <value>Could not delete one or more Messages</value>
+    <value>Kon niet een of meer Berichten verwijderen</value>
   </data>
   <data name="CouldNotDeletePageBackups" xml:space="preserve">
     <value>Could not delete Page backups</value>
@@ -605,10 +605,10 @@
     <value>Could not rollback Page</value>
   </data>
   <data name="PageRolledBack" xml:space="preserve">
-    <value>Page rolled back</value>
+    <value>Pagina is teruggerold</value>
   </data>
   <data name="CouldNotRenamePage" xml:space="preserve">
-    <value>Could not rename Page</value>
+    <value>Kon Pagina niet hernoemen</value>
   </data>
   <data name="PageRenamedCouldNotCreateShadowPage" xml:space="preserve">
     <value>Page renamed, but could not create shadow Page</value>
@@ -617,25 +617,25 @@
     <value>Page renamed, but could not set the content for the shadow Page</value>
   </data>
   <data name="GoToPageHistory" xml:space="preserve">
-    <value>Go to Page History</value>
+    <value>Ga naar Pagina Historie</value>
   </data>
   <data name="GoToPageDiscussion" xml:space="preserve">
-    <value>Go to Page Discussion</value>
+    <value>Ga naar Pagina Discussie</value>
   </data>
   <data name="GoToPage" xml:space="preserve">
-    <value>Go to Page</value>
+    <value>Ga naar Pagina</value>
   </data>
   <data name="CouldNotDeletePermissions" xml:space="preserve">
     <value>Could not delete permissions</value>
   </data>
   <data name="GroupCreatedCouldNotStorePermissions" xml:space="preserve">
-    <value>Group created, but could not store permissions</value>
+    <value>Groep gemaakt, maar toegangsrechten konden niet worden bewaard</value>
   </data>
   <data name="GroupSavedCouldNotDeleteOldPermissions" xml:space="preserve">
-    <value>Group saved, but could not delete old permissions</value>
+    <value>Groep verwijderd, maar kon niet de oude toegangsrechten verwijderen</value>
   </data>
   <data name="GroupSavedCouldNotStoreNewPermissions" xml:space="preserve">
-    <value>Group saved, but could not store new permissions</value>
+    <value>Groep bewaard, maar kon niet de nieuwe toegangsrechten bewaren</value>
   </data>
   <data name="PermissionsDeletedCouldNotDeleteGroup" xml:space="preserve">
     <value>Permissions deleted, but could not delete Group</value>
@@ -647,10 +647,10 @@
     <value>Could not set the Theme for the Namespace</value>
   </data>
   <data name="NamespaceCreatedCouldNotCreateDefaultPage" xml:space="preserve">
-    <value>Namespace created, but could not create the default Page</value>
+    <value>Namespace gemaakt, but could not create the default Page</value>
   </data>
   <data name="NamespaceCreatedCouldNotSetDefaultPage" xml:space="preserve">
-    <value>Namespace created, but could not set its default Page</value>
+    <value>Namespace gemaakt, but could not set its default Page</value>
   </data>
   <data name="NamespaceCreatedCouldNotSetTheme" xml:space="preserve">
     <value>Namespace saved, but could not set its Theme</value>
@@ -680,13 +680,13 @@
     <value>Permissions deleted, but could not delete User</value>
   </data>
   <data name="CouldNotDeleteNamespace" xml:space="preserve">
-    <value>Could not delete Namespace</value>
+    <value>Kon Namespace niet verwijderen</value>
   </data>
   <data name="NamespaceDeleted" xml:space="preserve">
-    <value>Namespace deleted</value>
+    <value>Namespace verwijderd</value>
   </data>
   <data name="NamespaceSaved" xml:space="preserve">
-    <value>Namespace saved</value>
+    <value>Namespace bewaard</value>
   </data>
   <data name="CouldNotStorePermissions" xml:space="preserve">
     <value>Could not store permissions</value>
@@ -695,37 +695,37 @@
     <value>Group</value>
   </data>
   <data name="GoToMainPage" xml:space="preserve">
-    <value>Go to the Main Page</value>
+    <value>Ga naar Hoofdpagina</value>
   </data>
   <data name="Action_Crt_Dirs" xml:space="preserve">
-    <value>Create Directories</value>
+    <value>Maak Folders</value>
   </data>
   <data name="Action_Crt_Pg" xml:space="preserve">
-    <value>Create Pages</value>
+    <value>Maak Pagina's</value>
   </data>
   <data name="Action_Del_1Attn" xml:space="preserve">
-    <value>Delete Attachments</value>
+    <value>Verwijder Bijlagen</value>
   </data>
   <data name="Action_Del_Attn" xml:space="preserve">
-    <value>Delete Attachments</value>
+    <value>Verwijder Bijlagen</value>
   </data>
   <data name="Action_Del_Dirs" xml:space="preserve">
-    <value>Delete Directories</value>
+    <value>Verwijder Folders</value>
   </data>
   <data name="Action_Del_Files" xml:space="preserve">
-    <value>Delete Files</value>
+    <value>Verwijder Files</value>
   </data>
   <data name="Action_Del_Pg" xml:space="preserve">
-    <value>Delete Pages</value>
+    <value>Verwijder Pagina's</value>
   </data>
   <data name="Action_Down_1Attn" xml:space="preserve">
-    <value>Download Attachments</value>
+    <value>Download Bijlagen</value>
   </data>
   <data name="Action_Down_Attn" xml:space="preserve">
-    <value>Download Attachments</value>
+    <value>Download Bijlagen</value>
   </data>
   <data name="Action_Down_Files" xml:space="preserve">
-    <value>Download Files</value>
+    <value>Download Bestanden</value>
   </data>
   <data name="Action_FullControl" xml:space="preserve">
     <value>Full Control</value>
@@ -734,94 +734,94 @@
     <value>List Contents</value>
   </data>
   <data name="Action_Man_1Cat" xml:space="preserve">
-    <value>Manage Categories</value>
+    <value>Beheer Categorieën</value>
   </data>
   <data name="Action_Man_1Pg" xml:space="preserve">
-    <value>Manage Page</value>
+    <value>Beheer Pagina </value>
   </data>
   <data name="Action_Man_Acc" xml:space="preserve">
-    <value>Manage User Accounts</value>
+    <value>Beheer Gebruiker Accounts</value>
   </data>
   <data name="Action_Man_Cat" xml:space="preserve">
-    <value>Manage Categories</value>
+    <value>Beheer Categorieën</value>
   </data>
   <data name="Action_Man_Conf" xml:space="preserve">
-    <value>Manage Configuration</value>
+    <value>Beheer  Configuratie</value>
   </data>
   <data name="Action_Man_Files" xml:space="preserve">
-    <value>Manage Files and Directories</value>
+    <value>Beheer Bestanden en Folders</value>
   </data>
   <data name="Action_Man_Grp" xml:space="preserve">
-    <value>Manage User Groups</value>
+    <value>Beheer Gebruikersgroepen</value>
   </data>
   <data name="Action_Man_MetaFiles" xml:space="preserve">
     <value>Manage Meta-Files</value>
   </data>
   <data name="Action_Man_NavPath" xml:space="preserve">
-    <value>Manage Navigation Paths</value>
+    <value>Beheer Navigatie Paden</value>
   </data>
   <data name="Action_Man_Ns" xml:space="preserve">
-    <value>Manage Namespaces</value>
+    <value>Beheer Namespaces</value>
   </data>
   <data name="Action_Man_Pg" xml:space="preserve">
-    <value>Manage Pages</value>
+    <value>Beheer Pagina's</value>
   </data>
   <data name="Action_Man_PgCat" xml:space="preserve">
-    <value>Manage Pages and Categories</value>
+    <value>Beheer Pagina's and Categorieën</value>
   </data>
   <data name="Action_Man_Prov" xml:space="preserve">
-    <value>Manage Providers</value>
+    <value>Beheer Providers</value>
   </data>
   <data name="Action_Mod_1Pg" xml:space="preserve">
-    <value>Modify Page</value>
+    <value>Wijzig Pagina</value>
   </data>
   <data name="Action_Mod_Pg" xml:space="preserve">
-    <value>Modify Pages</value>
+    <value>Wijzig Pagina's</value>
   </data>
   <data name="Action_Rd_1Pg" xml:space="preserve">
-    <value>Read Page</value>
+    <value>Lees Pagina</value>
   </data>
   <data name="Action_Rd_Pg" xml:space="preserve">
-    <value>Read Pages</value>
+    <value>Lees Pagina's</value>
   </data>
   <data name="Action_Up_1Attn" xml:space="preserve">
-    <value>Upload Attachments</value>
+    <value>Upload Bijlagen</value>
   </data>
   <data name="Action_Up_Attn" xml:space="preserve">
-    <value>Upload Attachments</value>
+    <value>Upload Bijlagen</value>
   </data>
   <data name="Action_Up_Files" xml:space="preserve">
-    <value>Upload Files</value>
+    <value>Upload Bestanden</value>
   </data>
   <data name="CouldNotCreateGroup" xml:space="preserve">
-    <value>Could not create Group</value>
+    <value>Kon niet Groep maken</value>
   </data>
   <data name="CouldNotUpdateGroup" xml:space="preserve">
     <value>Could not update group</value>
   </data>
   <data name="GroupCreated" xml:space="preserve">
-    <value>Group created</value>
+    <value>Groep gemaakt</value>
   </data>
   <data name="GroupDeleted" xml:space="preserve">
-    <value>Group deleted</value>
+    <value>Groep verwijderd</value>
   </data>
   <data name="GroupUpdated" xml:space="preserve">
-    <value>Group updated</value>
+    <value>Groep aangepast</value>
   </data>
   <data name="CouldNotSaveFile" xml:space="preserve">
-    <value>Could not save file</value>
+    <value>Kon bestand niet bewaren</value>
   </data>
   <data name="NoSimilarPages" xml:space="preserve">
-    <value>There are no Pages with similar name or title.</value>
+    <value>Er zijn geen pagina's met zelfde naam of titel.</value>
   </data>
   <data name="SearchStats" xml:space="preserve">
-    <value>This search, performed through &lt;b&gt;{0}&lt;/b&gt; (&lt;b&gt;{1} documents&lt;/b&gt;, &lt;b&gt;{2} words&lt;/b&gt;), completed in &lt;b&gt;{3:N1} seconds&lt;/b&gt; and yielded &lt;b&gt;{4} results&lt;/b&gt;.</value>
+    <value>Deze zoekaktie, gedaan door &lt;b&gt;{0}&lt;/b&gt; (&lt;b&gt;{1} documenten&lt;/b&gt;, &lt;b&gt;{2} woorden&lt;/b&gt;), is gereed in &lt;b&gt;{3:N1} seconden&lt;/b&gt; en leverde &lt;b&gt;{4} resultaten&lt;/b&gt;.</value>
   </data>
   <data name="InvalidDisplayName" xml:space="preserve">
-    <value>Invalid Display Name</value>
+    <value>Ongeldige Weergavenaam</value>
   </data>
   <data name="CouldNotCreateUser" xml:space="preserve">
-    <value>Could not create User</value>
+    <value>Kon Gebruiker niet maken</value>
   </data>
   <data name="CouldNotUpdateUser" xml:space="preserve">
     <value>Could not update User</value>
@@ -830,67 +830,67 @@
     <value>User created</value>
   </data>
   <data name="UserUpdated" xml:space="preserve">
-    <value>User updated</value>
+    <value>Gebruiker bijgewerkt</value>
   </data>
   <data name="RootNamespace" xml:space="preserve">
     <value>&lt;root&gt;</value>
   </data>
   <data name="CouldNotCreateNamespace" xml:space="preserve">
-    <value>Could not create Namespace</value>
+    <value>Kon Namespace niet maken</value>
   </data>
   <data name="InvalidNamespaceName" xml:space="preserve">
     <value>Invalid Namespace name</value>
   </data>
   <data name="NamespaceCreated" xml:space="preserve">
-    <value>Namespace created</value>
+    <value>Namespace gemaakt</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Sluit</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>Attachments</value>
   </data>
   <data name="ThereAreAttachments" xml:space="preserve">
-    <value>There are files attached to this page</value>
+    <value>Er zijn attachment bij deze pagina</value>
   </data>
   <data name="NoSnippets" xml:space="preserve">
-    <value>No Snippets</value>
+    <value>Geen Fragmenten</value>
   </data>
   <data name="LinkTitleOptional" xml:space="preserve">
-    <value>Link Title (optional)</value>
+    <value>Link Titel (optional)</value>
   </data>
   <data name="UpLevel" xml:space="preserve">
     <value>Up one level</value>
   </data>
   <data name="CannotRenameItem" xml:space="preserve">
-    <value>Cannot rename the selected item</value>
+    <value>Kan geselecteerde item niet hernoemen</value>
   </data>
   <data name="CannotStoreFile" xml:space="preserve">
-    <value>Cannot store the file</value>
+    <value>Kan het bestand niet opslaan</value>
   </data>
   <data name="CannotCreateNewDirectory" xml:space="preserve">
-    <value>Cannot create new directory</value>
+    <value>Kan nieuwe Folder niet maken</value>
   </data>
   <data name="DiffColorKey" xml:space="preserve">
     <value>Color key: &lt;span style="background-color: #88CC33;"&gt;added text&lt;/span&gt; / &lt;span style="background-color: #FFDF66;"&gt;removed text&lt;/span&gt;.</value>
   </data>
   <data name="EarlierThisMonth" xml:space="preserve">
-    <value>Earlier this month</value>
+    <value>Eerder deze maand</value>
   </data>
   <data name="EarlierThisWeek" xml:space="preserve">
-    <value>Earlier this week</value>
+    <value>Eerder deze week</value>
   </data>
   <data name="LastMonth" xml:space="preserve">
     <value>Last month</value>
   </data>
   <data name="Older" xml:space="preserve">
-    <value>Older</value>
+    <value>Ouder</value>
   </data>
   <data name="Today" xml:space="preserve">
-    <value>Today</value>
+    <value>Vandaag</value>
   </data>
   <data name="Yesterday" xml:space="preserve">
-    <value>Yesterday</value>
+    <value>Gisteren</value>
   </data>
   <data name="LoginNoticeFile" xml:space="preserve">
     <value>Login Notice File</value>
@@ -995,7 +995,7 @@
     <value>Tekstbewerker grootte</value>
   </data>
   <data name="ThisIsAPreview" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: this is only a preview! You must click on the Save button to save the changes!</value>
+    <value>&lt;b&gt;Let op&lt;/b&gt;: dit is slechts een preview! U moet op de Bewaar knop klikken om wijzigingen te bewaren!</value>
   </data>
   <data name="AccessDeniedTitle" xml:space="preserve">
     <value>Toegang Geweigerd</value>
@@ -1372,7 +1372,7 @@
     <value>Aangepast</value>
   </data>
   <data name="NavPathAlreadyExists" xml:space="preserve">
-    <value>Navigatiepad bestaand al</value>
+    <value>Navigatiepad bestond al</value>
   </data>
   <data name="NavPathDeleted" xml:space="preserve">
     <value>Navigatiepad verwijderd</value>
@@ -1545,7 +1545,7 @@
     <value>Provider ontlaadt</value>
   </data>
   <data name="RecentPageUpdates" xml:space="preserve">
-    <value>Recente pagina bijwerkingen</value>
+    <value>Recente pagina Updates</value>
   </data>
   <data name="RedirectedFrom" xml:space="preserve">
     <value>Doorgestuurd vanaf</value>
@@ -1746,7 +1746,7 @@
     <value>Configuratiewizard</value>
   </data>
   <data name="WrongControlText" xml:space="preserve">
-    <value>Verkeerd control tekst</value>
+    <value>Verkeerde control tekst</value>
   </data>
   <data name="WrongParameters" xml:space="preserve">
     <value>Verkeerde parameters</value>
