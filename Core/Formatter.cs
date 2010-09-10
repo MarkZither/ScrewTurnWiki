@@ -2279,7 +2279,7 @@ namespace ScrewTurn.Wiki {
 					//sb.Append(Tools.UrlEncode(categories[i].FullName));
 					sb.Append(@"<a href=""");
 					UrlTools.BuildUrl(sb, "AllPages.aspx?Cat=", Tools.UrlEncode(categories[i].FullName));
-					sb.Append(@""" style=""font-size: ");
+					sb.Append(@""" class=""CloudLink"" style=""font-size: ");
 					sb.Append(ComputeSize((float)categories[i].Pages.Length / (float)tot * 100F).ToString());
 					sb.Append(@"px;"">");
 					sb.Append(NameTools.GetLocalName(categories[i].FullName));
