@@ -201,6 +201,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.ja-JP.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Messages.lv-LV.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.lv-LV.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Messages.pl-PL.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -215,6 +220,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.ro-RO.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Messages.sv-SE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.sv-SE.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Messages.uk-UA.designer.cs">
       <AutoGen>True</AutoGen>
@@ -1516,6 +1526,90 @@
     <Content Include="App_LocalResources\Search.aspx.fa-IR.resx" />
     <Content Include="App_LocalResources\Upload.aspx.fa-IR.resx" />
     <Content Include="App_LocalResources\User.aspx.fa-IR.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Admin.master.lv-LV.resx" />
+    <Content Include="App_LocalResources\Admin.master.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.lv-LV.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Category.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Category.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Default.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Default.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Error.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Error.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.lv-LV.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.sv-SE.resx" />
+    <Content Include="App_LocalResources\History.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\History.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Login.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Login.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.lv-LV.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.sv-SE.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.lv-LV.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.sv-SE.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.lv-LV.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Post.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Post.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Register.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Register.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Search.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Search.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\User.aspx.lv-LV.resx" />
+    <Content Include="App_LocalResources\User.aspx.sv-SE.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>
@@ -1562,6 +1656,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.ja-JP.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Messages.lv-LV.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.lv-LV.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.nb-NO.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -1602,6 +1700,10 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.sr-Latn-CS.designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Messages.sv-SE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.sv-SE.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.tr-TR.resx">
       <SubType>Designer</SubType>
