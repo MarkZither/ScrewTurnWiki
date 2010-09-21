@@ -71,9 +71,9 @@ might cause issues and make the application unusable and/or unstable.
     - "public" directory
     - "web.config" file.
 
- 6. Make sure your "web.config" file contains a "customErrors" section; if not, copy it from the default "web.config".
-
- 7. Copy all the selected files into TARGET_DIR.
+ 6. Copy all the selected files into TARGET_DIR.
+ 
+ 7. Make sure your "web.config" file contains a "customErrors" section; if not, copy it from the default "web.config".
 
  8. Delete "app_offline.htm".
 

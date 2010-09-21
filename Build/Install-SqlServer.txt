@@ -83,10 +83,10 @@ might cause issues and make the application unusable and/or unstable.
  6. Select all files in INPUT_DIR, ***except***:
     - "web.config" file.
 
- 7. Make sure your "web.config" file contains a "customErrors" section; if not, copy it from the default "web.config".
-
- 8. Copy all the selected files into TARGET_DIR.
-
+ 7. Copy all the selected files into TARGET_DIR.
+ 
+ 8. Make sure your "web.config" file contains a "customErrors" section; if not, copy it from the default "web.config".
+ 
  9. Delete "app_offline.htm".
 
 10. Navigate to the wiki using a web browser and verify that everything works properly, 
