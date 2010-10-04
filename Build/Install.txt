@@ -62,16 +62,16 @@ might cause issues and make the application unusable and/or unstable.
 
  3. Rename "app_online.htm" to "app_offline.htm": this will take the application offline.
 
- 4. Delete all the content of TARGET_DIR, ***except***:
+ 4. Delete all the contents (files and directories) of TARGET_DIR, ***except***:
     - "public" directory
     - "web.config" file
     - "app_offline.htm" file.
 
- 5. Select all files in INPUT_DIR, ***except***:
+ 5. Select all files and directories in INPUT_DIR, ***except***:
     - "public" directory
     - "web.config" file.
 
- 6. Copy all the selected files into TARGET_DIR.
+ 6. Copy all the selected files and directories into TARGET_DIR.
  
  7. Make sure your "web.config" file contains a "customErrors" section; if not, copy it from the default "web.config".
 

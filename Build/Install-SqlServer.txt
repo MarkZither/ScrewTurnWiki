@@ -67,30 +67,32 @@ minor adjustments. If you made modifications to the application, the following s
 might cause issues and make the application unusable and/or unstable.
 
  1. Navigate to TARGET_DIR and verify that the "public" directory only contains the "Plugins" directory.
+    If it contains other data, then your instance might be misconfigured as no data should be stored on the file system.
+	--> Look for help at our forum [1].
 
  2. Backup all the content of TARGET_DIR (seriously).
     Backup your database (seriously).
 
  3. Rename "app_online.htm" to "app_offline.htm": this will take the application offline.
 
- 4. Delete all the content of TARGET_DIR, ***except***:
+ 4. Delete all the contents (files and directories) of TARGET_DIR, ***except***:
     - "web.config" file
     - "app_offline.htm" file.
 
  5. Copy "SqlServerProviders.dll" from the distribution package into "TARGET_DIR\public\Plugins", 
     replacing the existing file.
 
- 6. Select all files in INPUT_DIR, ***except***:
+ 6. Select all files and directories in INPUT_DIR, ***except***:
     - "web.config" file.
 
- 7. Copy all the selected files into TARGET_DIR.
+ 7. Copy all the selected files and directories into TARGET_DIR.
  
  8. Make sure your "web.config" file contains a "customErrors" section; if not, copy it from the default "web.config".
  
  9. Delete "app_offline.htm".
 
 10. Navigate to the wiki using a web browser and verify that everything works properly, 
-    (the data providers, if the connection string is correct, will automatically update the required 
+    (data providers, if the connection string is correct, will automatically update the required 
     tables in the database).
 
 11. Check for plugin updates in the administration interface.
