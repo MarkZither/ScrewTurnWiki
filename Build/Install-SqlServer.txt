@@ -79,23 +79,20 @@ might cause issues and make the application unusable and/or unstable.
     - "web.config" file
     - "app_offline.htm" file.
 
- 5. Copy "SqlServerProviders.dll" from the distribution package into "TARGET_DIR\public\Plugins", 
-    replacing the existing file.
-
- 6. Select all files and directories in INPUT_DIR, ***except***:
+ 5. Select all files and directories in INPUT_DIR, ***except***:
     - "web.config" file.
 
- 7. Copy all the selected files and directories into TARGET_DIR.
+ 6. Copy all the selected files and directories into TARGET_DIR.
  
- 8. Make sure your "web.config" file contains a "customErrors" section; if not, copy it from the default "web.config".
+ 7. Make sure your "web.config" file contains a "customErrors" section; if not, copy it from the default "web.config".
  
- 9. Delete "app_offline.htm".
+ 8. Delete "app_offline.htm".
 
-10. Navigate to the wiki using a web browser and verify that everything works properly, 
+ 9. Navigate to the wiki using a web browser and verify that everything works properly, 
     (data providers, if the connection string is correct, will automatically update the required 
     tables in the database).
 
-11. Check for plugin updates in the administration interface.
+10. Check for plugin updates in the administration interface.
 
 
 
