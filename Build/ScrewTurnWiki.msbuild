@@ -101,8 +101,11 @@
 			<Output TaskParameter="Assemblies" ItemName="MyAsm" />
 		</GetAssemblyIdentity>
 		
+		<Exec Command='svn export .\.. .\Artifacts\Source' />
+		
 		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-%(MyAsm.Version).zip" ".\Artifacts\WebApplication\" ".\Artifacts\Plugins\" ".\Artifacts\Install.txt"' />
 		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-SqlServer-%(MyAsm.Version).zip" ".\Artifacts\WebApplication-SqlServer\" ".\Artifacts\Plugins\" ".\Artifacts\Install-SqlServer.txt"' />
+		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-%(MyAsm.Version)-Source.zip" ".\Artifacts\Source\*"' />
 	</Target>
 	
 </Project>
