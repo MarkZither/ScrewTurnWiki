@@ -291,7 +291,7 @@ namespace ScrewTurn.Wiki {
 
 		private bool IsImage(string name) {
 			string ext = System.IO.Path.GetExtension(name.ToLowerInvariant());
-			return ext == ".jpg" || ext == ".jpeg" || ext == ".gif" || ext == ".png" || ext == ".tif" || ext == ".tiff";
+			return ext == ".jpg" || ext == ".jpeg" || ext == ".gif" || ext == ".png" || ext == ".tif" || ext == ".tiff" || ext == ".bmp";
 		}
 
 		protected void lstProviderImages_SelectedIndexChanged(object sender, EventArgs e) {
