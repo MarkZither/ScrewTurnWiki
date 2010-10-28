@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnBackResource1.Text" xml:space="preserve">
     <value>Återgå</value>
@@ -310,7 +310,7 @@
     <value>Alla, inklusive anonyma användare, kan &lt;b&gt;redigera&lt;/b&gt; sidor. Registrerade användare kan även &lt;b&gt;skapa&lt;/b&gt; sidor och &lt;b&gt;hantera&lt;/b&gt; kategorier.</value>
   </data>
   <data name="lblRenameInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Varning&lt;/b&gt;: namnbyte av namnrymd kommer att bryta alla existerande länkar mellan mellan namnrymder.</value>
+    <value>&lt;b&gt;Varning&lt;/b&gt;: namnbyte av namnrymd kommer att bryta alla existerande länkar mellan namnrymder.</value>
   </data>
   <data name="lblRenameResource1.Text" xml:space="preserve">
     <value>Byt namn på denna namnrymd</value>
