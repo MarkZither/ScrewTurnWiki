@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblUsernameRegExResource2.Text" xml:space="preserve">
-    <value>Regular Expression for validating usernames and group names</value>
+    <value>Regular Expression per la validazione di username e gruppi</value>
   </data>
   <data name="lblPasswordRegExResource2.Text" xml:space="preserve">
-    <value>Regular Expression for validating passwords</value>
+    <value>Regular Expression per la validazione delle password</value>
   </data>
   <data name="chkEnableSectionAnchorsResource1.Text" xml:space="preserve">
     <value>Visualizza ancore per sezioni pagina</value>
