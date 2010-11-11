@@ -106,8 +106,8 @@ namespace ScrewTurn.Wiki {
 						for(int i = 0; i < cat.Pages.Length; i++) {
 							pages[i] = Pages.FindPage(cat.Pages[i]);
 						}
+						Array.Sort(pages as PageInfo[], new PageNameComparer());
 					}
-					else return new List<PageInfo>();
 				}
 			}
 			else {
