@@ -30,6 +30,8 @@ namespace ScrewTurn.Wiki {
 
             StringBuilder result = new StringBuilder(300);
 
+			result.Append(GetJavaScriptIncludes());
+
             string[] css = Directory.GetFiles(Settings.ThemesDirectory + theme, "*.css");
 			string firstChunk;
             for(int i = 0; i < css.Length; i++) {
@@ -79,8 +81,6 @@ namespace ScrewTurn.Wiki {
 				}
 				result.Append(@""" />" + "\n");
 			}
-
-			result.Append(GetJavaScriptIncludes());
 
 			// Include HTML Head
 			result.Append(Settings.Provider.GetMetaDataItem(MetaDataItem.HtmlHead, nspace));
