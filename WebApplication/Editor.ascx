@@ -206,7 +206,7 @@
 			</div>
         </div>
         
-        <anthem:TextBox ID="txtMarkup" runat="server" TextMode="MultiLine" Width="99%" Height="400px" AutoUpdateAfterCallBack="True" meta:resourcekey="txtMarkupResource3" UpdateAfterCallBack="True" />
+        <anthem:TextBox ID="txtMarkup" runat="server" TextMode="MultiLine" Width="99%" Height="400px" style="width: 700px; min-width: 99%; max-width: 99%;" AutoUpdateAfterCallBack="True" meta:resourcekey="txtMarkupResource3" UpdateAfterCallBack="True" />
     
     </anthem:View>
     
