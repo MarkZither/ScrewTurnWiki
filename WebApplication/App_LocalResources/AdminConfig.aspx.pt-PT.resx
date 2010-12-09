@@ -316,7 +316,7 @@
     <value>Fuso horário Padrão</value>
   </data>
   <data name="lblDefaultUsersGroupResource1.Text" xml:space="preserve">
-    <value>Grpo Utilizadores Padrão</value>
+    <value>Grupo Utilizadores Padrão</value>
   </data>
   <data name="lblErrorsEmailsResource1.Text" xml:space="preserve">
     <value>Endereços de email para notificação no caso de erros (separado por vírgulas)</value>
