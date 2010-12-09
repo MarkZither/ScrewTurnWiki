@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnchorTitle2" xml:space="preserve">
     <value>Insert a new anchor or a link to an existing anchor</value>
@@ -434,7 +434,7 @@
     <value>Beheer Pagina discussie</value>
   </data>
   <data name="Action_Pst_1Disc" xml:space="preserve">
-    <value>Plaats berichten in Pagina discussie</value>
+    <value>Plaats reacties op Pagina</value>
   </data>
   <data name="Action_Rd_1Disc" xml:space="preserve">
     <value>Lees Pagina discussie</value>
@@ -584,7 +584,7 @@
     <value>Beheer Pagina discussies</value>
   </data>
   <data name="Action_Pst_Disc" xml:space="preserve">
-    <value>Plaats berichten in Pagina discussie</value>
+    <value>Plaats reacties op Pagina</value>
   </data>
   <data name="Action_Rd_Disc" xml:space="preserve">
     <value>Lees Pagina discussies</value>
@@ -593,7 +593,7 @@
     <value>Kon Pagina niet verwijderen</value>
   </data>
   <data name="AllMessagesDeleted" xml:space="preserve">
-    <value>Alle berichten verwijderd</value>
+    <value>Alle reacties zijn verwijderd</value>
   </data>
   <data name="CouldNotDeleteOneOrMoreMessages" xml:space="preserve">
     <value>Kon niet een of meer Berichten verwijderen</value>
@@ -1360,13 +1360,13 @@
     <comment>Mass Email sent (delivering could require a while)</comment>
   </data>
   <data name="Message" xml:space="preserve">
-    <value>Bericht</value>
+    <value>Reactie</value>
   </data>
   <data name="MessageSent" xml:space="preserve">
     <value>Bericht verstuurd</value>
   </data>
   <data name="MessageTitle" xml:space="preserve">
-    <value>Schrijf een bericht</value>
+    <value>Schrijf een reactie</value>
   </data>
   <data name="Modified" xml:space="preserve">
     <value>Aangepast</value>
@@ -1403,7 +1403,7 @@
     <value>Geen bestanden</value>
   </data>
   <data name="NoMessages" xml:space="preserve">
-    <value>Er zijn geen berichten voor deze pagina. Ben de eerste!</value>
+    <value>Er zijn nog geen reacties voor deze pagina. Wees de eerste!</value>
   </data>
   <data name="NoPagesInThisCategory" xml:space="preserve">
     <value>Geen pagina's gevonden in deze categorie.</value>
@@ -1512,10 +1512,10 @@
     <value>Toegevoegd</value>
   </data>
   <data name="PostMessage" xml:space="preserve">
-    <value>Voeg een bericht toe</value>
+    <value>Voeg een reactie toe</value>
   </data>
   <data name="PostTitle" xml:space="preserve">
-    <value>Voeg een bericht toe</value>
+    <value>Voeg een reactie toe</value>
   </data>
   <data name="PrevPage" xml:space="preserve">
     <value>Vorige pagina</value>
