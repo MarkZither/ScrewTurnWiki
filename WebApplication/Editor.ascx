@@ -304,6 +304,7 @@
 </div>
 
 <div id="SpecialTagsMenuDiv" class="menucontainer" style="display: none;">
+    <asp:Literal ID="lblCustomSpecialTags" runat="server" EnableViewState="false" />
 	<a href="#" onclick="javascript:return InsertMarkup('{WIKITITLE}');" class="menulink">{WikiTitle}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{UP}');" class="menulink">{Up}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{TOP}');" class="menulink">{Top}</a>
@@ -330,7 +331,6 @@
     <a href="#" onclick="javascript:return InsertMarkup('{OUTGOING}');" class="menulink">{Outgoing}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{RECENTCHANGES}');" class="menulink">{RecentChanges}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{RECENTCHANGES(*)}');" class="menulink">{RecentChanges(*)}</a>
-    <asp:Literal ID="lblCustomSpecialTags" runat="server" EnableViewState="false" />
 </div>
 
 <div id="SymbolsMenuDiv" class="menucontainer" style="display: none;">
