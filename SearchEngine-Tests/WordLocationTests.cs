@@ -68,8 +68,8 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(WordLocation.Content, WordLocation.GetInstance(3), "Wrong instance");
 		}
 
-		[TestCase(0, ExpectedException = typeof(ArgumentException))]
-		[TestCase(4, ExpectedException = typeof(ArgumentException))]
+		[TestCase((byte)0, ExpectedException = typeof(ArgumentOutOfRangeException))]
+		[TestCase((byte)4, ExpectedException = typeof(ArgumentOutOfRangeException))]
 		public void StaticMethods_GetInstance_InvalidLocation(byte location) {
 			WordLocation.GetInstance(location);
 		}
