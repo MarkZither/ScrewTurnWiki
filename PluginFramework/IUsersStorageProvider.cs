@@ -18,7 +18,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="user">The User account.</param>
 		/// <param name="password">The Password to test.</param>
 		/// <returns>True if the Password is correct.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="username"/> or <paramref name="password"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="user"/> or <paramref name="password"/> are <c>null</c>.</exception>
 		bool TestAccount(UserInfo user, string password);
 
 		/// <summary>

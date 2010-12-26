@@ -40,7 +40,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="overwrite"><c>true</c> to overwrite an existing file.</param>
 		/// <returns><c>true</c> if the File is stored, <c>false</c> otherwise.</returns>
 		/// <remarks>If <b>overwrite</b> is <c>false</c> and File already exists, the method returns <c>false</c>.</remarks>
-		/// <exception cref="ArgumentNullException">If <typeparamref name="fullName"/> os <paramref name="sourceStream"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> or <paramref name="sourceStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="sourceStream"/> does not support reading.</exception>
 		bool StoreFile(string fullName, Stream sourceStream, bool overwrite);
 
@@ -52,7 +52,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// i.e. the method writes to the Stream the file content.</param>
 		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the file is retrieved, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <typeparamref name="fullName"/> os <paramref name="destinationStream"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="destinationStream"/> does not support writing, or if <paramref name="fullName"/> does not exist.</exception>
 		bool RetrieveFile(string fullName, Stream destinationStream, bool countHit);
 

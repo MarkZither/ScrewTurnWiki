@@ -1,2 +1,2 @@
 
-"%WINDIR%\Microsoft.NET\Framework\v3.5\MSBuild.exe" ScrewTurnWiki.msbuild
+"%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe" ScrewTurnWiki.msbuild

@@ -400,7 +400,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="administrators">The administrators group.</param>
 		/// <param name="users">The users group.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="administrator"/> or <paramref name="users"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="administrators"/> or <paramref name="users"/> are <c>null</c>.</exception>
 		bool UpgradeSecurityFlagsToGroupsAcl(UserGroup administrators, UserGroup users);
 
 		/// <summary>
