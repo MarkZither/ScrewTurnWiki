@@ -33,7 +33,7 @@ namespace ScrewTurn.Wiki {
 				lblTitle.Text = lblTitle.Text.Replace("##NAME##", Users.GetDisplayName(currentUser));
 
 				txtSubject.Text = Request["Subject"];
-				if(txtSubject.Text != "" && SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
+				if(txtSubject.Text != "" && SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Tools.GetCurrentUrlFixed()));
 			}
 
 			if(SessionFacade.LoginKey == null) pnlMessage.Visible = false;

@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki {
 			lnkMainPage.NavigateUrl = nspace + "Default.aspx";
 
 			if(!Page.IsPostBack) {
-				string referrer = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : "";
+				string referrer = Request.UrlReferrer != null ? Request.UrlReferrer.FixHost().ToString() : "";
 				if(!string.IsNullOrEmpty(referrer)) {
 					lnkPreviousPage.Visible = true;
 					lnkPreviousPage.NavigateUrl = referrer;

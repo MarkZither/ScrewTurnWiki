@@ -115,7 +115,7 @@ namespace ScrewTurn.Wiki {
 				currentUsername, currentGroups);
 
 			if(!canViewNamespace) {
-				if(SessionFacade.CurrentUsername == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(HttpContext.Current.Request.Url.ToString()));
+				if(SessionFacade.CurrentUsername == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Tools.GetCurrentUrlFixed()));
 				else UrlTools.Redirect("AccessDenied.aspx");
 			}
 		}

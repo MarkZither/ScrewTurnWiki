@@ -37,7 +37,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static void RedirectToLoginIfNeeded() {
 			if(SessionFacade.LoginKey == null) {
-				UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(HttpContext.Current.Request.Url.ToString()));
+				UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Tools.GetCurrentUrlFixed()));
 			}
 		}
 

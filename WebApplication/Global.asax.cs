@@ -58,7 +58,7 @@ namespace ScrewTurn.Wiki {
 		private void LogError(Exception ex) {
 			//if(ex.InnerException != null) ex = ex.InnerException;
 			try {
-				ScrewTurn.Wiki.Log.LogEntry(HttpContext.Current.Request.Url.ToString() + "\n" +
+				ScrewTurn.Wiki.Log.LogEntry(Tools.GetCurrentUrlFixed() + "\n" +
 					ex.Source + " thrown " + ex.GetType().FullName + "\n" + ex.Message + "\n" + ex.StackTrace,
 					ScrewTurn.Wiki.PluginFramework.EntryType.Error, ScrewTurn.Wiki.Log.SystemUsername);
 			}
@@ -83,7 +83,7 @@ namespace ScrewTurn.Wiki {
 			LogError(ex);
 			string url = "";
 			try {
-				url = HttpContext.Current.Request.Url.ToString();
+				url = Tools.GetCurrentUrlFixed();
 			}
 			catch { }
 			EmailTools.NotifyError(ex, url);

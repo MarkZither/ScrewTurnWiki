@@ -230,8 +230,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void LoadSecurityConfig() {
 			chkAllowUsersToRegister.Checked = Settings.UsersCanRegister;
-            txtPasswordRegEx.Text = Settings.PasswordRegex;
-            txtUsernameRegEx.Text = Settings.UsernameRegex;
+			txtPasswordRegEx.Text = Settings.PasswordRegex;
+			txtUsernameRegEx.Text = Settings.UsernameRegex;
 			PopulateAccountActivationMode(Settings.AccountActivationMode);
 			PopulateDefaultGroups(Settings.UsersGroup,
 				Settings.AdministratorsGroup,
@@ -276,7 +276,7 @@ namespace ScrewTurn.Wiki {
 			txtMaxFileSize.Text = Settings.MaxFileSize.ToString();
 			chkAllowScriptTags.Checked = Settings.ScriptTagsAllowed;
 			txtMaxLogSize.Text = Settings.MaxLogSize.ToString();
-            txtIpHostFilter.Text = Settings.IpHostFilter;
+			txtIpHostFilter.Text = Settings.IpHostFilter;
 			switch(Settings.LoggingLevel) {
 				case LoggingLevel.DisableLog:
 					rdoDisableLog.Checked = true;
@@ -306,7 +306,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnAutoWikiUrl_Click(object sender, EventArgs e) {
-			string url = Request.Url.ToString();
+			string url = Tools.GetCurrentUrlFixed();
 			// Assume the URL contains AdminConfig.aspx
 			url = url.Substring(0, url.ToLowerInvariant().IndexOf("adminconfig.aspx"));
 			txtMainUrl.Text = url;
@@ -351,27 +351,27 @@ namespace ScrewTurn.Wiki {
 			e.IsValid = true;
 		}
 
-        protected void cvUsernameRegEx_ServerValidate(object sender, ServerValidateEventArgs e) {
-            try {
-                var r = new Regex(txtUsernameRegEx.Text);
-                r.IsMatch("Test String to validate Regular Expression");
-                e.IsValid = true;
-            }
-            catch {
-                e.IsValid = false;
-            }
-        }
+		protected void cvUsernameRegEx_ServerValidate(object sender, ServerValidateEventArgs e) {
+			try {
+				var r = new Regex(txtUsernameRegEx.Text);
+				r.IsMatch("Test String to validate Regular Expression");
+				e.IsValid = true;
+			}
+			catch {
+				e.IsValid = false;
+			}
+		}
 
-        protected void cvPasswordRegEx_ServerValidate(object sender, ServerValidateEventArgs e) {
-            try {
-                var r = new Regex(txtPasswordRegEx.Text);
-                r.IsMatch("Test String to validate Regular Expression");
-                e.IsValid = true;
-            } 
-            catch {
-                e.IsValid = false;
-            }
-        }
+		protected void cvPasswordRegEx_ServerValidate(object sender, ServerValidateEventArgs e) {
+			try {
+				var r = new Regex(txtPasswordRegEx.Text);
+				r.IsMatch("Test String to validate Regular Expression");
+				e.IsValid = true;
+			} 
+			catch {
+				e.IsValid = false;
+			}
+		}
 
 		protected void cvDateTimeFormat_ServerValidate(object sender, ServerValidateEventArgs e) {
 			try {
@@ -430,7 +430,7 @@ namespace ScrewTurn.Wiki {
 			Settings.SenderEmail = txtSenderEmail.Text;
 			Settings.ErrorsEmails = GetErrorsEmails();
 			Settings.SmtpServer = txtSmtpServer.Text;
-            
+			
 			txtSmtpPort.Text = txtSmtpPort.Text.Trim();
 			if(txtSmtpPort.Text.Length > 0) Settings.SmtpPort = int.Parse(txtSmtpPort.Text);
 			else Settings.SmtpPort = -1;
@@ -468,8 +468,8 @@ namespace ScrewTurn.Wiki {
 
 			// Save security configuration
 			Settings.UsersCanRegister = chkAllowUsersToRegister.Checked;
-            Settings.UsernameRegex = txtUsernameRegEx.Text;
-            Settings.PasswordRegex = txtPasswordRegEx.Text;
+			Settings.UsernameRegex = txtUsernameRegEx.Text;
+			Settings.PasswordRegex = txtPasswordRegEx.Text;
 			AccountActivationMode mode = AccountActivationMode.Email;
 			switch(lstAccountActivationMode.SelectedValue.ToLowerInvariant()) {
 				case "email":
@@ -507,7 +507,7 @@ namespace ScrewTurn.Wiki {
 			else level = LoggingLevel.DisableLog;
 			Settings.LoggingLevel = level;
 			Settings.MaxLogSize = int.Parse(txtMaxLogSize.Text);
-            Settings.IpHostFilter = txtIpHostFilter.Text;
+			Settings.IpHostFilter = txtIpHostFilter.Text;
 
 			// Save advanced configuration
 			Settings.DisableAutomaticVersionCheck = !chkEnableAutomaticUpdateChecks.Checked;

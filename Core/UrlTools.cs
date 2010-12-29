@@ -51,7 +51,7 @@ namespace ScrewTurn.Wiki {
 			string queryString = ""; // Empty or begins with ampersand, not question mark
 			try {
 				// This might throw exceptions if 3rd-party modules interfer with the request pipeline
-				queryString = HttpContext.Current.Request.Url.Query.Replace("?", "&");
+				queryString = HttpContext.Current.Request.Url.Query.Replace("?", "&"); // Host not used
 			}
 			catch { }
 

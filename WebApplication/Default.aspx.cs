@@ -51,7 +51,7 @@ namespace ScrewTurn.Wiki {
 			bool canManageDiscussion = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.ManageDiscussion, currentUsername, currentGroups);
 
 			if(!canView) {
-				if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
+				if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Tools.GetCurrentUrlFixed()));
 				else UrlTools.Redirect(UrlTools.BuildUrl("AccessDenied.aspx"));
 			}
 			attachmentViewer.Visible = canDownloadAttachments;

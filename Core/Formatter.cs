@@ -238,7 +238,7 @@ namespace ScrewTurn.Wiki {
 					}
 
 					sb.Remove(match.Index, match.Length);
-                    string prov = match.Groups[1].Value.StartsWith(":") ? match.Value.Substring(4, match.Value.Length - 5) : match.Value.Substring(3, match.Value.Length - 4);
+					string prov = match.Groups[1].Value.StartsWith(":") ? match.Value.Substring(4, match.Value.Length - 5) : match.Value.Substring(3, match.Value.Length - 4);
 					string page = null;
 					// prov - Full.Provider.Type.Name(PageName)
 					// (PageName) is optional, but it can contain brackets, for example (Page(WithBrackets))
@@ -250,7 +250,7 @@ namespace ScrewTurn.Wiki {
 					}
 					if(page == null) {
 						// Normal file
-                        sb.Insert(match.Index, ExtendedUpReplacement.Replace("$", (prov != "") ? "Provider=" + prov + "&" : ""));
+						sb.Insert(match.Index, ExtendedUpReplacement.Replace("$", (prov != "") ? "Provider=" + prov + "&" : ""));
 					}
 					else {
 						// Page attachment
@@ -795,9 +795,9 @@ namespace ScrewTurn.Wiki {
 
 								// This check allows to ignore special tags (especially Phase3)
 								if(!internalSnippet.ToLowerInvariant().StartsWith("{s:")) {
-								    internalSnippet = internalSnippet.Replace("{", "$$$$$$$$OPEN$$$$$$$$").Replace("}", "$$$$$$$$CLOSE$$$$$$$$");
-								    balanced = balanced.Insert(lastOpen, internalSnippet);
-								    continue;
+									internalSnippet = internalSnippet.Replace("{", "$$$$$$$$OPEN$$$$$$$$").Replace("}", "$$$$$$$$CLOSE$$$$$$$$");
+									balanced = balanced.Insert(lastOpen, internalSnippet);
+									continue;
 								}
 
 								string formattedInternalSnippet = FormatSnippet(internalSnippet, tocString);
@@ -2196,8 +2196,8 @@ namespace ScrewTurn.Wiki {
 					// Header
 					if(lines[i].Length < 3) continue;
 
-                    // only if ! is found in the first row of the table, it is an header
-                    if(lines[i + 1] == "|-") thAdded = true;
+					// only if ! is found in the first row of the table, it is an header
+					if(lines[i + 1] == "|-") thAdded = true;
 
 					item = lines[i].Substring(2);
 					if(item.IndexOf(" !! ") != -1) {
@@ -2233,16 +2233,16 @@ namespace ScrewTurn.Wiki {
 				int thIndex = sb.ToString().IndexOf("<th");
 				//if(thIndex >= 4) sb.Insert(thIndex - 4, "<thead>");
 				sb.Insert(thIndex - 4, "<thead>");
-                
+				
 				// search for the last </th> tag in the first row of the table
-                int thCloseIndex = -1;
-                int thCloseIndex_temp = -1;
-                do {
-                    thCloseIndex = thCloseIndex_temp;
-                    thCloseIndex_temp = sb.ToString().IndexOf("</th>", thCloseIndex + 1);
-                }
-                while (thCloseIndex_temp != -1/* && thCloseIndex_temp < sb.ToString().IndexOf("</tr>") #443, but disables row-header support */);
-                
+				int thCloseIndex = -1;
+				int thCloseIndex_temp = -1;
+				do {
+					thCloseIndex = thCloseIndex_temp;
+					thCloseIndex_temp = sb.ToString().IndexOf("</th>", thCloseIndex + 1);
+				}
+				while (thCloseIndex_temp != -1/* && thCloseIndex_temp < sb.ToString().IndexOf("</tr>") #443, but disables row-header support */);
+				
 				sb.Insert(thCloseIndex + 10, "</thead><tbody>");
 				sb.Insert(sb.Length - 8, "</tbody>");
 			}
@@ -2601,7 +2601,7 @@ namespace ScrewTurn.Wiki {
 			string login = Exchanger.ResourceExchanger.GetResource("Login");
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append("<a href=\"");
-			sb.Append(UrlTools.BuildUrl("Login.aspx?Redirect=", Tools.UrlEncode(HttpContext.Current.Request.Url.ToString())));
+			sb.Append(UrlTools.BuildUrl("Login.aspx?Redirect=", Tools.UrlEncode(Tools.GetCurrentUrlFixed())));
 			sb.Append("\" class=\"systemlink\" title=\"");
 			sb.Append(login);
 			sb.Append("\">");
@@ -2618,7 +2618,7 @@ namespace ScrewTurn.Wiki {
 			string login = Exchanger.ResourceExchanger.GetResource("Logout");
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append("<a href=\"");
-			sb.Append(UrlTools.BuildUrl("Login.aspx?ForceLogout=1&amp;Redirect=", Tools.UrlEncode(HttpContext.Current.Request.Url.ToString())));
+			sb.Append(UrlTools.BuildUrl("Login.aspx?ForceLogout=1&amp;Redirect=", Tools.UrlEncode(Tools.GetCurrentUrlFixed())));
 			sb.Append("\" class=\"systemlink\" title=\"");
 			sb.Append(login);
 			sb.Append("\">");

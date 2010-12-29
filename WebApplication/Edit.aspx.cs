@@ -180,14 +180,14 @@ namespace ScrewTurn.Wiki {
 			if(currentPage == null) {
 				// Check permissions for creating new pages
 				if(!canCreateNewPages) {
-					if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
+					if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Tools.GetCurrentUrlFixed()));
 					else UrlTools.Redirect("AccessDenied.aspx");
 				}
 			}
 			else {
 				// Check permissions for editing current page
 				if(!canEdit && !canEditWithApproval) {
-					if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
+					if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Tools.GetCurrentUrlFixed()));
 					else UrlTools.Redirect("AccessDenied.aspx");
 				}
 			}

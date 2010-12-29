@@ -1019,7 +1019,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The URL.</returns>
 		private static string GetCurrentRequestMainUrl() {
-			string url = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Path);
+			string url = HttpContext.Current.Request.Url.FixHost().GetLeftPart(UriPartial.Path);
 			if(!url.EndsWith("/")) {
 				int index = url.LastIndexOf("/");
 				if(index != -1) url = url.Substring(0, index + 1);

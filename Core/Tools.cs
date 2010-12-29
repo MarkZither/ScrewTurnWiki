@@ -14,27 +14,27 @@ using System.Net;
 
 namespace ScrewTurn.Wiki {
 
-    /// <summary>
-    /// Contains useful Tools.
-    /// </summary>
-    public static class Tools {
+	/// <summary>
+	/// Contains useful Tools.
+	/// </summary>
+	public static class Tools {
 
-        /// <summary>
-        /// Gets all the included files for the HTML Head, such as CSS, JavaScript and Icon pluginAssemblies, for a namespace.
-        /// </summary>
+		/// <summary>
+		/// Gets all the included files for the HTML Head, such as CSS, JavaScript and Icon pluginAssemblies, for a namespace.
+		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The includes.</returns>
-        public static string GetIncludes(string nspace) {
+		public static string GetIncludes(string nspace) {
 			string theme = Settings.GetTheme(nspace);
 			string themePath = Settings.GetThemePath(nspace);
 
-            StringBuilder result = new StringBuilder(300);
+			StringBuilder result = new StringBuilder(300);
 
 			result.Append(GetJavaScriptIncludes());
 
-            string[] css = Directory.GetFiles(Settings.ThemesDirectory + theme, "*.css");
+			string[] css = Directory.GetFiles(Settings.ThemesDirectory + theme, "*.css");
 			string firstChunk;
-            for(int i = 0; i < css.Length; i++) {
+			for(int i = 0; i < css.Length; i++) {
 				if(Path.GetFileName(css[i]).IndexOf("_") != -1) {
 					firstChunk = Path.GetFileName(css[i]).Substring(0, Path.GetFileName(css[i]).IndexOf("_")).ToLower(CultureInfo.CurrentCulture);
 					if(firstChunk.Equals("screen") || firstChunk.Equals("print") || firstChunk.Equals("all") ||
@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki {
 				else {
 					result.Append(@"<link rel=""stylesheet"" href=""" + themePath + Path.GetFileName(css[i]) + @""" type=""text/css"" />" + "\n");
 				}
-            }
+			}
 
 			string customEditorCss = Path.Combine(Settings.ThemesDirectory, theme);
 			customEditorCss = Path.Combine(customEditorCss, "Editor.css");
@@ -61,9 +61,9 @@ namespace ScrewTurn.Wiki {
 				Settings.MainUrl, Settings.WikiTitle + " - Search");
 
 			string[] js = Directory.GetFiles(Settings.ThemesDirectory + theme, "*.js");
-            for(int i = 0; i < js.Length; i++) {
+			for(int i = 0; i < js.Length; i++) {
 				result.Append(@"<script src=""" + themePath + Path.GetFileName(js[i]) + @""" type=""text/javascript""></script>" + "\n");
-            }
+			}
 
 			string[] icons = Directory.GetFiles(Settings.ThemesDirectory + theme, "Icon.*");
 			if(icons.Length > 0) {
@@ -85,8 +85,8 @@ namespace ScrewTurn.Wiki {
 			// Include HTML Head
 			result.Append(Settings.Provider.GetMetaDataItem(MetaDataItem.HtmlHead, nspace));
 
-            return result.ToString();
-        }
+			return result.ToString();
+		}
 
 		/// <summary>
 		/// Gets all the JavaScript files to include.
@@ -102,52 +102,52 @@ namespace ScrewTurn.Wiki {
 			return buffer.ToString();
 		}
 
-        /// <summary>
-        /// Converts a byte number into a string, formatted using KB, MB or GB.
-        /// </summary>
-        /// <param name="bytes">The # of bytes.</param>
-        /// <returns>The formatted string.</returns>
-        public static string BytesToString(long bytes) {
-            if(bytes < 1024) return bytes.ToString() + " B";
-            else if(bytes < 1048576) return string.Format("{0:N2} KB", (float)bytes / 1024F);
-            else if(bytes < 1073741824) return string.Format("{0:N2} MB", (float)bytes / 1048576F);
-            else return string.Format("{0:N2} GB", (float)bytes / 1073741824F);
-        }
+		/// <summary>
+		/// Converts a byte number into a string, formatted using KB, MB or GB.
+		/// </summary>
+		/// <param name="bytes">The # of bytes.</param>
+		/// <returns>The formatted string.</returns>
+		public static string BytesToString(long bytes) {
+			if(bytes < 1024) return bytes.ToString() + " B";
+			else if(bytes < 1048576) return string.Format("{0:N2} KB", (float)bytes / 1024F);
+			else if(bytes < 1073741824) return string.Format("{0:N2} MB", (float)bytes / 1048576F);
+			else return string.Format("{0:N2} GB", (float)bytes / 1073741824F);
+		}
 
-        /// <summary>
-        /// Computes the Disk Space Usage of a directory.
-        /// </summary>
-        /// <param name="dir">The directory.</param>
-        /// <returns>The used Disk Space, in bytes.</returns>
-        public static long DiskUsage(string dir) {
-            string[] files = Directory.GetFiles(dir);
-            string[] directories = Directory.GetDirectories(dir);
-            long result = 0;
+		/// <summary>
+		/// Computes the Disk Space Usage of a directory.
+		/// </summary>
+		/// <param name="dir">The directory.</param>
+		/// <returns>The used Disk Space, in bytes.</returns>
+		public static long DiskUsage(string dir) {
+			string[] files = Directory.GetFiles(dir);
+			string[] directories = Directory.GetDirectories(dir);
+			long result = 0;
 
-            FileInfo file;
-            for(int i = 0; i < files.Length; i++) {
-                file = new FileInfo(files[i]);
-                result += file.Length;
-            }
-            for(int i = 0; i < directories.Length; i++) {
-                result += DiskUsage(directories[i]);
-            }
-            return result;
-        }
+			FileInfo file;
+			for(int i = 0; i < files.Length; i++) {
+				file = new FileInfo(files[i]);
+				result += file.Length;
+			}
+			for(int i = 0; i < directories.Length; i++) {
+				result += DiskUsage(directories[i]);
+			}
+			return result;
+		}
 
-        /// <summary>
-        /// Generates the standard 5-digit Page Version string.
-        /// </summary>
-        /// <param name="version">The Page version.</param>
-        /// <returns>The 5-digit Version string.</returns>
-        public static string GetVersionString(int version) {
-            string result = version.ToString();
-            int len = result.Length;
-            for(int i = 0; i < 5 - len; i++) {
-                result = "0" + result;
-            }
-            return result;
-        }
+		/// <summary>
+		/// Generates the standard 5-digit Page Version string.
+		/// </summary>
+		/// <param name="version">The Page version.</param>
+		/// <returns>The 5-digit Version string.</returns>
+		public static string GetVersionString(int version) {
+			string result = version.ToString();
+			int len = result.Length;
+			for(int i = 0; i < 5 - len; i++) {
+				result = "0" + result;
+			}
+			return result;
+		}
 
 		/// <summary>
 		/// Gets the available Themes.
@@ -235,17 +235,17 @@ namespace ScrewTurn.Wiki {
 			else return "";
 		}
 
-        /// <summary>
-        /// Gets the current culture.
-        /// </summary>
+		/// <summary>
+		/// Gets the current culture.
+		/// </summary>
 		public static string CurrentCulture {
 			get { return CultureInfo.CurrentUICulture.Name; }
 		}
 
-        /// <summary>
-        /// Get the direction of the current culture.
-        /// </summary>
-        /// <returns><c>true</c> if the current culture is RTL, <c>false</c> otherwise.</returns>
+		/// <summary>
+		/// Get the direction of the current culture.
+		/// </summary>
+		/// <returns><c>true</c> if the current culture is RTL, <c>false</c> otherwise.</returns>
 		public static bool IsRightToLeftCulture() {
 			return new CultureInfo(CurrentCulture).TextInfo.IsRightToLeft;
 		}
@@ -324,6 +324,31 @@ namespace ScrewTurn.Wiki {
 			result += span.Minutes.ToString() + "m ";
 			result += span.Seconds.ToString() + "s";
 			return result;
+		}
+
+		/// <summary>
+		/// Automatically replaces the host in the URL with that obtained from <see cref="Settings.GetMainUrl"/>.
+		/// </summary>
+		/// <param name="url">The URL.</param>
+		/// <returns>The URL with fixed host.</returns>
+		public static Uri FixHost(this Uri url) {
+			// Make sure the host is replaced only once
+			string originalUrl = url.ToString();
+			string originalHost = url.Host;
+			string newHost = Settings.GetMainUrl().Host;
+			
+			int hostIndex = originalUrl.IndexOf(originalHost);
+			string newUrl = originalUrl.Substring(0, hostIndex) + newHost + originalUrl.Substring(hostIndex + originalHost.Length + 1);
+
+			return new Uri(newUrl);
+		}
+
+		/// <summary>
+		/// Gets the current request's URL, with the host already fixed.
+		/// </summary>
+		/// <returns>The current URL.</returns>
+		public static string GetCurrentUrlFixed() {
+			return HttpContext.Current.Request.Url.FixHost().ToString();
 		}
 
 		/// <summary>
