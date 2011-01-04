@@ -156,7 +156,15 @@ namespace ScrewTurn.Wiki {
 		/// Gets the Public Directory of the Wiki.
 		/// </summary>
 		public static string PublicDirectory {
-			get { return RootDirectory + PublicDirectoryName + Path.DirectorySeparatorChar; }
+			get {
+				string pubDirName = PublicDirectoryName;
+				if(Path.IsPathRooted(pubDirName)) return pubDirName;
+				else {
+					string path = Path.Combine(RootDirectory, pubDirName);
+					if(!path.EndsWith(Path.DirectorySeparatorChar.ToString())) path += Path.DirectorySeparatorChar;
+					return path;
+				}
+			}
 		}
 
 		/// <summary>
