@@ -433,6 +433,18 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Gets or sets the number of items displayed in pages/users lists.
+		/// </summary>
+		public static int ListSize {
+			get {
+				return GetInt(Provider.GetSetting("ListSize"), 50);
+			}
+			set {
+				Provider.SetSetting("ListSize", value.ToString());
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the Account Activation Mode.
 		/// </summary>
 		public static AccountActivationMode AccountActivationMode {

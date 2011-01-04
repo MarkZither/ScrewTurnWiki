@@ -13,18 +13,20 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The numer of items in a page.
 		/// </summary>
-		public const int PageSize = 50;
+		public int PageSize = 50;
 
 		private IList<PageInfo> currentPages = null;
 
 		private int rangeBegin = 0;
-		private int rangeEnd = PageSize - 1;
+		private int rangeEnd = 49;
 		private int selectedPage = 0;
 
 		private PageInfo externallySelectedPage = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
+			PageSize = Settings.ListSize;
+			rangeEnd = PageSize - 1;
 
 			if(!Page.IsPostBack) {
 				// Load namespaces

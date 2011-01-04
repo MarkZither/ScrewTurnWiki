@@ -21,16 +21,18 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The number of items in a page.
 		/// </summary>
-		public const int PageSize = 50;
+		public int PageSize = 50;
 
 		private int selectedPage = 0;
 		private int rangeBegin = 0;
-		private int rangeEnd = PageSize - 1;
+		private int rangeEnd = 49;
 
 		private IList<PageInfo> currentPages = null;
 
-        protected void Page_Load(object sender, EventArgs e) {
+		protected void Page_Load(object sender, EventArgs e) {
 			Page.Title = Properties.Messages.AllPagesTitle + " - " + Settings.WikiTitle;
+			PageSize = Settings.ListSize;
+			rangeEnd = PageSize - 1;
 
 			LoginTools.VerifyReadPermissionsForCurrentNamespace();
 
@@ -58,7 +60,7 @@ namespace ScrewTurn.Wiki {
 			// This page cannot use a repeater because the page list has particular elements used for grouping pages
 
 			PrintPages();
-        }
+		}
 
 		protected void pageSelector_SelectedPageChanged(object sender, SelectedPageChangedEventArgs e) {
 			rangeBegin = e.SelectedPage * PageSize;
@@ -120,7 +122,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Prints the pages.
 		/// </summary>
-        public void PrintPages() {
+		public void PrintPages() {
 			StringBuilder sb = new StringBuilder(65536);
 
 			if(currentPages == null) currentPages = GetAllPages();
@@ -343,7 +345,7 @@ namespace ScrewTurn.Wiki {
 			lbl.Text = sb.ToString();
 			pnlPageList.Controls.Clear();
 			pnlPageList.Controls.Add(lbl);
-        }
+		}
 
 	}
 

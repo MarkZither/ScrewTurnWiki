@@ -176,6 +176,7 @@ namespace ScrewTurn.Wiki {
 			if(Settings.KeptBackupNumber == -1) txtKeptBackupNumber.Text = "";
 			else txtKeptBackupNumber.Text = Settings.KeptBackupNumber.ToString();
 			chkDisplayGravatars.Checked = Settings.DisplayGravatars;
+			txtListSize.Text = Settings.ListSize.ToString();
 		}
 
 		/// <summary>
@@ -465,6 +466,7 @@ namespace ScrewTurn.Wiki {
 			if(txtKeptBackupNumber.Text == "") Settings.KeptBackupNumber = -1;
 			else Settings.KeptBackupNumber = int.Parse(txtKeptBackupNumber.Text);
 			Settings.DisplayGravatars = chkDisplayGravatars.Checked;
+			Settings.ListSize = int.Parse(txtListSize.Text);
 
 			// Save security configuration
 			Settings.UsersCanRegister = chkAllowUsersToRegister.Checked;

@@ -14,16 +14,18 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The numer of items in a page.
 		/// </summary>
-		public const int PageSize = 50;
+		public int PageSize = 50;
 
 		private IList<UserInfo> currentUsers = null;
 
 		private int rangeBegin = 0;
-		private int rangeEnd = PageSize - 1;
+		private int rangeEnd = 49;
 		private int selectedPage = 0;
 
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
+			PageSize = Settings.ListSize;
+			rangeEnd = PageSize - 1;
 
 			if(!AdminMaster.CanManageUsers(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
 			aclActionsSelector.Visible = AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());

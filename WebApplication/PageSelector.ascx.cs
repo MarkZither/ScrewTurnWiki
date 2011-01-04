@@ -16,6 +16,10 @@ namespace ScrewTurn.Wiki {
 		private int pageSize = 50;
 		private int selectedPage = 0;
 
+		protected PageSelector() {
+			pageSize = Settings.ListSize;
+		}
+
 		protected void Page_Load(object sender, EventArgs e) {
 			// Load data from ViewState
 			object temp = ViewState[ItemCountName];

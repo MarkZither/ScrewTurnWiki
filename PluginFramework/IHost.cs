@@ -631,7 +631,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The name of the theme of the root namespace.
 		/// </summary>
-		RootNamespaceTheme
+		RootNamespaceTheme,
+		/// <summary>
+		/// The number of items to display in lists of items before enabling paging.
+		/// </summary>
+		ListSize
 	}
 
 	/// <summary>

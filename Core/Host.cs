@@ -144,6 +144,8 @@ namespace ScrewTurn.Wiki {
 					return Settings.DefaultCacheProvider;
 				case SettingName.RootNamespaceTheme:
 					return Settings.GetTheme(null);
+				case SettingName.ListSize:
+					return Settings.ListSize.ToString();
 			}
 			return "";
 		}
