@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements a Users Storage Provider.
 	/// </summary>
-	public class UsersStorageProvider : IUsersStorageProviderV30 {
+	public class UsersStorageProvider : ProviderBase, IUsersStorageProviderV30 {
 
 		private const string UsersFile = "Users.cs";
 		private const string UsersDataFile = "UsersData.cs";
@@ -25,7 +25,7 @@ namespace ScrewTurn.Wiki {
 		private UserInfo[] usersCache = null;
 
 		private string GetFullPath(string filename) {
-			return Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), filename);
+			return Path.Combine(GetDataDirectory(host), filename);
 		}
 
 		/// <summary>
@@ -41,7 +41,7 @@ namespace ScrewTurn.Wiki {
 
 			this.host = host;
 
-			if(!LocalProvidersTools.CheckWritePermissions(host.GetSettingValue(SettingName.PublicDirectory))) {
+			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
 			}
 

@@ -12,7 +12,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements a Pages Storage Provider.
 	/// </summary>
-	public class PagesStorageProvider : IPagesStorageProviderV30 {
+	public class PagesStorageProvider : ProviderBase, IPagesStorageProviderV30 {
 
 		private const string NamespacesFile = "Namespaces.cs";
 		private const string PagesFile = "Pages.cs";
@@ -40,15 +40,15 @@ namespace ScrewTurn.Wiki {
 		private IndexStorerBase indexStorer;
 
 		private string GetFullPath(string filename) {
-			return Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), filename);
+			return Path.Combine(GetDataDirectory(host), filename);
 		}
 
 		private string GetFullPathForPageContent(string filename) {
-			return Path.Combine(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), PagesDirectory), filename);
+			return Path.Combine(Path.Combine(GetDataDirectory(host), PagesDirectory), filename);
 		}
 
 		private string GetFullPathForPageDrafts(string filename) {
-			return Path.Combine(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), DraftsDirectory), filename);
+			return Path.Combine(Path.Combine(GetDataDirectory(host), DraftsDirectory), filename);
 		}
 
 		private string GetDraftFullPath(LocalPageInfo page) {
@@ -58,15 +58,15 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private string GetFullPathForMessages(string filename) {
-			return Path.Combine(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), MessagesDirectory), filename);
+			return Path.Combine(Path.Combine(GetDataDirectory(host), MessagesDirectory), filename);
 		}
 
 		private string GetFullPathForSnippets(string filename) {
-			return Path.Combine(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), SnippetsDirectory), filename);
+			return Path.Combine(Path.Combine(GetDataDirectory(host), SnippetsDirectory), filename);
 		}
 
 		private string GetFullPathForContentTemplate(string filename) {
-			return Path.Combine(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), ContentTemplatesDirectory), filename);
+			return Path.Combine(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory), filename);
 		}
 
 		/// <summary>
@@ -92,24 +92,24 @@ namespace ScrewTurn.Wiki {
 
 			this.host = host;
 
-			if(!LocalProvidersTools.CheckWritePermissions(host.GetSettingValue(SettingName.PublicDirectory))) {
+			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
 			}
 
-			if(!Directory.Exists(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), PagesDirectory))) {
-				Directory.CreateDirectory(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), PagesDirectory));
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), PagesDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), PagesDirectory));
 			}
-			if(!Directory.Exists(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), MessagesDirectory))) {
-				Directory.CreateDirectory(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), MessagesDirectory));
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), MessagesDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), MessagesDirectory));
 			}
-			if(!Directory.Exists(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), SnippetsDirectory))) {
-				Directory.CreateDirectory(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), SnippetsDirectory));
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), SnippetsDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), SnippetsDirectory));
 			}
-			if(!Directory.Exists(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), ContentTemplatesDirectory))) {
-				Directory.CreateDirectory(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), ContentTemplatesDirectory));
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory));
 			}
-			if(!Directory.Exists(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), DraftsDirectory))) {
-				Directory.CreateDirectory(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), DraftsDirectory));
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), DraftsDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), DraftsDirectory));
 			}
 
 			bool upgradeNeeded = false;

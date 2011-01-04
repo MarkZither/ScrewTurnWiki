@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements a Settings Storage Provider against local text pluginAssemblies.
 	/// </summary>
-	public class SettingsStorageProvider : ISettingsStorageProviderV30 {
+	public class SettingsStorageProvider : ProviderBase, ISettingsStorageProviderV30 {
 
 		// Filenames: Settings, Log, RecentChanges, MetaData
 		private const string ConfigFile = "Config.cs";
@@ -62,15 +62,15 @@ namespace ScrewTurn.Wiki {
 		private bool isFirstStart = false;
 
 		private string GetFullPath(string name) {
-			return Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), name);
+			return Path.Combine(GetDataDirectory(host), name);
 		}
 
 		private string GetFullPathForPlugin(string name) {
-			return Path.Combine(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), PluginsDirectory), name);
+			return Path.Combine(Path.Combine(GetDataDirectory(host), PluginsDirectory), name);
 		}
 
 		private string GetFullPathForPluginConfig(string name) {
-			return Path.Combine(Path.Combine(Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), PluginsDirectory), PluginsConfigDirectory), name);
+			return Path.Combine(Path.Combine(Path.Combine(GetDataDirectory(host), PluginsDirectory), PluginsConfigDirectory), name);
 		}
 
 		/// <summary>
@@ -86,7 +86,7 @@ namespace ScrewTurn.Wiki {
 
 			this.host = host;
 
-			if(!LocalProvidersTools.CheckWritePermissions(host.GetSettingValue(SettingName.PublicDirectory))) {
+			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
 			}
 

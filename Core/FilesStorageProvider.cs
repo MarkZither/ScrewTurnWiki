@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements a Local Files Storage Provider.
 	/// </summary>
-	public class FilesStorageProvider : IFilesStorageProviderV30 {
+	public class FilesStorageProvider : ProviderBase, IFilesStorageProviderV30 {
 
 		private readonly ComponentInformation info = new ComponentInformation("Local Files Provider",
 			"Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
@@ -30,7 +30,7 @@ namespace ScrewTurn.Wiki {
 		private IHostV30 host;
 
 		private string GetFullPath(string finalChunk) {
-			return Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), finalChunk);
+			return Path.Combine(GetDataDirectory(host), finalChunk);
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace ScrewTurn.Wiki {
 
 			this.host = host;
 
-			if(!LocalProvidersTools.CheckWritePermissions(host.GetSettingValue(SettingName.PublicDirectory))) {
+			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
 			}
 
@@ -116,7 +116,7 @@ namespace ScrewTurn.Wiki {
 		private string BuildFullPath(string partialPath) {
 			if(partialPath == null) partialPath = "";
 			partialPath = partialPath.Replace("/", Path.DirectorySeparatorChar.ToString()).TrimStart(Path.DirectorySeparatorChar);
-			string up = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), UploadDirectory);			
+			string up = Path.Combine(GetDataDirectory(host), UploadDirectory);			
 			return CheckPath(Path.Combine(up, partialPath), up); // partialPath CANNOT start with "\" -> Path.Combine does not work
 		}
 
@@ -130,7 +130,7 @@ namespace ScrewTurn.Wiki {
 		private string BuildFullPathForAttachments(string partialPath) {
 			if(partialPath == null) partialPath = "";
 			partialPath = partialPath.Replace("/", Path.DirectorySeparatorChar.ToString()).TrimStart(Path.DirectorySeparatorChar);
-			string up = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), AttachmentsDirectory);
+			string up = Path.Combine(GetDataDirectory(host), AttachmentsDirectory);
 			return CheckPath(Path.Combine(up, partialPath), up); // partialPath CANNOT start with "\" -> Path.Combine does not work
 		}
 
