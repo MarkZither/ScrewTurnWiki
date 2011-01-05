@@ -21,7 +21,7 @@ namespace ScrewTurn.Wiki {
 		/// Sets the data directory.
 		/// </summary>
 		/// <param name="dataDirectory">The data directory.</param>
-		protected void SetDataDirectory(string dataDirectory) {
+		public void SetDataDirectory(string dataDirectory) {
 			lock(_syncLock) {
 				if(_dataDirectoryAlreadyRead) throw new InvalidOperationException("Cannot set data directory when it's already been read");
 				_dataDirectory = dataDirectory;
