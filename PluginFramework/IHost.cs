@@ -404,6 +404,15 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		bool UpgradeSecurityFlagsToGroupsAcl(UserGroup administrators, UserGroup users);
 
 		/// <summary>
+		/// Overrides the public directory.
+		/// </summary>
+		/// <param name="fullPath">The new full path of the public directory.</param>
+		/// <exception cref="ArgumentNullException">If <paramref name="fullPath"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullPath"/> is empty.</exception>
+		/// <exception cref="InvalidOperationException">If it's too late to override the public directory.</exception>
+		void OverridePublicDirectory(string fullPath);
+
+		/// <summary>
 		/// Event fired whenever an activity is performed on a User Account.
 		/// </summary>
 		event EventHandler<UserAccountActivityEventArgs> UserAccountActivity;

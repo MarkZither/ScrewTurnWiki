@@ -848,6 +848,20 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Overrides the public directory.
+		/// </summary>
+		/// <param name="fullPath">The new full path of the public directory.</param>
+		/// <exception cref="ArgumentNullException">If <paramref name="fullPath"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullPath"/> is empty.</exception>
+		/// <exception cref="InvalidOperationException">If it's too late to override the public directory.</exception>
+		public void OverridePublicDirectory(string fullPath) {
+			if(fullPath == null) throw new ArgumentNullException("fullPath");
+			if(fullPath == "") throw new ArgumentException("Full Path cannot be empty", "fullPath");
+
+			Settings.OverridePublicDirectory(fullPath);
+		}
+
+		/// <summary>
 		/// Event fired whenever an activity is performed on a User Account.
 		/// </summary>
 		public event EventHandler<UserAccountActivityEventArgs> UserAccountActivity;
