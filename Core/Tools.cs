@@ -339,7 +339,7 @@ namespace ScrewTurn.Wiki {
 			string newHost = Settings.GetMainUrl().Host;
 			
 			int hostIndex = originalUrl.IndexOf(originalHost);
-			string newUrl = originalUrl.Substring(0, hostIndex) + newHost + originalUrl.Substring(hostIndex + originalHost.Length + 1);
+			string newUrl = originalUrl.Substring(0, hostIndex) + newHost + originalUrl.Substring(hostIndex + originalHost.Length);
 
 			return new Uri(newUrl);
 		}
