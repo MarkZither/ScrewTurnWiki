@@ -45,7 +45,7 @@
 			<asp:Literal ID="lblWikiUrl" runat="server" Text="Wiki URL" 
 				EnableViewState="False" meta:resourcekey="lblWikiUrlResource1" />
 			<span class="smalllabel">(<asp:Literal ID="lblUsedForEmailCommunications" 
-				runat="server" Text="used for email communications" EnableViewState="False" 
+				runat="server" Text="used for email communications and redirects" EnableViewState="False" 
 				meta:resourcekey="lblUsedForEmailCommunicationsResource1" /> - 
 			<anthem:LinkButton ID="btnAutoWikiUrl" runat="server" Text="autodetect" 
 				CausesValidation="False" OnClick="btnAutoWikiUrl_Click" 

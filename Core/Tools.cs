@@ -327,16 +327,31 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
+		private static string CleanupPort(string url, string host) {
+			if(!url.Contains(host)) {
+				int colonIndex = host.IndexOf(":");
+				if(colonIndex != -1) {
+					host = host.Substring(0, colonIndex);
+				}
+			}
+			
+			return host;
+		}
+
 		/// <summary>
-		/// Automatically replaces the host in the URL with that obtained from <see cref="Settings.GetMainUrl"/>.
+		/// Automatically replaces the host and port in the URL with those obtained from <see cref="Settings.GetMainUrl"/>.
 		/// </summary>
 		/// <param name="url">The URL.</param>
-		/// <returns>The URL with fixed host.</returns>
+		/// <returns>The URL with fixed host and port.</returns>
 		public static Uri FixHost(this Uri url) {
 			// Make sure the host is replaced only once
 			string originalUrl = url.ToString();
-			string originalHost = url.Host;
-			string newHost = Settings.GetMainUrl().Host;
+			string originalHost = url.GetComponents(UriComponents.HostAndPort, UriFormat.Unescaped);
+			Uri mainUrl = Settings.GetMainUrl();
+			string newHost = mainUrl.GetComponents(UriComponents.HostAndPort, UriFormat.Unescaped);
+
+			originalHost = CleanupPort(originalUrl, originalHost);
+			newHost = CleanupPort(mainUrl.ToString(), newHost);
 			
 			int hostIndex = originalUrl.IndexOf(originalHost);
 			string newUrl = originalUrl.Substring(0, hostIndex) + newHost + originalUrl.Substring(hostIndex + originalHost.Length);
