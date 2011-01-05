@@ -832,7 +832,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The path of the theme.</returns>
 		public static string GetThemePath(string nspace) {
-			return ThemesDirectoryName + "/" + GetTheme(nspace) + "/";
+			string path = ThemesDirectoryName + "/" + GetTheme(nspace) + "/";
+			if(!Directory.Exists(path)) return ThemesDirectoryName + "/Default/";
+			else return path;
 		}
 
 		/// <summary>

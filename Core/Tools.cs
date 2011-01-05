@@ -25,18 +25,20 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The includes.</returns>
 		public static string GetIncludes(string nspace) {
-			string theme = Settings.GetTheme(nspace);
 			string themePath = Settings.GetThemePath(nspace);
 
 			StringBuilder result = new StringBuilder(300);
 
 			result.Append(GetJavaScriptIncludes());
 
-			string[] css = Directory.GetFiles(Settings.ThemesDirectory + theme, "*.css");
+			string themeDir = Settings.ThemesDirectory + Settings.GetTheme(nspace);
+			if(!Directory.Exists(themeDir)) themeDir = Settings.ThemesDirectory + "Default";
+
+			string[] css = Directory.GetFiles(themeDir, "*.css");
 			string firstChunk;
 			for(int i = 0; i < css.Length; i++) {
 				if(Path.GetFileName(css[i]).IndexOf("_") != -1) {
-					firstChunk = Path.GetFileName(css[i]).Substring(0, Path.GetFileName(css[i]).IndexOf("_")).ToLower(CultureInfo.CurrentCulture);
+					firstChunk = Path.GetFileName(css[i]).Substring(0, Path.GetFileName(css[i]).IndexOf("_")).ToLowerInvariant();
 					if(firstChunk.Equals("screen") || firstChunk.Equals("print") || firstChunk.Equals("all") ||
 						firstChunk.Equals("aural") || firstChunk.Equals("braille") || firstChunk.Equals("embossed") ||
 						firstChunk.Equals("handheld") || firstChunk.Equals("projection") || firstChunk.Equals("tty") || firstChunk.Equals("tv")) {
@@ -51,21 +53,20 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			string customEditorCss = Path.Combine(Settings.ThemesDirectory, theme);
-			customEditorCss = Path.Combine(customEditorCss, "Editor.css");
-			if(File.Exists(customEditorCss)) result.AppendFormat(@"<link rel=""stylesheet"" href=""Themes/{0}/Editor.css"" type=""text/css"" />" + "\n", theme);
+			string customEditorCss = Path.Combine(themeDir, "Editor.css");
+			if(File.Exists(customEditorCss)) result.AppendFormat(@"<link rel=""stylesheet"" href=""{0}Editor.css"" type=""text/css"" />" + "\n", themePath);
 			else result.Append(@"<link rel=""stylesheet"" href=""Themes/Editor.css"" type=""text/css"" />" + "\n");
 
 			// OpenSearch
 			result.AppendFormat(@"<link rel=""search"" href=""Search.aspx?OpenSearch=1"" type=""application/opensearchdescription+xml"" title=""{1}"" />",
 				Settings.MainUrl, Settings.WikiTitle + " - Search");
 
-			string[] js = Directory.GetFiles(Settings.ThemesDirectory + theme, "*.js");
+			string[] js = Directory.GetFiles(themeDir, "*.js");
 			for(int i = 0; i < js.Length; i++) {
 				result.Append(@"<script src=""" + themePath + Path.GetFileName(js[i]) + @""" type=""text/javascript""></script>" + "\n");
 			}
 
-			string[] icons = Directory.GetFiles(Settings.ThemesDirectory + theme, "Icon.*");
+			string[] icons = Directory.GetFiles(themeDir, "Icon.*");
 			if(icons.Length > 0) {
 				result.Append(@"<link rel=""shortcut icon"" href=""" + themePath + Path.GetFileName(icons[0]) + @""" type=""");
 				switch(Path.GetExtension(icons[0]).ToLowerInvariant()) {
