@@ -12,33 +12,13 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public abstract class ProviderBase {
 
-		private object _syncLock = new object();
-
-		private bool _dataDirectoryAlreadyRead = false;
-		private string _dataDirectory = null;
-
-		/// <summary>
-		/// Sets the data directory.
-		/// </summary>
-		/// <param name="dataDirectory">The data directory.</param>
-		public void SetDataDirectory(string dataDirectory) {
-			lock(_syncLock) {
-				if(_dataDirectoryAlreadyRead) throw new InvalidOperationException("Cannot set data directory when it's already been read");
-				_dataDirectory = dataDirectory;
-			}
-		}
-
 		/// <summary>
 		/// Gets the data directory.
 		/// </summary>
 		/// <param name="host">The host object.</param>
 		/// <returns>The data directory.</returns>
 		protected string GetDataDirectory(IHostV30 host) {
-			lock(_syncLock) {
-				_dataDirectoryAlreadyRead = true;
-				if(string.IsNullOrEmpty(_dataDirectory)) return host.GetSettingValue(SettingName.PublicDirectory);
-				else return _dataDirectory;
-			}
+			return host.GetSettingValue(SettingName.PublicDirectory);
 		}
 
 	}

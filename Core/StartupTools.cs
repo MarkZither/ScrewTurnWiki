@@ -69,6 +69,8 @@ namespace ScrewTurn.Wiki {
 			ssp.Init(Host.Instance, GetSettingsStorageProviderConfiguration());
 			Collectors.SettingsProvider = ssp;
 
+			Settings.CanOverridePublicDirectory = false;
+
 			if(!(ssp is SettingsStorageProvider)) {
 				// Update DLLs from public\Plugins
 				UpdateDllsIntoSettingsProvider(ssp, ProviderLoader.SettingsStorageProviderAssemblyName);

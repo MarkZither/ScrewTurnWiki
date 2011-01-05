@@ -23,6 +23,12 @@ namespace ScrewTurn.Wiki {
 		private static string version = null;
 
 		/// <summary>
+		/// A value indicating whether the public directory can still be overridden.
+		/// </summary>
+		internal static bool CanOverridePublicDirectory = true;
+		private static string _overriddenPublicDirectory = null;
+
+		/// <summary>
 		/// Gets the settings storage provider.
 		/// </summary>
 		public static ISettingsStorageProviderV30 Provider {
@@ -153,10 +159,22 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Overrides the public directory, unless it's too late to do that.
+		/// </summary>
+		/// <param name="fullPath">The full path.</param>
+		internal static void OverridePublicDirectory(string fullPath) {
+			if(!CanOverridePublicDirectory) throw new InvalidOperationException("Cannot override public directory - that can only be done during Settings Storage Provider initialization");
+
+			_overriddenPublicDirectory = fullPath;
+		}
+
+		/// <summary>
 		/// Gets the Public Directory of the Wiki.
 		/// </summary>
 		public static string PublicDirectory {
 			get {
+				if(!string.IsNullOrEmpty(_overriddenPublicDirectory)) return _overriddenPublicDirectory;
+
 				string pubDirName = PublicDirectoryName;
 				if(Path.IsPathRooted(pubDirName)) return pubDirName;
 				else {
@@ -170,7 +188,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the Public Directory Name (without the full Path) of the Wiki.
 		/// </summary>
-		public static string PublicDirectoryName {
+		private static string PublicDirectoryName {
 			get {
 				string dir = WebConfigurationManager.AppSettings["PublicDirectory"];
 				if(string.IsNullOrEmpty(dir)) throw new InvalidConfigurationException("PublicDirectory cannot be empty or null");
