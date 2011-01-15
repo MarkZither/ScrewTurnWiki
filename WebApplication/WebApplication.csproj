@@ -208,6 +208,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.ja-JP.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Messages.ko-KR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.ko-KR.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Messages.lv-LV.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1617,6 +1622,48 @@
     <Content Include="App_LocalResources\Upload.aspx.sv-SE.resx" />
     <Content Include="App_LocalResources\User.aspx.lv-LV.resx" />
     <Content Include="App_LocalResources\User.aspx.sv-SE.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Admin.master.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Category.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Default.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Error.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.ko-KR.resx" />
+    <Content Include="App_LocalResources\History.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Login.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.ko-KR.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.ko-KR.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Post.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Register.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Search.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\User.aspx.ko-KR.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>
@@ -1662,6 +1709,10 @@
     <EmbeddedResource Include="Properties\Messages.ja-JP.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.ja-JP.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Messages.ko-KR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.ko-KR.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.lv-LV.resx">
       <Generator>ResXFileCodeGenerator</Generator>
