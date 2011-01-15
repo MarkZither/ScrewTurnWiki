@@ -196,7 +196,7 @@
     <value />
   </data>
   <data name="chkEnableSectionEditingResource1.Text" xml:space="preserve">
-    <value>Enable editing of pages' sections</value>
+    <value>페이지 부분에 편집 활성화</value>
   </data>
   <data name="chkEnableSectionEditingResource1.ToolTip" xml:space="preserve">
     <value />
@@ -298,7 +298,7 @@
     <value>컨텐츠 설정</value>
   </data>
   <data name="lblDateTimeFormatResource1.Text" xml:space="preserve">
-    <value>Date/time format</value>
+    <value>날짜/시간 형식</value>
   </data>
   <data name="lblDateTimeFormatTemplatesResource1.Text" xml:space="preserve">
     <value />
@@ -370,10 +370,10 @@
     <value>메인페이지 루트 네임스페이스</value>
   </data>
   <data name="lblRootThemeResource1.Text" xml:space="preserve">
-    <value>Root namespace theme</value>
+    <value>루트 네임스페이스 테마</value>
   </data>
   <data name="lblSecurityConfigResource1.Text" xml:space="preserve">
-    <value>Security Configuration</value>
+    <value>보안 설정</value>
   </data>
   <data name="lblSeeAlsoNamespaces1Resource1.Text" xml:space="preserve">
     <value>더 보기</value>
@@ -586,7 +586,7 @@
     <value>EMAIL</value>
   </data>
   <data name="ListItemResource37.Text" xml:space="preserve">
-    <value>Administrators must activate accounts</value>
+    <value>관리자가 계정을 활Administrators must activate accounts</value>
   </data>
   <data name="ListItemResource37.Value" xml:space="preserve">
     <value>관리자</value>
@@ -661,13 +661,13 @@
     <value>관리</value>
   </data>
   <data name="rdoAllMessagesResource1.Text" xml:space="preserve">
-    <value>All Messages</value>
+    <value>모든 메세지</value>
   </data>
   <data name="rdoAllMessagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoDisableLogResource1.Text" xml:space="preserve">
-    <value>Disable Log</value>
+    <value>로그 비활성화</value>
   </data>
   <data name="rdoDisableLogResource1.ToolTip" xml:space="preserve">
     <value />
@@ -820,7 +820,7 @@
     <value />
   </data>
   <data name="rfvSenderEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Sender Email is required</value>
+    <value>메일발송자는 필수항목입니다</value>
   </data>
   <data name="rfvSenderEmailResource1.Text" xml:space="preserve">
     <value />
@@ -1039,7 +1039,7 @@
     <value />
   </data>
   <data name="lblRssFeedsModeResource1.Text" xml:space="preserve">
-    <value>RSS Feeds Serving Mode</value>
+    <value>RSS 피드 분배모드Serving Mode</value>
   </data>
   <data name="ListItemResource42.Text" xml:space="preserve">
     <value>전체본문</value>
@@ -1072,7 +1072,7 @@
     <value>편집허용을 위한 IP 필터 (콤마로 구분, 와일드카드는 '*', 예: 192.168.1.*)</value>
   </data>
   <data name="chkEnableSectionAnchorsResource1.Text" xml:space="preserve">
-    <value>Display anchors for pages' sections</value>
+    <value>페이지 부분에 앵커표시</value>
   </data>
   <data name="chkEnableSectionAnchorsResource1.ToolTip" xml:space="preserve">
     <value />
@@ -1082,7 +1082,7 @@
     <comment>As in 'Display at most 5 items in a list, ...'</comment>
   </data>
   <data name="lblDisplayAtMostPreResource1.Text" xml:space="preserve">
-    <value>Display at most</value>
+    <value>대부분 표시</value>
     <comment>As in 'Display at most: 5 items'</comment>
   </data>
   <data name="rvListSizeResource1.ErrorMessage" xml:space="preserve">
