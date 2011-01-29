@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		private const string ConfigHelpHtmlValue = "Config consists of three lines:<br/><i>&lt;Url&gt;</i> - The base url to the Unfuddle API (i.e. http://account_name.unfuddle.com/api/v1/projects/project_ID)<br/><i>&lt;Username&gt;</i> - The username to the unfuddle account to use for authentication<br/><i>&lt;Password&gt;</i> - The password to the unfuddle account to use for authentication<br/>";
 		private const string LoadErrorMessage = "Unable to load ticket report at this time.";
 		private static readonly Regex UnfuddleRegex = new Regex(@"{unfuddle}", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-		private static readonly ComponentInformation Info = new ComponentInformation("Unfuddle Tickets Plugin", "Threeplicate Srl", "3.0.2.538", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/UnfuddleTickets2.txt");
+		private static readonly ComponentInformation Info = new ComponentInformation("Unfuddle Tickets Plugin", "Threeplicate Srl", "3.0.4.575", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/UnfuddleTickets2.txt");
 
 		private string _config;
 		private IHostV30 _host;
@@ -77,14 +77,17 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 			if(block.Key != -1) {
 				string unfuddleTickets = null;
-				if(HttpContext.Current != null)
+				if(HttpContext.Current != null) {
 					unfuddleTickets = HttpContext.Current.Cache["UnfuddleTicketsStore"] as string;
+				}
 
-				if(string.IsNullOrEmpty(unfuddleTickets))
+				if(string.IsNullOrEmpty(unfuddleTickets)) {
 					unfuddleTickets = LoadUnfuddleTicketsFromWeb();
+				}
 
-				if(string.IsNullOrEmpty(unfuddleTickets))
+				if(string.IsNullOrEmpty(unfuddleTickets)) {
 					unfuddleTickets = LoadErrorMessage;
+				}
 
 				do {
 					buffer.Insert(block.Key, unfuddleTickets);
@@ -211,7 +214,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 				return null;
 			}
 
-			var tickets = GetXml("/ticket_reports/dynamic?sort_by=priority&sort_direction=DESC&conditions_string=status-neq-closed&group_by=priority&fields_string=number,priority,summary,milestone,status,version", _username, _password);
+			var tickets = GetXml("/ticket_reports/dynamic?sort_by=priority&sort_direction=DESC&conditions_string=status-neq-closed&group_by=priority&fields_string=number,priority,summary,milestone,status,version,description&formatted=true", _username, _password);
 			if(tickets == null) {
 				LogWarning("Exception occurred while pulling unfuddled ticket information from the API.");
 				return null;
