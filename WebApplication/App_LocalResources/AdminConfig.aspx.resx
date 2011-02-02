@@ -298,7 +298,7 @@
     <value>Content Configuration</value>
   </data>
   <data name="lblDateTimeFormatResource1.Text" xml:space="preserve">
-    <value>Date/time format</value>
+    <value>Date/Time format</value>
   </data>
   <data name="lblDateTimeFormatTemplatesResource1.Text" xml:space="preserve">
     <value />
