@@ -3,36 +3,39 @@ using System;
 using System.Configuration;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
 using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki {
 
-    /// <summary>
-    /// Implements email-related tools.
-    /// </summary>
-    public static class EmailTools {
+	/// <summary>
+	/// Implements email-related tools.
+	/// </summary>
+	public static class EmailTools {
 
-        /// <summary>
-        /// Sends an email.
-        /// </summary>
-        /// <param name="recipient">The recipient.</param>
-        /// <param name="sender">The sender.</param>
-        /// <param name="subject">The subject.</param>
-        /// <param name="body">The message body.</param>
-        /// <param name="html"><c>true</c> if the body is HTML.</param>
-        public static void AsyncSendEmail(string recipient, string sender, string subject, string body, bool html) {
+		/// <summary>
+		/// Sends an email.
+		/// </summary>
+		/// <param name="recipient">The recipient.</param>
+		/// <param name="sender">The sender.</param>
+		/// <param name="subject">The subject.</param>
+		/// <param name="body">The message body.</param>
+		/// <param name="html"><c>true</c> if the body is HTML.</param>
+		public static void AsyncSendEmail(string recipient, string sender, string subject, string body, bool html) {
 			System.Threading.ThreadPool.QueueUserWorkItem(delegate(object state) {
-				MailMessage message = new MailMessage(sender, recipient, subject, body);
-				message.IsBodyHtml = html;
-				TrySendMessage(message);
-			});
-        }
+				using(((WindowsIdentity)state).Impersonate()) {
+					MailMessage message = new MailMessage(sender, recipient, subject, body);
+					message.IsBodyHtml = html;
+					TrySendMessage(message);
+				}
+			}, WindowsIdentity.GetCurrent());
+		}
 
 		/// <summary>
 		/// Tries to send a message, swallowing all exceptions.
@@ -94,15 +97,17 @@ namespace ScrewTurn.Wiki {
 			if(recipients.Length == 0) return;
 
 			System.Threading.ThreadPool.QueueUserWorkItem(delegate(object state) {
-				MailMessage message = new MailMessage(new MailAddress(sender), new MailAddress(sender));
-				message.Subject = subject;
-				message.Body = body;
-				for(int i = 0; i < recipients.Length; i++) {
-					message.Bcc.Add(new MailAddress(recipients[i]));
+				using(((WindowsIdentity)state).Impersonate()) {
+					MailMessage message = new MailMessage(new MailAddress(sender), new MailAddress(sender));
+					message.Subject = subject;
+					message.Body = body;
+					for(int i = 0; i < recipients.Length; i++) {
+						message.Bcc.Add(new MailAddress(recipients[i]));
+					}
+					message.IsBodyHtml = html;
+					TrySendMessage(message);
 				}
-				message.IsBodyHtml = html;
-				TrySendMessage(message);
-			});
+			}, WindowsIdentity.GetCurrent());
 		}
 
 		/// <summary>

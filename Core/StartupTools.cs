@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Resources;
+using System.Security.Principal;
 using System.Web.Configuration;
 using ScrewTurn.Wiki.PluginFramework;
 
@@ -192,24 +193,26 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername);
 
-			System.Threading.ThreadPool.QueueUserWorkItem(ignored => {
-				if((DateTime.Now - Settings.LastPageIndexing).TotalDays > 7) {
-					Settings.LastPageIndexing = DateTime.Now;
-					System.Threading.Thread.Sleep(10000);
-					using(MemoryStream ms = new MemoryStream()) {
-						using(StreamWriter wr = new System.IO.StreamWriter(ms)) {
-							System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
-							foreach(var provider in Collectors.PagesProviderCollector.AllProviders) {
-								if(!provider.ReadOnly) {
-									Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
-									provider.RebuildIndex();
-									Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+			System.Threading.ThreadPool.QueueUserWorkItem(state => {
+				using(((WindowsIdentity)state).Impersonate()) {
+					if((DateTime.Now - Settings.LastPageIndexing).TotalDays > 7) {
+						Settings.LastPageIndexing = DateTime.Now;
+						System.Threading.Thread.Sleep(10000);
+						using(MemoryStream ms = new MemoryStream()) {
+							using(StreamWriter wr = new System.IO.StreamWriter(ms)) {
+								System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
+								foreach(var provider in Collectors.PagesProviderCollector.AllProviders) {
+									if(!provider.ReadOnly) {
+										Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+										provider.RebuildIndex();
+										Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+									}
 								}
 							}
 						}
 					}
 				}
-			});
+			}, WindowsIdentity.GetCurrent());
 		}
 
 		/// <summary>
