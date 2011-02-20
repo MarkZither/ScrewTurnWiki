@@ -101,7 +101,7 @@
 			<Output TaskParameter="Assemblies" ItemName="MyAsm" />
 		</GetAssemblyIdentity>
 		
-		<CreateItem Include="..\**\*.*" Exclude="..\.hg\**\*.*;..\Build\Artifacts\**\*.*;..\**\bin\**\*.*;..\**\obj\**\*.*">
+		<CreateItem Include="..\**\*.*" Exclude="..\.hg\**\*.*;..\Build\Artifacts\**\*.*;..\**\bin\**\*.*;..\**\obj\**\*.*;..\.hgignore">
 			<Output ItemName="SourceCode" TaskParameter="Include" />
 		</CreateItem>
 		<Copy SourceFiles="@(SourceCode)" DestinationFolder=".\Artifacts\Source\%(RecursiveDir)" />
