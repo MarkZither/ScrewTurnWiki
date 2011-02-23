@@ -11,7 +11,7 @@ using System.IO;
 namespace ScrewTurn.Wiki {
 
 	/// <summary>
-	/// Implements reverse formatting methods (HTML->WikiMarkup).
+	/// Implements reverse formatting methods (HTML-&gt;WikiMarkup).
 	/// </summary>
 	public static class ReverseFormatter {
 
@@ -79,6 +79,12 @@ namespace ScrewTurn.Wiki {
 		private static List<string> listText= new List<string>();
 		//private static string result = "";
 
+
+		/// <summary>
+		/// Processes the image.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <returns></returns>
 		private static string processImage(XmlNode node) {
 			string result = "";
 			if(node.Attributes.Count != 0) {
@@ -175,10 +181,10 @@ namespace ScrewTurn.Wiki {
 							result += ("=====" + processChild(node.ChildNodes) + "=====");
 							break;
 						case "pre":
-							result += ("(((" + processChild(node.ChildNodes) + ")))");
+							result += ("@@" + node.InnerText.ToString() + "@@");
 							break;
 						case "code":
-							result += ("@@" + processChild(node.ChildNodes) + "@@");
+							result += ("{{" + processChild(node.ChildNodes) + "}}");
 							break;
 						case "hr":
 						case "hr /":
@@ -204,10 +210,10 @@ namespace ScrewTurn.Wiki {
 							result += ("{br}" + processChild(node.ChildNodes));
 							break;
 						case "ol":
-							result += "{br}" + processChild(node.ChildNodes) + "{br}";
+							result += processChild(node.ChildNodes) + "{br}";
 							break;
 						case "ul":
-							result +=  "{br}" + processChild(node.ChildNodes) + "{br}";
+							result += processChild(node.ChildNodes) + "{br}";
 							break;
 						case "table":
 							result +=  processChild(node.ChildNodes);
@@ -223,9 +229,14 @@ namespace ScrewTurn.Wiki {
 							break;
 						case "li":
 							if (node.ParentNode.Name.ToLowerInvariant() == "ol")
-								result += ("# " + processChild(node.ChildNodes) + "{br}");
+								result += ("#" + " "+processChild(node.ChildNodes) + "{br}");
 							else if (node.ParentNode.Name.ToLowerInvariant() == "ul")
-								result += ("* " + processChild(node.ChildNodes) + "{br}");
+								result += ("*" + " "+ processChild(node.ChildNodes) + "{br}");
+							else if(node.ParentNode.Name.ToLowerInvariant() == "li") 
+								if(node.ParentNode.ParentNode.Name.ToLowerInvariant() == "ol")
+									result += ("*#" + " " + processChild(node.ChildNodes));
+								else if(node.ParentNode.ParentNode.Name.ToLowerInvariant() == "ul")
+									result += ("#*" + " " + processChild(node.ChildNodes));
 							break;
 						case "sup":
 							result += ("<sup>" + processChild(node.ChildNodes) + "</sup>");
@@ -269,7 +280,7 @@ namespace ScrewTurn.Wiki {
 									//if(attName.Name.ToString() == "src") {
 									//	string[] path = attName.Value.ToString().Split('=');
 										//result += "|" + processChild(node.ChildNodes);
-										result += "";
+										result += processImage(node);
 									//}
 								}
 							}
@@ -296,7 +307,10 @@ namespace ScrewTurn.Wiki {
 									}
 								}
 								if(!anchor)
-									result += "[" + target + link + "|" + title + "]" + processChild(node.ChildNodes); //"]");
+									if(title != link)
+										result += "[" + target + link + "|" + processChild(node.ChildNodes) + "]";
+									else
+										result += "[" + target + link + "|" + "]" + processChild(node.ChildNodes);
 							}
 						break;
 
