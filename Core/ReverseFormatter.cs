@@ -79,61 +79,29 @@ namespace ScrewTurn.Wiki {
 		private static List<string> listText= new List<string>();
 		//private static string result = "";
 
-
-		/// <summary>
-		/// Processes the sub list text.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		/// <returns></returns>
-		private static string processSubListText(XmlNode node) {
-			string result = "";
-			if(node.HasChildNodes)
-				result += processChild(node.ChildNodes);
-			else
-				result += node.InnerText.ToString();
-			return result;
-		}
-
 		/// <summary>
 		/// Processes the list.
 		/// </summary>
 		/// <param name="nodes">The nodes.</param>
+		/// <param name="marker">The marker.</param>
 		/// <returns></returns>
-		private static string processList(XmlNodeList nodes) {
+		private static string processList(XmlNodeList nodes, string marker) {
 			string result = "";
 			string ul = "*";
 			string ol = "#";
-
 			foreach(XmlNode node in nodes) {
-				string marker = "";
-				string text = "";
-
-				if(node.NodeType.ToString().ToLowerInvariant() == "text")
-				{
-					text += " " + processSubListText(node) + "{br}";
+				foreach(XmlNode child in node) {
+					if(child.Name.ToString() == "ol")
+						result += marker + " " +processList(child.ChildNodes, marker + ol);
+					if(child.Name.ToString() == "ul")
+						result += marker + " "+ processList(child.ChildNodes, marker + ul);
+					else
+						result += processChild(child.ChildNodes);
 				}
-				else {
-					switch(node.Name.ToLowerInvariant().ToString()) {
-						case "li":
-							if(node.ParentNode.Name.ToLowerInvariant().ToString() == "ul")
-								marker += ul + processList(node.ChildNodes);
-							if(node.ParentNode.Name.ToLowerInvariant().ToString() == "ol")
-								marker += ol + processList(node.ChildNodes);
-							//else
-							//    marker += "PIPPO2" + processList(node.ChildNodes);
-							break;
-						case "ol":
-							marker += ol + processList(node.ChildNodes);
-							break;
-						case "ul":
-							marker += ul + processList(node.ChildNodes);
-							break;
-					}
-				}
-				result += marker + text;
 			}
 			return result;
 		}
+
 
 		/// <summary>
 		/// Processes the image.
@@ -190,6 +158,7 @@ namespace ScrewTurn.Wiki {
 			result = p+image+ url;
 			return result;
 		}
+
 		/// <summary>
 		/// Processes the child.
 		/// </summary>
@@ -289,10 +258,10 @@ namespace ScrewTurn.Wiki {
 							result += processChild(node.ChildNodes);
 							break;
 						case "ol":
-							result += processList(node.ChildNodes) + "{br}";
+							result += processList(node.ChildNodes, "#") + "{br}";
 							break;
 						case "ul":
-							result += processList(node.ChildNodes) + "{br}";
+							result += processList(node.ChildNodes, "*") + "{br}";
 							break;
 						case "li":
 							result += processChild(node.ChildNodes);
@@ -335,6 +304,10 @@ namespace ScrewTurn.Wiki {
 						case "img":
 							string description = "";
 							bool hasClass = false;
+							bool isLink = false;
+							if(node.ParentNode != null)
+								if(node.ParentNode.Name.ToLowerInvariant().ToString() == "a")
+									isLink = true;
 							if(node.Attributes.Count != 0){
 								foreach(XmlAttribute attName in node.Attributes) {
 									if(attName.Name.ToString() == "alt")
@@ -343,42 +316,57 @@ namespace ScrewTurn.Wiki {
 										hasClass = true;
 								}
 							}
-							if(!hasClass)
+							if((!hasClass) && (!isLink))
 								result += "[image|" + description + "|" + processImage(node) + "]{br}";
+							else if((!hasClass) && (isLink))
+								result += "[image|" + description + "|" + processImage(node);
 							else
 								result += description+"|"+processImage(node);
 							break;
+
 						case "a":
+							bool isTable = false;
 							string link="";
 							string target="";
 							string title="";
-//							if(node.FirstChild.Name.ToLowerInvariant() != "img") {
-								if(node.Attributes.Count != 0) {
-									XmlAttributeCollection attribute = node.Attributes;
-									foreach(XmlAttribute attName in attribute) {
-										if(attName.Name.ToString() != "id".ToLowerInvariant()) {
-											if(attName.Value.ToString() == "_blank")
-												target += "^";
-											if(attName.Name.ToString() == "href")
-												link += attName.Value.ToString();
-											if(attName.Name.ToString() == "title")
-												title += attName.Value.ToString();
-										}
-										else {
-											anchor = true;
-											result += "[anchor|#" + attName.Value.ToString().ToLowerInvariant() + "]" + processChild(node.ChildNodes);
-											break;
-										}
+							bool childImg = false;
+							if(node.FirstChild != null) {
+								if(node.FirstChild.Name.ToLowerInvariant() == "img")
+									childImg = true;
+							}
+							if(node.ParentNode.Name.ToLowerInvariant() == "td")
+								isTable = true;
+							if(node.Attributes.Count != 0) {
+								XmlAttributeCollection attribute = node.Attributes;
+								foreach(XmlAttribute attName in attribute) {
+									if(attName.Name.ToString() != "id".ToLowerInvariant()) {
+										if(attName.Value.ToString() == "_blank")
+											target += "^";
+										if(attName.Name.ToString() == "href")
+											link += attName.Value.ToString();
+										if(attName.Name.ToString() == "title")
+											title += attName.Value.ToString();
 									}
-									if(!anchor)
-										if(title != link)
-											result += "[" + target + link + "|" + processChild(node.ChildNodes) + "]";
-										else
-											result += "[" + target + link + "|" + "]" + processChild(node.ChildNodes);
+									else {
+										anchor = true;
+										result += "[anchor|#" + attName.Value.ToString().ToLowerInvariant() + "]" + processChild(node.ChildNodes);
+										break;
+									}
 								}
-							//}
-							//else processChild(node.ChildNodes);
-							break;
+
+								if((!anchor) && (!isTable) && (!childImg))
+									if(title != link)
+										result += "[" + target + link + "|" + processChild(node.ChildNodes) + "]";
+									else
+										result += "[" + target + link + "|" + "]" + processChild(node.ChildNodes);
+								if((!anchor) && (isTable))
+									result += processChild(node.ChildNodes) + "|" + target + link;
+								if((!anchor) && (childImg) && (!isTable))
+									result += processChild(node.ChildNodes) + "|" + target + link +"]{br}";
+							}
+						//}
+						//else processChild(node.ChildNodes);
+						break;
 
 						default:
 							result += (node.OuterXml);
