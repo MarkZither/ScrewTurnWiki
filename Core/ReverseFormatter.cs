@@ -100,7 +100,7 @@ namespace ScrewTurn.Wiki {
 								result += processList(child.ChildNodes, marker + ul);
 								break;
 							default:
-								StringReader a = new StringReader(child.InnerText);
+								StringReader a = new StringReader(child.OuterXml);
 								XmlDocument n = FromHTML((TextReader)a);
 								result += marker + " " + processChild(n.ChildNodes) + "\r\n";
 								break;
