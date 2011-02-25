@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("<code><b>text</b></code>", "{{'''text'''}}")]
 		[TestCase("<div class=\"box\">text</div>", "(((text)))\r\n")]
 		[TestCase("<div>text</div>", "text\r\n")]
-		[TestCase("<html><ol><li>1</li><li>2</li><li>3<ol><li>3.1</li><li>3.2<ol><li>3.2.1</li></ol></li><li>3.3</li></ol></li><li>4<br /></li></ol><br /></html>", "# 1\r\n# 2\r\n# 3\r\n## 3.1\r\n## 3.2\r\n### 3.2.1\r\n## 3.3\r\n# 4\r\n# \r\n\r\n\r\n\r\n")]
+		[TestCase("<html><ol><li>1</li><li>2</li><li>3<ol><li>3.1</li><li>3.2<ol><li>3.2.1</li></ol></li><li>3.3</li></ol></li><li>4<br /></li></ol><br /></html>", "# 1\r\n# 2\r\n# 3\r\n## 3.1\r\n## 3.2\r\n### 3.2.1\r\n## 3.3\r\n# 4\r\n# {BR}\r\n\r\n\r\n{BR}\r\n")]
 		[TestCase("<ol><li>1</li><li>2</li></ol>", "# 1\r\n# 2\r\n\r\n")]
 		[TestCase("<ul><li>1</li><li>2</li></ul>", "* 1\r\n* 2\r\n\r\n")]
 		[TestCase("<html><ul><li>Punto 1</li><li>Punto 2</li><li>Punto 3</li><li>Punto 4</li><li>Punto 5</li></ul></html>", "* Punto 1\r\n* Punto 2\r\n* Punto 3\r\n* Punto 4\r\n* Punto 5\r\n\r\n")]

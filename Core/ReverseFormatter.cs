@@ -57,7 +57,7 @@ namespace ScrewTurn.Wiki {
 			string result = "";
 			if(node.Attributes.Count != 0) {
 				foreach(XmlAttribute attName in node.Attributes) {
-					if(attName.Name.ToString() == "src") {
+					if((attName.Name.ToString() == "src") || (attName.Value.ToString().ToLowerInvariant() == "Image")) {
 						string[] path = attName.Value.ToString().Split('=');
 						result += "{" + "UP(" + path[1].Split('&')[0] + ")}" + path[2];
 					}
@@ -114,9 +114,8 @@ namespace ScrewTurn.Wiki {
 				bool anchor = false;
 				if(node.NodeType == XmlNodeType.Text) {
 					result += node.Value;
-					//string result = "";
 				}
-				else {
+				else if (node.NodeType != XmlNodeType.Whitespace){
 					switch(node.Name.ToLowerInvariant()) {
 						case "html":
 							result += processChild(node.ChildNodes);
@@ -176,9 +175,8 @@ namespace ScrewTurn.Wiki {
 								}
 							}
 							break;
-						case "\n":
 						case "br":
-							result += ("\r\n" + processChild(node.ChildNodes));
+							result += ("{BR}\r\n" + processChild(node.ChildNodes));
 							break;
 						case "table":
 							string image = "";
@@ -227,6 +225,7 @@ namespace ScrewTurn.Wiki {
 										result += "";
 								}
 							}
+							else result += processChild(node.ChildNodes) + "{BR}\r\n";
 							break;
 						case "div":
 							if(node.Attributes.Count != 0) {
