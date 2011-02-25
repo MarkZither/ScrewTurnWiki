@@ -90,13 +90,22 @@ namespace ScrewTurn.Wiki {
 			string ul = "*";
 			string ol = "#";
 			foreach(XmlNode node in nodes) {
-				foreach(XmlNode child in node) {
-					if(child.Name.ToString() == "ol")
-						result += marker + " " +processList(child.ChildNodes, marker + ol);
-					if(child.Name.ToString() == "ul")
-						result += marker + " "+ processList(child.ChildNodes, marker + ul);
-					else
-						result += processChild(child.ChildNodes);
+				if(node.Name.ToString() == "li"){
+					foreach(XmlNode child in node.ChildNodes) {
+						switch(child.Name.ToString()){
+							case "ol":
+								result += processList(child.ChildNodes, marker + ol);
+								break;
+							case "ul":
+								result += processList(child.ChildNodes, marker + ul);
+								break;
+							default:
+								StringReader a = new StringReader(child.InnerText);
+								XmlDocument n = FromHTML((TextReader)a);
+								result += marker + " " + processChild(n.ChildNodes) + "\r\n";
+								break;
+						}
+					}
 				}
 			}
 			return result;
@@ -174,6 +183,9 @@ namespace ScrewTurn.Wiki {
 				}
 				else {
 					switch(node.Name.ToLowerInvariant()) {
+						case "html":
+							result += processChild(node.ChildNodes);
+							break;
 						case "b":
 						case "strong":
 							result += ("'''" + processChild(node.ChildNodes) + "'''");
