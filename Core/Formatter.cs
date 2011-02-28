@@ -1207,7 +1207,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="sb">The <see cref="T:StringBuilder" /> containing the text to process.</param>
 		/// <param name="bareBones">A value indicating whether the formatting is being done in bare-bones mode.</param>
 		private static void ProcessLineBreaks(StringBuilder sb, bool bareBones) {
-			if(bareBones || AreSingleLineBreaksToBeProcessed()) {
+			if(AreSingleLineBreaksToBeProcessed()) {
 				// Replace new-lines only when not enclosed in <nobr> tags
 				Match match = NoSingleBr.Match(sb.ToString());
 				while(match.Success) {
@@ -1234,9 +1234,9 @@ namespace ScrewTurn.Wiki {
 					match = NoSingleBr.Match(sb.ToString(), match.Index + 1);
 				}
 
-				sb.Replace("\n", "<br />");
+				sb.Replace("\n\n", "<br /><br />");
 
-				sb.Replace(SingleBrPlaceHolder, "\n");
+				sb.Replace(SingleBrPlaceHolder, "<br /><br />");
 
 			}
 

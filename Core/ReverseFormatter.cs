@@ -15,6 +15,26 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public static class ReverseFormatter {
 
+
+		/// <summary>
+		/// Searches the description.
+		/// </summary>
+		/// <param name="nodes">The nodes.</param>
+		/// <returns></returns>
+		private static string searchDescription (XmlNodeList nodes){
+			string description = "";
+			foreach (XmlNode n in nodes){
+				if(n.Name.ToLowerInvariant() == "p") {
+					foreach(XmlAttribute att in n.Attributes) {
+						if(att.Value.ToLowerInvariant().ToString() == "imagedescription")
+							description += processChild(n.ChildNodes);
+					}
+				}
+
+			}
+			return description;
+		}
+
 		/// <summary>
 		/// Processes order or unorder lists and sublists.
 		/// </summary>
@@ -28,12 +48,22 @@ namespace ScrewTurn.Wiki {
 			foreach(XmlNode node in nodes) {
 				if(node.Name.ToString() == "li") {
 					foreach(XmlNode child in node.ChildNodes) {
+						if(child.NodeType == XmlNodeType.Text) {
+						    string ie = child.Value.ToString();
+						    ie = ie.Replace("\r", string.Empty).Replace("\n", string.Empty);
+						    child.Value = ie;
+						}
 						switch(child.Name.ToString()) {
 							case "ol":
 								result += processList(child.ChildNodes, marker + ol);
 								break;
 							case "ul":
 								result += processList(child.ChildNodes, marker + ul);
+								break;
+							case "br":
+								StringReader aa = new StringReader(child.OuterXml);
+								XmlDocument ne = FromHTML((TextReader)aa);
+								result += processChild(ne.ChildNodes);
 								break;
 							default:
 								StringReader a = new StringReader(child.OuterXml);
@@ -76,10 +106,12 @@ namespace ScrewTurn.Wiki {
 			string p = "";
 			string url = "";
 			string result = "";
+			bool hasDescription = false;
 			foreach(XmlNode node in nodes) {
 				if(node.Name.ToLowerInvariant() == "img")
 					image += processImage(node);
 				else if(node.Name.ToLowerInvariant() == "p") {
+					hasDescription = true;
 					p += "|" + processChild(node.ChildNodes) + "|";
 				}
 				else if(node.Name.ToLowerInvariant() == "a") {
@@ -99,6 +131,8 @@ namespace ScrewTurn.Wiki {
 					url = "|" + target + link;
 				}
 			}
+			if (!hasDescription)
+				p = "||";
 			result = p + image + url;
 			return result;
 		}
@@ -203,10 +237,10 @@ namespace ScrewTurn.Wiki {
 							result += processChild(node.ChildNodes);
 							break;
 						case "ol":
-							result += processList(node.ChildNodes, "#") + "\r\n";
+							result += processList(node.ChildNodes, "#");
 							break;
 						case "ul":
-							result += processList(node.ChildNodes, "*") + "\r\n";
+							result += processList(node.ChildNodes, "*");
 							break;
 						case "li":
 							result += processChild(node.ChildNodes);
@@ -257,7 +291,8 @@ namespace ScrewTurn.Wiki {
 							if(node.Attributes.Count != 0) {
 								foreach(XmlAttribute attName in node.Attributes) {
 									if(attName.Name.ToString() == "alt")
-										description = attName.Value.ToString();
+										description = searchDescription(node.ParentNode.ChildNodes);
+										//description = attName.Value.ToString();
 									if(attName.Name.ToString() == "class")
 										hasClass = true;
 								}
