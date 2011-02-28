@@ -23,7 +23,9 @@ namespace ScrewTurn.Wiki.Tests {
 			string output = Formatter.Format(Input, false, context, currentPage, out linkedPages, false);
 
 			// Ignore \r characters
-			Assert.AreEqual(ExpectedOutput.Replace("\r", ""), output.Replace("\r", ""), "Formatter output is different from expected output");
+			// Ignore \n characters
+
+			Assert.AreEqual(ExpectedOutput.Replace("\r\n", ""), output.Replace("\r\n", ""), "Formatter output is different from expected output");
 		}
 
 		[SetUp]
@@ -92,11 +94,10 @@ second line@@
 |}";
 
 		private const string ExpectedOutput =
-@"<b>bold</b> <i>italic</i> <u>underlined</u> <strike>striked</strike>
-<a class=""pagelink"" href=""page1.ashx"" title=""Page 1"">page1</a> <a class=""unknownlink"" href=""page2.ashx"" title=""page2"">title</a><br /><br /><pre>&#42; item 1
+@"<b>bold</b> <i>italic</i> <u>underlined</u> <strike>striked</strike><br /><a class=""pagelink"" href=""page1.ashx"" title=""Page 1"">page1</a> 
+<a class=""unknownlink"" href=""page2.ashx"" title=""page2"">title</a><br /><br /><pre>&#42; item 1
 &#42; item 2
-second line</pre><br /><table><tr><td>cell</td><td>other cell</td></tr></table>
-";
+second line</pre><br /><table><tr><td>cell</td><td>other cell</td></tr></table>";
 
 	}
 

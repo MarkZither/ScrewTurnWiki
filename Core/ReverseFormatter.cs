@@ -176,7 +176,7 @@ namespace ScrewTurn.Wiki {
 							}
 							break;
 						case "br":
-							result += ("{BR}\r\n" + processChild(node.ChildNodes));
+							result += ("\r\n" + processChild(node.ChildNodes));
 							break;
 						case "table":
 							string image = "";
@@ -244,7 +244,7 @@ namespace ScrewTurn.Wiki {
 								}
 							}
 							else
-								result += (processChild(node.ChildNodes) + "\r\n");
+								result += "\r\n" + (processChild(node.ChildNodes) + "\r\n");
 							break;
 
 						case "img":

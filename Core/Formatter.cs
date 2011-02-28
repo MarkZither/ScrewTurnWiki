@@ -262,6 +262,22 @@ namespace ScrewTurn.Wiki {
 				match = ExtendedUpRegex.Match(sb.ToString(), end);
 			}
 
+			match = SpecialTagRegex.Match(sb.ToString());
+			while(match.Success) {
+				if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
+					sb.Remove(match.Index, match.Length);
+					if(!forIndexing) {
+						switch(match.Value.Substring(1, match.Value.Length - 2).ToUpperInvariant()) {
+							case "BR":
+								sb.Insert(match.Index, "<br />");
+								break;
+						}
+					}
+				}
+				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
+				match = SpecialTagRegex.Match(sb.ToString(), end);
+			}
+
 			if(!bareBones) {
 				NamespaceInfo ns = DetectNamespaceInfo(current);
 				match = SpecialTagRegex.Match(sb.ToString());
@@ -292,9 +308,6 @@ namespace ScrewTurn.Wiki {
 									break;
 								case "CLEAR":
 									sb.Insert(match.Index, @"<div style=""clear: both;""></div>");
-									break;
-								case "BR":
-									sb.Insert(match.Index, "<br />");
 									break;
 								case "TOP":
 									sb.Insert(match.Index, @"<a href=""#PageTop"">" + Exchanger.ResourceExchanger.GetResource("Top") + "</a>");
@@ -1196,17 +1209,19 @@ namespace ScrewTurn.Wiki {
 		private static void ProcessLineBreaks(StringBuilder sb, bool bareBones) {
 			if(bareBones || AreSingleLineBreaksToBeProcessed()) {
 				// Replace new-lines only when not enclosed in <nobr> tags
-
 				Match match = NoSingleBr.Match(sb.ToString());
 				while(match.Success) {
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, match.Value.Replace("\n", SingleBrPlaceHolder));
+					//sb.Insert(match.Index, match.Value.Replace("\n", "<br />"));
+
 					match = NoSingleBr.Match(sb.ToString(), match.Index + 1);
 				}
 
 				sb.Replace("\n", "<br />");
 
 				sb.Replace(SingleBrPlaceHolder, "\n");
+				//sb.Replace(SingleBrPlaceHolder, "<br />");
 			}
 			else {
 				// Replace new-lines only when not enclosed in <nobr> tags
@@ -1215,12 +1230,14 @@ namespace ScrewTurn.Wiki {
 				while(match.Success) {
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, match.Value.Replace("\n", SingleBrPlaceHolder));
+					//sb.Insert(match.Index, match.Value.Replace("\n", "<br />"));
 					match = NoSingleBr.Match(sb.ToString(), match.Index + 1);
 				}
 
-				sb.Replace("\n\n", "<br /><br />");
+				sb.Replace("\n", "<br />");
 
 				sb.Replace(SingleBrPlaceHolder, "\n");
+
 			}
 
 			sb.Replace("<br>", "<br />");
