@@ -29,6 +29,7 @@ second line";
 		private MockRepository mocks;
 
 		[Test]
+		//[TestCase("{wikititle}","Title")]
 		[TestCase("@@rigatesto1\r\nriga2@@","<pre>rigatesto1\r\nriga2</pre>\n")]
 		[TestCase(Input,ExpectedOutput)]
 		public void Format(string input, string output) {
