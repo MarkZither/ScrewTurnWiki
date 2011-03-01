@@ -30,6 +30,8 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex BoldRegex = new Regex(@"'''.+?'''", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex ItalicRegex = new Regex(@"''.+?''", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex BoldItalicRegex = new Regex(@"'''''.+?'''''", RegexOptions.Compiled | RegexOptions.Singleline);
+		private static readonly Regex ApexRegex = new Regex(@"\&lt;sup\&gt(.+?)\&lt;/sup\&gt;", RegexOptions.Compiled | RegexOptions.Singleline);
+		private static readonly Regex SubscribeRegex = new Regex(@"\&lt;sub\&gt(.+?)\&lt;/sub\&gt;",RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex UnderlinedRegex = new Regex(@"__.+?__", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex StrikedRegex = new Regex(@"(?<!(\<\!|\&lt;))(\-\-(?!\>).+?\-\-)(?!(\>|\&gt;))", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex CodeRegex = new Regex(@"\{\{.+?\}\}", RegexOptions.Compiled | RegexOptions.Singleline);
@@ -602,6 +604,32 @@ namespace ScrewTurn.Wiki {
 				}
 				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 				match = UnderlinedRegex.Match(sb.ToString(), end);
+			}
+
+			match = ApexRegex.Match(sb.ToString());
+			while(match.Success) {
+				if(!IsNoWikied(match.Index, noWikiBegin, noWikiBegin, out end)) {
+					sb.Remove(match.Index, match.Length);
+					dummy = new StringBuilder("<sup>");
+					dummy.Append(match.Value.Substring(11, match.Value.Length - 23));
+					dummy.Append("</sup>");
+					sb.Insert(match.Index, dummy.ToString());
+				}
+				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
+				match = ApexRegex.Match(sb.ToString(), end);
+			}
+
+			match = SubscribeRegex.Match(sb.ToString());
+			while(match.Success) {
+				if(!IsNoWikied(match.Index, noWikiBegin, noWikiBegin, out end)) {
+					sb.Remove(match.Index, match.Length);
+					dummy = new StringBuilder("<sub>");
+					dummy.Append(match.Value.Substring(11, match.Value.Length - 23));
+					dummy.Append("</sub>");
+					sb.Insert(match.Index, dummy.ToString());
+				}
+				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
+				match = SubscribeRegex.Match(sb.ToString(), end);
 			}
 
 			match = StrikedRegex.Match(sb.ToString());

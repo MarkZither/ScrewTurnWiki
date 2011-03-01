@@ -30,7 +30,6 @@ namespace ScrewTurn.Wiki {
 							description += processChild(n.ChildNodes);
 					}
 				}
-
 			}
 			return description;
 		}
@@ -137,6 +136,11 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
+		private static string processCode(string text) {
+			string result = "";
+			result = text;
+			return result;
+		}
 		/// <summary>
 		/// Processes the child.
 		/// </summary>
@@ -149,7 +153,7 @@ namespace ScrewTurn.Wiki {
 				if(node.NodeType == XmlNodeType.Text) {
 					result += node.Value;
 				}
-				else if (node.NodeType != XmlNodeType.Whitespace){
+				else if(node.NodeType != XmlNodeType.Whitespace) {
 					switch(node.Name.ToLowerInvariant()) {
 						case "html":
 							result += processChild(node.ChildNodes);
@@ -158,6 +162,7 @@ namespace ScrewTurn.Wiki {
 						case "strong":
 							result += ("'''" + processChild(node.ChildNodes) + "'''");
 							break;
+						case "strike":
 						case "s":
 							result += ("--" + processChild(node.ChildNodes) + "--");
 							break;
@@ -170,29 +175,32 @@ namespace ScrewTurn.Wiki {
 							break;
 						//break;
 						case "h1":
-							result += ("==" + processChild(node.ChildNodes) + "==");
+							if(node.HasChildNodes)
+								result += ("\r\n==" + processChild(node.ChildNodes) + "==\r\n");
+							else
+								result += ("\r\n== ==\r\n");
 							break;
 						//break;
 						case "h2":
-							result += ("===" + processChild(node.ChildNodes) + "===");
+							result += ("\r\n===" + processChild(node.ChildNodes) + "===\r\n");
 							break;
 						//break;
 						case "h3":
-							result += ("====" + processChild(node.ChildNodes) + "====");
+							result += ("\r\n====" + processChild(node.ChildNodes) + "====\r\n");
 							break;
 						//break;
 						case "h4":
-							result += ("=====" + processChild(node.ChildNodes) + "=====");
+							result += ("\r\n=====" + processChild(node.ChildNodes) + "=====\r\n");
 							break;
 						case "pre":
-							result += ("@@" + node.InnerText.ToString() + "@@");
+							result += ("@@" + processCode(node.InnerText.ToString()) + "@@");
 							break;
 						case "code":
 							result += ("{{" + processChild(node.ChildNodes) + "}}");
 							break;
 						case "hr":
 						case "hr /":
-							result += ("----" + processChild(node.ChildNodes));
+							result += ("\r\n== ==\r\n" + processChild(node.ChildNodes));
 							break;
 						case "\t":
 							result += (":" + processChild(node.ChildNodes));
@@ -266,15 +274,15 @@ namespace ScrewTurn.Wiki {
 								XmlAttributeCollection attribute = node.Attributes;
 								foreach(XmlAttribute attName in attribute) {
 									if(attName.Value.ToString() == "box") {
-										result += "(((" + processChild(node.ChildNodes) + ")))\r\n";
+										result += "\r\n" + "(((" + processChild(node.ChildNodes) + ")))\r\n";
 									}
 									if(attName.Value.ToString() == "imageleft") {
-										result += "[imageleft" + processChildImage(node.ChildNodes) + "]\r\n";
+										result += "\r\n" + "[imageleft" + processChildImage(node.ChildNodes) + "]\r\n";
 									}
 									if(attName.Value.ToString() == "imageright")
-										result += "[imageright" + processChildImage(node.ChildNodes) + "]\r\n";
+										result += "\r\n" + "[imageright" + processChildImage(node.ChildNodes) + "]\r\n";
 									if(attName.Value.ToString() == "imageauto")
-										result += "[imageauto" + processChildImage(node.ChildNodes) + "]\r\n";
+										result += "\r\n" + "[imageauto" + processChildImage(node.ChildNodes) + "]\r\n";
 								}
 							}
 							else
@@ -292,7 +300,7 @@ namespace ScrewTurn.Wiki {
 								foreach(XmlAttribute attName in node.Attributes) {
 									if(attName.Name.ToString() == "alt")
 										description = searchDescription(node.ParentNode.ChildNodes);
-										//description = attName.Value.ToString();
+									//description = attName.Value.ToString();
 									if(attName.Name.ToString() == "class")
 										hasClass = true;
 								}
@@ -352,6 +360,7 @@ namespace ScrewTurn.Wiki {
 							break;
 					}
 				}
+				else result += "";
 			}
 			return result;
 		}
