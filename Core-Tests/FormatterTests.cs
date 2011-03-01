@@ -25,7 +25,7 @@ namespace ScrewTurn.Wiki.Tests {
 			// Ignore \r characters
 			// Ignore \n characters
 
-			Assert.AreEqual(ExpectedOutput.Replace("\r\n", ""), output.Replace("\r\n", ""), "Formatter output is different from expected output");
+			Assert.AreEqual(ExpectedOutput, output, "Formatter output is different from expected output");
 		}
 
 		[SetUp]
@@ -82,22 +82,15 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		private const string Input =
-@"'''bold''' ''italic'' __underlined__ --striked--
-[page1] [page2|title]
-
-@@* item 1
+@"'''bold''' ''italic'' __underlined__ --striked-- [page1]\r\n[page2|title]
+* item 1
 * item 2
-second line@@
 
-{|
-| cell || other cell
-|}";
+second line";
 
 		private const string ExpectedOutput =
-@"<b>bold</b> <i>italic</i> <u>underlined</u> <strike>striked</strike><br /><a class=""pagelink"" href=""page1.ashx"" title=""Page 1"">page1</a> 
-<a class=""unknownlink"" href=""page2.ashx"" title=""page2"">title</a><br /><br /><pre>&#42; item 1
-&#42; item 2
-second line</pre><br /><table><tr><td>cell</td><td>other cell</td></tr></table>";
+@"<b>bold</b> <i>italic</i> <u>underlined</u> <strike>striked</strike> <a class=""pagelink"" href=""page1.ashx"" title=""Page 1"">page1</a>\r\n" +
+"<a class=\"unknownlink\" href=\"page2.ashx\" title=\"page2\">title</a>\n<ul><li>item 1</li><li>item 2<br /></li></ul><br />second line\n";
 
 	}
 
