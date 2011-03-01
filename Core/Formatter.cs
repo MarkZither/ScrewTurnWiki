@@ -1264,7 +1264,7 @@ namespace ScrewTurn.Wiki {
 
 				sb.Replace("\n\n", "<br /><br />");
 
-				sb.Replace(SingleBrPlaceHolder, "<br /><br />");
+				sb.Replace(SingleBrPlaceHolder, "\n");//Replace <br /><br /> with <br />
 
 			}
 

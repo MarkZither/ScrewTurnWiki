@@ -10,22 +10,38 @@ using ScrewTurn.Wiki.PluginFramework;
 namespace ScrewTurn.Wiki.Tests {
 
 	[TestFixture]
+
 	public class FormatterTests {
+
+	private const string Input =
+@"'''bold''' ''italic'' __underlined__ --striked-- [page1]\r\n[page2|title]
+* item 1
+* item 2
+
+second line";
+
+	private const string ExpectedOutput =
+@"<b>bold</b> <i>italic</i> <u>underlined</u> <strike>striked</strike> <a class=""pagelink"" href=""page1.ashx"" title=""Page 1"">page1</a>\r\n" +
+"<a class=\"unknownlink\" href=\"page2.ashx\" title=\"page2\">title</a>\n<ul><li>item 1</li><li>item 2<br /></li></ul><br />second line\n";
+
+
 
 		private MockRepository mocks;
 
 		[Test]
-		public void Format() {
+		[TestCase("@@rigatesto1\r\nriga2@@","<pre>rigatesto1\r\nriga2</pre>\n")]
+		[TestCase(Input,ExpectedOutput)]
+		public void Format(string input, string output) {
 			FormattingContext context = FormattingContext.PageContent;
 			PageInfo currentPage = null;
 			string[] linkedPages = null;
 
-			string output = Formatter.Format(Input, false, context, currentPage, out linkedPages, false);
+			string _input = Formatter.Format(input, false, context, currentPage, out linkedPages, false);
 
 			// Ignore \r characters
 			// Ignore \n characters
 
-			Assert.AreEqual(ExpectedOutput, output, "Formatter output is different from expected output");
+			Assert.AreEqual(output, _input, "Formatter output is different from expected output");
 		}
 
 		[SetUp]
@@ -80,17 +96,6 @@ namespace ScrewTurn.Wiki.Tests {
 		public void TearDown() {
 			mocks.VerifyAll();
 		}
-
-		private const string Input =
-@"'''bold''' ''italic'' __underlined__ --striked-- [page1]\r\n[page2|title]
-* item 1
-* item 2
-
-second line";
-
-		private const string ExpectedOutput =
-@"<b>bold</b> <i>italic</i> <u>underlined</u> <strike>striked</strike> <a class=""pagelink"" href=""page1.ashx"" title=""Page 1"">page1</a>\r\n" +
-"<a class=\"unknownlink\" href=\"page2.ashx\" title=\"page2\">title</a>\n<ul><li>item 1</li><li>item 2<br /></li></ul><br />second line\n";
 
 	}
 
