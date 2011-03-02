@@ -112,9 +112,51 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
+
 		private static string processCode(string text) {
 			string result = "";
 			result = text;
+			return result;
+		}
+
+		/// <summary>
+		/// Processes the table.
+		/// </summary>
+		/// <param name="nodes">The nodes.</param>
+		/// <returns></returns>
+		private static string processTable(XmlNodeList nodes) {
+			string result = "";
+			bool isLast = false;
+			foreach(XmlNode node in nodes) {
+				if(node == node.ParentNode.LastChild) isLast = true;
+				switch (node.Name.ToLowerInvariant()){
+					case "thead":
+						result += processTable(node.ChildNodes) + "|-\r\n";
+						break;
+					case "th":
+						result += "! " + processChild(node.ChildNodes) + "\r\n"; 
+						break;
+					case "caption":
+						result += "|+ "+ processChild(node.ChildNodes);
+ 						break;
+					case "tbody":
+						result += processTable(node.ChildNodes) + "";
+						break;
+					case "tr":
+						string style = "";
+						foreach(XmlAttribute attr in node.Attributes) {
+							if(attr.Name.ToLowerInvariant() == "style") style += "style=\"" + attr.Value.ToString() + "\" ";
+						}
+						if(!isLast) result += processTable(node.ChildNodes) + "|-" + style + "\r\n";
+							else result += processTable(node.ChildNodes);
+						
+						break;
+					case "td":
+						result += "| " + processChild(node.ChildNodes) + "\r\n";
+						break;
+				}	
+
+			}
 			return result;
 		}
 		/// <summary>
@@ -199,18 +241,27 @@ namespace ScrewTurn.Wiki {
 						case "table":
 							bool isImage = false;
 							string image = "";
+							string border = "";
+							string background = "";
+							string cellspacing = "";
+							string cellpadding = "";
+
 							foreach(XmlAttribute attName in node.Attributes) {
 								if(attName.Value.ToString() == "imageauto") {
 									isImage = true;
 									image += "[imageauto|" + processChild(node.ChildNodes) + "]\r\n";
 								}
+								if(attName.Name.ToLowerInvariant() == "border") border += "border=\""+ attName.Value.ToString() + "\" "; 
+								if(attName.Name.ToLowerInvariant() == "bgcolor") background += "bgcolor=\"" + attName.Value.ToString() + "\" ";
+								if(attName.Name.ToLowerInvariant() == "cellspacing") cellpadding += "cellpadding=\"" + attName.Value.ToString() + "\" ";
+								if(attName.Name.ToLowerInvariant() == "cellspacing") cellspacing += "cellspacing=\"" + attName.Value.ToString() + "\" ";
 							}
 							if(isImage) {
 								result += image;
 								isImage = false;
 								break;
 							}
-							else result += processChild(node.ChildNodes);
+							else result += "{| " + border + background + cellpadding + cellspacing + "\r\n" + processTable(node.ChildNodes) + "|}";
 							break;
 						case "tbody":
 							result += processChild(node.ChildNodes);

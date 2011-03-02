@@ -858,16 +858,14 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			if(!bareBones) {
-				match = TableRegex.Match(sb.ToString());
-				while(match.Success) {
-					if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
-						sb.Remove(match.Index, match.Length);
-						sb.Insert(match.Index, BuildTable(match.Value));
-					}
-					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
-					match = TableRegex.Match(sb.ToString(), end);
+			match = TableRegex.Match(sb.ToString());
+			while(match.Success) {
+				if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
+					sb.Remove(match.Index, match.Length);
+					sb.Insert(match.Index, BuildTable(match.Value));
 				}
+				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
+				match = TableRegex.Match(sb.ToString(), end);
 			}
 
 			// Strip out all comments
