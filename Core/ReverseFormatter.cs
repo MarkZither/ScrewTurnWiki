@@ -36,7 +36,8 @@ namespace ScrewTurn.Wiki {
 							text += processChild(n.ChildNodes);
 						}
 					}
-					result += marker + " " + text + "\r\n";
+					result += marker + " " + text;
+					if(!result.EndsWith("\r\n")) result += "\r\n";
 					foreach(XmlNode child in node.ChildNodes) {
 						if(child.Name.ToString() == "ol"){
 							result += processList(child.ChildNodes, marker + ol);
@@ -59,9 +60,11 @@ namespace ScrewTurn.Wiki {
 			string result = "";
 			if(node.Attributes.Count != 0) {
 				foreach(XmlAttribute attName in node.Attributes) {
-					if((attName.Name.ToString() == "src") || (attName.Value.ToString().ToLowerInvariant() == "Image")) {
+					if((attName.Name == "src") || (attName.Value.ToString() == "Image")) {
 						string[] path = attName.Value.ToString().Split('=');
-						result += "{" + "UP(" + path[1].Split('&')[0] + ")}" + path[path.Length-1];
+						if(path.Length > 2)
+							result += "{" + "UP(" + path[1].Split('&')[0] + ")}" + path[2];
+						else result += "{UP}" + path[path.Length - 1];
 					}
 				}
 			}
@@ -223,9 +226,6 @@ namespace ScrewTurn.Wiki {
 							break;
 						case "ul":
 							result += processList(node.ChildNodes, "*");
-							break;
-						case "li":
-							result += processChild(node.ChildNodes);
 							break;
 						case "sup":
 							result += ("<sup>" + processChild(node.ChildNodes) + "</sup>");
