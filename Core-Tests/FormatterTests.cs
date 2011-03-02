@@ -29,7 +29,7 @@ second line";
 		private MockRepository mocks;
 
 		[Test]
-		//[TestCase("{wikititle}","Title")]
+		[TestCase("{wikititle}","Title\n")]
 		[TestCase("@@rigatesto1\r\nriga2@@","<pre>rigatesto1\r\nriga2</pre>\n")]
 		[TestCase(Input,ExpectedOutput)]
 		public void Format(string input, string output) {
@@ -51,6 +51,7 @@ second line";
 
 			ISettingsStorageProviderV30 settingsProvider = mocks.StrictMock<ISettingsStorageProviderV30>();
 			Expect.Call(settingsProvider.GetSetting("ProcessSingleLineBreaks")).Return("false").Repeat.Any();
+			Expect.Call(settingsProvider.GetSetting("WikiTitle")).Return("Title").Repeat.Any();
 
 			Collectors.SettingsProvider = settingsProvider;
 

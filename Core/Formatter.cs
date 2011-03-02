@@ -38,8 +38,8 @@ namespace ScrewTurn.Wiki {
 		private static readonly Regex PreRegex = new Regex(@"\{\{\{\{.+?\}\}\}\}", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex BoxRegex = new Regex(@"\(\(\(.+?\)\)\)", RegexOptions.Compiled | RegexOptions.Singleline);
 		private static readonly Regex ExtendedUpRegex = new Regex(@"\{up((\:|\().+?)?\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		private static readonly Regex SpecialTagRegex = new Regex(@"\{(wikititle|wikiversion|mainurl|rsspage|themepath|clear|br|top|searchbox|pagecount|pagecount\(\*\)|categories|cloud|orphans|wanted|namespacelist)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-		private static readonly Regex SpecialTagBR = new Regex(@"\{(br)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);		
+		private static readonly Regex SpecialTagRegex = new Regex(@"\{(wikititle|wikiversion|mainurl|rsspage|themepath|clear|top|searchbox|pagecount|pagecount\(\*\)|categories|cloud|orphans|wanted|namespacelist)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		private static readonly Regex SpecialTagBRRegex = new Regex(@"\{(br)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);		
 		private static readonly Regex Phase3SpecialTagRegex = new Regex(@"\{(username|pagename|loginlogout|namespace|namespacedropdown|incoming|outgoing)\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex RecentChangesRegex = new Regex(@"\{recentchanges(\(\*\))?\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 		private static readonly Regex ListRegex = new Regex(@"(?<=(\n|^))((\*|\#)+(\ )?.+?\n)+((?=\n)|\z)", RegexOptions.Compiled | RegexOptions.Singleline); // Singleline to matche list elements on multiple lines
@@ -265,7 +265,7 @@ namespace ScrewTurn.Wiki {
 				match = ExtendedUpRegex.Match(sb.ToString(), end);
 			}
 
-			match = SpecialTagBR.Match(sb.ToString()); // solved by introducing a new regex call SpecialTagBR
+			match = SpecialTagBRRegex.Match(sb.ToString()); // solved by introducing a new regex call SpecialTagBR
 			while(match.Success) {
 				if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
 					sb.Remove(match.Index, match.Length);
@@ -278,7 +278,7 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
-				match = SpecialTagRegex.Match(sb.ToString(), end);
+				match = SpecialTagBRRegex.Match(sb.ToString(), end);
 			}
 
 			if(!bareBones) {

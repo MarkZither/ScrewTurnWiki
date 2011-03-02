@@ -148,6 +148,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The corrispondent WikiMarkup Text</returns>
 		private static string processChild(XmlNodeList nodes) {
 			string result = "";
+			bool isImage = false;
 			foreach(XmlNode node in nodes) {
 				bool anchor = false;
 				if(node.NodeType == XmlNodeType.Text) {
@@ -222,7 +223,6 @@ namespace ScrewTurn.Wiki {
 							break;
 						case "table":
 							string image = "";
-							bool isImage = false;
 							foreach(XmlAttribute attName in node.Attributes) {
 								if(attName.Value.ToString() == "imageauto") {
 									isImage = true;
@@ -231,6 +231,7 @@ namespace ScrewTurn.Wiki {
 							}
 							if(isImage) {
 								result += image;
+								isImage = false;
 								break;
 							}
 							else result += processChild(node.ChildNodes);
@@ -242,7 +243,11 @@ namespace ScrewTurn.Wiki {
 							result += processChild(node.ChildNodes);
 							break;
 						case "td":
-							result += processChild(node.ChildNodes);
+							if(isImage) {
+								result += processChildImage(node.ChildNodes);
+							}
+							else 
+								result += processChild(node.ChildNodes);
 							break;
 						case "ol":
 							result += processList(node.ChildNodes, "#");
@@ -281,8 +286,8 @@ namespace ScrewTurn.Wiki {
 									}
 									if(attName.Value.ToString() == "imageright")
 										result += "\r\n" + "[imageright" + processChildImage(node.ChildNodes) + "]\r\n";
-									if(attName.Value.ToString() == "imageauto")
-										result += "\r\n" + "[imageauto" + processChildImage(node.ChildNodes) + "]\r\n";
+									if(attName.Value.ToString() == "image")
+										result += "\r\n" + "[image" + processChildImage(node.ChildNodes) + "]\r\n";
 								}
 							}
 							else
