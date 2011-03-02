@@ -17,24 +17,6 @@ namespace ScrewTurn.Wiki {
 
 
 		/// <summary>
-		/// Searches the description.
-		/// </summary>
-		/// <param name="nodes">The nodes.</param>
-		/// <returns></returns>
-		private static string searchDescription (XmlNodeList nodes){
-			string description = "";
-			foreach (XmlNode n in nodes){
-				if(n.Name.ToLowerInvariant() == "p") {
-					foreach(XmlAttribute att in n.Attributes) {
-						if(att.Value.ToLowerInvariant().ToString() == "imagedescription")
-							description += processChild(n.ChildNodes);
-					}
-				}
-			}
-			return description;
-		}
-
-		/// <summary>
 		/// Processes order or unorder lists and sublists.
 		/// </summary>
 		/// <param name="nodes">The nodes.</param>
@@ -148,7 +130,6 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The corrispondent WikiMarkup Text</returns>
 		private static string processChild(XmlNodeList nodes) {
 			string result = "";
-			bool isImage = false;
 			foreach(XmlNode node in nodes) {
 				bool anchor = false;
 				if(node.NodeType == XmlNodeType.Text) {
@@ -222,6 +203,7 @@ namespace ScrewTurn.Wiki {
 							result += ("\r\n" + processChild(node.ChildNodes));
 							break;
 						case "table":
+							bool isImage = false;
 							string image = "";
 							foreach(XmlAttribute attName in node.Attributes) {
 								if(attName.Value.ToString() == "imageauto") {
@@ -243,10 +225,6 @@ namespace ScrewTurn.Wiki {
 							result += processChild(node.ChildNodes);
 							break;
 						case "td":
-							if(isImage) {
-								result += processChildImage(node.ChildNodes);
-							}
-							else 
 								result += processChild(node.ChildNodes);
 							break;
 						case "ol":
@@ -304,7 +282,7 @@ namespace ScrewTurn.Wiki {
 							if(node.Attributes.Count != 0) {
 								foreach(XmlAttribute attName in node.Attributes) {
 									if(attName.Name.ToString() == "alt")
-										description = searchDescription(node.ParentNode.ChildNodes);
+										description = attName.Value.ToString();
 									//description = attName.Value.ToString();
 									if(attName.Name.ToString() == "class")
 										hasClass = true;

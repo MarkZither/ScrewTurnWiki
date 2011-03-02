@@ -39,10 +39,10 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("<html><a class=\"externallink\" href=\"google.com\" title=\"BIG TITLE\" target=\"_blank\">BIG TITLE</a></html>", "[^google.com|BIG TITLE]")]
 		[TestCase("<esc>try to esc tag</esc>", "<esc>try to esc tag</esc>")]
 		[TestCase("<div class=\"imageleft\"><a target=\"_blank\" href=\"www.link.com\" title=\"left Align\"><img class=\"image\" src=\"GetFile.aspx?Page=MainPage&File=image.png\" alt=\"left Align\" /></a><p class=\"imagedescription\">leftalign</p></div>", "\r\n[imageleft|leftalign|{UP(MainPage)}image.png|^www.link.com]\r\n")]
-		[TestCase("<img src=\"GetFile.aspx?Page=MainPage&File=image.png\" alt=\"inlineimage\" />", "[image||{UP(MainPage)}image.png]\r\n")]
-		[TestCase("<a target=\"_blank\" href=\"www.google.it\" title=\"description\"><img src=\"GetFile.aspx?Page=MainPage&File=image.png\" alt=\"description\" /></a>", "[image||{UP(MainPage)}image.png|^www.google.it]\r\n")]
+		[TestCase("<img src=\"GetFile.aspx?Page=MainPage&File=image.png\" alt=\"inlineimage\" />", "[image|inlineimage|{UP(MainPage)}image.png]\r\n")]
+		[TestCase("<a target=\"_blank\" href=\"www.google.it\" title=\"description\"><img src=\"GetFile.aspx?Page=MainPage&File=image.png\" alt=\"description\" /></a>", "[image|description|{UP(MainPage)}image.png|^www.google.it]\r\n")]
 		[TestCase("<table class=\"imageauto\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr><td><img class=\"image\" src=\"GetFile.aspx?Page=MainPage&File=image.png\" alt=\"autoalign\" /><p class=\"imagedescription\">autoalign</p></td></tr></tbody></table>", "[imageauto|autoalign|{UP(MainPage)}image.png]\r\n")]
-		[TestCase("<table class=\"imageauto\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr><td><a href=\"www.link.com\" title=\"Auto align\"><img class=\"image\" src=\"GetFile.aspx?Page=MainPage&File=image.png\" alt=\"Auto align\" /></a><p class=\"imagedescription\">Auto align</p></td></tr></tbody></table>", "[imageauto||{UP(MainPage)}image.png|www.link.com]\r\n")]
+		[TestCase("<table class=\"imageauto\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr><td><a href=\"www.link.com\" title=\"Auto align\"><img class=\"image\" src=\"GetFile.aspx?Page=MainPage&File=image.png\" alt=\"Auto align\" /></a><p class=\"imagedescription\">Auto align</p></td></tr></tbody></table>", "[imageauto|Auto align|{UP(MainPage)}image.png|www.link.com]\r\n")]
 		public void PlainTest(string input, string output) {
 			Assert.AreEqual(output, ReverseFormatter.ReverseFormat(input));
 		}
