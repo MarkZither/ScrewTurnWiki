@@ -27,37 +27,28 @@ namespace ScrewTurn.Wiki {
 			string ul = "*";
 			string ol = "#";
 			foreach(XmlNode node in nodes) {
-				if(node.Name.ToString() == "li") {
+				string text = "";
+				if(node.Name == "li") {
 					foreach(XmlNode child in node.ChildNodes) {
-						if(child.NodeType == XmlNodeType.Text) {
-						    string ie = child.Value.ToString();
-						    ie = ie.Replace("\r", string.Empty).Replace("\n", string.Empty);
-						    child.Value = ie;
+						if(child.Name != "ol" && child.Name != "ul") {
+							StringReader a = new StringReader(child.OuterXml);
+							XmlDocument n = FromHTML((TextReader)a);
+							text += processChild(n.ChildNodes);
 						}
-						switch(child.Name.ToString()) {
-							case "ol":
-								result += processList(child.ChildNodes, marker + ol);
-								break;
-							case "ul":
-								result += processList(child.ChildNodes, marker + ul);
-								break;
-							case "br":
-								StringReader aa = new StringReader(child.OuterXml);
-								XmlDocument ne = FromHTML((TextReader)aa);
-								result += processChild(ne.ChildNodes);
-								break;
-							default:
-								StringReader a = new StringReader(child.OuterXml);
-								XmlDocument n = FromHTML((TextReader)a);
-								result += marker + " " + processChild(n.ChildNodes) + "\r\n";
-								break;
+					}
+					result += marker + " " + text + "\r\n";
+					foreach(XmlNode child in node.ChildNodes) {
+						if(child.Name.ToString() == "ol"){
+							result += processList(child.ChildNodes, marker + ol);
+						}
+						if (child.Name.ToString() == "ul") {
+							result += processList(child.ChildNodes, marker + ul);
 						}
 					}
 				}
 			}
 			return result;
 		}
-
 
 		/// <summary>
 		/// Processes the image.
@@ -70,7 +61,7 @@ namespace ScrewTurn.Wiki {
 				foreach(XmlAttribute attName in node.Attributes) {
 					if((attName.Name.ToString() == "src") || (attName.Value.ToString().ToLowerInvariant() == "Image")) {
 						string[] path = attName.Value.ToString().Split('=');
-						result += "{" + "UP(" + path[1].Split('&')[0] + ")}" + path[2];
+						result += "{" + "UP(" + path[1].Split('&')[0] + ")}" + path[path.Length-1];
 					}
 				}
 			}
