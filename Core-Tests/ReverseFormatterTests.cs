@@ -17,6 +17,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("<em>text</em>", "''text''")]
 		[TestCase("<u>text</u>", "__text__")]
 		[TestCase("<s>text</s>", "--text--")]
+		[TestCase("<html><table border=\"1\" bgcolor=\"LightBlue\"><thead><tr><th>Cells x.1</th><th>Cells x.2</th></tr></thead><tbody><tr><td>Cell 1.1</td><td>Cell 1.2</td></tr><tr><td>Cell 2.1</td><td>Cell 2.2</td></tr></tbody></table></html>", "{| border=\"1\" bgcolor=\"LightBlue\" \r\n|- \r\n! Cells x.1\r\n! Cells x.2\r\n|- \r\n| Cell 1.1\r\n| Cell 1.2\r\n|- \r\n| Cell 2.1\r\n| Cell 2.2\r\n|}\r\n")]
+		[TestCase("<table><tbody><tr><td bgcolor=\"Blue\">Styled Cell</td><td>Normal cell</td></tr><tr><td>Normal cell</td><td bgcolor=\"Yellow\">Styled cell</td></tr></tbody></table>", "{| \r\n|- \r\n|  bgcolor=\"Blue\"  | Styled Cell\r\n| Normal cell\r\n|- \r\n| Normal cell\r\n|  bgcolor=\"Yellow\"  | Styled cell\r\n|}\r\n")]
 		[TestCase("<h1>text</h1>", "\r\n==text==\r\n")]
 		[TestCase("<h2>text</h2>", "\r\n===text===\r\n")]
 		[TestCase("<h3>text</h3>", "\r\n====text====\r\n")]

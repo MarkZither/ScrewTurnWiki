@@ -60,7 +60,7 @@ namespace ScrewTurn.Wiki {
 			string result = "";
 			if(node.Attributes.Count != 0) {
 				foreach(XmlAttribute attName in node.Attributes) {
-					if((attName.Name == "src") || (attName.Value.ToString() == "Image")) {
+					if(attName.Name == "src")  {
 						string[] path = attName.Value.ToString().Split('=');
 						if(path.Length > 2)
 							result += "{" + "UP(" + path[1].Split('&')[0] + ")}" + path[2];
@@ -113,6 +113,66 @@ namespace ScrewTurn.Wiki {
 		}
 
 
+		/// <summary>
+		/// Processes the table image.
+		/// </summary>
+		/// <param name="nodes">The nodes.</param>
+		/// <returns>An auto-image type formmatter</returns>
+		private static string processTableImage(XmlNodeList nodes){
+			string result = "";
+			foreach(XmlNode node in nodes){
+				switch(node.Name.ToLowerInvariant()) {
+					case "tbody":
+						result += processTableImage(node.ChildNodes);
+						break;
+					case "tr":
+						result += processTableImage(node.ChildNodes);
+						break;
+					case "td":
+						string image = "";
+						string aref = "";
+						string p = "";
+						bool hasLink = false;
+						if(node.FirstChild.Name.ToLowerInvariant() == "img") image += processTableImage(node.ChildNodes);
+						if(node.FirstChild.Name.ToLowerInvariant() == "a") {
+							hasLink = true;
+							aref += processTableImage(node.ChildNodes);
+						}
+						if(node.LastChild.Name.ToLowerInvariant() == "p") p += node.LastChild.InnerText.ToString();
+						if(!hasLink) result += p + image;
+						else result += p + aref;
+						break;
+					case "img":
+						result += "|" + processImage(node);
+						break;
+					case "a":
+						string link = "";
+						string target = "";
+						string title = "";
+						if(node.Attributes.Count != 0) {
+							XmlAttributeCollection attribute = node.Attributes;
+							foreach(XmlAttribute attName in attribute) {
+								if(attName.Name.ToString() != "id".ToLowerInvariant()) {
+									if(attName.Value.ToString() == "_blank")
+										target += "^";
+									if(attName.Name.ToString() == "href")
+										link += attName.Value.ToString();
+									if(attName.Name.ToString() == "title")
+										title += attName.Value.ToString();
+								}
+							}
+							result += processTableImage(node.ChildNodes) + "|" + target + link;
+						}
+						break;
+				}
+			}
+			return result;
+		}
+		/// <summary>
+		/// Processes the code.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <returns></returns>
 		private static string processCode(string text) {
 			string result = "";
 			result = text;
@@ -126,33 +186,37 @@ namespace ScrewTurn.Wiki {
 		/// <returns></returns>
 		private static string processTable(XmlNodeList nodes) {
 			string result = "";
-			bool isLast = false;
+
 			foreach(XmlNode node in nodes) {
-				if(node == node.ParentNode.LastChild) isLast = true;
 				switch (node.Name.ToLowerInvariant()){
 					case "thead":
-						result += processTable(node.ChildNodes) + "|-\r\n";
+						result += processTable(node.ChildNodes);
 						break;
 					case "th":
 						result += "! " + processChild(node.ChildNodes) + "\r\n"; 
 						break;
 					case "caption":
-						result += "|+ "+ processChild(node.ChildNodes);
- 						break;
+						result += "|+ "+ processChild(node.ChildNodes) + "\r\n";
+						break;
 					case "tbody":
 						result += processTable(node.ChildNodes) + "";
 						break;
 					case "tr":
 						string style = "";
-						foreach(XmlAttribute attr in node.Attributes) {
+						foreach(XmlAttribute attr in node.Attributes) 
 							if(attr.Name.ToLowerInvariant() == "style") style += "style=\"" + attr.Value.ToString() + "\" ";
-						}
-						if(!isLast) result += processTable(node.ChildNodes) + "|-" + style + "\r\n";
-							else result += processTable(node.ChildNodes);
-						
+
+						result += "|- " + style + "\r\n" + processTable(node.ChildNodes);
+						//else result += processTable(node.ChildNodes);
 						break;
 					case "td":
-						result += "| " + processChild(node.ChildNodes) + "\r\n";
+						string styleTd = "";
+						if(node.Attributes.Count != 0) { 
+							foreach(XmlAttribute attr in node.Attributes) 
+								styleTd += " " + attr.Name + "=\"" + attr.Value.ToString() + "\" ";
+							result += "| " + styleTd + " | " + processChild(node.ChildNodes) + "\r\n";
+						}
+						else result += "| " + processChild(node.ChildNodes) + "\r\n";
 						break;
 				}	
 
@@ -241,36 +305,21 @@ namespace ScrewTurn.Wiki {
 						case "table":
 							bool isImage = false;
 							string image = "";
-							string border = "";
-							string background = "";
-							string cellspacing = "";
-							string cellpadding = "";
+							string tableStyle = "";
 
 							foreach(XmlAttribute attName in node.Attributes) {
 								if(attName.Value.ToString() == "imageauto") {
 									isImage = true;
-									image += "[imageauto|" + processChild(node.ChildNodes) + "]\r\n";
+									image += "[imageauto|" + processTableImage(node.ChildNodes)  + "]\r\n";
 								}
-								if(attName.Name.ToLowerInvariant() == "border") border += "border=\""+ attName.Value.ToString() + "\" "; 
-								if(attName.Name.ToLowerInvariant() == "bgcolor") background += "bgcolor=\"" + attName.Value.ToString() + "\" ";
-								if(attName.Name.ToLowerInvariant() == "cellspacing") cellpadding += "cellpadding=\"" + attName.Value.ToString() + "\" ";
-								if(attName.Name.ToLowerInvariant() == "cellspacing") cellspacing += "cellspacing=\"" + attName.Value.ToString() + "\" ";
+								else tableStyle += attName.Name + "=\"" + attName.Value.ToString() + "\" ";
 							}
 							if(isImage) {
 								result += image;
 								isImage = false;
 								break;
 							}
-							else result += "{| " + border + background + cellpadding + cellspacing + "\r\n" + processTable(node.ChildNodes) + "|}";
-							break;
-						case "tbody":
-							result += processChild(node.ChildNodes);
-							break;
-						case "tr":
-							result += processChild(node.ChildNodes);
-							break;
-						case "td":
-								result += processChild(node.ChildNodes);
+							else result += "{| " + tableStyle + "\r\n" + processTable(node.ChildNodes) + "|}\r\n";
 							break;
 						case "ol":
 							result += processList(node.ChildNodes, "#");
@@ -373,8 +422,8 @@ namespace ScrewTurn.Wiki {
 										result += "[" + target + link + "|" + processChild(node.ChildNodes) + "]";
 									else
 										result += "[" + target + link + "|" + processChild(node.ChildNodes) + "]";
-								if((!anchor) && (isTable))
-									result += processChild(node.ChildNodes) + "|" + target + link;
+								if((!anchor) && (!childImg) && (isTable))
+									result += "[" + processChild(node.ChildNodes) + "]";
 								if((!anchor) && (childImg) && (!isTable))
 									result += processChild(node.ChildNodes) + "|" + target + link + "]\r\n";
 							}
