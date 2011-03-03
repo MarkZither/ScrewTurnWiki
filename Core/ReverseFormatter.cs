@@ -351,12 +351,12 @@ namespace ScrewTurn.Wiki {
 										result += "\r\n" + "(((" + processChild(node.ChildNodes) + ")))\r\n";
 									}
 									if(attName.Value.ToString() == "imageleft") {
-										result += "\r\n" + "[imageleft" + processChildImage(node.ChildNodes) + "]\r\n";
+										result += "[imageleft" + processChildImage(node.ChildNodes) + "]\r\n";
 									}
 									if(attName.Value.ToString() == "imageright")
-										result += "\r\n" + "[imageright" + processChildImage(node.ChildNodes) + "]\r\n";
+										result += "[imageright" + processChildImage(node.ChildNodes) + "]\r\n";
 									if(attName.Value.ToString() == "image")
-										result += "\r\n" + "[image" + processChildImage(node.ChildNodes) + "]\r\n";
+										result += "[image" + processChildImage(node.ChildNodes) + "]\r\n";
 								}
 							}
 							else
