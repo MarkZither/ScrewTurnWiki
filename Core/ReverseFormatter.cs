@@ -257,22 +257,23 @@ namespace ScrewTurn.Wiki {
 							break;
 						//break;
 						case "h1":
-							if(node.HasChildNodes)
-								result += ("\r\n==" + processChild(node.ChildNodes) + "==\r\n");
-							else
-								result += ("\r\n== ==\r\n");
+							if(node.HasChildNodes) {
+								if (node.FirstChild.NodeType == XmlNodeType.Whitespace) result += ("----\r\n" + processChild(node.ChildNodes));
+								else result += ("==" + processChild(node.ChildNodes) + "==\r\n");
+							}
+							else result += ("----\r\n");
 							break;
 						//break;
 						case "h2":
-							result += ("\r\n===" + processChild(node.ChildNodes) + "===\r\n");
+							result += ("===" + processChild(node.ChildNodes) + "===\r\n");
 							break;
 						//break;
 						case "h3":
-							result += ("\r\n====" + processChild(node.ChildNodes) + "====\r\n");
+							result += ("====" + processChild(node.ChildNodes) + "====\r\n");
 							break;
 						//break;
 						case "h4":
-							result += ("\r\n=====" + processChild(node.ChildNodes) + "=====\r\n");
+							result += ("=====" + processChild(node.ChildNodes) + "=====\r\n");
 							break;
 						case "pre":
 							result += ("@@" + processCode(node.InnerText.ToString()) + "@@");
@@ -283,12 +284,6 @@ namespace ScrewTurn.Wiki {
 						case "hr":
 						case "hr /":
 							result += ("\r\n== ==\r\n" + processChild(node.ChildNodes));
-							break;
-						case "\t":
-							result += (":" + processChild(node.ChildNodes));
-							break;
-						case "éé":
-							result += ("~~~~" + processChild(node.ChildNodes));
 							break;
 						case "span":
 							if(node.Attributes.Count != 0) {
@@ -322,10 +317,18 @@ namespace ScrewTurn.Wiki {
 							else result += "{| " + tableStyle + "\r\n" + processTable(node.ChildNodes) + "|}\r\n";
 							break;
 						case "ol":
-							result += processList(node.ChildNodes, "#");
+							if(node.ParentNode != null) {
+								if(node.ParentNode.Name.ToLowerInvariant() != "td")	result += processList(node.ChildNodes, "#");
+								else result += node.OuterXml.ToString();
+							}
+							else result += processList(node.ChildNodes, "#");
 							break;
 						case "ul":
-							result += processList(node.ChildNodes, "*");
+							if (node.ParentNode != null) {
+								if(node.ParentNode.Name.ToLowerInvariant() != "td") result += processList(node.ChildNodes, "*");
+								else result += node.OuterXml.ToString();
+							}
+							else result += processList(node.ChildNodes, "*");
 							break;
 						case "sup":
 							result += ("<sup>" + processChild(node.ChildNodes) + "</sup>");
@@ -348,7 +351,7 @@ namespace ScrewTurn.Wiki {
 								XmlAttributeCollection attribute = node.Attributes;
 								foreach(XmlAttribute attName in attribute) {
 									if(attName.Value.ToString() == "box") {
-										result += "\r\n" + "(((" + processChild(node.ChildNodes) + ")))\r\n";
+										result += "(((" + processChild(node.ChildNodes) + ")))\r\n";
 									}
 									if(attName.Value.ToString() == "imageleft") {
 										result += "[imageleft" + processChildImage(node.ChildNodes) + "]\r\n";
@@ -357,10 +360,11 @@ namespace ScrewTurn.Wiki {
 										result += "[imageright" + processChildImage(node.ChildNodes) + "]\r\n";
 									if(attName.Value.ToString() == "image")
 										result += "[image" + processChildImage(node.ChildNodes) + "]\r\n";
+									if(attName.Value.ToString() == "indent") result += ": " + processChild(node.ChildNodes) + "\r\n";
 								}
 							}
 							else
-								result += "\r\n" + (processChild(node.ChildNodes) + "\r\n");
+								result += (processChild(node.ChildNodes) + "\r\n");
 							break;
 
 						case "img":
@@ -392,6 +396,7 @@ namespace ScrewTurn.Wiki {
 							string link = "";
 							string target = "";
 							string title = "";
+							bool isInternalLink = false;
 							bool childImg = false;
 							if(node.FirstChild != null) {
 								if(node.FirstChild.Name.ToLowerInvariant() == "img")
@@ -409,12 +414,18 @@ namespace ScrewTurn.Wiki {
 											link += attName.Value.ToString();
 										if(attName.Name.ToString() == "title")
 											title += attName.Value.ToString();
+										if(attName.Value.ToString() == "SystemLink".ToLowerInvariant())
+											isInternalLink = true;
 									}
 									else {
 										anchor = true;
 										result += "[anchor|#" + attName.Value.ToString().ToLowerInvariant() + "]" + processChild(node.ChildNodes);
 										break;
 									}
+								}
+								if (isInternalLink){
+									string[] splittedLink = link.Split('=');
+									link = "c:" + splittedLink[1];
 								}
 
 								if((!anchor) && (!isTable) && (!childImg))
@@ -423,7 +434,7 @@ namespace ScrewTurn.Wiki {
 									else
 										result += "[" + target + link + "|" + processChild(node.ChildNodes) + "]";
 								if((!anchor) && (!childImg) && (isTable))
-									result += "[" + processChild(node.ChildNodes) + "]";
+									result += "[" + target + link + "|" + processChild(node.ChildNodes) + "]";
 								if((!anchor) && (childImg) && (!isTable))
 									result += processChild(node.ChildNodes) + "|" + target + link + "]\r\n";
 							}

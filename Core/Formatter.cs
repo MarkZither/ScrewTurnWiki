@@ -216,16 +216,14 @@ namespace ScrewTurn.Wiki {
 
 			// Snippets and tables processing was here
 
-			if(!bareBones) {
-				match = IndentRegex.Match(sb.ToString());
-				while(match.Success) {
-					if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
-						sb.Remove(match.Index, match.Length);
-						sb.Insert(match.Index, BuildIndent(match.Value) + "\n");
-					}
-					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
-					match = IndentRegex.Match(sb.ToString(), end);
+			match = IndentRegex.Match(sb.ToString());
+			while(match.Success) {
+				if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
+					sb.Remove(match.Index, match.Length);
+					sb.Insert(match.Index, BuildIndent(match.Value) + "\n");
 				}
+				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
+				match = IndentRegex.Match(sb.ToString(), end);
 			}
 
 			// Process extended UP before standard UP
@@ -2304,7 +2302,7 @@ namespace ScrewTurn.Wiki {
 			indent = indent.Trim();
 			while(colons < indent.Length && indent[colons] == ':') colons++;
 			indent = indent.Substring(colons).Trim();
-			return @"<div style=""margin: 0px; padding: 0px; padding-left: " + ((int)(colons * 15)).ToString() + @"px"">" + indent + "</div>";
+			return @"<div class=""indent"" style=""margin: 0px; padding: 0px; padding-left: " + ((int)(colons * 15)).ToString() + @"px"">" + indent + "</div>";
 		}
 
 		/// <summary>
