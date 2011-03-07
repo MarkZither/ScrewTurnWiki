@@ -308,13 +308,13 @@
     <value>Weergavenaam bewaard</value>
   </data>
   <data name="UserDeletedMessage" xml:space="preserve">
-    <value>##USER## deleted a message on the discussion of ##PAGE##.</value>
+    <value>##USER## verwijderde een reactie bij ##PAGE##.</value>
   </data>
   <data name="UserDeletedPage" xml:space="preserve">
     <value>##USER## heeft de pagina  ##PAGE## verwijderd.</value>
   </data>
   <data name="UserEditedMessage" xml:space="preserve">
-    <value>##USER## edited a message on the discussion of ##PAGE##.</value>
+    <value>##USER## heeft een bericht bewerkt bij ##PAGE##.</value>
   </data>
   <data name="UserPostedMessage" xml:space="preserve">
     <value>##USER## plaatste een bericht op de discussie van ##PAGE##.</value>
@@ -326,7 +326,7 @@
     <value>##USER## heeft een eerdere versie tergezet van de pagina ##PAGE##.</value>
   </data>
   <data name="UserUpdatedPage" xml:space="preserve">
-    <value>##USER## updated the page ##PAGE##.</value>
+    <value>##USER## heeft de pagina ##PAGE## gewijzigd.</value>
   </data>
   <data name="CreateThisPage" xml:space="preserve">
     <value>Maak deze Pagina</value>
@@ -515,7 +515,7 @@
     <value>bekijk wijzigingen</value>
   </data>
   <data name="DiffingPageTitle" xml:space="preserve">
-    <value>Diffing &lt;i&gt;##PAGETITLE##&lt;/i&gt;, at revisions &lt;i&gt;##REV1##&lt;/i&gt; and &lt;i&gt;##REV2##&lt;/i&gt;</value>
+    <value>Verschillen&lt;i&gt;##PAGETITLE##&lt;/i&gt;, bij revisies &lt;i&gt;##REV1##&lt;/i&gt; en &lt;i&gt;##REV2##&lt;/i&gt;</value>
   </data>
   <data name="CouldNotCreateSnippet" xml:space="preserve">
     <value>Kon Fragment niet maken </value>
@@ -647,7 +647,7 @@
     <value>Could not set the Theme for the Namespace</value>
   </data>
   <data name="NamespaceCreatedCouldNotCreateDefaultPage" xml:space="preserve">
-    <value>Namespace gemaakt, but could not create the default Page</value>
+    <value>Namespace gemaakt, maar niet de default Pagina</value>
   </data>
   <data name="NamespaceCreatedCouldNotSetDefaultPage" xml:space="preserve">
     <value>Namespace gemaakt, but could not set its default Page</value>
@@ -665,10 +665,10 @@
     <value>User created, but could not store Permissions</value>
   </data>
   <data name="UserUpdatedCouldNotDeleteOldPermissions" xml:space="preserve">
-    <value>User updated, but could not delete old Permissions</value>
+    <value>Gebruiker is bijgewerkt, niet alle oude toegangsrechten konden worden verwijderd</value>
   </data>
   <data name="UserUpdatedCouldNotStoreGroupMembership" xml:space="preserve">
-    <value>User updated, but could not store Group membership</value>
+    <value>Gebruiker is bijgewerkt, de deelname aan groepen kon niet worden bijgewerkt</value>
   </data>
   <data name="UserUpdatedCouldNotStoreNewPermissions" xml:space="preserve">
     <value>User updated, but could not store new Permissions</value>
@@ -872,7 +872,7 @@
     <value>Kan nieuwe Folder niet maken</value>
   </data>
   <data name="DiffColorKey" xml:space="preserve">
-    <value>Color key: &lt;span style="background-color: #88CC33;"&gt;added text&lt;/span&gt; / &lt;span style="background-color: #FFDF66;"&gt;removed text&lt;/span&gt;.</value>
+    <value>Kleur sleutel: &lt;span style="background-color: #88CC33;"&gt;toegevoegde tekst&lt;/span&gt; / &lt;span style="background-color: #FFDF66;"&gt;verwijderde tekst&lt;/span&gt;.</value>
   </data>
   <data name="EarlierThisMonth" xml:space="preserve">
     <value>Eerder deze maand</value>
@@ -1542,7 +1542,7 @@
     <value>Provider niet gevonden</value>
   </data>
   <data name="ProviderUnloaded" xml:space="preserve">
-    <value>Provider ontlaadt</value>
+    <value>Provider verwijderd</value>
   </data>
   <data name="RecentPageUpdates" xml:space="preserve">
     <value>Recente pagina Updates</value>

@@ -117,197 +117,128 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblUsernameRegExResource2.Text" xml:space="preserve">
-    <value>Regul&amp;aelig;re uttrykk for &amp;aring; kontrollere brukernavn og gruppenavn</value>
-  </data>
-  <data name="lblPasswordRegExResource2.Text" xml:space="preserve">
-    <value>Regul&amp;aelig;rt uttrykk for passord-valid</value>
-  </data>
-  <data name="chkEnableSectionAnchorsResource1.Text" xml:space="preserve">
-    <value>Vis ankre for sidenes kapitler</value>
-  </data>
-  <data name="chkEnableSectionAnchorsResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblIpHostFilterResource1.Text" xml:space="preserve">
-    <value>IP-adresser som har lov til &amp;aring; editere (adskilt med komma, for eksempel 192.168.32.*,192.0.2.142)</value>
-  </data>
-  <data name="chkProcessSingleLineBreaksResource2.Text" xml:space="preserve">
-    <value>Sett enkle linjeskift inn i innholdet (experimentell funksjon)</value>
-  </data>
-  <data name="chkProcessSingleLineBreaksResource2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="chkAutoGeneratePageNamesResource1.Text" xml:space="preserve">
-    <value>Lag sidenavn automatisk som standard</value>
-  </data>
-  <data name="lblExtensionsAllowedForUploadResource2.Text" xml:space="preserve">
-    <value>Filtyper tillatt for opplasting (kommaseparert eller '*' for alle typer)</value>
-  </data>
-  <data name="lblRssFeedsModeResource1.Text" xml:space="preserve">
-    <value>RSS-modus</value>
-  </data>
-  <data name="ListItemResource42.Text" xml:space="preserve">
-    <value>Full tekst</value>
-  </data>
-  <data name="ListItemResource42.Value" xml:space="preserve">
-    <value>Full tekst</value>
-  </data>
-  <data name="ListItemResource43.Text" xml:space="preserve">
-    <value>Oppsummering</value>
-  </data>
-  <data name="ListItemResource43.Value" xml:space="preserve">
-    <value>Oppsummering</value>
-  </data>
-  <data name="ListItemResource44.Text" xml:space="preserve">
-    <value>Disabled (RSS feeds completely disabled)</value>
-  </data>
-  <data name="ListItemResource44.Value" xml:space="preserve">
-    <value>Disabled</value>
-  </data>
-  <data name="lstFileDownloadCountFilterModeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ListItemResource39.Text" xml:space="preserve">
-    <value>Antall filer</value>
-  </data>
-  <data name="ListItemResource39.Value" xml:space="preserve">
-    <value>Tell alt</value>
-  </data>
-  <data name="ListItemResource40.Text" xml:space="preserve">
-    <value>Antall med bestemte etternavn (adskilt med komma)</value>
-  </data>
-  <data name="ListItemResource40.Value" xml:space="preserve">
-    <value>Tell spesifikke etternavn</value>
-  </data>
-  <data name="ListItemResource41.Text" xml:space="preserve">
-    <value>Antall filer med alle etternavn unntatt (adskilt med komma)</value>
-  </data>
-  <data name="ListItemResource41.Value" xml:space="preserve">
-    <value>Ekskluder spesifiserte etternavn</value>
-  </data>
-  <data name="txtFileDownloadCountFilterResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtFileDownloadCountFilterResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="btnAutoWikiUrlResource1.Text" xml:space="preserve">
-    <value>auto-oppdag</value>
+    <value>tự động dò tìm</value>
   </data>
   <data name="btnAutoWikiUrlResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Lagre oppsett</value>
+    <value>Lưu cấu hình</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkAllowScriptTagsResource1.Text" xml:space="preserve">
-    <value>Tillat SCRIPT-tagger i WikiMarkup</value>
+    <value>Cho phép thẻ SCRIPT trong WikiMarkup</value>
   </data>
   <data name="chkAllowScriptTagsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkAllowUsersToRegisterResource1.Text" xml:space="preserve">
-    <value>La brukere registrere seg</value>
+    <value>Cho phép người dùng đăng ký</value>
   </data>
   <data name="chkAllowUsersToRegisterResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkDisableCacheResource1.Text" xml:space="preserve">
-    <value>Ta bort cache</value>
+    <value>Vô hiệu hóa cache một cách toàn diện</value>
   </data>
   <data name="chkDisableCacheResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkDisplayGravatarsResource1.Text" xml:space="preserve">
-    <value>Vis gravatarer i brukerkontoene</value>
+    <value>Hiển thị Gravatars cho tài khoản người dùng</value>
   </data>
   <data name="chkDisplayGravatarsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnableAutomaticUpdateChecksResource1.Text" xml:space="preserve">
-    <value>Tillat automatisk oppdaterings-sjekk (system og leverand&amp;oslash;rer)</value>
+    <value>Enable automatic update checks (system and providers)</value>
   </data>
   <data name="chkEnableAutomaticUpdateChecksResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnableBreadcrumbsTrailResource1.Text" xml:space="preserve">
-    <value>Vis sm&amp;aring;rester</value>
+    <value>Enable Breadcrumbs Trail</value>
   </data>
   <data name="chkEnableBreadcrumbsTrailResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnableCaptchaControlResource1.Text" xml:space="preserve">
-    <value>Sikre CAPTCHA-kontrol på alle offentlige funksjoner</value>
+    <value>Enable CAPTCHA control for all public functionalities</value>
   </data>
   <data name="chkEnableCaptchaControlResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnableDoubleClickEditingResource1.Text" xml:space="preserve">
-    <value>Editer vha dobbelt-klikk</value>
+    <value>Enable Double-Click editing</value>
   </data>
   <data name="chkEnableDoubleClickEditingResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnableHttpCompressionResource1.Text" xml:space="preserve">
-    <value>Bruk HTTP-komprimering</value>
+    <value>Enable HTTP compression</value>
   </data>
   <data name="chkEnableHttpCompressionResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnablePageInfoDivResource1.Text" xml:space="preserve">
-    <value>Vis seksjon med sideinformasjon (modifiseringsdato, kategorisert som mm.)</value>
+    <value>Enable Page Information section (Modified on, Categorized as, etc.)</value>
   </data>
   <data name="chkEnablePageInfoDivResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnablePageToolbarResource1.Text" xml:space="preserve">
-    <value>Vis verkt&amp;oslash;ylinje p&amp;aring; sidene (rediger siden, historikk, administrasjon)</value>
+    <value>Enable Page Toolbar (Edit this Page, History, Admin)</value>
   </data>
   <data name="chkEnablePageToolbarResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnableSectionEditingResource1.Text" xml:space="preserve">
-    <value>Tillat kappittelredigering</value>
+    <value>Enable editing of pages' sections</value>
   </data>
   <data name="chkEnableSectionEditingResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnableSslForSmtpResource1.Text" xml:space="preserve">
-    <value>Sl%aring; p&amp;aring; SSL</value>
+    <value>Enable SSL</value>
   </data>
   <data name="chkEnableSslForSmtpResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnableViewPageCodeResource1.Text" xml:space="preserve">
-    <value>Tillat visnng av sidekoden</value>
+    <value>Enable 'View Page Code' feature</value>
   </data>
   <data name="chkEnableViewPageCodeResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnableViewStateCompressionResource1.Text" xml:space="preserve">
-    <value>Sl&amp;aring; p&amp;aring; ViewState-komprimering</value>
+    <value>Enable ViewState compression</value>
   </data>
   <data name="chkEnableViewStateCompressionResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkPreventConcurrentEditingResource1.Text" xml:space="preserve">
-    <value>Hindre at flere redigerer en side samtidig</value>
+    <value>Ngăn cản việc sửa chữa đồng thời</value>
   </data>
   <data name="chkPreventConcurrentEditingResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
+  <data name="chkProcessSingleLineBreaksResource2.Text" xml:space="preserve">
+    <value>Process single line breaks in content (experimental)</value>
+  </data>
+  <data name="chkProcessSingleLineBreaksResource2.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="chkUseVisualEditorAsDefaultResource1.Text" xml:space="preserve">
-    <value>Bruk avansert redigering (WYSIWYG) som standard</value>
+    <value>Mặc định dùng editor WYSIWYG</value>
   </data>
   <data name="chkUseVisualEditorAsDefaultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvDateTimeFormatResource1.ErrorMessage" xml:space="preserve">
-    <value>Galt dato- eller tidsformat</value>
+    <value>Invalid Date/Time Format</value>
   </data>
   <data name="cvDateTimeFormatResource1.Text" xml:space="preserve">
     <value />
@@ -316,7 +247,7 @@
     <value />
   </data>
   <data name="cvErrorsEmailsResource1.ErrorMessage" xml:space="preserve">
-    <value>Ugyldig epostadresse</value>
+    <value>Invalid email address</value>
   </data>
   <data name="cvErrorsEmailsResource1.Text" xml:space="preserve">
     <value />
@@ -325,7 +256,7 @@
     <value />
   </data>
   <data name="cvPasswordResource1.ErrorMessage" xml:space="preserve">
-    <value>Brukernavnet er tomt</value>
+    <value>Username is required</value>
   </data>
   <data name="cvPasswordResource1.Text" xml:space="preserve">
     <value />
@@ -334,7 +265,7 @@
     <value />
   </data>
   <data name="cvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Passordet er tomt</value>
+    <value>Password is required</value>
   </data>
   <data name="cvUsernameResource1.Text" xml:space="preserve">
     <value />
@@ -343,88 +274,91 @@
     <value />
   </data>
   <data name="lblActivationModeResource1.Text" xml:space="preserve">
-    <value>Kontoaktiviserings-modus</value>
+    <value>Account activation mode</value>
   </data>
   <data name="lblAdvancedConfigResource1.Text" xml:space="preserve">
-    <value>Avansert oppsett</value>
+    <value>Advanced Configuration</value>
   </data>
   <data name="lblCacheCutSizeResource1.Text" xml:space="preserve">
     <value>Cache cut size</value>
   </data>
   <data name="lblCacheSizeResource1.Text" xml:space="preserve">
-    <value>Maks cache</value>
+    <value>Cache Size</value>
   </data>
   <data name="lblChangeModerationModeResource1.Text" xml:space="preserve">
-    <value>Sidemodererings-modus</value>
+    <value>Page change moderation mode</value>
   </data>
   <data name="lblConfigResource1.Text" xml:space="preserve">
-    <value>Konfigurering</value>
+    <value>Cấu hình</value>
   </data>
   <data name="lblContactEmailResource1.Text" xml:space="preserve">
-    <value>Epostadresse</value>
+    <value>Contact email</value>
   </data>
   <data name="lblContentConfigResource1.Text" xml:space="preserve">
-    <value>Oppsett</value>
+    <value>Content Configuration</value>
   </data>
   <data name="lblDateTimeFormatResource1.Text" xml:space="preserve">
-    <value>Dato/tidsformat</value>
+    <value>Date/Time format</value>
   </data>
   <data name="lblDateTimeFormatTemplatesResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblDefaultAdministratorsGroupResource1.Text" xml:space="preserve">
-    <value>Standardgruppe for administratorer</value>
+    <value>Default Administrators Group</value>
   </data>
   <data name="lblDefaultAnonymousGroupResource1.Text" xml:space="preserve">
-    <value>Standardgruppe for anonyme brukere</value>
+    <value>Default Anonymous Users Group</value>
   </data>
   <data name="lblDefaultLanguageResource1.Text" xml:space="preserve">
-    <value>Standardspr&amp;aring;k</value>
+    <value>Default language</value>
   </data>
   <data name="lblDefaultTimeZoneResource1.Text" xml:space="preserve">
-    <value>Standard tidssone</value>
+    <value>Default time zone</value>
   </data>
   <data name="lblDefaultUsersGroupResource1.Text" xml:space="preserve">
-    <value>Standard brukergruppe</value>
+    <value>Default Users Group</value>
   </data>
   <data name="lblErrorsEmailsResource1.Text" xml:space="preserve">
-    <value>Epost-adresser å varsle ved feil (kommaseparert)</value>
+    <value>Email addresses to notify in case of errors (separate with commas)</value>
+  </data>
+  <data name="lblExtensionsAllowedForUploadResource2.Text" xml:space="preserve">
+    <value>File extensions allowed for upload (separate with commas, '*' for any type)</value>
   </data>
   <data name="lblGeneralConfigResource1.Text" xml:space="preserve">
-    <value>Generell konfigurasjon</value>
+    <value>General Configuration</value>
   </data>
   <data name="lblKeptBackupNumberPostResource1.Text" xml:space="preserve">
-    <value>Antall sikkerhetskopier av hver side (tomt felt = ubegrenset)</value>
+    <value>backups for each page (leave empty for no limit)</value>
   </data>
   <data name="lblKeptBackupNumberPreResource1.Text" xml:space="preserve">
-    <value>Behold maks</value>
+    <value>Keep at most</value>
   </data>
   <data name="lblLoggingLevelResource1.Text" xml:space="preserve">
-    <value>Loggniv&amp;arling;</value>
+    <value>Logging level</value>
   </data>
   <data name="lblMaxFileSizeResource1.Text" xml:space="preserve">
-    <value>Maks opplastist&amp;oslash;rrelse</value>
+    <value>Max file size allowed for upload</value>
   </data>
   <data name="lblMaxLogSizeResource1.Text" xml:space="preserve">
-    <value>Maks loggst&amp;oslash;rrelse</value>
+    <value>Max log size</value>
   </data>
   <data name="lblMaxRecentChangesToDisplayPostResource1.Text" xml:space="preserve">
-    <value>Antall i &lt;code&gt;{RecentChanges}&lt;/code&gt; -taggene</value>
+    <value>items in &lt;code&gt;{RecentChanges}&lt;/code&gt; tags</value>
   </data>
   <data name="lblMaxRecentChangesToDisplayPreResource1.Text" xml:space="preserve">
-    <value>Vis maksimalt</value>
+    <value>Display at most</value>
   </data>
   <data name="lblNamespaces1Resource1.Text" xml:space="preserve">
-    <value>Navn</value>
+    <value>Namespaces</value>
   </data>
   <data name="lblNamespaces2Resource1.Text" xml:space="preserve">
-    <value>Navn</value>
+    <value>Namespaces</value>
   </data>
   <data name="lblPages1Resource1.Text" xml:space="preserve">
-    <value>sider</value>
+    <value>trang</value>
   </data>
   <data name="lblPages2Resource1.Text" xml:space="preserve">
-    <value>sider</value>
+    <value>trang</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -433,43 +367,43 @@
     <value />
   </data>
   <data name="lblRootMainPageResource1.Text" xml:space="preserve">
-    <value>Grunn-sidens hovedside</value>
+    <value>Root namespace main page</value>
   </data>
   <data name="lblRootThemeResource1.Text" xml:space="preserve">
-    <value>Tema for grunn-side</value>
+    <value>Root namespace theme</value>
   </data>
   <data name="lblSecurityConfigResource1.Text" xml:space="preserve">
-    <value>Sikkerhetsoppsett</value>
+    <value>Security Configuration</value>
   </data>
   <data name="lblSeeAlsoNamespaces1Resource1.Text" xml:space="preserve">
-    <value>se ogs&amp;aring;</value>
+    <value>see also</value>
   </data>
   <data name="lblSeeAlsoNamespaces2Resource1.Text" xml:space="preserve">
-    <value>se ogs&amp;aring;</value>
+    <value>see also</value>
   </data>
   <data name="lblSelectFormatResource1.Text" xml:space="preserve">
-    <value>Velg...</value>
+    <value>Chọn...</value>
   </data>
   <data name="lblSenderEmailResource1.Text" xml:space="preserve">
-    <value>Avsenderadresse</value>
+    <value>Sender email</value>
   </data>
   <data name="lblSmtpAuthenticationResource1.Text" xml:space="preserve">
-    <value>SMTP brukernavn og passord</value>
+    <value>SMTP username and password</value>
   </data>
   <data name="lblSmtpServerResource1.Text" xml:space="preserve">
-    <value>SMTP tjeneradresse og port</value>
+    <value>SMTP server address and port</value>
   </data>
   <data name="lblStringsResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblUsedForEmailCommunicationsResource1.Text" xml:space="preserve">
-    <value>for epost-kommunikasjon</value>
+    <value>used for email communications and redirects</value>
   </data>
   <data name="lblWikiTitleResource1.Text" xml:space="preserve">
-    <value>Tittel p&amp;aring; wikien</value>
+    <value>Wiki title</value>
   </data>
   <data name="lblWikiUrlResource1.Text" xml:space="preserve">
-    <value>Nettadressen til wikien</value>
+    <value>Wiki URL</value>
   </data>
   <data name="ListItemResource1.Text" xml:space="preserve">
     <value>(GMT-12:00) International Date Line West</value>
@@ -484,19 +418,19 @@
     <value>-210</value>
   </data>
   <data name="ListItemResource11.Text" xml:space="preserve">
-    <value>(GMT-03:00) Gr&amp;oslasn;nland</value>
+    <value>(GMT-03:00) Greenland</value>
   </data>
   <data name="ListItemResource11.Value" xml:space="preserve">
     <value>-180</value>
   </data>
   <data name="ListItemResource12.Text" xml:space="preserve">
-    <value>(GMT-02:00) Middel-Atlantisk</value>
+    <value>(GMT-02:00) Mid-Atlantic</value>
   </data>
   <data name="ListItemResource12.Value" xml:space="preserve">
     <value>-120</value>
   </data>
   <data name="ListItemResource13.Text" xml:space="preserve">
-    <value>(GMT-01:00) Asorene</value>
+    <value>(GMT-01:00) Azores</value>
   </data>
   <data name="ListItemResource13.Value" xml:space="preserve">
     <value>-60</value>
@@ -508,19 +442,19 @@
     <value>0</value>
   </data>
   <data name="ListItemResource15.Text" xml:space="preserve">
-    <value>(GMT+01:00) Vanlig europeisk</value>
+    <value>(GMT+01:00) Central European</value>
   </data>
   <data name="ListItemResource15.Value" xml:space="preserve">
     <value>60</value>
   </data>
   <data name="ListItemResource16.Text" xml:space="preserve">
-    <value>(GMT+02:00) Oslash;steuropeisk</value>
+    <value>(GMT+02:00) Eastern European</value>
   </data>
   <data name="ListItemResource16.Value" xml:space="preserve">
     <value>120</value>
   </data>
   <data name="ListItemResource17.Text" xml:space="preserve">
-    <value>(GMT+03:00) Moskva, Bagdad</value>
+    <value>(GMT+03:00) Moscow, Baghdad</value>
   </data>
   <data name="ListItemResource17.Value" xml:space="preserve">
     <value>180</value>
@@ -562,7 +496,7 @@
     <value>330</value>
   </data>
   <data name="ListItemResource23.Text" xml:space="preserve">
-    <value>(GMT+05:45) Katmandu</value>
+    <value>(GMT+05:45) Kathmandu</value>
   </data>
   <data name="ListItemResource23.Value" xml:space="preserve">
     <value>345</value>
@@ -586,7 +520,7 @@
     <value>420</value>
   </data>
   <data name="ListItemResource27.Text" xml:space="preserve">
-    <value>(GMT+08:00) K, Western Australia</value>
+    <value>(GMT+08:00) China Coast, Western Australia</value>
   </data>
   <data name="ListItemResource27.Value" xml:space="preserve">
     <value>480</value>
@@ -598,7 +532,7 @@
     <value>540</value>
   </data>
   <data name="ListItemResource29.Text" xml:space="preserve">
-    <value>(GMT+09:30) Midt-Australia</value>
+    <value>(GMT+09:30) Central Australia</value>
   </data>
   <data name="ListItemResource29.Value" xml:space="preserve">
     <value>570</value>
@@ -610,13 +544,13 @@
     <value>-600</value>
   </data>
   <data name="ListItemResource30.Text" xml:space="preserve">
-    <value>(GMT+10:00) Oslash;st-Australia</value>
+    <value>(GMT+10:00) Eastern Australia</value>
   </data>
   <data name="ListItemResource30.Value" xml:space="preserve">
     <value>600</value>
   </data>
   <data name="ListItemResource31.Text" xml:space="preserve">
-    <value>(GMT+11:00) Magadan, Solomon-&amp;oslash;yene</value>
+    <value>(GMT+11:00) Magadan, Solomon Island</value>
   </data>
   <data name="ListItemResource31.Value" xml:space="preserve">
     <value>660</value>
@@ -634,7 +568,7 @@
     <value>765</value>
   </data>
   <data name="ListItemResource34.Text" xml:space="preserve">
-    <value>(GMT+13:00) Tonga, Phoenix-&amp;oslash;yene</value>
+    <value>(GMT+13:00) Tonga, Phoenix Islands</value>
   </data>
   <data name="ListItemResource34.Value" xml:space="preserve">
     <value>780</value>
@@ -646,19 +580,19 @@
     <value>840</value>
   </data>
   <data name="ListItemResource36.Text" xml:space="preserve">
-    <value>Brukerne m&amp;aring; aktivisere kontoene via epost</value>
+    <value>Users must activate their account via Email</value>
   </data>
   <data name="ListItemResource36.Value" xml:space="preserve">
     <value>EMAIL</value>
   </data>
   <data name="ListItemResource37.Text" xml:space="preserve">
-    <value>Administratorene m&amp;aring; aktivisere kontoene</value>
+    <value>Administrators must activate accounts</value>
   </data>
   <data name="ListItemResource37.Value" xml:space="preserve">
     <value>ADMIN</value>
   </data>
   <data name="ListItemResource38.Text" xml:space="preserve">
-    <value>Kontoene er aktivisert som standard</value>
+    <value>Accounts are active by default</value>
   </data>
   <data name="ListItemResource38.Value" xml:space="preserve">
     <value>AUTO</value>
@@ -724,52 +658,52 @@
     <value />
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
-    <value>Administrasjon</value>
+    <value>Quản trị</value>
   </data>
   <data name="rdoAllMessagesResource1.Text" xml:space="preserve">
-    <value>Alle meldinger</value>
+    <value>All Messages</value>
   </data>
   <data name="rdoAllMessagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoDisableLogResource1.Text" xml:space="preserve">
-    <value>Ta vekk loggene</value>
+    <value>Disable Log</value>
   </data>
   <data name="rdoDisableLogResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoErrorsOnlyResource1.Text" xml:space="preserve">
-    <value>Kun feil</value>
+    <value>Errors Only</value>
   </data>
   <data name="rdoErrorsOnlyResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rdoNoModerationResource1.Text" xml:space="preserve">
-    <value>Ta vekk moderering</value>
+    <value>Disable Moderation</value>
   </data>
   <data name="rdoNoModerationResource1.ToolTip" xml:space="preserve">
-    <value>Ingen modereringssystemer i bruk, sidene kan kun redigeres av brukere med redigerings-tillatelse</value>
+    <value>No moderation system is used: pages can be edited only by users who have editing permissions</value>
   </data>
   <data name="rdoRequirePageEditingPermissionsResource1.Text" xml:space="preserve">
-    <value>Krev redigerings-tillatelse</value>
+    <value>Require Page Editing permissions</value>
   </data>
   <data name="rdoRequirePageEditingPermissionsResource1.ToolTip" xml:space="preserve">
-    <value>Sidene kan redigeres av de som har lov, men endringene m&amp;aring; godkjennes av administrator</value>
+    <value>Pages can be edited by users who have editing permissions but not management permissions, and the changes are held in moderation</value>
   </data>
   <data name="rdoRequirePageViewingPermissionsResource1.Text" xml:space="preserve">
-    <value>Forlang tillatelse for &amp;aring; vise sidene</value>
+    <value>Require Page Viewing permissions</value>
   </data>
   <data name="rdoRequirePageViewingPermissionsResource1.ToolTip" xml:space="preserve">
-    <value>Hvis sidene redigeres av de som har visningstillatelse men ikke redigerings-tillatelse, skal endringene godkjennes av administrator</value>
+    <value>Pages can be edited by users who have viewing permissions but not editing permissions, and the changes are help in moderation</value>
   </data>
   <data name="rdoWarningsAndErrorsResource1.Text" xml:space="preserve">
-    <value>Advarsler og feil</value>
+    <value>Warnings and Errors</value>
   </data>
   <data name="rdoWarningsAndErrorsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="revContactEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Feil epost-adresse</value>
+    <value>Địa chỉ email không hợp lý</value>
   </data>
   <data name="revContactEmailResource1.Text" xml:space="preserve">
     <value />
@@ -778,7 +712,7 @@
     <value />
   </data>
   <data name="revMainUrlResource1.ErrorMessage" xml:space="preserve">
-    <value>Feil Wiki-adresse</value>
+    <value>Invalid Wiki URL</value>
   </data>
   <data name="revMainUrlResource1.Text" xml:space="preserve">
     <value />
@@ -787,7 +721,7 @@
     <value />
   </data>
   <data name="revSenderEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Feil epost-adresse</value>
+    <value>Invalid email address</value>
   </data>
   <data name="revSenderEmailResource1.Text" xml:space="preserve">
     <value />
@@ -796,7 +730,7 @@
     <value />
   </data>
   <data name="revSmtpServerResource1.ErrorMessage" xml:space="preserve">
-    <value>Feil SMTP-tjener-adresse</value>
+    <value>Invalid SMTP Server address</value>
   </data>
   <data name="revSmtpServerResource1.Text" xml:space="preserve">
     <value />
@@ -805,7 +739,7 @@
     <value />
   </data>
   <data name="revWikiTitleResource1.ErrorMessage" xml:space="preserve">
-    <value> tittel</value>
+    <value>Invalid Wiki Title</value>
   </data>
   <data name="revWikiTitleResource1.Text" xml:space="preserve">
     <value />
@@ -823,7 +757,7 @@
     <value />
   </data>
   <data name="rfvCacheSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Cache-st&amp;oslash;rrelse kreves</value>
+    <value>Cache Size is required</value>
   </data>
   <data name="rfvCacheSizeResource1.Text" xml:space="preserve">
     <value />
@@ -832,7 +766,7 @@
     <value />
   </data>
   <data name="rfvContactEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Kontakt-epost kreves</value>
+    <value>Contact Email is required</value>
   </data>
   <data name="rfvContactEmailResource1.Text" xml:space="preserve">
     <value />
@@ -841,7 +775,7 @@
     <value />
   </data>
   <data name="rfvDateTimeFormatResource1.ErrorMessage" xml:space="preserve">
-    <value>Dato / tidsformat kreves</value>
+    <value>Date/Time Format is required</value>
   </data>
   <data name="rfvDateTimeFormatResource1.Text" xml:space="preserve">
     <value />
@@ -850,7 +784,7 @@
     <value />
   </data>
   <data name="rfvMainUrlResource1.ErrorMessage" xml:space="preserve">
-    <value>Nettadressen kreves</value>
+    <value>Wiki URL is required</value>
   </data>
   <data name="rfvMainUrlResource1.Text" xml:space="preserve">
     <value />
@@ -859,7 +793,7 @@
     <value />
   </data>
   <data name="rfvMaxFileSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Maks filst&amp;oslash;rrelse kreves</value>
+    <value>Max File Size is required</value>
   </data>
   <data name="rfvMaxFileSizeResource1.Text" xml:space="preserve">
     <value />
@@ -868,7 +802,7 @@
     <value />
   </data>
   <data name="rfvMaxLogSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Maks loggst&amp;oslash;relse kreves</value>
+    <value>Max Log Size is required</value>
   </data>
   <data name="rfvMaxLogSizeResource1.Text" xml:space="preserve">
     <value />
@@ -877,7 +811,7 @@
     <value />
   </data>
   <data name="rfvMaxRecentChangesToDisplayResource1.ErrorMessage" xml:space="preserve">
-    <value>Antallet kreves</value>
+    <value>Number is required</value>
   </data>
   <data name="rfvMaxRecentChangesToDisplayResource1.Text" xml:space="preserve">
     <value />
@@ -886,7 +820,7 @@
     <value />
   </data>
   <data name="rfvSenderEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Avsenders epost-adresse kreves</value>
+    <value>Sender Email is required</value>
   </data>
   <data name="rfvSenderEmailResource1.Text" xml:space="preserve">
     <value />
@@ -895,7 +829,7 @@
     <value />
   </data>
   <data name="rfvSmtpServerResource1.ErrorMessage" xml:space="preserve">
-    <value>SMTP-tjener kreves</value>
+    <value>SMTP Server is required</value>
   </data>
   <data name="rfvSmtpServerResource1.Text" xml:space="preserve">
     <value />
@@ -904,7 +838,7 @@
     <value />
   </data>
   <data name="rfvWikiTitleResource1.ErrorMessage" xml:space="preserve">
-    <value>Tittelen kreves</value>
+    <value>Wiki Title is required</value>
   </data>
   <data name="rfvWikiTitleResource1.Text" xml:space="preserve">
     <value />
@@ -922,7 +856,7 @@
     <value />
   </data>
   <data name="rvCacheSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Ugyldig st&amp;oslash;rrelse (min. 10, maks. 100000)</value>
+    <value>Invalid Size (min. 10, max. 100000)</value>
   </data>
   <data name="rvCacheSizeResource1.Text" xml:space="preserve">
     <value />
@@ -931,7 +865,7 @@
     <value />
   </data>
   <data name="rvKeptBackupNumberResource1.ErrorMessage" xml:space="preserve">
-    <value>Antallet m&amp;aring; v&amp;aelig;re mellom 0 og 1000</value>
+    <value>Number must be between 0 and 1000</value>
   </data>
   <data name="rvKeptBackupNumberResource1.Text" xml:space="preserve">
     <value />
@@ -940,7 +874,7 @@
     <value />
   </data>
   <data name="rvMaxFileSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Ugyldig filst&amp;oslash;rrelse (min. 256, maks. 102400)</value>
+    <value>Invalid File Size (min. 256, max. 102400)</value>
   </data>
   <data name="rvMaxFileSizeResource1.Text" xml:space="preserve">
     <value />
@@ -949,7 +883,7 @@
     <value />
   </data>
   <data name="rvMaxLogSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Ugyldig loggst&amp;oslash;rrelse (min. 16, max. 10240)</value>
+    <value>Invalid Log Size (min. 16, max. 10240)</value>
   </data>
   <data name="rvMaxLogSizeResource1.Text" xml:space="preserve">
     <value />
@@ -958,7 +892,7 @@
     <value />
   </data>
   <data name="rvMaxRecentChangesToDisplayResource1.ErrorMessage" xml:space="preserve">
-    <value>Antallet m&amp;aring; v&amp;aelig;re mellom 0 og 50</value>
+    <value>Number must be between 0 and 50</value>
   </data>
   <data name="rvMaxRecentChangesToDisplayResource1.Text" xml:space="preserve">
     <value />
@@ -967,7 +901,7 @@
     <value />
   </data>
   <data name="rvSmtpPortResource1.ErrorMessage" xml:space="preserve">
-    <value>Ugyldig Port (min. 1, maks. 65535)</value>
+    <value>Invalid Port (min. 1, max. 65535)</value>
   </data>
   <data name="rvSmtpPortResource1.Text" xml:space="preserve">
     <value />
@@ -1075,6 +1009,72 @@
     <value />
   </data>
   <data name="txtWikiTitleResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListItemResource39.Text" xml:space="preserve">
+    <value>Count all file downloads</value>
+  </data>
+  <data name="ListItemResource39.Value" xml:space="preserve">
+    <value>CountAll</value>
+  </data>
+  <data name="ListItemResource40.Text" xml:space="preserve">
+    <value>Count downloads for specified extensions (separate with commas)</value>
+  </data>
+  <data name="ListItemResource40.Value" xml:space="preserve">
+    <value>CountSpecifiedExtensions</value>
+  </data>
+  <data name="ListItemResource41.Text" xml:space="preserve">
+    <value>Count downloads for all extensions except (separate with commas)</value>
+  </data>
+  <data name="ListItemResource41.Value" xml:space="preserve">
+    <value>ExcludeSpecifiedExtensions</value>
+  </data>
+  <data name="txtFileDownloadCountFilterResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtFileDownloadCountFilterResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lstFileDownloadCountFilterModeResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblRssFeedsModeResource1.Text" xml:space="preserve">
+    <value>RSS Feeds Serving Mode</value>
+  </data>
+  <data name="ListItemResource42.Text" xml:space="preserve">
+    <value>Full Text</value>
+  </data>
+  <data name="ListItemResource42.Value" xml:space="preserve">
+    <value>FullText</value>
+  </data>
+  <data name="ListItemResource43.Text" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="ListItemResource43.Value" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="ListItemResource44.Text" xml:space="preserve">
+    <value>Disabled (RSS feeds completely disabled)</value>
+  </data>
+  <data name="ListItemResource44.Value" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="lblUsernameRegExResource2.Text" xml:space="preserve">
+    <value>Regular Expression for validating usernames and group names</value>
+  </data>
+  <data name="lblPasswordRegExResource2.Text" xml:space="preserve">
+    <value>Regular Expression for validating passwords</value>
+  </data>
+  <data name="chkAutoGeneratePageNamesResource1.Text" xml:space="preserve">
+    <value>Mặc định tên trang tự động tạo ra trong editor </value>
+  </data>
+  <data name="lblIpHostFilterResource1.Text" xml:space="preserve">
+    <value>IP Filter for allowed editing (seperate with commas, Use '*' for wild cards, Example: 192.168.1.*)</value>
+  </data>
+  <data name="chkEnableSectionAnchorsResource1.Text" xml:space="preserve">
+    <value>Display anchors for pages' sections</value>
+  </data>
+  <data name="chkEnableSectionAnchorsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblDisplayAtMostPostResource1.Text" xml:space="preserve">
