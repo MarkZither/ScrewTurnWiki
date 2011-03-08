@@ -33,7 +33,21 @@ namespace ScrewTurn.Wiki {
 				}
 				Application.UnLock();
 			}
+			if(!Request.PhysicalPath.ToLowerInvariant().Contains("createmasterpassword.aspx")) {
+				if(Application["MasterPasswordOk"] == null) {
+					Application.Lock();
+					if(Application["MasterPasswordOk"] == null) {
+						//Setup Master Password
+						if(!String.IsNullOrEmpty(Settings.MasterPassword))
+							Application["MasterPasswordOk"] = "OK";
+					}
+					Application.UnLock();
+				}
 
+				if(Application["MasterPasswordOk"] == null) {
+					ScrewTurn.Wiki.UrlTools.Redirect("CreateMasterPassword.aspx");
+				}
+			}
 			ScrewTurn.Wiki.UrlTools.RouteCurrentRequest();
 		}
 

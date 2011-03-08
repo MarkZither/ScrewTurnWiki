@@ -172,6 +172,13 @@
     <Compile Include="AllPages.aspx.designer.cs">
       <DependentUpon>AllPages.aspx</DependentUpon>
     </Compile>
+    <Compile Include="CreateMasterPassword.aspx.cs">
+      <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CreateMasterPassword.aspx.designer.cs">
+      <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PageListBuilder.ascx.cs">
       <DependentUpon>PageListBuilder.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1287,6 +1294,7 @@
     <Content Include="Captcha.ascx" />
     <Content Include="Captcha.aspx" />
     <Content Include="Category.aspx" />
+    <Content Include="CreateMasterPassword.aspx" />
     <Content Include="Diff.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="GetFile.aspx" />

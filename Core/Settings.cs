@@ -67,7 +67,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string MasterPassword {
 			get {
-				return GetString(Provider.GetSetting("MasterPassword"), "password");
+				return GetString(Provider.GetSetting("MasterPassword"), "");
 			}
 			set {
 				Provider.SetSetting("MasterPassword", value);
