@@ -1750,4 +1750,7 @@
   <data name="WrapperBoxTitle" xml:space="preserve">
     <value>Wrap selected text in a 'box'</value>
   </data>
+  <data name="PasswordEmpty" xml:space="preserve">
+    <value>The new password is required</value>
+  </data>
 </root>

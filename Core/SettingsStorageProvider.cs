@@ -328,7 +328,6 @@ namespace ScrewTurn.Wiki {
 				for(int i = 0; i < keys.Length; i++) {
 					buffer.AppendFormat("{0} = {1}\r\n", keys[i], configData[keys[i]]);
 				}
-
 				File.WriteAllText(GetFullPath(ConfigFile), buffer.ToString());
 			}
 		}

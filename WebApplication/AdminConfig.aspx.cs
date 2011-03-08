@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using ScrewTurn.Wiki.PluginFramework;
+using System.Security.Cryptography;
 
 namespace ScrewTurn.Wiki {
 
@@ -384,10 +385,27 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
+
 		/// <summary>
-		/// Gets the extensions allowed for upload from the input control.
+		/// Cvs the check old password.
 		/// </summary>
-		/// <returns>The extensions.</returns>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="System.Web.UI.WebControls.ServerValidateEventArgs"/> instance containing the event data.</param>
+		protected void cvCheckOldPassword(object sender, ServerValidateEventArgs e) {
+			string pwd = Hash.Compute(txtBoxOldPassword.Text);
+			if(pwd == Settings.MasterPassword)
+				if((txtNewPassword.Text.Length != 0) && (txtNewPassword.Text != null)) 
+					e.IsValid = true;
+				else {
+					e.IsValid = false;
+					((CustomValidator)sender).ErrorMessage = Properties.Messages.PasswordEmpty;
+				}
+			else {
+				e.IsValid = false;
+				((CustomValidator)sender).ErrorMessage = Properties.Messages.WrongPassword;
+			}
+		}
+	
 		private string[] GetAllowedFileExtensions() {
 			return txtExtensionsAllowed.Text.Replace(" ", "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 		}
@@ -445,6 +463,7 @@ namespace ScrewTurn.Wiki {
 			}
 			Settings.SmtpSsl = chkEnableSslForSmtp.Checked;
 
+			
 			// Save content configuration
 			Settings.SetTheme(null, lstRootTheme.SelectedValue);
 			Settings.DefaultPage = lstMainPage.SelectedValue;
@@ -467,7 +486,12 @@ namespace ScrewTurn.Wiki {
 			else Settings.KeptBackupNumber = int.Parse(txtKeptBackupNumber.Text);
 			Settings.DisplayGravatars = chkDisplayGravatars.Checked;
 			Settings.ListSize = int.Parse(txtListSize.Text);
-
+			if(txtBoxOldPassword.Text != "" && txtBoxOldPassword.Text != null && txtBoxOldPassword.Text.Length != 0) {
+				if (txtNewPassword.Text.Length != 0){
+						if	(Hash.Compute(txtNewPassword.Text) == Hash.Compute(txtReNewPassword.Text))	
+							Settings.MasterPassword = Hash.Compute(txtNewPassword.Text);
+					}
+				}
 			// Save security configuration
 			Settings.UsersCanRegister = chkAllowUsersToRegister.Checked;
 			Settings.UsernameRegex = txtUsernameRegEx.Text;

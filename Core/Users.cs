@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Web;
+using System.Security.Cryptography;
 
 namespace ScrewTurn.Wiki {
 
@@ -602,6 +603,7 @@ namespace ScrewTurn.Wiki {
 			return null;
 		}
 
+
 		/// <summary>
 		/// Tries to manually login a user using all the available methods.
 		/// </summary>
@@ -609,7 +611,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="password">The password.</param>
 		/// <returns>The correct UserInfo, or <c>null</c>.</returns>
 		public static UserInfo TryLogin(string username, string password) {
-			if(username == "admin" && password == Settings.MasterPassword) {
+			string _password = Hash.Compute(password);
+			if(username == "admin" && Settings.MasterPassword.Equals(_password)) {
 				return GetAdministratorAccount();
 			}
 

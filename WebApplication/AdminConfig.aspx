@@ -71,13 +71,11 @@
 			<asp:RequiredFieldValidator ID="rfvContactEmail" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtContactEmail" ErrorMessage="Contact Email is required" 
-				meta:resourcekey="rfvContactEmailResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rfvContactEmailResource1" />
 			<asp:RegularExpressionValidator ID="revContactEmail" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtContactEmail" ErrorMessage="Invalid email address" 
-				meta:resourcekey="revContactEmailResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="revContactEmailResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -89,13 +87,11 @@
 			<asp:RequiredFieldValidator ID="rfvSenderEmail" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtSenderEmail" ErrorMessage="Sender Email is required" 
-				meta:resourcekey="rfvSenderEmailResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rfvSenderEmailResource1" />
 			<asp:RegularExpressionValidator ID="revSenderEmail" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtSenderEmail" ErrorMessage="Invalid email address" 
-				meta:resourcekey="revSenderEmailResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="revSenderEmailResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -106,9 +102,8 @@
 				meta:resourcekey="txtErrorsEmailsResource1" />
 			
 			<asp:CustomValidator ID="cvErrorsEmails" runat="server" Display="Dynamic" CssClass="resulterror"
-				ControlToValidate="txtErrorsEmails" ErrorMessage="Invalid email address" AutoUpdateAfterCallBack="True"
-				OnServerValidate="cvErrorsEmails_ServerValidate" 
-				meta:resourcekey="cvErrorsEmailsResource1" UpdateAfterCallBack="True" />
+				ControlToValidate="txtErrorsEmails" ErrorMessage="Invalid email address" OnServerValidate="cvErrorsEmails_ServerValidate" 
+				meta:resourcekey="cvErrorsEmailsResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -123,17 +118,15 @@
 			<asp:RequiredFieldValidator ID="rfvSmtpServer" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtSmtpServer" ErrorMessage="SMTP Server is required" 
-				meta:resourcekey="rfvSmtpServerResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rfvSmtpServerResource1" />
 			<asp:RegularExpressionValidator ID="revSmtpServer" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtSmtpServer" ErrorMessage="Invalid SMTP Server address" 
-				meta:resourcekey="revSmtpServerResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="revSmtpServerResource1" />
 			<asp:RangeValidator ID="rvSmtpPort" runat="server" Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtSmtpPort" ErrorMessage="Invalid Port (min. 1, max. 65535)"
 				Type="Integer" MinimumValue="1" MaximumValue="65535" 
-				meta:resourcekey="rvSmtpPortResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="rvSmtpPortResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -148,13 +141,13 @@
 				meta:resourcekey="chkEnableSslForSmtpResource1" />
 			
 			<asp:CustomValidator ID="cvUsername" runat="server" Display="Dynamic" CssClass="resulterror"
-				ControlToValidate="txtUsername" ErrorMessage="Password is required" AutoUpdateAfterCallBack="True"
+				ControlToValidate="txtUsername" ErrorMessage="Password is required"
 				OnServerValidate="cvUsername_ServerValidate" ValidateEmptyText="True" 
-				meta:resourcekey="cvUsernameResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="cvUsernameResource1" />
 			<asp:CustomValidator ID="cvPassword" runat="server" Display="Dynamic" CssClass="resulterror"
-				ControlToValidate="txtUsername" ErrorMessage="Username is required" AutoUpdateAfterCallBack="True"
+				ControlToValidate="txtUsername" ErrorMessage="Username is required"
 				OnServerValidate="cvPassword_ServerValidate" ValidateEmptyText="True" 
-				meta:resourcekey="cvPasswordResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="cvPasswordResource1" />
 		</div>
 	</div>
 	
@@ -207,12 +200,11 @@
 			<asp:RequiredFieldValidator ID="rfvDateTimeFormat" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtDateTimeFormat" ErrorMessage="Date/Time Format is required" 
-				meta:resourcekey="rfvDateTimeFormatResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rfvDateTimeFormatResource1" />
 			<asp:CustomValidator ID="cvDateTimeFormat" runat="server" Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtDateTimeFormat" ErrorMessage="Invalid Date/Time Format"
 				OnServerValidate="cvDateTimeFormat_ServerValidate" 
-				meta:resourcekey="cvDateTimeFormatResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="cvDateTimeFormatResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -314,14 +306,12 @@
 			<asp:RequiredFieldValidator ID="rfvMaxRecentChangesToDisplay" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtMaxRecentChangesToDisplay" ErrorMessage="Number is required" 
-				meta:resourcekey="rfvMaxRecentChangesToDisplayResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rfvMaxRecentChangesToDisplayResource1" />
 			<asp:RangeValidator ID="rvMaxRecentChangesToDisplay" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtMaxRecentChangesToDisplay" ErrorMessage="Number must be between 0 and 50"
 				Type="Integer" MinimumValue="0" MaximumValue="50" 
-				meta:resourcekey="rvMaxRecentChangesToDisplayResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rvMaxRecentChangesToDisplayResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -408,7 +398,7 @@
 				CssClass="resulterror"
 				ControlToValidate="txtKeptBackupNumber" ErrorMessage="Number must be between 0 and 1000"
 				Type="Integer" MinimumValue="0" MaximumValue="1000" 
-				meta:resourcekey="rvKeptBackupNumberResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="rvKeptBackupNumberResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -424,15 +414,54 @@
 				CssClass="configsmallest" meta:resourceKey="txtListSizeResource1" />
 			<asp:Literal ID="lblDisplayAtMostPost" runat="server" Text="items in a list, then start paging"
 				EnableViewState="false" meta:resourcekey="lblDisplayAtMostPostResource1" />
-
 			<asp:RangeValidator ID="rvListSize" runat="server" Display="Dynamic" 
 				CssClass="resulterror"
 				ControlToValidate="txtListSize" ErrorMessage="Number must be between 10 and 1000"
 				Type="Integer" MinimumValue="10" MaximumValue="1000" 
-				meta:resourcekey="rvListSizeResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="rvListSizeResource1" />
 		</div>
 	</div>
-	
+
+	<div id="ChangeMasterPasswordDiv">
+		<div class="featurecontainer">
+			<h3 class="separator">
+				<asp:Literal ID="lblChangeMasterPassword" runat="server" 
+					Text="Master Password" EnableViewState="False"
+					meta:resourcekey="lblChangeMasterPasswordResource1" />
+			</h3>
+		</div>	
+
+		<div class="featurecontainer">
+				<asp:Literal ID="lblOldPwd" runat="server" 
+					Text="Old Password" EnableViewState="False" 
+					meta:resourcekey="lblOldPwdResource1" /><br />
+				<asp:TextBox ID="txtBoxOldPassword" TextMode="Password" runat="server" 
+					meta:resourcekey="txtBoxOldPasswordResource1" />
+				<asp:CustomValidator Id="cvCompareOldPwd" runat="server" ControlToValidate="txtBoxOldPassword" 
+					OnServerValidate="cvCheckOldPassword">
+				</asp:CustomValidator>
+		</div>
+
+		<div class="featurecontainer">
+				<asp:Literal ID="lblNewPwd" runat="server" 
+					Text="New Password" EnableViewState="False" 
+					meta:resourcekey="lblNewPwdResource1" /><br />
+				<asp:TextBox ID="txtNewPassword" TextMode="Password" runat="server"
+					meta:resourcekey="txtNewPasswordResource1" />
+		</div>
+
+		<div class="featurecontainer">
+				<asp:Literal ID="lblReNewPwd" runat="server" 
+					Text="New Password (Repeat)" EnableViewState="False" 
+					meta:resourcekey="lblReNewPwdResource1" /><br />
+				<asp:TextBox ID="txtReNewPassword" TextMode="Password" runat="server" 
+					meta:resourcekey="txtReNewPasswordResource1" />
+				<asp:CompareValidator id="cvComparePwd" runat="server" ErrorMessage="Passwords are not equal"
+					ControlToValidate="txtReNewPassword" ControlToCompare="txtNewPassword" meta:resourcekey="cvComparePwdResource1">
+				</asp:CompareValidator>
+		</div>
+	</div>
+
 	<div id="ConfigSecurityDiv">
 		<div class="featurecontainer">
 			<h3 class="separator"><asp:Literal ID="lblSecurityConfig" runat="server" 
@@ -529,7 +558,7 @@
 		</div>
 		
 		<div class="featurecontainer">
-			<asp:DropDownList ID="lstFileDownloadCountFilterMode" runat="server" AutoCallBack="true"
+			<asp:DropDownList ID="lstFileDownloadCountFilterMode" runat="server"
 				meta:resourcekey="lstFileDownloadCountFilterModeResource1"
 				OnSelectedIndexChanged="lstFileDownloadCountFilterMode_SelectedIndexChanged">
 				<asp:ListItem Text="Count all file downloads" Value="CountAll" Selected="True" meta:resourcekey="ListItemResource39" />
@@ -550,12 +579,11 @@
 			<asp:RequiredFieldValidator ID="rfvMaxFileSize" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtMaxFileSize" ErrorMessage="Max File Size is required" 
-				meta:resourcekey="rfvMaxFileSizeResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rfvMaxFileSizeResource1" />
 			<asp:RangeValidator ID="rvMaxFileSize" runat="server" Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtMaxFileSize" ErrorMessage="Invalid File Size (min. 256, max. 102400)"
 				Type="Integer" MinimumValue="256" MaximumValue="102400" 
-				meta:resourcekey="rvMaxFileSizeResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="rvMaxFileSizeResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -587,12 +615,11 @@
 			<asp:RequiredFieldValidator ID="rfvMaxLogSize" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtMaxLogSize" ErrorMessage="Max Log Size is required" 
-				meta:resourcekey="rfvMaxLogSizeResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rfvMaxLogSizeResource1" />
 			<asp:RangeValidator ID="rvMaxLogSize" runat="server" Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtMaxLogSize" ErrorMessage="Invalid Log Size (min. 16, max. 10240)"
 				Type="Integer" MinimumValue="16" MaximumValue="10240" 
-				meta:resourcekey="rvMaxLogSizeResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="rvMaxLogSizeResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -619,7 +646,7 @@
 					<asp:CustomValidator ID="cvUsernameRegEx" runat="server" Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtUsernameRegEx" ErrorMessage="Invalid Regular Expression"
 				OnServerValidate="cvUsernameRegEx_ServerValidate" 
-				meta:resourcekey="cvUsernameRegExResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="cvUsernameRegExResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -630,7 +657,7 @@
 			<asp:CustomValidator ID="cvPasswordRegEx" runat="server" Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtPasswordRegEx" ErrorMessage="Invalid Regular Expression"
 				OnServerValidate="cvPasswordRegEx_ServerValidate" 
-				meta:resourcekey="cvPasswordRegExResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="cvPasswordRegExResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -655,12 +682,11 @@
 			<asp:RequiredFieldValidator ID="rfvCacheSize" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtCacheSize" ErrorMessage="Cache Size is required" 
-				meta:resourcekey="rfvCacheSizeResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rfvCacheSizeResource1" />
 			<asp:RangeValidator ID="rvCacheSize" runat="server" Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtCacheSize" ErrorMessage="Invalid Size (min. 10, max. 100000)"
 				Type="Integer" MinimumValue="10" MaximumValue="100000" 
-				meta:resourcekey="rvCacheSizeResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="rvCacheSizeResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -674,12 +700,11 @@
 			<asp:RequiredFieldValidator ID="rfvCacheCutSize" runat="server" 
 				Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtCacheCutSize" ErrorMessage="Cache Cut Size is required" 
-				meta:resourcekey="rfvCacheCutSizeResource1" 
-				UpdateAfterCallBack="True" />
+				meta:resourcekey="rfvCacheCutSizeResource1" />
 			<asp:RangeValidator ID="rvCacheCutSize" runat="server" Display="Dynamic" CssClass="resulterror"
 				ControlToValidate="txtCacheCutSize" ErrorMessage="Invalid Cache Cut Size (min. 5, max. 50000)"
 				Type="Integer" MinimumValue="5" MaximumValue="50000" 
-				meta:resourcekey="rvCacheCutSizeResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="rvCacheCutSizeResource1" />
 		</div>
 		
 		<div class="featurecontainer">
@@ -699,7 +724,7 @@
 		<asp:Button ID="btnSave" runat="server" Text="Save Configuration" 
 			OnClick="btnSave_Click" meta:resourcekey="btnSaveResource1" />
 		<asp:Label ID="lblResult" runat="server" 
-			meta:resourcekey="lblResultResource1" UpdateAfterCallBack="True" />
+			meta:resourcekey="lblResultResource1" />
 	</div>
 	
 	<div style="clear: both;"></div>

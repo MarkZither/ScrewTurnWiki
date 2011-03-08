@@ -67,9 +67,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string MasterPassword {
 			get {
-				string pass = WebConfigurationManager.AppSettings["MasterPassword"];
-				if(pass == null || pass.Length == 0) throw new Exception("Configuration: MasterPassword cannot be null.");
-				return pass;
+				return GetString(Provider.GetSetting("MasterPassword"), "password");
+			}
+			set {
+				Provider.SetSetting("MasterPassword", value);
 			}
 		}
 

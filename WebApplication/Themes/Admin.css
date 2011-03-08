@@ -679,6 +679,15 @@ input.searchtextbox {
 	width: 600px;
 }
 
+#ChangeMasterPasswordDiv {
+	background-color: #CCDDEE;
+	border: solid 1px #214C9A;
+	padding: 10px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	width: 600px;
+}
+
 #ConfigSecurityDiv {
 	background-color: #CCDDEE;
 	border: solid 1px #214C9A;

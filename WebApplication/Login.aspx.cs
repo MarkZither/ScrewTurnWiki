@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki {
 
 	public partial class Login : BasePage {
 
-        protected void Page_Load(object sender, EventArgs e) {
+		protected void Page_Load(object sender, EventArgs e) {
 			Page.Title = Properties.Messages.LoginTitle + " - " + Settings.WikiTitle;
 
 			rxNewPassword1.ValidationExpression = Settings.PasswordRegex;
@@ -59,34 +59,34 @@ namespace ScrewTurn.Wiki {
 				else mlvLogin.ActiveViewIndex = 1;
 			}
 
-            if(Request["Activate"] != null && Request["Username"] != null && !Page.IsPostBack) {
+			if(Request["Activate"] != null && Request["Username"] != null && !Page.IsPostBack) {
 				UserInfo user = Users.FindUser(Request["Username"]);
-                if(user!= null && Tools.ComputeSecurityHash(user.Username, user.Email, user.DateTime).Equals(Request["Activate"])) {
+				if(user!= null && Tools.ComputeSecurityHash(user.Username, user.Email, user.DateTime).Equals(Request["Activate"])) {
 					Log.LogEntry("Account activation requested for " + user.Username, EntryType.General, Log.SystemUsername);
-                    if(user.Active) {
+					if(user.Active) {
 						lblResult.CssClass = "resultok";
 						lblResult.Text = Properties.Messages.AccountAlreadyActive;
-                        return;
-                    }
-                    if(user.DateTime.AddHours(24).CompareTo(DateTime.Now) < 0) {
-                        // Too late
+						return;
+					}
+					if(user.DateTime.AddHours(24).CompareTo(DateTime.Now) < 0) {
+						// Too late
 						lblResult.CssClass = "resulterror";
 						lblResult.Text = Properties.Messages.AccountNotFound;
-                        // Delete user (is this correct?)
-                        Users.RemoveUser(user);
-                        return;
-                    }
-                    // Activate User
+						// Delete user (is this correct?)
+						Users.RemoveUser(user);
+						return;
+					}
+					// Activate User
 					Users.SetActivationStatus(user, true);
 					lblResult.CssClass = "resultok";
 					lblResult.Text = Properties.Messages.AccountActivated;
-                    return;
-                }
+					return;
+				}
 				lblResult.CssClass = "resulterror";
 				lblResult.Text = Properties.Messages.AccountNotActivated;
-                return;
-            }
-        }
+				return;
+			}
+		}
 
 		/// <summary>
 		/// Loads the user for the password reset procedure.
@@ -115,7 +115,7 @@ namespace ScrewTurn.Wiki {
 			if(!string.IsNullOrEmpty(n)) lblDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
 		}
 
-        protected void btnLogin_Click(object sender, EventArgs e) {
+		protected void btnLogin_Click(object sender, EventArgs e) {
 			UserInfo user = Users.TryLogin(txtUsername.Text, txtPassword.Text);
 			if(user != null) {
 				string loginKey = Users.ComputeLoginKey(user.Username, user.Email, user.DateTime);
@@ -131,12 +131,12 @@ namespace ScrewTurn.Wiki {
 				lblResult.CssClass = "resulterror";
 				lblResult.Text = Properties.Messages.WrongUsernamePassword;
 			}
-        }
+		}
 
-        protected void btnLogout_Click(object sender, EventArgs e) {
+		protected void btnLogout_Click(object sender, EventArgs e) {
 			Logout();
 			UrlTools.Redirect(UrlTools.BuildUrl("Login.aspx?Logout=1"));
-        }
+		}
 
 		/// <summary>
 		/// Performs the logout.
@@ -189,6 +189,6 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-    }
+	}
 
 }

@@ -3517,6 +3517,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The new password is required.
+        /// </summary>
+        public static string PasswordEmpty {
+            get {
+                return ResourceManager.GetString("PasswordEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password Reset Message File.
         /// </summary>
         public static string PasswordResetMessageFile {
