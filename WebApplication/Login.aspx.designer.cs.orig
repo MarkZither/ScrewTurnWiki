@@ -10,7 +10,7 @@
 namespace ScrewTurn.Wiki {
     
     
-    public partial class CreateMasterPassword {
+    public partial class Login {
         
         /// <summary>
         /// lblChangeMasterPassword control.
@@ -20,15 +20,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal lblChangeMasterPassword;
-        
-        /// <summary>
-        /// lblDescriptionPwd control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblDescriptionPwd;
         
         /// <summary>
         /// lblNewPwd control.
@@ -49,13 +40,13 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.TextBox txtNewPwd;
         
         /// <summary>
-        /// RequiredFieldValidator2 control.
+        /// RequiredFieldValidator1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
         
         /// <summary>
         /// lblReNewPwd control.
@@ -74,15 +65,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtReNewPwd;
-        
-        /// <summary>
-        /// cvCheckPwd control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator cvCheckPwd;
         
         /// <summary>
         /// cvComparePwd control.

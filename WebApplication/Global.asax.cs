@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Text;
+using System.IO;
 
 namespace ScrewTurn.Wiki {
 
@@ -33,19 +34,42 @@ namespace ScrewTurn.Wiki {
 				}
 				Application.UnLock();
 			}
-			if(!Request.PhysicalPath.ToLowerInvariant().Contains("createmasterpassword.aspx")) {
-				if(Application["MasterPasswordOk"] == null) {
-					Application.Lock();
-					if(Application["MasterPasswordOk"] == null) {
-						//Setup Master Password
-						if(!String.IsNullOrEmpty(Settings.MasterPassword))
-							Application["MasterPasswordOk"] = "OK";
-					}
-					Application.UnLock();
-				}
 
-				if(Application["MasterPasswordOk"] == null) {
-					ScrewTurn.Wiki.UrlTools.Redirect("CreateMasterPassword.aspx");
+			string physicalPath = null;
+
+			try {
+				physicalPath = HttpContext.Current.Request.PhysicalPath;
+			}
+			catch(ArgumentException) {
+				// Illegal characters in path
+				HttpContext.Current.Response.Redirect("~/PageNotFound.aspx");
+				return;
+			}
+
+			// Extract the physical page name, e.g. MainPage, Edit or Category
+			string pageName = Path.GetFileNameWithoutExtension(physicalPath);
+			// Exctract the extension, e.g. .ashx or .aspx
+			string ext = Path.GetExtension(HttpContext.Current.Request.PhysicalPath).ToLowerInvariant();
+			// Remove trailing dot, .ashx -> ashx
+			if(ext.Length > 0) ext = ext.Substring(1);
+
+			// IIS7+Integrated Pipeline handles all requests through the ASP.NET engine
+			// All non-interesting files are not processed, such as GIF, CSS, etc.
+			if(ext == "ashx" || ext == "aspx") {
+				if(!Request.PhysicalPath.ToLowerInvariant().Contains("createmasterpassword.aspx")) {
+					if(Application["MasterPasswordOk"] == null) {
+						Application.Lock();
+						if(Application["MasterPasswordOk"] == null) {
+							//Setup Master Password
+							if(!String.IsNullOrEmpty(Settings.MasterPassword))
+								Application["MasterPasswordOk"] = "OK";
+						}
+						Application.UnLock();
+					}
+
+					if(Application["MasterPasswordOk"] == null) {
+						ScrewTurn.Wiki.UrlTools.Redirect("CreateMasterPassword.aspx");
+					}
 				}
 			}
 			ScrewTurn.Wiki.UrlTools.RouteCurrentRequest();

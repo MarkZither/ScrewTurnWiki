@@ -17,12 +17,17 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsValid) return;
 			Settings.BeginBulkUpdate();
-			Settings.MasterPassword = Hash.Compute(txtNewPwd.Text);
+			Settings.MasterPassword = Hash.Compute(txtReNewPwd.Text);
 			Settings.EndBulkUpdate();
 			lblRes.CssClass = "resultok";
 			lblRes.Text = Properties.Messages.ConfigSaved;
 			lnkMainRedirect.Visible = true;
 			lnkMainRedirect.NavigateUrl = "/";
+			lblNewPwd.Visible = false;
+			txtNewPwd.Visible = false;
+			lblReNewPwd.Visible = false;
+			txtReNewPwd.Visible = false;
+			BtnSave.Visible = false;
 		}
 	}
 }

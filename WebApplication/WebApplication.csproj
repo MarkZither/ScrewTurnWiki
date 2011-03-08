@@ -179,6 +179,13 @@
     <Compile Include="CreateMasterPassword.aspx.designer.cs">
       <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MasterPageClean.master.cs">
+      <DependentUpon>MasterPageClean.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPageClean.master.designer.cs">
+      <DependentUpon>MasterPageClean.master</DependentUpon>
+    </Compile>
     <Compile Include="PageListBuilder.ascx.cs">
       <DependentUpon>PageListBuilder.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2687,6 +2694,9 @@
     <Content Include="Web.SqlServer.Release.config">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MasterPageClean.master" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
