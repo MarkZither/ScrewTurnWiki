@@ -122,18 +122,16 @@ namespace ScrewTurn.Wiki {
 			if(!Directory.Exists(GetPath(GetDataDirectory(host), ThemeDirectory)))
 				Directory.CreateDirectory(GetPath(GetDataDirectory(host), ThemeDirectory));
 
-			if(!Directory.Exists(GetPath(GetDataDirectory(host), ThemeDirectory)))
-				Directory.CreateDirectory(GetPath(GetDataDirectory(host), ThemeDirectory));
-			
 			bool successExtract;
-						if(!Directory.Exists(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme))) {
+			if(!Directory.Exists(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme))) {
 				Directory.CreateDirectory(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
 				 successExtract = storeTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
 			}
 		}
 
 		private byte[] DefaultThemeZip() {
-			Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Core.Resources.Default.zip");
+			string[] resourceList = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames();
+			Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceList[0]);
 			byte[] buffer = new byte[stream.Length];
 			stream.Read(buffer, 0, buffer.Length);
 

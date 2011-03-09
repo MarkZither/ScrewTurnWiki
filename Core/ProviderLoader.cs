@@ -99,6 +99,7 @@ namespace ScrewTurn.Wiki {
 			List<IUsersStorageProviderV30> users = new List<IUsersStorageProviderV30>(2);
 			List<IUsersStorageProviderV30> dUsers = new List<IUsersStorageProviderV30>(2);
 			List<IPagesStorageProviderV30> pages = new List<IPagesStorageProviderV30>(2);
+			List<IThemeStorageProviderV30> theme = new List<IThemeStorageProviderV30>(2);
 			List<IPagesStorageProviderV30> dPages = new List<IPagesStorageProviderV30>(2);
 			List<IFilesStorageProviderV30> files = new List<IFilesStorageProviderV30>(2);
 			List<IFilesStorageProviderV30> dFiles = new List<IFilesStorageProviderV30>(2);
@@ -111,9 +112,10 @@ namespace ScrewTurn.Wiki {
 				IFilesStorageProviderV30[] d;
 				IUsersStorageProviderV30[] u;
 				IPagesStorageProviderV30[] p;
+				IThemeStorageProviderV30[] t;
 				IFormatterProviderV30[] f;
 				ICacheProviderV30[] c;
-				LoadFrom(pluginAssemblies[i], out u, out p, out d, out f, out c);
+				LoadFrom(pluginAssemblies[i], out u, out p, out d, out t, out f, out c);
 				if(loadFiles) files.AddRange(d);
 				if(loadUsers) users.AddRange(u);
 				if(loadPages) pages.AddRange(p);
@@ -132,6 +134,10 @@ namespace ScrewTurn.Wiki {
 
 			for(int i = 0; i < pages.Count; i++) {
 				Initialize<IPagesStorageProviderV30>(pages[i], Collectors.PagesProviderCollector, Collectors.DisabledPagesProviderCollector);
+			}
+
+			for(int i = 0; i < theme.Count; i++) {
+				Initialize<IThemeStorageProviderV30>(theme[i], Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
 			}
 
 			for(int i = 0; i < forms.Count; i++) {
@@ -187,9 +193,10 @@ namespace ScrewTurn.Wiki {
 			IUsersStorageProviderV30[] users;
 			IPagesStorageProviderV30[] pages;
 			IFilesStorageProviderV30[] files;
+			IThemeStorageProviderV30[] themes;
 			IFormatterProviderV30[] forms;
 			ICacheProviderV30[] cache;
-			LoadFrom(assembly, out users, out pages, out files, out forms, out cache);
+			LoadFrom(assembly, out users, out pages, out files, out themes, out forms, out cache);
 
 			int count = 0;
 
@@ -201,6 +208,11 @@ namespace ScrewTurn.Wiki {
 
 			for(int i = 0; i < users.Length; i++) {
 				Initialize<IUsersStorageProviderV30>(users[i], Collectors.UsersProviderCollector, Collectors.DisabledUsersProviderCollector);
+				count++;
+			}
+
+			for(int i = 0; i < themes.Length; i++) {
+				Initialize<IThemeStorageProviderV30>(themes[i], Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
 				count++;
 			}
 
@@ -229,11 +241,12 @@ namespace ScrewTurn.Wiki {
 		/// <param name="users">The Users Providers.</param>
 		/// <param name="files">The Files Providers.</param>
 		/// <param name="pages">The Pages Providers.</param>
+		/// <param name="themes">The Themes Providers.</param>
 		/// <param name="formatters">The Formatter Providers.</param>
 		/// <param name="cache">The Cache Providers.</param>
 		/// <remarks>The Components returned are <b>not</b> initialized.</remarks>
 		public static void LoadFrom(string assembly, out IUsersStorageProviderV30[] users, out IPagesStorageProviderV30[] pages,
-			out IFilesStorageProviderV30[] files, out IFormatterProviderV30[] formatters, out ICacheProviderV30[] cache) {
+			out IFilesStorageProviderV30[] files, out IThemeStorageProviderV30[] themes, out IFormatterProviderV30[] formatters, out ICacheProviderV30[] cache) {
 
 			Assembly asm = null;
 			try {
@@ -245,6 +258,7 @@ namespace ScrewTurn.Wiki {
 				files = new IFilesStorageProviderV30[0];
 				users = new IUsersStorageProviderV30[0];
 				pages = new IPagesStorageProviderV30[0];
+				themes = new IThemeStorageProviderV30[0];
 				formatters = new IFormatterProviderV30[0];
 				cache = new ICacheProviderV30[0];
 
@@ -261,6 +275,7 @@ namespace ScrewTurn.Wiki {
 				files = new IFilesStorageProviderV30[0];
 				users = new IUsersStorageProviderV30[0];
 				pages = new IPagesStorageProviderV30[0];
+				themes = new IThemeStorageProviderV30[0];
 				formatters = new IFormatterProviderV30[0];
 				cache = new ICacheProviderV30[0];
 
@@ -271,6 +286,7 @@ namespace ScrewTurn.Wiki {
 			List<IUsersStorageProviderV30> urs = new List<IUsersStorageProviderV30>();
 			List<IPagesStorageProviderV30> pgs = new List<IPagesStorageProviderV30>();
 			List<IFilesStorageProviderV30> fls = new List<IFilesStorageProviderV30>();
+			List<IThemeStorageProviderV30> thm = new List<IThemeStorageProviderV30>();
 			List<IFormatterProviderV30> frs = new List<IFormatterProviderV30>();
 			List<ICacheProviderV30> che = new List<ICacheProviderV30>();
 
@@ -302,6 +318,13 @@ namespace ScrewTurn.Wiki {
 							Collectors.FileNames[tmpd.GetType().FullName] = assembly;
 						}
 					}
+					if(iface == typeof(IThemeStorageProviderV30)) {
+						IThemeStorageProviderV30 thmm = CreateInstance<IThemeStorageProviderV30>(asm, types[i]);
+						if(thmm != null) {
+							thm.Add(thmm);
+							Collectors.FileNames[thmm.GetType().FullName] = assembly;
+						}
+					}
 					if(iface == typeof(IFormatterProviderV30)) {
 						IFormatterProviderV30 tmpf = CreateInstance<IFormatterProviderV30>(asm, types[i]);
 						if(tmpf != null) {
@@ -322,6 +345,7 @@ namespace ScrewTurn.Wiki {
 			users = urs.ToArray();
 			pages = pgs.ToArray();
 			files = fls.ToArray();
+			themes = thm.ToArray();
 			formatters = frs.ToArray();
 			cache = che.ToArray();
 		}

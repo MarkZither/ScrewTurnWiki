@@ -753,6 +753,16 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Gets the theme providers, either enabled or disabled.
+		/// </summary>
+		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
+		/// <returns>The providers.</returns>
+		public IThemeStorageProviderV30[] GetThemeProviders(bool enabled) {
+			if(enabled) return Collectors.ThemeProviderCollector.AllProviders;
+			else return Collectors.DisabledThemeProviderCollector.AllProviders;
+		}
+
+		/// <summary>
 		/// Gets the formatter providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>

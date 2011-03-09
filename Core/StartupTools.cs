@@ -106,13 +106,16 @@ namespace ScrewTurn.Wiki {
 			Collectors.UsersProviderCollector = new ProviderCollector<IUsersStorageProviderV30>();
 			Collectors.PagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
 			Collectors.FilesProviderCollector = new ProviderCollector<IFilesStorageProviderV30>();
+			Collectors.ThemeProviderCollector = new ProviderCollector<IThemeStorageProviderV30>();
 			Collectors.FormatterProviderCollector = new ProviderCollector<IFormatterProviderV30>();
 			Collectors.CacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
 			Collectors.DisabledUsersProviderCollector = new ProviderCollector<IUsersStorageProviderV30>();
 			Collectors.DisabledPagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
 			Collectors.DisabledFilesProviderCollector = new ProviderCollector<IFilesStorageProviderV30>();
+			Collectors.DisabledThemeProviderCollector = new ProviderCollector<IThemeStorageProviderV30>();
 			Collectors.DisabledFormatterProviderCollector = new ProviderCollector<IFormatterProviderV30>();
 			Collectors.DisabledCacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
+
 
 			// Load built-in providers
 
@@ -126,6 +129,17 @@ namespace ScrewTurn.Wiki {
 			else {
 				Collectors.DisabledFilesProviderCollector.AddProvider(f);
 				Log.LogEntry("Provider " + f.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
+			}
+
+			ThemeStorageProvider t = new ThemeStorageProvider();
+			if(!ProviderLoader.IsDisabled(t.GetType().FullName)) {
+				t.Init(Host.Instance, "");
+				Collectors.ThemeProviderCollector.AddProvider(t);
+				Log.LogEntry("Provider " + t.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
+			}
+			else {
+				Collectors.DisabledThemeProviderCollector.AddProvider(t);
+				Log.LogEntry("Provider " + t.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
 			UsersStorageProvider u = new UsersStorageProvider();

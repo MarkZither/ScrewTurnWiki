@@ -30,6 +30,10 @@ namespace ScrewTurn.Wiki {
 		public static ProviderCollector<IUsersStorageProviderV30> UsersProviderCollector;
 
 		/// <summary>
+		/// The Theme Provider Collector istance.
+		/// </summary>
+		public static ProviderCollector<IThemeStorageProviderV30> ThemeProviderCollector;
+		/// <summary>
 		/// The Pages Provider Collector instance.
 		/// </summary>
 		public static ProviderCollector<IPagesStorageProviderV30> PagesProviderCollector;
@@ -64,6 +68,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static ProviderCollector<IPagesStorageProviderV30> DisabledPagesProviderCollector;
 
+		/// <summary>
+		/// The Disabled Theme Provider Collector instance.
+		/// </summary>
+		public static ProviderCollector<IThemeStorageProviderV30> DisabledThemeProviderCollector;
 		/// <summary>
 		/// The Disabled Formatter Provider Collector instance.
 		/// </summary>
@@ -139,6 +147,9 @@ namespace ScrewTurn.Wiki {
 			PagesProviderCollector.RemoveProvider(prov as IPagesStorageProviderV30);
 			DisabledPagesProviderCollector.RemoveProvider(prov as IPagesStorageProviderV30);
 
+			ThemeProviderCollector.RemoveProvider(prov as IThemeStorageProviderV30);
+			DisabledThemeProviderCollector.RemoveProvider(prov as IThemeStorageProviderV30);
+
 			UsersProviderCollector.RemoveProvider(prov as IUsersStorageProviderV30);
 			DisabledUsersProviderCollector.RemoveProvider(prov as IUsersStorageProviderV30);
 
@@ -158,6 +169,12 @@ namespace ScrewTurn.Wiki {
 		/// <param name="typeName">The provider.</param>
 		public static void TryDisable(string typeName) {
 			IProviderV30 prov = null;
+
+			prov = ThemeProviderCollector.GetProvider(typeName);
+			if(prov != null) {
+				DisabledThemeProviderCollector.AddProvider((IThemeStorageProviderV30)prov);
+				ThemeProviderCollector.RemoveProvider((IThemeStorageProviderV30)prov);
+			}
 
 			prov = PagesProviderCollector.GetProvider(typeName);
 			if(prov != null) {
@@ -201,6 +218,13 @@ namespace ScrewTurn.Wiki {
 		/// <param name="typeName">The provider.</param>
 		public static void TryEnable(string typeName) {
 			IProviderV30 prov = null;
+
+			prov = DisabledThemeProviderCollector.GetProvider(typeName);
+			if(prov != null) {
+				ThemeProviderCollector.AddProvider((IThemeStorageProviderV30)prov);
+				DisabledThemeProviderCollector.RemoveProvider((IThemeStorageProviderV30)prov);
+				return;
+			}
 
 			prov = DisabledPagesProviderCollector.GetProvider(typeName);
 			if(prov != null) {
@@ -247,6 +271,9 @@ namespace ScrewTurn.Wiki {
 
 			foreach(IProviderV30 prov in PagesProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
 			foreach(IProviderV30 prov in DisabledPagesProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
+
+			foreach(IProviderV30 prov in ThemeProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
+			foreach(IProviderV30 prov in DisabledThemeProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
 
 			foreach(IProviderV30 prov in UsersProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
 			foreach(IProviderV30 prov in DisabledUsersProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
