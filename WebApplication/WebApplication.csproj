@@ -1675,6 +1675,8 @@
     <Content Include="App_LocalResources\Search.aspx.ko-KR.resx" />
     <Content Include="App_LocalResources\Upload.aspx.ko-KR.resx" />
     <Content Include="App_LocalResources\User.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\CreateMasterPassword.aspx.resx" />
+    <Content Include="App_LocalResources\MasterPageClean.master.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>

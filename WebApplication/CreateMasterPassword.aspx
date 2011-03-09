@@ -41,8 +41,8 @@
 		<tr>
 			<td style="height: 24px">&nbsp;</td>
 			<td style="height: 24px">
-				<asp:Button ID="BtnSave" runat="server" Text="Save Password" OnClick="btnSave_Click"/>
-				<asp:Label ID="lblRes" runat="server" meta:resourcekey="lblResultResource1" />
+				<asp:Button ID="BtnSave" runat="server" Text="Save Password" OnClick="btnSave_Click" meta:resourcekey="BtnSaveResource1"/>
+				<asp:Label ID="lblRes" runat="server" meta:resourcekey="lblResuResource1" />
 			</td>
 		</tr>
 		<tr>

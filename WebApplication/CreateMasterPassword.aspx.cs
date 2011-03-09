@@ -23,6 +23,7 @@ namespace ScrewTurn.Wiki {
 			lblRes.Text = Properties.Messages.ConfigSaved;
 			lnkMainRedirect.Visible = true;
 			lnkMainRedirect.NavigateUrl = "/";
+			lblDescriptionPwd.Visible = false;
 			lblNewPwd.Visible = false;
 			txtNewPwd.Visible = false;
 			lblReNewPwd.Visible = false;
