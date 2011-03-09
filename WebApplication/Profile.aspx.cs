@@ -34,10 +34,10 @@ namespace ScrewTurn.Wiki {
 			if(currentUser.Username == "admin") {
 				// Admin only has language preferences, stored in a cookie
 				UrlTools.Redirect("Language.aspx");
-                return;
-            }
+				return;
+			}
 
-            if(!Page.IsPostBack) {
+			if(!Page.IsPostBack) {
 				bool usersDataSupported = !currentUser.Provider.UsersDataReadOnly;
 				bool accountDetailsSupported = !currentUser.Provider.UserAccountsReadOnly;
 
