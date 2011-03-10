@@ -301,11 +301,11 @@ namespace ScrewTurn.Wiki {
 										sb.Insert(match.Index, @"<a href=""" +
 											UrlTools.BuildUrl("RSS.aspx?Page=", Tools.UrlEncode(current.FullName)) +
 											@""" title=""" + Exchanger.ResourceExchanger.GetResource("RssForThisPage") + @"""><img src=""" +
-											Settings.GetThemePath(Tools.DetectCurrentNamespace()) + @"Images/RSS.png"" alt=""RSS"" /></a>");
+											Themes.ListThemeFiles(Settings.GetTheme(Tools.DetectCurrentNamespace()), "Images/RSS.png") + @""" alt=""RSS"" /></a>");
 									}
 									break;
 								case "THEMEPATH":
-									sb.Insert(match.Index, Settings.GetThemePath(Tools.DetectCurrentNamespace()));
+									sb.Insert(match.Index,  Themes.GetThemePath(Settings.GetTheme(Tools.DetectCurrentNamespace())));
 									break;
 								case "CLEAR":
 									sb.Insert(match.Index, @"<div style=""clear: both;""></div>");

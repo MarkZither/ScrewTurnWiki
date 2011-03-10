@@ -162,6 +162,13 @@
     <Compile Include="AdminSnippets.aspx.designer.cs">
       <DependentUpon>AdminSnippets.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AdminTheme.aspx.cs">
+      <DependentUpon>AdminTheme.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminTheme.aspx.designer.cs">
+      <DependentUpon>AdminTheme.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AdminUsers.aspx.cs">
       <DependentUpon>AdminUsers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -635,6 +642,13 @@
     <Compile Include="Sitemap.aspx.designer.cs">
       <DependentUpon>Sitemap.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ThemeSelector.ascx.cs">
+      <DependentUpon>ThemeSelector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ThemeSelector.ascx.designer.cs">
+      <DependentUpon>ThemeSelector.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Thumb.aspx.cs">
       <DependentUpon>Thumb.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -667,6 +681,7 @@
   <ItemGroup>
     <Content Include="AccessDenied.aspx" />
     <Content Include="Admin.aspx" />
+    <Content Include="AdminTheme.aspx" />
     <Content Include="AllPages.aspx" />
     <Content Include="App_LocalResources\AccessDenied.aspx.cs-CZ.resx">
       <SubType>Designer</SubType>
@@ -1344,6 +1359,7 @@
     <Content Include="robots.txt" />
     <Content Include="RSS.aspx" />
     <Content Include="SessionRefresh.aspx" />
+    <Content Include="ThemeSelector.ascx" />
     <Content Include="Themes\Admin.css" />
     <Content Include="Themes\Elegant\Icon.ico" />
     <Content Include="Themes\Elegant\Images\Attachment.png" />
@@ -1752,6 +1768,7 @@
     <EmbeddedResource Include="Properties\Messages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.ro-RO.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -2079,7 +2096,9 @@
     <Content Include="App_LocalResources\Admin.master.it-IT.resx" />
     <Content Include="App_LocalResources\Admin.master.nb-NO.resx" />
     <Content Include="App_LocalResources\Admin.master.nl-NL.resx" />
-    <Content Include="App_LocalResources\Admin.master.resx" />
+    <Content Include="App_LocalResources\Admin.master.resx">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_LocalResources\Admin.master.ro-RO.resx" />
     <Content Include="App_LocalResources\Admin.master.ru-RU.resx" />
     <Content Include="App_LocalResources\Admin.master.sk-SK.resx" />

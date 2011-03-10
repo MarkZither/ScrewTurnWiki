@@ -9,14 +9,17 @@ using ScrewTurn.Wiki.SearchEngine;
 using Ionic.Zip;
 
 namespace ScrewTurn.Wiki {
-	class ThemeStorageProvider : ProviderBase, IThemeStorageProviderV30 {
+	/// <summary>
+	/// Implements the methods to view, add or delete Themes
+	/// </summary>
+	public class ThemeStorageProvider : ProviderBase, IThemeStorageProviderV30 {
 
 		private const string ThemeDirectory = ("Themes");
 		/// <summary>
 		/// The name of the provider.
 		/// </summary>
 		public static readonly string ProviderName = "Theme Provider";
-		public const string DefaultTheme = "Default";
+		private const string DefaultTheme = "Default";
 		private readonly ComponentInformation info =
 			new ComponentInformation(ProviderName, "Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
 
@@ -26,56 +29,78 @@ namespace ScrewTurn.Wiki {
 		/// Gets the path.
 		/// </summary>
 		/// <returns>The path generated from hostV30 and ThemeDirectory</returns>
-		private string GetPath(string path1, string path2){
+		private string GetPath(string path1, string path2) {
 			return Path.Combine(path1, path2);
 		}
 
-		public List<string> GetListTheme() {
+		/// <summary>
+		/// Retrives the lists of avaiable themes.
+		/// </summary>
+		/// <returns>A list of theme names.</returns>
+		public List<string> ListThemes() {
 			List<string> listTheme = new List<string>();
 			string pathFolders = GetPath(GetDataDirectory(host), ThemeDirectory);
 
-			foreach(string dir in Directory.GetDirectories(pathFolders))
-					listTheme.Add(dir.ToString());
-
+			foreach(string dir in Directory.GetDirectories(pathFolders)) {
+				DirectoryInfo themeName = new DirectoryInfo(dir);
+				listTheme.Add(themeName.Name);
+			}
 			return listTheme;
 		}
 
-		public List<string> GetListThemeFiles(string name) {
-			List<string> listFiles = new List<string>();
-			List<string> Folder = GetListTheme();
-			foreach(string dir in Folder){
-				if (name == dir.ToString())
-					foreach(var file in Directory.GetFiles(name)) {
-						listFiles.Add(file);
-					}
+		/// <summary>
+		/// Retrieves all files present in the selected theme.
+		/// </summary>
+		/// <param name="themeName">The name of the selected theme.</param>
+		/// <param name="searchPattern">The search string to match against the name of files.</param>
+		/// <returns>The list of files matching the searchPattern.</returns>
+		public List<string> ListThemeFiles(string themeName, string searchPattern) {
+			string path = GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName);
+			string[] files = Directory.GetFiles(path, searchPattern);
+
+			for(int i = 0; i < files.Length; i++) {
+				files[i] = GetRelativePath(files[i]);
 			}
-			return listFiles;
+			return new List<string>(files);
 		}
 
-		public bool DeleteTheme(string themename) {
-			List<string> ThemeName = new List<string>();
-			foreach(var theme in Directory.GetDirectories(Path.Combine(GetDataDirectory(host), ThemeDirectory))) {
-				if(themename == theme.ToString()) {
-					Directory.Delete(themename);
+		private string GetRelativePath(string file) {
+			DirectoryInfo publicPath = new DirectoryInfo(GetDataDirectory(host));
+			return file.Substring(file.IndexOf(publicPath.Name));
+		}
+
+		/// <summary>
+		/// Deletes the theme with the given name.
+		/// </summary>
+		/// <param name="themeName">The name of the theme to be deleted.</param>
+		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
+		public bool DeleteTheme(string themeName) {
+			foreach(var theme in ListThemes()) {
+				if(themeName == theme.ToString()) {
+					Directory.Delete(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName), true);
 					return true;
 				}
 			}
 			return false;
 		}
 
-		public bool storeTheme(string filename, byte[] assembly) {
+		/// <summary>
+		/// Stores the theme.
+		/// </summary>
+		/// <param name="themeName">The name of the theme.</param>
+		/// <param name="zipFile">The zipFile conteining the theme.</param>
+		/// <returns><c>true</c> if the theme is saved, <c>false</c> otherwise.</returns>
+		public bool StoreTheme(string themeName, byte[] zipFile) {
+			if(themeName == null) throw new ArgumentNullException("filename");
+			if(themeName.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
+			if(zipFile == null) throw new ArgumentNullException("assembly");
+			if(zipFile.Length == 0) throw new ArgumentException("Assembly cannot be empty", "assembly");
+			string targetPath = GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName);
 
-			if(filename == null) throw new ArgumentNullException("filename");
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
-			if(assembly == null) throw new ArgumentNullException("assembly");
-			if(assembly.Length == 0) throw new ArgumentException("Assembly cannot be empty", "assembly");
-			string targetPath = GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), filename);
 			Directory.CreateDirectory(targetPath);
 			lock(this) {
 				try {
-					using(ZipFile zip1 = ZipFile.Read(assembly)) {
-						// here, we extract every entry, but we could extract conditionally
-						// based on entry name, size, date, checkbox status, etc.  
+					using(ZipFile zip1 = ZipFile.Read(zipFile)) {
 						foreach(ZipEntry e in zip1) {
 							e.Extract(targetPath, ExtractExistingFileAction.OverwriteSilently);
 						}
@@ -86,6 +111,15 @@ namespace ScrewTurn.Wiki {
 				}
 				return true;
 			}
+		}
+
+		/// <summary>
+		/// Gets the relative path of the theme with the given name.
+		/// </summary>
+		/// <param name="themeName">The name of the theme.</param>
+		/// <returns>The relative path of the theme.</returns>
+		public string GetThemePath(string themeName) {
+			return GetRelativePath(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName)) + "/";
 		}
 
 		/// <summary>
@@ -103,7 +137,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Initializes the Storage Provider.
+		/// Initializes the Theme Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
@@ -125,10 +159,14 @@ namespace ScrewTurn.Wiki {
 			bool successExtract;
 			if(!Directory.Exists(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme))) {
 				Directory.CreateDirectory(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
-				 successExtract = storeTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
+				successExtract = StoreTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
 			}
 		}
 
+		/// <summary>
+		/// Extrats the defaults the theme zip.
+		/// </summary>
+		/// <returns>The file contenent in the resources.</returns>
 		private byte[] DefaultThemeZip() {
 			string[] resourceList = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames();
 			Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceList[0]);

@@ -22,9 +22,8 @@ namespace ScrewTurn.Wiki {
 				rptNamespaces.DataBind();
 
 				// Populate themes
-				string[] themes = Tools.AvailableThemes;
-				foreach(string theme in themes) {
-					lstTheme.Items.Add(new ListItem(theme, theme));
+				foreach(string theme in Themes.ListThemes()) {
+				    lstTheme.Items.Add(new ListItem(theme, theme));
 				}
 			}
 		}

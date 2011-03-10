@@ -132,6 +132,7 @@
     <Compile Include="StartupTools.cs" />
     <Compile Include="SubjectInfo.cs" />
     <Compile Include="Templates.cs" />
+    <Compile Include="Themes.cs" />
     <Compile Include="ThemeStorageProvider.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="Translator.cs" />

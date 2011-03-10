@@ -13,33 +13,41 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	public interface IThemeStorageProviderV30 : IProviderV30 {
 
 		/// <summary>
-		/// Retrives the lists of all theme saved.
+		/// Retrives the lists of avaiable themes.
 		/// </summary>
-		/// <returns>list contenent all theme</returns>
-		List<string> GetListTheme();
+		/// <returns>A list of theme names.</returns>
+		List<string> ListThemes();
 
 		/// <summary>
-		/// Retrieve all files present in the selected theme 
+		/// Retrieves all files present in the selected theme.
 		/// </summary>
-		/// <param name="name">The name of theme selected</param>
-		/// <returns>list contenet all files for the selected theme</returns>
-		List<string> GetListThemeFiles(string name);
+		/// <param name="themeName">The name of the selected theme.</param>
+		/// <param name="searchPattern">The search string to match against the name of files.</param>
+		/// <returns>The list of files matching the searchPattern.</returns>
+		List<string> ListThemeFiles(string themeName, string searchPattern);
 
 
 		/// <summary>
 		/// Stores the theme.
 		/// </summary>
-		/// <param name="filename">The name.</param>
-		/// <param name="assembly">The zipFile contenent the theme</param>
+		/// <param name="themeName">The name of the theme.</param>
+		/// <param name="zipFile">The zipFile conteining the theme.</param>
 		/// <returns><c>true</c> if the theme is saved, <c>false</c> otherwise.</returns>
-		bool storeTheme(string filename, byte[] assembly);
+		bool StoreTheme(string themeName, byte[] zipFile);
 
 
 		/// <summary>
-		/// Deletes the theme.
+		/// Deletes the theme with the given name.
 		/// </summary>
-		/// <param name="themename">The name.</param>
+		/// <param name="themeName">The name of the theme to be deleted.</param>
 		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
-		bool DeleteTheme(string themename);
+		bool DeleteTheme(string themeName);
+
+		/// <summary>
+		/// Gets the relative path of the theme with the given name.
+		/// </summary>
+		/// <param name="themeName">The name of the theme.</param>
+		/// <returns>The relative path of the theme.</returns>
+		string GetThemePath(string themeName);
 	}
 }

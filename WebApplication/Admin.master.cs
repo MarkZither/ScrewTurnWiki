@@ -53,7 +53,8 @@ namespace ScrewTurn.Wiki {
 			{ "admincategories", "lnkSelectCategories" },
 			{ "adminhome", "lnkSelectAdminHome" },
 			{ "adminnavpaths", "lnkSelectNavPaths" },
-			{ "adminproviders", "lnkSelectProviders" }
+			{ "adminproviders", "lnkSelectProviders" },
+			{ "admintheme", "lnkSelectTheme" }
 		};
 
 		/// <summary>
@@ -76,6 +77,7 @@ namespace ScrewTurn.Wiki {
 			lnkSelectAdminHome.CssClass = "tab";
 			lnkSelectNavPaths.CssClass = "tab";
 			lnkSelectProviders.CssClass = "tab";
+			lnkSelectTheme.CssClass = "tab";
 
 			hyperLink.CssClass = "tabselected";
 		}

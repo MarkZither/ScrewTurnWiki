@@ -7,10 +7,10 @@ using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki {
 
-    /// <summary>
-    /// Contains the Contents.
-    /// </summary>
-    public static class Content {
+	/// <summary>
+	/// Contains the Contents.
+	/// </summary>
+	public static class Content {
 
 		/// <summary>
 		/// Gets a pseudo cache item value.
@@ -90,10 +90,10 @@ namespace ScrewTurn.Wiki {
 		/// Invalidates the cached Content of a Page.
 		/// </summary>
 		/// <param name="pageInfo">The Page to invalidate the cached content of.</param>
-        public static void InvalidatePage(PageInfo pageInfo) {
+		public static void InvalidatePage(PageInfo pageInfo) {
 			Cache.RemovePage(pageInfo);
 			Redirections.WipePageOut(pageInfo);
-        }
+		}
 
 		/// <summary>
 		/// Invalidates all the cache Contents.
@@ -103,6 +103,6 @@ namespace ScrewTurn.Wiki {
 			Redirections.Clear();
 		}
 
-    }
+	}
 
 }

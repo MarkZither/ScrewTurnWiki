@@ -68,8 +68,6 @@ namespace ScrewTurn.Wiki {
 					return Settings.SenderEmail;
 				case SettingName.WikiTitle:
 					return Settings.WikiTitle;
-				case SettingName.ThemesDirectory:
-					return Settings.ThemesDirectory;
 				case SettingName.PublicDirectory:
 					return Settings.PublicDirectory;
 				case SettingName.UsersCanRegister:

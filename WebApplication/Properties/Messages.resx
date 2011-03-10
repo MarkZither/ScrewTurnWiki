@@ -1753,4 +1753,16 @@
   <data name="PasswordEmpty" xml:space="preserve">
     <value>The new password is required</value>
   </data>
+  <data name="CouldNotDeleteTheme" xml:space="preserve">
+    <value>Could not delete Theme</value>
+  </data>
+  <data name="LoadedThemes" xml:space="preserve">
+    <value>Loaded theme</value>
+  </data>
+  <data name="ThemeAlreadyExists" xml:space="preserve">
+    <value>Theme already exists</value>
+  </data>
+  <data name="ThemeDeleted" xml:space="preserve">
+    <value>Theme Deleted</value>
+  </data>
 </root>

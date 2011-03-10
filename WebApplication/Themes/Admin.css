@@ -324,7 +324,7 @@ tr.warning td {
 
 /* BEGIN AdminUsers.aspx, AdminGroups.aspx, AdminNamespaces.aspx,
 	AdminPages.aspx, AdminCategories.aspx, AdminSnippets.aspx,
-	AdminNavPaths.aspx, AdminLog.aspx, AdminProviders.aspx */
+	AdminNavPaths.aspx, AdminLog.aspx, AdminProviders.aspx, AdminThemes.aspx */
 
 /* AdminPages.aspx - specific */
 #NamespaceSelectorDiv {
@@ -638,7 +638,7 @@ input.searchtextbox {
 
 /* END AdminUsers.aspx, AdminGroups.aspx, AdminNamespaces.aspx,
 	AdminPages.aspx, AdminCategories.aspx, AdminSnippets.aspx,
-	AdminNavPaths.aspx, AdminLog.aspx, AdminProviders.aspx */
+	AdminNavPaths.aspx, AdminLog.aspx, AdminProviders.aspx, AdminThemes.aspx */
 
 /* BEGIN AdminConfig.aspx */
 

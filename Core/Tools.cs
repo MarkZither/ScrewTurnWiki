@@ -25,51 +25,46 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The includes.</returns>
 		public static string GetIncludes(string nspace) {
-			string themePath = Settings.GetThemePath(nspace);
-
 			StringBuilder result = new StringBuilder(300);
-
+			string nameTheme = Settings.GetTheme(nspace);
 			result.Append(GetJavaScriptIncludes());
 
-			string themeDir = Settings.ThemesDirectory + Settings.GetTheme(nspace);
-			if(!Directory.Exists(themeDir)) themeDir = Settings.ThemesDirectory + "Default";
-
-			string[] css = Directory.GetFiles(themeDir, "*.css");
+			List<string> cssList = Themes.ListThemeFiles(nameTheme, "*.css");
 			string firstChunk;
-			for(int i = 0; i < css.Length; i++) {
-				if(Path.GetFileName(css[i]).IndexOf("_") != -1) {
-					firstChunk = Path.GetFileName(css[i]).Substring(0, Path.GetFileName(css[i]).IndexOf("_")).ToLowerInvariant();
+			foreach (string cssFile in cssList){
+				if(Path.GetFileName(cssFile).IndexOf("_") != -1) { 
+					firstChunk = Path.GetFileName(cssFile).Substring(0, Path.GetFileName(cssFile).IndexOf("_")).ToLowerInvariant();
 					if(firstChunk.Equals("screen") || firstChunk.Equals("print") || firstChunk.Equals("all") ||
 						firstChunk.Equals("aural") || firstChunk.Equals("braille") || firstChunk.Equals("embossed") ||
 						firstChunk.Equals("handheld") || firstChunk.Equals("projection") || firstChunk.Equals("tty") || firstChunk.Equals("tv")) {
-						result.Append(@"<link rel=""stylesheet"" media=""" + firstChunk + @""" href=""" + themePath + Path.GetFileName(css[i]) + @""" type=""text/css"" />" + "\n");
+						result.Append(@"<link rel=""stylesheet"" media=""" + firstChunk + @""" href=""" + cssFile + @""" type=""text/css"" />" + "\n");
 					}
 					else {
-						result.Append(@"<link rel=""stylesheet"" href=""" + themePath + Path.GetFileName(css[i]) + @""" type=""text/css"" />" + "\n");
+						result.Append(@"<link rel=""stylesheet"" href=""" + cssFile + @""" type=""text/css"" />" + "\n");
 					}
 				}
 				else {
-					result.Append(@"<link rel=""stylesheet"" href=""" + themePath + Path.GetFileName(css[i]) + @""" type=""text/css"" />" + "\n");
+					result.Append(@"<link rel=""stylesheet"" href=""" + cssFile + @""" type=""text/css"" />" + "\n");
 				}
 			}
 
-			string customEditorCss = Path.Combine(themeDir, "Editor.css");
-			if(File.Exists(customEditorCss)) result.AppendFormat(@"<link rel=""stylesheet"" href=""{0}Editor.css"" type=""text/css"" />" + "\n", themePath);
+			List<string> customEditorCss = Themes.ListThemeFiles(nameTheme, "Editor.css");
+			if (customEditorCss!= null) result.AppendFormat(@"<link rel=""stylesheet"" href=""{0}"" type=""text/css"" />" + "\n", customEditorCss[0]);
 			else result.Append(@"<link rel=""stylesheet"" href=""Themes/Editor.css"" type=""text/css"" />" + "\n");
 
 			// OpenSearch
 			result.AppendFormat(@"<link rel=""search"" href=""Search.aspx?OpenSearch=1"" type=""application/opensearchdescription+xml"" title=""{1}"" />",
 				Settings.MainUrl, Settings.WikiTitle + " - Search");
 
-			string[] js = Directory.GetFiles(themeDir, "*.js");
-			for(int i = 0; i < js.Length; i++) {
-				result.Append(@"<script src=""" + themePath + Path.GetFileName(js[i]) + @""" type=""text/javascript""></script>" + "\n");
+			List<string> jsFiles = Themes.ListThemeFiles(nameTheme, "*.js");
+			foreach(string jsFile in jsFiles) {
+				result.Append(@"<script src=""" + jsFile + @""" type=""text/javascript""></script>" + "\n");
 			}
 
-			string[] icons = Directory.GetFiles(themeDir, "Icon.*");
+			string[] icons = Themes.ListThemeFiles(nameTheme, "Icon.*").ToArray();
 			if(icons.Length > 0) {
-				result.Append(@"<link rel=""shortcut icon"" href=""" + themePath + Path.GetFileName(icons[0]) + @""" type=""");
-				switch(Path.GetExtension(icons[0]).ToLowerInvariant()) {
+				result.Append(@"<link rel=""shortcut icon"" href=""" + icons[0] + @""" type=""");
+				switch(icons[0].Substring(icons[0].LastIndexOf('.')).ToLowerInvariant()) {
 					case ".ico":
 						result.Append("image/x-icon");
 						break;
@@ -148,22 +143,6 @@ namespace ScrewTurn.Wiki {
 				result = "0" + result;
 			}
 			return result;
-		}
-
-		/// <summary>
-		/// Gets the available Themes.
-		/// </summary>
-		public static string[] AvailableThemes {
-			get {
-				string[] dirs = Directory.GetDirectories(Settings.ThemesDirectory);
-				string[] res = new string[dirs.Length];
-				for(int i = 0; i < dirs.Length; i++) {
-					//if(dirs[i].EndsWith("\\")) dirs[i] = dirs[i].Substring(0, dirs[i].Length - 1);
-					dirs[i] = dirs[i].TrimEnd(Path.DirectorySeparatorChar);
-					res[i] = dirs[i].Substring(dirs[i].LastIndexOf(Path.DirectorySeparatorChar) + 1);
-				}
-				return res;
-			}
 		}
 
 		/// <summary>

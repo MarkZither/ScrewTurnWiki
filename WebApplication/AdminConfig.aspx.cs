@@ -57,22 +57,7 @@ namespace ScrewTurn.Wiki {
 			txtPassword.Attributes.Add("value", Settings.SmtpPassword);
 			chkEnableSslForSmtp.Checked = Settings.SmtpSsl;
 		}
-
-		/// <summary>
-		/// Populates the Themes list selecting the current one.
-		/// </summary>
-		/// <param name="current">The current theme.</param>
-		private void PopulateThemes(string current) {
-			current = current.ToLowerInvariant();
-
-			string[] themes = Tools.AvailableThemes;
-			lstRootTheme.Items.Clear();
-			foreach(string theme in themes) {
-				lstRootTheme.Items.Add(new ListItem(theme, theme));
-				if(theme.ToLowerInvariant() == current) lstRootTheme.Items[lstRootTheme.Items.Count - 1].Selected = true;
-			}
-		}
-
+		
 		/// <summary>
 		/// Populates the main pages list selecting the current one.
 		/// </summary>
@@ -143,7 +128,6 @@ namespace ScrewTurn.Wiki {
 		/// Loads the content configuration.
 		/// </summary>
 		private void LoadContentConfig() {
-			PopulateThemes(Settings.GetTheme(null));
 			PopulateMainPages(Settings.DefaultPage);
 			txtDateTimeFormat.Text = Settings.DateTimeFormat;
 			PopulateDateTimeFormats();
