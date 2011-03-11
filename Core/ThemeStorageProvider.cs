@@ -62,14 +62,14 @@ namespace ScrewTurn.Wiki {
 			else return null;
 
 			for(int i = 0; i < files.Length; i++) {
-				files[i] = GetRelativePath(files[i]);
+				files[i] = GetRelativePath(files[i]).Replace(Path.DirectorySeparatorChar.ToString(),"/");
 			}
 			return new List<string>(files);
 		}
 
 		private string GetRelativePath(string file) {
 			DirectoryInfo publicPath = new DirectoryInfo(GetDataDirectory(host));
-			return file.Substring(file.IndexOf(publicPath.Name));
+			return file.Substring(file.IndexOf(publicPath.Name)).Replace(Path.DirectorySeparatorChar.ToString(),"/");
 		}
 
 		/// <summary>
