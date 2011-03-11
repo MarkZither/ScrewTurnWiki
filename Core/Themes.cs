@@ -36,7 +36,20 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
 		public static bool DeleteTheme(string themeName) {
 			IThemeStorageProviderV30 themeDeleteProvider = Collectors.ThemeProviderCollector.GetProvider(Settings.DefaultThemeProvider);
-			return themeDeleteProvider.DeleteTheme(themeName);
+			if(!IsThemeInUse(themeName)) 
+				return themeDeleteProvider.DeleteTheme(themeName);
+				else return false;
+		}
+
+		private static bool IsThemeInUse(string themeName) {
+			List<NamespaceInfo> namespaces = Pages.GetNamespaces();
+			bool result = false;
+
+			if(themeName == Settings.GetTheme(null)) return true;
+			foreach(NamespaceInfo ns in namespaces) {
+				if(themeName == Settings.GetTheme(ns.Name)) return true;
+			}
+			return result;
 		}
 
 		/// <summary>

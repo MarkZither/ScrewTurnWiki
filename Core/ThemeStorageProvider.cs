@@ -56,7 +56,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The list of files matching the searchPattern.</returns>
 		public List<string> ListThemeFiles(string themeName, string searchPattern) {
 			string path = GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName);
-			string[] files = Directory.GetFiles(path, searchPattern);
+			string[] files;
+			if(!String.IsNullOrEmpty(path))
+				files = Directory.GetFiles(path, searchPattern);
+			else return null;
 
 			for(int i = 0; i < files.Length; i++) {
 				files[i] = GetRelativePath(files[i]);
@@ -75,13 +78,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="themeName">The name of the theme to be deleted.</param>
 		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
 		public bool DeleteTheme(string themeName) {
-			foreach(var theme in ListThemes()) {
-				if(themeName == theme.ToString()) {
-					Directory.Delete(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName), true);
-					return true;
-				}
-			}
-			return false;
+				Directory.Delete(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName), true);
+				return true;
 		}
 
 		/// <summary>
@@ -98,19 +96,17 @@ namespace ScrewTurn.Wiki {
 			string targetPath = GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName);
 
 			Directory.CreateDirectory(targetPath);
-			lock(this) {
-				try {
-					using(ZipFile zip1 = ZipFile.Read(zipFile)) {
-						foreach(ZipEntry e in zip1) {
-							e.Extract(targetPath, ExtractExistingFileAction.OverwriteSilently);
-						}
+			try {
+				using(ZipFile zip1 = ZipFile.Read(zipFile)) {
+					foreach(ZipEntry e in zip1) {
+						e.Extract(targetPath, ExtractExistingFileAction.OverwriteSilently);
 					}
 				}
-				catch(IOException) {
-					return false;
-				}
-				return true;
 			}
+			catch(IOException) {
+				return false;
+			}
+			return true;
 		}
 
 		/// <summary>
@@ -146,7 +142,7 @@ namespace ScrewTurn.Wiki {
 		public void Init(IHostV30 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
-
+			string[] files;
 			this.host = host;
 
 			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
@@ -160,6 +156,13 @@ namespace ScrewTurn.Wiki {
 			if(!Directory.Exists(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme))) {
 				Directory.CreateDirectory(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
 				successExtract = StoreTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
+			}
+			else {
+				files = Directory.GetFiles(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
+				if(files.Length == 0) {
+					Directory.Delete(GetPath(GetDataDirectory(host), ThemeDirectory), true);
+					successExtract = StoreTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
+				}
 			}
 		}
 
@@ -183,4 +186,6 @@ namespace ScrewTurn.Wiki {
 		public void Shutdown() { }
 
 	}
+
+
 }

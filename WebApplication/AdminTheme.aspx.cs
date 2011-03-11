@@ -15,7 +15,7 @@ namespace ScrewTurn.Wiki {
 			if(!AdminMaster.CanManageProviders(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
 
 			if(!Page.IsPostBack) {
-				// Load providers and related data
+				// Load themes and related data
 				LoadThemes();
 			}
 		}
@@ -31,17 +31,9 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void lstThemes_SelectedIndexChanged(object sender, EventArgs e) {
-			btnDeleteTheme.Enabled = lstThemes.SelectedIndex >= 0 && !string.IsNullOrEmpty(lstThemes.SelectedValue);
+			btnDeleteTheme.Enabled = lstThemes.SelectedIndex >= 0;
 		}
-
-		/// <summary>
-		/// Performs all the actions that are needed after a provider status is changed.
-		/// </summary>
-		private void PerformPostProviderChangeActions() {
-			Content.InvalidateAllPages();
-			Content.ClearPseudoCache();
-		}
-
+		
 		protected void btnTheme_Click(object sender, EventArgs e) {
 			string file = upTheme.FileName;
 
@@ -71,8 +63,6 @@ namespace ScrewTurn.Wiki {
 				lblUploadThemeResult.CssClass = "resultok";
 				lblUploadThemeResult.Text = Properties.Messages.LoadedThemes;
 				upTheme.Attributes.Add("value", "");
-
-				PerformPostProviderChangeActions();
 
 				LoadThemes();
 			}
