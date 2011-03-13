@@ -1742,7 +1742,6 @@ namespace ScrewTurn.Wiki {
 					}
 					else if(targetUrl.Contains(":") || targetUrl.ToLowerInvariant().Contains("%3a") || targetUrl.Contains("&") || targetUrl.Contains("%26")) {
 						sb.Append(@"<b style=""color: #FF0000;"">FORMATTER ERROR ("":"" and ""&"" not supported in Page Names)</b>");
-
 					}
 					else {
 						// The link points to a wiki page
@@ -2142,7 +2141,7 @@ namespace ScrewTurn.Wiki {
 		private static string BuildTable(string table) {
 			// Proceed line-by-line, ignoring the first and last one
 			string[] lines = table.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-			if(lines.Length < 3) {	
+			if(lines.Length < 3) {
 				return "<b>FORMATTER ERROR (Malformed Table)</b>";
 			}
 			StringBuilder sb = new StringBuilder();
@@ -2524,9 +2523,7 @@ namespace ScrewTurn.Wiki {
 					string formatterErrorString = @"<b style=""color: #FF0000;"">FORMATTER ERROR (Transcluded inexistent page or this same page)</b>";
 					sb.Insert(match.Index, formatterErrorString);
 					sb.Insert(match.Index, match);
-
 				}
-
 
 				match = TransclusionRegex.Match(sb.ToString());
 			}
