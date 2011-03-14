@@ -15,13 +15,6 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public static class ReverseFormatter {
 
-
-		/// <summary>
-		/// Processes order or unorder lists and sublists.
-		/// </summary>
-		/// <param name="nodes">The nodes.</param>
-		/// <param name="marker">The marker.</param>
-		/// <returns>Valid WikiMarkUp text for the lists</returns>
 		private static string processList(XmlNodeList nodes, string marker) {
 			string result = "";
 			string ul = "*";
@@ -51,11 +44,6 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
-		/// <summary>
-		/// Processes the image.
-		/// </summary>
-		/// <param name="node">The node contenent fileName of the image.</param>
-		/// <returns>The correct path for wikimarup and image</returns>
 		private static string processImage(XmlNode node) {
 			string result = "";
 			if(node.Attributes.Count != 0) {
@@ -71,11 +59,19 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
-		/// <summary>
-		/// Processes the child Image.
-		/// </summary>
-		/// <param name="nodes">Nodelist from an image.</param>
-		/// <returns>The correct WikiMarkup for the images </returns>
+		private static string processLink(string link) {
+			string subLink = "";
+			string[] links = link.Split('=');
+			if(links[0] == "GetFile.aspx?File") {
+				subLink += "{UP}";
+				for(int i = 1; i < links.Length - 1; i++)
+					subLink += links[i] + "=";
+				subLink += links[links.Length - 1];
+				link = subLink;
+			}
+			return link;
+		}
+
 		private static string processChildImage(XmlNodeList nodes) {
 			string image = "";
 			string p = "";
@@ -102,6 +98,8 @@ namespace ScrewTurn.Wiki {
 								link += attName.Value.ToString();
 						}
 					}
+					link = processLink(link);
+
 					image += processImage(node.LastChild);
 					url = "|" + target + link;
 				}
@@ -111,13 +109,7 @@ namespace ScrewTurn.Wiki {
 			result = p + image + url;
 			return result;
 		}
-
-
-		/// <summary>
-		/// Processes the table image.
-		/// </summary>
-		/// <param name="nodes">The nodes.</param>
-		/// <returns>An auto-image type formmatter</returns>
+		
 		private static string processTableImage(XmlNodeList nodes) {
 			string result = "";
 			foreach(XmlNode node in nodes) {
@@ -160,6 +152,7 @@ namespace ScrewTurn.Wiki {
 									if(attName.Name.ToString() == "title")
 										title += attName.Value.ToString();
 								}
+								link = processLink(link);
 							}
 							result += processTableImage(node.ChildNodes) + "|" + target + link;
 						}
@@ -168,22 +161,13 @@ namespace ScrewTurn.Wiki {
 			}
 			return result;
 		}
-		/// <summary>
-		/// Processes the code.
-		/// </summary>
-		/// <param name="text">The text.</param>
-		/// <returns></returns>
+
 		private static string processCode(string text) {
 			string result = "";
 			result = text;
 			return result;
 		}
 
-		/// <summary>
-		/// Processes the table.
-		/// </summary>
-		/// <param name="nodes">The nodes.</param>
-		/// <returns></returns>
 		private static string processTable(XmlNodeList nodes) {
 			string result = "";
 
@@ -207,7 +191,6 @@ namespace ScrewTurn.Wiki {
 							if(attr.Name.ToLowerInvariant() == "style") style += "style=\"" + attr.Value.ToString() + "\" ";
 
 						result += "|- " + style + "\r\n" + processTable(node.ChildNodes);
-						//else result += processTable(node.ChildNodes);
 						break;
 					case "td":
 						string styleTd = "";
@@ -223,11 +206,7 @@ namespace ScrewTurn.Wiki {
 			}
 			return result;
 		}
-		/// <summary>
-		/// Processes the child.
-		/// </summary>
-		/// <param name="nodes">A XmlNodeList .</param>
-		/// <returns>The corrispondent WikiMarkup Text</returns>
+
 		private static string processChild(XmlNodeList nodes) {
 			string result = "";
 			foreach(XmlNode node in nodes) {
@@ -255,7 +234,6 @@ namespace ScrewTurn.Wiki {
 						case "u":
 							result += ("__" + processChild(node.ChildNodes) + "__");
 							break;
-						//break;
 						case "h1":
 							if(node.HasChildNodes) {
 								if(node.FirstChild.NodeType == XmlNodeType.Whitespace) result += ("----\r\n" + processChild(node.ChildNodes));
@@ -263,15 +241,12 @@ namespace ScrewTurn.Wiki {
 							}
 							else result += ("----\r\n");
 							break;
-						//break;
 						case "h2":
 							result += ("===" + processChild(node.ChildNodes) + "===\r\n");
 							break;
-						//break;
 						case "h3":
 							result += ("====" + processChild(node.ChildNodes) + "====\r\n");
 							break;
-						//break;
 						case "h4":
 							result += ("=====" + processChild(node.ChildNodes) + "=====\r\n");
 							break;
@@ -427,10 +402,13 @@ namespace ScrewTurn.Wiki {
 									}
 								}
 
+
 								if(isInternalLink) {
 									string[] splittedLink = link.Split('=');
 									link = "c:" + splittedLink[1];
 								}
+								else
+									link = processLink(link);
 
 								if((!anchor) && (!isTable) && (!childImg) && (!isUnknowLink))
 									if(title != link)
@@ -454,11 +432,6 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
-		/// <summary>
-		/// Froms the HTML.
-		/// </summary>
-		/// <param name="reader">The reader.</param>
-		/// <returns>valid XML Document</returns>
 		private static XmlDocument FromHTML(TextReader reader) {
 			// setup SgmlReader
 			Sgml.SgmlReader sgmlReader = new Sgml.SgmlReader();
