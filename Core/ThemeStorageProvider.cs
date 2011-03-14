@@ -39,7 +39,9 @@ namespace ScrewTurn.Wiki {
 		/// <returns>A list of theme names.</returns>
 		public List<string> ListThemes() {
 			List<string> listTheme = new List<string>();
-			string pathFolders = GetPath(GetDataDirectory(host), ThemeDirectory);
+			string parent = GetDataDirectory(host);
+			parent = parent.Replace("public", "");
+			string pathFolders = GetPath(parent, ThemeDirectory);
 
 			foreach(string dir in Directory.GetDirectories(pathFolders)) {
 				DirectoryInfo themeName = new DirectoryInfo(dir);

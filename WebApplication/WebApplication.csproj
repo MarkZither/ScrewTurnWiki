@@ -186,6 +186,7 @@
     <Compile Include="CreateMasterPassword.aspx.designer.cs">
       <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
     </Compile>
+    <Compile Include="IThemeProvider.cs" />
     <Compile Include="MasterPageClean.master.cs">
       <DependentUpon>MasterPageClean.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -540,6 +541,13 @@
       <DependentUpon>Profile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProviderSelectorThemes.ascx.cs">
+      <DependentUpon>ProviderSelectorThemes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProviderSelectorThemes.ascx.designer.cs">
+      <DependentUpon>ProviderSelectorThemes.ascx</DependentUpon>
+    </Compile>
     <Compile Include="RandPage.aspx.cs">
       <DependentUpon>RandPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1354,6 +1362,7 @@
     <Content Include="Preview.aspx" />
     <Content Include="Print.aspx" />
     <Content Include="Profile.aspx" />
+    <Content Include="ProviderSelectorThemes.ascx" />
     <Content Include="RandPage.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="robots.txt" />

@@ -148,6 +148,22 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Gets the available Themes.
+		/// </summary>
+		public static string[] AvailableThemes {
+			get {
+				string[] dirs = Directory.GetDirectories(Settings.ThemesDirectory);
+				string[] res = new string[dirs.Length];
+				for(int i = 0; i < dirs.Length; i++) {
+					//if(dirs[i].EndsWith("\\")) dirs[i] = dirs[i].Substring(0, dirs[i].Length - 1);
+					dirs[i] = dirs[i].TrimEnd(Path.DirectorySeparatorChar);
+					res[i] = dirs[i].Substring(dirs[i].LastIndexOf(Path.DirectorySeparatorChar) + 1);
+				}
+				return res;
+			}
+		}
+
+		/// <summary>
 		/// Gets the available Cultures.
 		/// </summary>
 		public static string[] AvailableCultures {

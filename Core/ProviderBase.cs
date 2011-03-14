@@ -20,7 +20,5 @@ namespace ScrewTurn.Wiki {
 		protected string GetDataDirectory(IHostV30 host) {
 			return host.GetSettingValue(SettingName.PublicDirectory);
 		}
-
 	}
-
 }

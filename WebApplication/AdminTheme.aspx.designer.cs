@@ -31,6 +31,24 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblManagementThemeTitle;
         
         /// <summary>
+        /// lblSelectProvider control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblSelectProvider;
+        
+        /// <summary>
+        /// stProviderSelector control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::ScrewTurn.Wiki.ProviderSelectorThemes stProviderSelector;
+        
+        /// <summary>
         /// lblUploadNewTheme control.
         /// </summary>
         /// <remarks>

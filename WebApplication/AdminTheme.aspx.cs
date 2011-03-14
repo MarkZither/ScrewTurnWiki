@@ -18,6 +18,10 @@ namespace ScrewTurn.Wiki {
 				// Load themes and related data
 				LoadThemes();
 			}
+			if(stProviderSelector.SelectedProvider.ToString() == "Local Pages Provider") {
+				lstThemes.Visible = false;
+			}
+
 		}
 
 		# region Themes
@@ -26,8 +30,9 @@ namespace ScrewTurn.Wiki {
 			List<string> dir = Themes.ListThemes();
 			lstThemes.Items.Clear();
 			lstThemes.Items.Add(new ListItem("- " + Properties.Messages.SelectAndDelete + " -", ""));
-			foreach(string theme in dir)
+			foreach(string theme in dir) {
 				lstThemes.Items.Add(new ListItem(theme, theme));
+			}
 		}
 
 		protected void lstThemes_SelectedIndexChanged(object sender, EventArgs e) {

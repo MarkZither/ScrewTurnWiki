@@ -21,10 +21,13 @@ namespace ScrewTurn.Wiki {
 			if(!Page.IsPostBack) {
 				rptNamespaces.DataBind();
 
-				// Populate themes
-				foreach(string theme in Themes.ListThemes()) {
-				    lstTheme.Items.Add(new ListItem(theme, theme));
+				//Populate themes linked at the providers.
+				if (providerSelector.SelectedProvider.ToString() != "Local Pages Provider"){
+					foreach(string theme in Themes.ListThemes()){
+						lstTheme.Items.Add(new ListItem(theme, theme));
+					}
 				}
+
 			}
 		}
 

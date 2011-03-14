@@ -200,11 +200,27 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Gets the Name of the Themes directory.
+		/// </summary>
+		public static string ThemesDirectoryName {
+			get { return "Themes"; }
+		}
+
+		/// <summary>
+		/// Gets the Themes directory.
+		/// </summary>
+		public static string ThemesDirectory {
+			get { return RootDirectory + ThemesDirectoryName + Path.DirectorySeparatorChar; }
+		}
+
+		/// <summary>
 		/// Gets the Name of the JavaScript Directory.
 		/// </summary>
 		public static string JsDirectoryName {
 			get { return "JS"; }
 		}
+
+
 
 		/// <summary>
 		/// Gets the JavaScript Directory.

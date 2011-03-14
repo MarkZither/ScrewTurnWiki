@@ -21,7 +21,6 @@ namespace ScrewTurn.Wiki {
 		/// <returns>A list of theme names.</returns>
 		public static List<String> ListThemes() {
 			List<string> result = new List<string>();
-
 			foreach(IThemeStorageProviderV30 provider in Collectors.ThemeProviderCollector.AllProviders) {
 				result.AddRange(provider.ListThemes());
 			}
