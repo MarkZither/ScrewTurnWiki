@@ -10,15 +10,15 @@
 namespace ScrewTurn.Wiki {
     
     
-    public partial class ProviderSelectorThemes {
+    public partial class ThemesProviderSelector {
         
         /// <summary>
-        /// lstProvidersThemes control.
+        /// lstThemesProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList lstProvidersThemes;
+        protected global::System.Web.UI.WebControls.DropDownList lstThemesProviders;
     }
 }

@@ -19,12 +19,11 @@ namespace ScrewTurn.Wiki {
 		/// Retrives the lists of avaiable themes.
 		/// </summary>
 		/// <returns>A list of theme names.</returns>
-		public static List<String> ListThemes() {
+		public static List<String> ListThemes(string provider) {
 			List<string> result = new List<string>();
-			foreach(IThemeStorageProviderV30 provider in Collectors.ThemeProviderCollector.AllProviders) {
-				result.AddRange(provider.ListThemes());
+			foreach(IThemeStorageProviderV30 prov in Collectors.ThemeProviderCollector.AllProviders) {
+				if (prov.ToString() == provider) result.AddRange(prov.ListThemes(provider));
 			}
-
 			return result;
 		}
 

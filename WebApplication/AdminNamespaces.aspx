@@ -92,6 +92,7 @@
 				Visible="False" CssClass="injectedmessage" meta:resourcekey="lblDefaultPageInfoResource1" />
 			
 			<asp:Literal ID="lblTheme" runat="server" Text="Theme" EnableViewState="False" meta:resourcekey="lblThemeResource2" /><br />
+			<st:ProviderSelector ID="providerThSelector" runat="server" ExcludeReadOnly="true" ProviderType="Themes" /><br />
 			<asp:DropDownList ID="lstTheme" runat="server" CssClass="dropdown" meta:resourcekey="lstThemeResource1" /><br />
 			
 			<div id="ButtonsDiv">

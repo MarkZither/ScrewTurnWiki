@@ -166,6 +166,15 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblTheme;
         
         /// <summary>
+        /// providerThSelector control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::ScrewTurn.Wiki.ProviderSelector providerThSelector;
+        
+        /// <summary>
         /// lstTheme control.
         /// </summary>
         /// <remarks>

@@ -541,13 +541,6 @@
       <DependentUpon>Profile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProviderSelectorThemes.ascx.cs">
-      <DependentUpon>ProviderSelectorThemes.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProviderSelectorThemes.ascx.designer.cs">
-      <DependentUpon>ProviderSelectorThemes.ascx</DependentUpon>
-    </Compile>
     <Compile Include="RandPage.aspx.cs">
       <DependentUpon>RandPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -656,6 +649,13 @@
     </Compile>
     <Compile Include="ThemeSelector.ascx.designer.cs">
       <DependentUpon>ThemeSelector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ThemesProviderSelector.ascx.cs">
+      <DependentUpon>ThemesProviderSelector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ThemesProviderSelector.ascx.designer.cs">
+      <DependentUpon>ThemesProviderSelector.ascx</DependentUpon>
     </Compile>
     <Compile Include="Thumb.aspx.cs">
       <DependentUpon>Thumb.aspx</DependentUpon>
@@ -1362,13 +1362,13 @@
     <Content Include="Preview.aspx" />
     <Content Include="Print.aspx" />
     <Content Include="Profile.aspx" />
-    <Content Include="ProviderSelectorThemes.ascx" />
     <Content Include="RandPage.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="robots.txt" />
     <Content Include="RSS.aspx" />
     <Content Include="SessionRefresh.aspx" />
     <Content Include="ThemeSelector.ascx" />
+    <Content Include="ThemesProviderSelector.ascx" />
     <Content Include="Themes\Admin.css" />
     <Content Include="Themes\Elegant\Icon.ico" />
     <Content Include="Themes\Elegant\Images\Attachment.png" />

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using ScrewTurn.Wiki;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.SearchEngine;
 using Ionic.Zip;
@@ -18,11 +19,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The name of the provider.
 		/// </summary>
-		public static readonly string ProviderName = "Theme Provider";
+		public static readonly string ProviderName = "Local Theme Provider";
 		private const string DefaultTheme = "Default";
 		private readonly ComponentInformation info =
 			new ComponentInformation(ProviderName, "Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
-
 		private IHostV30 host;
 
 		/// <summary>
@@ -37,12 +37,11 @@ namespace ScrewTurn.Wiki {
 		/// Retrives the lists of avaiable themes.
 		/// </summary>
 		/// <returns>A list of theme names.</returns>
-		public List<string> ListThemes() {
+		public List<string> ListThemes(string provider) {
 			List<string> listTheme = new List<string>();
 			string parent = GetDataDirectory(host);
-			parent = parent.Replace("public", "");
+			//parent = parent.Replace("public\\", "");
 			string pathFolders = GetPath(parent, ThemeDirectory);
-
 			foreach(string dir in Directory.GetDirectories(pathFolders)) {
 				DirectoryInfo themeName = new DirectoryInfo(dir);
 				listTheme.Add(themeName.Name);
@@ -57,7 +56,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="searchPattern">The search string to match against the name of files.</param>
 		/// <returns>The list of files matching the searchPattern.</returns>
 		public List<string> ListThemeFiles(string themeName, string searchPattern) {
-			string path = GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName);
+			string parent = GetDataDirectory(host);
+			//parent = parent.Replace("public\\", "");
+			string path = GetPath(GetPath(parent, ThemeDirectory), themeName);
 			string[] files;
 			if(!String.IsNullOrEmpty(path))
 				files = Directory.GetFiles(path, searchPattern);
@@ -70,7 +71,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private string GetRelativePath(string file) {
-			DirectoryInfo publicPath = new DirectoryInfo(GetDataDirectory(host));
+			string parent = GetDataDirectory(host);
+			//parent = parent.Replace("public\\", "");
+			DirectoryInfo publicPath = new DirectoryInfo(parent);
+
 			return file.Substring(file.IndexOf(publicPath.Name)).Replace(Path.DirectorySeparatorChar.ToString(),"/");
 		}
 
@@ -80,7 +84,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="themeName">The name of the theme to be deleted.</param>
 		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
 		public bool DeleteTheme(string themeName) {
-				Directory.Delete(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName), true);
+			string parent = GetDataDirectory(host);
+			//parent = parent.Replace("public\\", "");
+			Directory.Delete(GetPath(GetPath(parent, ThemeDirectory), themeName), true);
 				return true;
 		}
 
@@ -95,7 +101,9 @@ namespace ScrewTurn.Wiki {
 			if(themeName.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
 			if(zipFile == null) throw new ArgumentNullException("assembly");
 			if(zipFile.Length == 0) throw new ArgumentException("Assembly cannot be empty", "assembly");
-			string targetPath = GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName);
+			string parent = GetDataDirectory(host);
+			//parent = parent.Replace("public\\", "");
+			string targetPath = GetPath(GetPath(parent, ThemeDirectory), themeName);
 
 			Directory.CreateDirectory(targetPath);
 			try {
@@ -117,7 +125,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="themeName">The name of the theme.</param>
 		/// <returns>The relative path of the theme.</returns>
 		public string GetThemePath(string themeName) {
-			return GetRelativePath(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), themeName)) + "/";
+			string parent = GetDataDirectory(host);
+			//parent = parent.Replace("public\\", "");
+			return GetRelativePath(GetPath(GetPath(parent, ThemeDirectory), themeName)) + "/";
 		}
 
 		/// <summary>
@@ -144,28 +154,28 @@ namespace ScrewTurn.Wiki {
 		public void Init(IHostV30 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
-			string[] files;
+			//string[] files;
 			this.host = host;
 
 			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
 			}
 
-			if(!Directory.Exists(GetPath(GetDataDirectory(host), ThemeDirectory)))
-				Directory.CreateDirectory(GetPath(GetDataDirectory(host), ThemeDirectory));
+			//if(!Directory.Exists(GetPath(GetDataDirectory(host), ThemeDirectory)))
+			//    Directory.CreateDirectory(GetPath(GetDataDirectory(host), ThemeDirectory));
 
-			bool successExtract;
-			if(!Directory.Exists(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme))) {
-				Directory.CreateDirectory(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
-				successExtract = StoreTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
-			}
-			else {
-				files = Directory.GetFiles(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
-				if(files.Length == 0) {
-					Directory.Delete(GetPath(GetDataDirectory(host), ThemeDirectory), true);
-					successExtract = StoreTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
-				}
-			}
+			//bool successExtract;
+			//if(!Directory.Exists(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme))) {
+			//    Directory.CreateDirectory(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
+			//    successExtract = StoreTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
+			//}
+			//else {
+			//    files = Directory.GetFiles(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
+			//    if(files.Length == 0) {
+			//        Directory.Delete(GetPath(GetDataDirectory(host), ThemeDirectory), true);
+			//        successExtract = StoreTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
+			//    }
+			//}
 		}
 
 		/// <summary>

@@ -20,14 +20,18 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsPostBack) {
 				rptNamespaces.DataBind();
-
+				
 				//Populate themes linked at the providers.
-				if (providerSelector.SelectedProvider.ToString() != "Local Pages Provider"){
-					foreach(string theme in Themes.ListThemes()){
-						lstTheme.Items.Add(new ListItem(theme, theme));
-					}
+				providerSelector.Reload();
+				providerThSelector.Reload();
+				List<string> dir = Themes.ListThemes(providerThSelector.SelectedProvider);
+				lstTheme.Items.Clear();
+				foreach(string theme in dir) {
+					lstTheme.Items.Add(new ListItem(theme, theme));
 				}
-
+				//    foreach(string theme in Themes.ListThemes(providerSelector.SelectedProvider)) {
+				//    lstTheme.Items.Add(new ListItem(theme, theme));
+				//}
 			}
 		}
 

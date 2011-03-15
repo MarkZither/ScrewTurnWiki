@@ -153,6 +153,10 @@
 		<asp:Literal ID="lblDefaultProvCache" runat="server" Text="Cache Provider" EnableViewState="False" meta:resourcekey="lblDefaultProvCacheResource1" /><br />
 		<st:ProviderSelector ID="lstCacheProvider" runat="server" ProviderType="Cache" ExcludeReadOnly="true" />
 	</div>
+	<div class="defaultprov">
+		<asp:Literal ID="lblDefaultProvThemes" runat="server" Text="Themes Provider" EnableViewState="false" meta:resourcekey="lblDefaultProvThemesResource1" /><br />
+		<st:ProviderSelector ID="lstThemesProvider" runat="server" ProviderType="Themes" ExcludeReadOnly="true" />
+	</div>
 	<div class="defaultprovbutton">
 		<asp:Button ID="btnSaveDefaultProviders" runat="server" Text="Save" OnClick="btnSaveDefaultProviders_Click" meta:resourcekey="btnSaveDefaultProvidersResource1" />
 		<asp:Label ID="lblDefaultProvidersResult" runat="server" meta:resourcekey="lblDefaultProvidersResultResource1" />

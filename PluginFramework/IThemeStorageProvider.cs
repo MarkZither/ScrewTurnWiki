@@ -15,8 +15,9 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Retrives the lists of avaiable themes.
 		/// </summary>
+		/// <param name="providerName">The name of the provider selected.</param>
 		/// <returns>A list of theme names.</returns>
-		List<string> ListThemes();
+		List<string> ListThemes(string providerName);
 
 		/// <summary>
 		/// Retrieves all files present in the selected theme.
@@ -34,7 +35,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="zipFile">The zipFile conteining the theme.</param>
 		/// <returns><c>true</c> if the theme is saved, <c>false</c> otherwise.</returns>
 		bool StoreTheme(string themeName, byte[] zipFile);
-
 
 		/// <summary>
 		/// Deletes the theme with the given name.

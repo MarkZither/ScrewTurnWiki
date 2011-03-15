@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using ScrewTurn.Wiki.PluginFramework;
+using ScrewTurn.Wiki;
 
 namespace ScrewTurn.Wiki {
 
@@ -43,6 +44,10 @@ namespace ScrewTurn.Wiki {
 				case ProviderType.Pages:
 					allProviders = Collectors.PagesProviderCollector.AllProviders;
 					defaultProvider = Settings.DefaultPagesProvider;
+					break;
+				case ProviderType.Themes:
+					allProviders = Collectors.ThemeProviderCollector.AllProviders;
+					defaultProvider = Settings.DefaultThemeProvider;
 					break;
 				case ProviderType.Files:
 					allProviders = Collectors.FilesProviderCollector.AllProviders;
@@ -84,6 +89,8 @@ namespace ScrewTurn.Wiki {
 				case ProviderType.Pages:
 					return storageProvider == null || (!storageProvider.ReadOnly || storageProvider.ReadOnly && !excludeReadOnly);
 				case ProviderType.Files:
+					return storageProvider == null || (!storageProvider.ReadOnly || storageProvider.ReadOnly && !excludeReadOnly);
+				case ProviderType.Themes:
 					return storageProvider == null || (!storageProvider.ReadOnly || storageProvider.ReadOnly && !excludeReadOnly);
 				case ProviderType.Cache:
 					return true;
@@ -181,6 +188,7 @@ namespace ScrewTurn.Wiki {
 
 		protected void lstProviders_SelectedIndexChanged(object sender, EventArgs e) {
 			if(SelectedProviderChanged != null) SelectedProviderChanged(sender, e);
+
 		}
 
 	}
@@ -204,7 +212,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Cache providers.
 		/// </summary>
-		Cache
+		Cache,
+		/// <summary>
+		///  Theme providers.
+		/// </summary>
+		Themes
 	}
 
 	/// <summary>
