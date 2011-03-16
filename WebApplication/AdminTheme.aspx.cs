@@ -19,13 +19,18 @@ namespace ScrewTurn.Wiki {
 				LoadThemes();
 
 			}
-			
-			//string name = (new ProviderRow.Name);
-			//if(stProviderSelector.SelectedProvider.ToString() == "Local Pages Provider") {
-			//    lstThemes.Enabled = false;
-			//}
+		}
 
-		 }
+		/// <summary>
+		/// Event fired when the selected provider changes.
+		/// </summary>
+		public event EventHandler<EventArgs> SelectedProviderThemesChanged;
+
+		protected void providerThemeSelector_SelectedIndexChanged(object sender, EventArgs e) {
+			if(SelectedProviderThemesChanged != null) SelectedProviderThemesChanged(sender, e);
+			else fillThemeList(SelectedProviderThemeDelete);
+		}
+
 
 		private void UploadTheme() {
 			
@@ -33,43 +38,88 @@ namespace ScrewTurn.Wiki {
 
 		# region Themes
 		private void LoadThemes() {
-			//ThemeProviderSelectorDelete.Reload();
-			//List<string> dir = Themes.ListThemes(ThemeProviderSelectorDelete.SelectedProvider);
-			//lstThemes.Items.Clear();
-			//lstThemes.Items.Add(new ListItem("- " + Properties.Messages.SelectAndDelete + " -", ""));
-			//foreach(string theme in dir) {
-			//    lstThemes.Items.Add(new ListItem(theme, theme));
-			//}
+			lstProvThemeSelectorUpload.Items.Clear();
+			foreach(IProviderV30 themesProv in Collectors.ThemeProviderCollector.AllProviders) {
+				lstProvThemeSelectorUpload.Items.Add(new ListItem(themesProv.Information.Name, themesProv.Information.Name));
+			}
+
+			provThemeSelector.Items.Clear();
+			foreach(IProviderV30 themesProvider in Collectors.ThemeProviderCollector.AllProviders) {
+				provThemeSelector.Items.Add(new ListItem(themesProvider.Information.Name, themesProvider.ToString()));
+			}
+			fillThemeList(SelectedProviderThemeDelete);
+
+		}
+
+		private void fillThemeList(string provider) {
+			lstThemes.Enabled = true;
+			lstThemes.Items.Clear();
+			if(provThemeSelector.SelectedIndex != -1) {
+				lstThemes.Items.Add(new ListItem("- Select and Delete -", "- Select and Delete -"));
+				foreach(string theme in Themes.ListThemes(provider)) {
+					lstThemes.Items.Add(new ListItem(theme, theme));
+				}
+			}
+			else {
+				lstThemes.Items.Add(new ListItem("- Select and Delete -", "- Select and Delete -"));
+				lstThemes.Enabled = false;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the selected provider.
+		/// </summary>
+		public string SelectedProviderUpload {
+			get { return lstProvThemeSelectorUpload.SelectedValue; }
+			set {
+				lstProvThemeSelectorUpload.SelectedIndex = -1;
+				foreach(ListItem itm in lstProvThemeSelectorUpload.Items) {
+					if(itm.Value == value) {
+						itm.Selected = true;
+						break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the selected provider.
+		/// </summary>
+		public string SelectedProviderThemeDelete {
+			get { return provThemeSelector.SelectedValue; }
+			set {
+				provThemeSelector.SelectedIndex = -1;
+				foreach(ListItem itm in provThemeSelector.Items) {
+					if(itm.Value == value) {
+						itm.Selected = true;
+						break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the selected themes.
+		/// </summary>
+		/// <value>
+		/// The selected themes.
+		/// </value>
+		public string SelectedThemesToDelete {
+			get { return lstThemes.SelectedValue; }
+			set {
+				lstThemes.SelectedIndex = -1;
+				foreach(ListItem itm in lstThemes.Items) {
+					if(itm.Value == value) {
+						itm.Selected = true;
+						break;
+					}
+				}
+			}
 		}
 
 		protected void lstThemeProviders_SelectedIndexChanged() {
-
-			lstThemes.Items.Clear();
-			List<string> dir = Themes.ListThemes(ThemeProviderSelector.SelectedProvider);
-			lstThemes.Items.Add(new ListItem("- " + Properties.Messages.SelectAndDelete + " -", ""));
-			foreach(string theme in dir) {
-				lstThemes.Items.Add(new ListItem(theme, theme));
-			}
-
-			//if(ThemeProviderSelector.IsDefault()) {
-			//    lstThemes.Enabled = false;
-			//    btnDeleteTheme.Enabled = false;
-			//    upTheme.Enabled = false;
-			//    btnTheme.Enabled = false;
-			//}
-			//else {
-			//    lstThemes.Enabled = true;
-			//    btnDeleteTheme.Enabled = true;
-			//    upTheme.Enabled = true;
-			//    btnTheme.Enabled = true;
-
-			//}
 		}
 
-		protected void lstThemes_SelectedIndexChanged(object sender, EventArgs e) {
-			btnDeleteTheme.Enabled = lstThemes.SelectedIndex >= 0;
-		}
-		
 		protected void btnTheme_Click(object sender, EventArgs e) {
 			string file = upTheme.FileName;
 
@@ -82,12 +132,12 @@ namespace ScrewTurn.Wiki {
 			}
 
 			Log.LogEntry("Theme upload requested " + upTheme.FileName, EntryType.General, SessionFacade.CurrentUsername);
-			List<string> themes = Themes.ListThemes(ThemeProviderSelector.SelectedProvider);
+			List<string> themes = Themes.ListThemes(SelectedProviderUpload);
 			bool exist = false;
 			foreach(string th in themes) {
-				if (th == file) exist = true;
+				if(th == file) exist = true;
 			}
-			if (exist){
+			if(exist) {
 				// Theme already exists
 				lblUploadThemeResult.CssClass = "resulterror";
 				lblUploadThemeResult.Text = Properties.Messages.ThemeAlreadyExists;
@@ -102,6 +152,10 @@ namespace ScrewTurn.Wiki {
 
 				LoadThemes();
 			}
+		}
+
+		protected void lstThemes_SelectedIndexChanged(object sender, EventArgs e) {
+
 		}
 
 		protected void btnDeleteTheme_Click(object sender, EventArgs e) {

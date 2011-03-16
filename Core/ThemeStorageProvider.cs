@@ -60,7 +60,7 @@ namespace ScrewTurn.Wiki {
 			//parent = parent.Replace("public\\", "");
 			string path = GetPath(GetPath(parent, ThemeDirectory), themeName);
 			string[] files;
-			if(!String.IsNullOrEmpty(path))
+			if(!String.IsNullOrEmpty(path) && Directory.Exists(path))
 				files = Directory.GetFiles(path, searchPattern);
 			else return null;
 
@@ -72,9 +72,7 @@ namespace ScrewTurn.Wiki {
 
 		private string GetRelativePath(string file) {
 			string parent = GetDataDirectory(host);
-			//parent = parent.Replace("public\\", "");
 			DirectoryInfo publicPath = new DirectoryInfo(parent);
-
 			return file.Substring(file.IndexOf(publicPath.Name)).Replace(Path.DirectorySeparatorChar.ToString(),"/");
 		}
 
@@ -160,22 +158,6 @@ namespace ScrewTurn.Wiki {
 			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
 			}
-
-			//if(!Directory.Exists(GetPath(GetDataDirectory(host), ThemeDirectory)))
-			//    Directory.CreateDirectory(GetPath(GetDataDirectory(host), ThemeDirectory));
-
-			//bool successExtract;
-			//if(!Directory.Exists(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme))) {
-			//    Directory.CreateDirectory(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
-			//    successExtract = StoreTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
-			//}
-			//else {
-			//    files = Directory.GetFiles(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme));
-			//    if(files.Length == 0) {
-			//        Directory.Delete(GetPath(GetDataDirectory(host), ThemeDirectory), true);
-			//        successExtract = StoreTheme(GetPath(GetPath(GetDataDirectory(host), ThemeDirectory), DefaultTheme), DefaultThemeZip());
-			//    }
-			//}
 		}
 
 		/// <summary>

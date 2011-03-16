@@ -12,7 +12,6 @@ namespace ScrewTurn.Wiki {
 
 		private const string RootName = "&lt;root&gt;";
 		private const string RootNameUnescaped = "-- root --";
-
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
@@ -20,18 +19,6 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsPostBack) {
 				rptNamespaces.DataBind();
-				
-				//Populate themes linked at the providers.
-				providerSelector.Reload();
-				providerThSelector.Reload();
-				List<string> dir = Themes.ListThemes(providerThSelector.SelectedProvider);
-				lstTheme.Items.Clear();
-				foreach(string theme in dir) {
-					lstTheme.Items.Add(new ListItem(theme, theme));
-				}
-				//    foreach(string theme in Themes.ListThemes(providerSelector.SelectedProvider)) {
-				//    lstTheme.Items.Add(new ListItem(theme, theme));
-				//}
 			}
 		}
 
@@ -76,15 +63,6 @@ namespace ScrewTurn.Wiki {
 				cvName.Enabled = false;
 				cvName2.Enabled = false;
 				LoadDefaultPages();
-				lstTheme.SelectedIndex = -1;
-				foreach(ListItem item in lstTheme.Items) {
-					if(item.Value == theme) {
-						item.Selected = true;
-						break;
-					}
-				}
-				providerSelector.SelectedProvider = nspace != null ? nspace.Provider.ToString() : Settings.DefaultPagesProvider;
-				providerSelector.Enabled = false;
 
 				btnCreate.Visible = false;
 				btnSave.Visible = true;
@@ -242,7 +220,7 @@ namespace ScrewTurn.Wiki {
 						done = Pages.SetNamespaceDefaultPage(nspace, page);
 
 						if(done) {
-							Settings.SetTheme(nspace.Name, lstTheme.SelectedValue);
+							Settings.SetTheme(nspace.Name, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
 
 							if(done) {
 								RefreshList();
@@ -279,7 +257,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnSave_Click(object sender, EventArgs e) {
 			// This can rarely occur
 			if(string.IsNullOrEmpty(lstDefaultPage.SelectedValue)) return;
-			if(string.IsNullOrEmpty(lstTheme.SelectedValue)) return;
+			if(string.IsNullOrEmpty(providerThSelector.SelectedThemes)) return;
 
 			NamespaceInfo nspace = txtCurrentNamespace.Value != RootName ?
 				Pages.FindNamespace(txtCurrentNamespace.Value) : null;
@@ -287,7 +265,7 @@ namespace ScrewTurn.Wiki {
 			bool done = Pages.SetNamespaceDefaultPage(nspace, Pages.FindPage(lstDefaultPage.SelectedValue));
 
 			if(done) {
-				Settings.SetTheme(nspace != null ? nspace.Name : null, lstTheme.SelectedValue);
+				Settings.SetTheme(nspace != null ? nspace.Name : null, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
 
 				if(done) {
 					RefreshList();
@@ -385,12 +363,11 @@ namespace ScrewTurn.Wiki {
 			txtName.Enabled = true;
 			cvName.Enabled = true;
 			cvName2.Enabled = true;
-			providerSelector.Enabled = true;
-			providerSelector.Reload();
+			providerThSelector.Enabled = true;
+			providerThSelector.Reload();
 			lstDefaultPage.Enabled = true;
 			lstDefaultPage.Items.Clear();
 			lblDefaultPageInfo.Visible = false;
-			lstTheme.SelectedIndex = 0;
 			btnCreate.Visible = true;
 			btnSave.Visible = false;
 			btnDelete.Visible = false;

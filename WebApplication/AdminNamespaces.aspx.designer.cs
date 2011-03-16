@@ -172,16 +172,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::ScrewTurn.Wiki.ProviderSelector providerThSelector;
-        
-        /// <summary>
-        /// lstTheme control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList lstTheme;
+        protected global::ScrewTurn.Wiki.ThemesProviderSelector providerThSelector;
         
         /// <summary>
         /// btnSave control.

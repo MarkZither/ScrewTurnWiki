@@ -40,15 +40,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblSelectProvider;
         
         /// <summary>
-        /// ProviderSelector control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::ScrewTurn.Wiki.ProviderSelector ProviderSelector;
-        
-        /// <summary>
         /// lblUploadNewTheme control.
         /// </summary>
         /// <remarks>
@@ -56,6 +47,15 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal lblUploadNewTheme;
+        
+        /// <summary>
+        /// lstProvThemeSelectorUpload control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList lstProvThemeSelectorUpload;
         
         /// <summary>
         /// upTheme control.
@@ -103,15 +103,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblSelectProvider2;
         
         /// <summary>
-        /// ThemeProviderSelector control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::ScrewTurn.Wiki.ProviderSelector ThemeProviderSelector;
-        
-        /// <summary>
         /// lblDeleteTheme control.
         /// </summary>
         /// <remarks>
@@ -119,6 +110,15 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal lblDeleteTheme;
+        
+        /// <summary>
+        /// provThemeSelector control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList provThemeSelector;
         
         /// <summary>
         /// lstThemes control.

@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin.master" AutoEventWireup="true" CodeBehind="AdminConfig.aspx.cs" Inherits="ScrewTurn.Wiki.AdminConfig" culture="auto" meta:resourcekey="PageResource2" uiculture="auto" %>
+<%@ Register TagPrefix="st" TagName="ThemesProviderSelector" Src="~/ThemesProviderSelector.ascx" %>
 
 <asp:Content ID="ctnHead" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -167,8 +168,7 @@
 			<a href="AdminNamespaces.aspx" class="smalllabel">
 			<asp:Literal ID="lblNamespaces1" runat="server" Text="Namespaces" 
 				EnableViewState="False" meta:resourcekey="lblNamespaces1Resource1" /></a>)</span><br />
-			<asp:DropDownList ID="lstRootTheme" runat="server" CssClass="configmedium" 
-				meta:resourcekey="lstRootThemeResource1" />
+			<st:ThemesProviderSelector ID="ThemeRootSelector" runat="server" /><br />
 		</div>
 		
 		<div class="featurecontainer">

@@ -373,13 +373,13 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblNamespaces1;
         
         /// <summary>
-        /// lstRootTheme control.
+        /// ThemeRootSelector control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList lstRootTheme;
+        protected global::ScrewTurn.Wiki.ThemesProviderSelector ThemeRootSelector;
         
         /// <summary>
         /// lblRootMainPage control.

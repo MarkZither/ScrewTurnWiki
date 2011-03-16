@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin.master" AutoEventWireup="true" CodeBehind="AdminNamespaces.aspx.cs" Inherits="ScrewTurn.Wiki.AdminNamespaces" culture="auto" meta:resourcekey="PageResource3" uiculture="auto" %>
-
 <%@ Register TagPrefix="st" TagName="ProviderSelector" Src="~/ProviderSelector.ascx" %>
+<%@ Register TagPrefix="st" TagName="ThemesProviderSelector" Src="~/ThemesProviderSelector.ascx" %>
 <%@ Register TagPrefix="st" TagName="PermissionsManager" Src="~/PermissionsManager.ascx" %>
 
 <asp:Content ID="ctnHead" ContentPlaceHolderID="head" runat="server">
@@ -92,8 +92,7 @@
 				Visible="False" CssClass="injectedmessage" meta:resourcekey="lblDefaultPageInfoResource1" />
 			
 			<asp:Literal ID="lblTheme" runat="server" Text="Theme" EnableViewState="False" meta:resourcekey="lblThemeResource2" /><br />
-			<st:ProviderSelector ID="providerThSelector" runat="server" ExcludeReadOnly="true" ProviderType="Themes" /><br />
-			<asp:DropDownList ID="lstTheme" runat="server" CssClass="dropdown" meta:resourcekey="lstThemeResource1" /><br />
+			<st:ThemesProviderSelector ID="providerThSelector" runat="server" ExcludeReadOnly="true" ProviderType="Themes" /><br />
 			
 			<div id="ButtonsDiv">
 				<asp:Button ID="btnSave" runat="server" Text="Save Namespace" ToolTip="Save modifications"

@@ -449,7 +449,7 @@ namespace ScrewTurn.Wiki {
 
 			
 			// Save content configuration
-			Settings.SetTheme(null, lstRootTheme.SelectedValue);
+			Settings.SetTheme(null, ThemeRootSelector.SelectedProvider + "|" + ThemeRootSelector.SelectedThemes);
 			Settings.DefaultPage = lstMainPage.SelectedValue;
 			Settings.DateTimeFormat = txtDateTimeFormat.Text;
 			Settings.DefaultLanguage = lstDefaultLanguage.SelectedValue;

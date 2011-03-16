@@ -64,6 +64,7 @@ namespace ScrewTurn.Wiki {
 			lstProviders.Items.Clear();
 
 			int count = 0;
+			if(providerType == ProviderType.Themes) lstProviders.Items.Add(new ListItem("standard", "standard"));
 			foreach(IProviderV30 prov in allProviders) {
 				if(IsProviderIncludedInList(prov)) {
 					string typeName = prov.GetType().FullName;
@@ -187,7 +188,10 @@ namespace ScrewTurn.Wiki {
 		public event EventHandler<EventArgs> SelectedProviderChanged;
 
 		protected void lstProviders_SelectedIndexChanged(object sender, EventArgs e) {
-			if(SelectedProviderChanged != null) SelectedProviderChanged(sender, e);
+			if(SelectedProviderChanged != null) {
+				Reload();
+				SelectedProviderChanged(sender, e);
+			}
 
 		}
 

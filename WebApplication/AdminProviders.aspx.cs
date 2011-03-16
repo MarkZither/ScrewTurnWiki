@@ -297,6 +297,7 @@ namespace ScrewTurn.Wiki {
 			Settings.DefaultUsersProvider = lstUsersProvider.SelectedProvider;
 			Settings.DefaultFilesProvider = lstFilesProvider.SelectedProvider;
 			Settings.DefaultCacheProvider = lstCacheProvider.SelectedProvider;
+			Settings.DefaultThemeProvider = lstThemesProvider.SelectedProvider;
 			Settings.EndBulkUpdate();
 
 			lblDefaultProvidersResult.CssClass = "resultok";

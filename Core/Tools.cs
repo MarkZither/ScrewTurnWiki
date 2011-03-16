@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 			List<string> customEditorCss = Themes.ListThemeFiles(nameTheme, "Editor.css");
-			if (customEditorCss!= null) result.AppendFormat(@"<link rel=""stylesheet"" href=""{0}"" type=""text/css"" />" + "\n", customEditorCss[0]);
+			if (customEditorCss!= null && customEditorCss.Count>0) result.AppendFormat(@"<link rel=""stylesheet"" href=""{0}"" type=""text/css"" />" + "\n", customEditorCss[0]);
 			else result.Append(@"<link rel=""stylesheet"" href=""Themes/Editor.css"" type=""text/css"" />" + "\n");
 			// OpenSearch
 			result.AppendFormat(@"<link rel=""search"" href=""Search.aspx?OpenSearch=1"" type=""application/opensearchdescription+xml"" title=""{1}"" />",
