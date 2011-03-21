@@ -24,11 +24,12 @@
 
 	<asp:Panel ID="pnlList" runat="server" meta:resourcekey="pnlListResource1" >
 		<asp:Literal ID="lblDisplay" runat="server" Text="Display" EnableViewState="False" meta:resourcekey="lblDisplayResource1" />:
-		<asp:RadioButton ID="rdoPages" runat="server" Text="Pages Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoPagesResource1" />
-		<asp:RadioButton ID="rdoUsers" runat="server" Text="Users Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoUsersResource1" />
-		<asp:RadioButton ID="rdoFiles" runat="server" Text="Files Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFilesResource1" />
-		<asp:RadioButton ID="rdoCache" runat="server" Text="Cache Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoCacheResource1" />
-		<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" />
+		<asp:RadioButton ID="rdoPages" runat="server" Text="Pages Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoPagesResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoUsers" runat="server" Text="Users Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoUsersResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoFiles" runat="server" Text="Files Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFilesResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoCache" runat="server" Text="Cache Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoCacheResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoThemes" runat="server" Text="Themes Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoThemesResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" AutoPostBack="true" />
 		<br />
 		
 		<div id="ProvidersListContainerDiv">
@@ -152,10 +153,6 @@
 	<div class="defaultprov">
 		<asp:Literal ID="lblDefaultProvCache" runat="server" Text="Cache Provider" EnableViewState="False" meta:resourcekey="lblDefaultProvCacheResource1" /><br />
 		<st:ProviderSelector ID="lstCacheProvider" runat="server" ProviderType="Cache" ExcludeReadOnly="true" />
-	</div>
-	<div class="defaultprov">
-		<asp:Literal ID="lblDefaultProvThemes" runat="server" Text="Themes Provider" EnableViewState="false" meta:resourcekey="lblDefaultProvThemesResource1" /><br />
-		<st:ProviderSelector ID="lstThemesProvider" runat="server" ProviderType="Themes" ExcludeReadOnly="true" />
 	</div>
 	<div class="defaultprovbutton">
 		<asp:Button ID="btnSaveDefaultProviders" runat="server" Text="Save" OnClick="btnSaveDefaultProviders_Click" meta:resourcekey="btnSaveDefaultProvidersResource1" />

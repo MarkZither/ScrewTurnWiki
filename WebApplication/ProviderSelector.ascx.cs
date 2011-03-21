@@ -47,7 +47,6 @@ namespace ScrewTurn.Wiki {
 					break;
 				case ProviderType.Themes:
 					allProviders = Collectors.ThemeProviderCollector.AllProviders;
-					defaultProvider = Settings.DefaultThemeProvider;
 					break;
 				case ProviderType.Files:
 					allProviders = Collectors.FilesProviderCollector.AllProviders;

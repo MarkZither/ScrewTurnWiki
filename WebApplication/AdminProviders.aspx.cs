@@ -69,6 +69,11 @@ namespace ScrewTurn.Wiki {
 				providers.AddRange(Collectors.CacheProviderCollector.AllProviders);
 				providers.AddRange(Collectors.DisabledCacheProviderCollector.AllProviders);
 			}
+			else if(rdoThemes.Checked) {
+				enabledCount = Collectors.ThemeProviderCollector.AllProviders.Length;
+				providers.AddRange(Collectors.ThemeProviderCollector.AllProviders);
+				providers.AddRange(Collectors.DisabledThemeProviderCollector.AllProviders);
+			}
 			else if(rdoFormatter.Checked) {
 				enabledCount = Collectors.FormatterProviderCollector.AllProviders.Length;
 				providers.AddRange(Collectors.FormatterProviderCollector.AllProviders);
@@ -297,7 +302,6 @@ namespace ScrewTurn.Wiki {
 			Settings.DefaultUsersProvider = lstUsersProvider.SelectedProvider;
 			Settings.DefaultFilesProvider = lstFilesProvider.SelectedProvider;
 			Settings.DefaultCacheProvider = lstCacheProvider.SelectedProvider;
-			Settings.DefaultThemeProvider = lstThemesProvider.SelectedProvider;
 			Settings.EndBulkUpdate();
 
 			lblDefaultProvidersResult.CssClass = "resultok";

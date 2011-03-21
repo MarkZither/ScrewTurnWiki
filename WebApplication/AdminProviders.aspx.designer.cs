@@ -76,6 +76,15 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.RadioButton rdoCache;
         
         /// <summary>
+        /// rdoThemes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rdoThemes;
+        
+        /// <summary>
         /// rdoFormatter control.
         /// </summary>
         /// <remarks>
@@ -326,24 +335,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::ScrewTurn.Wiki.ProviderSelector lstCacheProvider;
-        
-        /// <summary>
-        /// lblDefaultProvThemes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblDefaultProvThemes;
-        
-        /// <summary>
-        /// lstThemesProvider control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::ScrewTurn.Wiki.ProviderSelector lstThemesProvider;
         
         /// <summary>
         /// btnSaveDefaultProviders control.

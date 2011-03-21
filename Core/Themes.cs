@@ -77,7 +77,6 @@ namespace ScrewTurn.Wiki {
 			provider = values[0];
 			theme = values[values.Length-1];
 			if(values.Length > 1) {
-
 				if(provider == "standard") {
 					foreach(string s in ListThemes(provider)) {
 						if(s == theme) {
@@ -94,7 +93,8 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 				else {
-					IThemeStorageProviderV30 themeListFileProvider = Collectors.ThemeProviderCollector.GetProvider(Settings.DefaultThemeProvider);
+					IThemeStorageProviderV30 themeListFileProvider = Collectors.ThemeProviderCollector.GetProvider(provider);
+					if(themeListFileProvider == null) return null;
 					List<string> lists = themeListFileProvider.ListThemeFiles(theme, searchPattern);
 					if((lists == null) || (lists.Count == 0)) return null;
 					else return themeListFileProvider.ListThemeFiles(theme, searchPattern);
@@ -115,8 +115,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="zipFile">The zipFile conteining the theme.</param>
 		/// <returns><c>true</c> if the theme is saved, <c>false</c> otherwise.</returns>
 		public static bool StoreTheme(string themeName, byte[] zipFile) {
-			IThemeStorageProviderV30 themeStorageProvider = Collectors.ThemeProviderCollector.GetProvider(Settings.DefaultThemeProvider);
-			return themeStorageProvider.StoreTheme(themeName, zipFile);
+			string[] values = themeName.Split('|');
+			string provider = values[0];
+			string theme = values[values.Length - 1];
+			IThemeStorageProviderV30 themeStorageProvider = Collectors.ThemeProviderCollector.GetProvider(provider);
+			return themeStorageProvider.StoreTheme(theme, zipFile);
 		}
 
 		/// <summary>
@@ -129,7 +132,7 @@ namespace ScrewTurn.Wiki {
 			string provider = values[0];
 			string theme = values[values.Length-1];
 			if(provider == "standard") return "Themes/" + GetRelativePath(Path.Combine(Settings.ThemesDirectory, theme), theme) + "/";
-			IThemeStorageProviderV30 themePathProvider = Collectors.ThemeProviderCollector.GetProvider(Settings.DefaultThemeProvider);
+			IThemeStorageProviderV30 themePathProvider = Collectors.ThemeProviderCollector.GetProvider(provider);
 			return themePathProvider.GetThemePath(theme);
 		}
 	}

@@ -36,7 +36,6 @@ namespace ScrewTurn.Wiki {
 			string defaultProvider = null;
 
 			allProviders = Collectors.ThemeProviderCollector.AllProviders;
-			defaultProvider = Settings.DefaultThemeProvider;
 			lstThemesProviders.Items.Clear();
 
 			int count = 0;

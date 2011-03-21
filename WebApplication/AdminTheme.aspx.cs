@@ -137,7 +137,7 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 			else {
-				Themes.StoreTheme(System.IO.Path.GetFileNameWithoutExtension(file), upTheme.FileBytes);
+				Themes.StoreTheme(lstProvThemeSelectorUpload.SelectedValue + "|" + System.IO.Path.GetFileNameWithoutExtension(file), upTheme.FileBytes);
 
 				lblUploadThemeResult.CssClass = "resultok";
 				lblUploadThemeResult.Text = Properties.Messages.LoadedThemes;

@@ -118,6 +118,14 @@ namespace ScrewTurn.Wiki {
 			}
 			if(prov != null) return prov;
 
+			prov = ThemeProviderCollector.GetProvider(typeName);
+			canDisable = true;
+			if(prov == null) {
+				prov = DisabledThemeProviderCollector.GetProvider(typeName);
+				if(prov != null) enabled = false;
+			}
+			if(prov != null) return prov;
+
 			prov = CacheProviderCollector.GetProvider(typeName);
 			canDisable = typeName != Settings.DefaultCacheProvider;
 			if(prov == null) {

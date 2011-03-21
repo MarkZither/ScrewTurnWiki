@@ -1012,18 +1012,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets or sets the Type name of the Default Theme Provider.
-		/// </summary>
-		public static string DefaultThemeProvider {
-			get {
-				return GetString(Provider.GetSetting("DefaultThemeProvider"), typeof(ThemeStorageProvider).ToString());
-			}
-			set {
-				Provider.SetSetting("DefaultThemeProvider", value);
-			}
-		}
-
-		/// <summary>
 		/// Gets or sets the Discussion Permissions.
 		/// </summary>
 		public static string DiscussionPermissions {
