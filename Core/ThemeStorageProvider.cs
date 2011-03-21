@@ -40,7 +40,6 @@ namespace ScrewTurn.Wiki {
 		public List<string> ListThemes(string provider) {
 			List<string> listTheme = new List<string>();
 			string parent = GetDataDirectory(host);
-			//parent = parent.Replace("public\\", "");
 			string pathFolders = GetPath(parent, ThemeDirectory);
 			foreach(string dir in Directory.GetDirectories(pathFolders)) {
 				DirectoryInfo themeName = new DirectoryInfo(dir);
@@ -57,7 +56,6 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The list of files matching the searchPattern.</returns>
 		public List<string> ListThemeFiles(string themeName, string searchPattern) {
 			string parent = GetDataDirectory(host);
-			//parent = parent.Replace("public\\", "");
 			string path = GetPath(GetPath(parent, ThemeDirectory), themeName);
 			string[] files;
 			if(!String.IsNullOrEmpty(path) && Directory.Exists(path))
@@ -83,7 +81,6 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
 		public bool DeleteTheme(string themeName) {
 			string parent = GetDataDirectory(host);
-			//parent = parent.Replace("public\\", "");
 			Directory.Delete(GetPath(GetPath(parent, ThemeDirectory), themeName), true);
 				return true;
 		}
@@ -180,6 +177,4 @@ namespace ScrewTurn.Wiki {
 		public void Shutdown() { }
 
 	}
-
-
 }

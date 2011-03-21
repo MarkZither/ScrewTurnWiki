@@ -28,30 +28,25 @@ namespace ScrewTurn.Wiki {
 
 		protected void providerThemeSelector_SelectedIndexChanged(object sender, EventArgs e) {
 			if(SelectedProviderThemesChanged != null) SelectedProviderThemesChanged(sender, e);
-			else fillThemeList(SelectedProviderThemeDelete);
-		}
-
-
-		private void UploadTheme() {
-			
+			else FillThemeList(SelectedProviderThemeDelete);
 		}
 
 		# region Themes
 		private void LoadThemes() {
 			lstProvThemeSelectorUpload.Items.Clear();
 			foreach(IProviderV30 themesProv in Collectors.ThemeProviderCollector.AllProviders) {
-				lstProvThemeSelectorUpload.Items.Add(new ListItem(themesProv.Information.Name, themesProv.Information.Name));
+				lstProvThemeSelectorUpload.Items.Add(new ListItem(themesProv.Information.Name, themesProv.ToString()));
 			}
 
 			provThemeSelector.Items.Clear();
 			foreach(IProviderV30 themesProvider in Collectors.ThemeProviderCollector.AllProviders) {
 				provThemeSelector.Items.Add(new ListItem(themesProvider.Information.Name, themesProvider.ToString()));
 			}
-			fillThemeList(SelectedProviderThemeDelete);
+			FillThemeList(SelectedProviderThemeDelete);
 
 		}
 
-		private void fillThemeList(string provider) {
+		private void FillThemeList(string provider) {
 			lstThemes.Enabled = true;
 			lstThemes.Items.Clear();
 			if(provThemeSelector.SelectedIndex != -1) {
@@ -117,9 +112,6 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		protected void lstThemeProviders_SelectedIndexChanged() {
-		}
-
 		protected void btnTheme_Click(object sender, EventArgs e) {
 			string file = upTheme.FileName;
 
@@ -135,7 +127,8 @@ namespace ScrewTurn.Wiki {
 			List<string> themes = Themes.ListThemes(SelectedProviderUpload);
 			bool exist = false;
 			foreach(string th in themes) {
-				if(th == file) exist = true;
+
+				if(th.Replace(".zip", "") == file.Replace(".zip", "")) exist = true;
 			}
 			if(exist) {
 				// Theme already exists
@@ -154,16 +147,24 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		protected void lstThemes_SelectedIndexChanged(object sender, EventArgs e) {
+		/// <summary>
+		/// Event fired when the selected provider changes.
+		/// </summary>
+		public event EventHandler<EventArgs> SelectedThemesChanged;
 
+		protected void lstThemes_SelectedIndexChanged(object sender, EventArgs e) {
+			if(SelectedThemesChanged != null) SelectedThemesChanged(sender, e);
+			else FillThemeList(SelectedProviderThemeDelete);
 		}
 
 		protected void btnDeleteTheme_Click(object sender, EventArgs e) {
-			if(Themes.DeleteTheme(lstThemes.SelectedValue)) {
-				LoadThemes();
-				lstThemes_SelectedIndexChanged(sender, e);
-				lblThemeResult.CssClass = "resultok";
-				lblThemeResult.Text = Properties.Messages.ThemeDeleted;
+			if(lstThemes.SelectedValue != "- Select and Delete -") {
+				if(Themes.DeleteTheme(provThemeSelector.SelectedValue + "|" + lstThemes.SelectedValue)) {
+					LoadThemes();
+					lstThemes_SelectedIndexChanged(sender, e);
+					lblThemeResult.CssClass = "resultok";
+					lblThemeResult.Text = Properties.Messages.ThemeDeleted;
+				}
 			}
 			else {
 				lblThemeResult.CssClass = "resulterror";

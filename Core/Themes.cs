@@ -43,10 +43,13 @@ namespace ScrewTurn.Wiki {
 		/// <param name="themeName">The name of the theme to be deleted.</param>
 		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
 		public static bool DeleteTheme(string themeName) {
-			IThemeStorageProviderV30 themeDeleteProvider = Collectors.ThemeProviderCollector.GetProvider(Settings.DefaultThemeProvider);
-			if(!IsThemeInUse(themeName)) 
-				return themeDeleteProvider.DeleteTheme(themeName);
-				else return false;
+			foreach(IThemeStorageProviderV30 themeDeleteProvider in Collectors.ThemeProviderCollector.AllProviders) {
+				if(!IsThemeInUse(themeName)) {
+					string[] theme = themeName.Split('|');
+					if (theme[0] == themeDeleteProvider.ToString())	return themeDeleteProvider.DeleteTheme(theme[theme.Length-1]);
+				}
+			}
+			return false;
 		}
 
 		private static bool IsThemeInUse(string themeName) {
@@ -125,9 +128,7 @@ namespace ScrewTurn.Wiki {
 			string[] values = themeName.Split('|');
 			string provider = values[0];
 			string theme = values[values.Length-1];
-			if(provider == "standard") {
-				return "Themes/" + GetRelativePath(Path.Combine(Settings.ThemesDirectory, theme), theme) + "/";
-			}
+			if(provider == "standard") return "Themes/" + GetRelativePath(Path.Combine(Settings.ThemesDirectory, theme), theme) + "/";
 			IThemeStorageProviderV30 themePathProvider = Collectors.ThemeProviderCollector.GetProvider(Settings.DefaultThemeProvider);
 			return themePathProvider.GetThemePath(theme);
 		}

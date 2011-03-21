@@ -429,4 +429,7 @@
   <data name="btnAutoUpdateProvidersResource1.ToolTip" xml:space="preserve">
     <value>Automatically update all installed providers, of all types</value>
   </data>
+  <data name="lblDefaultProvThemesResource1.Text" xml:space="preserve">
+    <value>Themes Provider</value>
+  </data>
 </root>
