@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki {
 
 		protected void providerThemeSelector_SelectedIndexChanged(object sender, EventArgs e) {
 			if(SelectedProviderThemesChanged != null) SelectedProviderThemesChanged(sender, e);
-			else FillThemeList(SelectedProviderThemeDelete);
+			else fillThemeList(SelectedProviderThemeDelete);
 		}
 
 		# region Themes
@@ -42,21 +42,21 @@ namespace ScrewTurn.Wiki {
 			foreach(IProviderV30 themesProvider in Collectors.ThemeProviderCollector.AllProviders) {
 				provThemeSelector.Items.Add(new ListItem(themesProvider.Information.Name, themesProvider.ToString()));
 			}
-			FillThemeList(SelectedProviderThemeDelete);
+			fillThemeList(SelectedProviderThemeDelete);
 
 		}
 
-		private void FillThemeList(string provider) {
+		private void fillThemeList(string provider) {
 			lstThemes.Enabled = true;
 			lstThemes.Items.Clear();
 			if(provThemeSelector.SelectedIndex != -1) {
-				lstThemes.Items.Add(new ListItem("- Select and Delete -", "- Select and Delete -"));
+				lstThemes.Items.Add(new ListItem(Properties.Messages.SelectAndDelete, Properties.Messages.SelectAndDelete));
 				foreach(string theme in Themes.ListThemes(provider)) {
 					lstThemes.Items.Add(new ListItem(theme, theme));
 				}
 			}
 			else {
-				lstThemes.Items.Add(new ListItem("- Select and Delete -", "- Select and Delete -"));
+				lstThemes.Items.Add(new ListItem(Properties.Messages.SelectAndDelete, Properties.Messages.SelectAndDelete));
 				lstThemes.Enabled = false;
 			}
 		}
@@ -147,23 +147,20 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		/// <summary>
-		/// Event fired when the selected provider changes.
-		/// </summary>
-		public event EventHandler<EventArgs> SelectedThemesChanged;
 
 		protected void lstThemes_SelectedIndexChanged(object sender, EventArgs e) {
-			if(SelectedThemesChanged != null) SelectedThemesChanged(sender, e);
-			else FillThemeList(SelectedProviderThemeDelete);
 		}
 
 		protected void btnDeleteTheme_Click(object sender, EventArgs e) {
-			if(lstThemes.SelectedValue != "- Select and Delete -") {
+			if(lstThemes.SelectedIndex != 0) {
 				if(Themes.DeleteTheme(provThemeSelector.SelectedValue + "|" + lstThemes.SelectedValue)) {
 					LoadThemes();
-					lstThemes_SelectedIndexChanged(sender, e);
 					lblThemeResult.CssClass = "resultok";
 					lblThemeResult.Text = Properties.Messages.ThemeDeleted;
+				}
+				else {
+					lblThemeResult.CssClass = "resulterror";
+					lblThemeResult.Text = Properties.Messages.CouldNotDeleteTheme;
 				}
 			}
 			else {
