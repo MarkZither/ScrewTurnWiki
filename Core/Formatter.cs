@@ -1662,10 +1662,10 @@ namespace ScrewTurn.Wiki {
 				sb.Append(@""" title=""");
 				if(!isImage && title.Length > 0) sb.Append(nstripped);
 				else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-				else sb.Append(targetUrl.Substring(1));
+				else sb.Append(NoWikiUrl(targetUrl.Substring(1)));
 				sb.Append(@""">");
 				if(title.Length > 0) sb.Append(title);
-				else sb.Append(targetUrl.Substring(1));
+				else sb.Append(NoWikiUrl(targetUrl.Substring(1)));
 				sb.Append("</a>");
 			}
 			else if(targetUrl.StartsWith("http://") || targetUrl.StartsWith("https://") || targetUrl.StartsWith("ftp://") || targetUrl.StartsWith("file://")) {
@@ -1673,14 +1673,14 @@ namespace ScrewTurn.Wiki {
 				sb.Append(@"<a");
 				if(!isImage) sb.Append(@" class=""externallink""");
 				sb.Append(@" href=""");
-				sb.Append(targetUrl);
+				sb.Append(NoWikiUrl(targetUrl));
 				sb.Append(@""" title=""");
 				if(!isImage && title.Length > 0) sb.Append(nstripped);
 				else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-				else sb.Append(targetUrl);
+				else sb.Append(NoWikiUrl(targetUrl));
 				sb.Append(@""" target=""_blank"">");
 				if(title.Length > 0) sb.Append(title);
-				else sb.Append(targetUrl);
+				else sb.Append(NoWikiUrl(targetUrl));
 				sb.Append("</a>");
 			}
 			else if(targetUrl.StartsWith(@"\\") || targetUrl.StartsWith("//")) {
@@ -1688,14 +1688,14 @@ namespace ScrewTurn.Wiki {
 				sb.Append(@"<a");
 				if(!isImage) sb.Append(@" class=""externallink""");
 				sb.Append(@" href=""file://///");
-				sb.Append(targetUrl.Substring(2));
+				sb.Append(NoWikiUrl(targetUrl.Substring(2)));
 				sb.Append(@""" title=""");
 				if(!isImage && title.Length > 0) sb.Append(nstripped);
 				else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-				else sb.Append(targetUrl);
+				else sb.Append(NoWikiUrl(targetUrl));
 				sb.Append(@""" target=""_blank"">");
 				if(title.Length > 0) sb.Append(title);
-				else sb.Append(targetUrl);
+				else sb.Append(NoWikiUrl(targetUrl));
 				sb.Append("</a>");
 			}
 			else if(targetUrl.IndexOf("@") != -1 && targetUrl.IndexOf(".") != -1) {
@@ -1874,6 +1874,11 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 			return sb.ToString();
+		}
+
+		// Wrap url in <nowiki> tags to prevent formatter to erroneously modify it.
+		private static string NoWikiUrl(string url) {
+			return "<nowiki>" + url + "</nowiki>";
 		}
 
 		/// <summary>
