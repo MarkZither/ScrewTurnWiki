@@ -22,6 +22,15 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblChangeMasterPassword;
         
         /// <summary>
+        /// newAdminPassForm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl newAdminPassForm;
+        
+        /// <summary>
         /// lblDescriptionPwd control.
         /// </summary>
         /// <remarks>
@@ -29,6 +38,15 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal lblDescriptionPwd;
+        
+        /// <summary>
+        /// tbAdminPass control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tbAdminPass;
         
         /// <summary>
         /// lblNewPwd control.
@@ -103,13 +121,22 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Button BtnSave;
         
         /// <summary>
-        /// lblRes control.
+        /// newAdminPassOk control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblRes;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl newAdminPassOk;
+        
+        /// <summary>
+        /// lblResult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblResult;
         
         /// <summary>
         /// lnkMainRedirect control.

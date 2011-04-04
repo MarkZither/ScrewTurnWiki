@@ -19,8 +19,10 @@ namespace ScrewTurn.Wiki {
 			Settings.BeginBulkUpdate();
 			Settings.MasterPassword = Hash.Compute(txtReNewPwd.Text);
 			Settings.EndBulkUpdate();
-			lblRes.CssClass = "resultok";
-			lblRes.Text = Properties.Messages.ConfigSaved;
+			newAdminPassForm.Visible = false;
+			newAdminPassOk.Visible = true;
+			lblResult.CssClass = "resultok";
+			lblResult.Text = Properties.Messages.ConfigSaved;
 			lnkMainRedirect.Visible = true;
 			lnkMainRedirect.NavigateUrl = "/";
 			lblDescriptionPwd.Visible = false;

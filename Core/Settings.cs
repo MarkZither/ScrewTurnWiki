@@ -833,7 +833,7 @@ namespace ScrewTurn.Wiki {
 		public static string GetTheme(string nspace) {
 			if(!string.IsNullOrEmpty(nspace)) nspace = Pages.FindNamespace(nspace).Name;
 			string propertyName = "Theme" + (!string.IsNullOrEmpty(nspace) ? "-" + nspace : "");
-			return GetString(Provider.GetSetting(propertyName), "Default");
+			return GetString(Provider.GetSetting(propertyName), "standard|Default");
 		}
 
 		/// <summary>
