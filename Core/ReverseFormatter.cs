@@ -23,7 +23,10 @@ namespace ScrewTurn.Wiki {
 				string text = "";
 				if(node.Name == "li") {
 					foreach(XmlNode child in node.ChildNodes) {
-						if(child.Name != "ol" && child.Name != "ul") {
+						if(child.Name == "br") {
+							text += "\n";
+						}
+						else if(child.Name != "ol" && child.Name != "ul") {
 							TextReader reader = new StringReader(child.OuterXml);
 							XmlDocument n = FromHTML(reader);
 							text += ProcessChild(n.ChildNodes);
@@ -44,8 +47,8 @@ namespace ScrewTurn.Wiki {
 					result += marker + " " + text;
 					if(!result.EndsWith("\n")) result += "\n";
 					foreach(XmlNode child in node.ChildNodes) {
-						if(child.Name.ToString() == "ol") result += ProcessList(child.ChildNodes, marker + ol);
-						if(child.Name.ToString() == "ul") result += ProcessList(child.ChildNodes, marker + ul);
+						if(child.Name == "ol") result += ProcessList(child.ChildNodes, marker + ol);
+						if(child.Name == "ul") result += ProcessList(child.ChildNodes, marker + ul);
 					}
 				}
 			}
@@ -285,21 +288,21 @@ namespace ScrewTurn.Wiki {
 							}
 							break;
 						case "ol":
-							if(node.PreviousSibling != null) {
+							if(node.PreviousSibling != null && node.PreviousSibling.Name != "br") {
 								result += "\n";
 							}
 							if(node.ParentNode != null) {
-								if(node.ParentNode.Name.ToLowerInvariant() != "td") result += ProcessList(node.ChildNodes, "#");
+								if(node.ParentNode.Name != "td") result += ProcessList(node.ChildNodes, "#");
 								else result += node.OuterXml.ToString();
 							}
 							else result += ProcessList(node.ChildNodes, "#");
 							break;
 						case "ul":
-							if(node.PreviousSibling != null) {
+							if(node.PreviousSibling != null && node.PreviousSibling.Name != "br") {
 								result += "\n";
 							}
 							if(node.ParentNode != null) {
-								if(node.ParentNode.Name.ToLowerInvariant() != "td") result += ProcessList(node.ChildNodes, "*");
+								if(node.ParentNode.Name != "td") result += ProcessList(node.ChildNodes, "*");
 								else result += node.OuterXml.ToString();
 							}
 							else result += ProcessList(node.ChildNodes, "*");
@@ -323,8 +326,9 @@ namespace ScrewTurn.Wiki {
 								else if(node.Attributes["class"].Value.Contains("indent")) result += ": " + ProcessChild(node.ChildNodes) + "\n";
 							}
 							else {
+								result += "\n";
 								if(node.PreviousSibling != null && node.PreviousSibling.Name != "div") {
-									result += Settings.ProcessSingleLineBreaks ? "\n" : "\n\n";
+									result += Settings.ProcessSingleLineBreaks ? "" : "\n";
 								}
 								if(node.FirstChild != null && node.FirstChild.Name == "br") {
 									node.RemoveChild(node.FirstChild);
