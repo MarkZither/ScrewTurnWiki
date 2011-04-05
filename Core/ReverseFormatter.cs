@@ -317,10 +317,10 @@ namespace ScrewTurn.Wiki {
 						case "div":
 							if(node.Attributes["class"] != null) {
 								if(node.Attributes["class"].Value.Contains("box")) result += node.HasChildNodes ? "(((" + ProcessChild(node.ChildNodes) + ")))" : "";
-								if(node.Attributes["class"].Value.Contains("imageleft")) result += "[imageleft" + ProcessChildImage(node.ChildNodes) + "]";
-								if(node.Attributes["class"].Value.Contains("imageright")) result += "[imageright" + ProcessChildImage(node.ChildNodes) + "]";
-								if(node.Attributes["class"].Value.Contains("image")) result += "[image" + ProcessChildImage(node.ChildNodes) + "]";
-								if(node.Attributes["class"].Value.Contains("indent")) result += ": " + ProcessChild(node.ChildNodes) + "\n";
+								else if(node.Attributes["class"].Value.Contains("imageleft")) result += "[imageleft" + ProcessChildImage(node.ChildNodes) + "]";
+								else if(node.Attributes["class"].Value.Contains("imageright")) result += "[imageright" + ProcessChildImage(node.ChildNodes) + "]";
+								else if(node.Attributes["class"].Value.Contains("image")) result += "[image" + ProcessChildImage(node.ChildNodes) + "]";
+								else if(node.Attributes["class"].Value.Contains("indent")) result += ": " + ProcessChild(node.ChildNodes) + "\n";
 							}
 							else {
 								if(node.PreviousSibling != null && node.PreviousSibling.Name != "div") {
@@ -358,21 +358,21 @@ namespace ScrewTurn.Wiki {
 							bool isInternalLink = false;
 							bool childImg = false;
 							bool isUnknowLink = false;
-							if(node.FirstChild != null && node.FirstChild.Name.ToLowerInvariant() == "img") childImg = true;
-							if(node.ParentNode.Name.ToLowerInvariant() == "td") isTable = true;
+							if(node.FirstChild != null && node.FirstChild.Name == "img") childImg = true;
+							if(node.ParentNode.Name == "td") isTable = true;
 							if(node.Attributes.Count != 0) {
 								XmlAttributeCollection attribute = node.Attributes;
 								foreach(XmlAttribute attName in attribute) {
-									if(attName.Name.ToString() != "id".ToLowerInvariant()) {
-										if(attName.Value.ToString() == "_blank") target += "^";
-										if(attName.Name.ToString() == "href") link += attName.Value.ToString();
-										if(attName.Name.ToString() == "title") title += attName.Value.ToString();
-										if(attName.Value.ToString() == "SystemLink".ToLowerInvariant()) isInternalLink = true;
-										if(attName.Value.ToString().ToLowerInvariant() == "unknownlink") isUnknowLink = true;
+									if(attName.Name != "id".ToLowerInvariant()) {
+										if(attName.Value == "_blank") target += "^";
+										if(attName.Name == "href") link += attName.Value.ToString();
+										if(attName.Name == "title") title += attName.Value.ToString();
+										if(attName.Value == "SystemLink".ToLowerInvariant()) isInternalLink = true;
+										if(attName.Value == "unknownlink") isUnknowLink = true;
 									}
 									else {
 										anchor = true;
-										result += "[anchor|#" + attName.Value.ToString().ToLowerInvariant() + "]" + ProcessChild(node.ChildNodes);
+										result += "[anchor|#" + attName.Value + "]" + ProcessChild(node.ChildNodes);
 										break;
 									}
 								}
@@ -385,7 +385,7 @@ namespace ScrewTurn.Wiki {
 									if(title != link) result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
 									else result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
 								if(!anchor && !childImg && isTable) result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
-								if(!anchor && childImg && !isTable) result += ProcessChild(node.ChildNodes) + "|" + target + link + "]\n";
+								if(!anchor && childImg && !isTable) result += ProcessChild(node.ChildNodes) + "|" + target + link + "]";
 							}
 							break;
 						default:
