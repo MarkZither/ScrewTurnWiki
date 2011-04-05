@@ -412,7 +412,7 @@ namespace ScrewTurn.Wiki {
 		public static string ReverseFormat(string html) {
 			StringReader strReader = new StringReader(html);
 			XmlDocument x = FromHTML((TextReader)strReader);
-			if(x != null) return ProcessChild(x.FirstChild.ChildNodes);
+			if(x != null && x.HasChildNodes && x.FirstChild.HasChildNodes) return ProcessChild(x.FirstChild.ChildNodes);
 			else return "";
 		}
 	}
