@@ -203,7 +203,7 @@ namespace ScrewTurn.Wiki {
 			string result = "";
 			foreach(XmlNode node in nodes) {
 				bool anchor = false;
-				if(node.NodeType == XmlNodeType.Text) result += node.Value;
+				if(node.NodeType == XmlNodeType.Text) result += node.Value.TrimStart('\n');
 				else if(node.NodeType != XmlNodeType.Whitespace) {
 					switch(node.Name.ToLowerInvariant()) {
 						case "html":
@@ -264,7 +264,12 @@ namespace ScrewTurn.Wiki {
 							}
 							break;
 						case "br":
-							result += "\n" + ProcessChild(node.ChildNodes);
+							if(node.PreviousSibling != null && node.PreviousSibling.Name == "br") {
+								result += "\n";
+							}
+							else {
+								result += Settings.ProcessSingleLineBreaks ? "\n" : "\n\n";
+							}
 							break;
 						case "table":
 							bool isImage = false;
@@ -310,7 +315,7 @@ namespace ScrewTurn.Wiki {
 							break;
 						case "p":
 							if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("imagedescription")) continue;
-							else result += ProcessChild(node.ChildNodes) + "\n\n";
+							else result += ProcessChild(node.ChildNodes) + "\n" + (Settings.ProcessSingleLineBreaks ? "" : "\n");
 							break;
 						case "div":
 							if(node.Attributes["class"] != null) {
@@ -321,7 +326,16 @@ namespace ScrewTurn.Wiki {
 								if(node.Attributes["class"].Value.Contains("indent")) result += ": " + ProcessChild(node.ChildNodes) + "\n";
 							}
 							else {
-								result += ProcessChild(node.ChildNodes) + "\n";
+								if(node.PreviousSibling != null && node.PreviousSibling.Name != "div") {
+									result += Settings.ProcessSingleLineBreaks ? "\n" : "\n\n";
+								}
+								if(node.FirstChild != null && node.FirstChild.Name == "br") {
+									node.RemoveChild(node.FirstChild);
+								}
+								if(node.HasChildNodes) {
+									result += ProcessChild(node.ChildNodes);
+									result += Settings.ProcessSingleLineBreaks ? "\n" : "\n\n";
+								}
 							}
 							break;
 						case "img":
