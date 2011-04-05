@@ -272,25 +272,22 @@ namespace ScrewTurn.Wiki {
 							}
 							break;
 						case "table":
-							bool isImage = false;
-							string image = "";
 							string tableStyle = "";
 
-							foreach(XmlAttribute attName in node.Attributes) {
-								if(attName.Value.ToString() == "imageauto") {
-									isImage = true;
-									image += "[imageauto|" + ProcessTableImage(node.ChildNodes) + "]\n";
+							if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("imageauto")) {
+								result += "[imageauto|" + ProcessTableImage(node.ChildNodes) + "]";
+							}
+							else {
+								foreach(XmlAttribute attName in node.Attributes) {
+									tableStyle += attName.Name + "=\"" + attName.Value + "\" ";
 								}
-								else tableStyle += attName.Name + "=\"" + attName.Value.ToString() + "\" ";
+								result += "{| " + tableStyle + "\n" + ProcessTable(node.ChildNodes) + "|}\n";
 							}
-							if(isImage) {
-								result += image;
-								isImage = false;
-								break;
-							}
-							else result += "{| " + tableStyle + "\n" + ProcessTable(node.ChildNodes) + "|}\n";
 							break;
 						case "ol":
+							if(node.PreviousSibling != null) {
+								result += "\n";
+							}
 							if(node.ParentNode != null) {
 								if(node.ParentNode.Name.ToLowerInvariant() != "td") result += ProcessList(node.ChildNodes, "#");
 								else result += node.OuterXml.ToString();
@@ -320,9 +317,9 @@ namespace ScrewTurn.Wiki {
 						case "div":
 							if(node.Attributes["class"] != null) {
 								if(node.Attributes["class"].Value.Contains("box")) result += node.HasChildNodes ? "(((" + ProcessChild(node.ChildNodes) + ")))" : "";
-								if(node.Attributes["class"].Value.Contains("imageleft")) result += "[imageleft" + ProcessChildImage(node.ChildNodes) + "]\n";
-								if(node.Attributes["class"].Value.Contains("imageright")) result += "[imageright" + ProcessChildImage(node.ChildNodes) + "]\n";
-								if(node.Attributes["class"].Value.Contains("image")) result += "[image" + ProcessChildImage(node.ChildNodes) + "]\n";
+								if(node.Attributes["class"].Value.Contains("imageleft")) result += "[imageleft" + ProcessChildImage(node.ChildNodes) + "]";
+								if(node.Attributes["class"].Value.Contains("imageright")) result += "[imageright" + ProcessChildImage(node.ChildNodes) + "]";
+								if(node.Attributes["class"].Value.Contains("image")) result += "[image" + ProcessChildImage(node.ChildNodes) + "]";
 								if(node.Attributes["class"].Value.Contains("indent")) result += ": " + ProcessChild(node.ChildNodes) + "\n";
 							}
 							else {
