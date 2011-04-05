@@ -49,9 +49,9 @@
 
     function getSelectedText() {
       if(document.all)
-        var selected=iframe.document.selection.createRange().text;
+        var selected=iframe.document.selection.createRange().htmlText;
       else
-        var selected=iframe.document.defaultView.getSelection().getRangeAt(0); 
+        var selected=iframe.document.defaultView.getSelection().getRangeAt(0).commonAncestorContainer.innerHTML;
       return selected;
     }
 
