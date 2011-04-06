@@ -40,22 +40,32 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
+
+		private static void SetUp<T>(T instance, ProviderCollector<T> collectorEnabled,
+			ProviderCollector<T> collectorDisabled) where T : class, IProviderV30 {
+			if(collectorEnabled.GetProvider(instance.GetType().FullName) != null ||
+				collectorDisabled.GetProvider(instance.GetType().FullName) != null) {
+
+				Log.LogEntry("SetUp already colled on provider " + instance.Information.Name, EntryType.Warning, Log.SystemUsername);
+				return;
+			}
+			bool enabled = !IsDisabled(instance.GetType().FullName);
+
+			if(enabled) collectorEnabled.AddProvider(instance, Assembly.GetAssembly(instance.GetType()));
+			else collectorDisabled.AddProvider(instance, Assembly.GetAssembly(instance.GetType()));
+
+			// Verify constraints
+			VerifyConstraints<T>(instance);
+		}
+
 		/// <summary>
 		/// Tries to inizialize a provider.
 		/// </summary>
 		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
 		/// <param name="instance">The provider instance to initialize.</param>
-		/// <param name="collectorEnabled">The collector for enabled providers.</param>
-		/// <param name="collectorDisabled">The collector for disabled providers.</param>
-		private static void Initialize<T>(T instance, ProviderCollector<T> collectorEnabled,
-			ProviderCollector<T> collectorDisabled) where T : class, IProviderV30 {
-
-			if(collectorEnabled.GetProvider(instance.GetType().FullName) != null ||
-				collectorDisabled.GetProvider(instance.GetType().FullName) != null) {
-
-				Log.LogEntry("Provider " + instance.Information.Name + " already in memory", EntryType.Warning, Log.SystemUsername);
-				return;
-			}
+		///// <param name="collectorEnabled">The collector for enabled providers.</param>
+		///// <param name="collectorDisabled">The collector for disabled providers.</param>
+		public static void Initialize<T>(T instance) where T : class, IProviderV30 {
 
 			bool enabled = !IsDisabled(instance.GetType().FullName);
 			try {
@@ -76,12 +86,7 @@ namespace ScrewTurn.Wiki {
 				SaveStatus(instance.GetType().FullName, false);
 				throw; // Exception is rethrown because it's not a normal condition
 			}
-			if(enabled) collectorEnabled.AddProvider(instance);
-			else collectorDisabled.AddProvider(instance);
-
-			// Verify constraints
-			VerifyConstraints<T>(instance);
-
+			
 			Log.LogEntry("Provider " + instance.Information.Name + " loaded (" + (enabled ? "Enabled" : "Disabled") + ")", EntryType.General, Log.SystemUsername);
 		}
 
@@ -99,8 +104,8 @@ namespace ScrewTurn.Wiki {
 			List<IUsersStorageProviderV30> users = new List<IUsersStorageProviderV30>(2);
 			List<IUsersStorageProviderV30> dUsers = new List<IUsersStorageProviderV30>(2);
 			List<IPagesStorageProviderV30> pages = new List<IPagesStorageProviderV30>(2);
-			List<IThemeStorageProviderV30> theme = new List<IThemeStorageProviderV30>(2);
 			List<IPagesStorageProviderV30> dPages = new List<IPagesStorageProviderV30>(2);
+			List<IThemeStorageProviderV30> theme = new List<IThemeStorageProviderV30>(2);
 			List<IFilesStorageProviderV30> files = new List<IFilesStorageProviderV30>(2);
 			List<IFilesStorageProviderV30> dFiles = new List<IFilesStorageProviderV30>(2);
 			List<IFormatterProviderV30> forms = new List<IFormatterProviderV30>(2);
@@ -125,29 +130,30 @@ namespace ScrewTurn.Wiki {
 
 			// Init and add to the Collectors, starting from files providers
 			for(int i = 0; i < files.Count; i++) {
-				Initialize<IFilesStorageProviderV30>(files[i], Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
+				SetUp<IFilesStorageProviderV30>(files[i], Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
 			}
 
 			for(int i = 0; i < users.Count; i++) {
-				Initialize<IUsersStorageProviderV30>(users[i], Collectors.UsersProviderCollector, Collectors.DisabledUsersProviderCollector);
+				SetUp<IUsersStorageProviderV30>(users[i], Collectors.UsersProviderCollector, Collectors.DisabledUsersProviderCollector);
 			}
 
 			for(int i = 0; i < pages.Count; i++) {
-				Initialize<IPagesStorageProviderV30>(pages[i], Collectors.PagesProviderCollector, Collectors.DisabledPagesProviderCollector);
+				SetUp<IPagesStorageProviderV30>(pages[i], Collectors.PagesProviderCollector, Collectors.DisabledPagesProviderCollector);
 			}
 
 			for(int i = 0; i < theme.Count; i++) {
-				Initialize<IThemeStorageProviderV30>(theme[i], Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
+				SetUp<IThemeStorageProviderV30>(theme[i], Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
 			}
 
 			for(int i = 0; i < forms.Count; i++) {
-				Initialize<IFormatterProviderV30>(forms[i], Collectors.FormatterProviderCollector, Collectors.DisabledFormatterProviderCollector);
+				SetUp<IFormatterProviderV30>(forms[i], Collectors.FormatterProviderCollector, Collectors.DisabledFormatterProviderCollector);
 			}
 
 			for(int i = 0; i < cache.Count; i++) {
-				Initialize<ICacheProviderV30>(cache[i], Collectors.CacheProviderCollector, Collectors.DisabledCacheProviderCollector);
+				SetUp<ICacheProviderV30>(cache[i], Collectors.CacheProviderCollector, Collectors.DisabledCacheProviderCollector);
 			}
 		}
+
 
 		/// <summary>
 		/// Loads the Configuration data of a Provider.
@@ -202,32 +208,32 @@ namespace ScrewTurn.Wiki {
 
 			// Init and add to the Collectors, starting from files providers
 			for(int i = 0; i < files.Length; i++) {
-				Initialize<IFilesStorageProviderV30>(files[i], Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
+				SetUp<IFilesStorageProviderV30>(files[i], Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
 				count++;
 			}
 
 			for(int i = 0; i < users.Length; i++) {
-				Initialize<IUsersStorageProviderV30>(users[i], Collectors.UsersProviderCollector, Collectors.DisabledUsersProviderCollector);
+				SetUp<IUsersStorageProviderV30>(users[i], Collectors.UsersProviderCollector, Collectors.DisabledUsersProviderCollector);
 				count++;
 			}
 
 			for(int i = 0; i < themes.Length; i++) {
-				Initialize<IThemeStorageProviderV30>(themes[i], Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
+				SetUp<IThemeStorageProviderV30>(themes[i], Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
 				count++;
 			}
 
 			for(int i = 0; i < pages.Length; i++) {
-				Initialize<IPagesStorageProviderV30>(pages[i], Collectors.PagesProviderCollector, Collectors.DisabledPagesProviderCollector);
+				SetUp<IPagesStorageProviderV30>(pages[i], Collectors.PagesProviderCollector, Collectors.DisabledPagesProviderCollector);
 				count++;
 			}
 
 			for(int i = 0; i < forms.Length; i++) {
-				Initialize<IFormatterProviderV30>(forms[i], Collectors.FormatterProviderCollector, Collectors.DisabledFormatterProviderCollector);
+				SetUp<IFormatterProviderV30>(forms[i], Collectors.FormatterProviderCollector, Collectors.DisabledFormatterProviderCollector);
 				count++;
 			}
 
 			for(int i = 0; i < cache.Length; i++) {
-				Initialize<ICacheProviderV30>(cache[i], Collectors.CacheProviderCollector, Collectors.DisabledCacheProviderCollector);
+				SetUp<ICacheProviderV30>(cache[i], Collectors.CacheProviderCollector, Collectors.DisabledCacheProviderCollector);
 				count++;
 			}
 
@@ -357,7 +363,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="asm">The assembly that contains the type.</param>
 		/// <param name="type">The type to create an instance of.</param>
 		/// <returns>The instance, or <c>null</c>.</returns>
-		private static T CreateInstance<T>(Assembly asm, Type type) where T : class, IProviderV30 {
+		public static T CreateInstance<T>(Assembly asm, Type type) where T : class, IProviderV30 {
 			T instance;
 			try {
 				instance = asm.CreateInstance(type.ToString()) as T;

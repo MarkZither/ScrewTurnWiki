@@ -5,6 +5,7 @@ using System.Resources;
 using System.Security.Principal;
 using System.Web.Configuration;
 using ScrewTurn.Wiki.PluginFramework;
+using System.Reflection;
 
 namespace ScrewTurn.Wiki {
 
@@ -122,34 +123,34 @@ namespace ScrewTurn.Wiki {
 			// Files storage providers have to be loaded BEFORE users storage providers in order to properly set permissions
 			FilesStorageProvider f = new FilesStorageProvider();
 			if(!ProviderLoader.IsDisabled(f.GetType().FullName)) {
-				f.Init(Host.Instance, "");
-				Collectors.FilesProviderCollector.AddProvider(f);
+				//f.Init(Host.Instance, "");
+				Collectors.FilesProviderCollector.AddProvider(f, Assembly.GetAssembly(f.GetType()));
 				Log.LogEntry("Provider " + f.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledFilesProviderCollector.AddProvider(f);
+				Collectors.DisabledFilesProviderCollector.AddProvider(f, Assembly.GetAssembly(f.GetType()));
 				Log.LogEntry("Provider " + f.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
 			ThemeStorageProvider t = new ThemeStorageProvider();
 			if(!ProviderLoader.IsDisabled(t.GetType().FullName)) {
-				t.Init(Host.Instance, "");
-				Collectors.ThemeProviderCollector.AddProvider(t);
+				//t.Init(Host.Instance, "");
+				Collectors.ThemeProviderCollector.AddProvider(t, Assembly.GetAssembly(t.GetType()));
 				Log.LogEntry("Provider " + t.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledThemeProviderCollector.AddProvider(t);
+				Collectors.DisabledThemeProviderCollector.AddProvider(t, Assembly.GetAssembly(t.GetType()));
 				Log.LogEntry("Provider " + t.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
 			UsersStorageProvider u = new UsersStorageProvider();
 			if(!ProviderLoader.IsDisabled(u.GetType().FullName)) {
-				u.Init(Host.Instance, "");
-				Collectors.UsersProviderCollector.AddProvider(u);
+				//u.Init(Host.Instance, "");
+				Collectors.UsersProviderCollector.AddProvider(u, Assembly.GetAssembly(u.GetType()));
 				Log.LogEntry("Provider " + u.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledUsersProviderCollector.AddProvider(u);
+				Collectors.DisabledUsersProviderCollector.AddProvider(u, Assembly.GetAssembly(u.GetType()));
 				Log.LogEntry("Provider " + u.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
@@ -160,23 +161,23 @@ namespace ScrewTurn.Wiki {
 
 			PagesStorageProvider p = new PagesStorageProvider();
 			if(!ProviderLoader.IsDisabled(p.GetType().FullName)) {
-				p.Init(Host.Instance, "");
-				Collectors.PagesProviderCollector.AddProvider(p);
+				//p.Init(Host.Instance, "");
+				Collectors.PagesProviderCollector.AddProvider(p, Assembly.GetAssembly(p.GetType()));
 				Log.LogEntry("Provider " + p.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledPagesProviderCollector.AddProvider(p);
+				Collectors.DisabledPagesProviderCollector.AddProvider(p, Assembly.GetAssembly(p.GetType()));
 				Log.LogEntry("Provider " + p.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
 			CacheProvider c = new CacheProvider();
 			if(!ProviderLoader.IsDisabled(c.GetType().FullName)) {
-				c.Init(Host.Instance, "");
-				Collectors.CacheProviderCollector.AddProvider(c);
+				//c.Init(Host.Instance, "");
+				Collectors.CacheProviderCollector.AddProvider(c, Assembly.GetAssembly(c.GetType()));
 				Log.LogEntry("Provider " + c.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledCacheProviderCollector.AddProvider(c);
+				Collectors.DisabledCacheProviderCollector.AddProvider(c, Assembly.GetAssembly(c.GetType()));
 				Log.LogEntry("Provider " + c.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
@@ -215,7 +216,8 @@ namespace ScrewTurn.Wiki {
 						using(MemoryStream ms = new MemoryStream()) {
 							using(StreamWriter wr = new System.IO.StreamWriter(ms)) {
 								System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
-								foreach(var provider in Collectors.PagesProviderCollector.AllProviders) {
+								foreach(var providerType in Collectors.PagesProviderCollector.AllProviders) {
+									IPagesStorageProviderV30 provider = Collectors.PagesProviderCollector.GetProvider(providerType.GetType().FullName);
 									if(!provider.ReadOnly) {
 										Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
 										provider.RebuildIndex();

@@ -10,7 +10,6 @@ using ScrewTurn.Wiki.PluginFramework;
 namespace ScrewTurn.Wiki.Tests {
 
 	[TestFixture]
-
 	public class FormatterTests {
 
 	private const string Input =
@@ -57,7 +56,7 @@ second line";
 
 			IPagesStorageProviderV30 pagesProvider = mocks.StrictMock<IPagesStorageProviderV30>();
 			Collectors.PagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
-			Collectors.PagesProviderCollector.AddProvider(pagesProvider);
+			Collectors.PagesProviderCollector.AddProvider(pagesProvider, System.Reflection.Assembly.GetAssembly(pagesProvider.GetType()));
 
 			Expect.Call(settingsProvider.GetSetting("DefaultPagesProvider")).Return(pagesProvider.GetType().FullName).Repeat.Any();
 
@@ -83,7 +82,7 @@ second line";
 			ICacheProviderV30 cacheProvider = new CacheProvider();
 			cacheProvider.Init(Host.Instance, "");
 			Collectors.CacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
-			Collectors.CacheProviderCollector.AddProvider(cacheProvider);
+			Collectors.CacheProviderCollector.AddProvider(cacheProvider, System.Reflection.Assembly.GetAssembly(cacheProvider.GetType()));
 
 			mocks.Replay(pagesProvider);
 

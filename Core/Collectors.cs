@@ -155,9 +155,6 @@ namespace ScrewTurn.Wiki {
 			PagesProviderCollector.RemoveProvider(prov as IPagesStorageProviderV30);
 			DisabledPagesProviderCollector.RemoveProvider(prov as IPagesStorageProviderV30);
 
-			ThemeProviderCollector.RemoveProvider(prov as IThemeStorageProviderV30);
-			DisabledThemeProviderCollector.RemoveProvider(prov as IThemeStorageProviderV30);
-
 			UsersProviderCollector.RemoveProvider(prov as IUsersStorageProviderV30);
 			DisabledUsersProviderCollector.RemoveProvider(prov as IUsersStorageProviderV30);
 
@@ -178,43 +175,37 @@ namespace ScrewTurn.Wiki {
 		public static void TryDisable(string typeName) {
 			IProviderV30 prov = null;
 
-			prov = ThemeProviderCollector.GetProvider(typeName);
-			if(prov != null) {
-				DisabledThemeProviderCollector.AddProvider((IThemeStorageProviderV30)prov);
-				ThemeProviderCollector.RemoveProvider((IThemeStorageProviderV30)prov);
-			}
-
 			prov = PagesProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				DisabledPagesProviderCollector.AddProvider((IPagesStorageProviderV30)prov);
+				DisabledPagesProviderCollector.AddProvider((IPagesStorageProviderV30)prov, PagesProviderCollector.GetAssembly((IPagesStorageProviderV30)prov));
 				PagesProviderCollector.RemoveProvider((IPagesStorageProviderV30)prov);
 				return;
 			}
 
 			prov = UsersProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				DisabledUsersProviderCollector.AddProvider((IUsersStorageProviderV30)prov);
+				DisabledUsersProviderCollector.AddProvider((IUsersStorageProviderV30)prov, UsersProviderCollector.GetAssembly((IUsersStorageProviderV30)prov));
 				UsersProviderCollector.RemoveProvider((IUsersStorageProviderV30)prov);
 				return;
 			}
 
 			prov = FilesProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				DisabledFilesProviderCollector.AddProvider((IFilesStorageProviderV30)prov);
+				DisabledFilesProviderCollector.AddProvider((IFilesStorageProviderV30)prov, FilesProviderCollector.GetAssembly((IFilesStorageProviderV30)prov));
 				FilesProviderCollector.RemoveProvider((IFilesStorageProviderV30)prov);
 				return;
 			}
 
 			prov = CacheProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				DisabledCacheProviderCollector.AddProvider((ICacheProviderV30)prov);
+				DisabledCacheProviderCollector.AddProvider((ICacheProviderV30)prov, CacheProviderCollector.GetAssembly((ICacheProviderV30)prov));
 				CacheProviderCollector.RemoveProvider((ICacheProviderV30)prov);
 				return;
 			}
 
 			prov = FormatterProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				DisabledFormatterProviderCollector.AddProvider((IFormatterProviderV30)prov);
+				DisabledFormatterProviderCollector.AddProvider((IFormatterProviderV30)prov, FormatterProviderCollector.GetAssembly((IFormatterProviderV30)prov));
 				FormatterProviderCollector.RemoveProvider((IFormatterProviderV30)prov);
 				return;
 			}
@@ -227,44 +218,37 @@ namespace ScrewTurn.Wiki {
 		public static void TryEnable(string typeName) {
 			IProviderV30 prov = null;
 
-			prov = DisabledThemeProviderCollector.GetProvider(typeName);
-			if(prov != null) {
-				ThemeProviderCollector.AddProvider((IThemeStorageProviderV30)prov);
-				DisabledThemeProviderCollector.RemoveProvider((IThemeStorageProviderV30)prov);
-				return;
-			}
-
 			prov = DisabledPagesProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				PagesProviderCollector.AddProvider((IPagesStorageProviderV30)prov);
+				PagesProviderCollector.AddProvider((IPagesStorageProviderV30)prov, DisabledPagesProviderCollector.GetAssembly((IPagesStorageProviderV30)prov));
 				DisabledPagesProviderCollector.RemoveProvider((IPagesStorageProviderV30)prov);
 				return;
 			}
 
 			prov = DisabledUsersProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				UsersProviderCollector.AddProvider((IUsersStorageProviderV30)prov);
+				UsersProviderCollector.AddProvider((IUsersStorageProviderV30)prov, DisabledUsersProviderCollector.GetAssembly((IUsersStorageProviderV30)prov));
 				DisabledUsersProviderCollector.RemoveProvider((IUsersStorageProviderV30)prov);
 				return;
 			}
 
 			prov = DisabledFilesProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				FilesProviderCollector.AddProvider((IFilesStorageProviderV30)prov);
+				FilesProviderCollector.AddProvider((IFilesStorageProviderV30)prov, DisabledFilesProviderCollector.GetAssembly((IFilesStorageProviderV30)prov));
 				DisabledFilesProviderCollector.RemoveProvider((IFilesStorageProviderV30)prov);
 				return;
 			}
 
 			prov = DisabledCacheProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				CacheProviderCollector.AddProvider((ICacheProviderV30)prov);
+				CacheProviderCollector.AddProvider((ICacheProviderV30)prov, DisabledCacheProviderCollector.GetAssembly((ICacheProviderV30)prov));
 				DisabledCacheProviderCollector.RemoveProvider((ICacheProviderV30)prov);
 				return;
 			}
 
 			prov = DisabledFormatterProviderCollector.GetProvider(typeName);
 			if(prov != null) {
-				FormatterProviderCollector.AddProvider((IFormatterProviderV30)prov);
+				FormatterProviderCollector.AddProvider((IFormatterProviderV30)prov, DisabledFormatterProviderCollector.GetAssembly((IFormatterProviderV30)prov));
 				DisabledFormatterProviderCollector.RemoveProvider((IFormatterProviderV30)prov);
 				return;
 			}
