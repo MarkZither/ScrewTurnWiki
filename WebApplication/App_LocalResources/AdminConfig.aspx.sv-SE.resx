@@ -349,10 +349,10 @@
     <value>Visa som mest</value>
   </data>
   <data name="lblNamespaces1Resource1.Text" xml:space="preserve">
-    <value>Namnrymder</value>
+    <value>Namnområden</value>
   </data>
   <data name="lblNamespaces2Resource1.Text" xml:space="preserve">
-    <value>Namnrymder</value>
+    <value>Namnområden</value>
   </data>
   <data name="lblPages1Resource1.Text" xml:space="preserve">
     <value>sidor</value>
@@ -364,13 +364,14 @@
     <value />
   </data>
   <data name="lblResultResource1.ToolTip" xml:space="preserve">
-    <value />
+    <value>
+</value>
   </data>
   <data name="lblRootMainPageResource1.Text" xml:space="preserve">
-    <value>Huvudsida för rotnamnrymd</value>
+    <value>Huvudsida för rotnamnområde</value>
   </data>
   <data name="lblRootThemeResource1.Text" xml:space="preserve">
-    <value>Visuellt tema för rotnamnrymd</value>
+    <value>Visuellt tema för rotnamnområde</value>
   </data>
   <data name="lblSecurityConfigResource1.Text" xml:space="preserve">
     <value>Säkerhet</value>

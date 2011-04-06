@@ -381,7 +381,13 @@ namespace ScrewTurn.Wiki {
 						sb.Insert(match.Index, GenerateList(lines, 0, 0, ref d) + "\n");
 					}
 					catch {
-						sb.Insert(match.Index, @"<b style=""color: #FF0000;"">FORMATTER ERROR (Malformed List)</b>");
+						if(!bareBones) {
+							sb.Insert(match.Index, @"<b style=""color: #FF0000;"">FORMATTER ERROR (Malformed List)</b><br />");
+						}
+						else {
+							sb.Insert(match.Index, match);
+							end = match.Index + match.Length;
+						}
 					}
 				}
 				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
@@ -525,9 +531,13 @@ namespace ScrewTurn.Wiki {
 							sb.Insert(match.Index, img.ToString());
 						}
 						else {
-							sb.Insert(match.Index, @"<b style=""color: #FF0000;"">FORMATTER ERROR (Malformed Image Tag)</b>");
+							if(!bareBones) sb.Insert(match.Index, @"<b style=""color: #FF0000;"">FORMATTER ERROR (Malformed Image Tag)</b>");
+							else {
+								sb.Insert(match.Index, match);
+								end = match.Index + match.Length;
+							}
+							done = true;
 						}
-						done = true;
 					}
 				}
 				else if(tmp.ToLowerInvariant().StartsWith("attachment:")) {
@@ -2554,8 +2564,8 @@ namespace ScrewTurn.Wiki {
 				else {
 					string formatterErrorString = @"<b style=""color: #FF0000;"">FORMATTER ERROR (Transcluded inexistent page or this same page)</b>";
 					sb.Insert(match.Index, formatterErrorString);
+					sb.Insert(match.Index, match);
 				}
-
 
 				match = TransclusionRegex.Match(sb.ToString());
 			}
