@@ -887,7 +887,7 @@ namespace ScrewTurn.Wiki {
 			// TODO: make this work when Users.GetUsers does not return all existing users but only a sub-set
 			List<UserInfo> usersToNotify = new List<UserInfo>(10);
 			foreach(UserInfo user in Users.GetUsers()) {
-				if(CanApproveDraft(currentPage, user.Username, user.Groups)) {
+				if(user.Active && CanApproveDraft(currentPage, user.Username, user.Groups)) {
 					usersToNotify.Add(user);
 				}
 			}
