@@ -444,7 +444,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void TryManualLogin_NullPassword() {
 			IUsersStorageProviderV30 prov = GetProvider();
-
+			
 			prov.AddUser("user", null, "password", "email@server.com", true, DateTime.Now);
 			prov.TryManualLogin("user", null);
 		}

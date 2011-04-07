@@ -14,6 +14,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public override IPagesStorageProviderV30 GetProvider() {
 			PagesStorageProvider prov = new PagesStorageProvider();
 			prov.Init(MockHost(), "");
+			prov.SetUp();
 			return prov;
 		}
 
@@ -69,6 +70,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			PagesStorageProvider prov = new PagesStorageProvider();
 			prov.Init(host, "");
+			prov.SetUp();
 
 			PageInfo[] pages = prov.GetPages(null);
 

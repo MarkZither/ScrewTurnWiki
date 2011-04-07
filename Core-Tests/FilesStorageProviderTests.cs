@@ -14,6 +14,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public override IFilesStorageProviderV30 GetProvider() {
 			FilesStorageProvider prov = new FilesStorageProvider();
 			prov.Init(MockHost(), "");
+			prov.SetUp();
 			return prov;
 		}
 

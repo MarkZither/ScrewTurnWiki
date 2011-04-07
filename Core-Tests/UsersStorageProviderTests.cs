@@ -14,6 +14,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public override IUsersStorageProviderV30 GetProvider() {
 			UsersStorageProvider prov = new UsersStorageProvider();
 			prov.Init(MockHost(), "");
+			prov.SetUp();
 			return prov;
 		}
 
@@ -46,6 +47,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			UsersStorageProvider prov = new UsersStorageProvider();
 			prov.Init(host, "");
+			prov.SetUp();
 
 			UserInfo[] users = prov.GetUsers();
 
