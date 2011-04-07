@@ -122,36 +122,36 @@ namespace ScrewTurn.Wiki {
 
 			// Files storage providers have to be loaded BEFORE users storage providers in order to properly set permissions
 			FilesStorageProvider f = new FilesStorageProvider();
-			if(!ProviderLoader.IsDisabled(f.GetType().FullName)) {
+			if(!ProviderLoader.IsDisabled(typeof(FilesStorageProvider).FullName)) {
 				//f.Init(Host.Instance, "");
-				Collectors.FilesProviderCollector.AddProvider(f, Assembly.GetAssembly(f.GetType()));
-				Log.LogEntry("Provider " + f.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
+				Collectors.FilesProviderCollector.AddProvider(typeof(FilesStorageProvider), Assembly.GetAssembly(typeof(FilesStorageProvider)));
+				//Log.LogEntry("Provider " + f.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledFilesProviderCollector.AddProvider(f, Assembly.GetAssembly(f.GetType()));
-				Log.LogEntry("Provider " + f.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
+				Collectors.DisabledFilesProviderCollector.AddProvider(typeof(FilesStorageProvider), Assembly.GetAssembly(typeof(FilesStorageProvider)));
+				//Log.LogEntry("Provider " + f.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
 			ThemeStorageProvider t = new ThemeStorageProvider();
-			if(!ProviderLoader.IsDisabled(t.GetType().FullName)) {
+			if(!ProviderLoader.IsDisabled(typeof(ThemeStorageProvider).FullName)) {
 				//t.Init(Host.Instance, "");
-				Collectors.ThemeProviderCollector.AddProvider(t, Assembly.GetAssembly(t.GetType()));
-				Log.LogEntry("Provider " + t.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
+				Collectors.ThemeProviderCollector.AddProvider(typeof(ThemeStorageProvider), Assembly.GetAssembly(typeof(ThemeStorageProvider)));
+				//Log.LogEntry("Provider " + t.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledThemeProviderCollector.AddProvider(t, Assembly.GetAssembly(t.GetType()));
-				Log.LogEntry("Provider " + t.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
+				Collectors.DisabledThemeProviderCollector.AddProvider(typeof(ThemeStorageProvider), Assembly.GetAssembly(typeof(ThemeStorageProvider)));
+				//Log.LogEntry("Provider " + t.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
 			UsersStorageProvider u = new UsersStorageProvider();
-			if(!ProviderLoader.IsDisabled(u.GetType().FullName)) {
+			if(!ProviderLoader.IsDisabled(typeof(UsersStorageProvider).FullName)) {
 				//u.Init(Host.Instance, "");
-				Collectors.UsersProviderCollector.AddProvider(u, Assembly.GetAssembly(u.GetType()));
-				Log.LogEntry("Provider " + u.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
+				Collectors.UsersProviderCollector.AddProvider(typeof(UsersStorageProvider), Assembly.GetAssembly(typeof(UsersStorageProvider)));
+				//Log.LogEntry("Provider " + u.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledUsersProviderCollector.AddProvider(u, Assembly.GetAssembly(u.GetType()));
-				Log.LogEntry("Provider " + u.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
+				Collectors.DisabledUsersProviderCollector.AddProvider(typeof(UsersStorageProvider), Assembly.GetAssembly(typeof(UsersStorageProvider)));
+				//Log.LogEntry("Provider " + u.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
 			// Load Users (pages storage providers might need access to users/groups data for upgrading from 2.0 to 3.0)
@@ -159,26 +159,26 @@ namespace ScrewTurn.Wiki {
 			//Users.Instance = new Users();
 			bool groupsCreated = VerifyAndCreateDefaultGroups();
 
-			PagesStorageProvider p = new PagesStorageProvider();
-			if(!ProviderLoader.IsDisabled(p.GetType().FullName)) {
+			//PagesStorageProvider p = new PagesStorageProvider();
+			if(!ProviderLoader.IsDisabled(typeof(PagesStorageProvider).FullName)) {
 				//p.Init(Host.Instance, "");
-				Collectors.PagesProviderCollector.AddProvider(p, Assembly.GetAssembly(p.GetType()));
-				Log.LogEntry("Provider " + p.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
+				Collectors.PagesProviderCollector.AddProvider(typeof(PagesStorageProvider), Assembly.GetAssembly(typeof(PagesStorageProvider)));
+				//Log.LogEntry("Provider " + p.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledPagesProviderCollector.AddProvider(p, Assembly.GetAssembly(p.GetType()));
-				Log.LogEntry("Provider " + p.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
+				Collectors.DisabledPagesProviderCollector.AddProvider(typeof(PagesStorageProvider), Assembly.GetAssembly(typeof(PagesStorageProvider)));
+				//Log.LogEntry("Provider " + p.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
-			CacheProvider c = new CacheProvider();
-			if(!ProviderLoader.IsDisabled(c.GetType().FullName)) {
+			//CacheProvider c = new CacheProvider();
+			if(!ProviderLoader.IsDisabled(typeof(CacheProvider).FullName)) {
 				//c.Init(Host.Instance, "");
-				Collectors.CacheProviderCollector.AddProvider(c, Assembly.GetAssembly(c.GetType()));
-				Log.LogEntry("Provider " + c.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
+				Collectors.CacheProviderCollector.AddProvider(typeof(CacheProvider), Assembly.GetAssembly(typeof(CacheProvider)));
+				//Log.LogEntry("Provider " + c.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
 			}
 			else {
-				Collectors.DisabledCacheProviderCollector.AddProvider(c, Assembly.GetAssembly(c.GetType()));
-				Log.LogEntry("Provider " + c.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
+				Collectors.DisabledCacheProviderCollector.AddProvider(typeof(CacheProvider), Assembly.GetAssembly(typeof(CacheProvider)));
+				//Log.LogEntry("Provider " + c.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
 			}
 
 			// Load all other providers

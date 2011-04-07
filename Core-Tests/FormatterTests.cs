@@ -54,37 +54,29 @@ second line";
 
 			Collectors.SettingsProvider = settingsProvider;
 
-			IPagesStorageProviderV30 pagesProvider = mocks.StrictMock<IPagesStorageProviderV30>();
 			Collectors.PagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
-			Collectors.PagesProviderCollector.AddProvider(pagesProvider, System.Reflection.Assembly.GetAssembly(pagesProvider.GetType()));
+			Collectors.PagesProviderCollector.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)));
 
-			Expect.Call(settingsProvider.GetSetting("DefaultPagesProvider")).Return(pagesProvider.GetType().FullName).Repeat.Any();
-
-			PageInfo page1 = new PageInfo("page1", pagesProvider, DateTime.Now);
-			PageContent page1Content = new PageContent(page1, "Page 1", "User", DateTime.Now, "Comment", "Content", null, null);
-			Expect.Call(pagesProvider.GetPage("page1")).Return(page1).Repeat.Any();
-			Expect.Call(pagesProvider.GetContent(page1)).Return(page1Content).Repeat.Any();
-
-			Expect.Call(pagesProvider.GetPage("page2")).Return(null).Repeat.Any();
-
-			//Pages.Instance = new Pages();
+			Expect.Call(settingsProvider.GetSetting("DefaultPagesProvider")).Return(typeof(DummyPagesStorageProvider).FullName).Repeat.Any();
+			Expect.Call(settingsProvider.GetPluginStatus(typeof(DummyPagesStorageProvider).FullName)).Return(true).Repeat.Any();
+			Expect.Call(settingsProvider.GetPluginConfiguration(typeof(DummyPagesStorageProvider).FullName)).Return("").Repeat.Any();
 
 			Host.Instance = new Host();
 
 			Expect.Call(settingsProvider.GetSetting("CacheSize")).Return("100").Repeat.Any();
 			Expect.Call(settingsProvider.GetSetting("CacheCutSize")).Return("20").Repeat.Any();
 
-			Expect.Call(settingsProvider.GetSetting("DefaultCacheProvider")).Return(typeof(CacheProvider).FullName).Repeat.Any();
+			Collectors.CacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
+			Collectors.CacheProviderCollector.AddProvider(typeof(DummyCacheProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyCacheProvider)));
+			
+			settingsProvider.LogEntry("", EntryType.General, "");
+			LastCall.On(settingsProvider).IgnoreArguments().Repeat.Any();
+			Expect.Call(settingsProvider.GetPluginConfiguration(typeof(DummyCacheProvider).FullName)).Return("").Repeat.Any();
+			Expect.Call(settingsProvider.GetSetting("DefaultCacheProvider")).Return(typeof(DummyCacheProvider).FullName).Repeat.Any();
+			Expect.Call(settingsProvider.GetPluginStatus(typeof(DummyCacheProvider).FullName)).Return(true).Repeat.Any();
 
 			// Cache needs setting to init
 			mocks.Replay(settingsProvider);
-
-			ICacheProviderV30 cacheProvider = new CacheProvider();
-			cacheProvider.Init(Host.Instance, "");
-			Collectors.CacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
-			Collectors.CacheProviderCollector.AddProvider(cacheProvider, System.Reflection.Assembly.GetAssembly(cacheProvider.GetType()));
-
-			mocks.Replay(pagesProvider);
 
 			Collectors.FormatterProviderCollector = new ProviderCollector<IFormatterProviderV30>();
 
@@ -161,7 +153,354 @@ second line";
 
 		public override void SendUnknownResponseHeader(string name, string value) {
 		}
+	}
 
+	public class DummyPagesStorageProvider : IPagesStorageProviderV30 {
+
+		public NamespaceInfo GetNamespace(string name) {
+			throw new NotImplementedException();
+		}
+
+		public NamespaceInfo[] GetNamespaces() {
+			throw new NotImplementedException();
+		}
+
+		public NamespaceInfo AddNamespace(string name) {
+			throw new NotImplementedException();
+		}
+
+		public NamespaceInfo RenameNamespace(NamespaceInfo nspace, string newName) {
+			throw new NotImplementedException();
+		}
+
+		public NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, PageInfo page) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveNamespace(NamespaceInfo nspace) {
+			throw new NotImplementedException();
+		}
+
+		public PageInfo MovePage(PageInfo page, NamespaceInfo destination, bool copyCategories) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo GetCategory(string fullName) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo[] GetCategories(NamespaceInfo nspace) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo[] GetCategoriesForPage(PageInfo page) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo AddCategory(string nspace, string name) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo RenameCategory(CategoryInfo category, string newName) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveCategory(CategoryInfo category) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo MergeCategories(CategoryInfo source, CategoryInfo destination) {
+			throw new NotImplementedException();
+		}
+
+		public SearchEngine.SearchResultCollection PerformSearch(SearchEngine.SearchParameters parameters) {
+			throw new NotImplementedException();
+		}
+
+		public void RebuildIndex() {
+			throw new NotImplementedException();
+		}
+
+		public void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size) {
+			throw new NotImplementedException();
+		}
+
+		public bool IsIndexCorrupted {
+			get { throw new NotImplementedException(); }
+		}
+
+		public PageInfo GetPage(string fullName) {
+			if(fullName == "page1") {
+				return new PageInfo(fullName, this, DateTime.Now);
+			}
+			return null;
+		}
+
+		public PageInfo[] GetPages(NamespaceInfo nspace) {
+			throw new NotImplementedException();
+		}
+
+		public PageInfo[] GetUncategorizedPages(NamespaceInfo nspace) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent GetContent(PageInfo page) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent GetDraft(PageInfo page) {
+			throw new NotImplementedException();
+		}
+
+		public bool DeleteDraft(PageInfo page) {
+			throw new NotImplementedException();
+		}
+
+		public int[] GetBackups(PageInfo page) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent GetBackupContent(PageInfo page, int revision) {
+			throw new NotImplementedException();
+		}
+
+		public bool SetBackupContent(PageContent content, int revision) {
+			throw new NotImplementedException();
+		}
+
+		public PageInfo AddPage(string nspace, string name, DateTime creationDateTime) {
+			throw new NotImplementedException();
+		}
+
+		public PageInfo RenamePage(PageInfo page, string newName) {
+			throw new NotImplementedException();
+		}
+
+		public bool ModifyPage(PageInfo page, string title, string username, DateTime dateTime, string comment, string content, string[] keywords, string description, SaveMode saveMode) {
+			throw new NotImplementedException();
+		}
+
+		public bool RollbackPage(PageInfo page, int revision) {
+			throw new NotImplementedException();
+		}
+
+		public bool DeleteBackups(PageInfo page, int revision) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemovePage(PageInfo page) {
+			throw new NotImplementedException();
+		}
+
+		public bool RebindPage(PageInfo page, string[] categories) {
+			throw new NotImplementedException();
+		}
+
+		public Message[] GetMessages(PageInfo page) {
+			throw new NotImplementedException();
+		}
+
+		public int GetMessageCount(PageInfo page) {
+			throw new NotImplementedException();
+		}
+
+		public bool BulkStoreMessages(PageInfo page, Message[] messages) {
+			throw new NotImplementedException();
+		}
+
+		public bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveMessage(PageInfo page, int id, bool removeReplies) {
+			throw new NotImplementedException();
+		}
+
+		public bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
+			throw new NotImplementedException();
+		}
+
+		public NavigationPath[] GetNavigationPaths(NamespaceInfo nspace) {
+			throw new NotImplementedException();
+		}
+
+		public NavigationPath AddNavigationPath(string nspace, string name, PageInfo[] pages) {
+			throw new NotImplementedException();
+		}
+
+		public NavigationPath ModifyNavigationPath(NavigationPath path, PageInfo[] pages) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveNavigationPath(NavigationPath path) {
+			throw new NotImplementedException();
+		}
+
+		public Snippet[] GetSnippets() {
+			throw new NotImplementedException();
+		}
+
+		public Snippet AddSnippet(string name, string content) {
+			throw new NotImplementedException();
+		}
+
+		public Snippet ModifySnippet(string name, string content) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveSnippet(string name) {
+			throw new NotImplementedException();
+		}
+
+		public ContentTemplate[] GetContentTemplates() {
+			throw new NotImplementedException();
+		}
+
+		public ContentTemplate AddContentTemplate(string name, string content) {
+			throw new NotImplementedException();
+		}
+
+		public ContentTemplate ModifyContentTemplate(string name, string content) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveContentTemplate(string name) {
+			throw new NotImplementedException();
+		}
+
+		public bool ReadOnly {
+			get { return false; }
+		}
+
+		public void Init(IHostV30 host, string config) {
+			
+		}
+
+		public void Shutdown() {
+			
+		}
+
+		public ComponentInformation Information {
+			get {
+				return new ComponentInformation("dummy", "", "", "", "");
+			}
+		}
+
+		public string ConfigHelpHtml {
+			get { throw new NotImplementedException(); }
+		}
+
+	}
+
+	public class DummyCacheProvider : ICacheProviderV30 {
+
+		public int OnlineUsers {
+			get {
+				throw new NotImplementedException();
+			}
+			set {
+				throw new NotImplementedException();
+			}
+		}
+
+		public string GetPseudoCacheValue(string name) {
+			throw new NotImplementedException();
+		}
+
+		public void SetPseudoCacheValue(string name, string value) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent GetPageContent(PageInfo pageInfo) {
+			if(pageInfo.FullName == "page1") {
+				return new PageContent(pageInfo, "Page 1", "", DateTime.Now, "", "", new string[] { }, "");
+			}
+			else return null;
+		}
+
+		public void SetPageContent(PageInfo pageInfo, PageContent content) {
+			throw new NotImplementedException();
+		}
+
+		public string GetFormattedPageContent(PageInfo pageInfo) {
+			return "";
+		}
+
+		public void SetFormattedPageContent(PageInfo pageInfo, string content) {
+			throw new NotImplementedException();
+		}
+
+		public void RemovePage(PageInfo pageInfo) {
+			throw new NotImplementedException();
+		}
+
+		public void ClearPageContentCache() {
+			throw new NotImplementedException();
+		}
+
+		public void ClearPseudoCache() {
+			throw new NotImplementedException();
+		}
+
+		public void CutCache(int cutSize) {
+			throw new NotImplementedException();
+		}
+
+		public int PageCacheUsage {
+			get { throw new NotImplementedException(); }
+		}
+
+		public int FormatterPageCacheUsage {
+			get { throw new NotImplementedException(); }
+		}
+
+		public void RenewEditingSession(string page, string user) {
+			throw new NotImplementedException();
+		}
+
+		public void CancelEditingSession(string page, string user) {
+			throw new NotImplementedException();
+		}
+
+		public bool IsPageBeingEdited(string page, string currentUser) {
+			throw new NotImplementedException();
+		}
+
+		public string WhosEditing(string page) {
+			throw new NotImplementedException();
+		}
+
+		public void AddRedirection(string source, string destination) {
+			throw new NotImplementedException();
+		}
+
+		public string GetRedirectionDestination(string source) {
+			throw new NotImplementedException();
+		}
+
+		public void RemovePageFromRedirections(string name) {
+			throw new NotImplementedException();
+		}
+
+		public void ClearRedirections() {
+			throw new NotImplementedException();
+		}
+
+		public void Init(IHostV30 host, string config) {
+			
+		}
+
+		public void Shutdown() {
+			
+		}
+
+		public ComponentInformation Information {
+			get { return new ComponentInformation("dummyCache", "", "", "", ""); }
+		}
+
+		public string ConfigHelpHtml {
+			get { throw new NotImplementedException(); }
+		}
 	}
 
 }

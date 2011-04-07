@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki {
 		/// <typeparam name="T">The type of the provider.</typeparam>
 		/// <param name="provider">The provider.</param>
 		/// <exception cref="T:ProviderConstraintException">Thrown when a constraint is not fulfilled.</exception>
-		private static void VerifyConstraints<T>(T provider) {
+		private static void VerifyConstraints<T>(Type provider) {
 			if(typeof(T) == typeof(IUsersStorageProviderV30)) {
 				// If the provider allows to write user accounts data, then group membership must be writeable too
 
@@ -41,18 +41,19 @@ namespace ScrewTurn.Wiki {
 		}
 
 
-		private static void SetUp<T>(T instance, ProviderCollector<T> collectorEnabled,
+		private static void SetUp<T>(Type instance, ProviderCollector<T> collectorEnabled,
 			ProviderCollector<T> collectorDisabled) where T : class, IProviderV30 {
+
 			if(collectorEnabled.GetProvider(instance.GetType().FullName) != null ||
 				collectorDisabled.GetProvider(instance.GetType().FullName) != null) {
 
-				Log.LogEntry("SetUp already colled on provider " + instance.Information.Name, EntryType.Warning, Log.SystemUsername);
+				Log.LogEntry("SetUp already colled on provider " + instance.FullName, EntryType.Warning, Log.SystemUsername);
 				return;
 			}
 			bool enabled = !IsDisabled(instance.GetType().FullName);
 
-			if(enabled) collectorEnabled.AddProvider(instance, Assembly.GetAssembly(instance.GetType()));
-			else collectorDisabled.AddProvider(instance, Assembly.GetAssembly(instance.GetType()));
+			if(enabled) collectorEnabled.AddProvider(instance, Assembly.GetAssembly(instance));
+			else collectorDisabled.AddProvider(instance, Assembly.GetAssembly(instance));
 
 			// Verify constraints
 			VerifyConstraints<T>(instance);
@@ -101,25 +102,25 @@ namespace ScrewTurn.Wiki {
 		public static void FullLoad(bool loadUsers, bool loadPages, bool loadFiles, bool loadFormatters, bool loadCache) {
 			string[] pluginAssemblies = Settings.Provider.ListPluginAssemblies();
 
-			List<IUsersStorageProviderV30> users = new List<IUsersStorageProviderV30>(2);
-			List<IUsersStorageProviderV30> dUsers = new List<IUsersStorageProviderV30>(2);
-			List<IPagesStorageProviderV30> pages = new List<IPagesStorageProviderV30>(2);
-			List<IPagesStorageProviderV30> dPages = new List<IPagesStorageProviderV30>(2);
-			List<IThemeStorageProviderV30> theme = new List<IThemeStorageProviderV30>(2);
-			List<IFilesStorageProviderV30> files = new List<IFilesStorageProviderV30>(2);
-			List<IFilesStorageProviderV30> dFiles = new List<IFilesStorageProviderV30>(2);
-			List<IFormatterProviderV30> forms = new List<IFormatterProviderV30>(2);
-			List<IFormatterProviderV30> dForms = new List<IFormatterProviderV30>(2);
-			List<ICacheProviderV30> cache = new List<ICacheProviderV30>(2);
-			List<ICacheProviderV30> dCache = new List<ICacheProviderV30>(2);
+			List<Type> users = new List<Type>(2);
+			List<Type> dUsers = new List<Type>(2);
+			List<Type> pages = new List<Type>(2);
+			List<Type> dPages = new List<Type>(2);
+			List<Type> theme = new List<Type>(2);
+			List<Type> files = new List<Type>(2);
+			List<Type> dFiles = new List<Type>(2);
+			List<Type> forms = new List<Type>(2);
+			List<Type> dForms = new List<Type>(2);
+			List<Type> cache = new List<Type>(2);
+			List<Type> dCache = new List<Type>(2);
 
 			for(int i = 0; i < pluginAssemblies.Length; i++) {
-				IFilesStorageProviderV30[] d;
-				IUsersStorageProviderV30[] u;
-				IPagesStorageProviderV30[] p;
-				IThemeStorageProviderV30[] t;
-				IFormatterProviderV30[] f;
-				ICacheProviderV30[] c;
+				Type[] d;
+				Type[] u;
+				Type[] p;
+				Type[] t;
+				Type[] f;
+				Type[] c;
 				LoadFrom(pluginAssemblies[i], out u, out p, out d, out t, out f, out c);
 				if(loadFiles) files.AddRange(d);
 				if(loadUsers) users.AddRange(u);
@@ -196,12 +197,12 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="assembly">The path of the Assembly to load the Providers from.</param>
 		public static int LoadFromAuto(string assembly) {
-			IUsersStorageProviderV30[] users;
-			IPagesStorageProviderV30[] pages;
-			IFilesStorageProviderV30[] files;
-			IThemeStorageProviderV30[] themes;
-			IFormatterProviderV30[] forms;
-			ICacheProviderV30[] cache;
+			Type[] users;
+			Type[] pages;
+			Type[] files;
+			Type[] themes;
+			Type[] forms;
+			Type[] cache;
 			LoadFrom(assembly, out users, out pages, out files, out themes, out forms, out cache);
 
 			int count = 0;
@@ -251,8 +252,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="formatters">The Formatter Providers.</param>
 		/// <param name="cache">The Cache Providers.</param>
 		/// <remarks>The Components returned are <b>not</b> initialized.</remarks>
-		public static void LoadFrom(string assembly, out IUsersStorageProviderV30[] users, out IPagesStorageProviderV30[] pages,
-			out IFilesStorageProviderV30[] files, out IThemeStorageProviderV30[] themes, out IFormatterProviderV30[] formatters, out ICacheProviderV30[] cache) {
+		public static void LoadFrom(string assembly, out Type[] users, out Type[] pages,
+			out Type[] files, out Type[] themes, out Type[] formatters, out Type[] cache) {
 
 			Assembly asm = null;
 			try {
@@ -261,12 +262,12 @@ namespace ScrewTurn.Wiki {
 				asm = Assembly.Load(LoadAssemblyFromProvider(Path.GetFileName(assembly)));
 			}
 			catch {
-				files = new IFilesStorageProviderV30[0];
-				users = new IUsersStorageProviderV30[0];
-				pages = new IPagesStorageProviderV30[0];
-				themes = new IThemeStorageProviderV30[0];
-				formatters = new IFormatterProviderV30[0];
-				cache = new ICacheProviderV30[0];
+				files = new Type[0];
+				users = new Type[0];
+				pages = new Type[0];
+				themes = new Type[0];
+				formatters = new Type[0];
+				cache = new Type[0];
 
 				Log.LogEntry("Unable to load assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
 				return;
@@ -278,23 +279,23 @@ namespace ScrewTurn.Wiki {
 				types = asm.GetTypes();
 			}
 			catch(ReflectionTypeLoadException) {
-				files = new IFilesStorageProviderV30[0];
-				users = new IUsersStorageProviderV30[0];
-				pages = new IPagesStorageProviderV30[0];
-				themes = new IThemeStorageProviderV30[0];
-				formatters = new IFormatterProviderV30[0];
-				cache = new ICacheProviderV30[0];
+				files = new Type[0];
+				users = new Type[0];
+				pages = new Type[0];
+				themes = new Type[0];
+				formatters = new Type[0];
+				cache = new Type[0];
 
 				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
 				return;
 			}
 
-			List<IUsersStorageProviderV30> urs = new List<IUsersStorageProviderV30>();
-			List<IPagesStorageProviderV30> pgs = new List<IPagesStorageProviderV30>();
-			List<IFilesStorageProviderV30> fls = new List<IFilesStorageProviderV30>();
-			List<IThemeStorageProviderV30> thm = new List<IThemeStorageProviderV30>();
-			List<IFormatterProviderV30> frs = new List<IFormatterProviderV30>();
-			List<ICacheProviderV30> che = new List<ICacheProviderV30>();
+			List<Type> urs = new List<Type>();
+			List<Type> pgs = new List<Type>();
+			List<Type> fls = new List<Type>();
+			List<Type> thm = new List<Type>();
+			List<Type> frs = new List<Type>();
+			List<Type> che = new List<Type>();
 
 			Type[] interfaces;
 			for(int i = 0; i < types.Length; i++) {
@@ -304,46 +305,28 @@ namespace ScrewTurn.Wiki {
 				interfaces = types[i].GetInterfaces();
 				foreach(Type iface in interfaces) {
 					if(iface == typeof(IUsersStorageProviderV30)) {
-						IUsersStorageProviderV30 tmpu = CreateInstance<IUsersStorageProviderV30>(asm, types[i]);
-						if(tmpu != null) {
-							urs.Add(tmpu);
-							Collectors.FileNames[tmpu.GetType().FullName] = assembly;
-						}
+						urs.Add(types[i]);
+						Collectors.FileNames[types[i].FullName] = assembly;
 					}
 					if(iface == typeof(IPagesStorageProviderV30)) {
-						IPagesStorageProviderV30 tmpp = CreateInstance<IPagesStorageProviderV30>(asm, types[i]);
-						if(tmpp != null) {
-							pgs.Add(tmpp);
-							Collectors.FileNames[tmpp.GetType().FullName] = assembly;
-						}
+						pgs.Add(types[i]);
+						Collectors.FileNames[types[i].FullName] = assembly;
 					}
 					if(iface == typeof(IFilesStorageProviderV30)) {
-						IFilesStorageProviderV30 tmpd = CreateInstance<IFilesStorageProviderV30>(asm, types[i]);
-						if(tmpd != null) {
-							fls.Add(tmpd);
-							Collectors.FileNames[tmpd.GetType().FullName] = assembly;
-						}
+						fls.Add(types[i]);
+						Collectors.FileNames[types[i].FullName] = assembly;
 					}
 					if(iface == typeof(IThemeStorageProviderV30)) {
-						IThemeStorageProviderV30 thmm = CreateInstance<IThemeStorageProviderV30>(asm, types[i]);
-						if(thmm != null) {
-							thm.Add(thmm);
-							Collectors.FileNames[thmm.GetType().FullName] = assembly;
-						}
+						thm.Add(types[i]);
+						Collectors.FileNames[types[i].FullName] = assembly;
 					}
 					if(iface == typeof(IFormatterProviderV30)) {
-						IFormatterProviderV30 tmpf = CreateInstance<IFormatterProviderV30>(asm, types[i]);
-						if(tmpf != null) {
-							frs.Add(tmpf);
-							Collectors.FileNames[tmpf.GetType().FullName] = assembly;
-						}
+						frs.Add(types[i]);
+						Collectors.FileNames[types[i].FullName] = assembly;
 					}
 					if(iface == typeof(ICacheProviderV30)) {
-						ICacheProviderV30 tmpc = CreateInstance<ICacheProviderV30>(asm, types[i]);
-						if(tmpc != null) {
-							che.Add(tmpc);
-							Collectors.FileNames[tmpc.GetType().FullName] = assembly;
-						}
+						che.Add(types[i]);
+						Collectors.FileNames[types[i].FullName] = assembly;
 					}
 				}
 			}

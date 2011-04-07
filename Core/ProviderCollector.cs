@@ -13,13 +13,13 @@ namespace ScrewTurn.Wiki {
 	/// <typeparam name="T">The type of the Collector.</typeparam>
 	public class ProviderCollector<T> where T : class, IProviderV30 {
 
-		private Dictionary<T, Assembly> dictionary;
+		private Dictionary<Type, Assembly> dictionary;
 
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
 		public ProviderCollector() {
-			dictionary = new Dictionary<T, Assembly>(3);
+			dictionary = new Dictionary<Type, Assembly>(3);
 		}
 
 		/// <summary>
@@ -27,7 +27,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="provider">The Provider to add.</param>
 		/// <param name="assembly">The assembly.</param>
-		public void AddProvider(T provider, Assembly assembly) {
+		public void AddProvider(Type provider, Assembly assembly) {
 			lock(this) {
 				dictionary[provider] = assembly;
 			}
@@ -37,7 +37,7 @@ namespace ScrewTurn.Wiki {
 		/// Removes a Provider from the Collector.
 		/// </summary>
 		/// <param name="provider">The Provider to remove.</param>
-		public void RemoveProvider(T provider) {
+		public void RemoveProvider(Type provider) {
 			lock(this) {
 				dictionary.Remove(provider);
 			}
@@ -50,8 +50,8 @@ namespace ScrewTurn.Wiki {
 			get {
 				lock(this) {
 					List<T> providers = new List<T>(dictionary.Count);
-					foreach(T key in dictionary.Keys) {
-						T provider = ProviderLoader.CreateInstance<T>(dictionary[key], key.GetType());
+					foreach(Type key in dictionary.Keys) {
+						T provider = ProviderLoader.CreateInstance<T>(dictionary[key], key);
 						ProviderLoader.Initialize<T>(provider);
 						providers.Add(provider);
 					}
@@ -65,7 +65,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="typeName">The Type Name.</param>
 		/// <returns>The assembly</returns>
-		public Assembly GetAssembly(T typeName) {
+		public Assembly GetAssembly(Type typeName) {
 			return dictionary[typeName];
 		}
 
@@ -76,9 +76,9 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Provider, or null if the Provider was not found.</returns>
 		public T GetProvider(string typeName) {
 			lock(this) {
-				foreach(var type in dictionary.Keys) {
-					if(type.GetType().FullName.Equals(typeName)) {
-						T provider = ProviderLoader.CreateInstance<T>(dictionary[type], type.GetType());
+				foreach(Type type in dictionary.Keys) {
+					if(type.FullName.Equals(typeName)) {
+						T provider = ProviderLoader.CreateInstance<T>(dictionary[type], type);
 						ProviderLoader.Initialize<T>(provider);
 						return provider;
 					}
