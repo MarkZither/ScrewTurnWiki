@@ -149,25 +149,18 @@ namespace ScrewTurn.Wiki {
 		public void Init(IHostV30 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
-			//string[] files;
+			
 			this.host = host;
 
-			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
-				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
-			}
 		}
 
 		/// <summary>
-		/// Extrats the defaults the theme zip.
+		/// Sets up the Storage Provider.
 		/// </summary>
-		/// <returns>The file contenent in the resources.</returns>
-		private byte[] DefaultThemeZip() {
-			string[] resourceList = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames();
-			Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceList[0]);
-			byte[] buffer = new byte[stream.Length];
-			stream.Read(buffer, 0, buffer.Length);
-
-			return buffer;
+		public void SetUp() {
+			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
+				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
+			}
 		}
 
 		/// <summary>

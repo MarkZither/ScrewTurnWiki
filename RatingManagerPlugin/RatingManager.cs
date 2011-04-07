@@ -351,21 +351,6 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 					}
 				}
 			}
-
-			IFilesStorageProviderV30 filesStorageProvider = GetDefaultFilesStorageProvider();
-
-			if(!DirectoryExists(filesStorageProvider, defaultDirectoryName)) {
-				filesStorageProvider.CreateDirectory("/", defaultDirectoryName.Trim('/'));
-			}
-			if(!FileExists(filesStorageProvider, defaultDirectoryName, cssFileName)) {
-				filesStorageProvider.StoreFile(defaultDirectoryName + cssFileName, Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.jquery.rating.css"), true);
-			}
-			if(!FileExists(filesStorageProvider, defaultDirectoryName, jsFileName)) {
-				filesStorageProvider.StoreFile(defaultDirectoryName + jsFileName, Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.jquery.rating.pack.js"), true);
-			}
-			if(!FileExists(filesStorageProvider, defaultDirectoryName, starImageFileName)) {
-				filesStorageProvider.StoreFile(defaultDirectoryName + starImageFileName, Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.star.gif"), true);
-			}
 		}
 
 
@@ -388,6 +373,27 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 				if(file == directory + fileName) return true;
 			}
 			return false;
+		}
+
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() {
+			IFilesStorageProviderV30 filesStorageProvider = GetDefaultFilesStorageProvider();
+
+			if(!DirectoryExists(filesStorageProvider, defaultDirectoryName)) {
+				filesStorageProvider.CreateDirectory("/", defaultDirectoryName.Trim('/'));
+			}
+			if(!FileExists(filesStorageProvider, defaultDirectoryName, cssFileName)) {
+				filesStorageProvider.StoreFile(defaultDirectoryName + cssFileName, Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.jquery.rating.css"), true);
+			}
+			if(!FileExists(filesStorageProvider, defaultDirectoryName, jsFileName)) {
+				filesStorageProvider.StoreFile(defaultDirectoryName + jsFileName, Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.jquery.rating.pack.js"), true);
+			}
+			if(!FileExists(filesStorageProvider, defaultDirectoryName, starImageFileName)) {
+				filesStorageProvider.StoreFile(defaultDirectoryName + starImageFileName, Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.star.gif"), true);
+			}
 		}
 
 		/// <summary>

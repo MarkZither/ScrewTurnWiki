@@ -40,22 +40,6 @@ namespace ScrewTurn.Wiki {
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
-
-			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
-				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
-			}
-
-			if(!File.Exists(GetFullPath(UsersFile))) {
-				File.Create(GetFullPath(UsersFile)).Close();
-			}
-			if(!File.Exists(GetFullPath(UsersDataFile))) {
-				File.Create(GetFullPath(UsersDataFile)).Close();
-			}
-			if(!File.Exists(GetFullPath(GroupsFile))) {
-				File.Create(GetFullPath(GroupsFile)).Close();
-			}
-
-			VerifyAndPerformUpgrade();
 		}
 
 		/// <summary>
@@ -136,6 +120,28 @@ namespace ScrewTurn.Wiki {
 					host.UpgradeSecurityFlagsToGroupsAcl(adminsGroup, usersGroup);
 				}
 			}
+		}
+
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() {
+			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
+				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
+			}
+
+			if(!File.Exists(GetFullPath(UsersFile))) {
+				File.Create(GetFullPath(UsersFile)).Close();
+			}
+			if(!File.Exists(GetFullPath(UsersDataFile))) {
+				File.Create(GetFullPath(UsersDataFile)).Close();
+			}
+			if(!File.Exists(GetFullPath(GroupsFile))) {
+				File.Create(GetFullPath(GroupsFile)).Close();
+			}
+
+			VerifyAndPerformUpgrade();
 		}
 
 		/// <summary>

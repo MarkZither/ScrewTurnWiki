@@ -35,6 +35,11 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			this.config = config != null ? config : "";
 		}
 
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() { }
+
 		// Replaces the first occurence of 'find' in 'input' with 'replace'
 		private static string ReplaceFirst(string input, string find, string replace) {
 			return input.Substring(0, input.IndexOf(find)) + replace + input.Substring(input.IndexOf(find) + find.Length);

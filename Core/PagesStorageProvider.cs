@@ -92,55 +92,6 @@ namespace ScrewTurn.Wiki {
 
 			this.host = host;
 
-			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
-				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
-			}
-
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), PagesDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), PagesDirectory));
-			}
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), MessagesDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), MessagesDirectory));
-			}
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), SnippetsDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), SnippetsDirectory));
-			}
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory));
-			}
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), DraftsDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), DraftsDirectory));
-			}
-
-			bool upgradeNeeded = false;
-
-			if(!File.Exists(GetFullPath(NamespacesFile))) {
-				File.Create(GetFullPath(NamespacesFile)).Close();
-			}
-
-			upgradeNeeded = VerifyIfPagesFileNeedsAnUpgrade();
-
-			if(!File.Exists(GetFullPath(PagesFile))) {
-				File.Create(GetFullPath(PagesFile)).Close();
-			}
-			else if(upgradeNeeded) {
-				VerifyAndPerformUpgradeForPages();
-			}
-
-			if(!File.Exists(GetFullPath(CategoriesFile))) {
-				File.Create(GetFullPath(CategoriesFile)).Close();
-			}
-			else if(upgradeNeeded) {
-				VerifyAndPerformUpgradeForCategories();
-			}
-
-			if(!File.Exists(GetFullPath(NavigationPathsFile))) {
-				File.Create(GetFullPath(NavigationPathsFile)).Close();
-			}
-			else if(upgradeNeeded) {
-				VerifyAndPerformUpgradeForNavigationPaths();
-			}
-
 			// Prepare search index
 			index = new StandardIndex();
 			index.SetBuildDocumentDelegate(BuildDocumentHandler);
@@ -152,7 +103,7 @@ namespace ScrewTurn.Wiki {
 
 			if(indexStorer.DataCorrupted) {
 				host.LogEntry("Search Engine Index is corrupted and needs to be rebuilt\r\n" +
-					indexStorer.ReasonForDataCorruption.ToString(),	LogEntryType.Warning, null, this);
+					indexStorer.ReasonForDataCorruption.ToString(), LogEntryType.Warning, null, this);
 			}
 		}
 
@@ -338,6 +289,60 @@ namespace ScrewTurn.Wiki {
 				File.Copy(GetFullPath(NavigationPathsFile), backupFile);
 
 				File.WriteAllLines(GetFullPath(NavigationPathsFile), lines);
+			}
+		}
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() {
+			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
+				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
+			}
+
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), PagesDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), PagesDirectory));
+			}
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), MessagesDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), MessagesDirectory));
+			}
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), SnippetsDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), SnippetsDirectory));
+			}
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory));
+			}
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), DraftsDirectory))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), DraftsDirectory));
+			}
+
+			bool upgradeNeeded = false;
+
+			if(!File.Exists(GetFullPath(NamespacesFile))) {
+				File.Create(GetFullPath(NamespacesFile)).Close();
+			}
+
+			upgradeNeeded = VerifyIfPagesFileNeedsAnUpgrade();
+
+			if(!File.Exists(GetFullPath(PagesFile))) {
+				File.Create(GetFullPath(PagesFile)).Close();
+			}
+			else if(upgradeNeeded) {
+				VerifyAndPerformUpgradeForPages();
+			}
+
+			if(!File.Exists(GetFullPath(CategoriesFile))) {
+				File.Create(GetFullPath(CategoriesFile)).Close();
+			}
+			else if(upgradeNeeded) {
+				VerifyAndPerformUpgradeForCategories();
+			}
+
+			if(!File.Exists(GetFullPath(NavigationPathsFile))) {
+				File.Create(GetFullPath(NavigationPathsFile)).Close();
+			}
+			else if(upgradeNeeded) {
+				VerifyAndPerformUpgradeForNavigationPaths();
 			}
 		}
 

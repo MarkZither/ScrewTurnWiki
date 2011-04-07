@@ -69,6 +69,7 @@ namespace ScrewTurn.Wiki {
 			// Load config
 			ISettingsStorageProviderV30 ssp = ProviderLoader.LoadSettingsStorageProvider(WebConfigurationManager.AppSettings["SettingsStorageProvider"]);
 			ssp.Init(Host.Instance, GetSettingsStorageProviderConfiguration());
+			ssp.SetUp();
 			Collectors.SettingsProvider = ssp;
 
 			Settings.CanOverridePublicDirectory = false;
@@ -121,65 +122,20 @@ namespace ScrewTurn.Wiki {
 			// Load built-in providers
 
 			// Files storage providers have to be loaded BEFORE users storage providers in order to properly set permissions
-			FilesStorageProvider f = new FilesStorageProvider();
-			if(!ProviderLoader.IsDisabled(typeof(FilesStorageProvider).FullName)) {
-				//f.Init(Host.Instance, "");
-				Collectors.FilesProviderCollector.AddProvider(typeof(FilesStorageProvider), Assembly.GetAssembly(typeof(FilesStorageProvider)));
-				//Log.LogEntry("Provider " + f.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
-			}
-			else {
-				Collectors.DisabledFilesProviderCollector.AddProvider(typeof(FilesStorageProvider), Assembly.GetAssembly(typeof(FilesStorageProvider)));
-				//Log.LogEntry("Provider " + f.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
-			}
+			ProviderLoader.SetUp<IFilesStorageProviderV30>(typeof(FilesStorageProvider), Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
 
-			ThemeStorageProvider t = new ThemeStorageProvider();
-			if(!ProviderLoader.IsDisabled(typeof(ThemeStorageProvider).FullName)) {
-				//t.Init(Host.Instance, "");
-				Collectors.ThemeProviderCollector.AddProvider(typeof(ThemeStorageProvider), Assembly.GetAssembly(typeof(ThemeStorageProvider)));
-				//Log.LogEntry("Provider " + t.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
-			}
-			else {
-				Collectors.DisabledThemeProviderCollector.AddProvider(typeof(ThemeStorageProvider), Assembly.GetAssembly(typeof(ThemeStorageProvider)));
-				//Log.LogEntry("Provider " + t.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
-			}
+			ProviderLoader.SetUp<IThemeStorageProviderV30>(typeof(ThemeStorageProvider), Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
 
-			UsersStorageProvider u = new UsersStorageProvider();
-			if(!ProviderLoader.IsDisabled(typeof(UsersStorageProvider).FullName)) {
-				//u.Init(Host.Instance, "");
-				Collectors.UsersProviderCollector.AddProvider(typeof(UsersStorageProvider), Assembly.GetAssembly(typeof(UsersStorageProvider)));
-				//Log.LogEntry("Provider " + u.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
-			}
-			else {
-				Collectors.DisabledUsersProviderCollector.AddProvider(typeof(UsersStorageProvider), Assembly.GetAssembly(typeof(UsersStorageProvider)));
-				//Log.LogEntry("Provider " + u.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
-			}
+			ProviderLoader.SetUp<IUsersStorageProviderV30>(typeof(UsersStorageProvider), Collectors.UsersProviderCollector, Collectors.DisabledUsersProviderCollector);
 
 			// Load Users (pages storage providers might need access to users/groups data for upgrading from 2.0 to 3.0)
 			ProviderLoader.FullLoad(true, false, false, false, false);
-			//Users.Instance = new Users();
+
 			bool groupsCreated = VerifyAndCreateDefaultGroups();
 
-			//PagesStorageProvider p = new PagesStorageProvider();
-			if(!ProviderLoader.IsDisabled(typeof(PagesStorageProvider).FullName)) {
-				//p.Init(Host.Instance, "");
-				Collectors.PagesProviderCollector.AddProvider(typeof(PagesStorageProvider), Assembly.GetAssembly(typeof(PagesStorageProvider)));
-				//Log.LogEntry("Provider " + p.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
-			}
-			else {
-				Collectors.DisabledPagesProviderCollector.AddProvider(typeof(PagesStorageProvider), Assembly.GetAssembly(typeof(PagesStorageProvider)));
-				//Log.LogEntry("Provider " + p.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
-			}
+			ProviderLoader.SetUp<IPagesStorageProviderV30>(typeof(PagesStorageProvider), Collectors.PagesProviderCollector, Collectors.DisabledPagesProviderCollector);
 
-			//CacheProvider c = new CacheProvider();
-			if(!ProviderLoader.IsDisabled(typeof(CacheProvider).FullName)) {
-				//c.Init(Host.Instance, "");
-				Collectors.CacheProviderCollector.AddProvider(typeof(CacheProvider), Assembly.GetAssembly(typeof(CacheProvider)));
-				//Log.LogEntry("Provider " + c.Information.Name + " loaded (Enabled)", EntryType.General, Log.SystemUsername);
-			}
-			else {
-				Collectors.DisabledCacheProviderCollector.AddProvider(typeof(CacheProvider), Assembly.GetAssembly(typeof(CacheProvider)));
-				//Log.LogEntry("Provider " + c.Information.Name + " loaded (Disabled)", EntryType.General, Log.SystemUsername);
-			}
+			ProviderLoader.SetUp<ICacheProviderV30>(typeof(CacheProvider), Collectors.CacheProviderCollector, Collectors.DisabledCacheProviderCollector);
 
 			// Load all other providers
 			ProviderLoader.FullLoad(false, true, true, true, true);

@@ -66,6 +66,12 @@ namespace ScrewTurn.Wiki {
 			_redirections = new Dictionary<string, string>(50);
 		}
 
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() { }
+
 		/// <summary>
 		/// Method invoked on shutdown.
 		/// </summary>

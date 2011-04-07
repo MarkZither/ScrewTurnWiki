@@ -52,7 +52,13 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 			_username = configEntries[1];
 			_password = configEntries[2];
+		}
 
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() {
 			var settings = new XsltSettings {
 				EnableScript = true,
 				EnableDocumentFunction = true

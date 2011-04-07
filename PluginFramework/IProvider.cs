@@ -21,6 +21,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		void Init(IHostV30 host, string config);
 
 		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		void SetUp();
+
+		/// <summary>
 		/// Method invoked on shutdown.
 		/// </summary>
 		/// <remarks>This method might not be invoked in some cases.</remarks>

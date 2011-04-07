@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki {
 		/// <typeparam name="T">The type of the provider.</typeparam>
 		/// <param name="provider">The provider.</param>
 		/// <exception cref="T:ProviderConstraintException">Thrown when a constraint is not fulfilled.</exception>
-		private static void VerifyConstraints<T>(Type provider) {
+		private static void VerifyConstraints<T>(T provider) {
 			if(typeof(T) == typeof(IUsersStorageProviderV30)) {
 				// If the provider allows to write user accounts data, then group membership must be writeable too
 
@@ -41,22 +41,37 @@ namespace ScrewTurn.Wiki {
 		}
 
 
-		private static void SetUp<T>(Type instance, ProviderCollector<T> collectorEnabled,
+		/// <summary>
+		/// Try to setup a provider.
+		/// </summary>
+		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
+		/// <param name="instance">The provider instance to setup.</param>
+		/// <param name="collectorEnabled">The collector for enabled providers.</param>
+		/// <param name="collectorDisabled">The collector for disabled providers.</param>
+		public static void SetUp<T>(Type instance, ProviderCollector<T> collectorEnabled,
 			ProviderCollector<T> collectorDisabled) where T : class, IProviderV30 {
 
-			if(collectorEnabled.GetProvider(instance.GetType().FullName) != null ||
-				collectorDisabled.GetProvider(instance.GetType().FullName) != null) {
+			if(collectorEnabled.GetProvider(instance.FullName) != null ||
+				collectorDisabled.GetProvider(instance.FullName) != null) {
 
 				Log.LogEntry("SetUp already colled on provider " + instance.FullName, EntryType.Warning, Log.SystemUsername);
 				return;
 			}
-			bool enabled = !IsDisabled(instance.GetType().FullName);
+			bool enabled = !IsDisabled(instance.FullName);
 
-			if(enabled) collectorEnabled.AddProvider(instance, Assembly.GetAssembly(instance));
-			else collectorDisabled.AddProvider(instance, Assembly.GetAssembly(instance));
+			if(enabled) {
+				T provider = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(instance), instance);
+				ProviderLoader.Initialize<T>(provider);
+				provider.SetUp();
+				collectorEnabled.AddProvider(instance, Assembly.GetAssembly(instance));
 
-			// Verify constraints
-			VerifyConstraints<T>(instance);
+				// Verify constraints
+				VerifyConstraints<T>(provider);
+			}
+			else {
+				collectorDisabled.AddProvider(instance, Assembly.GetAssembly(instance));
+			}
+
 		}
 
 		/// <summary>
@@ -64,10 +79,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
 		/// <param name="instance">The provider instance to initialize.</param>
-		///// <param name="collectorEnabled">The collector for enabled providers.</param>
-		///// <param name="collectorDisabled">The collector for disabled providers.</param>
 		public static void Initialize<T>(T instance) where T : class, IProviderV30 {
-
 			bool enabled = !IsDisabled(instance.GetType().FullName);
 			try {
 				if(enabled) {

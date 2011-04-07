@@ -68,6 +68,10 @@ namespace ScrewTurn.Wiki.Tests {
 			throw new NotImplementedException();
 		}
 
+		public void SetUp() {
+			throw new NotImplementedException();
+		}
+
 		public void Shutdown() {
 			throw new NotImplementedException();
 		}

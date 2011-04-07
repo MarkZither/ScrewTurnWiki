@@ -14,7 +14,8 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 	/// </summary>
 	public class Updater : IFormatterProviderV30 {
 
-		private static bool AlreadyRun = false;
+		private static IHostV30 _host;
+		private static string _config;
 
 		private static readonly ComponentInformation _info = new ComponentInformation("Updater Plugin", "Threeplicate Srl", "3.0.2.538", "http://www.screwturn.eu", null);
 
@@ -29,8 +30,20 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			if(AlreadyRun) return;
+			_host = host;
+			_config = config;
+		}
 
+		private void LoadProvider(string dll) {
+			Type loader = Type.GetType("ScrewTurn.Wiki.ProviderLoader, ScrewTurn.Wiki.Core");
+			var method = loader.GetMethod("LoadFromAuto");
+			method.Invoke(null, new[] { dll });
+		}
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() {
 			// 1. Delete PluginPack.dll
 			// 2. Download all other DLLs
 
@@ -56,7 +69,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 			try {
 				foreach(string dll in dllNames) {
-					host.LogEntry("Downloading " + dll, LogEntryType.General, null, this);
+					_host.LogEntry("Downloading " + dll, LogEntryType.General, null, this);
 
 					HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(root + dll);
 					req.AllowAutoRedirect = true;
@@ -75,26 +88,19 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 				}
 
 				foreach(string dll in dllNames) {
-					host.GetSettingsStorageProvider().StorePluginAssembly(dll, assemblies[dll]);
+					_host.GetSettingsStorageProvider().StorePluginAssembly(dll, assemblies[dll]);
 				}
 
 				foreach(string dll in dllNames) {
 					LoadProvider(dll);
 				}
 
-				host.GetSettingsStorageProvider().DeletePluginAssembly("PluginPack.dll");
+				_host.GetSettingsStorageProvider().DeletePluginAssembly("PluginPack.dll");
 
-				AlreadyRun = true;
 			}
 			catch(Exception ex) {
-				host.LogEntry("Error occurred during automatic DLL updating with Updater Plugin\n" + ex.ToString(), LogEntryType.Error, null, this);
+				_host.LogEntry("Error occurred during automatic DLL updating with Updater Plugin\n" + ex.ToString(), LogEntryType.Error, null, this);
 			}
-		}
-
-		private void LoadProvider(string dll) {
-			Type loader = Type.GetType("ScrewTurn.Wiki.ProviderLoader, ScrewTurn.Wiki.Core");
-			var method = loader.GetMethod("LoadFromAuto");
-			method.Invoke(null, new[] { dll });
 		}
 
 		/// <summary>

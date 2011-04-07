@@ -93,7 +93,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ValidateConnectionString(config);
 
 			connString = config;
+		}
 
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() {
 			CreateOrUpdateDatabaseIfNecessary();
 		}
 

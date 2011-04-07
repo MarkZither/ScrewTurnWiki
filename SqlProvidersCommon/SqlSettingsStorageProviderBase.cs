@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			aclManager = new SqlAclManager(StoreEntry, DeleteEntries, RenameAclResource, RetrieveAllAclEntries, RetrieveAclEntriesForResource, RetrieveAclEntriesForSubject);
 		}
-
+		
 		/// <summary>
 		/// Gets the default users storage provider, when no value is stored in the database.
 		/// </summary>

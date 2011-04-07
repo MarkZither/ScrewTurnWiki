@@ -290,6 +290,11 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		}
 
 		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() { }
+
+		/// <summary>
 		/// Method invoked on shutdown.
 		/// </summary>
 		/// <remarks>This method might not be invoked in some cases.</remarks>

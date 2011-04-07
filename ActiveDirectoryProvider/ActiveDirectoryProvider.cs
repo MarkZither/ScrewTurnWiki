@@ -715,6 +715,10 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 			InitConfig(config);
 		}
 
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		public void SetUp() { }
 
 		/// <summary>
 		/// Returns the storage provider.

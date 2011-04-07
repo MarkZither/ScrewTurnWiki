@@ -372,13 +372,11 @@ second line";
 			get { return false; }
 		}
 
-		public void Init(IHostV30 host, string config) {
-			
-		}
+		public void Init(IHostV30 host, string config) { }
 
-		public void Shutdown() {
-			
-		}
+		public void SetUp() { }
+
+		public void Shutdown() { }
 
 		public ComponentInformation Information {
 			get {
@@ -486,13 +484,11 @@ second line";
 			throw new NotImplementedException();
 		}
 
-		public void Init(IHostV30 host, string config) {
-			
-		}
+		public void Init(IHostV30 host, string config) { }
 
-		public void Shutdown() {
-			
-		}
+		public void SetUp() { }
+
+		public void Shutdown() { }
 
 		public ComponentInformation Information {
 			get { return new ComponentInformation("dummyCache", "", "", "", ""); }
