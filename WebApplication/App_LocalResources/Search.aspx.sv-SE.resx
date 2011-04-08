@@ -184,12 +184,12 @@
     <value />
   </data>
   <data name="lblSelectAllResource1.Text" xml:space="preserve">
-    <value>Select all</value>
+    <value>Markera alla</value>
   </data>
   <data name="lblSelectInverseResource1.Text" xml:space="preserve">
-    <value>Invert</value>
+    <value>Invertera</value>
   </data>
   <data name="lblSelectNoneResource1.Text" xml:space="preserve">
-    <value>None</value>
+    <value>Ingen</value>
   </data>
 </root>
