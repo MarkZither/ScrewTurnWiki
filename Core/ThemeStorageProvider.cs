@@ -161,6 +161,11 @@ namespace ScrewTurn.Wiki {
 			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
 			}
+
+			string pathFolders = GetPath(GetDataDirectory(host), ThemeDirectory);
+			if(!Directory.Exists(pathFolders)) {
+				Directory.CreateDirectory(pathFolders);
+			}
 		}
 
 		void IDisposable.Dispose() { }
