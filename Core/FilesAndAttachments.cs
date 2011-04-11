@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki {
 
 			fullName = NormalizeFullName(fullName);
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				FileDetails details = provider.GetFileDetails(fullName);
 				if(details != null) return provider;
 			}
@@ -45,7 +45,7 @@ namespace ScrewTurn.Wiki {
 
 			fullName = NormalizeFullName(fullName);
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				FileDetails details = provider.GetFileDetails(fullName);
 				if(details != null) return details;
 			}
@@ -113,7 +113,7 @@ namespace ScrewTurn.Wiki {
 				allLevels.Add(oneLevelUp.ToLowerInvariant());
 			}
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				bool allLevelsFound = true;
 
 				for(int i = allLevels.Count - 1; i >= 1; i--) {
@@ -148,7 +148,7 @@ namespace ScrewTurn.Wiki {
 			if(fullPath == "/") {
 				List<string> directories = new List<string>(50);
 
-				foreach(IFilesStorageProviderV30 provider in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					directories.AddRange(provider.ListDirectories(fullPath));
 				}
 
@@ -174,7 +174,7 @@ namespace ScrewTurn.Wiki {
 			if(fullPath == "/") {
 				List<string> files = new List<string>(50);
 				
-				foreach(IFilesStorageProviderV30 provider in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					files.AddRange(provider.ListFiles(fullPath));
 				}
 
@@ -203,7 +203,7 @@ namespace ScrewTurn.Wiki {
 			if(attachmentName == null) throw new ArgumentNullException("attachmentName");
 			if(attachmentName.Length == 0) throw new ArgumentException("Attachment Name cannot be empty", "attachmentName");
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				FileDetails details = provider.GetPageAttachmentDetails(page, attachmentName);
 				if(details != null) return provider;
 			}
@@ -222,7 +222,7 @@ namespace ScrewTurn.Wiki {
 			if(attachmentName == null) throw new ArgumentNullException("attachmentName");
 			if(attachmentName.Length == 0) throw new ArgumentException("Attachment Name cannot be empty", "attachmentName");
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				FileDetails details = provider.GetPageAttachmentDetails(page, attachmentName);
 				if(details != null) return details;
 			}

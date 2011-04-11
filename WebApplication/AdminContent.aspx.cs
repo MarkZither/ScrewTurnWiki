@@ -105,7 +105,6 @@ namespace ScrewTurn.Wiki {
 				(tag != null ? ", ns: " + tag : "") + lstNamespace.SelectedValue, EntryType.General, SessionFacade.CurrentUsername);
 
 			Settings.Provider.SetMetaDataItem(item, tag, editor.GetContent());
-			Content.ClearPseudoCache();
 
 			pnlEditor.Visible = false;
 			pnlList.Visible = true;

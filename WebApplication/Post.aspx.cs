@@ -30,7 +30,7 @@ namespace ScrewTurn.Wiki {
 
 			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension));
 
-			content = Content.GetPageContent(page, true);
+			content = Content.GetPageContent(page);
 			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.MessageBody, page);
 
 			// Verify permissions and setup captcha

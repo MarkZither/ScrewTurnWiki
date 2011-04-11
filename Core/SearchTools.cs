@@ -65,7 +65,7 @@ namespace ScrewTurn.Wiki {
 			// First, search regular page content...
 			List<SearchResultCollection> allCollections = new List<SearchResultCollection>(3);
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				SearchResultCollection currentResults = prov.PerformSearch(new SearchParameters(query, options));
 
 				if(!fullText) {
@@ -87,7 +87,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// ... normalize relevance based on the number of providers
-			float providerNormalizationFactor = 1F / (float)Collectors.PagesProviderCollector.AllProviders.Length;
+			float providerNormalizationFactor = 1F / (float)Collectors.CollectorsBox.PagesProviderCollector.AllProviders.Length;
 			foreach(SearchResultCollection coll in allCollections) {
 				foreach(SearchResult result in coll) {
 					result.Relevance.NormalizeAfterFinalization(providerNormalizationFactor);
@@ -115,7 +115,7 @@ namespace ScrewTurn.Wiki {
 				};
 				temporaryIndex.SetBuildDocumentDelegate(DetectFileOrAttachment);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					TraverseDirectories(temporaryIndex, prov, null);
 
 					string[] pagesWithAttachments = prov.GetPagesWithAttachments();
@@ -137,7 +137,7 @@ namespace ScrewTurn.Wiki {
 
 				// ... then search in the temporary index and normalize relevance
 				SearchResultCollection filesAndAttachments = temporaryIndex.Search(new SearchParameters(query, options));
-				providerNormalizationFactor = 1F / (float)Collectors.FilesProviderCollector.AllProviders.Length;
+				providerNormalizationFactor = 1F / (float)Collectors.CollectorsBox.FilesProviderCollector.AllProviders.Length;
 				foreach(SearchResult result in filesAndAttachments) {
 					result.Relevance.NormalizeAfterFinalization(providerNormalizationFactor);
 				}

@@ -665,46 +665,17 @@
 				Text="Enable automatic update checks (system and providers)" 
 				meta:resourcekey="chkEnableAutomaticUpdateChecksResource1" />
 		</div>
-		
+				
 		<div class="featurecontainer">
-			<asp:CheckBox ID="chkDisableCache" runat="server" 
-				Text="Completely disable cache" meta:resourcekey="chkDisableCacheResource1" />
-		</div>
-		
-		<div class="featurecontainer">
-			<asp:Literal ID="lblCacheSize" runat="server" Text="Cache Size" 
-				EnableViewState="False" meta:resourcekey="lblCacheSizeResource1" /><br />
-			<asp:TextBox ID="txtCacheSize" runat="server" CssClass="configsmallest" 
-				meta:resourcekey="txtCacheSizeResource1" />
 			<asp:Literal ID="lblPages1" runat="server" Text="pages" EnableViewState="False" 
 				meta:resourcekey="lblPages1Resource1" />
 			
-			<asp:RequiredFieldValidator ID="rfvCacheSize" runat="server" 
-				Display="Dynamic" CssClass="resulterror"
-				ControlToValidate="txtCacheSize" ErrorMessage="Cache Size is required" 
-				meta:resourcekey="rfvCacheSizeResource1" />
-			<asp:RangeValidator ID="rvCacheSize" runat="server" Display="Dynamic" CssClass="resulterror"
-				ControlToValidate="txtCacheSize" ErrorMessage="Invalid Size (min. 10, max. 100000)"
-				Type="Integer" MinimumValue="10" MaximumValue="100000" 
-				meta:resourcekey="rvCacheSizeResource1" />
 		</div>
 		
 		<div class="featurecontainer">
-			<asp:Literal ID="lblCacheCutSize" runat="server" Text="Cache cut size" 
-				EnableViewState="False" meta:resourcekey="lblCacheCutSizeResource1" /><br />
-			<asp:TextBox ID="txtCacheCutSize" runat="server" CssClass="configsmallest" 
-				meta:resourcekey="txtCacheCutSizeResource1" />
 			<asp:Literal ID="lblPages2" runat="server" Text="pages" EnableViewState="False" 
 				meta:resourcekey="lblPages2Resource1" />
 			
-			<asp:RequiredFieldValidator ID="rfvCacheCutSize" runat="server" 
-				Display="Dynamic" CssClass="resulterror"
-				ControlToValidate="txtCacheCutSize" ErrorMessage="Cache Cut Size is required" 
-				meta:resourcekey="rfvCacheCutSizeResource1" />
-			<asp:RangeValidator ID="rvCacheCutSize" runat="server" Display="Dynamic" CssClass="resulterror"
-				ControlToValidate="txtCacheCutSize" ErrorMessage="Invalid Cache Cut Size (min. 5, max. 50000)"
-				Type="Integer" MinimumValue="5" MaximumValue="50000" 
-				meta:resourcekey="rvCacheCutSizeResource1" />
 		</div>
 		
 		<div class="featurecontainer">

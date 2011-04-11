@@ -103,11 +103,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		}
 
 		/// <summary>
-		/// Method invoked on shutdown.
+		/// Releases resources
 		/// </summary>
-		/// <remarks>This method might not be invoked in some cases.</remarks>
-		public void Shutdown() {
-		}
+		public void Dispose() { }
 
 		/// <summary>
 		/// Gets the Information about the Provider.

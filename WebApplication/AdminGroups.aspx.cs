@@ -132,7 +132,7 @@ namespace ScrewTurn.Wiki {
 
 			// Add the new group then set its global permissions
 			bool done = Users.AddUserGroup(txtName.Text, txtDescription.Text,
-				Collectors.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider));
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider));
 
 			UserGroup currentGroup = null;
 			if(done) {

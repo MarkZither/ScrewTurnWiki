@@ -355,7 +355,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets or sets a value specifying whether the access to the Wiki is public or not (in this case users won't need to login in order to edit pagesCache).
+		/// Gets or sets a value specifying whether the access to the Wiki is public or not.
 		/// </summary>
 		/// <remarks>Deprecated in version 3.0.</remarks>
 		public static bool PublicAccess {
@@ -368,7 +368,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets or sets a value specifying whether the access to the Wiki is private or not (in this case users won't be able to view pagesCache unless they are logged in).
+		/// Gets or sets a value specifying whether the access to the Wiki is private or not.
 		/// </summary>
 		/// <remarks>Deprecated in version 3.0.</remarks>
 		public static bool PrivateAccess {
@@ -1000,18 +1000,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets or sets the Default Cache Provider.
-		/// </summary>
-		public static string DefaultCacheProvider {
-			get {
-				return GetString(Provider.GetSetting("DefaultCacheProvider"), typeof(CacheProvider).ToString());
-			}
-			set {
-				Provider.SetSetting("DefaultCacheProvider", value);
-			}
-		}
-
-		/// <summary>
 		/// Gets or sets the Discussion Permissions.
 		/// </summary>
 		public static string DiscussionPermissions {
@@ -1135,43 +1123,7 @@ namespace ScrewTurn.Wiki {
 				Provider.SetSetting("MaxFileSize", value.ToString());
 			}
 		}
-
-		/// <summary>
-		/// Gets or sets a value specifying whether to disable the cache.
-		/// </summary>
-		public static bool DisableCache {
-			get {
-				return GetBool(Provider.GetSetting("DisableCache"), false);
-			}
-			set {
-				Provider.SetSetting("DisableCache", PrintBool(value));
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Cache Size.
-		/// </summary>
-		public static int CacheSize {
-			get {
-				return GetInt(Provider.GetSetting("CacheSize"), 100);
-			}
-			set {
-				Provider.SetSetting("CacheSize", value.ToString());
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the Cache Cut Size.
-		/// </summary>
-		public static int CacheCutSize {
-			get {
-				return GetInt(Provider.GetSetting("CacheCutSize"), 20);
-			}
-			set {
-				Provider.SetSetting("CacheCutSize", value.ToString());
-			}
-		}
-
+		
 		/// <summary>
 		/// Gets or sets a value specifying whether ViewState compression is enabled or not.
 		/// </summary>

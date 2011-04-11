@@ -37,7 +37,7 @@ namespace ScrewTurn.Wiki {
 			}
 			if(!canView) UrlTools.Redirect("AccessDenied.aspx");
 
-			content = Content.GetPageContent(page, true);
+			content = Content.GetPageContent(page);
 
 			Page.Title = FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page) + " - " + Settings.WikiTitle;
 
@@ -68,7 +68,7 @@ namespace ScrewTurn.Wiki {
 					user != null ? Users.GetDisplayName(user) : content.User,
 					Properties.Messages.CategorizedAs,
 					categories.Length == 0 ? Properties.Messages.Uncategorized : string.Join(", ", categories));
-				sb.Append(Content.GetFormattedPageContent(page, true));
+				sb.Append(Content.GetFormattedPageContent(page));
 			}
 			else {
 				sb.Append(@"<h1 class=""pagetitle"">");

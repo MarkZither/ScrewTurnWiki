@@ -748,13 +748,8 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		}
 
 
-		/// <summary>
-		/// Method invoked on shutdown.
-		/// Ignored
-		/// </summary>
-		/// <remarks>This method might not be invoked in some cases.</remarks>
-		public void Shutdown() {
-			StorageProvider.Shutdown();
+		void IDisposable.Dispose() {
+			StorageProvider.Dispose();
 		}
 
 

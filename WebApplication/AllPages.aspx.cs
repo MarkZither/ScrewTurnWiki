@@ -83,7 +83,7 @@ namespace ScrewTurn.Wiki {
 				content = Pages.GetBackupContent(page, baks[0]);
 			}
 			else {
-				content = Content.GetPageContent(page, false);
+				content = Content.GetPageContent(page);
 			}
 
 			return content.User;
@@ -131,7 +131,7 @@ namespace ScrewTurn.Wiki {
 			ExtendedPageInfo[] tempPageList = new ExtendedPageInfo[rangeEnd - rangeBegin + 1];
 			PageContent cnt;
 			for(int i = 0; i < tempPageList.Length; i++) {
-				cnt = Content.GetPageContent(currentPages[rangeBegin + i], true);
+				cnt = Content.GetPageContent(currentPages[rangeBegin + i]);
 				tempPageList[i] = new ExtendedPageInfo(currentPages[rangeBegin + i], cnt.Title, cnt.LastModified, GetCreator(currentPages[rangeBegin + i]), cnt.User);
 			}
 

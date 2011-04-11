@@ -206,7 +206,7 @@ namespace ScrewTurn.Wiki {
 				}
 				else if(res.Document.TypeTag == FileDocument.StandardTypeTag) {
 					string[] fields = ((FileDocument)res.Document).Name.Split('|');
-					IFilesStorageProviderV30 provider = Collectors.FilesProviderCollector.GetProvider(fields[0]);
+					IFilesStorageProviderV30 provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(fields[0]);
 					string directory = Tools.GetDirectoryName(fields[1]);
 
 					// Verify permissions
@@ -261,7 +261,7 @@ namespace ScrewTurn.Wiki {
 			int totalWords = 0;
 			long totalSize = 0;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				int dc, wc, oc;
 				long s;
 				prov.GetIndexStats(out dc, out wc, out oc, out s);
@@ -388,7 +388,7 @@ namespace ScrewTurn.Wiki {
 			else if(result.Document.TypeTag == MessageDocument.StandardTypeTag) {
 				MessageDocument msgDoc = result.Document as MessageDocument;
 
-				PageContent content = Content.GetPageContent(msgDoc.PageInfo, true);
+				PageContent content = Content.GetPageContent(msgDoc.PageInfo);
 
 				return new SearchResultRow(msgDoc.PageInfo.FullName + Settings.PageExtension + "?" + queryStringKeywords +"&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(msgDoc.DateTime), Message,
 					FormattingPipeline.PrepareTitle(msgDoc.Title, false, FormattingContext.MessageBody, content.PageInfo) + " (" +
@@ -404,7 +404,7 @@ namespace ScrewTurn.Wiki {
 			}
 			else if(result.Document.TypeTag == PageAttachmentDocument.StandardTypeTag) {
 				PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
-				PageContent content = Content.GetPageContent(attnDoc.Page, false);
+				PageContent content = Content.GetPageContent(attnDoc.Page);
 
 				return new SearchResultRow(attnDoc.Page.FullName + Settings.PageExtension, Attachment,
 					attnDoc.Title + " (" +
@@ -421,7 +421,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="matches">The matches to highlight.</param>
 		/// <returns>The excerpt.</returns>
 		private static string GetExcerpt(PageInfo page, WordInfoCollection matches) {
-			PageContent pageContent = Content.GetPageContent(page, true);
+			PageContent pageContent = Content.GetPageContent(page);
 			string content = pageContent.Content;
 
 			List<WordInfo> sortedMatches = new List<WordInfo>(matches);

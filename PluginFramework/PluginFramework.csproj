@@ -81,7 +81,6 @@
     <Compile Include="Exchanger.cs" />
     <Compile Include="FileActivityEventArgs.cs" />
     <Compile Include="FileDetails.cs" />
-    <Compile Include="ICacheProvider.cs" />
     <Compile Include="IFilesStorageProvider.cs" />
     <Compile Include="IFormatterProvider.cs" />
     <Compile Include="IHost.cs">

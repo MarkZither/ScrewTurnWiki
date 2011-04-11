@@ -43,7 +43,7 @@ namespace ScrewTurn.Wiki {
 			table.Columns.Add("Size");
 			table.Columns.Add("Link");
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				string[] attachments = provider.ListPageAttachments(pageInfo);
 				foreach(string s in attachments) {
 					DataRow row = table.NewRow();

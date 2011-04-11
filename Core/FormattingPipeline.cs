@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The list.</returns>
 		private static IList<IFormatterProviderV30> GetSortedFormatters() {
-			List<IFormatterProviderV30> providers = new List<IFormatterProviderV30>(Collectors.FormatterProviderCollector.AllProviders);
+			List<IFormatterProviderV30> providers = new List<IFormatterProviderV30>(Collectors.CollectorsBox.FormatterProviderCollector.AllProviders);
 
 			// Sort by priority, then by name
 			providers.Sort((x, y) => {

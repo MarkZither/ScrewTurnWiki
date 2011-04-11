@@ -47,27 +47,14 @@ namespace ScrewTurn.Wiki {
 			c.Text = Tools.GetIncludes(Tools.DetectCurrentNamespace());
 			Page.Header.Controls.Add(c);
 		}
-
-		/// <summary>
-		/// Gets the pseudo-cache item name based on the current namespace.
-		/// </summary>
-		/// <param name="name">The item name.</param>
-		/// <returns>The namespace-qualified item name.</returns>
-		private string GetPseudoCacheItemName(string name) {
-			if(string.IsNullOrEmpty(currentNamespace)) return name;
-			else return currentNamespace + "." + name;
-		}
-
+		
 		/// <summary>
 		/// Prints the header.
 		/// </summary>
 		public void PrintHeader() {
-			string h = Content.GetPseudoCacheValue(GetPseudoCacheItemName("Header"));
-			if(h == null) {
-				h = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Header, currentNamespace),
+			string h = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Header, currentNamespace),
 					false, FormattingContext.Header, null);
-				Content.SetPseudoCacheValue(GetPseudoCacheItemName("Header"), h);
-			}
+
 			lblHeaderDiv.Text = FormattingPipeline.FormatWithPhase3(h, FormattingContext.Header, null);
 		}
 
@@ -75,12 +62,9 @@ namespace ScrewTurn.Wiki {
 		/// Prints the footer.
 		/// </summary>
 		public void PrintFooter() {
-			string f = Content.GetPseudoCacheValue(GetPseudoCacheItemName("Footer"));
-			if(f == null) {
-				f = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Footer, currentNamespace),
+			string f = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Footer, currentNamespace),
 					false, FormattingContext.Footer, null);
-				Content.SetPseudoCacheValue(GetPseudoCacheItemName("Footer"), f);
-			}
+
 			lblFooterDiv.Text = FormattingPipeline.FormatWithPhase3(f, FormattingContext.Footer, null);
 		}
 

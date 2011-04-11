@@ -9,7 +9,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// The base interface that all the Providers must implement. All the Provider Type-specific interfaces inherit from this one or from a one, either directly or from a derived interface.
 	/// </summary>
 	/// <remarks>This interface should not be implemented directly by a class.</remarks>
-	public interface IProviderV30 {
+	public interface IProviderV30 : IDisposable {
 
 		/// <summary>
 		/// Initializes the Storage Provider.
@@ -24,12 +24,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Sets up the Storage Provider.
 		/// </summary>
 		void SetUp();
-
-		/// <summary>
-		/// Method invoked on shutdown.
-		/// </summary>
-		/// <remarks>This method might not be invoked in some cases.</remarks>
-		void Shutdown();
 
 		/// <summary>
 		/// Gets the Information about the Provider.

@@ -22,7 +22,6 @@ namespace ScrewTurn.Wiki {
 			if(source == null) throw new ArgumentNullException("source");
 			if(destination == null) throw new ArgumentNullException("destination");
 
-			Cache.Provider.AddRedirection(source.FullName, destination.FullName);
 		}
 
 		/// <summary>
@@ -33,9 +32,7 @@ namespace ScrewTurn.Wiki {
 		public static PageInfo GetDestination(PageInfo page) {
 			if(page == null) throw new ArgumentNullException("page");
 
-			string destination = Cache.Provider.GetRedirectionDestination(page.FullName);
-			if(string.IsNullOrEmpty(destination)) return null;
-			else return Pages.FindPage(destination);
+			return null;
 		}
 
 		/// <summary>
@@ -45,16 +42,12 @@ namespace ScrewTurn.Wiki {
 		/// <remarks>This method is useful when removing a Page.</remarks>
 		public static void WipePageOut(PageInfo page) {
 			if(page == null) throw new ArgumentNullException("page");
-
-			Cache.Provider.RemovePageFromRedirections(page.FullName);
 		}
 
 		/// <summary>
 		/// Clears the Redirection table.
 		/// </summary>
-		public static void Clear() {
-			Cache.Provider.ClearRedirections();
-		}
+		public static void Clear() { }
 
 	}
 

@@ -13,13 +13,15 @@ namespace ScrewTurn.Wiki {
 	/// <typeparam name="T">The type of the Collector.</typeparam>
 	public class ProviderCollector<T> where T : class, IProviderV30 {
 
-		private Dictionary<Type, Assembly> dictionary;
+		private Dictionary<Type, Assembly> assembliesDictionary;
+		private Dictionary<Type, T> instancesDictionary;
 
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
 		public ProviderCollector() {
-			dictionary = new Dictionary<Type, Assembly>(3);
+			assembliesDictionary = new Dictionary<Type, Assembly>(3);
+			instancesDictionary = new Dictionary<Type, T>(3);
 		}
 
 		/// <summary>
@@ -29,7 +31,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="assembly">The assembly.</param>
 		public void AddProvider(Type provider, Assembly assembly) {
 			lock(this) {
-				dictionary[provider] = assembly;
+				assembliesDictionary[provider] = assembly;
 			}
 		}
 
@@ -39,7 +41,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The Provider to remove.</param>
 		public void RemoveProvider(Type provider) {
 			lock(this) {
-				dictionary.Remove(provider);
+				if(instancesDictionary.ContainsKey(provider)) {
+					instancesDictionary[provider].Dispose();
+					instancesDictionary.Remove(provider);
+				}
+				assembliesDictionary.Remove(provider);
 			}
 		}
 
@@ -49,10 +55,17 @@ namespace ScrewTurn.Wiki {
 		public T[] AllProviders {
 			get {
 				lock(this) {
-					List<T> providers = new List<T>(dictionary.Count);
-					foreach(Type key in dictionary.Keys) {
-						T provider = ProviderLoader.CreateInstance<T>(dictionary[key], key);
-						ProviderLoader.Initialize<T>(provider);
+					List<T> providers = new List<T>(assembliesDictionary.Count);
+					foreach(Type key in assembliesDictionary.Keys) {
+						T provider = null;
+						if(instancesDictionary.ContainsKey(key)) {
+							provider = instancesDictionary[key];
+						}
+						else {
+							provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[key], key);
+							ProviderLoader.Initialize<T>(provider);
+							instancesDictionary[key] = provider;
+						}
 						providers.Add(provider);
 					}
 					return providers.ToArray();
@@ -66,7 +79,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="typeName">The Type Name.</param>
 		/// <returns>The assembly</returns>
 		public Assembly GetAssembly(Type typeName) {
-			return dictionary[typeName];
+			return assembliesDictionary[typeName];
 		}
 
 		/// <summary>
@@ -76,15 +89,44 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Provider, or null if the Provider was not found.</returns>
 		public T GetProvider(string typeName) {
 			lock(this) {
-				foreach(Type type in dictionary.Keys) {
+				foreach(Type type in assembliesDictionary.Keys) {
 					if(type.FullName.Equals(typeName)) {
-						T provider = ProviderLoader.CreateInstance<T>(dictionary[type], type);
-						ProviderLoader.Initialize<T>(provider);
+						T provider = null;
+						if(instancesDictionary.ContainsKey(type)) {
+							provider = instancesDictionary[type];
+						}
+						else {
+							provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[type], type);
+							ProviderLoader.Initialize<T>(provider);
+							instancesDictionary[type] = provider;
+						}
 						return provider;
 					}
 				}
 				return default(T);
 			}
+		}
+
+		/// <summary>
+		/// Clones this instance.
+		/// </summary>
+		/// <returns>A clone of this instance.</returns>
+		public ProviderCollector<T> Clone() {
+			ProviderCollector<T> ret = new ProviderCollector<T>();
+			foreach(var provider in assembliesDictionary) {
+				ret.AddProvider(provider.Key, provider.Value);
+			}
+			return ret;
+		}
+
+		/// <summary>
+		/// Releases resources
+		/// </summary>
+		public void Dispose() {
+			foreach(Type key in instancesDictionary.Keys) {
+				instancesDictionary[key].Dispose();
+			}
+			instancesDictionary.Clear();
 		}
 	}
 

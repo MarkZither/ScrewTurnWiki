@@ -193,11 +193,7 @@ namespace ScrewTurn.Wiki {
 			aclStorer.LoadData();
 		}
 
-		/// <summary>
-		/// Method invoked on shutdown.
-		/// </summary>
-		/// <remarks>This method might not be invoked in some cases.</remarks>
-		public void Shutdown() {
+		void IDisposable.Dispose() {
 			lock(this) {
 				aclStorer.Dispose();
 			}

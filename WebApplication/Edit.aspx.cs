@@ -105,8 +105,7 @@ namespace ScrewTurn.Wiki {
 					currentContent = Pages.GetDraft(currentPage);
 
 					if(currentContent == null) {
-						// No cache because the page will be probably modified in a few minutes
-						currentContent = Content.GetPageContent(currentPage, false);
+						currentContent = Content.GetPageContent(currentPage);
 					}
 					else isDraft = true;
 
@@ -442,7 +441,7 @@ namespace ScrewTurn.Wiki {
 				string anchor = null;
 				if(currentSection != -1) {
 					int start, len;
-					ExtractSection(Content.GetPageContent(currentPage, true).Content, currentSection, out start, out len, out anchor);
+					ExtractSection(Content.GetPageContent(currentPage).Content, currentSection, out start, out len, out anchor);
 				}
 
 				UrlTools.Redirect(Tools.UrlEncode(currentPage.FullName) + Settings.PageExtension + (anchor != null ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
@@ -492,7 +491,7 @@ namespace ScrewTurn.Wiki {
 				NamespaceInfo currentNamespace = DetectNamespaceInfo();
 				provider =
 					currentNamespace == null ?
-					Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider) :
+					Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider) :
 					currentNamespace.Provider;
 			}
 
@@ -630,7 +629,7 @@ namespace ScrewTurn.Wiki {
 				// Save data
 				Log.LogEntry("Page update requested for " + currentPage.FullName, EntryType.General, username);
 				if(!isDraft && currentSection != -1) {
-					PageContent cont = Content.GetPageContent(currentPage, false);
+					PageContent cont = Content.GetPageContent(currentPage);
 					StringBuilder sb = new StringBuilder(cont.Content.Length);
 					int start, len;
 					ExtractSection(cont.Content, currentSection, out start, out len, out anchor);

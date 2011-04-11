@@ -105,40 +105,30 @@ namespace ScrewTurn.Wiki {
 
 			// Load Providers
 			Collectors.FileNames = new System.Collections.Generic.Dictionary<string, string>(10);
-			Collectors.UsersProviderCollector = new ProviderCollector<IUsersStorageProviderV30>();
-			Collectors.PagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
-			Collectors.FilesProviderCollector = new ProviderCollector<IFilesStorageProviderV30>();
-			Collectors.ThemeProviderCollector = new ProviderCollector<IThemeStorageProviderV30>();
-			Collectors.FormatterProviderCollector = new ProviderCollector<IFormatterProviderV30>();
-			Collectors.CacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
-			Collectors.DisabledUsersProviderCollector = new ProviderCollector<IUsersStorageProviderV30>();
-			Collectors.DisabledPagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
-			Collectors.DisabledFilesProviderCollector = new ProviderCollector<IFilesStorageProviderV30>();
-			Collectors.DisabledThemeProviderCollector = new ProviderCollector<IThemeStorageProviderV30>();
-			Collectors.DisabledFormatterProviderCollector = new ProviderCollector<IFormatterProviderV30>();
-			Collectors.DisabledCacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
-
+			Collectors.InitCollectors();
 
 			// Load built-in providers
 
 			// Files storage providers have to be loaded BEFORE users storage providers in order to properly set permissions
-			ProviderLoader.SetUp<IFilesStorageProviderV30>(typeof(FilesStorageProvider), Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
-
-			ProviderLoader.SetUp<IThemeStorageProviderV30>(typeof(ThemeStorageProvider), Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
-
-			ProviderLoader.SetUp<IUsersStorageProviderV30>(typeof(UsersStorageProvider), Collectors.UsersProviderCollector, Collectors.DisabledUsersProviderCollector);
-
+				ProviderLoader.SetUp<IFilesStorageProviderV30>(typeof(FilesStorageProvider));
+				Collectors.AddProvider(typeof(FilesStorageProvider), Assembly.GetAssembly(typeof(FilesStorageProvider)), typeof(IFilesStorageProviderV30), !ProviderLoader.IsDisabled(typeof(IFilesStorageProviderV30).FullName));
+			
+			ProviderLoader.SetUp<IThemeStorageProviderV30>(typeof(ThemeStorageProvider));
+			Collectors.AddProvider(typeof(ThemeStorageProvider), Assembly.GetAssembly(typeof(ThemeStorageProvider)), typeof(IThemeStorageProviderV30), !ProviderLoader.IsDisabled(typeof(ThemeStorageProvider).FullName));
+			
+			ProviderLoader.SetUp<IUsersStorageProviderV30>(typeof(UsersStorageProvider));
+			Collectors.AddProvider(typeof(UsersStorageProvider), Assembly.GetAssembly(typeof(UsersStorageProvider)), typeof(IUsersStorageProviderV30), !ProviderLoader.IsDisabled(typeof(UsersStorageProvider).FullName));
+			
 			// Load Users (pages storage providers might need access to users/groups data for upgrading from 2.0 to 3.0)
-			ProviderLoader.FullLoad(true, false, false, false, false);
+			ProviderLoader.FullLoad(true, false, false, false);
 
 			bool groupsCreated = VerifyAndCreateDefaultGroups();
-
-			ProviderLoader.SetUp<IPagesStorageProviderV30>(typeof(PagesStorageProvider), Collectors.PagesProviderCollector, Collectors.DisabledPagesProviderCollector);
-
-			ProviderLoader.SetUp<ICacheProviderV30>(typeof(CacheProvider), Collectors.CacheProviderCollector, Collectors.DisabledCacheProviderCollector);
-
+			
+			ProviderLoader.SetUp<IPagesStorageProviderV30>(typeof(PagesStorageProvider));
+			Collectors.AddProvider(typeof(PagesStorageProvider), Assembly.GetAssembly(typeof(PagesStorageProvider)), typeof(IPagesStorageProviderV30), !ProviderLoader.IsDisabled(typeof(PagesStorageProvider).FullName));
+			
 			// Load all other providers
-			ProviderLoader.FullLoad(false, true, true, true, true);
+			ProviderLoader.FullLoad(false, true, true, true);
 
 			if(groupsCreated) {
 				// It is necessary to set default permissions for file management
@@ -149,14 +139,6 @@ namespace ScrewTurn.Wiki {
 				SetAdministratorsGroupDefaultPermissions(administratorsGroup);
 				SetUsersGroupDefaultPermissions(usersGroup);
 				SetAnonymousGroupDefaultPermissions(anonymousGroup);
-			}
-
-			// Init cache
-			//Cache.Instance = new Cache(Collectors.CacheProviderCollector.GetProvider(Settings.DefaultCacheProvider));
-			if(Collectors.CacheProviderCollector.GetProvider(Settings.DefaultCacheProvider) == null) {
-				Log.LogEntry("Default Cache Provider was not loaded, backing to integrated provider", EntryType.Error, Log.SystemUsername);
-				Settings.DefaultCacheProvider = typeof(CacheProvider).FullName;
-				Collectors.TryEnable(Settings.DefaultCacheProvider);
 			}
 
 			// Create the Main Page, if needed
@@ -172,8 +154,7 @@ namespace ScrewTurn.Wiki {
 						using(MemoryStream ms = new MemoryStream()) {
 							using(StreamWriter wr = new System.IO.StreamWriter(ms)) {
 								System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
-								foreach(var providerType in Collectors.PagesProviderCollector.AllProviders) {
-									IPagesStorageProviderV30 provider = Collectors.PagesProviderCollector.GetProvider(providerType.GetType().FullName);
+								foreach(var provider in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 									if(!provider.ReadOnly) {
 										Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
 										provider.RebuildIndex();
@@ -241,22 +222,8 @@ namespace ScrewTurn.Wiki {
 		/// Performs shutdown operations, such as shutting-down Providers.
 		/// </summary>
 		public static void Shutdown() {
-			foreach(IFormatterProviderV30 provider in Collectors.FormatterProviderCollector.AllProviders) {
-				provider.Shutdown();
-			}
-			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders) {
-				provider.Shutdown();
-			}
-			foreach(IUsersStorageProviderV30 provider in Collectors.UsersProviderCollector.AllProviders) {
-				provider.Shutdown();
-			}
-			foreach(IFilesStorageProviderV30 provider in Collectors.FilesProviderCollector.AllProviders) {
-				provider.Shutdown();
-			}
-			foreach(ICacheProviderV30 provider in Collectors.CacheProviderCollector.AllProviders) {
-				provider.Shutdown();
-			}
-			Settings.Provider.Shutdown();
+			Collectors.CollectorsBox.Dispose();
+			Settings.Provider.Dispose();
 		}
 
 		/// <summary>
@@ -326,7 +293,7 @@ namespace ScrewTurn.Wiki {
 				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ReadDiscussion, anonymous);
 				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, anonymous);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DownloadFiles, anonymous);
 				}
 			}
@@ -344,20 +311,20 @@ namespace ScrewTurn.Wiki {
 
 			if(Settings.UsersCanViewFiles) {
 				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, group);
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DownloadFiles, group);
 				}
 			}
 			if(Settings.UsersCanUploadFiles) {
 				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.UploadAttachments, group);
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.UploadFiles, group);
 					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.CreateDirectories, group);
 				}
 			}
 			if(Settings.UsersCanDeleteFiles) {
 				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DeleteAttachments, group);
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DeleteFiles, group);
 					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DeleteDirectories, group);
 				}

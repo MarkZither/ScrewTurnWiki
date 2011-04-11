@@ -51,7 +51,7 @@ namespace ScrewTurn.Wiki {
 				lblUploadFilesInfo.Text = lblUploadFilesInfo.Text.Replace("$2", sb.ToString());
 
 				// Load Providers
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					ListItem item = new ListItem(prov.Information.Name, prov.GetType().FullName);
 					if(item.Value == Settings.DefaultFilesProvider) {
 						item.Selected = true;
@@ -63,7 +63,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Set provider
-			provider = Collectors.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
 
 			if(!Page.IsPostBack) {
 				rptItems.DataBind();
@@ -124,7 +124,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptItems_DataBinding(object sender, EventArgs e) {
-			provider = Collectors.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
 
 			if(provider == null || CurrentPage == null) {
 				return;
@@ -226,7 +226,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void lstProviders_SelectedIndexChanged(object sender, EventArgs e) {
-			provider = Collectors.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
 			rptItems.DataBind();
 		}
 

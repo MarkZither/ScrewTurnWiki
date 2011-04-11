@@ -145,7 +145,7 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Snippet creation requested for " + txtName.Text, EntryType.General, Log.SystemUsername);
 
 			if(Snippets.AddSnippet(txtName.Text, editor.GetContent(),
-				Collectors.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider))) {
+				Collectors.CollectorsBox.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider))) {
 
 				RefreshList();
 				lblResult.CssClass = "resultok";
@@ -165,7 +165,7 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Content Template creation requested for " + txtName.Text, EntryType.General, Log.SystemUsername);
 
 			if(Templates.AddTemplate(txtName.Text, editor.GetContent(),
-				Collectors.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider))) {
+				Collectors.CollectorsBox.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider))) {
 
 				RefreshList();
 				lblResult.CssClass = "resultok";

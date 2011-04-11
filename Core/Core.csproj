@@ -85,9 +85,8 @@
     <Compile Include="AuthTools.cs" />
     <Compile Include="AuthWriter.cs" />
     <Compile Include="BreadcrumbsManager.cs" />
-    <Compile Include="Cache.cs" />
-    <Compile Include="CacheProvider.cs" />
     <Compile Include="Collectors.cs" />
+    <Compile Include="CollectorsBox.cs" />
     <Compile Include="Collisions.cs" />
     <Compile Include="Content.cs" />
     <Compile Include="DataMigrator.cs" />

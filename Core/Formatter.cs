@@ -1101,7 +1101,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append("<ul>");
 
 			foreach(PageInfo page in orhpans) {
-				PageContent content = Content.GetPageContent(page, false);
+				PageContent content = Content.GetPageContent(page);
 				sb.Append("<li>");
 				sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" class=""pagelink"">{2}</a>", Tools.UrlEncode(page.FullName), Settings.PageExtension,
 					FormattingPipeline.PrepareTitle(content.Title, false, context, current));
@@ -1156,7 +1156,7 @@ namespace ScrewTurn.Wiki {
 			foreach(string link in links) {
 				PageInfo linkedPage = Pages.FindPage(link);
 				if(linkedPage != null) {
-					PageContent content = Content.GetPageContent(linkedPage, false);
+					PageContent content = Content.GetPageContent(linkedPage);
 
 					sb.Append("<li>");
 					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" class=""pagelink"">{2}</a>", Tools.UrlEncode(link), Settings.PageExtension,
@@ -1189,7 +1189,7 @@ namespace ScrewTurn.Wiki {
 			foreach(string link in links) {
 				PageInfo linkedPage = Pages.FindPage(link);
 				if(linkedPage != null) {
-					PageContent content = Content.GetPageContent(linkedPage, false);
+					PageContent content = Content.GetPageContent(linkedPage);
 
 					sb.Append("<li>");
 					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" class=""pagelink"">{2}</a>", Tools.UrlEncode(link), Settings.PageExtension,
@@ -1867,14 +1867,14 @@ namespace ScrewTurn.Wiki {
 								}
 								else {
 									// Try to format title
-									PageContent retrievedContent = Content.GetPageContent(info, false);
+									PageContent retrievedContent = Content.GetPageContent(info);
 									if(retrievedContent != null && !retrievedContent.IsEmpty()) {
 										sb.Append(FormattingPipeline.PrepareTitle(retrievedContent.Title, forIndexing, context, currentPage));
 									}
 									else sb.Append(info.FullName);
 								}
 							}
-							else sb.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(info, false).Title, forIndexing, context, currentPage));
+							else sb.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(info).Title, forIndexing, context, currentPage));
 
 							sb.Append(@""">");
 							if(title.Length > 0) sb.Append(title);
@@ -2551,7 +2551,7 @@ namespace ScrewTurn.Wiki {
 						dummy = new StringBuilder();
 						dummy.Append(@"<div class=""transcludedpage"">");
 						dummy.Append(FormattingPipeline.FormatWithPhase3(
-							FormattingPipeline.FormatWithPhase1And2(Content.GetPageContent(transcludedPage, true).Content,
+							FormattingPipeline.FormatWithPhase1And2(Content.GetPageContent(transcludedPage).Content,
 							false, FormattingContext.TranscludedPageContent, transcludedPage),
 							FormattingContext.TranscludedPageContent, transcludedPage));
 						dummy.Append("</div>");

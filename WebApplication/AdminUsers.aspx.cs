@@ -224,7 +224,7 @@ namespace ScrewTurn.Wiki {
 		/// Populates the groups list according to the currently selected provider.
 		/// </summary>
 		private void PopulateGroups() {
-			List<UserGroup> groups = Users.GetUserGroups(Collectors.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider));
+			List<UserGroup> groups = Users.GetUserGroups(Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider));
 
 			lstGroups.Items.Clear();
 			foreach(UserGroup group in groups) {
@@ -278,7 +278,7 @@ namespace ScrewTurn.Wiki {
 			// Add the new user, set its global permissions, set its membership
 			bool done = Users.AddUser(txtUsername.Text, txtDisplayName.Text, txtPassword1.Text, txtEmail.Text,
 				chkSetActive.Checked,
-				Collectors.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider));
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider));
 
 			UserInfo currentUser = null;
 			if(done) {

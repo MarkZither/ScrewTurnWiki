@@ -68,7 +68,7 @@ namespace ScrewTurn.Wiki {
 					return AuthReader.RetrieveSubjectsForPage(Pages.FindPage(CurrentResourceName));
 				case AclResources.Directories:
 					return AuthReader.RetrieveSubjectsForDirectory(
-						Collectors.FilesProviderCollector.GetProvider(CurrentFilesProvider), CurrentResourceName);
+						Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider), CurrentResourceName);
 				default:
 					throw new NotSupportedException();
 			}
@@ -157,7 +157,7 @@ namespace ScrewTurn.Wiki {
 					break;
 				case AclResources.Directories:
 					string directory = CurrentResourceName;
-					IFilesStorageProviderV30 prov = Collectors.FilesProviderCollector.GetProvider(CurrentFilesProvider);
+					IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider);
 					if(type == SubjectType.Group) {
 						grants = AuthReader.RetrieveGrantsForDirectory(
 							Users.FindUserGroup(subject),
@@ -434,7 +434,7 @@ namespace ScrewTurn.Wiki {
 					break;
 				case AclResources.Directories:
 					// Remove old values, add new ones
-					IFilesStorageProviderV30 prov = Collectors.FilesProviderCollector.GetProvider(CurrentFilesProvider);
+					IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider);
 					done = RemoveAllAclEntriesForDirectory(subject, prov, CurrentResourceName);
 					if(done) {
 						done = AddAclEntriesForDirectory(subject, prov, CurrentResourceName,
@@ -471,7 +471,7 @@ namespace ScrewTurn.Wiki {
 				case AclResources.Directories:
 					// Remove values
 					done = RemoveAllAclEntriesForDirectory(subject,
-						Collectors.FilesProviderCollector.GetProvider(CurrentFilesProvider),
+						Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider),
 						CurrentResourceName);
 					break;
 				default:
@@ -567,7 +567,7 @@ namespace ScrewTurn.Wiki {
 					}
 					break;
 				case AclResources.Directories:
-					IFilesStorageProviderV30 prov = Collectors.FilesProviderCollector.GetProvider(CurrentFilesProvider);
+					IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider);
 					if(isGroup) {
 						done = AuthWriter.SetPermissionForDirectory(AuthStatus.Deny,
 							prov, CurrentResourceName, Actions.FullControl,

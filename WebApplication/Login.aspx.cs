@@ -104,13 +104,9 @@ namespace ScrewTurn.Wiki {
 		/// Prints the login notice.
 		/// </summary>
 		public void PrintLoginNotice() {
-			string n = Content.GetPseudoCacheValue("LoginNotice");
-			if(n == null) {
-				n = Settings.Provider.GetMetaDataItem(MetaDataItem.LoginNotice, null);
-				if(!string.IsNullOrEmpty(n)) {
-					n = FormattingPipeline.FormatWithPhase1And2(n, false, FormattingContext.Other, null);
-					Content.SetPseudoCacheValue("LoginNotice", n);
-				}
+			string n = Settings.Provider.GetMetaDataItem(MetaDataItem.LoginNotice, null);
+			if(!string.IsNullOrEmpty(n)) {
+				n = FormattingPipeline.FormatWithPhase1And2(n, false, FormattingContext.Other, null);
 			}
 			if(!string.IsNullOrEmpty(n)) lblDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
 		}

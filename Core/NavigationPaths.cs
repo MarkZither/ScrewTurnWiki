@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki {
 			List<NavigationPath> allPaths = new List<NavigationPath>(30);
 
 			// Retrieve paths from every Pages provider
-			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				allPaths.AddRange(provider.GetNavigationPaths(null));
 				foreach(NamespaceInfo nspace in provider.GetNamespaces()) {
 					allPaths.AddRange(provider.GetNavigationPaths(nspace));
@@ -40,7 +40,7 @@ namespace ScrewTurn.Wiki {
 			List<NavigationPath> allPaths = new List<NavigationPath>(30);
 
 			// Retrieve paths from every Pages provider
-			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				allPaths.AddRange(provider.GetNavigationPaths(nspace));
 			}
 
@@ -84,7 +84,7 @@ namespace ScrewTurn.Wiki {
 
 			if(Exists(fullName)) return false;
 
-			if(provider == null) provider = Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
 
 			NavigationPath newPath = provider.AddNavigationPath(namespaceName, name, pages.ToArray());
 			if(newPath != null) Log.LogEntry("Navigation Path " + fullName + " added", EntryType.General, Log.SystemUsername);

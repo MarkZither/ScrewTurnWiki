@@ -1228,33 +1228,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.CheckBox chkEnableAutomaticUpdateChecks;
         
         /// <summary>
-        /// chkDisableCache control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkDisableCache;
-        
-        /// <summary>
-        /// lblCacheSize control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblCacheSize;
-        
-        /// <summary>
-        /// txtCacheSize control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCacheSize;
-        
-        /// <summary>
         /// lblPages1 control.
         /// </summary>
         /// <remarks>
@@ -1264,42 +1237,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblPages1;
         
         /// <summary>
-        /// rfvCacheSize control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCacheSize;
-        
-        /// <summary>
-        /// rvCacheSize control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RangeValidator rvCacheSize;
-        
-        /// <summary>
-        /// lblCacheCutSize control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblCacheCutSize;
-        
-        /// <summary>
-        /// txtCacheCutSize control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCacheCutSize;
-        
-        /// <summary>
         /// lblPages2 control.
         /// </summary>
         /// <remarks>
@@ -1307,24 +1244,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal lblPages2;
-        
-        /// <summary>
-        /// rfvCacheCutSize control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCacheCutSize;
-        
-        /// <summary>
-        /// rvCacheCutSize control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RangeValidator rvCacheCutSize;
         
         /// <summary>
         /// chkEnableViewStateCompression control.

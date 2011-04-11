@@ -50,34 +50,29 @@ namespace ScrewTurn.Wiki {
 			int enabledCount = 0;
 
 			if(rdoPages.Checked) {
-				enabledCount = Collectors.PagesProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.PagesProviderCollector.AllProviders);
-				providers.AddRange(Collectors.DisabledPagesProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.PagesProviderCollector.AllProviders.Length;
+				providers.AddRange(Collectors.CollectorsBox.PagesProviderCollector.AllProviders);
+				providers.AddRange(Collectors.CollectorsBox.DisabledPagesProviderCollector.AllProviders);
 			}
 			else if(rdoUsers.Checked) {
-				enabledCount = Collectors.UsersProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.UsersProviderCollector.AllProviders);
-				providers.AddRange(Collectors.DisabledUsersProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.UsersProviderCollector.AllProviders.Length;
+				providers.AddRange(Collectors.CollectorsBox.UsersProviderCollector.AllProviders);
+				providers.AddRange(Collectors.CollectorsBox.DisabledUsersProviderCollector.AllProviders);
 			}
 			else if(rdoFiles.Checked) {
-				enabledCount = Collectors.FilesProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.FilesProviderCollector.AllProviders);
-				providers.AddRange(Collectors.DisabledFilesProviderCollector.AllProviders);
-			}
-			else if(rdoCache.Checked) {
-				enabledCount = Collectors.CacheProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.CacheProviderCollector.AllProviders);
-				providers.AddRange(Collectors.DisabledCacheProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.FilesProviderCollector.AllProviders.Length;
+				providers.AddRange(Collectors.CollectorsBox.FilesProviderCollector.AllProviders);
+				providers.AddRange(Collectors.CollectorsBox.DisabledFilesProviderCollector.AllProviders);
 			}
 			else if(rdoThemes.Checked) {
-				enabledCount = Collectors.ThemeProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.ThemeProviderCollector.AllProviders);
-				providers.AddRange(Collectors.DisabledThemeProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.ThemeProviderCollector.AllProviders.Length;
+				providers.AddRange(Collectors.CollectorsBox.ThemeProviderCollector.AllProviders);
+				providers.AddRange(Collectors.CollectorsBox.DisabledThemeProviderCollector.AllProviders);
 			}
 			else if(rdoFormatter.Checked) {
-				enabledCount = Collectors.FormatterProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.FormatterProviderCollector.AllProviders);
-				providers.AddRange(Collectors.DisabledFormatterProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.FormatterProviderCollector.AllProviders.Length;
+				providers.AddRange(Collectors.CollectorsBox.FormatterProviderCollector.AllProviders);
+				providers.AddRange(Collectors.CollectorsBox.DisabledFormatterProviderCollector.AllProviders);
 			}
 
 			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
@@ -172,7 +167,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void PerformPostProviderChangeActions() {
 			Content.InvalidateAllPages();
-			Content.ClearPseudoCache();
 		}
 
 		protected void btnSave_Click(object sender, EventArgs e) {
@@ -261,16 +255,14 @@ namespace ScrewTurn.Wiki {
 
 			ProviderUpdater updater = new ProviderUpdater(Settings.Provider,
 				Collectors.FileNames,
-				Collectors.PagesProviderCollector.AllProviders,
-				Collectors.DisabledPagesProviderCollector.AllProviders,
-				Collectors.UsersProviderCollector.AllProviders,
-				Collectors.DisabledUsersProviderCollector.AllProviders,
-				Collectors.FilesProviderCollector.AllProviders,
-				Collectors.DisabledFilesProviderCollector.AllProviders,
-				Collectors.CacheProviderCollector.AllProviders,
-				Collectors.DisabledCacheProviderCollector.AllProviders,
-				Collectors.FormatterProviderCollector.AllProviders,
-				Collectors.DisabledFormatterProviderCollector.AllProviders);
+				Collectors.CollectorsBox.PagesProviderCollector.AllProviders,
+				Collectors.CollectorsBox.DisabledPagesProviderCollector.AllProviders,
+				Collectors.CollectorsBox.UsersProviderCollector.AllProviders,
+				Collectors.CollectorsBox.DisabledUsersProviderCollector.AllProviders,
+				Collectors.CollectorsBox.FilesProviderCollector.AllProviders,
+				Collectors.CollectorsBox.DisabledFilesProviderCollector.AllProviders,
+				Collectors.CollectorsBox.FormatterProviderCollector.AllProviders,
+				Collectors.CollectorsBox.DisabledFormatterProviderCollector.AllProviders);
 
 			int count = updater.UpdateAll();
 
@@ -301,7 +293,6 @@ namespace ScrewTurn.Wiki {
 			Settings.DefaultPagesProvider = lstPagesProvider.SelectedProvider;
 			Settings.DefaultUsersProvider = lstUsersProvider.SelectedProvider;
 			Settings.DefaultFilesProvider = lstFilesProvider.SelectedProvider;
-			Settings.DefaultCacheProvider = lstCacheProvider.SelectedProvider;
 			Settings.EndBulkUpdate();
 
 			lblDefaultProvidersResult.CssClass = "resultok";
@@ -395,7 +386,7 @@ namespace ScrewTurn.Wiki {
 		private void LoadSourceProviders() {
 			lstPagesSource.Items.Clear();
 			lstPagesSource.Items.Add(new ListItem("", ""));
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				if(!prov.ReadOnly) {
 					lstPagesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 				}
@@ -403,7 +394,7 @@ namespace ScrewTurn.Wiki {
 
 			lstUsersSource.Items.Clear();
 			lstUsersSource.Items.Add(new ListItem("", ""));
-			foreach(IUsersStorageProviderV30 prov in Collectors.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
 				if(IsUsersProviderFullWriteEnabled(prov)) {
 					lstUsersSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 				}
@@ -411,7 +402,7 @@ namespace ScrewTurn.Wiki {
 
 			lstFilesSource.Items.Clear();
 			lstFilesSource.Items.Add(new ListItem("", ""));
-			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				if(!prov.ReadOnly) {
 					lstFilesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 				}
@@ -433,7 +424,7 @@ namespace ScrewTurn.Wiki {
 		protected void lstPagesSource_SelectedIndexChanged(object sender, EventArgs e) {
 			lstPagesDestination.Items.Clear();
 			if(lstPagesSource.SelectedValue != "") {
-				foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+				foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 					if(!prov.ReadOnly && lstPagesSource.SelectedValue != prov.GetType().ToString()) {
 						lstPagesDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 					}
@@ -445,7 +436,7 @@ namespace ScrewTurn.Wiki {
 		protected void lstUsersSource_SelectedIndexChanged(object sender, EventArgs e) {
 			lstUsersDestination.Items.Clear();
 			if(lstUsersSource.SelectedValue != "") {
-				foreach(IUsersStorageProviderV30 prov in Collectors.UsersProviderCollector.AllProviders) {
+				foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
 					if(IsUsersProviderFullWriteEnabled(prov) && lstUsersSource.SelectedValue != prov.GetType().ToString()) {
 						lstUsersDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 					}
@@ -457,7 +448,7 @@ namespace ScrewTurn.Wiki {
 		protected void lstFilesSource_SelectedIndexChanged(object sender, EventArgs e) {
 			lstFilesDestination.Items.Clear();
 			if(lstFilesSource.SelectedValue != "") {
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					if(!prov.ReadOnly && lstFilesSource.SelectedValue != prov.GetType().ToString()) {
 						lstFilesDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 					}
@@ -471,8 +462,8 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnMigratePages_Click(object sender, EventArgs e) {
-			IPagesStorageProviderV30 from = Collectors.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue);
-			IPagesStorageProviderV30 to = Collectors.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue);
+			IPagesStorageProviderV30 from = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue);
+			IPagesStorageProviderV30 to = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue);
 
 			Log.LogEntry("Pages data migration requested from " + from.Information.Name + " to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
@@ -483,8 +474,8 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnMigrateUsers_Click(object sender, EventArgs e) {
-			IUsersStorageProviderV30 from = Collectors.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue);
-			IUsersStorageProviderV30 to = Collectors.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue);
+			IUsersStorageProviderV30 from = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue);
+			IUsersStorageProviderV30 to = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue);
 
 			Log.LogEntry("Users data migration requested from " + from.Information.Name + " to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
@@ -495,8 +486,8 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnMigrateFiles_Click(object sender, EventArgs e) {
-			IFilesStorageProviderV30 from = Collectors.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue);
-			IFilesStorageProviderV30 to = Collectors.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue);
+			IFilesStorageProviderV30 from = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue);
+			IFilesStorageProviderV30 to = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue);
 
 			Log.LogEntry("Files data migration requested from " + from.Information.Name + " to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 

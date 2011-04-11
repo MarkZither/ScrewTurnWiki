@@ -57,7 +57,7 @@ namespace ScrewTurn.Wiki {
 			attachmentViewer.Visible = canDownloadAttachments;
 
 			attachmentViewer.PageInfo = currentPage;
-			currentContent = Content.GetPageContent(currentPage, true);
+			currentContent = Content.GetPageContent(currentPage);
 
 			pnlPageInfo.Visible = Settings.EnablePageInfoDiv;
 
@@ -221,7 +221,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The number of attachments.</returns>
 		private int GetAttachmentCount() {
 			int count = 0;
-			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				count += prov.ListPageAttachments(currentPage).Length;
 			}
 			return count;
@@ -346,7 +346,7 @@ namespace ScrewTurn.Wiki {
 			if(currentPage == null) return;
 
 			// Force formatting so that the destination can be detected
-			Content.GetFormattedPageContent(currentPage, true);
+			Content.GetFormattedPageContent(currentPage);
 
 			PageInfo dest = Redirections.GetDestination(currentPage);
 			if(dest == null) return;
@@ -364,7 +364,7 @@ namespace ScrewTurn.Wiki {
 					sb.Append(@"<a href=""");
 					UrlTools.BuildUrl(sb, "++", Tools.UrlEncode(dest.FullName), Settings.PageExtension, "?From=", Tools.UrlEncode(currentPage.FullName));
 					sb.Append(@""">");
-					PageContent k = Content.GetPageContent(dest, true);
+					PageContent k = Content.GetPageContent(dest);
 					sb.Append(FormattingPipeline.PrepareTitle(k.Title, false, FormattingContext.PageContent, currentPage));
 					sb.Append("</a></div>");
 					Literal literal = new Literal();
@@ -429,7 +429,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="dpPrefix">The drop-down menu ID prefix.</param>
 		private void AppendBreadcrumb(StringBuilder sb, PageInfo page, string dpPrefix) {
 			PageNameComparer comp = new PageNameComparer();
-			PageContent pc = Content.GetPageContent(page, true);
+			PageContent pc = Content.GetPageContent(page);
 
 			string id = AppendBreadcrumbDropDown(sb, page, dpPrefix);
 
@@ -472,7 +472,7 @@ namespace ScrewTurn.Wiki {
 				PageInfo target = Pages.FindPage(link);
 				if(target != null) {
 					count++;
-					PageContent cont = Content.GetPageContent(target, true);
+					PageContent cont = Content.GetPageContent(target);
 
 					string title = FormattingPipeline.PrepareTitle(cont.Title, false, FormattingContext.PageContent, currentPage);
 
@@ -504,7 +504,7 @@ namespace ScrewTurn.Wiki {
 					sb.Append(@"<a href=""");
 					sb.Append(UrlTools.BuildUrl("++", Tools.UrlEncode(source.FullName), Settings.PageExtension, "?NoRedirect=1"));
 					sb.Append(@""">");
-					PageContent w = Content.GetPageContent(source, true);
+					PageContent w = Content.GetPageContent(source);
 					sb.Append(FormattingPipeline.PrepareTitle(w.Title, false, FormattingContext.PageContent, currentPage));
 					sb.Append("</a></div>");
 
@@ -574,7 +574,7 @@ namespace ScrewTurn.Wiki {
 							prev.Append(@""" title=""");
 							prev.Append(Properties.Messages.PrevPage);
 							prev.Append(": ");
-							prev.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(prevPage, true).Title, false, FormattingContext.PageContent, currentPage));
+							prev.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(prevPage).Title, false, FormattingContext.PageContent, currentPage));
 							prev.Append(@"""><b>&laquo;</b></a> ");
 						}
 						if(idx < path.Pages.Length - 1) {
@@ -586,7 +586,7 @@ namespace ScrewTurn.Wiki {
 							next.Append(@""" title=""");
 							next.Append(Properties.Messages.NextPage);
 							next.Append(": ");
-							next.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(nextPage, true).Title, false, FormattingContext.PageContent, currentPage));
+							next.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(nextPage).Title, false, FormattingContext.PageContent, currentPage));
 							next.Append(@"""><b>&raquo;</b></a>");
 						}
 					}
@@ -690,7 +690,7 @@ namespace ScrewTurn.Wiki {
 		private void SetupPageContent(bool canPostMessages, bool canManageDiscussion) {
 			if(!discussMode && !viewCodeMode) {
 				Literal literal = new Literal();
-				literal.Text = Content.GetFormattedPageContent(currentPage, true);
+				literal.Text = Content.GetFormattedPageContent(currentPage);
 				plhContent.Controls.Add(literal);
 			}
 			else if(!discussMode && viewCodeMode) {

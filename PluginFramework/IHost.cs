@@ -191,7 +191,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		PageContent GetBackupContent(PageInfo page, int revision);
 
 		/// <summary>
-		/// Gets the formatted content of a Page, retrieving it from the cache (if available).
+		/// Gets the formatted content of a Page.
 		/// </summary>
 		/// <param name="page">The Page.</param>
 		/// <returns>The formatted content of the Page.</returns>
@@ -297,12 +297,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		DateTime AlignDateTimeWithPreferences(DateTime dt);
 
 		/// <summary>
-		/// Clears the cache.
-		/// </summary>
-		/// <param name="data">The part of the cache to clear.</param>
-		void ClearCache(CacheData data);
-
-		/// <summary>
 		/// Adds an item in the Editing Toolbar.
 		/// </summary>
 		/// <param name="item">The item to add.</param>
@@ -319,8 +313,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="providerType">The type of the provider (
 		/// <see cref="T:IPagesStorageProviderV30" />, 
 		/// <see cref="T:IUsersStorageProviderV30" />, 
-		/// <see cref="T:IFilesStorageProviderV30" />, 
-		/// <see cref="T:ICacheStorageProviderV30" />,
+		/// <see cref="T:IFilesStorageProviderV30" />,
 		/// <see cref="T:IFormatterProviderV30" />).</param>
 		/// <returns>The Full type name of the default provider of the specified type or <c>null</c>.</returns>
 		string GetDefaultProvider(Type providerType);
@@ -345,13 +338,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		IFilesStorageProviderV30[] GetFilesStorageProviders(bool enabled);
-
-		/// <summary>
-		/// Gets the cache providers, either enabled or disabled.
-		/// </summary>
-		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
-		/// <returns>The providers.</returns>
-		ICacheProviderV30[] GetCacheProviders(bool enabled);
 
 		/// <summary>
 		/// Gets the formatter providers, either enabled or disabled.
@@ -546,10 +532,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		DisableBreadcrumbsTrail,
 		/// <summary>
-		/// A value (true/false) indicating whether to disable the page cache.
-		/// </summary>
-		DisableCache,
-		/// <summary>
 		/// A value (true/false) indicating whether to disable the captcha control in public functionalities.
 		/// </summary>
 		DisableCaptchaControl,
@@ -594,14 +576,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		MaxRecentChanges,
 		/// <summary>
-		/// The size of the cache (# of pages).
-		/// </summary>
-		CacheSize,
-		/// <summary>
-		/// The # of pages to remove fromm the cache when it is full.
-		/// </summary>
-		CacheCutSize,
-		/// <summary>
 		/// The timeout, in seconds, after which a page editing session is considered to be dead.
 		/// </summary>
 		EditingSessionTimeout,
@@ -634,10 +608,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		DefaultFilesStorageProvider,
 		/// <summary>
-		/// The default cache provider.
-		/// </summary>
-		DefaultCacheProvider,
-		/// <summary>
 		/// The name of the theme of the root namespace.
 		/// </summary>
 		RootNamespaceTheme,
@@ -646,21 +616,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		ListSize
 	}
-
-	/// <summary>
-	/// Enumerates the parts of the cache that can be cleared.
-	/// </summary>
-	public enum CacheData {
-		/// <summary>
-		/// All the pages data.
-		/// </summary>
-		Pages,
-		/// <summary>
-		/// All the meta-files (Header, Footer, Sidebar, etc.).
-		/// </summary>
-		MetaFiles
-	}
-
+	
 	/// <summary>
 	/// Enumerates the toolbar items that can be added.
 	/// </summary>

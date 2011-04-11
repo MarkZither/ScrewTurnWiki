@@ -141,12 +141,6 @@
   <data name="chkAllowUsersToRegisterResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="chkDisableCacheResource1.Text" xml:space="preserve">
-    <value>Completely disable cache</value>
-  </data>
-  <data name="chkDisableCacheResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="chkDisplayGravatarsResource1.Text" xml:space="preserve">
     <value>Display Gravatars for user accounts</value>
   </data>
@@ -278,12 +272,6 @@
   </data>
   <data name="lblAdvancedConfigResource1.Text" xml:space="preserve">
     <value>Advanced Configuration</value>
-  </data>
-  <data name="lblCacheCutSizeResource1.Text" xml:space="preserve">
-    <value>Cache cut size</value>
-  </data>
-  <data name="lblCacheSizeResource1.Text" xml:space="preserve">
-    <value>Cache Size</value>
   </data>
   <data name="lblChangeModerationModeResource1.Text" xml:space="preserve">
     <value>Page change moderation mode</value>
@@ -747,24 +735,6 @@
   <data name="revWikiTitleResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rfvCacheCutSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Cache Cut Size is required</value>
-  </data>
-  <data name="rfvCacheCutSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvCacheCutSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvCacheSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Cache Size is required</value>
-  </data>
-  <data name="rfvCacheSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvCacheSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="rfvContactEmailResource1.ErrorMessage" xml:space="preserve">
     <value>Contact Email is required</value>
   </data>
@@ -846,24 +816,6 @@
   <data name="rfvWikiTitleResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rvCacheCutSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Cache Cut Size (min. 5, max. 50000)</value>
-  </data>
-  <data name="rvCacheCutSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rvCacheCutSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rvCacheSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Size (min. 10, max. 100000)</value>
-  </data>
-  <data name="rvCacheSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rvCacheSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="rvKeptBackupNumberResource1.ErrorMessage" xml:space="preserve">
     <value>Number must be between 0 and 1000</value>
   </data>
@@ -907,18 +859,6 @@
     <value />
   </data>
   <data name="rvSmtpPortResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtCacheCutSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtCacheCutSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtCacheSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtCacheSizeResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="txtContactEmailResource1.Text" xml:space="preserve">

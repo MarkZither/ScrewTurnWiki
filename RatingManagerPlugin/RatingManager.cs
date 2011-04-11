@@ -396,11 +396,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 			}
 		}
 
-		/// <summary>
-		/// Method invoked on shutdown.
-		/// </summary>
-		/// <remarks>This method might not be invoked in some cases.</remarks>
-		public void Shutdown() {
+		void IDisposable.Dispose() {
 			// Nothing to do
 		}
 

@@ -15,11 +15,7 @@ namespace ScrewTurn.Wiki {
 			// Nothing to do (see Application_BeginRequest).
 		}
 
-		protected void Session_Start(object sender, EventArgs e) {
-			// Increment # of online users and setup a new breadcrumbs manager
-			// TODO: avoid to increment # of online users when session is not InProc
-			ScrewTurn.Wiki.Cache.OnlineUsers++;
-		}
+		protected void Session_Start(object sender, EventArgs e) { }
 
 		protected void Application_BeginRequest(object sender, EventArgs e) {
 			if(Application["StartupOK"] == null) {
@@ -89,6 +85,14 @@ namespace ScrewTurn.Wiki {
 			// Nothing to do
 		}
 
+		protected void Application_EndRequest(object sender, EventArgs e) {
+			if(Collectors.CollectorsBoxUsed) {
+				Collectors.CollectorsBox.Dispose();
+				Collectors.CollectorsBox = null;
+				Collectors.CollectorsBoxUsed = false;
+			}
+		}
+
 		/// <summary>
 		/// Logs an error.
 		/// </summary>
@@ -129,10 +133,7 @@ namespace ScrewTurn.Wiki {
 			if(!Request.PhysicalPath.ToLowerInvariant().Contains("error.aspx")) ScrewTurn.Wiki.UrlTools.Redirect("Error.aspx");
 		}
 
-		protected void Session_End(object sender, EventArgs e) {
-			// Decrement # of online users (only works when session is InProc)
-			ScrewTurn.Wiki.Cache.OnlineUsers--;
-		}
+		protected void Session_End(object sender, EventArgs e) { }
 
 		protected void Application_End(object sender, EventArgs e) {
 			// Try to cleanly shutdown the application and providers

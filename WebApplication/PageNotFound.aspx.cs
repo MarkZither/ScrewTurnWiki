@@ -44,7 +44,7 @@ namespace ScrewTurn.Wiki {
 				sb.Append("<ul>");
 				PageContent c;
 				for(int i = 0; i < results.Length; i++) {
-					c = Content.GetPageContent(results[i], true);
+					c = Content.GetPageContent(results[i]);
 					sb.Append(@"<li><a href=""");
 					UrlTools.BuildUrl(sb, Tools.UrlEncode(results[i].FullName), Settings.PageExtension);
 					sb.Append(@""">");

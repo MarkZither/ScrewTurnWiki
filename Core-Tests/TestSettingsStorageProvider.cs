@@ -72,7 +72,7 @@ namespace ScrewTurn.Wiki.Tests {
 			throw new NotImplementedException();
 		}
 
-		public void Shutdown() {
+		void IDisposable.Dispose() {
 			throw new NotImplementedException();
 		}
 

@@ -27,7 +27,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Test whether the default Users Provider is read-only
-			IUsersStorageProviderV30 p = Collectors.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
+			IUsersStorageProviderV30 p = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
 			if(p.UserAccountsReadOnly) {
 				Log.LogEntry("Default Users Provider (" + p.Information.Name + ") is read-only, aborting Account Creation", EntryType.Warning, Log.SystemUsername);
 				UrlTools.Redirect(UrlTools.BuildUrl("Error.aspx"));
@@ -76,13 +76,10 @@ namespace ScrewTurn.Wiki {
 		/// Prints the register notice.
 		/// </summary>
 		private void PrintRegisterNotice() {
-			string n = Content.GetPseudoCacheValue("RegisterNotice");
-			if(n == null) {
-				n = Settings.Provider.GetMetaDataItem(MetaDataItem.RegisterNotice, null);
-				if(!string.IsNullOrEmpty(n)) {
-					n = FormattingPipeline.FormatWithPhase1And2(n, false, FormattingContext.Other, null);
-					Content.SetPseudoCacheValue("RegisterNotice", n);
-				}
+			string n = Settings.Provider.GetMetaDataItem(MetaDataItem.RegisterNotice, null);
+			if(!string.IsNullOrEmpty(n)) {
+				n = FormattingPipeline.FormatWithPhase1And2(n, false, FormattingContext.Other, null);
+
 			}
 			if(!string.IsNullOrEmpty(n)) lblRegisterDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
 		}

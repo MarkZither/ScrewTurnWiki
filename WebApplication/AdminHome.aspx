@@ -57,8 +57,6 @@
 	
 	<p>
 		<asp:Literal ID="lblSystemStatusContent" runat="server" meta:resourcekey="lblSystemStatusContentResource1" />
-		<br /><br />
-		<asp:Button ID="btnClearCache" runat="server" Text="Clear Cache" OnClick="btnClearCache_Click" ToolTip="Clears the Cache" meta:resourcekey="btnClearCacheResource1" />
 	</p>
 	<br /><br />
 	

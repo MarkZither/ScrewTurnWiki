@@ -54,31 +54,19 @@ second line";
 
 			Collectors.SettingsProvider = settingsProvider;
 
-			Collectors.PagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
-			Collectors.PagesProviderCollector.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)));
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), typeof(IPagesStorageProviderV30), true);
 
 			Expect.Call(settingsProvider.GetSetting("DefaultPagesProvider")).Return(typeof(DummyPagesStorageProvider).FullName).Repeat.Any();
 			Expect.Call(settingsProvider.GetPluginStatus(typeof(DummyPagesStorageProvider).FullName)).Return(true).Repeat.Any();
 			Expect.Call(settingsProvider.GetPluginConfiguration(typeof(DummyPagesStorageProvider).FullName)).Return("").Repeat.Any();
 
 			Host.Instance = new Host();
-
-			Expect.Call(settingsProvider.GetSetting("CacheSize")).Return("100").Repeat.Any();
-			Expect.Call(settingsProvider.GetSetting("CacheCutSize")).Return("20").Repeat.Any();
-
-			Collectors.CacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
-			Collectors.CacheProviderCollector.AddProvider(typeof(DummyCacheProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyCacheProvider)));
-			
+						
 			settingsProvider.LogEntry("", EntryType.General, "");
 			LastCall.On(settingsProvider).IgnoreArguments().Repeat.Any();
-			Expect.Call(settingsProvider.GetPluginConfiguration(typeof(DummyCacheProvider).FullName)).Return("").Repeat.Any();
-			Expect.Call(settingsProvider.GetSetting("DefaultCacheProvider")).Return(typeof(DummyCacheProvider).FullName).Repeat.Any();
-			Expect.Call(settingsProvider.GetPluginStatus(typeof(DummyCacheProvider).FullName)).Return(true).Repeat.Any();
 
-			// Cache needs setting to init
 			mocks.Replay(settingsProvider);
-
-			Collectors.FormatterProviderCollector = new ProviderCollector<IFormatterProviderV30>();
 
 			//System.Web.UI.HtmlTextWriter writer = new System.Web.UI.HtmlTextWriter(new System.IO.StreamWriter(new System.IO.MemoryStream()));
 			//System.Web.Hosting.SimpleWorkerRequest request = new System.Web.Hosting.SimpleWorkerRequest("Default.aspx", "?Page=MainPage", writer);
@@ -245,7 +233,10 @@ second line";
 		}
 
 		public PageContent GetContent(PageInfo page) {
-			throw new NotImplementedException();
+			if(page.FullName == "page1") {
+				return new PageContent(page, "Page 1", "", DateTime.Now, "", "", new string[] { }, "");
+			}
+			else return null;
 		}
 
 		public PageContent GetDraft(PageInfo page) {
@@ -376,7 +367,7 @@ second line";
 
 		public void SetUp() { }
 
-		public void Shutdown() { }
+		void IDisposable.Dispose() { }
 
 		public ComponentInformation Information {
 			get {
@@ -388,115 +379,6 @@ second line";
 			get { throw new NotImplementedException(); }
 		}
 
-	}
-
-	public class DummyCacheProvider : ICacheProviderV30 {
-
-		public int OnlineUsers {
-			get {
-				throw new NotImplementedException();
-			}
-			set {
-				throw new NotImplementedException();
-			}
-		}
-
-		public string GetPseudoCacheValue(string name) {
-			throw new NotImplementedException();
-		}
-
-		public void SetPseudoCacheValue(string name, string value) {
-			throw new NotImplementedException();
-		}
-
-		public PageContent GetPageContent(PageInfo pageInfo) {
-			if(pageInfo.FullName == "page1") {
-				return new PageContent(pageInfo, "Page 1", "", DateTime.Now, "", "", new string[] { }, "");
-			}
-			else return null;
-		}
-
-		public void SetPageContent(PageInfo pageInfo, PageContent content) {
-			throw new NotImplementedException();
-		}
-
-		public string GetFormattedPageContent(PageInfo pageInfo) {
-			return "";
-		}
-
-		public void SetFormattedPageContent(PageInfo pageInfo, string content) {
-			throw new NotImplementedException();
-		}
-
-		public void RemovePage(PageInfo pageInfo) {
-			throw new NotImplementedException();
-		}
-
-		public void ClearPageContentCache() {
-			throw new NotImplementedException();
-		}
-
-		public void ClearPseudoCache() {
-			throw new NotImplementedException();
-		}
-
-		public void CutCache(int cutSize) {
-			throw new NotImplementedException();
-		}
-
-		public int PageCacheUsage {
-			get { throw new NotImplementedException(); }
-		}
-
-		public int FormatterPageCacheUsage {
-			get { throw new NotImplementedException(); }
-		}
-
-		public void RenewEditingSession(string page, string user) {
-			throw new NotImplementedException();
-		}
-
-		public void CancelEditingSession(string page, string user) {
-			throw new NotImplementedException();
-		}
-
-		public bool IsPageBeingEdited(string page, string currentUser) {
-			throw new NotImplementedException();
-		}
-
-		public string WhosEditing(string page) {
-			throw new NotImplementedException();
-		}
-
-		public void AddRedirection(string source, string destination) {
-			throw new NotImplementedException();
-		}
-
-		public string GetRedirectionDestination(string source) {
-			throw new NotImplementedException();
-		}
-
-		public void RemovePageFromRedirections(string name) {
-			throw new NotImplementedException();
-		}
-
-		public void ClearRedirections() {
-			throw new NotImplementedException();
-		}
-
-		public void Init(IHostV30 host, string config) { }
-
-		public void SetUp() { }
-
-		public void Shutdown() { }
-
-		public ComponentInformation Information {
-			get { return new ComponentInformation("dummyCache", "", "", "", ""); }
-		}
-
-		public string ConfigHelpHtml {
-			get { throw new NotImplementedException(); }
-		}
 	}
 
 }

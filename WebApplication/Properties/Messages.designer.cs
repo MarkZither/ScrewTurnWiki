@@ -808,15 +808,6 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cached Pages.
-        /// </summary>
-        public static string CachedPages {
-            get {
-                return ResourceManager.GetString("CachedPages", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot create new directory.
         /// </summary>
         public static string CannotCreateNewDirectory {
@@ -1942,15 +1933,6 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to formatted.
-        /// </summary>
-        public static string Formatted {
-            get {
-                return ResourceManager.GetString("Formatted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Full View (new Window).
         /// </summary>
         public static string FullView {
@@ -2343,24 +2325,6 @@ namespace ScrewTurn.Wiki.Properties {
         public static string InvalidBackupNumber {
             get {
                 return ResourceManager.GetString("InvalidBackupNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid Cache Cut size: it must be an integer greater than 0 and smaller than Cache size.
-        /// </summary>
-        public static string InvalidCacheCutSize {
-            get {
-                return ResourceManager.GetString("InvalidCacheCutSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid Cache size: it must be an integer greater than 0.
-        /// </summary>
-        public static string InvalidCacheSize {
-            get {
-                return ResourceManager.GetString("InvalidCacheSize", resourceCulture);
             }
         }
         
@@ -3216,15 +3180,6 @@ namespace ScrewTurn.Wiki.Properties {
         public static string OlderRevision {
             get {
                 return ResourceManager.GetString("OlderRevision", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Online Users.
-        /// </summary>
-        public static string OnlineUsers {
-            get {
-                return ResourceManager.GetString("OnlineUsers", resourceCulture);
             }
         }
         

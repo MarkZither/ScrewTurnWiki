@@ -94,8 +94,6 @@ namespace ScrewTurn.Wiki {
 					return Settings.DisableAutomaticVersionCheck.ToString();
 				case SettingName.DisableBreadcrumbsTrail:
 					return Settings.DisableBreadcrumbsTrail.ToString();
-				case SettingName.DisableCache:
-					return Settings.DisableCache.ToString();
 				case SettingName.DisableCaptchaControl:
 					return Settings.DisableCaptchaControl.ToString();
 				case SettingName.DisableConcurrentEditing:
@@ -118,10 +116,6 @@ namespace ScrewTurn.Wiki {
 					return Settings.MaxLogSize.ToString();
 				case SettingName.MaxRecentChanges:
 					return Settings.MaxRecentChanges.ToString();
-				case SettingName.CacheSize:
-					return Settings.CacheSize.ToString();
-				case SettingName.CacheCutSize:
-					return Settings.CacheCutSize.ToString();
 				case SettingName.EditingSessionTimeout:
 					return Collisions.EditingSessionTimeout.ToString();
 				case SettingName.AdministratorsGroup:
@@ -138,8 +132,6 @@ namespace ScrewTurn.Wiki {
 					return Settings.DefaultUsersProvider;
 				case SettingName.DefaultFilesStorageProvider:
 					return Settings.DefaultFilesProvider;
-				case SettingName.DefaultCacheProvider:
-					return Settings.DefaultCacheProvider;
 				case SettingName.RootNamespaceTheme:
 					return Settings.GetTheme(null);
 				case SettingName.ListSize:
@@ -368,7 +360,7 @@ namespace ScrewTurn.Wiki {
 		public PageContent GetPageContent(PageInfo page) {
 			if(page == null) throw new ArgumentNullException("page");
 
-			return Content.GetPageContent(page, true);
+			return Content.GetPageContent(page);
 		}
 
 		/// <summary>
@@ -409,7 +401,7 @@ namespace ScrewTurn.Wiki {
 
 			PageInfo pageInfo = Pages.FindPage(page.FullName);
 			if(pageInfo == null) return null;
-			PageContent content = Content.GetPageContent(pageInfo, true);
+			PageContent content = Content.GetPageContent(pageInfo);
 			return Formatter.Format(content.Content, false, FormattingContext.PageContent, page);
 		}
 
@@ -480,7 +472,7 @@ namespace ScrewTurn.Wiki {
 			List<StDirectoryInfo> result = new List<StDirectoryInfo>(20);
 
 			if(directory == null) {
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					string[] dirs = prov.ListDirectories(null);
 
 					foreach(string dir in dirs) {
@@ -508,7 +500,7 @@ namespace ScrewTurn.Wiki {
 			List<StFileInfo> result = new List<StFileInfo>(20);
 
 			if(directory == null) {
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					string[] files = prov.ListFiles(null);
 
 					foreach(string file in files) {
@@ -539,7 +531,7 @@ namespace ScrewTurn.Wiki {
 			if(page == null) throw new ArgumentNullException("page");
 
 			List<StFileInfo> result = new List<StFileInfo>(10);
-			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				string[] attachments = prov.ListPageAttachments(page);
 
 				foreach(string attn in attachments) {
@@ -614,7 +606,6 @@ namespace ScrewTurn.Wiki {
 				else if(caller is IFormatterProviderV30) name = ((IFormatterProviderV30)caller).Information.Name;
 				else if(caller is ISettingsStorageProviderV30) name = ((ISettingsStorageProviderV30)caller).Information.Name;
 				else if(caller is IFilesStorageProviderV30) name = ((IFilesStorageProviderV30)caller).Information.Name;
-				else if(caller is ICacheProviderV30) name = ((ICacheProviderV30)caller).Information.Name;
 				name += "+" + Log.SystemUsername;
 			}
 			else name = user;
@@ -640,24 +631,7 @@ namespace ScrewTurn.Wiki {
 		public DateTime AlignDateTimeWithPreferences(DateTime dt) {
 			return Preferences.AlignWithTimezone(dt);
 		}
-
-		/// <summary>
-		/// Clears the cache.
-		/// </summary>
-		/// <param name="data">The part of the cache to clear.</param>
-		public void ClearCache(CacheData data) {
-			switch(data) {
-				case CacheData.Pages:
-					Content.InvalidateAllPages();
-					break;
-				case CacheData.MetaFiles:
-					Content.ClearPseudoCache();
-					break;
-				default:
-					throw new ArgumentException("Invalid CacheData");
-			}
-		}
-
+		
 		/// <summary>
 		/// Adds an item in the Editing Toolbar.
 		/// </summary>
@@ -692,8 +666,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="providerType">The type of the provider (
 		/// <see cref="T:IPagesStorageProviderV30" />, 
 		/// <see cref="T:IUsersStorageProviderV30" />, 
-		/// <see cref="T:IFilesStorageProviderV30" />, 
-		/// <see cref="T:ICacheStorageProviderV30" />).</param>
+		/// <see cref="T:IFilesStorageProviderV30" />.</param>
 		/// <returns>The Full type name of the default provider of the specified type or <c>null</c>.</returns>
 		public string GetDefaultProvider(Type providerType) {
 			switch(providerType.FullName) {
@@ -703,8 +676,6 @@ namespace ScrewTurn.Wiki {
 					return Settings.DefaultPagesProvider;
 				case ProviderLoader.FilesProviderInterfaceName:
 					return Settings.DefaultFilesProvider;
-				case ProviderLoader.CacheProviderInterfaceName:
-					return Settings.DefaultCacheProvider;
 				default:
 					return null;
 			}
@@ -716,8 +687,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public IPagesStorageProviderV30[] GetPagesStorageProviders(bool enabled) {
-			if(enabled) return Collectors.PagesProviderCollector.AllProviders;
-			else return Collectors.DisabledPagesProviderCollector.AllProviders;
+			if(enabled) return Collectors.CollectorsBox.PagesProviderCollector.AllProviders;
+			else return Collectors.CollectorsBox.DisabledPagesProviderCollector.AllProviders;
 		}
 
 		/// <summary>
@@ -726,8 +697,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public IUsersStorageProviderV30[] GetUsersStorageProviders(bool enabled) {
-			if(enabled) return Collectors.UsersProviderCollector.AllProviders;
-			else return Collectors.DisabledUsersProviderCollector.AllProviders;
+			if(enabled) return Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
+			else return Collectors.CollectorsBox.DisabledUsersProviderCollector.AllProviders;
 		}
 
 		/// <summary>
@@ -736,18 +707,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public IFilesStorageProviderV30[] GetFilesStorageProviders(bool enabled) {
-			if(enabled) return Collectors.FilesProviderCollector.AllProviders;
-			else return Collectors.DisabledFilesProviderCollector.AllProviders;
-		}
-
-		/// <summary>
-		/// Gets the cache providers, either enabled or disabled.
-		/// </summary>
-		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
-		/// <returns>The providers.</returns>
-		public ICacheProviderV30[] GetCacheProviders(bool enabled) {
-			if(enabled) return Collectors.CacheProviderCollector.AllProviders;
-			else return Collectors.DisabledCacheProviderCollector.AllProviders;
+			if(enabled) return Collectors.CollectorsBox.FilesProviderCollector.AllProviders;
+			else return Collectors.CollectorsBox.DisabledFilesProviderCollector.AllProviders;
 		}
 
 		/// <summary>
@@ -756,8 +717,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public IThemeStorageProviderV30[] GetThemeProviders(bool enabled) {
-			if(enabled) return Collectors.ThemeProviderCollector.AllProviders;
-			else return Collectors.DisabledThemeProviderCollector.AllProviders;
+			if(enabled) return Collectors.CollectorsBox.ThemeProviderCollector.AllProviders;
+			else return Collectors.CollectorsBox.DisabledThemeProviderCollector.AllProviders;
 		}
 
 		/// <summary>
@@ -766,8 +727,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public IFormatterProviderV30[] GetFormatterProviders(bool enabled) {
-			if(enabled) return Collectors.FormatterProviderCollector.AllProviders;
-			else return Collectors.DisabledFormatterProviderCollector.AllProviders;
+			if(enabled) return Collectors.CollectorsBox.FormatterProviderCollector.AllProviders;
+			else return Collectors.CollectorsBox.DisabledFormatterProviderCollector.AllProviders;
 		}
 
 		/// <summary>
@@ -950,7 +911,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="activity">The activity.</param>
 		public void OnFileActivity(string provider, string file, string oldFileName, FileActivity activity) {
 			if(FileActivity != null) {
-				IFilesStorageProviderV30 prov = Collectors.FilesProviderCollector.GetProvider(provider);
+				IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider);
 
 				FileActivity(this, new FileActivityEventArgs(
 					new StFileInfo(prov.GetFileDetails(file), file, prov), oldFileName, null, null, null, activity));
@@ -967,7 +928,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="activity">The activity.</param>
 		public void OnAttachmentActivity(string provider, string attachment, string page, string oldAttachmentName, FileActivity activity) {
 			if(FileActivity != null) {
-				IFilesStorageProviderV30 prov = Collectors.FilesProviderCollector.GetProvider(provider);
+				IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider);
 				PageInfo pageInfo = Pages.FindPage(page);
 
 				FileActivity(this, new FileActivityEventArgs(
@@ -984,7 +945,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="activity">The activity.</param>
 		public void OnDirectoryActivity(string provider, string directory, string oldDirectoryName, FileActivity activity) {
 			if(FileActivity != null) {
-				IFilesStorageProviderV30 prov = Collectors.FilesProviderCollector.GetProvider(provider);
+				IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider);
 
 				FileActivity(this, new FileActivityEventArgs(
 					null, null, new StDirectoryInfo(directory, prov), oldDirectoryName, null, activity));

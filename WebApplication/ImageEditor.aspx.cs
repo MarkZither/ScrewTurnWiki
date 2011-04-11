@@ -54,7 +54,7 @@ namespace ScrewTurn.Wiki {
 			if(string.IsNullOrEmpty(p)) {
 				p = Settings.DefaultFilesProvider;
 			}
-			provider = Collectors.FilesProviderCollector.GetProvider(p);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(p);
 		}
 
 		private void SetInputData() {

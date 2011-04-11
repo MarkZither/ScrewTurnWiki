@@ -38,33 +38,17 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the pseudo-cache item name based on the current namespace.
-		/// </summary>
-		/// <param name="name">The item name.</param>
-		/// <returns>The namespace-qualified item name.</returns>
-		private string GetPseudoCacheItemName(string name) {
-			if(string.IsNullOrEmpty(currentNamespace)) return name;
-			else return currentNamespace + "." + name;
-		}
-
-		/// <summary>
 		/// Prints the page header and page footer.
 		/// </summary>
 		public void PrintPageHeaderAndFooter() {
-			string h = Content.GetPseudoCacheValue(GetPseudoCacheItemName("PageHeader"));
-			if(h == null) {
-				h = Settings.Provider.GetMetaDataItem(MetaDataItem.PageHeader, currentNamespace);
-				h = @"<div id=""PageInternalHeaderDiv"">" + FormattingPipeline.FormatWithPhase1And2(h, false, FormattingContext.PageHeader, currentPage) + "</div>";
-				Content.SetPseudoCacheValue(GetPseudoCacheItemName("PageHeader"), h);
-			}
+			string h = Settings.Provider.GetMetaDataItem(MetaDataItem.PageHeader, currentNamespace);
+			h = @"<div id=""PageInternalHeaderDiv"">" + FormattingPipeline.FormatWithPhase1And2(h, false, FormattingContext.PageHeader, currentPage) + "</div>";
+
 			lblPageHeaderDiv.Text = FormattingPipeline.FormatWithPhase3(h, FormattingContext.PageHeader, currentPage);
 
-			h = Content.GetPseudoCacheValue(GetPseudoCacheItemName("PageFooter"));
-			if(h == null) {
-				h = Settings.Provider.GetMetaDataItem(MetaDataItem.PageFooter, currentNamespace);
-				h = @"<div id=""PageInternalFooterDiv"">" + FormattingPipeline.FormatWithPhase1And2(h, false, FormattingContext.PageFooter, currentPage) + "</div>";
-				Content.SetPseudoCacheValue(GetPseudoCacheItemName("PageFooter"), h);
-			}
+			h = Settings.Provider.GetMetaDataItem(MetaDataItem.PageFooter, currentNamespace);
+			h = @"<div id=""PageInternalFooterDiv"">" + FormattingPipeline.FormatWithPhase1And2(h, false, FormattingContext.PageFooter, currentPage) + "</div>";
+
 			lblPageFooterDiv.Text = FormattingPipeline.FormatWithPhase3(h, FormattingContext.PageFooter, currentPage);
 		}
 
@@ -72,23 +56,19 @@ namespace ScrewTurn.Wiki {
 		/// Prints the HTML head tag.
 		/// </summary>
 		public void PrintHtmlHead() {
-			string h = Content.GetPseudoCacheValue(GetPseudoCacheItemName("Head"));
-			if(h == null) {
-				StringBuilder sb = new StringBuilder(100);
+			StringBuilder sb = new StringBuilder(100);
 
-				if(Settings.RssFeedsMode != RssFeedsMode.Disabled) {
-					sb.AppendFormat(@"<link rel=""alternate"" title=""{0}"" href=""{1}######______NAMESPACE______######RSS.aspx"" type=""application/rss+xml"" />",
-						Settings.WikiTitle, Settings.MainUrl);
-					sb.Append("\n");
-					sb.AppendFormat(@"<link rel=""alternate"" title=""{0}"" href=""{1}######______NAMESPACE______######RSS.aspx?Discuss=1"" type=""application/rss+xml"" />",
-						Settings.WikiTitle + " - Discussions", Settings.MainUrl);
-					sb.Append("\n");
-				}
-
-				sb.Append("######______INCLUDES______######");
-				h = sb.ToString();
-				Content.SetPseudoCacheValue(GetPseudoCacheItemName("Head"), h);
+			if(Settings.RssFeedsMode != RssFeedsMode.Disabled) {
+				sb.AppendFormat(@"<link rel=""alternate"" title=""{0}"" href=""{1}######______NAMESPACE______######RSS.aspx"" type=""application/rss+xml"" />",
+					Settings.WikiTitle, Settings.MainUrl);
+				sb.Append("\n");
+				sb.AppendFormat(@"<link rel=""alternate"" title=""{0}"" href=""{1}######______NAMESPACE______######RSS.aspx?Discuss=1"" type=""application/rss+xml"" />",
+					Settings.WikiTitle + " - Discussions", Settings.MainUrl);
+				sb.Append("\n");
 			}
+
+			sb.Append("######______INCLUDES______######");
+
 
 			// Use a Control to allow 3rd party plugins to programmatically access the Page header
 			string nspace = currentNamespace;
@@ -96,7 +76,7 @@ namespace ScrewTurn.Wiki {
 			else if(nspace.Length > 0) nspace += ".";
 
 			Literal c = new Literal();
-			c.Text = h.Replace("######______INCLUDES______######", Tools.GetIncludes(currentNamespace)).Replace("######______NAMESPACE______######", nspace);
+			c.Text = sb.ToString().Replace("######______INCLUDES______######", Tools.GetIncludes(currentNamespace)).Replace("######______NAMESPACE______######", nspace);
 			Page.Header.Controls.Add(c);
 		}
 
@@ -104,12 +84,9 @@ namespace ScrewTurn.Wiki {
 		/// Prints the header.
 		/// </summary>
 		public void PrintHeader() {
-			string h = Content.GetPseudoCacheValue(GetPseudoCacheItemName("Header"));
-			if(h == null) {
-				h = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Header, currentNamespace),
-					false, FormattingContext.Header, currentPage);
-				Content.SetPseudoCacheValue(GetPseudoCacheItemName("Header"), h);
-			}
+			string h = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Header, currentNamespace),
+				false, FormattingContext.Header, currentPage);
+
 			lblHeaderDiv.Text = FormattingPipeline.FormatWithPhase3(h, FormattingContext.Header, currentPage);
 		}
 
@@ -117,12 +94,9 @@ namespace ScrewTurn.Wiki {
 		/// Prints the sidebar.
 		/// </summary>
 		public void PrintSidebar() {
-			string s = Content.GetPseudoCacheValue(GetPseudoCacheItemName("Sidebar"));
-			if(s == null) {
-				s = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Sidebar, currentNamespace),
-					false, FormattingContext.Sidebar, currentPage);
-				Content.SetPseudoCacheValue(GetPseudoCacheItemName("Sidebar"), s);
-			}
+			string s = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Sidebar, currentNamespace),
+				false, FormattingContext.Sidebar, currentPage);
+
 			lblSidebarDiv.Text = FormattingPipeline.FormatWithPhase3(s, FormattingContext.Sidebar, currentPage);
 		}
 
@@ -130,12 +104,9 @@ namespace ScrewTurn.Wiki {
 		/// Prints the footer.
 		/// </summary>
 		public void PrintFooter() {
-			string f = Content.GetPseudoCacheValue(GetPseudoCacheItemName("Footer"));
-			if(f == null) {
-				f = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Footer, currentNamespace),
-					false, FormattingContext.Footer, currentPage);
-				Content.SetPseudoCacheValue(GetPseudoCacheItemName("Footer"), f);
-			}
+			string f = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Footer, currentNamespace),
+				false, FormattingContext.Footer, currentPage);
+
 			lblFooterDiv.Text = FormattingPipeline.FormatWithPhase3(f, FormattingContext.Footer, currentPage);
 		}
 

@@ -67,7 +67,7 @@ namespace ScrewTurn.Wiki {
 				PageInfo page = Pages.FindPage(Request["Page"]);
 				if(page == null) return;
 
-				PageContent content = Content.GetPageContent(page, true);
+				PageContent content = Content.GetPageContent(page);
 				if(Request["Discuss"] == null) {
 					// Check permission for the page
 					bool canReadPage = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
@@ -106,7 +106,7 @@ namespace ScrewTurn.Wiki {
 						}
 						else
 						{
-							rss.WriteCData(Content.GetFormattedPageContent(page, false));
+							rss.WriteCData(Content.GetFormattedPageContent(page));
 						}
 						rss.WriteEndElement();
 
@@ -313,7 +313,7 @@ namespace ScrewTurn.Wiki {
 							}
 							else {
 								// p != null
-								sb.Append(Content.GetFormattedPageContent(p, false));
+								sb.Append(Content.GetFormattedPageContent(p));
 							}
 							rss.WriteStartElement("description");
 							rss.WriteCData(sb.ToString());

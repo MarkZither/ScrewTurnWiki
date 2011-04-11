@@ -41,7 +41,7 @@ namespace ScrewTurn.Wiki {
 
 			IFilesStorageProviderV30 provider;
 
-			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.FilesProviderCollector.GetProvider(Request["Provider"]);
+			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(Request["Provider"]);
 			else {
 				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(pageInfo, filename);
 				else provider = FilesAndAttachments.FindFileProvider(filename);

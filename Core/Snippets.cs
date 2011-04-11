@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki {
 			List<Snippet> allSnippets = new List<Snippet>(50);
 
 			// Retrieve all snippets from Pages Provider
-			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				allSnippets.AddRange(provider.GetSnippets());
 			}
 
@@ -53,13 +53,12 @@ namespace ScrewTurn.Wiki {
 		public static bool AddSnippet(string name, string content, IPagesStorageProviderV30 provider) {
 			if(Find(name) != null) return false;
 
-			if(provider == null) provider = Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
 
 			Snippet newSnippet = provider.AddSnippet(name, content);
 
 			if(newSnippet != null) {
 				Log.LogEntry("Snippet " + name + " created", EntryType.General, Log.SystemUsername);
-				Content.ClearPseudoCache();
 				Content.InvalidateAllPages();
 			}
 			else Log.LogEntry("Creation failed for Snippet " + name, EntryType.Error, Log.SystemUsername);
@@ -77,7 +76,6 @@ namespace ScrewTurn.Wiki {
 
 			if(done) {
 				Log.LogEntry("Snippet " + snippet.Name + " deleted", EntryType.General, Log.SystemUsername);
-				Content.ClearPseudoCache();
 				Content.InvalidateAllPages();
 			}
 			else Log.LogEntry("Deletion failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername);
@@ -96,7 +94,6 @@ namespace ScrewTurn.Wiki {
 
 			if(newSnippet != null) {
 				Log.LogEntry("Snippet " + snippet.Name + " updated", EntryType.General, Log.SystemUsername);
-				Content.ClearPseudoCache();
 				Content.InvalidateAllPages();
 			}
 			else Log.LogEntry("Modification failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername);

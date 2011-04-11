@@ -86,14 +86,7 @@ namespace ScrewTurn.Wiki {
 			lblEmailResult.CssClass = "resultok";
 			lblEmailResult.Text = Properties.Messages.MassEmailSent;
 		}
-
-		protected void btnClearCache_Click(object sender, EventArgs e) {
-			Redirections.Clear();
-			Content.ClearPseudoCache();
-			Content.InvalidateAllPages();
-			PrintSystemStatus();
-		}
-
+		
 		protected void rptPages_DataBinding(object sender, EventArgs e) {
 			List<WantedPageRow> result = new List<WantedPageRow>(50);
 
@@ -127,7 +120,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="pages">The pages.</param>
 		private void RebuildPageLinks(IList<PageInfo> pages) {
 			foreach(PageInfo page in pages) {
-				PageContent content = Content.GetPageContent(page, false);
+				PageContent content = Content.GetPageContent(page);
 				Pages.StorePageOutgoingLinks(page, content.Content);				
 			}
 		}
@@ -135,7 +128,7 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_DataBinding(object sender, EventArgs e) {
 			List<IndexRow> result = new List<IndexRow>(5);
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				result.Add(new IndexRow(prov));
 			}
 
@@ -145,7 +138,7 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_ItemCommand(object sender, CommandEventArgs e) {
 			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername());
 
-			IPagesStorageProviderV30 provider = Collectors.PagesProviderCollector.GetProvider(e.CommandArgument as string);
+			IPagesStorageProviderV30 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string);
 			provider.RebuildIndex();
 
 			Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername);
@@ -165,8 +158,6 @@ namespace ScrewTurn.Wiki {
 
 		public void PrintSystemStatus() {
 			StringBuilder sb = new StringBuilder(500);
-			sb.Append(Properties.Messages.OnlineUsers + ": <b>" + 
-				ScrewTurn.Wiki.Cache.OnlineUsers.ToString() + "</b><br />" + "\n");
 			int inactive = 0;
 
 			List<UserInfo> users = Users.GetUsers();
@@ -174,7 +165,6 @@ namespace ScrewTurn.Wiki {
 				if(!users[i].Active) inactive++;
 			}
 			sb.Append(Properties.Messages.UserCount + ": <b>" + users.Count.ToString() + "</b> (" + inactive.ToString() + " " + Properties.Messages.InactiveUsers + ")<br />" + "\n");
-			sb.Append(Properties.Messages.CachedPages + ": <b>" + ScrewTurn.Wiki.Cache.PageCacheUsage.ToString() + "/" + Pages.GetGlobalPageCount().ToString() + "</b> (" + ScrewTurn.Wiki.Cache.FormattedPageCacheUsage.ToString() + " " + Properties.Messages.Formatted + ")<br />" + "\n");
 			sb.Append(Properties.Messages.WikiVersion + ": <b>" + Settings.WikiVersion + "</b>" + "\n");
 			if(!Page.IsPostBack) {
 				sb.Append(CheckVersion());
@@ -237,7 +227,7 @@ namespace ScrewTurn.Wiki {
 			for(int i = 0; i < linkingPages.Count; i++) {
 				PageInfo page = Pages.FindPage(linkingPages[i]);
 				if(page != null) {
-					PageContent content = Content.GetPageContent(page, false);
+					PageContent content = Content.GetPageContent(page);
 
 					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" target=""_blank"">{2}</a>, ", page.FullName, Settings.PageExtension,
 						FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page));

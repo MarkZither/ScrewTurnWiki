@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki {
 			if(!Page.IsPostBack) {
 
 				// Load FilesStorageProviders
-				IFilesStorageProviderV30[] provs = Collectors.FilesProviderCollector.AllProviders;
+				IFilesStorageProviderV30[] provs = Collectors.CollectorsBox.FilesProviderCollector.AllProviders;
 				foreach(IFilesStorageProviderV30 p in provs) {
 					lstProviderFiles.Items.Add(new ListItem(p.Information.Name, p.GetType().FullName));
 					// Select the default files provider
@@ -155,7 +155,7 @@ namespace ScrewTurn.Wiki {
 			NamespaceInfo currentNamespace = DetectNamespaceInfo();
 
 			foreach(PageInfo pi in Pages.GetPages(selectedNamespace)) {
-				PageContent cont = Content.GetPageContent(pi, true);
+				PageContent cont = Content.GetPageContent(pi);
 				string formattedTitle = FormattingPipeline.PrepareTitle(cont.Title, false, FormattingContext.Other, pi);
 				string onClickJavascript = "javascript:";
 				// Populate the page title box if the title is different to the page name
@@ -187,7 +187,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected List<TreeElement> ctFiles_Populate(object sender, PopulateEventArgs e) {
-			IFilesStorageProviderV30 p = Collectors.FilesProviderCollector.GetProvider(lstProviderFiles.SelectedValue);
+			IFilesStorageProviderV30 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviderFiles.SelectedValue);
 			return BuildFilesSubTree(p, "/");
 		}
 
@@ -241,7 +241,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected List<TreeElement> cibImages_Populate(object sender, PopulateEventArgs e) {
-			IFilesStorageProviderV30 p = Collectors.FilesProviderCollector.GetProvider(lstProviderImages.SelectedValue);
+			IFilesStorageProviderV30 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviderImages.SelectedValue);
 			return BuildImagesSubTree(p, "/");
 		}
 

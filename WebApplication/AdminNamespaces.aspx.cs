@@ -204,7 +204,7 @@ namespace ScrewTurn.Wiki {
 
 			// Create new namespace and the default page (MainPage)
 			bool done = Pages.CreateNamespace(txtName.Text,
-				Collectors.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider));
+				Collectors.CollectorsBox.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider));
 
 			if(done) {
 				NamespaceInfo nspace = Pages.FindNamespace(txtName.Text);

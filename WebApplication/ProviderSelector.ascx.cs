@@ -38,23 +38,19 @@ namespace ScrewTurn.Wiki {
 			string defaultProvider = null;
 			switch(providerType) {
 				case ProviderType.Users:
-					allProviders = Collectors.UsersProviderCollector.AllProviders;
+					allProviders = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
 					defaultProvider = Settings.DefaultUsersProvider;
 					break;
 				case ProviderType.Pages:
-					allProviders = Collectors.PagesProviderCollector.AllProviders;
+					allProviders = Collectors.CollectorsBox.PagesProviderCollector.AllProviders;
 					defaultProvider = Settings.DefaultPagesProvider;
 					break;
 				case ProviderType.Themes:
-					allProviders = Collectors.ThemeProviderCollector.AllProviders;
+					allProviders = Collectors.CollectorsBox.ThemeProviderCollector.AllProviders;
 					break;
 				case ProviderType.Files:
-					allProviders = Collectors.FilesProviderCollector.AllProviders;
+					allProviders = Collectors.CollectorsBox.FilesProviderCollector.AllProviders;
 					defaultProvider = Settings.DefaultFilesProvider;
-					break;
-				case ProviderType.Cache:
-					allProviders = Collectors.CacheProviderCollector.AllProviders;
-					defaultProvider = Settings.DefaultCacheProvider;
 					break;
 				default:
 					throw new NotSupportedException();
@@ -92,8 +88,6 @@ namespace ScrewTurn.Wiki {
 					return storageProvider == null || (!storageProvider.ReadOnly || storageProvider.ReadOnly && !excludeReadOnly);
 				case ProviderType.Themes:
 					return storageProvider == null || (!storageProvider.ReadOnly || storageProvider.ReadOnly && !excludeReadOnly);
-				case ProviderType.Cache:
-					return true;
 				default:
 					throw new NotSupportedException();
 			}
@@ -212,10 +206,6 @@ namespace ScrewTurn.Wiki {
 		/// Files storage providers.
 		/// </summary>
 		Files,
-		/// <summary>
-		/// Cache providers.
-		/// </summary>
-		Cache,
 		/// <summary>
 		///  Theme providers.
 		/// </summary>

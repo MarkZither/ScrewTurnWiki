@@ -71,7 +71,7 @@ namespace ScrewTurn.Wiki {
 
 			// Retrieve all the users from the Users Providers
 			int count = 0;
-			foreach(IUsersStorageProviderV30 provider in Collectors.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 provider in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
 				count++;
 				allUsers.AddRange(provider.GetUsers());
 			}
@@ -94,13 +94,13 @@ namespace ScrewTurn.Wiki {
 			if(username == "admin") return GetAdministratorAccount();
 
 			// Try default provider first
-			IUsersStorageProviderV30 defaultProvider = Collectors.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
+			IUsersStorageProviderV30 defaultProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
 			UserInfo temp = defaultProvider.GetUser(username);
 			if(temp != null) return temp;
 
 			// The try other providers
 			temp = null;
-			IUsersStorageProviderV30[] providers = Collectors.UsersProviderCollector.AllProviders;
+			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
 			foreach(IUsersStorageProviderV30 p in providers) {
 				IUsersStorageProviderV30 extProv = p as IUsersStorageProviderV30;
 				if(extProv != null && extProv != defaultProvider) {
@@ -118,13 +118,13 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The user, or <c>null</c>.</returns>
 		public static UserInfo FindUserByEmail(string email) {
 			// Try default provider first
-			IUsersStorageProviderV30 defaultProvider = Collectors.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
+			IUsersStorageProviderV30 defaultProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
 			UserInfo temp = defaultProvider.GetUserByEmail(email);
 			if(temp != null) return temp;
 
 			// The try other providers
 			temp = null;
-			IUsersStorageProviderV30[] providers = Collectors.UsersProviderCollector.AllProviders;
+			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
 			foreach(IUsersStorageProviderV30 p in providers) {
 				IUsersStorageProviderV30 extProv = p as IUsersStorageProviderV30;
 				if(extProv != null && extProv != defaultProvider) {
@@ -182,7 +182,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>True if the User has been created successfully.</returns>
 		public static bool AddUser(string username, string displayName, string password, string email, bool active, IUsersStorageProviderV30 provider) {
 			if(FindUser(username) != null) return false;
-			if(provider == null) provider = Collectors.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
+			if(provider == null) provider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
 
 			if(provider.UserAccountsReadOnly) return false;
 
@@ -274,7 +274,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="user">The user.</param>
 		private static void RemovePermissions(UserInfo user) {
-			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				foreach(string dir in ListDirectories(prov)) {
 					AuthWriter.RemoveEntriesForDirectory(user, prov, dir);
 				}
@@ -283,7 +283,7 @@ namespace ScrewTurn.Wiki {
 			AuthWriter.RemoveEntriesForGlobals(user);
 
 			AuthWriter.RemoveEntriesForNamespace(user, null);
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				foreach(PageInfo page in prov.GetPages(null)) {
 					AuthWriter.RemoveEntriesForPage(user, page);
 				}
@@ -303,7 +303,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="group">The group.</param>
 		private static void RemovePermissions(UserGroup group) {
-			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				foreach(string dir in ListDirectories(prov)) {
 					AuthWriter.RemoveEntriesForDirectory(group, prov, dir);
 				}
@@ -312,7 +312,7 @@ namespace ScrewTurn.Wiki {
 			AuthWriter.RemoveEntriesForGlobals(group);
 
 			AuthWriter.RemoveEntriesForNamespace(group, null);
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				foreach(PageInfo page in prov.GetPages(null)) {
 					AuthWriter.RemoveEntriesForPage(group, page);
 				}
@@ -381,7 +381,7 @@ namespace ScrewTurn.Wiki {
 			List<UserGroup> result = new List<UserGroup>(50);
 
 			int count = 0;
-			foreach(IUsersStorageProviderV30 prov in Collectors.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
 				count++;
 				result.AddRange(prov.GetUserGroups());
 			}
@@ -446,7 +446,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The target provider.</param>
 		/// <returns><c>true</c> if the groups is added, <c>false</c> otherwise.</returns>
 		public static bool AddUserGroup(string name, string description, IUsersStorageProviderV30 provider) {
-			if(provider == null) provider = Collectors.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
+			if(provider == null) provider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
 
 			if(provider.UserGroupsReadOnly) return false;
 
@@ -471,7 +471,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the groups is added, <c>false</c> otherwise.</returns>
 		public static bool AddUserGroup(string name, string description) {
 			return AddUserGroup(name, description,
-				Collectors.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider));
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider));
 		}
 
 		/// <summary>
@@ -584,7 +584,7 @@ namespace ScrewTurn.Wiki {
 		public static UserInfo TryAutoLogin(HttpContext context) {
 			// Try default provider first
 			IUsersStorageProviderV30 defaultProvider =
-				Collectors.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider) as IUsersStorageProviderV30;
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider) as IUsersStorageProviderV30;
 
 			if(defaultProvider != null) {
 				UserInfo temp = defaultProvider.TryAutoLogin(context);
@@ -592,7 +592,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Then try all other providers
-			IUsersStorageProviderV30[] providers = Collectors.UsersProviderCollector.AllProviders;
+			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
 			foreach(IUsersStorageProviderV30 p in providers) {
 				IUsersStorageProviderV30 extProv = p as IUsersStorageProviderV30;
 				if(extProv != null && extProv != defaultProvider) {
@@ -618,7 +618,7 @@ namespace ScrewTurn.Wiki {
 
 			// Try default provider first
 			IUsersStorageProviderV30 defaultProvider =
-				Collectors.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider) as IUsersStorageProviderV30;
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider) as IUsersStorageProviderV30;
 
 			if(defaultProvider != null) {
 				UserInfo temp = defaultProvider.TryManualLogin(username, password);
@@ -626,7 +626,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Then try all other providers
-			IUsersStorageProviderV30[] providers = Collectors.UsersProviderCollector.AllProviders;
+			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
 			foreach(IUsersStorageProviderV30 p in providers) {
 				IUsersStorageProviderV30 extProv = p as IUsersStorageProviderV30;
 				if(extProv != null && extProv != defaultProvider) {
@@ -983,7 +983,7 @@ namespace ScrewTurn.Wiki {
 
 			string lowercasePage = page.FullName.ToLowerInvariant();
 
-			foreach(IUsersStorageProviderV30 prov in Collectors.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
 				IDictionary<UserInfo, string> users = prov.GetUsersWithData(key);
 
 				string[] fields;
@@ -1010,7 +1010,7 @@ namespace ScrewTurn.Wiki {
 
 			string lowercaseNamespace = nspace != null ? nspace.Name.ToLowerInvariant() : "<root>";
 
-			foreach(IUsersStorageProviderV30 prov in Collectors.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
 				IDictionary<UserInfo, string> users = prov.GetUsersWithData(key);
 
 				string[] fields;

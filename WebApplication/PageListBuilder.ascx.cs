@@ -89,7 +89,7 @@ namespace ScrewTurn.Wiki {
 				}
 
 				if(!found) {
-					PageContent content = Content.GetPageContent(page, false);
+					PageContent content = Content.GetPageContent(page);
 					lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page), page.FullName));
 				}
 			}
@@ -99,7 +99,7 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnAddPage_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(lstAvailablePage.SelectedValue);
-			PageContent content = Content.GetPageContent(page, false);
+			PageContent content = Content.GetPageContent(page);
 
 			lstPages.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page), page.FullName));
 

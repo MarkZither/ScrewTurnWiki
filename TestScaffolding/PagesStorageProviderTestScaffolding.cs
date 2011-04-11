@@ -1208,7 +1208,6 @@ namespace ScrewTurn.Wiki.Tests {
 
 		private void AssertPageInfosAreEqual(PageInfo expected, PageInfo actual, bool checkProvider) {
 			Assert.AreEqual(expected.FullName, actual.FullName, "Wrong name");
-			Assert.AreEqual(expected.NonCached, actual.NonCached, "Wrong non-cached flag");
 			Tools.AssertDateTimesAreEqual(expected.CreationDateTime, actual.CreationDateTime, true);
 			if(checkProvider) Assert.AreSame(expected.Provider, actual.Provider, "Different provider instances");
 		}

@@ -193,7 +193,7 @@ namespace ScrewTurn.Wiki {
 			for(int i = rangeBegin; i <= rangeEnd; i++) {
 				PageInfo page = currentPages[i];
 
-				PageContent currentContent = Content.GetPageContent(page, false);
+				PageContent currentContent = Content.GetPageContent(page);
 
 				// The page can be selected if the user can either manage or delete the page or manage the discussion
 				// Repeat checks for enabling/disabling sections when a page is selected
@@ -585,7 +585,7 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Page rename requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
 
 			PageInfo oldPage = Pages.FindPage(txtCurrentPage.Value);
-			PageContent oldContent = Content.GetPageContent(oldPage, false);
+			PageContent oldContent = Content.GetPageContent(oldPage);
 
 			bool done = Pages.RenamePage(oldPage, txtNewName.Text);
 

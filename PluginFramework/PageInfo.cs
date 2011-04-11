@@ -24,10 +24,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		protected IPagesStorageProviderV30 provider;
 		/// <summary>
-		/// A value specifying whether the Page should NOT be cached by the engine.
-		/// </summary>
-		protected bool nonCached;
-		/// <summary>
 		/// The Page creation Date/Time.
 		/// </summary>
 		protected DateTime creationDateTime;
@@ -59,15 +55,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 			get { return provider; }
 			set { provider = value; }
 		}
-
-		/// <summary>
-		/// Gets or sets a value specifying whether the Page should NOT be cached by the engine.
-		/// </summary>
-		public bool NonCached {
-			get { return nonCached; }
-			set { nonCached = value; }
-		}
-
+		
 		/// <summary>
 		/// Gets or sets the creation Date/Time.
 		/// </summary>

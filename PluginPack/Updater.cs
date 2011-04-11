@@ -103,12 +103,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			}
 		}
 
-		/// <summary>
-		/// Method invoked on shutdown.
-		/// </summary>
-		/// <remarks>This method might not be invoked in some cases.</remarks>
-		public void Shutdown() {
-		}
+		void IDisposable.Dispose() { }
 
 		/// <summary>
 		/// Specifies whether or not to execute Phase 1.

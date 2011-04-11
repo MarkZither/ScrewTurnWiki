@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki {
 			IProviderV30[] allProviders = null;
 			string defaultProvider = null;
 
-			allProviders = Collectors.ThemeProviderCollector.AllProviders;
+			allProviders = Collectors.CollectorsBox.ThemeProviderCollector.AllProviders;
 			lstThemesProviders.Items.Clear();
 
 			int count = 0;

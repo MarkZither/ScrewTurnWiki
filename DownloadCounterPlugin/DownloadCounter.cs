@@ -352,10 +352,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		public void SetUp() { }
 
 		/// <summary>
-		/// Method invoked on shutdown.
+		/// Method invoked on dispose.
 		/// </summary>
 		/// <remarks>This method might not be invoked in some cases.</remarks>
-		public void Shutdown() {
+		void IDisposable.Dispose() {
 			// Nothing to do
 		}
 

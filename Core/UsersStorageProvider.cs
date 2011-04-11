@@ -144,11 +144,7 @@ namespace ScrewTurn.Wiki {
 			VerifyAndPerformUpgrade();
 		}
 
-		/// <summary>
-		/// Method invoked on shutdown.
-		/// </summary>
-		/// <remarks>This method might not be invoked in some cases.</remarks>
-		public void Shutdown() { }
+		void IDisposable.Dispose() { }
 
 		/// <summary>
 		/// Gets the Information about the Provider.

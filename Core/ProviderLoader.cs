@@ -19,7 +19,6 @@ namespace ScrewTurn.Wiki {
 		internal const string PagesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IPagesStorageProviderV30";
 		internal const string FilesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IFilesStorageProviderV30";
 		internal const string FormatterProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IFormatterProviderV30";
-		internal const string CacheProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.ICacheProviderV30";
 
 		internal static string SettingsStorageProviderAssemblyName = "";
 
@@ -46,32 +45,13 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
 		/// <param name="instance">The provider instance to setup.</param>
-		/// <param name="collectorEnabled">The collector for enabled providers.</param>
-		/// <param name="collectorDisabled">The collector for disabled providers.</param>
-		public static void SetUp<T>(Type instance, ProviderCollector<T> collectorEnabled,
-			ProviderCollector<T> collectorDisabled) where T : class, IProviderV30 {
+		public static void SetUp<T>(Type instance) where T : class, IProviderV30 {
+			T provider = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(instance), instance);
+			ProviderLoader.Initialize<T>(provider);
+			provider.SetUp();
 
-			if(collectorEnabled.GetProvider(instance.FullName) != null ||
-				collectorDisabled.GetProvider(instance.FullName) != null) {
-
-				Log.LogEntry("SetUp already colled on provider " + instance.FullName, EntryType.Warning, Log.SystemUsername);
-				return;
-			}
-			bool enabled = !IsDisabled(instance.FullName);
-
-			if(enabled) {
-				T provider = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(instance), instance);
-				ProviderLoader.Initialize<T>(provider);
-				provider.SetUp();
-				collectorEnabled.AddProvider(instance, Assembly.GetAssembly(instance));
-
-				// Verify constraints
-				VerifyConstraints<T>(provider);
-			}
-			else {
-				collectorDisabled.AddProvider(instance, Assembly.GetAssembly(instance));
-			}
-
+			// Verify constraints
+			VerifyConstraints<T>(provider);
 		}
 
 		/// <summary>
@@ -99,7 +79,7 @@ namespace ScrewTurn.Wiki {
 				SaveStatus(instance.GetType().FullName, false);
 				throw; // Exception is rethrown because it's not a normal condition
 			}
-			
+
 			Log.LogEntry("Provider " + instance.Information.Name + " loaded (" + (enabled ? "Enabled" : "Disabled") + ")", EntryType.General, Log.SystemUsername);
 		}
 
@@ -110,8 +90,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="loadPages">A value indicating whether to load pages storage providers.</param>
 		/// <param name="loadFiles">A value indicating whether to load files storage providers.</param>
 		/// <param name="loadFormatters">A value indicating whether to load formatter providers.</param>
-		/// <param name="loadCache">A value indicating whether to load cache providers.</param>
-		public static void FullLoad(bool loadUsers, bool loadPages, bool loadFiles, bool loadFormatters, bool loadCache) {
+		public static void FullLoad(bool loadUsers, bool loadPages, bool loadFiles, bool loadFormatters) {
 			string[] pluginAssemblies = Settings.Provider.ListPluginAssemblies();
 
 			List<Type> users = new List<Type>(2);
@@ -123,8 +102,6 @@ namespace ScrewTurn.Wiki {
 			List<Type> dFiles = new List<Type>(2);
 			List<Type> forms = new List<Type>(2);
 			List<Type> dForms = new List<Type>(2);
-			List<Type> cache = new List<Type>(2);
-			List<Type> dCache = new List<Type>(2);
 
 			for(int i = 0; i < pluginAssemblies.Length; i++) {
 				Type[] d;
@@ -132,38 +109,57 @@ namespace ScrewTurn.Wiki {
 				Type[] p;
 				Type[] t;
 				Type[] f;
-				Type[] c;
-				LoadFrom(pluginAssemblies[i], out u, out p, out d, out t, out f, out c);
+				LoadFrom(pluginAssemblies[i], out u, out p, out d, out t, out f);
 				if(loadFiles) files.AddRange(d);
 				if(loadUsers) users.AddRange(u);
 				if(loadPages) pages.AddRange(p);
 				if(loadFormatters) forms.AddRange(f);
-				if(loadCache) cache.AddRange(c);
 			}
 
 			// Init and add to the Collectors, starting from files providers
 			for(int i = 0; i < files.Count; i++) {
-				SetUp<IFilesStorageProviderV30>(files[i], Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
+				if(Collectors.CollectorsBox.FilesProviderCollector.GetProvider(files[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledFilesProviderCollector.GetProvider(files[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + files[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IFilesStorageProviderV30>(files[i]);
+				Collectors.AddProvider(files[i], Assembly.GetAssembly(files[i]), typeof(IFilesStorageProviderV30), !IsDisabled(files[i].FullName));
 			}
 
 			for(int i = 0; i < users.Count; i++) {
-				SetUp<IUsersStorageProviderV30>(users[i], Collectors.UsersProviderCollector, Collectors.DisabledUsersProviderCollector);
+				if(Collectors.CollectorsBox.UsersProviderCollector.GetProvider(users[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledUsersProviderCollector.GetProvider(users[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + users[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IUsersStorageProviderV30>(users[i]);
+				Collectors.AddProvider(users[i], Assembly.GetAssembly(users[i]), typeof(IUsersStorageProviderV30), !IsDisabled(users[i].FullName));
 			}
 
 			for(int i = 0; i < pages.Count; i++) {
-				SetUp<IPagesStorageProviderV30>(pages[i], Collectors.PagesProviderCollector, Collectors.DisabledPagesProviderCollector);
+				if(Collectors.CollectorsBox.PagesProviderCollector.GetProvider(pages[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledPagesProviderCollector.GetProvider(pages[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + pages[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IPagesStorageProviderV30>(pages[i]);
+				Collectors.AddProvider(pages[i], Assembly.GetAssembly(pages[i]), typeof(IPagesStorageProviderV30), !IsDisabled(pages[i].FullName));
 			}
 
 			for(int i = 0; i < theme.Count; i++) {
-				SetUp<IThemeStorageProviderV30>(theme[i], Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
+				if(Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(theme[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledThemeProviderCollector.GetProvider(theme[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + theme[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IThemeStorageProviderV30>(theme[i]);
+				Collectors.AddProvider(theme[i], Assembly.GetAssembly(theme[i]), typeof(IThemeStorageProviderV30), !IsDisabled(theme[i].FullName));
 			}
 
 			for(int i = 0; i < forms.Count; i++) {
-				SetUp<IFormatterProviderV30>(forms[i], Collectors.FormatterProviderCollector, Collectors.DisabledFormatterProviderCollector);
-			}
-
-			for(int i = 0; i < cache.Count; i++) {
-				SetUp<ICacheProviderV30>(cache[i], Collectors.CacheProviderCollector, Collectors.DisabledCacheProviderCollector);
+				if(Collectors.CollectorsBox.FormatterProviderCollector.GetProvider(forms[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledFormatterProviderCollector.GetProvider(forms[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + forms[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IFormatterProviderV30>(forms[i]);
+				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), typeof(IFormatterProviderV30), !IsDisabled(forms[i].FullName));
 			}
 		}
 
@@ -212,41 +208,60 @@ namespace ScrewTurn.Wiki {
 			Type[] users;
 			Type[] pages;
 			Type[] files;
-			Type[] themes;
+			Type[] theme;
 			Type[] forms;
-			Type[] cache;
-			LoadFrom(assembly, out users, out pages, out files, out themes, out forms, out cache);
+			LoadFrom(assembly, out users, out pages, out files, out theme, out forms);
 
 			int count = 0;
 
 			// Init and add to the Collectors, starting from files providers
 			for(int i = 0; i < files.Length; i++) {
-				SetUp<IFilesStorageProviderV30>(files[i], Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
+				if(Collectors.CollectorsBox.FilesProviderCollector.GetProvider(files[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledFilesProviderCollector.GetProvider(files[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + files[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IFilesStorageProviderV30>(files[i]);
+				Collectors.AddProvider(files[i], Assembly.GetAssembly(files[i]), typeof(IFilesStorageProviderV30), !IsDisabled(files[i].FullName));
 				count++;
 			}
 
 			for(int i = 0; i < users.Length; i++) {
-				SetUp<IUsersStorageProviderV30>(users[i], Collectors.UsersProviderCollector, Collectors.DisabledUsersProviderCollector);
-				count++;
-			}
-
-			for(int i = 0; i < themes.Length; i++) {
-				SetUp<IThemeStorageProviderV30>(themes[i], Collectors.ThemeProviderCollector, Collectors.DisabledThemeProviderCollector);
+				if(Collectors.CollectorsBox.UsersProviderCollector.GetProvider(users[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledUsersProviderCollector.GetProvider(users[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + users[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IUsersStorageProviderV30>(users[i]);
+				Collectors.AddProvider(users[i], Assembly.GetAssembly(users[i]), typeof(IUsersStorageProviderV30), !IsDisabled(users[i].FullName));
 				count++;
 			}
 
 			for(int i = 0; i < pages.Length; i++) {
-				SetUp<IPagesStorageProviderV30>(pages[i], Collectors.PagesProviderCollector, Collectors.DisabledPagesProviderCollector);
+				if(Collectors.CollectorsBox.PagesProviderCollector.GetProvider(pages[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledPagesProviderCollector.GetProvider(pages[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + pages[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IPagesStorageProviderV30>(pages[i]);
+				Collectors.AddProvider(pages[i], Assembly.GetAssembly(pages[i]), typeof(IPagesStorageProviderV30), !IsDisabled(pages[i].FullName));
+				count++;
+			}
+
+			for(int i = 0; i < theme.Length; i++) {
+				if(Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(theme[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledThemeProviderCollector.GetProvider(theme[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + theme[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IThemeStorageProviderV30>(theme[i]);
+				Collectors.AddProvider(theme[i], Assembly.GetAssembly(theme[i]), typeof(IThemeStorageProviderV30), !IsDisabled(theme[i].FullName));
 				count++;
 			}
 
 			for(int i = 0; i < forms.Length; i++) {
-				SetUp<IFormatterProviderV30>(forms[i], Collectors.FormatterProviderCollector, Collectors.DisabledFormatterProviderCollector);
-				count++;
-			}
-
-			for(int i = 0; i < cache.Length; i++) {
-				SetUp<ICacheProviderV30>(cache[i], Collectors.CacheProviderCollector, Collectors.DisabledCacheProviderCollector);
+				if(Collectors.CollectorsBox.FormatterProviderCollector.GetProvider(forms[i].FullName) != null ||
+					Collectors.CollectorsBox.DisabledFormatterProviderCollector.GetProvider(forms[i].FullName) != null) {
+					Log.LogEntry("SetUp already colled on provider " + forms[i].FullName, EntryType.Warning, Log.SystemUsername);
+				}
+				SetUp<IFormatterProviderV30>(forms[i]);
+				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), typeof(IFormatterProviderV30), !IsDisabled(forms[i].FullName));
 				count++;
 			}
 
@@ -262,10 +277,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="pages">The Pages Providers.</param>
 		/// <param name="themes">The Themes Providers.</param>
 		/// <param name="formatters">The Formatter Providers.</param>
-		/// <param name="cache">The Cache Providers.</param>
 		/// <remarks>The Components returned are <b>not</b> initialized.</remarks>
 		public static void LoadFrom(string assembly, out Type[] users, out Type[] pages,
-			out Type[] files, out Type[] themes, out Type[] formatters, out Type[] cache) {
+			out Type[] files, out Type[] themes, out Type[] formatters) {
 
 			Assembly asm = null;
 			try {
@@ -279,7 +293,6 @@ namespace ScrewTurn.Wiki {
 				pages = new Type[0];
 				themes = new Type[0];
 				formatters = new Type[0];
-				cache = new Type[0];
 
 				Log.LogEntry("Unable to load assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
 				return;
@@ -296,7 +309,6 @@ namespace ScrewTurn.Wiki {
 				pages = new Type[0];
 				themes = new Type[0];
 				formatters = new Type[0];
-				cache = new Type[0];
 
 				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
 				return;
@@ -336,10 +348,6 @@ namespace ScrewTurn.Wiki {
 						frs.Add(types[i]);
 						Collectors.FileNames[types[i].FullName] = assembly;
 					}
-					if(iface == typeof(ICacheProviderV30)) {
-						che.Add(types[i]);
-						Collectors.FileNames[types[i].FullName] = assembly;
-					}
 				}
 			}
 
@@ -348,7 +356,6 @@ namespace ScrewTurn.Wiki {
 			files = fls.ToArray();
 			themes = thm.ToArray();
 			formatters = frs.ToArray();
-			cache = che.ToArray();
 		}
 
 		/// <summary>
@@ -533,7 +540,6 @@ namespace ScrewTurn.Wiki {
 			bool enabled, canDisable;
 			IProviderV30 provider = Collectors.FindProvider(typeName, out enabled, out canDisable);
 			if(enabled && canDisable) {
-				provider.Shutdown();
 				Collectors.TryDisable(typeName);
 				SaveStatus(typeName, false);
 			}

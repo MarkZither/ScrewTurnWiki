@@ -284,9 +284,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void LoadAdvancedConfig() {
 			chkEnableAutomaticUpdateChecks.Checked = !Settings.DisableAutomaticVersionCheck;
-			chkDisableCache.Checked = Settings.DisableCache;
-			txtCacheSize.Text = Settings.CacheSize.ToString();
-			txtCacheCutSize.Text = Settings.CacheCutSize.ToString();
 			chkEnableViewStateCompression.Checked = Settings.EnableViewStateCompression;
 			chkEnableHttpCompression.Checked = Settings.EnableHttpCompression;
 		}
@@ -521,16 +518,12 @@ namespace ScrewTurn.Wiki {
 
 			// Save advanced configuration
 			Settings.DisableAutomaticVersionCheck = !chkEnableAutomaticUpdateChecks.Checked;
-			Settings.DisableCache = chkDisableCache.Checked;
-			Settings.CacheSize = int.Parse(txtCacheSize.Text);
-			Settings.CacheCutSize = int.Parse(txtCacheCutSize.Text);
 			Settings.EnableViewStateCompression = chkEnableViewStateCompression.Checked;
 			Settings.EnableHttpCompression = chkEnableHttpCompression.Checked;
 
 			Settings.EndBulkUpdate();
 
 			Content.InvalidateAllPages();
-			Content.ClearPseudoCache();
 
 			lblResult.CssClass = "resultok";
 			lblResult.Text = Properties.Messages.ConfigSaved;

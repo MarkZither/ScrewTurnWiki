@@ -72,7 +72,6 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>AssemblyVersion.cs</Link>
     </Compile>
-    <Compile Include="CacheProviderTestScaffolding.cs" />
     <Compile Include="FilesStorageProviderTestScaffolding.cs" />
     <Compile Include="PagesStorageProviderTestScaffolding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

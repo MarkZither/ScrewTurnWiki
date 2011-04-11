@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki {
 				canRollback = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 
-                content = Content.GetPageContent(page, true);
+                content = Content.GetPageContent(page);
 				lblTitle.Text = Properties.Messages.PageHistory + ": " + FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page);
 
 				bool canView = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
@@ -81,7 +81,7 @@ namespace ScrewTurn.Wiki {
 
 				List<RevisionRow> result = new List<RevisionRow>(revisions.Count + 1);
 
-				result.Add(new RevisionRow(-1, Content.GetPageContent(page, false), false));
+				result.Add(new RevisionRow(-1, Content.GetPageContent(page), false));
 
 				foreach(int rev in revisions) {
 					PageContent content = Pages.GetBackupContent(page, rev);

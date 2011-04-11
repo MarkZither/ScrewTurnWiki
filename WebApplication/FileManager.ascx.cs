@@ -68,7 +68,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Set provider
-			provider = Collectors.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
 
 			// The following actions are verified ***FOR THE CURRENT DIRECTORY***:
 			// - List contents
@@ -97,7 +97,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void LoadProviders() {
 			lstProviders.Items.Clear();
-			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				ListItem item = new ListItem(prov.Information.Name, prov.GetType().FullName);
 				if(item.Value == Settings.DefaultFilesProvider) {
 					item.Selected = true;
@@ -289,7 +289,7 @@ namespace ScrewTurn.Wiki {
 
 			LoadProviders();
 
-			IFilesStorageProviderV30 realProvider = Collectors.FilesProviderCollector.GetProvider(provider);
+			IFilesStorageProviderV30 realProvider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider);
 			if(realProvider == null) return;
 			this.provider = realProvider;
 
@@ -602,7 +602,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void lstProviders_SelectedIndexChanged(object sender, EventArgs e) {
-			provider = Collectors.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
 			GoToRoot();
 		}
 

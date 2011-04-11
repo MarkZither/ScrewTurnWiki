@@ -195,9 +195,6 @@
   <data name="By" xml:space="preserve">
     <value>by</value>
   </data>
-  <data name="CachedPages" xml:space="preserve">
-    <value>Cached Pages</value>
-  </data>
   <data name="CannotDisableDefaultProvider" xml:space="preserve">
     <value>Cannot disable a default Provider</value>
   </data>
@@ -439,12 +436,6 @@
   <data name="InvalidBackupNumber" xml:space="preserve">
     <value>Invalid number: it must be greater or equal to zero (leave blank to disable automatic Backup deletion) </value>
   </data>
-  <data name="InvalidCacheCutSize" xml:space="preserve">
-    <value>Invalid Cache Cut size: it must be an integer greater than 0 and smaller than Cache size</value>
-  </data>
-  <data name="InvalidCacheSize" xml:space="preserve">
-    <value>Invalid Cache size: it must be an integer greater than 0</value>
-  </data>
   <data name="InvalidCategoryName" xml:space="preserve">
     <value>Invalid Category name</value>
   </data>
@@ -616,9 +607,6 @@
   </data>
   <data name="OlderRevision" xml:space="preserve">
     <value>Older Revision</value>
-  </data>
-  <data name="OnlineUsers" xml:space="preserve">
-    <value>Online Users</value>
   </data>
   <data name="OnlyDllFilesAllowed" xml:space="preserve">
     <value>Only DLL files are allowed</value>
@@ -1643,9 +1631,6 @@
   </data>
   <data name="NoPagesToMigrate" xml:space="preserve">
     <value>No pages to migrate</value>
-  </data>
-  <data name="Formatted" xml:space="preserve">
-    <value>formatted</value>
   </data>
   <data name="NAccountsDeleted" xml:space="preserve">
     <value>$ accounts deleted</value>
