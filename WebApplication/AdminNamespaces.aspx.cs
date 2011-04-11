@@ -257,7 +257,6 @@ namespace ScrewTurn.Wiki {
 		protected void btnSave_Click(object sender, EventArgs e) {
 			// This can rarely occur
 			if(string.IsNullOrEmpty(lstDefaultPage.SelectedValue)) return;
-			if(string.IsNullOrEmpty(providerThSelector.SelectedThemes)) return;
 
 			NamespaceInfo nspace = txtCurrentNamespace.Value != RootName ?
 				Pages.FindNamespace(txtCurrentNamespace.Value) : null;
@@ -265,9 +264,10 @@ namespace ScrewTurn.Wiki {
 			bool done = Pages.SetNamespaceDefaultPage(nspace, Pages.FindPage(lstDefaultPage.SelectedValue));
 
 			if(done) {
-				Settings.SetTheme(nspace != null ? nspace.Name : null, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
-
+				if(string.IsNullOrEmpty(providerThSelector.SelectedThemes)) done = false;
+				
 				if(done) {
+					Settings.SetTheme(nspace != null ? nspace.Name : null, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
 					RefreshList();
 					lblResult.CssClass = "resultok";
 					lblResult.Text = Properties.Messages.NamespaceSaved;

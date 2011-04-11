@@ -3976,6 +3976,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select theme.
+        /// </summary>
+        public static string SelectTheme {
+            get {
+                return ResourceManager.GetString("SelectTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select your language.
         /// </summary>
         public static string SelectYourLanguage {

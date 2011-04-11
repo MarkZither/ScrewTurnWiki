@@ -1750,4 +1750,7 @@
   <data name="ThemeDeleted" xml:space="preserve">
     <value>Theme Deleted</value>
   </data>
+  <data name="SelectTheme" xml:space="preserve">
+    <value>Select theme</value>
+  </data>
 </root>

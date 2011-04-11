@@ -102,6 +102,7 @@ namespace ScrewTurn.Wiki {
 
 		private void FillThemes(string provider) { 
 			lstThemes.Items.Clear();
+			lstThemes.Items.Add(new ListItem(Properties.Messages.SelectTheme, ""));
 			foreach(string th in Themes.ListThemes(provider)) {
 				lstThemes.Items.Add(new ListItem(th, th));
 			}
