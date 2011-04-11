@@ -27,7 +27,6 @@
 		<asp:RadioButton ID="rdoPages" runat="server" Text="Pages Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoPagesResource1" AutoPostBack="true" />
 		<asp:RadioButton ID="rdoUsers" runat="server" Text="Users Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoUsersResource1" AutoPostBack="true" />
 		<asp:RadioButton ID="rdoFiles" runat="server" Text="Files Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFilesResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoCache" runat="server" Text="Cache Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoCacheResource1" AutoPostBack="true" />
 		<asp:RadioButton ID="rdoThemes" runat="server" Text="Themes Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoThemesResource1" AutoPostBack="true" />
 		<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" AutoPostBack="true" />
 		<br />
@@ -150,10 +149,6 @@
 		<asp:Literal ID="lblDefaultProvFiles" runat="server" Text="Files Provider" EnableViewState="False" meta:resourcekey="lblDefaultProvFilesResource1" /><br />
 		<st:ProviderSelector ID="lstFilesProvider" runat="server" ProviderType="Files" ExcludeReadOnly="true" />
 	</div>
-	<div class="defaultprov">
-		<asp:Literal ID="lblDefaultProvCache" runat="server" Text="Cache Provider" EnableViewState="False" meta:resourcekey="lblDefaultProvCacheResource1" /><br />
-		<st:ProviderSelector ID="lstCacheProvider" runat="server" ProviderType="Cache" ExcludeReadOnly="true" />
-	</div>
 	<div class="defaultprovbutton">
 		<asp:Button ID="btnSaveDefaultProviders" runat="server" Text="Save" OnClick="btnSaveDefaultProviders_Click" meta:resourcekey="btnSaveDefaultProvidersResource1" />
 		<asp:Label ID="lblDefaultProvidersResult" runat="server" meta:resourcekey="lblDefaultProvidersResultResource1" />
@@ -172,7 +167,7 @@
 	<asp:Label ID="lblUploadResult" runat="server" meta:resourcekey="lblUploadResultResource1" />
 	
 	<div id="DllsListContainerDiv">
-		<asp:DropDownList ID="lstDlls" runat="server" OnSelectedIndexChanged="lstDlls_SelectedIndexChanged" meta:resourcekey="lstDllsResource1" />
+		<asp:DropDownList ID="lstDlls" runat="server" OnSelectedIndexChanged="lstDlls_SelectedIndexChanged" meta:resourcekey="lstDllsResource1" AutoPostBack="true" />
 		<asp:Button ID="btnDeleteDll" runat="server" Text="Delete" OnClick="btnDeleteDll_Click" Enabled="False" meta:resourcekey="btnDeleteDllResource1" />
 		<br />
 		<asp:Label ID="lblDllResult" runat="server" meta:resourcekey="lblDllResultResource1" />
