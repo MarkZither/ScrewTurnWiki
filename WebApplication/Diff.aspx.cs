@@ -37,7 +37,9 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			bool canView = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
+			bool canView = authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			if(!canView) UrlTools.Redirect("AccessDenied.aspx");
 

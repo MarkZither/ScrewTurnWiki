@@ -13,8 +13,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		public override IUsersStorageProviderV30 GetProvider() {
 			UsersStorageProvider prov = new UsersStorageProvider();
-			prov.Init(MockHost(), "");
-			prov.SetUp();
+			prov.SetUp(MockHost(), "");
 			return prov;
 		}
 
@@ -46,8 +45,7 @@ namespace ScrewTurn.Wiki.Tests {
 			File.WriteAllText(file, "user|PASSHASH|user@users.com|Inactive|2008/10/31 15:15:15|USER\r\nsuperuser|SUPERPASSHASH|superuser@users.com|Active|2008/10/31 15:15:16|ADMIN");
 
 			UsersStorageProvider prov = new UsersStorageProvider();
-			prov.Init(host, "");
-			prov.SetUp();
+			prov.SetUp(host, "");
 
 			UserInfo[] users = prov.GetUsers();
 

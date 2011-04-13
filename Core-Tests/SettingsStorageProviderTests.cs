@@ -13,8 +13,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		public override ISettingsStorageProviderV30 GetProvider() {
 			SettingsStorageProvider prov = new SettingsStorageProvider();
-			prov.Init(MockHost(), "");
-			prov.SetUp();
+			prov.SetUp(MockHost(), "");
 			return prov;
 		}
 

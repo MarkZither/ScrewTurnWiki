@@ -87,7 +87,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void SetSetting_GetSetting(string c, string r) {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.IsTrue(prov.SetSetting("TS", c), "SetSetting should return true");
 			Assert.AreEqual(r, prov.GetSetting("TS"), "Wrong return value");
@@ -97,7 +97,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void SetSetting_GetAllSettings() {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.IsTrue(prov.SetSetting("TS1", "Value1"), "SetSetting should return true");
 			Assert.IsTrue(prov.SetSetting("TS2", "Value2"), "SetSetting should return true");
@@ -116,7 +116,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void LogEntry_GetLogEntries(string m, EntryType t, string u) {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.LogEntry(m, t, u);
 
@@ -131,7 +131,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void LogEntry_InvalidMessage(string m) {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.LogEntry(m, EntryType.General, "NUnit");
 		}
@@ -141,7 +141,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void LogEntry_InvalidUser(string u) {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.LogEntry("Test", EntryType.General, u);
 		}
@@ -150,7 +150,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void ClearLog() {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.LogEntry("Test", EntryType.General, "User");
 			prov.LogEntry("Test", EntryType.Error, "User");
@@ -167,7 +167,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void CutLog_LogSize() {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			for(int i = 0; i < 100; i++) {
 				prov.LogEntry("Test", EntryType.General, "User");
@@ -228,7 +228,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void AddRecentChange_GetRecentChanges() {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			DateTime dt = DateTime.Now;
 			Assert.IsTrue(prov.AddRecentChange("MainPage", "Main Page", null, dt, Log.SystemUsername, ScrewTurn.Wiki.PluginFramework.Change.PageUpdated, ""), "AddRecentChange should return true");
@@ -316,7 +316,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void AddRecentChange_InvalidPage(string p) {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.AddRecentChange(p, "Title", null, DateTime.Now, "User", ScrewTurn.Wiki.PluginFramework.Change.PageDeleted, "Descr");
 		}
@@ -326,7 +326,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void AddRecentChange_InvalidTitle(string t) {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.AddRecentChange("Page", t, null, DateTime.Now, "User", ScrewTurn.Wiki.PluginFramework.Change.PageDeleted, "Descr");
 		}
@@ -336,7 +336,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void AddRecentChange_InvalidUser(string u) {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.AddRecentChange("Page", "Title", null, DateTime.Now, u, ScrewTurn.Wiki.PluginFramework.Change.PageDeleted, "Descr");
 		}
@@ -345,7 +345,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void AddRecentChange_NullMessageSubject_NullDescription() {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			DateTime dt = DateTime.Now;
 			Assert.IsTrue(prov.AddRecentChange("Page", "Title", null, dt, "User", ScrewTurn.Wiki.PluginFramework.Change.PageUpdated, null), "AddRecentChange should return true");
@@ -365,7 +365,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void AddRecentChange_CutRecentChanges() {
 			ISettingsStorageProviderV30 prov = GetProvider();
 
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			for(int i = 0; i < MaxRecentChanges + 8; i++) {
 				Assert.IsTrue(prov.AddRecentChange("MainPage", "Main Page", null, DateTime.Now, Log.SystemUsername, ScrewTurn.Wiki.PluginFramework.Change.PageUpdated, ""), "AddRecentChange should return true");
@@ -379,7 +379,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void StorePluginAssembly_RetrievePluginAssembly_ListPluginAssemblies() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			byte[] stuff = new byte[50];
 			for(int i = 0; i < stuff.Length; i++) stuff[i] = (byte)i;
@@ -409,7 +409,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void DeletePluginAssembly() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.IsFalse(prov.DeletePluginAssembly("Assembly.dll"), "DeletePluginAssembly should return false");
 
@@ -431,7 +431,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void DeletePluginAssembly_InvalidName(string n) {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.DeletePluginAssembly(n);
 		}
@@ -440,7 +440,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void StorePluginAssembly_InvalidFilename(string fn) {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.StorePluginAssembly(fn, new byte[10]);
 		}
@@ -449,7 +449,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void StorePluginAssembly_NullAssembly() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.StorePluginAssembly("Test.dll", null);
 		}
@@ -458,7 +458,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentException))]
 		public void StorePluginAssembly_EmptyAssembly() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.StorePluginAssembly("Test.dll", new byte[0]);
 		}
@@ -467,7 +467,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RetrievePluginAssembly_InvalidFilename(string fn) {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.RetrievePluginAssembly(fn);
 		}
@@ -475,7 +475,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RetrievePluginAssembly_InexistentFilename() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.IsNull(prov.RetrievePluginAssembly("Inexistent.dll"), "RetrievePluginAssembly should return null");
 		}
@@ -483,7 +483,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPluginStatus_RetrievePluginStatus() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.IsTrue(prov.GetPluginStatus("My.Test.Plugin"), "GetPluginStatus should return true");
 
@@ -500,7 +500,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetPluginStatus_InvalidTypeName(string tn) {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.SetPluginStatus(tn, false);
 		}
@@ -509,7 +509,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetPluginStatus_InvalidTypeName(string tn) {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.GetPluginStatus(tn);
 		}
@@ -517,7 +517,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPluginConfiguration_GetPluginConfiguration() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.IsEmpty(prov.GetPluginConfiguration("My.Test.Plugin"), "GetPluginConfiguration should return an empty string");
 
@@ -542,7 +542,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetPluginConfiguration_InvalidTypeName(string tn) {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.SetPluginConfiguration(tn, "config");
 		}
@@ -551,7 +551,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetPluginConfiguration_InvalidTypeName(string tn) {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			prov.GetPluginConfiguration(tn);
 		}
@@ -559,13 +559,13 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void AclManager_StoreEntry_RetrieveAllEntries_DeleteEntry() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.IsTrue(prov.AclManager.StoreEntry("Res", "Action", "U.User", Value.Grant), "StoreEntry should return true");
 
 			prov = null;
 			prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			AclEntry[] entries = prov.AclManager.RetrieveAllEntries();
 			Assert.AreEqual(1, entries.Length, "Wrong entry count");
@@ -577,7 +577,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			prov = null;
 			prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.IsTrue(prov.AclManager.RenameResource("Res", "NewName"), "RenameResource should return true");
 
@@ -591,13 +591,13 @@ namespace ScrewTurn.Wiki.Tests {
 
 			prov = null;
 			prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.IsTrue(prov.AclManager.DeleteEntry("NewName", "Action", "U.User"), "DeleteEntry should return true");
 
 			prov = null;
 			prov = GetProvider();
-			Collectors.SettingsProvider = prov;
+			//Collectors.SettingsProvider = prov;
 
 			Assert.AreEqual(0, prov.AclManager.RetrieveAllEntries().Length, "Wrong entry count");
 		}

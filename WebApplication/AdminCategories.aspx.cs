@@ -89,7 +89,8 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the user can manage categories, <c>false</c> otherwise.</returns>
 		private bool CanManageCategoriesInCurrentNamespace() {
 			NamespaceInfo nspace = Pages.FindNamespace(lstNamespace.SelectedValue);
-			bool canManageCategories = AuthChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManageCategories,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageCategories = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManageCategories,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			return canManageCategories;
 		}

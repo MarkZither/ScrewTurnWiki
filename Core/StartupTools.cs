@@ -68,9 +68,9 @@ namespace ScrewTurn.Wiki {
 
 			// Load config
 			ISettingsStorageProviderV30 ssp = ProviderLoader.LoadSettingsStorageProvider(WebConfigurationManager.AppSettings["SettingsStorageProvider"]);
-			ssp.Init(Host.Instance, GetSettingsStorageProviderConfiguration());
-			ssp.SetUp();
-			Collectors.SettingsProvider = ssp;
+			ssp.SetUp(Host.Instance, GetSettingsStorageProviderConfiguration());
+			Collectors.AddSettingsProvider(ssp.GetType(), Assembly.GetAssembly(ssp.GetType()));
+			ssp.Dispose();
 
 			Settings.CanOverridePublicDirectory = false;
 
@@ -110,23 +110,23 @@ namespace ScrewTurn.Wiki {
 			// Load built-in providers
 
 			// Files storage providers have to be loaded BEFORE users storage providers in order to properly set permissions
-				ProviderLoader.SetUp<IFilesStorageProviderV30>(typeof(FilesStorageProvider));
-				Collectors.AddProvider(typeof(FilesStorageProvider), Assembly.GetAssembly(typeof(FilesStorageProvider)), typeof(IFilesStorageProviderV30), !ProviderLoader.IsDisabled(typeof(IFilesStorageProviderV30).FullName));
-			
+			ProviderLoader.SetUp<IFilesStorageProviderV30>(typeof(FilesStorageProvider));
+			Collectors.AddProvider(typeof(FilesStorageProvider), Assembly.GetAssembly(typeof(FilesStorageProvider)), typeof(IFilesStorageProviderV30), !ProviderLoader.IsDisabled(typeof(IFilesStorageProviderV30).FullName));
+
 			ProviderLoader.SetUp<IThemeStorageProviderV30>(typeof(ThemeStorageProvider));
 			Collectors.AddProvider(typeof(ThemeStorageProvider), Assembly.GetAssembly(typeof(ThemeStorageProvider)), typeof(IThemeStorageProviderV30), !ProviderLoader.IsDisabled(typeof(ThemeStorageProvider).FullName));
-			
+
 			ProviderLoader.SetUp<IUsersStorageProviderV30>(typeof(UsersStorageProvider));
 			Collectors.AddProvider(typeof(UsersStorageProvider), Assembly.GetAssembly(typeof(UsersStorageProvider)), typeof(IUsersStorageProviderV30), !ProviderLoader.IsDisabled(typeof(UsersStorageProvider).FullName));
-			
+
 			// Load Users (pages storage providers might need access to users/groups data for upgrading from 2.0 to 3.0)
 			ProviderLoader.FullLoad(true, false, false, false);
 
 			bool groupsCreated = VerifyAndCreateDefaultGroups();
-			
+
 			ProviderLoader.SetUp<IPagesStorageProviderV30>(typeof(PagesStorageProvider));
 			Collectors.AddProvider(typeof(PagesStorageProvider), Assembly.GetAssembly(typeof(PagesStorageProvider)), typeof(IPagesStorageProviderV30), !ProviderLoader.IsDisabled(typeof(PagesStorageProvider).FullName));
-			
+
 			// Load all other providers
 			ProviderLoader.FullLoad(false, true, true, true);
 
@@ -233,7 +233,9 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		public static bool SetAdministratorsGroupDefaultPermissions(UserGroup administrators) {
 			// Administrators can do any operation
-			return AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, Actions.FullControl, administrators);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
+			return authWriter.SetPermissionForGlobals(AuthStatus.Grant, Actions.FullControl, administrators);
 
 			// Settings.ConfigVisibleToAdmins is not imported on purpose
 		}
@@ -247,13 +249,14 @@ namespace ScrewTurn.Wiki {
 			bool done = true;
 
 			// Set namespace-related permissions
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
 			if(Settings.UsersCanCreateNewPages) {
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.CreatePages, users);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.CreatePages, users);
 			}
-			else done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, users);
-			done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.PostDiscussion, users);
+			else done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, users);
+			done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.PostDiscussion, users);
 			if(Settings.UsersCanCreateNewCategories || Settings.UsersCanManagePageCategories) {
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ManageCategories, users);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ManageCategories, users);
 			}
 
 			done &= SetupFileManagementPermissions(users);
@@ -269,19 +272,21 @@ namespace ScrewTurn.Wiki {
 		public static bool SetAnonymousGroupDefaultPermissions(UserGroup anonymous) {
 			bool done = true;
 
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			// Properly import Private/Public Mode wiki
 			if(Settings.PrivateAccess) {
 				// Nothing to do, because without any explicit grant, Anonymous users cannot do anything
 			}
 			else if(Settings.PublicAccess) {
 				// Public access, allow modification and propagate file management permissions if they were allowed for anonymous users
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, anonymous);
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, anonymous);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, anonymous);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, anonymous);
 				if(Settings.UsersCanCreateNewPages) {
-					done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.CreatePages, anonymous);
+					done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.CreatePages, anonymous);
 				}
 				if(Settings.UsersCanCreateNewCategories || Settings.UsersCanManagePageCategories) {
-					done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ManageCategories, anonymous);
+					done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ManageCategories, anonymous);
 				}
 				if(Settings.FileManagementInPublicAccessAllowed) {
 					SetupFileManagementPermissions(anonymous);
@@ -289,12 +294,12 @@ namespace ScrewTurn.Wiki {
 			}
 			else {
 				// Standard configuration, only allow read permissions
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ReadPages, anonymous);
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ReadDiscussion, anonymous);
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, anonymous);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ReadPages, anonymous);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ReadDiscussion, anonymous);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, anonymous);
 
 				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
-					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DownloadFiles, anonymous);
+					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DownloadFiles, anonymous);
 				}
 			}
 
@@ -309,24 +314,26 @@ namespace ScrewTurn.Wiki {
 		private static bool SetupFileManagementPermissions(UserGroup group) {
 			bool done = true;
 
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			if(Settings.UsersCanViewFiles) {
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, group);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, group);
 				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
-					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DownloadFiles, group);
+					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DownloadFiles, group);
 				}
 			}
 			if(Settings.UsersCanUploadFiles) {
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.UploadAttachments, group);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.UploadAttachments, group);
 				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
-					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.UploadFiles, group);
-					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.CreateDirectories, group);
+					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.UploadFiles, group);
+					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.CreateDirectories, group);
 				}
 			}
 			if(Settings.UsersCanDeleteFiles) {
-				done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DeleteAttachments, group);
+				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DeleteAttachments, group);
 				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
-					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DeleteFiles, group);
-					done &= AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DeleteDirectories, group);
+					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DeleteFiles, group);
+					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DeleteDirectories, group);
 				}
 			}
 
@@ -351,22 +358,24 @@ namespace ScrewTurn.Wiki {
 
 			bool done = true;
 
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			switch(value) {
 				case "page":
 					// Nothing to do
 					break;
 				case "normal":
 					// Allow Users to post messages
-					done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.PostDiscussion, usersGroup);
+					done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.PostDiscussion, usersGroup);
 					break;
 				case "locked":
 					// Deny Users to post messages
-					done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Deny, null, Actions.ForNamespaces.PostDiscussion, usersGroup);
+					done &= authWriter.SetPermissionForNamespace(AuthStatus.Deny, null, Actions.ForNamespaces.PostDiscussion, usersGroup);
 					break;
 				case "public":
 					// Allow Users and Anonymous Users to post messages
-					done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.PostDiscussion, usersGroup);
-					done &= AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.PostDiscussion, anonymousGroup);
+					done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.PostDiscussion, usersGroup);
+					done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.PostDiscussion, anonymousGroup);
 					break;
 			}
 

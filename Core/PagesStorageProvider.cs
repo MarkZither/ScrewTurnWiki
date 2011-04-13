@@ -295,7 +295,16 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Sets up the Storage Provider.
 		/// </summary>
-		public void SetUp() {
+		/// <param name="host">The Host of the Provider.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
+		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
+		public void SetUp(IHostV30 host, string config) {
+			if(host == null) throw new ArgumentNullException("host");
+			if(config == null) throw new ArgumentNullException("config");
+
+			this.host = host;
+
 			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
 			}
@@ -348,7 +357,9 @@ namespace ScrewTurn.Wiki {
 
 		void IDisposable.Dispose() {
 			lock(this) {
-				indexStorer.Dispose();
+				if(indexStorer != null) {
+					indexStorer.Dispose();
+				}
 			}
 		}
 

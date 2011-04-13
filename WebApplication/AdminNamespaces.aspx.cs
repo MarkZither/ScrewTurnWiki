@@ -98,24 +98,26 @@ namespace ScrewTurn.Wiki {
 
 			RemoveAllPermissions(nspace);
 
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			// Set permissions
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.FullControl,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.FullControl,
 				Users.FindUserGroup(Settings.AdministratorsGroup));
 
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.CreatePages,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.CreatePages,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ManageCategories,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ManageCategories,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
 				Users.FindUserGroup(Settings.UsersGroup));
 
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ModifyPages,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ModifyPages,
 				Users.FindUserGroup(Settings.AnonymousGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
 				Users.FindUserGroup(Settings.AnonymousGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
 				Users.FindUserGroup(Settings.AnonymousGroup));
 
 			RefreshPermissionsManager();
@@ -126,24 +128,26 @@ namespace ScrewTurn.Wiki {
 
 			RemoveAllPermissions(nspace);
 
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			// Set permissions
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.FullControl,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.FullControl,
 				Users.FindUserGroup(Settings.AdministratorsGroup));
 
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.CreatePages,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.CreatePages,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ManageCategories,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ManageCategories,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
 				Users.FindUserGroup(Settings.UsersGroup));
 
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ReadPages,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ReadPages,
 				Users.FindUserGroup(Settings.AnonymousGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ReadDiscussion,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ReadDiscussion,
 				Users.FindUserGroup(Settings.AnonymousGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
 				Users.FindUserGroup(Settings.AnonymousGroup));
 
 			RefreshPermissionsManager();
@@ -154,17 +158,19 @@ namespace ScrewTurn.Wiki {
 
 			RemoveAllPermissions(nspace);
 
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			// Set permissions
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.FullControl,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.FullControl,
 				Users.FindUserGroup(Settings.AdministratorsGroup));
 
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.CreatePages,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.CreatePages,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ManageCategories,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ManageCategories,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
+			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
 				Users.FindUserGroup(Settings.UsersGroup));
 
 			RefreshPermissionsManager();
@@ -183,9 +189,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		private void RemoveAllPermissions(NamespaceInfo nspace) {
-			AuthWriter.RemoveEntriesForNamespace(Users.FindUserGroup(Settings.AnonymousGroup), nspace);
-			AuthWriter.RemoveEntriesForNamespace(Users.FindUserGroup(Settings.UsersGroup), nspace);
-			AuthWriter.RemoveEntriesForNamespace(Users.FindUserGroup(Settings.AdministratorsGroup), nspace);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			authWriter.RemoveEntriesForNamespace(Users.FindUserGroup(Settings.AnonymousGroup), nspace);
+			authWriter.RemoveEntriesForNamespace(Users.FindUserGroup(Settings.UsersGroup), nspace);
+			authWriter.RemoveEntriesForNamespace(Users.FindUserGroup(Settings.AdministratorsGroup), nspace);
 		}
 
 		protected void cvName_ServerValidate(object sender, ServerValidateEventArgs e) {

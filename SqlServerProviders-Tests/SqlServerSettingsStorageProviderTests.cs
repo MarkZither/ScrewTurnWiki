@@ -19,8 +19,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		public override ISettingsStorageProviderV30 GetProvider() {
 			SqlServerSettingsStorageProvider prov = new SqlServerSettingsStorageProvider();
+			prov.SetUp(MockHost(), ConnString + InitialCatalog);
 			prov.Init(MockHost(), ConnString + InitialCatalog);
-			prov.SetUp();
+
 			return prov;
 		}
 

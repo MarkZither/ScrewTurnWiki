@@ -34,9 +34,10 @@ namespace ScrewTurn.Wiki {
 			string dir = Tools.GetDirectoryName(file);
 
 			// Verify permissions
-			bool canUpload = AuthChecker.CheckActionForDirectory(provider, dir,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canUpload = authChecker.CheckActionForDirectory(provider, dir,
 				Actions.ForDirectories.UploadFiles, currentUser, currentGroups);
-			bool canDeleteFiles = AuthChecker.CheckActionForDirectory(provider, dir,
+			bool canDeleteFiles = authChecker.CheckActionForDirectory(provider, dir,
 				Actions.ForDirectories.DeleteFiles, currentUser, currentGroups);
 
 			if(!canUpload || !canDeleteFiles) UrlTools.Redirect("AccessDenied.aspx");

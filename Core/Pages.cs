@@ -96,7 +96,8 @@ namespace ScrewTurn.Wiki {
 			if(result != null) {
 				InitMetaDataItems(name);
 
-				AuthWriter.ClearEntriesForNamespace(name, new List<string>());
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				authWriter.ClearEntriesForNamespace(name, new List<string>());
 
 				Host.Instance.OnNamespaceActivity(result, null, NamespaceActivity.NamespaceAdded);
 
@@ -128,7 +129,8 @@ namespace ScrewTurn.Wiki {
 
 				ResetMetaDataItems(nspace.Name);
 
-				AuthWriter.ClearEntriesForNamespace(nspace.Name, pages.ConvertAll((p) => { return NameTools.GetLocalName(p.FullName); }));
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				authWriter.ClearEntriesForNamespace(nspace.Name, pages.ConvertAll((p) => { return NameTools.GetLocalName(p.FullName); }));
 
 				Host.Instance.OnNamespaceActivity(realNspace, null, NamespaceActivity.NamespaceRemoved);
 
@@ -182,8 +184,9 @@ namespace ScrewTurn.Wiki {
 
 				UpdateMetaDataItems(oldName, newName);
 
-				AuthWriter.ClearEntriesForNamespace(newName, new List<string>());
-				AuthWriter.ProcessNamespaceRenaming(oldName, pageNames, newName);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				authWriter.ClearEntriesForNamespace(newName, new List<string>());
+				authWriter.ProcessNamespaceRenaming(oldName, pageNames, newName);
 
 				Host.Instance.OnNamespaceActivity(newNspace, oldName, NamespaceActivity.NamespaceRenamed);
 
@@ -501,7 +504,8 @@ namespace ScrewTurn.Wiki {
 			PageInfo newPage = provider.AddPage(nspace, name, DateTime.Now);
 
 			if(newPage != null) {
-				AuthWriter.ClearEntriesForPage(fullName);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				authWriter.ClearEntriesForPage(fullName);
 
 				Content.InvalidateAllPages();
 				Log.LogEntry("Page " + fullName + " created", EntryType.General, Log.SystemUsername);
@@ -526,7 +530,8 @@ namespace ScrewTurn.Wiki {
 			bool done = page.Provider.RemovePage(page);
 
 			if(done) {
-				AuthWriter.ClearEntriesForPage(page.FullName);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				authWriter.ClearEntriesForPage(page.FullName);
 
 				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					foreach(string attn in prov.ListPageAttachments(page)) {
@@ -573,8 +578,9 @@ namespace ScrewTurn.Wiki {
 			Settings.Provider.StoreOutgoingLinks(page.FullName, new string[0]);
 			PageInfo pg = page.Provider.RenamePage(page, name);
 			if(pg != null) {
-				AuthWriter.ClearEntriesForPage(newFullName);
-				AuthWriter.ProcessPageRenaming(oldName, newFullName);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				authWriter.ClearEntriesForPage(newFullName);
+				authWriter.ProcessPageRenaming(oldName, newFullName);
 
 				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), pg);
@@ -772,17 +778,19 @@ namespace ScrewTurn.Wiki {
 
 			canEdit = false;
 			canEditWithApproval = false;
+
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
 			switch(Settings.ChangeModerationMode) {
 				case ChangeModerationMode.RequirePageEditingPermissions:
-					canEdit = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, username, groups);
-					canEditWithApproval = AuthChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, username, groups);
+					canEdit = authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, username, groups);
+					canEditWithApproval = authChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, username, groups);
 					break;
 				case ChangeModerationMode.RequirePageViewingPermissions:
-					canEdit = AuthChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, username, groups);
-					canEditWithApproval = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, username, groups);
+					canEdit = authChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, username, groups);
+					canEditWithApproval = authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, username, groups);
 					break;
 				case ChangeModerationMode.None:
-					canEdit = AuthChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, username, groups);
+					canEdit = authChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, username, groups);
 					canEditWithApproval = false;
 					break;
 			}
@@ -855,7 +863,8 @@ namespace ScrewTurn.Wiki {
 					throw new NotSupportedException();
 			}*/
 
-			return AuthChecker.CheckActionForPage(page, requiredAction, username, groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			return authChecker.CheckActionForPage(page, requiredAction, username, groups);
 		}
 
 		/// <summary>

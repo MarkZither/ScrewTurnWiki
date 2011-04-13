@@ -50,7 +50,8 @@ namespace ScrewTurn.Wiki {
 			if(page == null) UrlTools.RedirectHome();
 			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension));
 
-			bool canManageDiscussion = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageDiscussion = authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			if(!canManageDiscussion) UrlTools.Redirect("AccessDenied.aspx");
 

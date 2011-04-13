@@ -155,7 +155,8 @@ namespace ScrewTurn.Wiki {
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
-			bool canManageAllPages = AuthChecker.CheckActionForNamespace(
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageAllPages = authChecker.CheckActionForNamespace(
 				Pages.FindNamespace(lstNamespace.SelectedValue),
 				Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 
@@ -187,8 +188,9 @@ namespace ScrewTurn.Wiki {
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
 			bool canSetPermissions = AdminMaster.CanManagePermissions(currentUser, currentGroups);
-			bool canDeletePages = AuthChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.DeletePages, currentUser, currentGroups);
+			bool canDeletePages = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.DeletePages, currentUser, currentGroups);
 
 			for(int i = rangeBegin; i <= rangeEnd; i++) {
 				PageInfo page = currentPages[i];
@@ -197,11 +199,11 @@ namespace ScrewTurn.Wiki {
 
 				// The page can be selected if the user can either manage or delete the page or manage the discussion
 				// Repeat checks for enabling/disabling sections when a page is selected
-				bool canEdit = AuthChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, currentUser, currentGroups);
+				bool canEdit = authChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, currentUser, currentGroups);
 				bool canManagePage = false;
 				bool canManageDiscussion = false;
-				if(!canDeletePages) canManagePage = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, currentUser, currentGroups);
-				if(!canDeletePages && !canManagePage) canManageDiscussion = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, currentUser, currentGroups);
+				if(!canDeletePages) canManagePage = authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, currentUser, currentGroups);
+				if(!canDeletePages && !canManagePage) canManageDiscussion = authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, currentUser, currentGroups);
 				bool canSelect = canManagePage | canDeletePages | canManageDiscussion;
 
 				int incomingLinks = Pages.GetPageIncomingLinks(page).Length;
@@ -241,10 +243,12 @@ namespace ScrewTurn.Wiki {
 
 			RemoveAllPermissions(page);
 
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			// Set permissions
-			AuthWriter.SetPermissionForPage(AuthStatus.Grant, page, Actions.ForPages.ModifyPage,
+			authWriter.SetPermissionForPage(AuthStatus.Grant, page, Actions.ForPages.ModifyPage,
 				Users.FindUserGroup(Settings.AnonymousGroup));
-			AuthWriter.SetPermissionForPage(AuthStatus.Grant, page, Actions.ForPages.PostDiscussion,
+			authWriter.SetPermissionForPage(AuthStatus.Grant, page, Actions.ForPages.PostDiscussion,
 				Users.FindUserGroup(Settings.AnonymousGroup));
 
 			RefreshPermissionsManager();
@@ -263,10 +267,12 @@ namespace ScrewTurn.Wiki {
 
 			RemoveAllPermissions(page);
 
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			// Set permissions
-			AuthWriter.SetPermissionForPage(AuthStatus.Deny, page, Actions.ForPages.ModifyPage,
+			authWriter.SetPermissionForPage(AuthStatus.Deny, page, Actions.ForPages.ModifyPage,
 				Users.FindUserGroup(Settings.UsersGroup));
-			AuthWriter.SetPermissionForPage(AuthStatus.Deny, page, Actions.ForPages.ModifyPage,
+			authWriter.SetPermissionForPage(AuthStatus.Deny, page, Actions.ForPages.ModifyPage,
 				Users.FindUserGroup(Settings.AnonymousGroup));
 
 			RefreshPermissionsManager();
@@ -285,9 +291,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		private void RemoveAllPermissions(PageInfo page) {
-			AuthWriter.RemoveEntriesForPage(Users.FindUserGroup(Settings.AnonymousGroup), page);
-			AuthWriter.RemoveEntriesForPage(Users.FindUserGroup(Settings.UsersGroup), page);
-			AuthWriter.RemoveEntriesForPage(Users.FindUserGroup(Settings.AdministratorsGroup), page);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			authWriter.RemoveEntriesForPage(Users.FindUserGroup(Settings.AnonymousGroup), page);
+			authWriter.RemoveEntriesForPage(Users.FindUserGroup(Settings.UsersGroup), page);
+			authWriter.RemoveEntriesForPage(Users.FindUserGroup(Settings.AdministratorsGroup), page);
 		}
 
 		/// <summary>
@@ -301,17 +308,18 @@ namespace ScrewTurn.Wiki {
 
 			lstTargetNamespace.Items.Clear();
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
 			NamespaceInfo pageNamespace = Pages.FindNamespace(NameTools.GetNamespace(page.FullName));
 			if(pageNamespace != null) {
 				// Try adding Root as target namespace
-				bool canManagePages = AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
+				bool canManagePages = authChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 				if(canManagePages) lstTargetNamespace.Items.Add(new ListItem("<root>", ""));
 			}
 
 			// Try adding all other namespaces
 			foreach(NamespaceInfo nspace in Pages.GetNamespaces().FindAll(n => n.Provider == page.Provider)) {
 				if(pageNamespace == null || (pageNamespace != null && nspace.Name != pageNamespace.Name)) {
-					bool canManagePages = AuthChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
+					bool canManagePages = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 					if(canManagePages) lstTargetNamespace.Items.Add(new ListItem(nspace.Name, nspace.Name));
 				}
 			}
@@ -332,11 +340,13 @@ namespace ScrewTurn.Wiki {
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
 			bool canApproveReject = AdminMaster.CanApproveDraft(page, currentUser, currentGroups);
-			bool canDeletePages = AuthChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.DeletePages, currentUser, currentGroups);
-			bool canManageAllPages = AuthChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
-			bool canManagePage = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, currentUser, currentGroups);
-			bool canManageDiscussion = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, currentUser, currentGroups);
+			bool canDeletePages = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.DeletePages, currentUser, currentGroups);
+			bool canManageAllPages = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
+			bool canManagePage = authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, currentUser, currentGroups);
+			bool canManageDiscussion = authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, currentUser, currentGroups);
 			bool namespaceAvailable = PopulateTargetNamespaces(page);
 
 			// Approve/reject
@@ -562,7 +572,8 @@ namespace ScrewTurn.Wiki {
 			// Create shadow page, if needed
 
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AuthChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			if(!authChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
 
 			txtNewName.Text = txtNewName.Text.Trim();
@@ -639,9 +650,10 @@ namespace ScrewTurn.Wiki {
 
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
 			NamespaceInfo targetNamespace = Pages.FindNamespace(lstTargetNamespace.SelectedValue);
-			bool canManageAllPages = AuthChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)),
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageAllPages = authChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)),
 				Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
-			bool canManageAllPagesInTarget = AuthChecker.CheckActionForNamespace(targetNamespace,
+			bool canManageAllPagesInTarget = authChecker.CheckActionForNamespace(targetNamespace,
 				Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 
 			if(canManageAllPages && canManageAllPagesInTarget) {
@@ -665,7 +677,8 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnRollback_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
 
 			int targetRevision = -1;
 
@@ -690,7 +703,8 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnDeleteBackups_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
 
 			int targetRevision = -1;
 
@@ -721,7 +735,8 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnClearDiscussion_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AuthChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
 
 			Log.LogEntry("Page discussion cleanup requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
 
@@ -741,7 +756,8 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnDeletePage_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AuthChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			if(!authChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
 
 			Log.LogEntry("Page deletion requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
@@ -785,9 +801,11 @@ namespace ScrewTurn.Wiki {
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
 			if(!string.IsNullOrEmpty(lstNamespace.SelectedValue)) {
 				// Root namespace
-				canManageAllPages = AuthChecker.CheckActionForNamespace(null,
+				canManageAllPages = authChecker.CheckActionForNamespace(null,
 					Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 
 				if(canManageAllPages) {
@@ -798,7 +816,7 @@ namespace ScrewTurn.Wiki {
 			foreach(NamespaceInfo ns in Pages.GetNamespaces().FindAll(n => n.Provider.GetType().FullName == providerSelector.SelectedProvider)) {
 				// All sub-namespaces
 				if(ns.Name != lstNamespace.SelectedValue) {
-					canManageAllPages = AuthChecker.CheckActionForNamespace(ns,
+					canManageAllPages = authChecker.CheckActionForNamespace(ns,
 						Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 
 					if(canManageAllPages) {

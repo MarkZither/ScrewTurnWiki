@@ -39,20 +39,22 @@ namespace ScrewTurn.Wiki {
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
 			if(currentPage != null) {
 				Pages.CanEditPage(currentPage, currentUser, currentGroups, out canEdit, out canEditWithApproval);
 				canCreateNewPages = false; // Least privilege
-				canCreateNewCategories = AuthChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(currentPage.FullName)),
+				canCreateNewCategories = authChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(currentPage.FullName)),
 					Actions.ForNamespaces.ManageCategories, currentUser, currentGroups);
-				canManagePageCategories = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.ManageCategories, currentUser, currentGroups);
-				canDownloadAttachments = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
+				canManagePageCategories = authChecker.CheckActionForPage(currentPage, Actions.ForPages.ManageCategories, currentUser, currentGroups);
+				canDownloadAttachments = authChecker.CheckActionForPage(currentPage, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
 			}
 			else {
 				NamespaceInfo ns = DetectNamespaceInfo();
-				canCreateNewPages = AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.CreatePages, currentUser, currentGroups);
-				canCreateNewCategories = AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManageCategories, currentUser, currentGroups);
+				canCreateNewPages = authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.CreatePages, currentUser, currentGroups);
+				canCreateNewCategories = authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManageCategories, currentUser, currentGroups);
 				canManagePageCategories = canCreateNewCategories;
-				canDownloadAttachments = AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.DownloadAttachments, currentUser, currentGroups);
+				canDownloadAttachments = authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.DownloadAttachments, currentUser, currentGroups);
 			}
 		}
 

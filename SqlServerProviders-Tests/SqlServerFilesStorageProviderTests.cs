@@ -19,8 +19,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		public override IFilesStorageProviderV30 GetProvider() {
 			SqlServerFilesStorageProvider prov = new SqlServerFilesStorageProvider();
+			prov.SetUp(MockHost(), ConnString + InitialCatalog);
 			prov.Init(MockHost(), ConnString + InitialCatalog);
-			prov.SetUp();
 
 			return prov;
 		}

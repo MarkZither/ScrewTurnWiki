@@ -170,6 +170,8 @@ namespace ScrewTurn.Wiki {
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
 			CategoryInfo[] pageCategories;
 			int count = 0;
 			foreach(SearchResult res in results) {
@@ -182,7 +184,7 @@ namespace ScrewTurn.Wiki {
 					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
 					// Verify permissions
-					bool canReadPage = AuthChecker.CheckActionForPage(currentPage,
+					bool canReadPage = authChecker.CheckActionForPage(currentPage,
 						Actions.ForPages.ReadPage, currentUser, currentGroups);
 					if(!canReadPage) continue; // Skip
 				}
@@ -191,7 +193,7 @@ namespace ScrewTurn.Wiki {
 					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
 					// Verify permissions
-					bool canReadDiscussion = AuthChecker.CheckActionForPage(currentPage,
+					bool canReadDiscussion = authChecker.CheckActionForPage(currentPage,
 						Actions.ForPages.ReadDiscussion, currentUser, currentGroups);
 					if(!canReadDiscussion) continue; // Skip
 				}
@@ -200,7 +202,7 @@ namespace ScrewTurn.Wiki {
 					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
 					// Verify permissions
-					bool canDownloadAttn = AuthChecker.CheckActionForPage(currentPage,
+					bool canDownloadAttn = authChecker.CheckActionForPage(currentPage,
 						Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
 					if(!canDownloadAttn) continue; // Skip
 				}
@@ -210,7 +212,7 @@ namespace ScrewTurn.Wiki {
 					string directory = Tools.GetDirectoryName(fields[1]);
 
 					// Verify permissions
-					bool canDownloadFiles = AuthChecker.CheckActionForDirectory(provider, directory,
+					bool canDownloadFiles = authChecker.CheckActionForDirectory(provider, directory,
 						Actions.ForDirectories.DownloadFiles, currentUser, currentGroups);
 					if(!canDownloadFiles) continue; // Skip
 				}

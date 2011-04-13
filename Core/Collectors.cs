@@ -12,7 +12,7 @@ namespace ScrewTurn.Wiki {
 	public static class Collectors {
 
 		[ThreadStatic]
-		private static CollectorsBox collectorsBox;
+		private static ICollectorsBox collectorsBox;
 
 		/// <summary>
 		/// <c>true</c> if the collectorsBox has been used
@@ -23,10 +23,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the collectors box.
 		/// </summary>
-		public static CollectorsBox CollectorsBox {
+		public static ICollectorsBox CollectorsBox {
 			get {
 				if(collectorsBox == null) {
-					collectorsBox = new CollectorsBox(UsersProviderCollector.Clone(),
+					collectorsBox = new CollectorsBox(SettingsProvider,
+													  SettingsProviderAssembly,
+													  UsersProviderCollector.Clone(),
 													  ThemeProviderCollector.Clone(),
 													  PagesProviderCollector.Clone(),
 													  FilesProviderCollector.Clone(),
@@ -56,7 +58,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The settings storage provider.
 		/// </summary>
-		public static ISettingsStorageProviderV30 SettingsProvider;
+		private static Type SettingsProvider;
+
+		/// <summary>
+		/// The settings storage provider assembly.
+		/// </summary>
+		private static System.Reflection.Assembly SettingsProviderAssembly;
 
 		/// <summary>
 		/// The Users Provider Collector instance.
@@ -347,6 +354,15 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
+		/// <summary>
+		/// Sets the settings storage provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="assembly">The assembly.</param>
+		public static void AddSettingsProvider(Type provider, System.Reflection.Assembly assembly) {
+			SettingsProvider = provider;
+			SettingsProviderAssembly = assembly;
+		}
 	}
 
 }

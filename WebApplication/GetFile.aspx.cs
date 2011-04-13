@@ -64,13 +64,15 @@ namespace ScrewTurn.Wiki {
 			// Verify permissions
 			bool canDownload = false;
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
 			if(isPageAttachment) {
-				canDownload = AuthChecker.CheckActionForPage(pageInfo, Actions.ForPages.DownloadAttachments,
+				canDownload = authChecker.CheckActionForPage(pageInfo, Actions.ForPages.DownloadAttachments,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			}
 			else {
 				string dir = Tools.GetDirectoryName(filename);
-				canDownload = AuthChecker.CheckActionForDirectory(provider, dir,
+				canDownload = authChecker.CheckActionForDirectory(provider, dir,
 					 Actions.ForDirectories.DownloadFiles, SessionFacade.GetCurrentUsername(),
 					 SessionFacade.GetCurrentGroupNames());
 			}

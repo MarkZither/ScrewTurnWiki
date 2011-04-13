@@ -34,7 +34,8 @@ namespace ScrewTurn.Wiki {
 			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.MessageBody, page);
 
 			// Verify permissions and setup captcha
-			bool canPostMessage = AuthChecker.CheckActionForPage(page, Actions.ForPages.PostDiscussion,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canPostMessage = authChecker.CheckActionForPage(page, Actions.ForPages.PostDiscussion,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(Tools.UrlEncode(page.FullName), Settings.PageExtension));
 			captcha.Visible = SessionFacade.LoginKey == null && !Settings.DisableCaptchaControl;

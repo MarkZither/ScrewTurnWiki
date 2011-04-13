@@ -98,7 +98,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>
 		/// Sets up the Storage Provider.
 		/// </summary>
-		public void SetUp() {
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
+		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
+		public void SetUp(IHostV30 host, string config) {
+			if(host == null) throw new ArgumentNullException("host");
+			if(config == null) throw new ArgumentNullException("config");
+
+			Init(host, config);
+
 			CreateOrUpdateDatabaseIfNecessary();
 		}
 

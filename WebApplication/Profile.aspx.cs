@@ -78,15 +78,17 @@ namespace ScrewTurn.Wiki {
 			lstDiscussionMessages.Items.Add(new ListItem("&lt;root&gt;", ""));
 			lstDiscussionMessages.Items[0].Selected = discussionMessages;
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
 			foreach(ScrewTurn.Wiki.PluginFramework.NamespaceInfo ns in Pages.GetNamespaces()) {
 				Users.GetEmailNotification(currentUser, ns, out pageChanges, out discussionMessages);
 
-				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ReadPages, currentUser.Username, currentGroups)) {
+				if(authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ReadPages, currentUser.Username, currentGroups)) {
 					lstPageChanges.Items.Add(new ListItem(ns.Name, ns.Name));
 					lstPageChanges.Items[lstPageChanges.Items.Count - 1].Selected = pageChanges;
 				}
 
-				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ReadDiscussion, currentUser.Username, currentGroups)) {
+				if(authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ReadDiscussion, currentUser.Username, currentGroups)) {
 					lstDiscussionMessages.Items.Add(new ListItem(ns.Name, ns.Name));
 					lstDiscussionMessages.Items[lstPageChanges.Items.Count - 1].Selected = discussionMessages;
 				}

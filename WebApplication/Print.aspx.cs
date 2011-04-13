@@ -27,12 +27,13 @@ namespace ScrewTurn.Wiki {
 
 			// Check permissions
 			bool canView = false;
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
 			if(Request["Discuss"] == null) {
-				canView = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
+				canView = authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			}
 			else {
-				canView = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion,
+				canView = authChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			}
 			if(!canView) UrlTools.Redirect("AccessDenied.aspx");

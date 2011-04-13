@@ -100,6 +100,7 @@
     <Compile Include="FormattingPipeline.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Host.cs" />
+    <Compile Include="ICollectorsBox.cs" />
     <Compile Include="IndexStorer.cs" />
     <Compile Include="ITranslator.cs" />
     <Compile Include="LocalPageInfo.cs" />

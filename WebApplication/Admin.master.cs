@@ -133,7 +133,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage the configuration, <c>false</c> otherwise.</returns>
 		public static bool CanManageConfiguration(string username, string[] groups) {
-			bool canManageConfiguration = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageConfiguration, username, groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageConfiguration = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageConfiguration, username, groups);
 			return canManageConfiguration;
 		}
 
@@ -144,10 +145,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage categories in at least one namespace, <c>false</c> otherwise.</returns>
 		public static bool CanManageCategories(string username, string[] groups) {
-			if(AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManageCategories, username, groups)) return true;
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			if(authChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManageCategories, username, groups)) return true;
 
 			foreach(NamespaceInfo ns in Pages.GetNamespaces()) {
-				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManageCategories, username, groups)) return true;
+				if(authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManageCategories, username, groups)) return true;
 			}
 
 			return false;
@@ -160,7 +162,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage groups, <c>false</c> otherwise.</returns>
 		public static bool CanManageGroups(string username, string[] groups) {
-			bool canManageGroups = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageGroups, username, groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageGroups = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageGroups, username, groups);
 			return canManageGroups;
 		}
 
@@ -171,7 +174,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage permissions, <c>false</c> otherwise.</returns>
 		public static bool CanManagePermissions(string username, string[] groups) {
-			bool canManagePermissions = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, username, groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManagePermissions = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, username, groups);
 			return canManagePermissions;
 		}
 
@@ -182,7 +186,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage namespace, <c>false</c> otherwise.</returns>
 		public static bool CanManageNamespaces(string username, string[] groups) {
-			bool canManageNamespaces = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageNamespaces, username, groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageNamespaces = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageNamespaces, username, groups);
 			return canManageNamespaces;
 		}
 
@@ -193,10 +198,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the the user can manage pages in at least one namespace, <c>false</c> otherwise.</returns>
 		public static bool CanManagePages(string username, string[] groups) {
-			if(AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManagePages, username, groups)) return true;
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			if(authChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManagePages, username, groups)) return true;
 
 			foreach(NamespaceInfo ns in Pages.GetNamespaces()) {
-				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManagePages, username, groups)) return true;
+				if(authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManagePages, username, groups)) return true;
 			}
 
 			return false;
@@ -209,7 +215,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage providers, <c>false</c> otherwise.</returns>
 		public static bool CanManageProviders(string username, string[] groups) {
-			bool canManageProviders = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageProviders, username, groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageProviders = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageProviders, username, groups);
 			return canManageProviders;
 		}
 
@@ -220,7 +227,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage snippets and templates, <c>false</c> otherwise.</returns>
 		public static bool CanManageSnippetsAndTemplates(string username, string[] groups) {
-			bool canManageSnippets = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageSnippetsAndTemplates, username, groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageSnippets = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageSnippetsAndTemplates, username, groups);
 			return canManageSnippets;
 		}
 
@@ -231,7 +239,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage user accounts, <c>false</c> otherwise.</returns>
 		public static bool CanManageUsers(string username, string[] groups) {
-			bool canManageUsers = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageAccounts, username, groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManageUsers = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageAccounts, username, groups);
 			return canManageUsers;
 		}
 

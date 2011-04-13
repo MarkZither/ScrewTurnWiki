@@ -113,13 +113,15 @@ namespace ScrewTurn.Wiki {
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
-			canList = AuthChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.List, currentUser, currentGroups);
-			canDownload = AuthChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.DownloadFiles, currentUser, currentGroups);
-			canUpload = AuthChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.UploadFiles, currentUser, currentGroups);
-			canCreateDirs = AuthChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.CreateDirectories, currentUser, currentGroups);
-			canDeleteFiles = AuthChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.DeleteFiles, currentUser, currentGroups);
-			canDeleteDirs = AuthChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.DeleteDirectories, currentUser, currentGroups);
-			canSetPerms = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, currentUser, currentGroups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
+			canList = authChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.List, currentUser, currentGroups);
+			canDownload = authChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.DownloadFiles, currentUser, currentGroups);
+			canUpload = authChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.UploadFiles, currentUser, currentGroups);
+			canCreateDirs = authChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.CreateDirectories, currentUser, currentGroups);
+			canDeleteFiles = authChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.DeleteFiles, currentUser, currentGroups);
+			canDeleteDirs = authChecker.CheckActionForDirectory(provider, CurrentDirectory, Actions.ForDirectories.DeleteDirectories, currentUser, currentGroups);
+			canSetPerms = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, currentUser, currentGroups);
 			isAdmin = Array.Find(currentGroups, delegate(string g) { return g == Settings.AdministratorsGroup; }) != null;
 		}
 
@@ -168,8 +170,10 @@ namespace ScrewTurn.Wiki {
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
 			foreach(string s in dirs) {
-				bool canListThisSubDir = AuthChecker.CheckActionForDirectory(provider, s, Actions.ForDirectories.List, currentUser, currentGroups);
+				bool canListThisSubDir = authChecker.CheckActionForDirectory(provider, s, Actions.ForDirectories.List, currentUser, currentGroups);
 
 				DataRow row = table.NewRow();
 				row["Type"] = "D";
@@ -225,7 +229,8 @@ namespace ScrewTurn.Wiki {
 				DeletePermissions(sub);
 			}
 
-			AuthWriter.ClearEntriesForDirectory(provider, directory);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			authWriter.ClearEntriesForDirectory(provider, directory);
 		}
 
 		protected void rptItems_ItemCommand(object sender, RepeaterCommandEventArgs e) {
@@ -301,7 +306,9 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			bool canListThisSubDir = AuthChecker.CheckActionForDirectory(realProvider, directory, Actions.ForDirectories.List,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
+			bool canListThisSubDir = authChecker.CheckActionForDirectory(realProvider, directory, Actions.ForDirectories.List,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			if(!canListThisSubDir) {
 				return;
@@ -337,7 +344,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The name of the current directory.</param>
 		private void EnterDirectory(string name) {
 			string newDirectory = CurrentDirectory + name + "/";
-			bool canListThisSubDir = AuthChecker.CheckActionForDirectory(provider, newDirectory, Actions.ForDirectories.List,
+
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
+			bool canListThisSubDir = authChecker.CheckActionForDirectory(provider, newDirectory, Actions.ForDirectories.List,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			if(!canListThisSubDir) {
 				return;
@@ -453,9 +463,9 @@ namespace ScrewTurn.Wiki {
 				string subNew = newDirectory + sub.Substring(oldDirectory.Length);
 				MovePermissions(sub, subNew);
 			}
-
-			AuthWriter.ClearEntriesForDirectory(provider, newDirectory);
-			AuthWriter.ProcessDirectoryRenaming(provider, oldDirectory, newDirectory);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			authWriter.ClearEntriesForDirectory(provider, newDirectory);
+			authWriter.ProcessDirectoryRenaming(provider, oldDirectory, newDirectory);
 		}
 
 		protected void btnRename_Click(object sender, EventArgs e) {
@@ -528,7 +538,8 @@ namespace ScrewTurn.Wiki {
 
 				lblNewDirectoryResult.Text = "";
 				txtNewDirectoryName.Text = txtNewDirectoryName.Text.Trim('/');
-				AuthWriter.ClearEntriesForDirectory(provider, CurrentDirectory + txtNewDirectoryName.Text + "/");
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				authWriter.ClearEntriesForDirectory(provider, CurrentDirectory + txtNewDirectoryName.Text + "/");
 				bool done = false;
 				try {
 					done = provider.CreateDirectory(CurrentDirectory, txtNewDirectoryName.Text);

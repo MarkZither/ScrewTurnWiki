@@ -48,26 +48,14 @@ second line";
 		public void SetUp() {
 			mocks = new MockRepository();
 
-			ISettingsStorageProviderV30 settingsProvider = mocks.StrictMock<ISettingsStorageProviderV30>();
-			Expect.Call(settingsProvider.GetSetting("ProcessSingleLineBreaks")).Return("false").Repeat.Any();
-			Expect.Call(settingsProvider.GetSetting("WikiTitle")).Return("Title").Repeat.Any();
-
-			Collectors.SettingsProvider = settingsProvider;
-
+			//ISettingsStorageProviderV30 settingsProvider = new DummySettingsStorageProvider();
+			Collectors.AddSettingsProvider(typeof(DummySettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummySettingsStorageProvider)));
+			
 			Collectors.InitCollectors();
 			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), typeof(IPagesStorageProviderV30), true);
-
-			Expect.Call(settingsProvider.GetSetting("DefaultPagesProvider")).Return(typeof(DummyPagesStorageProvider).FullName).Repeat.Any();
-			Expect.Call(settingsProvider.GetPluginStatus(typeof(DummyPagesStorageProvider).FullName)).Return(true).Repeat.Any();
-			Expect.Call(settingsProvider.GetPluginConfiguration(typeof(DummyPagesStorageProvider).FullName)).Return("").Repeat.Any();
-
+			
 			Host.Instance = new Host();
 						
-			settingsProvider.LogEntry("", EntryType.General, "");
-			LastCall.On(settingsProvider).IgnoreArguments().Repeat.Any();
-
-			mocks.Replay(settingsProvider);
-
 			//System.Web.UI.HtmlTextWriter writer = new System.Web.UI.HtmlTextWriter(new System.IO.StreamWriter(new System.IO.MemoryStream()));
 			//System.Web.Hosting.SimpleWorkerRequest request = new System.Web.Hosting.SimpleWorkerRequest("Default.aspx", "?Page=MainPage", writer);
 			System.Web.HttpContext.Current = new System.Web.HttpContext(new DummyRequest());
@@ -76,6 +64,164 @@ second line";
 		[TearDown]
 		public void TearDown() {
 			mocks.VerifyAll();
+		}
+
+		private class DummySettingsStorageProvider : ISettingsStorageProviderV30 {
+
+			#region ISettingsStorageProviderV30 Members
+
+			public string GetSetting(string name) {
+				switch(name) {
+					case "ProcessSingleLineBreaks":
+						return "false";
+					case "WikiTitle":
+						return "Title";
+					case "DefaultPagesProvider":
+						return typeof(DummyPagesStorageProvider).FullName;
+					default:
+						return null;
+				}
+			}
+
+			public bool SetSetting(string name, string value) {
+				throw new NotImplementedException();
+			}
+
+			public IDictionary<string, string> GetAllSettings() {
+				throw new NotImplementedException();
+			}
+
+			public void BeginBulkUpdate() {
+				throw new NotImplementedException();
+			}
+
+			public void EndBulkUpdate() {
+				throw new NotImplementedException();
+			}
+
+			public void LogEntry(string message, EntryType entryType, string user) {
+				// Nothing TODO
+			}
+
+			public LogEntry[] GetLogEntries() {
+				throw new NotImplementedException();
+			}
+
+			public void ClearLog() {
+				throw new NotImplementedException();
+			}
+
+			public int LogSize {
+				get { throw new NotImplementedException(); }
+			}
+
+			public string GetMetaDataItem(MetaDataItem item, string tag) {
+				throw new NotImplementedException();
+			}
+
+			public bool SetMetaDataItem(MetaDataItem item, string tag, string content) {
+				throw new NotImplementedException();
+			}
+
+			public RecentChange[] GetRecentChanges() {
+				throw new NotImplementedException();
+			}
+
+			public bool AddRecentChange(string page, string title, string messageSubject, DateTime dateTime, string user, Change change, string descr) {
+				throw new NotImplementedException();
+			}
+
+			public string[] ListPluginAssemblies() {
+				throw new NotImplementedException();
+			}
+
+			public bool StorePluginAssembly(string filename, byte[] assembly) {
+				throw new NotImplementedException();
+			}
+
+			public byte[] RetrievePluginAssembly(string filename) {
+				throw new NotImplementedException();
+			}
+
+			public bool DeletePluginAssembly(string filename) {
+				throw new NotImplementedException();
+			}
+
+			public bool SetPluginStatus(string typeName, bool enabled) {
+				throw new NotImplementedException();
+			}
+
+			public bool GetPluginStatus(string typeName) {
+				if(typeName == typeof(DummyPagesStorageProvider).FullName) return true;
+				return false;
+			}
+
+			public bool SetPluginConfiguration(string typeName, string config) {
+				throw new NotImplementedException();
+			}
+
+			public string GetPluginConfiguration(string typeName) {
+				if(typeName == typeof(DummyPagesStorageProvider).FullName) return "";
+				return null;
+			}
+
+			public AclEngine.IAclManager AclManager {
+				get { throw new NotImplementedException(); }
+			}
+
+			public bool StoreOutgoingLinks(string page, string[] outgoingLinks) {
+				throw new NotImplementedException();
+			}
+
+			public string[] GetOutgoingLinks(string page) {
+				throw new NotImplementedException();
+			}
+
+			public IDictionary<string, string[]> GetAllOutgoingLinks() {
+				throw new NotImplementedException();
+			}
+
+			public bool DeleteOutgoingLinks(string page) {
+				throw new NotImplementedException();
+			}
+
+			public bool UpdateOutgoingLinksForRename(string oldName, string newName) {
+				throw new NotImplementedException();
+			}
+
+			public bool IsFirstApplicationStart() {
+				throw new NotImplementedException();
+			}
+
+			#endregion
+
+			#region IProviderV30 Members
+
+			public void Init(IHostV30 host, string config) {
+				//Nothing TODO
+			}
+
+			public void SetUp(IHostV30 host, string config) {
+				//Nothing TODO
+			}
+
+			public ComponentInformation Information {
+				get { throw new NotImplementedException(); }
+			}
+
+			public string ConfigHelpHtml {
+				get { throw new NotImplementedException(); }
+			}
+
+			#endregion
+
+			#region IDisposable Members
+
+			public void Dispose() {
+				//Nothing TODO
+			}
+
+			#endregion
 		}
 
 	}
@@ -365,7 +511,7 @@ second line";
 
 		public void Init(IHostV30 host, string config) { }
 
-		public void SetUp() { }
+		public void SetUp(IHostV30 host, string config) { }
 
 		void IDisposable.Dispose() { }
 

@@ -40,8 +40,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		public IPagesStorageProviderV30 GetProvider() {
 			SqlServerPagesStorageProvider prov = new SqlServerPagesStorageProvider();
+			prov.SetUp(MockHost(), ConnString + InitialCatalog);
 			prov.Init(MockHost(), ConnString + InitialCatalog);
-			prov.SetUp();
+
 			return prov;
 		}
 

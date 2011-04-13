@@ -171,10 +171,11 @@ namespace ScrewTurn.Wiki {
 				}
 
 				// Select user's global permissions
+				AuthReader authReader = new AuthReader(Collectors.CollectorsBox.SettingsProvider);
 				aclActionsSelector.GrantedActions =
-					AuthReader.RetrieveGrantsForGlobals(user);
+					authReader.RetrieveGrantsForGlobals(user);
 				aclActionsSelector.DeniedActions =
-					AuthReader.RetrieveDenialsForGlobals(user);
+					authReader.RetrieveDenialsForGlobals(user);
 
 				// Enable/disable interface sections based on provider read-only settings
 				lstGroups.Enabled = !user.Provider.GroupMembershipReadOnly;
@@ -453,7 +454,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private bool RemoveAllAclEntries(UserInfo user) {
-			return AuthWriter.RemoveEntriesForGlobals(user);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			return authWriter.RemoveEntriesForGlobals(user);
 		}
 
 		/// <summary>
@@ -464,13 +466,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="denials">The denied actions.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private bool AddAclEntries(UserInfo user, string[] grants, string[] denials) {
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
 			foreach(string action in grants) {
-				bool done = AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, action, user);
+				bool done = authWriter.SetPermissionForGlobals(AuthStatus.Grant, action, user);
 				if(!done) return false;
 			}
 
 			foreach(string action in denials) {
-				bool done = AuthWriter.SetPermissionForGlobals(AuthStatus.Deny, action, user);
+				bool done = authWriter.SetPermissionForGlobals(AuthStatus.Deny, action, user);
 				if(!done) return false;
 			}
 

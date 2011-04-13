@@ -28,13 +28,14 @@ namespace ScrewTurn.Wiki {
 			page = Pages.FindPage(Request["Page"]);
 
             if(page != null) {
-				canRollback = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage,
+				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+				canRollback = authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 
                 content = Content.GetPageContent(page);
 				lblTitle.Text = Properties.Messages.PageHistory + ": " + FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page);
 
-				bool canView = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
+				bool canView = authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 				if(!canView) UrlTools.Redirect("AccessDenied.aspx");
             }

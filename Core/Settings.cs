@@ -32,7 +32,7 @@ namespace ScrewTurn.Wiki {
 		/// Gets the settings storage provider.
 		/// </summary>
 		public static ISettingsStorageProviderV30 Provider {
-			get { return Collectors.SettingsProvider; }
+			get { return Collectors.CollectorsBox.SettingsProvider; }
 		}
 
 		/// <summary>

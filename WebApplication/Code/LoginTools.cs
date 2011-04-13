@@ -110,7 +110,9 @@ namespace ScrewTurn.Wiki {
 			string currentUsername = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
-			bool canViewNamespace = AuthChecker.CheckActionForNamespace(
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
+			bool canViewNamespace = authChecker.CheckActionForNamespace(
 				Tools.DetectCurrentNamespaceInfo(), Actions.ForNamespaces.ReadPages,
 				currentUsername, currentGroups);
 

@@ -33,6 +33,8 @@ namespace ScrewTurn.Wiki {
 			string currentUsername = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
 			currentNamespace = DetectNamespace();
 			if(string.IsNullOrEmpty(currentNamespace)) currentNamespace = null;
 
@@ -70,7 +72,7 @@ namespace ScrewTurn.Wiki {
 				PageContent content = Content.GetPageContent(page);
 				if(Request["Discuss"] == null) {
 					// Check permission for the page
-					bool canReadPage = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
+					bool canReadPage = authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
 						currentUsername, currentGroups);
 					if(!canReadPage) {
 						Response.StatusCode = 401;
@@ -136,7 +138,7 @@ namespace ScrewTurn.Wiki {
 
 				else {
 					// Check permission for the discussion
-					bool canReadDiscussion = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion,
+					bool canReadDiscussion = authChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion,
 						currentUsername, currentGroups);
 					if(!canReadDiscussion) {
 						Response.StatusCode = 401;
@@ -255,7 +257,7 @@ namespace ScrewTurn.Wiki {
 							PageInfo p = Pages.FindPage(ch[i].Page);
 							if(p != null) {
 								// Check permissions for every page
-								bool canReadThisPage = AuthChecker.CheckActionForPage(p, Actions.ForPages.ReadPage,
+								bool canReadThisPage = authChecker.CheckActionForPage(p, Actions.ForPages.ReadPage,
 									currentUsername, currentGroups);
 								if(!canReadThisPage) continue;
 
@@ -379,7 +381,7 @@ namespace ScrewTurn.Wiki {
 							{
 
 								// Check permissions for every page
-								bool canReadThisPageDiscussion = AuthChecker.CheckActionForPage(p, Actions.ForPages.ReadDiscussion,
+								bool canReadThisPageDiscussion = authChecker.CheckActionForPage(p, Actions.ForPages.ReadDiscussion,
 									currentUsername, currentGroups);
 								if (!canReadThisPageDiscussion) continue;
 

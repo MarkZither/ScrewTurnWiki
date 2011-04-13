@@ -274,25 +274,27 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="user">The user.</param>
 		private static void RemovePermissions(UserInfo user) {
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				foreach(string dir in ListDirectories(prov)) {
-					AuthWriter.RemoveEntriesForDirectory(user, prov, dir);
+					authWriter.RemoveEntriesForDirectory(user, prov, dir);
 				}
 			}
 
-			AuthWriter.RemoveEntriesForGlobals(user);
+			authWriter.RemoveEntriesForGlobals(user);
 
-			AuthWriter.RemoveEntriesForNamespace(user, null);
+			authWriter.RemoveEntriesForNamespace(user, null);
 			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				foreach(PageInfo page in prov.GetPages(null)) {
-					AuthWriter.RemoveEntriesForPage(user, page);
+					authWriter.RemoveEntriesForPage(user, page);
 				}
 
 				foreach(NamespaceInfo nspace in prov.GetNamespaces()) {
-					AuthWriter.RemoveEntriesForNamespace(user, nspace);
+					authWriter.RemoveEntriesForNamespace(user, nspace);
 
 					foreach(PageInfo page in prov.GetPages(nspace)) {
-						AuthWriter.RemoveEntriesForPage(user, page);
+						authWriter.RemoveEntriesForPage(user, page);
 					}
 				}
 			}
@@ -303,25 +305,26 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="group">The group.</param>
 		private static void RemovePermissions(UserGroup group) {
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
 			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
 				foreach(string dir in ListDirectories(prov)) {
-					AuthWriter.RemoveEntriesForDirectory(group, prov, dir);
+					authWriter.RemoveEntriesForDirectory(group, prov, dir);
 				}
 			}
 
-			AuthWriter.RemoveEntriesForGlobals(group);
+			authWriter.RemoveEntriesForGlobals(group);
 
-			AuthWriter.RemoveEntriesForNamespace(group, null);
+			authWriter.RemoveEntriesForNamespace(group, null);
 			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
 				foreach(PageInfo page in prov.GetPages(null)) {
-					AuthWriter.RemoveEntriesForPage(group, page);
+					authWriter.RemoveEntriesForPage(group, page);
 				}
 
 				foreach(NamespaceInfo nspace in prov.GetNamespaces()) {
-					AuthWriter.RemoveEntriesForNamespace(group, nspace);
+					authWriter.RemoveEntriesForNamespace(group, nspace);
 
 					foreach(PageInfo page in prov.GetPages(nspace)) {
-						AuthWriter.RemoveEntriesForPage(group, page);
+						authWriter.RemoveEntriesForPage(group, page);
 					}
 				}
 			}
@@ -910,8 +913,9 @@ namespace ScrewTurn.Wiki {
 			List<UserInfo> result = new List<UserInfo>(temp.Length);
 
 			// Verify read permissions
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
 			foreach(UserInfo user in temp) {
-				if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user.Username, user.Groups)) {
+				if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user.Username, user.Groups)) {
 					result.Add(user);
 				}
 			}
@@ -935,8 +939,9 @@ namespace ScrewTurn.Wiki {
 			List<UserInfo> result = new List<UserInfo>(temp.Length);
 
 			// Verify read permissions
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
 			foreach(UserInfo user in temp) {
-				if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion, user.Username, user.Groups)) {
+				if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion, user.Username, user.Groups)) {
 					result.Add(user);
 				}
 			}

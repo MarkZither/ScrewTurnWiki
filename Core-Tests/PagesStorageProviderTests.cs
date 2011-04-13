@@ -13,15 +13,14 @@ namespace ScrewTurn.Wiki.Tests {
 
 		public override IPagesStorageProviderV30 GetProvider() {
 			PagesStorageProvider prov = new PagesStorageProvider();
+			prov.SetUp(MockHost(), "");
 			prov.Init(MockHost(), "");
-			prov.SetUp();
 			return prov;
 		}
 
 		[Test]
 		public void Init() {
 			IPagesStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), "");
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}
@@ -69,8 +68,8 @@ namespace ScrewTurn.Wiki.Tests {
 			File.WriteAllText(navPathsFile, "Path1|Page1|Page.3\r\nPath2|Page2\r\n");
 
 			PagesStorageProvider prov = new PagesStorageProvider();
+			prov.SetUp(host, "");
 			prov.Init(host, "");
-			prov.SetUp();
 
 			PageInfo[] pages = prov.GetPages(null);
 
@@ -117,6 +116,7 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Replay(host);
 
 			prov = new PagesStorageProvider();
+			prov.SetUp(host, "");
 			prov.Init(host, "");
 
 			mocks.Verify(host);

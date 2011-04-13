@@ -19,8 +19,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		public override IUsersStorageProviderV30 GetProvider() {
 			SqlServerUsersStorageProvider prov = new SqlServerUsersStorageProvider();
+			prov.SetUp(MockHost(), ConnString + InitialCatalog);
 			prov.Init(MockHost(), ConnString + InitialCatalog);
-			prov.SetUp();
+
 			return prov;
 		}
 
@@ -162,8 +163,7 @@ INSERT INTO [User] ([Username], [PasswordHash], [Email], [DateTime], [Active], [
 			mocks.Replay(host);
 
 			IUsersStorageProviderV30 prov = new SqlServerUsersStorageProvider();
-			prov.Init(host, ConnString + InitialCatalog);
-			prov.SetUp();
+			prov.SetUp(host, ConnString + InitialCatalog);
 
 			mocks.Verify(host);
 

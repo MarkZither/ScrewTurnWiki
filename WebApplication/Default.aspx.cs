@@ -38,17 +38,19 @@ namespace ScrewTurn.Wiki {
 			string currentUsername = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
-			bool canView = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.ReadPage, currentUsername, currentGroups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
+			bool canView = authChecker.CheckActionForPage(currentPage, Actions.ForPages.ReadPage, currentUsername, currentGroups);
 			bool canEdit = false;
 			bool canEditWithApproval = false;
 			Pages.CanEditPage(currentPage, currentUsername, currentGroups, out canEdit, out canEditWithApproval);
 			if(canEditWithApproval && canEdit) canEditWithApproval = false;
-			bool canDownloadAttachments = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.DownloadAttachments, currentUsername, currentGroups);
-			bool canSetPerms = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, currentUsername, currentGroups);
-			bool canAdmin = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.ManagePage, currentUsername, currentGroups);
-			bool canViewDiscussion = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.ReadDiscussion, currentUsername, currentGroups);
-			bool canPostDiscussion = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.PostDiscussion, currentUsername, currentGroups);
-			bool canManageDiscussion = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.ManageDiscussion, currentUsername, currentGroups);
+			bool canDownloadAttachments = authChecker.CheckActionForPage(currentPage, Actions.ForPages.DownloadAttachments, currentUsername, currentGroups);
+			bool canSetPerms = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, currentUsername, currentGroups);
+			bool canAdmin = authChecker.CheckActionForPage(currentPage, Actions.ForPages.ManagePage, currentUsername, currentGroups);
+			bool canViewDiscussion = authChecker.CheckActionForPage(currentPage, Actions.ForPages.ReadDiscussion, currentUsername, currentGroups);
+			bool canPostDiscussion = authChecker.CheckActionForPage(currentPage, Actions.ForPages.PostDiscussion, currentUsername, currentGroups);
+			bool canManageDiscussion = authChecker.CheckActionForPage(currentPage, Actions.ForPages.ManageDiscussion, currentUsername, currentGroups);
 
 			if(!canView) {
 				if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Tools.GetCurrentUrlFixed()));

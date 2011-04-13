@@ -2546,7 +2546,8 @@ namespace ScrewTurn.Wiki {
 					string currentUsername = SessionFacade.GetCurrentUsername();
 					string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
-					bool canView = AuthChecker.CheckActionForPage(transcludedPage, Actions.ForPages.ReadPage, currentUsername, currentGroups);
+					AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+					bool canView = authChecker.CheckActionForPage(transcludedPage, Actions.ForPages.ReadPage, currentUsername, currentGroups);
 					if(canView) {
 						dummy = new StringBuilder();
 						dummy.Append(@"<div class=""transcludedpage"">");
@@ -2590,11 +2591,12 @@ namespace ScrewTurn.Wiki {
 			List<NamespaceInfo> allNamespaces = Pages.GetNamespaces();
 			List<string> allowedNamespaces = new List<string>(allNamespaces.Count);
 
-			if(AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ReadPages, currentUser, currentGroups)) {
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			if(authChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ReadPages, currentUser, currentGroups)) {
 				allowedNamespaces.Add("");
 			}
 			foreach(NamespaceInfo nspace in allNamespaces) {
-				if(AuthChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ReadPages, currentUser, currentGroups)) {
+				if(authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ReadPages, currentUser, currentGroups)) {
 					allowedNamespaces.Add(nspace.Name);
 				}
 			}

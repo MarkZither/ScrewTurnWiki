@@ -207,7 +207,8 @@ namespace ScrewTurn.Wiki {
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
 			if(user == null) throw new ArgumentNullException("user");
 
-			return AuthChecker.CheckActionForGlobals(action, user.Username, user.Groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			return authChecker.CheckActionForGlobals(action, user.Username, user.Groups);
 		}
 
 		/// <summary>
@@ -224,7 +225,8 @@ namespace ScrewTurn.Wiki {
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
 			if(user == null) throw new ArgumentNullException("user");
 
-			return AuthChecker.CheckActionForNamespace(nspace, action, user.Username, user.Groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			return authChecker.CheckActionForNamespace(nspace, action, user.Username, user.Groups);
 		}
 
 		/// <summary>
@@ -242,7 +244,8 @@ namespace ScrewTurn.Wiki {
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
 			if(user == null) throw new ArgumentNullException("user");
 
-			return AuthChecker.CheckActionForPage(page, action, user.Username, user.Groups);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			return authChecker.CheckActionForPage(page, action, user.Username, user.Groups);
 		}
 
 		/// <summary>
@@ -260,7 +263,8 @@ namespace ScrewTurn.Wiki {
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
 			if(user == null) throw new ArgumentNullException("user");
 
-			return AuthChecker.CheckActionForDirectory(directory.Provider, directory.FullPath, action,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			return authChecker.CheckActionForDirectory(directory.Provider, directory.FullPath, action,
 				user.Username, user.Groups);
 		}
 
@@ -784,14 +788,16 @@ namespace ScrewTurn.Wiki {
 		public bool UpgradePageStatusToAcl(PageInfo page, char oldStatus) {
 			if(page == null) throw new ArgumentNullException("page");
 
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+
 			switch(oldStatus) {
 				case 'L':
 					// Locked: only administrators can edit this page
-					return AuthWriter.SetPermissionForPage(AuthStatus.Deny, page, Actions.ForPages.ModifyPage,
+					return authWriter.SetPermissionForPage(AuthStatus.Deny, page, Actions.ForPages.ModifyPage,
 						Users.FindUserGroup(Settings.UsersGroup));
 				case 'P':
 					// Public: anonymous users can edit this page
-					return AuthWriter.SetPermissionForPage(AuthStatus.Grant, page, Actions.ForPages.ModifyPage,
+					return authWriter.SetPermissionForPage(AuthStatus.Grant, page, Actions.ForPages.ModifyPage,
 						Users.FindUserGroup(Settings.AnonymousGroup));
 				default:
 					throw new ArgumentOutOfRangeException("oldStatus", "Invalid old status code");

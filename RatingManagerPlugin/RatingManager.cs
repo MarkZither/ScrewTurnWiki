@@ -379,7 +379,11 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		/// <summary>
 		/// Sets up the Storage Provider.
 		/// </summary>
-		public void SetUp() {
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
+		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
+		public void SetUp(IHostV30 host, string config) {
 			IFilesStorageProviderV30 filesStorageProvider = GetDefaultFilesStorageProvider();
 
 			if(!DirectoryExists(filesStorageProvider, defaultDirectoryName)) {

@@ -31,8 +31,11 @@ namespace ScrewTurn.Wiki {
 				string user = SessionFacade.GetCurrentUsername();
 				string[] groups = SessionFacade.GetCurrentGroupNames();
 
+
+				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+
 				foreach(PageInfo page in Pages.GetPages(null)) {
-					if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
+					if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
 						WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == rootDefault, writer);
 					}
 				}
@@ -40,7 +43,7 @@ namespace ScrewTurn.Wiki {
 					string nspaceDefault = nspace.DefaultPage.FullName.ToLowerInvariant();
 
 					foreach(PageInfo page in Pages.GetPages(nspace)) {
-						if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
+						if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
 							WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == nspaceDefault, writer);
 						}
 					}

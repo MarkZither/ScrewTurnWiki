@@ -47,11 +47,12 @@ namespace ScrewTurn.Wiki {
 		/// <param name="instance">The provider instance to setup.</param>
 		public static void SetUp<T>(Type instance) where T : class, IProviderV30 {
 			T provider = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(instance), instance);
-			ProviderLoader.Initialize<T>(provider);
-			provider.SetUp();
+			provider.SetUp(Host.Instance, LoadConfiguration(instance.GetType().FullName));
 
 			// Verify constraints
 			VerifyConstraints<T>(provider);
+
+			provider.Dispose();
 		}
 
 		/// <summary>

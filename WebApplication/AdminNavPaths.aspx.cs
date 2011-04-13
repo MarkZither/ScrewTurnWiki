@@ -45,7 +45,8 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the user can manage pages, <c>false</c> otherwise.</returns>
 		private bool CanManagePagesInCurrentNamespace() {
 			NamespaceInfo nspace = Pages.FindNamespace(lstNamespace.SelectedValue);
-			bool canManagePages = AuthChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManagePages,
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			bool canManagePages = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManagePages,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			return canManagePages;
 		}

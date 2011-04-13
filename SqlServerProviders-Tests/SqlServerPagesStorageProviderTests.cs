@@ -21,8 +21,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		public override IPagesStorageProviderV30 GetProvider() {
 			SqlServerPagesStorageProvider prov = new SqlServerPagesStorageProvider();
+			prov.SetUp(MockHost(), ConnString + InitialCatalog);
 			prov.Init(MockHost(), ConnString + InitialCatalog);
-			prov.SetUp();
+
 			return prov;
 		}
 
@@ -232,8 +233,7 @@ insert into [NavigationPathBinding] ([NavigationPath], [Page], [Number]) values 
 			mocks.Replay(host);
 
 			SqlServerPagesStorageProvider prov = new SqlServerPagesStorageProvider();
-			prov.Init(host, ConnString + InitialCatalog);
-			prov.SetUp();
+			prov.SetUp(host, ConnString + InitialCatalog);
 
 			Snippet[] snippets = prov.GetSnippets();
 			Assert.AreEqual(1, snippets.Length, "Wrong snippet count");

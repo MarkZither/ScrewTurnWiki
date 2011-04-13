@@ -68,7 +68,7 @@ namespace ScrewTurn.Wiki.Tests {
 			throw new NotImplementedException();
 		}
 
-		public void SetUp() {
+		public void SetUp(IHostV30 host, string config) {
 			throw new NotImplementedException();
 		}
 

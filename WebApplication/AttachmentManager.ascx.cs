@@ -80,9 +80,10 @@ namespace ScrewTurn.Wiki {
 			if(CurrentPage != null) {
 				string currentUser = SessionFacade.GetCurrentUsername();
 				string[] currentGroups = SessionFacade.GetCurrentGroupNames();
-				canDownload = AuthChecker.CheckActionForPage(CurrentPage, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
-				canUpload = AuthChecker.CheckActionForPage(CurrentPage, Actions.ForPages.UploadAttachments, currentUser, currentGroups);
-				canDelete = AuthChecker.CheckActionForPage(CurrentPage, Actions.ForPages.DeleteAttachments, currentUser, currentGroups);
+				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+				canDownload = authChecker.CheckActionForPage(CurrentPage, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
+				canUpload = authChecker.CheckActionForPage(CurrentPage, Actions.ForPages.UploadAttachments, currentUser, currentGroups);
+				canDelete = authChecker.CheckActionForPage(CurrentPage, Actions.ForPages.DeleteAttachments, currentUser, currentGroups);
 				isAdmin = Array.Find(currentGroups, delegate(string g) { return g == Settings.AdministratorsGroup; }) != null;
 			}
 			else {

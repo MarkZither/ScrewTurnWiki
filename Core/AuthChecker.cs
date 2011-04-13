@@ -10,13 +10,19 @@ namespace ScrewTurn.Wiki {
 	/// Utility class for checking permissions and authorizations.
 	/// </summary>
 	/// <remarks>All the methods in this class implement a security bypass for the <i>admin</i> user.</remarks>
-	public static class AuthChecker {
+	public class AuthChecker {
 
 		/// <summary>
 		/// Gets the settings storage provider.
 		/// </summary>
-		private static ISettingsStorageProviderV30 SettingsProvider {
-			get { return Collectors.SettingsProvider; }
+		private ISettingsStorageProviderV30 _settingsProvider;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AuthChecker"/> class.
+		/// </summary>
+		/// <param name="settingsProvider">The settings provider.</param>
+		public AuthChecker(ISettingsStorageProviderV30 settingsProvider) {
+			_settingsProvider = settingsProvider;
 		}
 
 		/// <summary>
@@ -26,7 +32,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="currentUser">The current user.</param>
 		/// <param name="groups">The groups the user is member of.</param>
 		/// <returns><c>true</c> if the action is allowed.</returns>
-		public static bool CheckActionForGlobals(string action, string currentUser, string[] groups) {
+		public bool CheckActionForGlobals(string action, string currentUser, string[] groups) {
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
 			if(!AuthTools.IsValidAction(action, Actions.ForGlobals.All)) throw new ArgumentException("Invalid action", "action");
@@ -38,7 +44,7 @@ namespace ScrewTurn.Wiki {
 
 			if(currentUser == "admin") return true;
 
-			AclEntry[] entries = SettingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForGlobals.ResourceMasterPrefix);
+			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForGlobals.ResourceMasterPrefix);
 			Authorization auth = AclEvaluator.AuthorizeAction(Actions.ForGlobals.ResourceMasterPrefix, action,
 				AuthTools.PrepareUsername(currentUser), AuthTools.PrepareGroups(groups), entries);
 
@@ -53,7 +59,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="currentUser">The current user.</param>
 		/// <param name="groups">The groups the user is member of.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
-		public static bool CheckActionForNamespace(NamespaceInfo nspace, string action, string currentUser, string[] groups) {
+		public bool CheckActionForNamespace(NamespaceInfo nspace, string action, string currentUser, string[] groups) {
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
 			if(!AuthTools.IsValidAction(action, Actions.ForNamespaces.All)) throw new ArgumentException("Invalid action", "action");
@@ -67,7 +73,7 @@ namespace ScrewTurn.Wiki {
 
 			string namespaceName = nspace != null ? nspace.Name : "";
 
-			AclEntry[] entries = SettingsProvider.AclManager.RetrieveEntriesForResource(
+			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(
 				Actions.ForNamespaces.ResourceMasterPrefix + namespaceName);
 
 			Authorization auth = AclEvaluator.AuthorizeAction(Actions.ForNamespaces.ResourceMasterPrefix + namespaceName,
@@ -110,7 +116,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="currentUser">The current user.</param>
 		/// <param name="groups">The groups the user is member of.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
-		public static bool CheckActionForPage(PageInfo page, string action, string currentUser, string[] groups) {
+		public bool CheckActionForPage(PageInfo page, string action, string currentUser, string[] groups) {
 			if(page == null) throw new ArgumentNullException("page");
 
 			if(action == null) throw new ArgumentNullException("action");
@@ -124,7 +130,7 @@ namespace ScrewTurn.Wiki {
 
 			if(currentUser == "admin") return true;
 
-			AclEntry[] entries = SettingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForPages.ResourceMasterPrefix + page.FullName);
+			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForPages.ResourceMasterPrefix + page.FullName);
 			Authorization auth = AclEvaluator.AuthorizeAction(Actions.ForPages.ResourceMasterPrefix + page.FullName, action,
 				AuthTools.PrepareUsername(currentUser), AuthTools.PrepareGroups(groups), entries);
 
@@ -171,7 +177,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="currentUser">The current user.</param>
 		/// <param name="groups">The groups the user is member of.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
-		public static bool CheckActionForDirectory(IFilesStorageProviderV30 provider, string directory, string action, string currentUser, string[] groups) {
+		public bool CheckActionForDirectory(IFilesStorageProviderV30 provider, string directory, string action, string currentUser, string[] groups) {
 			if(provider == null) throw new ArgumentNullException("provider");
 
 			if(directory == null) throw new ArgumentNullException("directory");
@@ -190,7 +196,7 @@ namespace ScrewTurn.Wiki {
 
 			string resourceName = Actions.ForDirectories.ResourceMasterPrefix + AuthTools.GetDirectoryName(provider, directory);
 
-			AclEntry[] entries = SettingsProvider.AclManager.RetrieveEntriesForResource(resourceName);
+			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(resourceName);
 
 			Authorization auth = AclEvaluator.AuthorizeAction(resourceName, action,
 				AuthTools.PrepareUsername(currentUser), AuthTools.PrepareGroups(groups), entries);
