@@ -31,7 +31,6 @@ namespace ScrewTurn.Wiki {
 		private static void VerifyConstraints<T>(T provider) {
 			if(typeof(T) == typeof(IUsersStorageProviderV30)) {
 				// If the provider allows to write user accounts data, then group membership must be writeable too
-
 				IUsersStorageProviderV30 actualInstance = (IUsersStorageProviderV30)provider;
 				if(!actualInstance.UserAccountsReadOnly && actualInstance.GroupMembershipReadOnly) {
 					throw new ProviderConstraintException("If UserAccountsReadOnly is false, then also GroupMembershipReadOnly must be false");
@@ -52,6 +51,7 @@ namespace ScrewTurn.Wiki {
 			// Verify constraints
 			VerifyConstraints<T>(provider);
 
+			// Dispose the provider
 			provider.Dispose();
 		}
 
@@ -85,7 +85,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Loads all the Providers and initialises them.
+		/// Loads all the Providers and set-up them.
 		/// </summary>
 		/// <param name="loadUsers">A value indicating whether to load users storage providers.</param>
 		/// <param name="loadPages">A value indicating whether to load pages storage providers.</param>
