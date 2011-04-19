@@ -97,7 +97,7 @@
 						<td><%# Eval("RegDateTime") %></td>
 						<td><%# Eval("Provider") %></td>
 						<td><anthem:LinkButton ID="btnSelect" runat="server" Text="Select" ToolTip="Select this Account" CommandName="Select"
-								CommandArgument='<%# Eval("Username") %>' meta:resourcekey="btnSelectResource2" /></td>
+								CommandArgument='<%# Eval("Username") %>' meta:resourcekey="btnSelectResource1" /></td>
 					</tr>
 				</AlternatingItemTemplate>
 				<FooterTemplate>
