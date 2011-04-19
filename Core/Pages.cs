@@ -1410,8 +1410,7 @@ namespace ScrewTurn.Wiki {
 
 			bool done = page.Provider.AddMessage(page, username, subject, dateTime, body, parent);
 			if(done) {
-				SendEmailNotificationForMessage(page, Users.FindUser(username),
-					Tools.GetMessageIdForAnchor(dateTime), subject);
+				SendEmailNotificationForMessage(page, Users.FindUser(username), Tools.GetMessageIdForAnchor(dateTime), subject, dateTime);
 
 				PageContent content = Content.GetPageContent(page, false);
 				RecentChanges.AddChange(page.FullName, content.Title, subject, dateTime, username, Change.MessagePosted, "");
@@ -1427,7 +1426,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="author">The author of the message.</param>
 		/// <param name="id">The message ID to be used for anchors.</param>
 		/// <param name="subject">The message subject.</param>
-		private static void SendEmailNotificationForMessage(PageInfo page, UserInfo author, string id, string subject) {
+		/// <param name="dateTime">The message date/time.</param>
+		private static void SendEmailNotificationForMessage(PageInfo page, UserInfo author, string id, string subject, DateTime dateTime) {
 			if(page == null) return;
 
 			PageContent content = Content.GetPageContent(page, false);
@@ -1443,7 +1443,7 @@ namespace ScrewTurn.Wiki {
 			EmailTools.AsyncSendMassEmail(recipients, Settings.SenderEmail,
 				Settings.WikiTitle + " - " + title,
 				body.Replace("##PAGE##", title).Replace("##USER##", author != null ? Users.GetDisplayName(author) : "anonymous").Replace("##DATETIME##",
-				Preferences.AlignWithServerTimezone(content.LastModified).ToString(Settings.DateTimeFormat)).Replace("##SUBJECT##",
+				Preferences.AlignWithServerTimezone(dateTime).ToString(Settings.DateTimeFormat)).Replace("##SUBJECT##",
 				subject).Replace("##LINK##", Settings.MainUrl + Tools.UrlEncode(page.FullName) +
 				Settings.PageExtension + "?Discuss=1#" + id).Replace("##WIKITITLE##", Settings.WikiTitle),
 				false);
