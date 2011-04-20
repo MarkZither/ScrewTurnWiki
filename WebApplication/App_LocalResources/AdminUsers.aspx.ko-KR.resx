@@ -159,12 +159,6 @@
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
     <value>이 계정 선택</value>
   </data>
-  <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>선택</value>
-  </data>
-  <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>이 계정 선택</value>
-  </data>
   <data name="chkActiveResource1.Text" xml:space="preserve">
     <value>활성화 계정</value>
   </data>

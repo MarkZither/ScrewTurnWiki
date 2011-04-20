@@ -908,7 +908,7 @@ namespace ScrewTurn.Wiki {
 
 			// Verify read permissions
 			foreach(UserInfo user in temp) {
-				if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user.Username, user.Groups)) {
+				if(user.Active && AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user.Username, user.Groups)) {
 					result.Add(user);
 				}
 			}
@@ -933,7 +933,7 @@ namespace ScrewTurn.Wiki {
 
 			// Verify read permissions
 			foreach(UserInfo user in temp) {
-				if(AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion, user.Username, user.Groups)) {
+				if(user.Active && AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion, user.Username, user.Groups)) {
 					result.Add(user);
 				}
 			}

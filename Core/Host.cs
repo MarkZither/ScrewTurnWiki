@@ -215,9 +215,10 @@ namespace ScrewTurn.Wiki {
 		public bool CheckActionForGlobals(string action, UserInfo user) {
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(user == null) throw new ArgumentNullException("user");
 
-			return AuthChecker.CheckActionForGlobals(action, user.Username, user.Groups);
+			var temp = user != null ? user : Users.GetAnonymousAccount();
+
+			return AuthChecker.CheckActionForGlobals(action, temp.Username, temp.Groups);
 		}
 
 		/// <summary>
@@ -232,9 +233,10 @@ namespace ScrewTurn.Wiki {
 		public bool CheckActionForNamespace(NamespaceInfo nspace, string action, UserInfo user) {
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(user == null) throw new ArgumentNullException("user");
 
-			return AuthChecker.CheckActionForNamespace(nspace, action, user.Username, user.Groups);
+			var temp = user != null ? user : Users.GetAnonymousAccount();
+
+			return AuthChecker.CheckActionForNamespace(nspace, action, temp.Username, temp.Groups);
 		}
 
 		/// <summary>
@@ -250,9 +252,10 @@ namespace ScrewTurn.Wiki {
 			if(page == null) throw new ArgumentNullException("page");
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(user == null) throw new ArgumentNullException("user");
 
-			return AuthChecker.CheckActionForPage(page, action, user.Username, user.Groups);
+			var temp = user != null ? user : Users.GetAnonymousAccount();
+
+			return AuthChecker.CheckActionForPage(page, action, temp.Username, temp.Groups);
 		}
 
 		/// <summary>
@@ -268,10 +271,10 @@ namespace ScrewTurn.Wiki {
 			if(directory == null) throw new ArgumentNullException("directory");
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(user == null) throw new ArgumentNullException("user");
 
-			return AuthChecker.CheckActionForDirectory(directory.Provider, directory.FullPath, action,
-				user.Username, user.Groups);
+			var temp = user != null ? user : Users.GetAnonymousAccount();
+
+			return AuthChecker.CheckActionForDirectory(directory.Provider, directory.FullPath, action, temp.Username, temp.Groups);
 		}
 
 		/// <summary>
