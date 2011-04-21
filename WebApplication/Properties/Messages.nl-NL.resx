@@ -353,7 +353,7 @@
     <value>Bezoeker</value>
   </data>
   <data name="CouldNotRenameNamespace" xml:space="preserve">
-    <value>Kon niet Namespace hernoemen</value>
+    <value>Kan namespace niet hernoemen</value>
   </data>
   <data name="NamespaceRenamed" xml:space="preserve">
     <value>Namespace hernoemd</value>
@@ -542,7 +542,7 @@
     <value>Categorie gemaakt</value>
   </data>
   <data name="CouldNotRenameCategory" xml:space="preserve">
-    <value>Kon niet Categoriew hernoemen</value>
+    <value>Kan categorie niet hernoemen</value>
   </data>
   <data name="CategoryAlreadyExists" xml:space="preserve">
     <value>Categorie bestaat al</value>
@@ -998,7 +998,7 @@
     <value>&lt;b&gt;Let op&lt;/b&gt;: dit is slechts een preview! U moet op de Bewaar knop klikken om wijzigingen te bewaren!</value>
   </data>
   <data name="AccessDeniedTitle" xml:space="preserve">
-    <value>Toegang Geweigerd</value>
+    <value>Toegang geweigerd</value>
   </data>
   <data name="AccountActivated" xml:space="preserve">
     <value>Uw gebruikersprofiel is succesvol geactiveerd. U kunt nu inloggen.</value>
