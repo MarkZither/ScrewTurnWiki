@@ -103,6 +103,8 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
+			result.Sort(new UsernameComparer());
+
 			return result;
 		}
 

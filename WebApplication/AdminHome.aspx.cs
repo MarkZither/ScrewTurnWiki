@@ -43,7 +43,7 @@ namespace ScrewTurn.Wiki {
 		/// Displays the orphan pages count.
 		/// </summary>
 		private void DisplayOrphansCount() {
-			int orphans = Pages.GetOrphanedPages(null).Length;
+			int orphans = Pages.GetOrphanedPages(null as NamespaceInfo).Length;
 			foreach(NamespaceInfo nspace in Pages.GetNamespaces()) {
 				orphans += Pages.GetOrphanedPages(nspace).Length;
 			}

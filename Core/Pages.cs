@@ -956,20 +956,41 @@ namespace ScrewTurn.Wiki {
 		public static string[] GetPageIncomingLinks(PageInfo page) {
 			if(page == null) return null;
 
-			IDictionary<string, string[]> allLinks = Settings.Provider.GetAllOutgoingLinks();
-			string[] knownPages = new string[allLinks.Count];
-			allLinks.Keys.CopyTo(knownPages, 0);
+			return GetPageIncomingLinks(page, Settings.Provider.GetAllOutgoingLinks());
+		}
+
+		private static string[] GetPageIncomingLinks(PageInfo page, IDictionary<string, string[]> allOutgoingLinks) {
+			string[] knownPages = new string[allOutgoingLinks.Count];
+			allOutgoingLinks.Keys.CopyTo(knownPages, 0);
 
 			List<string> result = new List<string>(20);
 
 			foreach(string key in knownPages) {
-				if(Contains(allLinks[key], page.FullName)) {
+				if(Contains(allOutgoingLinks[key], page.FullName)) {
 					// result is likely to be very small, so a linear search is fine
 					if(!result.Contains(key)) result.Add(key);
 				}
 			}
 
 			return result.ToArray();
+		}
+
+		/// <summary>
+		/// Gets all the orphan pages.
+		/// </summary>
+		/// <param name="pages">The pages to analyze.</param>
+		/// <returns>The orphan pages.</returns>
+		public static List<string> GetOrphanedPages(IList<PageInfo> pages) {
+			IDictionary<string, string[]> allLinks = Settings.Provider.GetAllOutgoingLinks();
+
+			List<string> orphans = new List<string>();
+			foreach(var p in pages) {
+				if(GetPageIncomingLinks(p, allLinks).Length == 0) {
+					orphans.Add(p.FullName);
+				}
+			}
+
+			return orphans;
 		}
 
 		/// <summary>
