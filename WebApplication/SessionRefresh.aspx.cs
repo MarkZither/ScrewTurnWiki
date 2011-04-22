@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki {
 			// during the editing of a Page or File
 
 			if(Request["Page"] != null) {
-				PageInfo page = Pages.FindPage(Request["Page"]);
+				PageInfo page = Pages.FindPage(DetectWiki(), Request["Page"]);
 				if(page == null) return;
 				else {
 					// The system already authenticates the user, if any, at the request level

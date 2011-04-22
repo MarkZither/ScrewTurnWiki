@@ -16,11 +16,15 @@ namespace ScrewTurn.Wiki {
 
 	public partial class Login : BasePage {
 
-		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = Properties.Messages.LoginTitle + " - " + Settings.WikiTitle;
+		private string currentWiki = null;
 
-			rxNewPassword1.ValidationExpression = Settings.PasswordRegex;
-			rxNewPassword2.ValidationExpression = Settings.PasswordRegex;
+		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = DetectWiki();
+
+			Page.Title = Properties.Messages.LoginTitle + " - " + Settings.GetWikiTitle(currentWiki);
+
+			rxNewPassword1.ValidationExpression = GlobalSettings.PasswordRegex;
+			rxNewPassword2.ValidationExpression = GlobalSettings.PasswordRegex;
 
 			lblResult.Text = "";
 			lblResult.CssClass = "";
@@ -60,8 +64,8 @@ namespace ScrewTurn.Wiki {
 			}
 
 			if(Request["Activate"] != null && Request["Username"] != null && !Page.IsPostBack) {
-				UserInfo user = Users.FindUser(Request["Username"]);
-				if(user!= null && Tools.ComputeSecurityHash(user.Username, user.Email, user.DateTime).Equals(Request["Activate"])) {
+				UserInfo user = Users.FindUser(currentWiki, Request["Username"]);
+				if(user!= null && Tools.ComputeSecurityHash(currentWiki, user.Username, user.Email, user.DateTime).Equals(Request["Activate"])) {
 					Log.LogEntry("Account activation requested for " + user.Username, EntryType.General, Log.SystemUsername);
 					if(user.Active) {
 						lblResult.CssClass = "resultok";
@@ -73,7 +77,7 @@ namespace ScrewTurn.Wiki {
 						lblResult.CssClass = "resulterror";
 						lblResult.Text = Properties.Messages.AccountNotFound;
 						// Delete user (is this correct?)
-						Users.RemoveUser(user);
+						Users.RemoveUser(currentWiki, user);
 						return;
 					}
 					// Activate User
@@ -93,8 +97,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The user, or <c>null</c>.</returns>
 		private UserInfo LoadUserForPasswordReset() {
-			UserInfo user = Users.FindUser(Request["Username"]);
-			if(user != null && Request["ResetCode"] == Tools.ComputeSecurityHash(user.Username, user.Email, user.DateTime)) {
+			UserInfo user = Users.FindUser(currentWiki, Request["Username"]);
+			if(user != null && Request["ResetCode"] == Tools.ComputeSecurityHash(currentWiki, user.Username, user.Email, user.DateTime)) {
 				return user;
 			}
 			else return null;
@@ -104,22 +108,22 @@ namespace ScrewTurn.Wiki {
 		/// Prints the login notice.
 		/// </summary>
 		public void PrintLoginNotice() {
-			string n = Settings.Provider.GetMetaDataItem(MetaDataItem.LoginNotice, null);
+			string n = Settings.GetProvider(currentWiki).GetMetaDataItem(MetaDataItem.LoginNotice, null);
 			if(!string.IsNullOrEmpty(n)) {
-				n = FormattingPipeline.FormatWithPhase1And2(n, false, FormattingContext.Other, null);
+				n = FormattingPipeline.FormatWithPhase1And2(currentWiki, n, false, FormattingContext.Other, null);
 			}
-			if(!string.IsNullOrEmpty(n)) lblDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
+			if(!string.IsNullOrEmpty(n)) lblDescription.Text = FormattingPipeline.FormatWithPhase3(currentWiki, n, FormattingContext.Other, null);
 		}
 
 		protected void btnLogin_Click(object sender, EventArgs e) {
-			UserInfo user = Users.TryLogin(txtUsername.Text, txtPassword.Text);
+			UserInfo user = Users.TryLogin(currentWiki, txtUsername.Text, txtPassword.Text);
 			if(user != null) {
-				string loginKey = Users.ComputeLoginKey(user.Username, user.Email, user.DateTime);
+				string loginKey = Users.ComputeLoginKey(currentWiki, user.Username, user.Email, user.DateTime);
 				if(chkRemember.Checked) {
 					LoginTools.SetLoginCookie(user.Username, loginKey,
 						DateTime.Now.AddYears(1));
 				}
-				LoginTools.SetupSession(user);
+				LoginTools.SetupSession(currentWiki, user);
 				Log.LogEntry("User " + user.Username + " logged in", EntryType.General, Log.SystemUsername);
 				LoginTools.TryRedirect(true);
 			}
@@ -138,7 +142,7 @@ namespace ScrewTurn.Wiki {
 		/// Performs the logout.
 		/// </summary>
 		private void Logout() {
-			Users.NotifyLogout(SessionFacade.CurrentUsername);
+			Users.NotifyLogout(currentWiki, SessionFacade.CurrentUsername);
 			LoginTools.SetLoginCookie("", "", DateTime.Now.AddYears(-1));
 			Log.LogEntry("User " + SessionFacade.CurrentUsername + " logged out", EntryType.General, Log.SystemUsername);
 			Session.Abandon();
@@ -151,16 +155,16 @@ namespace ScrewTurn.Wiki {
 
 			UserInfo user = null;
 			if(txtUsernameReset.Text.Length > 0) {
-				user = Users.FindUser(txtUsernameReset.Text);
+				user = Users.FindUser(currentWiki, txtUsernameReset.Text);
 			}
 			else if(txtEmailReset.Text.Length > 0) {
-				user = Users.FindUserByEmail(txtEmailReset.Text);
+				user = Users.FindUserByEmail(currentWiki, txtEmailReset.Text);
 			}
 
 			if(user != null) {
 				Log.LogEntry("Password reset message sent for " + user.Username, EntryType.General, Log.SystemUsername);
 
-				Users.SendPasswordResetMessage(user.Username, user.Email, user.DateTime);
+				Users.SendPasswordResetMessage(currentWiki, user.Username, user.Email, user.DateTime);
 
 				lblResult.CssClass = "resultok";
 				lblResult.Text = Properties.Messages.AMessageWasSentCheckInbox;

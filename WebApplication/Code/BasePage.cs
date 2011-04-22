@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki {
 
 			// Request might not be initialized -> use HttpContext
 			string ua = HttpContext.Current.Request.UserAgent != null ? HttpContext.Current.Request.UserAgent.ToLowerInvariant() : "";
-			if(Settings.EnableHttpCompression && !ua.Contains("konqueror") && !ua.Contains("safari")) {
+			if(GlobalSettings.EnableHttpCompression && !ua.Contains("konqueror") && !ua.Contains("safari")) {
 				if(Request.Headers["Accept-encoding"] != null && Request.Headers["Accept-encoding"].Contains("gzip")) {
 					Response.Filter = new GZipStream(Response.Filter, CompressionMode.Compress, true);
 					Response.AppendHeader("Content-encoding", "gzip");
@@ -51,7 +51,7 @@ namespace ScrewTurn.Wiki {
 			// First, look for hard-stored user preferences
 			// If they are not available, look at the cookie
 
-			string culture = Preferences.LoadLanguageFromUserData();
+			string culture = Preferences.LoadLanguageFromUserData(DetectWiki());
 			if(culture == null) culture = Preferences.LoadLanguageFromCookie();
 
 			if(culture != null) {
@@ -60,13 +60,13 @@ namespace ScrewTurn.Wiki {
 			}
 			else {
 				try {
-					if(Settings.DefaultLanguage.Equals("-")) {
+					if(Settings.GetDefaultLanguage(DetectWiki()).Equals("-")) {
 						Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 						Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
 					}
 					else {
-						Thread.CurrentThread.CurrentCulture = new CultureInfo(Settings.DefaultLanguage);
-						Thread.CurrentThread.CurrentUICulture = new CultureInfo(Settings.DefaultLanguage);
+						Thread.CurrentThread.CurrentCulture = new CultureInfo(Settings.GetDefaultLanguage(DetectWiki()));
+						Thread.CurrentThread.CurrentUICulture = new CultureInfo(Settings.GetDefaultLanguage(DetectWiki()));
 					}
 				}
 				catch {
@@ -110,6 +110,14 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The name of the namespace, or an empty string.</returns>
 		protected string DetectNamespace() {
 			return Tools.DetectCurrentNamespace();
+		}
+
+		/// <summary>
+		/// Detects the name of the current wiki using the <b>Wiki</b> parameter in the query string.
+		/// </summary>
+		/// <returns>The name of the wiki, or null.</returns>
+		protected string DetectWiki() {
+			return Tools.DetectCurrentWiki();
 		}
 
 	}

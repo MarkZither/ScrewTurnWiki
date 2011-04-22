@@ -20,16 +20,19 @@ namespace ScrewTurn.Wiki {
 
 		private UserInfo currentUser;
 		private string[] currentGroups;
-		
+		private string currentWiki = null;
+
 		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = Properties.Messages.ProfileTitle + " - " + Settings.WikiTitle;
+			currentWiki = DetectWiki();
+			
+			Page.Title = Properties.Messages.ProfileTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
 			if(SessionFacade.LoginKey == null) {
 				UrlTools.Redirect(UrlTools.BuildUrl("Login.aspx?Redirect=Profile.aspx"));
 			}
 
-			currentUser = SessionFacade.GetCurrentUser();
-			currentGroups = SessionFacade.GetCurrentGroupNames();
+			currentUser = SessionFacade.GetCurrentUser(currentWiki);
+			currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
 			if(currentUser.Username == "admin") {
 				// Admin only has language preferences, stored in a cookie
@@ -51,14 +54,14 @@ namespace ScrewTurn.Wiki {
 				lblUsername.Text = name;
 				txtDisplayName.Text = currentUser.DisplayName;
 				txtEmail1.Text = currentUser.Email;
-				lblGroupsList.Text = string.Join(", ", Array.ConvertAll(SessionFacade.GetCurrentGroups(), delegate(UserGroup g) { return g.Name; }));
+				lblGroupsList.Text = string.Join(", ", Array.ConvertAll(SessionFacade.GetCurrentGroups(currentWiki), delegate(UserGroup g) { return g.Name; }));
 
 				LoadNotificationsStatus();
 				LoadLanguageAndTimezoneSettings();
 
-				rxvDisplayName.ValidationExpression = Settings.DisplayNameRegex;
-				rxvEmail1.ValidationExpression = Settings.EmailRegex;
-				rxvPassword1.ValidationExpression = Settings.PasswordRegex;
+				rxvDisplayName.ValidationExpression = GlobalSettings.DisplayNameRegex;
+				rxvEmail1.ValidationExpression = GlobalSettings.EmailRegex;
+				rxvPassword1.ValidationExpression = GlobalSettings.PasswordRegex;
 			}
 		}
 
@@ -78,9 +81,9 @@ namespace ScrewTurn.Wiki {
 			lstDiscussionMessages.Items.Add(new ListItem("&lt;root&gt;", ""));
 			lstDiscussionMessages.Items[0].Selected = discussionMessages;
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
-			foreach(ScrewTurn.Wiki.PluginFramework.NamespaceInfo ns in Pages.GetNamespaces()) {
+			foreach(ScrewTurn.Wiki.PluginFramework.NamespaceInfo ns in Pages.GetNamespaces(currentWiki)) {
 				Users.GetEmailNotification(currentUser, ns, out pageChanges, out discussionMessages);
 
 				if(authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ReadPages, currentUser.Username, currentGroups)) {
@@ -103,13 +106,13 @@ namespace ScrewTurn.Wiki {
 			// If not available, look for cookie
 			// If not available, load defaults
 
-			string culture = Preferences.LoadLanguageFromUserData();
+			string culture = Preferences.LoadLanguageFromUserData(currentWiki);
 			if(culture == null) culture = Preferences.LoadLanguageFromCookie();
-			if(culture == null) culture = Settings.DefaultLanguage;
+			if(culture == null) culture = Settings.GetDefaultLanguage(currentWiki);
 
-			int? tempTimezone = Preferences.LoadTimezoneFromUserData();
+			int? tempTimezone = Preferences.LoadTimezoneFromUserData(currentWiki);
 			if(!tempTimezone.HasValue) tempTimezone = Preferences.LoadTimezoneFromCookie();
-			if(!tempTimezone.HasValue) tempTimezone = Settings.DefaultTimezone;
+			if(!tempTimezone.HasValue) tempTimezone = Settings.GetDefaultTimezone(currentWiki);
 
 			languageSelector.SelectedLanguage = culture;
 			languageSelector.SelectedTimezone = tempTimezone.ToString();
@@ -121,8 +124,8 @@ namespace ScrewTurn.Wiki {
 				bool pageChanges = lstPageChanges.Items[i].Selected;
 				bool discussionMessages = lstDiscussionMessages.Items[i].Selected;
 
-				Users.SetEmailNotification(currentUser,
-					Pages.FindNamespace(lstPageChanges.Items[i].Value), pageChanges, discussionMessages);
+				Users.SetEmailNotification(currentWiki, currentUser,
+					Pages.FindNamespace(currentWiki, lstPageChanges.Items[i].Value), pageChanges, discussionMessages);
 			}
 
 			lblNotificationsResult.CssClass = "resultok";
@@ -132,7 +135,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnSaveLanguage_Click(object sender, EventArgs e) {
 			// Hard store settings
 			// Delete cookie
-			if(Preferences.SavePreferencesInUserData(languageSelector.SelectedLanguage,
+			if(Preferences.SavePreferencesInUserData(currentWiki, languageSelector.SelectedLanguage,
 				int.Parse(languageSelector.SelectedTimezone, CultureInfo.InvariantCulture))) {
 
 				Preferences.DeletePreferencesCookie();
@@ -162,7 +165,7 @@ namespace ScrewTurn.Wiki {
 				lblSaveDisplayNameResult.Text = Properties.Messages.CouldNotSaveDisplayName;
 			}
 
-			currentUser = Users.FindUser(currentUser.Username);
+			currentUser = Users.FindUser(currentWiki, currentUser.Username);
 		}
 
 		protected void btnSaveEmail_Click(object sender, EventArgs e) {
@@ -177,7 +180,7 @@ namespace ScrewTurn.Wiki {
 			lblSaveEmailResult.Text = Properties.Messages.EmailSaved;
 			txtEmail2.Text = "";
 
-			currentUser = Users.FindUser(currentUser.Username);
+			currentUser = Users.FindUser(currentWiki, currentUser.Username);
 		}
 
 		protected void btnSavePassword_Click(object sender, EventArgs e) {
@@ -191,7 +194,7 @@ namespace ScrewTurn.Wiki {
 			txtPassword1.Text = "";
 			txtPassword2.Text = "";
 
-			currentUser = Users.FindUser(currentUser.Username);
+			currentUser = Users.FindUser(currentWiki, currentUser.Username);
 		}
 
 		protected void btnDeleteAccount_Click(object sender, EventArgs e) {
@@ -201,10 +204,10 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnConfirm_Click(object sender, EventArgs e) {
 			Log.LogEntry("Account deletion requested", EntryType.General, currentUser.Username);
-			UserInfo user = Users.FindUser(currentUser.Username);
-			Users.RemoveUser(user);
+			UserInfo user = Users.FindUser(currentWiki, currentUser.Username);
+			Users.RemoveUser(currentWiki, user);
 			Session.Abandon();
-			UrlTools.RedirectHome();
+			UrlTools.RedirectHome(currentWiki);
 		}
 
 		#region Custom Validators
@@ -226,7 +229,7 @@ namespace ScrewTurn.Wiki {
 		}
 		
 		protected void cvOldPassword_ServerValidate(object source, ServerValidateEventArgs args) {
-			UserInfo user = SessionFacade.GetCurrentUser();
+			UserInfo user = SessionFacade.GetCurrentUser(currentWiki);
 			args.IsValid = user.Provider.TestAccount(user, txtOldPassword.Text);
 		}
 		

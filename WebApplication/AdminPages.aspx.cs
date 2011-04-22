@@ -25,7 +25,10 @@ namespace ScrewTurn.Wiki {
 
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
-			PageSize = Settings.ListSize;
+
+			string currentWiki = DetectWiki();
+
+			PageSize = Settings.GetListSize(currentWiki);
 			rangeEnd = PageSize - 1;
 
 			if(!Page.IsPostBack) {
@@ -34,7 +37,7 @@ namespace ScrewTurn.Wiki {
 				// Add root namespace
 				lstNamespace.Items.Add(new ListItem("<root>", ""));
 
-				List<NamespaceInfo> namespaces = Pages.GetNamespaces();
+				List<NamespaceInfo> namespaces = Pages.GetNamespaces(currentWiki);
 
 				foreach(NamespaceInfo ns in namespaces) {
 					lstNamespace.Items.Add(new ListItem(ns.Name, ns.Name));
@@ -64,8 +67,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The pages.</returns>
 		private IList<PageInfo> GetPages() {
-			NamespaceInfo nspace = Pages.FindNamespace(lstNamespace.SelectedValue);
-			List<PageInfo> pages = Pages.GetPages(nspace);
+			string currentWiki = DetectWiki();
+
+			NamespaceInfo nspace = Pages.FindNamespace(currentWiki, lstNamespace.SelectedValue);
+			List<PageInfo> pages = Pages.GetPages(currentWiki, nspace);
 
 			List<PageInfo> result = new List<PageInfo>(pages.Count);
 
@@ -85,8 +90,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns><c>true</c> if a page was loaded, <c>false</c> otherwise.</returns>
 		private bool LoadExternallySelectedPage() {
+			string currentWiki = DetectWiki();
+
 			if(!string.IsNullOrEmpty(Request["Rollback"])) {
-				externallySelectedPage = Pages.FindPage(Request["Rollback"]);
+				externallySelectedPage = Pages.FindPage(currentWiki, Request["Rollback"]);
 				if(externallySelectedPage != null) {
 					AutoRollback();
 					return true;
@@ -94,7 +101,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			if(!string.IsNullOrEmpty(Request["Admin"])) {
-				externallySelectedPage = Pages.FindPage(Request["Admin"]);
+				externallySelectedPage = Pages.FindPage(currentWiki, Request["Admin"]);
 				if(externallySelectedPage != null) {
 					txtCurrentPage.Value = externallySelectedPage.FullName;
 					ActivatePageEditor();
@@ -103,7 +110,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			if(!string.IsNullOrEmpty(Request["Perms"])) {
-				externallySelectedPage = Pages.FindPage(Request["Perms"]);
+				externallySelectedPage = Pages.FindPage(currentWiki, Request["Perms"]);
 				if(externallySelectedPage != null) {
 					txtCurrentPage.Value = externallySelectedPage.FullName;
 					ActivatePagePermissionsManager();
@@ -124,9 +131,9 @@ namespace ScrewTurn.Wiki {
 
 				Log.LogEntry("Page rollback requested for " + txtCurrentPage.Value + " to rev. " + targetRevision.ToString(), EntryType.General, SessionFacade.GetCurrentUsername());
 
-				Pages.Rollback(externallySelectedPage, targetRevision);
+				Pages.Rollback(DetectWiki(), externallySelectedPage, targetRevision);
 
-				UrlTools.Redirect(externallySelectedPage.FullName + Settings.PageExtension);
+				UrlTools.Redirect(externallySelectedPage.FullName + GlobalSettings.PageExtension);
 			}
 		}
 
@@ -152,12 +159,14 @@ namespace ScrewTurn.Wiki {
 
 			rptPages.DataBind();
 
-			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string currentWiki = DetectWiki();
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			string currentUser = SessionFacade.GetCurrentUsername();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
+
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			bool canManageAllPages = authChecker.CheckActionForNamespace(
-				Pages.FindNamespace(lstNamespace.SelectedValue),
+				Pages.FindNamespace(currentWiki, lstNamespace.SelectedValue),
 				Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 
 			btnBulkMigrate.Enabled = canManageAllPages;
@@ -185,10 +194,12 @@ namespace ScrewTurn.Wiki {
 
 			List<PageRow> result = new List<PageRow>(PageSize);
 
-			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string currentWiki = DetectWiki();
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			string currentUser = SessionFacade.GetCurrentUsername();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
+
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			bool canSetPermissions = AdminMaster.CanManagePermissions(currentUser, currentGroups);
 			bool canDeletePages = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.DeletePages, currentUser, currentGroups);
 
@@ -206,7 +217,7 @@ namespace ScrewTurn.Wiki {
 				if(!canDeletePages && !canManagePage) canManageDiscussion = authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, currentUser, currentGroups);
 				bool canSelect = canManagePage | canDeletePages | canManageDiscussion;
 
-				int incomingLinks = Pages.GetPageIncomingLinks(page).Length;
+				int incomingLinks = Pages.GetPageIncomingLinks(currentWiki, page).Length;
 
 				if(chkOrphansOnly.Checked && incomingLinks > 0) continue;
 
@@ -232,30 +243,32 @@ namespace ScrewTurn.Wiki {
 				ActivatePageEditor();
 			}
 			else if(e.CommandName == "Perms") {
-				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(DetectWiki()))) return;
 
 				ActivatePagePermissionsManager();
 			}
 		}
 
 		protected void btnPublic_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 
 			RemoveAllPermissions(page);
 
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			// Set permissions
 			authWriter.SetPermissionForPage(AuthStatus.Grant, page, Actions.ForPages.ModifyPage,
-				Users.FindUserGroup(Settings.AnonymousGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)));
 			authWriter.SetPermissionForPage(AuthStatus.Grant, page, Actions.ForPages.PostDiscussion,
-				Users.FindUserGroup(Settings.AnonymousGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)));
 
 			RefreshPermissionsManager();
 		}
 
 		protected void btnAsNamespace_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
+			PageInfo page = Pages.FindPage(DetectWiki(), txtCurrentPage.Value);
 
 			RemoveAllPermissions(page);
 
@@ -263,17 +276,19 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnLocked_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 
 			RemoveAllPermissions(page);
 
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			// Set permissions
 			authWriter.SetPermissionForPage(AuthStatus.Deny, page, Actions.ForPages.ModifyPage,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForPage(AuthStatus.Deny, page, Actions.ForPages.ModifyPage,
-				Users.FindUserGroup(Settings.AnonymousGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)));
 
 			RefreshPermissionsManager();
 		}
@@ -291,10 +306,12 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		private void RemoveAllPermissions(PageInfo page) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
-			authWriter.RemoveEntriesForPage(Users.FindUserGroup(Settings.AnonymousGroup), page);
-			authWriter.RemoveEntriesForPage(Users.FindUserGroup(Settings.UsersGroup), page);
-			authWriter.RemoveEntriesForPage(Users.FindUserGroup(Settings.AdministratorsGroup), page);
+			string currentWiki = DetectWiki();
+
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
+			authWriter.RemoveEntriesForPage(Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)), page);
+			authWriter.RemoveEntriesForPage(Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)), page);
+			authWriter.RemoveEntriesForPage(Users.FindUserGroup(currentWiki, Settings.GetAdministratorsGroup(currentWiki)), page);
 		}
 
 		/// <summary>
@@ -303,13 +320,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The selected page.</param>
 		/// <returns><c>true</c> if there is at least one valid target namespace, <c>false</c> otherwise.</returns>
 		private bool PopulateTargetNamespaces(PageInfo page) {
+			string currentWiki = DetectWiki();
+
 			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
 			lstTargetNamespace.Items.Clear();
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
-			NamespaceInfo pageNamespace = Pages.FindNamespace(NameTools.GetNamespace(page.FullName));
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
+			NamespaceInfo pageNamespace = Pages.FindNamespace(currentWiki, NameTools.GetNamespace(page.FullName));
 			if(pageNamespace != null) {
 				// Try adding Root as target namespace
 				bool canManagePages = authChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
@@ -317,7 +336,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Try adding all other namespaces
-			foreach(NamespaceInfo nspace in Pages.GetNamespaces().FindAll(n => n.Provider == page.Provider)) {
+			foreach(NamespaceInfo nspace in Pages.GetNamespaces(currentWiki).FindAll(n => n.Provider == page.Provider)) {
 				if(pageNamespace == null || (pageNamespace != null && nspace.Name != pageNamespace.Name)) {
 					bool canManagePages = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 					if(canManagePages) lstTargetNamespace.Items.Add(new ListItem(nspace.Name, nspace.Name));
@@ -331,16 +350,18 @@ namespace ScrewTurn.Wiki {
 		/// Activates the page editor.
 		/// </summary>
 		private void ActivatePageEditor() {
+			string currentWiki = DetectWiki();
+
 			lblCurrentPage.Text = txtCurrentPage.Value;
 			txtNewName.Text = NameTools.GetLocalName(txtCurrentPage.Value);
 
 			// Enable/disable page sections
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			NamespaceInfo nspace = Pages.FindNamespace(NameTools.GetNamespace(page.FullName));
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
+			NamespaceInfo nspace = Pages.FindNamespace(currentWiki, NameTools.GetNamespace(page.FullName));
 			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			bool canApproveReject = AdminMaster.CanApproveDraft(page, currentUser, currentGroups);
 			bool canDeletePages = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.DeletePages, currentUser, currentGroups);
@@ -366,8 +387,8 @@ namespace ScrewTurn.Wiki {
 			pnlDelete.Enabled = canDeletePages;
 
 			// Disable rename, migrate, delete for default page
-			NamespaceInfo currentNamespace = Pages.FindNamespace(lstNamespace.SelectedValue);
-			string currentDefaultPage = currentNamespace != null ? currentNamespace.DefaultPage.FullName : Settings.DefaultPage;
+			NamespaceInfo currentNamespace = Pages.FindNamespace(currentWiki, lstNamespace.SelectedValue);
+			string currentDefaultPage = currentNamespace != null ? currentNamespace.DefaultPage.FullName : Settings.GetDefaultPage(currentWiki);
 			if(txtCurrentPage.Value == currentDefaultPage) {
 				btnRename.Enabled = false;
 				btnMigrate.Enabled = false;
@@ -404,19 +425,21 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="currentPage">The current page name.</param>
 		private void LoadDraft(string currentPage) {
-			PageInfo page = Pages.FindPage(currentPage);
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, currentPage);
 			PageContent draft = Pages.GetDraft(page);
 
 			if(draft != null) {
 				pnlApproveRevision.Visible = true;
-				lblDateTime.Text = Preferences.AlignWithTimezone(draft.LastModified).ToString(Settings.DateTimeFormat);
-				lblUser.Text = Users.UserLink(draft.User, true);
+				lblDateTime.Text = Preferences.AlignWithTimezone(currentWiki, draft.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki));
+				lblUser.Text = Users.UserLink(currentWiki, draft.User, true);
 
 				// Ampersands are escaped automatically
 				lnkEdit.NavigateUrl = "Edit.aspx?Page=" + Tools.UrlEncode(currentPage);
 				lnkDiff.NavigateUrl = "Diff.aspx?Page=" + Tools.UrlEncode(currentPage) + "&Rev1=Current&Rev2=Draft";
 				lblDraftPreview.Text = FormattingPipeline.FormatWithPhase3(
-					FormattingPipeline.FormatWithPhase1And2(draft.Content, false, FormattingContext.PageContent, page), FormattingContext.PageContent, page);
+					currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, draft.Content, false, FormattingContext.PageContent, page), FormattingContext.PageContent, page);
 			}
 			else {
 				pnlApproveRevision.Visible = false;
@@ -428,7 +451,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="pageName">The page.</param>
 		private void LoadBackups(string pageName) {
-			PageInfo page = Pages.FindPage(pageName);
+			string currentWiki = DetectWiki();
+			PageInfo page = Pages.FindPage(currentWiki, pageName);
 			List<int> backups = Pages.GetBackups(page);
 
 			lstRevision.Items.Clear();
@@ -438,7 +462,7 @@ namespace ScrewTurn.Wiki {
 				PageContent bakContent = Pages.GetBackupContent(page, bak);
 				
 				ListItem item = new ListItem(bak.ToString() + ": " +
-					Preferences.AlignWithTimezone(bakContent.LastModified).ToString(Settings.DateTimeFormat) + 
+					Preferences.AlignWithTimezone(currentWiki, bakContent.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki)) + 
 					" " + Properties.Messages.By + " " + bakContent.User,
 					bak.ToString());
 
@@ -496,7 +520,7 @@ namespace ScrewTurn.Wiki {
 			LoadExternallySelectedPage();
 			if(externallySelectedPage != null) {
 				// Return to page
-				UrlTools.Redirect(externallySelectedPage.FullName + Settings.PageExtension);
+				UrlTools.Redirect(externallySelectedPage.FullName + GlobalSettings.PageExtension);
 			}
 			else {
 				// Return to list
@@ -526,14 +550,16 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnApprove_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
+			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 			PageContent draft = Pages.GetDraft(page);
 
 			Log.LogEntry("Page draft approval requested for " + draft.PageInfo.FullName, EntryType.General, SessionFacade.CurrentUsername);
 
-			bool done = Pages.ModifyPage(draft.PageInfo, draft.Title, draft.User, draft.LastModified, draft.Comment,
+			bool done = Pages.ModifyPage(currentWiki, draft.PageInfo, draft.Title, draft.User, draft.LastModified, draft.Comment,
 				draft.Content, draft.Keywords, draft.Description, SaveMode.Backup);
 
 			if(done) {
@@ -552,8 +578,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnReject_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
+			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 			Log.LogEntry("Page draft reject requested for " + page.FullName, EntryType.General, SessionFacade.CurrentUsername);
 
@@ -571,10 +599,12 @@ namespace ScrewTurn.Wiki {
 			// Perform rename
 			// Create shadow page, if needed
 
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
-			if(!authChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
-				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
+			if(!authChecker.CheckActionForNamespace(Pages.FindNamespace(currentWiki, NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
+				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 			txtNewName.Text = txtNewName.Text.Trim();
 
@@ -587,7 +617,7 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			if(Pages.FindPage(NameTools.GetFullName(currentNamespace, txtNewName.Text)) != null) {
+			if(Pages.FindPage(currentWiki, NameTools.GetFullName(currentNamespace, txtNewName.Text)) != null) {
 				lblRenameResult.CssClass = "resulterror";
 				lblRenameResult.Text = Properties.Messages.PageAlreadyExists;
 				return;
@@ -595,17 +625,17 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Page rename requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
 
-			PageInfo oldPage = Pages.FindPage(txtCurrentPage.Value);
+			PageInfo oldPage = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			PageContent oldContent = Content.GetPageContent(oldPage);
 
-			bool done = Pages.RenamePage(oldPage, txtNewName.Text);
+			bool done = Pages.RenamePage(currentWiki, oldPage, txtNewName.Text);
 
 			if(done) {
 				if(chkShadowPage.Checked) {
-					done = Pages.CreatePage(currentNamespace, currentPage);
+					done = Pages.CreatePage(currentWiki, currentNamespace, currentPage);
 
 					if(done) {
-						done = Pages.ModifyPage(Pages.FindPage(txtCurrentPage.Value),
+						done = Pages.ModifyPage(currentWiki, Pages.FindPage(currentWiki, txtCurrentPage.Value),
 							oldContent.Title, oldContent.User, oldContent.LastModified,
 							oldContent.Comment, ">>> [" + txtNewName.Text + "]",
 							new string[0], oldContent.Description, SaveMode.Normal);
@@ -645,19 +675,21 @@ namespace ScrewTurn.Wiki {
 			lblMigrateResult.CssClass = "";
 			lblMigrateResult.Text = "";
 
-			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string currentWiki = DetectWiki();
 
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			NamespaceInfo targetNamespace = Pages.FindNamespace(lstTargetNamespace.SelectedValue);
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
-			bool canManageAllPages = authChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)),
+			string currentUser = SessionFacade.GetCurrentUsername();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
+			NamespaceInfo targetNamespace = Pages.FindNamespace(currentWiki, lstTargetNamespace.SelectedValue);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
+			bool canManageAllPages = authChecker.CheckActionForNamespace(Pages.FindNamespace(currentWiki, NameTools.GetNamespace(page.FullName)),
 				Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 			bool canManageAllPagesInTarget = authChecker.CheckActionForNamespace(targetNamespace,
 				Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 
 			if(canManageAllPages && canManageAllPagesInTarget) {
-				bool done = Pages.MigratePage(page, targetNamespace, chkCopyCategories.Checked);
+				bool done = Pages.MigratePage(currentWiki, page, targetNamespace, chkCopyCategories.Checked);
 				if(done) {
 					chkCopyCategories.Checked = false;
 
@@ -676,9 +708,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnRollback_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
-			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
+			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 			int targetRevision = -1;
 
@@ -687,7 +721,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Page rollback requested for " + txtCurrentPage.Value + " to rev. " + targetRevision.ToString(), EntryType.General, Log.SystemUsername);
 
-			bool done = Pages.Rollback(page, targetRevision);
+			bool done = Pages.Rollback(currentWiki, page, targetRevision);
 
 			if(done) {
 				RefreshList();
@@ -702,9 +736,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnDeleteBackups_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
-			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
+			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 			int targetRevision = -1;
 
@@ -734,9 +770,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnClearDiscussion_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
-			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
+			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 			Log.LogEntry("Page discussion cleanup requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
 
@@ -755,14 +793,16 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnDeletePage_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
-			if(!authChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
-				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			string currentWiki = DetectWiki();
+
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
+			if(!authChecker.CheckActionForNamespace(Pages.FindNamespace(currentWiki, NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
+				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 			Log.LogEntry("Page deletion requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
 
-			bool done = Pages.DeletePage(page);
+			bool done = Pages.DeletePage(currentWiki, page);
 
 			if(done) {
 				ResetPageList();
@@ -797,11 +837,12 @@ namespace ScrewTurn.Wiki {
 			// Load valid namespaces, filtering the current one
 			lstBulkMigrateTargetNamespace.Items.Clear();
 
+			string currentWiki = DetectWiki();
 			bool canManageAllPages = false;
 			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			if(!string.IsNullOrEmpty(lstNamespace.SelectedValue)) {
 				// Root namespace
@@ -813,7 +854,7 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			foreach(NamespaceInfo ns in Pages.GetNamespaces().FindAll(n => n.Provider.GetType().FullName == providerSelector.SelectedProvider)) {
+			foreach(NamespaceInfo ns in Pages.GetNamespaces(currentWiki).FindAll(n => n.Provider.GetType().FullName == providerSelector.SelectedProvider)) {
 				// All sub-namespaces
 				if(ns.Name != lstNamespace.SelectedValue) {
 					canManageAllPages = authChecker.CheckActionForNamespace(ns,
@@ -857,11 +898,13 @@ namespace ScrewTurn.Wiki {
 			string localName, nspace;
 			NameTools.ExpandFullName(page.FullName, out nspace, out localName);
 
+			string currentWiki = DetectWiki();
+
 			if(string.IsNullOrEmpty(nspace)) {
-				return localName.ToLowerInvariant() == Settings.DefaultPage.ToLowerInvariant();
+				return localName.ToLowerInvariant() == Settings.GetDefaultPage(currentWiki).ToLowerInvariant();
 			}
 			else {
-				NamespaceInfo ns = Pages.FindNamespace(nspace);
+				NamespaceInfo ns = Pages.FindNamespace(currentWiki, nspace);
 				return ns.DefaultPage != null && ns.DefaultPage.FullName.ToLowerInvariant() == page.FullName.ToLowerInvariant();
 			}
 		}
@@ -870,9 +913,10 @@ namespace ScrewTurn.Wiki {
 			lblBulkMigrateResult.CssClass = "";
 			lblBulkMigrateResult.Text = "";
 
+			string currentWiki = DetectWiki();
 			List<PageInfo> selectedPages = new List<PageInfo>(20);
 			foreach(string pg in pageListBuilder.SelectedPages) {
-				PageInfo page = Pages.FindPage(pg);
+				PageInfo page = Pages.FindPage(currentWiki, pg);
 				if(page != null && !IsDefaultPage(page)) selectedPages.Add(page);
 			}
 
@@ -884,13 +928,13 @@ namespace ScrewTurn.Wiki {
 
 			string nspaceName = lstBulkMigrateTargetNamespace.SelectedValue;
 			if(nspaceName == ".") nspaceName = null;
-			NamespaceInfo selectedNamespace = Pages.FindNamespace(nspaceName);
+			NamespaceInfo selectedNamespace = Pages.FindNamespace(currentWiki, nspaceName);
 
 			Log.LogEntry("Bulk migration requested", EntryType.General, SessionFacade.CurrentUsername);
 
 			bool allDone = true;
 			foreach(PageInfo pg in selectedPages) {
-				allDone &= Pages.MigratePage(pg, selectedNamespace, chkBulkMigrateCopyCategories.Checked);
+				allDone &= Pages.MigratePage(currentWiki, pg, selectedNamespace, chkBulkMigrateCopyCategories.Checked);
 			}
 
 			if(allDone) {
@@ -934,12 +978,14 @@ namespace ScrewTurn.Wiki {
 		public PageRow(PageInfo page, PageContent currentContent, PageContent firstContent, int discussionCount, int revisionCount,
 			bool isOrphan, bool canEdit, bool canSelect, bool canSetPermissions, bool selected) {
 
+			string currentWiki = Tools.DetectCurrentWiki();
+
 			fullName = page.FullName;
-			title = FormattingPipeline.PrepareTitle(currentContent.Title, false, FormattingContext.Other, page);
+			title = FormattingPipeline.PrepareTitle(currentWiki, currentContent.Title, false, FormattingContext.Other, page);
 			createdBy = firstContent.User;
-			createdOn = Preferences.AlignWithTimezone(page.CreationDateTime).ToString(Settings.DateTimeFormat);
+			createdOn = Preferences.AlignWithTimezone(currentWiki, page.CreationDateTime).ToString(Settings.GetDateTimeFormat(currentWiki));
 			lastModifiedBy = currentContent.User;
-			lastModifiedOn = Preferences.AlignWithTimezone(currentContent.LastModified).ToString(Settings.DateTimeFormat);
+			lastModifiedOn = Preferences.AlignWithTimezone(currentWiki, currentContent.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki));
 			discussion = discussionCount.ToString();
 			revisions = revisionCount.ToString();
 			provider = page.Provider.Information.Name;

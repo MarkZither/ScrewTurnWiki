@@ -9,15 +9,14 @@ using ScrewTurn.Wiki;
 
 namespace ScrewTurn.Wiki {
 
-	public partial class AdminTheme : System.Web.UI.Page {
+	public partial class AdminTheme : BasePage {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
-			if(!AdminMaster.CanManageProviders(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageProviders(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(DetectWiki()))) UrlTools.Redirect("AccessDenied.aspx");
 
 			if(!Page.IsPostBack) {
 				// Load themes and related data
 				LoadThemes();
-
 			}
 		}
 
@@ -33,13 +32,14 @@ namespace ScrewTurn.Wiki {
 
 		# region Themes
 		private void LoadThemes() {
+			string currentWiki = DetectWiki();
 			lstProvThemeSelectorUpload.Items.Clear();
-			foreach(IProviderV30 themesProv in Collectors.CollectorsBox.ThemeProviderCollector.AllProviders) {
+			foreach(IProviderV30 themesProv in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki)) {
 				lstProvThemeSelectorUpload.Items.Add(new ListItem(themesProv.Information.Name, themesProv.ToString()));
 			}
 
 			provThemeSelector.Items.Clear();
-			foreach(IProviderV30 themesProvider in Collectors.CollectorsBox.ThemeProviderCollector.AllProviders) {
+			foreach(IProviderV30 themesProvider in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki)) {
 				provThemeSelector.Items.Add(new ListItem(themesProvider.Information.Name, themesProvider.ToString()));
 			}
 			fillThemeList(SelectedProviderThemeDelete);
@@ -51,7 +51,7 @@ namespace ScrewTurn.Wiki {
 			lstThemes.Items.Clear();
 			if(provThemeSelector.SelectedIndex != -1) {
 				lstThemes.Items.Add(new ListItem(Properties.Messages.SelectAndDelete, Properties.Messages.SelectAndDelete));
-				foreach(string theme in Themes.ListThemes(provider)) {
+				foreach(string theme in Themes.ListThemes(DetectWiki(), provider)) {
 					lstThemes.Items.Add(new ListItem(theme, theme));
 				}
 			}
@@ -124,7 +124,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			Log.LogEntry("Theme upload requested " + upTheme.FileName, EntryType.General, SessionFacade.CurrentUsername);
-			List<string> themes = Themes.ListThemes(SelectedProviderUpload);
+			List<string> themes = Themes.ListThemes(DetectWiki(), SelectedProviderUpload);
 			bool exist = false;
 			foreach(string th in themes) {
 
@@ -137,7 +137,7 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 			else {
-				Themes.StoreTheme(lstProvThemeSelectorUpload.SelectedValue + "|" + System.IO.Path.GetFileNameWithoutExtension(file), upTheme.FileBytes);
+				Themes.StoreTheme(DetectWiki(), lstProvThemeSelectorUpload.SelectedValue + "|" + System.IO.Path.GetFileNameWithoutExtension(file), upTheme.FileBytes);
 
 				lblUploadThemeResult.CssClass = "resultok";
 				lblUploadThemeResult.Text = Properties.Messages.LoadedThemes;
@@ -153,7 +153,7 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnDeleteTheme_Click(object sender, EventArgs e) {
 			if(lstThemes.SelectedIndex != 0) {
-				if(Themes.DeleteTheme(provThemeSelector.SelectedValue + "|" + lstThemes.SelectedValue)) {
+				if(Themes.DeleteTheme(DetectWiki(), provThemeSelector.SelectedValue + "|" + lstThemes.SelectedValue)) {
 					LoadThemes();
 					lblThemeResult.CssClass = "resultok";
 					lblThemeResult.Text = Properties.Messages.ThemeDeleted;

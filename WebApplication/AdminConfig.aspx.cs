@@ -15,9 +15,11 @@ namespace ScrewTurn.Wiki {
 	public partial class AdminConfig : BasePage {
 
 		protected void Page_Load(object sender, EventArgs e) {
+			string currentWiki = DetectWiki();
+
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) UrlTools.Redirect("AccessDenied.aspx");
 
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append("<script type=\"text/javascript\">\r\n<!--\r\n");
@@ -27,16 +29,16 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsPostBack) {
 				// Setup validation regular expressions
-				revMainUrl.ValidationExpression = Settings.MainUrlRegex;
-				revWikiTitle.ValidationExpression = Settings.WikiTitleRegex;
-				revContactEmail.ValidationExpression = Settings.EmailRegex;
-				revSenderEmail.ValidationExpression = Settings.EmailRegex;
-				revSmtpServer.ValidationExpression = Settings.SmtpServerRegex;
+				revMainUrl.ValidationExpression = GlobalSettings.MainUrlRegex;
+				revWikiTitle.ValidationExpression = GlobalSettings.WikiTitleRegex;
+				revContactEmail.ValidationExpression = GlobalSettings.EmailRegex;
+				revSenderEmail.ValidationExpression = GlobalSettings.EmailRegex;
+				revSmtpServer.ValidationExpression = GlobalSettings.SmtpServerRegex;
 
 				// Load current values
-				LoadGeneralConfig();
-				LoadContentConfig();
-				LoadSecurityConfig();
+				LoadGeneralConfig(currentWiki);
+				LoadContentConfig(currentWiki);
+				LoadSecurityConfig(currentWiki);
 				LoadAdvancedConfig();
 			}
 		}
@@ -44,18 +46,19 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Loads the general configuration.
 		/// </summary>
-		private void LoadGeneralConfig() {
-			txtWikiTitle.Text = Settings.WikiTitle;
-			txtMainUrl.Text = Settings.MainUrl;
-			txtContactEmail.Text = Settings.ContactEmail;
-			txtSenderEmail.Text = Settings.SenderEmail;
-			txtErrorsEmails.Text = string.Join(", ", Settings.ErrorsEmails);
-			txtSmtpServer.Text = Settings.SmtpServer;
-			int port = Settings.SmtpPort;
+		/// <param name="currentWiki">The wiki.</param>
+		private void LoadGeneralConfig(string currentWiki) {
+			txtWikiTitle.Text = Settings.GetWikiTitle(currentWiki);
+			txtMainUrl.Text = GlobalSettings.MainUrl;
+			txtContactEmail.Text = GlobalSettings.ContactEmail;
+			txtSenderEmail.Text = GlobalSettings.SenderEmail;
+			txtErrorsEmails.Text = string.Join(", ", GlobalSettings.ErrorsEmails);
+			txtSmtpServer.Text = GlobalSettings.SmtpServer;
+			int port = GlobalSettings.SmtpPort;
 			txtSmtpPort.Text = port != -1 ? port.ToString() : "";
-			txtUsername.Text = Settings.SmtpUsername;
-			txtPassword.Attributes.Add("value", Settings.SmtpPassword);
-			chkEnableSslForSmtp.Checked = Settings.SmtpSsl;
+			txtUsername.Text = GlobalSettings.SmtpUsername;
+			txtPassword.Attributes.Add("value", GlobalSettings.SmtpPassword);
+			chkEnableSslForSmtp.Checked = GlobalSettings.SmtpSsl;
 		}
 		
 		/// <summary>
@@ -65,7 +68,7 @@ namespace ScrewTurn.Wiki {
 		private void PopulateMainPages(string current) {
 			current = current.ToLowerInvariant();
 
-			List<PageInfo> pages = Pages.GetPages(null);
+			List<PageInfo> pages = Pages.GetPages(DetectWiki(), null);
 			lstMainPage.Items.Clear();
 			foreach(PageInfo page in pages) {
 				lstMainPage.Items.Add(new ListItem(page.FullName, page.FullName));
@@ -127,16 +130,17 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Loads the content configuration.
 		/// </summary>
-		private void LoadContentConfig() {
-			PopulateMainPages(Settings.DefaultPage);
-			txtDateTimeFormat.Text = Settings.DateTimeFormat;
+		/// <param name="currentWiki">The wiki.</param>
+		private void LoadContentConfig(string currentWiki) {
+			PopulateMainPages(Settings.GetDefaultPage(currentWiki));
+			txtDateTimeFormat.Text = Settings.GetDateTimeFormat(currentWiki);
 			PopulateDateTimeFormats();
-			PopulateLanguages(Settings.DefaultLanguage);
-			PopulateTimeZones(Settings.DefaultTimezone.ToString());
-			txtMaxRecentChangesToDisplay.Text = Settings.MaxRecentChangesToDisplay.ToString();
+			PopulateLanguages(Settings.GetDefaultLanguage(currentWiki));
+			PopulateTimeZones(Settings.GetDefaultLanguage(currentWiki).ToString());
+			txtMaxRecentChangesToDisplay.Text = Settings.GetMaxRecentChangesToDisplay(currentWiki).ToString();
 
 			lstRssFeedsMode.SelectedIndex = -1;
-			switch(Settings.RssFeedsMode) {
+			switch(Settings.GetRssFeedsMode(currentWiki)) {
 				case RssFeedsMode.FullText:
 					lstRssFeedsMode.SelectedIndex = 0;
 					break;
@@ -148,20 +152,20 @@ namespace ScrewTurn.Wiki {
 					break;
 			}
 
-			chkEnableDoubleClickEditing.Checked = Settings.EnableDoubleClickEditing;
-			chkEnableSectionEditing.Checked = Settings.EnableSectionEditing;
-			chkEnableSectionAnchors.Checked = Settings.EnableSectionAnchors;
-			chkEnablePageToolbar.Checked = Settings.EnablePageToolbar;
-			chkEnableViewPageCode.Checked = Settings.EnableViewPageCodeFeature;
-			chkEnablePageInfoDiv.Checked = Settings.EnablePageInfoDiv;
-			chkEnableBreadcrumbsTrail.Checked = !Settings.DisableBreadcrumbsTrail;
-			chkAutoGeneratePageNames.Checked = Settings.AutoGeneratePageNames;
-			chkProcessSingleLineBreaks.Checked = Settings.ProcessSingleLineBreaks;
-			chkUseVisualEditorAsDefault.Checked = Settings.UseVisualEditorAsDefault;
-			if(Settings.KeptBackupNumber == -1) txtKeptBackupNumber.Text = "";
-			else txtKeptBackupNumber.Text = Settings.KeptBackupNumber.ToString();
-			chkDisplayGravatars.Checked = Settings.DisplayGravatars;
-			txtListSize.Text = Settings.ListSize.ToString();
+			chkEnableDoubleClickEditing.Checked = Settings.GetEnableDoubleClickEditing(currentWiki);
+			chkEnableSectionEditing.Checked = Settings.GetEnableSectionEditing(currentWiki);
+			chkEnableSectionAnchors.Checked = Settings.GetEnableSectionAnchors(currentWiki);
+			chkEnablePageToolbar.Checked = Settings.GetEnablePageToolbar(currentWiki);
+			chkEnableViewPageCode.Checked = Settings.GetEnableViewPageCodeFeature(currentWiki);
+			chkEnablePageInfoDiv.Checked = Settings.GetEnablePageInfoDiv(currentWiki);
+			chkEnableBreadcrumbsTrail.Checked = !Settings.GetDisableBreadcrumbsTrail(currentWiki);
+			chkAutoGeneratePageNames.Checked = Settings.GetAutoGeneratePageNames(currentWiki);
+			chkProcessSingleLineBreaks.Checked = Settings.GetProcessSingleLineBreaks(currentWiki);
+			chkUseVisualEditorAsDefault.Checked = Settings.GetUseVisualEditorAsDefault(currentWiki);
+			if(Settings.GetKeptBackupNumber(currentWiki) == -1) txtKeptBackupNumber.Text = "";
+			else txtKeptBackupNumber.Text = Settings.GetKeptBackupNumber(currentWiki).ToString();
+			chkDisplayGravatars.Checked = Settings.GetDisplayGravatars(currentWiki);
+			txtListSize.Text = Settings.GetListSize(currentWiki).ToString();
 		}
 
 		/// <summary>
@@ -188,7 +192,7 @@ namespace ScrewTurn.Wiki {
 			lstDefaultUsersGroup.Items.Clear();
 			lstDefaultAdministratorsGroup.Items.Clear();
 			lstDefaultAnonymousGroup.Items.Clear();
-			foreach(UserGroup group in Users.GetUserGroups()) {
+			foreach(UserGroup group in Users.GetUserGroups(DetectWiki())) {
 				string lowerName = group.Name.ToLowerInvariant();
 
 				lstDefaultUsersGroup.Items.Add(new ListItem(group.Name, group.Name));
@@ -214,18 +218,19 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Loads the security configuration.
 		/// </summary>
-		private void LoadSecurityConfig() {
-			chkAllowUsersToRegister.Checked = Settings.UsersCanRegister;
-			txtPasswordRegEx.Text = Settings.PasswordRegex;
-			txtUsernameRegEx.Text = Settings.UsernameRegex;
-			PopulateAccountActivationMode(Settings.AccountActivationMode);
-			PopulateDefaultGroups(Settings.UsersGroup,
-				Settings.AdministratorsGroup,
-				Settings.AnonymousGroup);
-			chkEnableCaptchaControl.Checked = !Settings.DisableCaptchaControl;
-			chkPreventConcurrentEditing.Checked = Settings.DisableConcurrentEditing;
+		/// <param name="wiki">The wiki.</param>
+		private void LoadSecurityConfig(string currentWiki) {
+			chkAllowUsersToRegister.Checked = Settings.UsersCanRegister(currentWiki);
+			txtPasswordRegEx.Text = GlobalSettings.PasswordRegex;
+			txtUsernameRegEx.Text = GlobalSettings.UsernameRegex;
+			PopulateAccountActivationMode(Settings.GetAccountActivationMode(currentWiki));
+			PopulateDefaultGroups(Settings.GetUsersGroup(currentWiki),
+				Settings.GetAdministratorsGroup(currentWiki),
+				Settings.GetAnonymousGroup(currentWiki));
+			chkEnableCaptchaControl.Checked = !Settings.GetDisableCaptchaControl(currentWiki);
+			chkPreventConcurrentEditing.Checked = Settings.GetDisableConcurrentEditing(currentWiki);
 
-			switch(Settings.ChangeModerationMode) {
+			switch(Settings.GetModerationMode(currentWiki)) {
 				case ChangeModerationMode.None:
 					rdoNoModeration.Checked = true;
 					break;
@@ -237,10 +242,10 @@ namespace ScrewTurn.Wiki {
 					break;
 			}
 
-			txtExtensionsAllowed.Text = string.Join(", ", Settings.AllowedFileTypes);
+			txtExtensionsAllowed.Text = string.Join(", ", Settings.GetAllowedFileTypes(currentWiki));
 
 			lstFileDownloadCountFilterMode.SelectedIndex = -1;
-			switch(Settings.FileDownloadCountFilterMode) {
+			switch(Settings.GetFileDownloadCountFilterMode(currentWiki)) {
 				case FileDownloadCountFilterMode.CountAll:
 					lstFileDownloadCountFilterMode.SelectedIndex = 0;
 					txtFileDownloadCountFilter.Enabled = false;
@@ -248,10 +253,10 @@ namespace ScrewTurn.Wiki {
 				case FileDownloadCountFilterMode.CountSpecifiedExtensions:
 					lstFileDownloadCountFilterMode.SelectedIndex = 1;
 					txtFileDownloadCountFilter.Enabled = true;
-					txtFileDownloadCountFilter.Text = string.Join(", ", Settings.FileDownloadCountFilter);
+					txtFileDownloadCountFilter.Text = string.Join(", ", Settings.GetFileDownloadCountFilter(currentWiki));
 					break;
 				case FileDownloadCountFilterMode.ExcludeSpecifiedExtensions:
-					txtFileDownloadCountFilter.Text = string.Join(", ", Settings.FileDownloadCountFilter);
+					txtFileDownloadCountFilter.Text = string.Join(", ", Settings.GetFileDownloadCountFilter(currentWiki));
 					txtFileDownloadCountFilter.Enabled = true;
 					lstFileDownloadCountFilterMode.SelectedIndex = 2;
 					break;
@@ -259,11 +264,11 @@ namespace ScrewTurn.Wiki {
 					throw new NotSupportedException();
 			}
 
-			txtMaxFileSize.Text = Settings.MaxFileSize.ToString();
-			chkAllowScriptTags.Checked = Settings.ScriptTagsAllowed;
-			txtMaxLogSize.Text = Settings.MaxLogSize.ToString();
-			txtIpHostFilter.Text = Settings.IpHostFilter;
-			switch(Settings.LoggingLevel) {
+			txtMaxFileSize.Text = GlobalSettings.MaxFileSize.ToString();
+			chkAllowScriptTags.Checked = Settings.GetScriptTagsAllowed(currentWiki);
+			txtMaxLogSize.Text = GlobalSettings.MaxLogSize.ToString();
+			txtIpHostFilter.Text = Settings.GetIpHostFilter(currentWiki);
+			switch(GlobalSettings.LoggingLevel) {
 				case LoggingLevel.DisableLog:
 					rdoDisableLog.Checked = true;
 					break;
@@ -283,9 +288,9 @@ namespace ScrewTurn.Wiki {
 		/// Loads the advanced configuration.
 		/// </summary>
 		private void LoadAdvancedConfig() {
-			chkEnableAutomaticUpdateChecks.Checked = !Settings.DisableAutomaticVersionCheck;
-			chkEnableViewStateCompression.Checked = Settings.EnableViewStateCompression;
-			chkEnableHttpCompression.Checked = Settings.EnableHttpCompression;
+			chkEnableAutomaticUpdateChecks.Checked = !GlobalSettings.DisableAutomaticVersionCheck;
+			chkEnableViewStateCompression.Checked = GlobalSettings.EnableViewStateCompression;
+			chkEnableHttpCompression.Checked = GlobalSettings.EnableHttpCompression;
 		}
 
 		protected void btnAutoWikiUrl_Click(object sender, EventArgs e) {
@@ -322,7 +327,7 @@ namespace ScrewTurn.Wiki {
 		protected void cvErrorsEmails_ServerValidate(object sender, ServerValidateEventArgs e) {
 			string[] emails = GetErrorsEmails();
 
-			Regex regex = new Regex(Settings.EmailRegex, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+			Regex regex = new Regex(GlobalSettings.EmailRegex, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
 			foreach(string email in emails) {
 				if(!regex.Match(email).Success) {
@@ -374,7 +379,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="e">The <see cref="System.Web.UI.WebControls.ServerValidateEventArgs"/> instance containing the event data.</param>
 		protected void cvCheckOldPassword(object sender, ServerValidateEventArgs e) {
 			string pwd = Hash.Compute(txtBoxOldPassword.Text);
-			if(pwd == Settings.MasterPassword)
+			if(pwd == Settings.GetMasterPassword(DetectWiki()))
 				if((txtNewPassword.Text.Length != 0) && (txtNewPassword.Text != null)) 
 					e.IsValid = true;
 				else {
@@ -421,62 +426,63 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Wiki Configuration change requested", EntryType.General, SessionFacade.CurrentUsername);
 
-			Settings.BeginBulkUpdate();
+			string currentWiki = DetectWiki();
+
+			Settings.BeginBulkUpdate(currentWiki);
 
 			// Save general configuration
-			Settings.WikiTitle = txtWikiTitle.Text;
-			Settings.MainUrl = txtMainUrl.Text;
-			Settings.ContactEmail = txtContactEmail.Text;
-			Settings.SenderEmail = txtSenderEmail.Text;
-			Settings.ErrorsEmails = GetErrorsEmails();
-			Settings.SmtpServer = txtSmtpServer.Text;
+			Settings.SetWikiTitle(currentWiki, txtWikiTitle.Text);
+			GlobalSettings.MainUrl = txtMainUrl.Text;
+			GlobalSettings.ContactEmail = txtContactEmail.Text;
+			GlobalSettings.SenderEmail = txtSenderEmail.Text;
+			GlobalSettings.ErrorsEmails = GetErrorsEmails();
+			GlobalSettings.SmtpServer = txtSmtpServer.Text;
 			
 			txtSmtpPort.Text = txtSmtpPort.Text.Trim();
-			if(txtSmtpPort.Text.Length > 0) Settings.SmtpPort = int.Parse(txtSmtpPort.Text);
-			else Settings.SmtpPort = -1;
+			if(txtSmtpPort.Text.Length > 0) GlobalSettings.SmtpPort = int.Parse(txtSmtpPort.Text);
+			else GlobalSettings.SmtpPort = -1;
 			if(txtUsername.Text.Length > 0) {
-				Settings.SmtpUsername = txtUsername.Text;
-				Settings.SmtpPassword = txtPassword.Text;
+				GlobalSettings.SmtpUsername = txtUsername.Text;
+				GlobalSettings.SmtpPassword = txtPassword.Text;
 			}
 			else {
-				Settings.SmtpUsername = "";
-				Settings.SmtpPassword = "";
+				GlobalSettings.SmtpUsername = "";
+				GlobalSettings.SmtpPassword = "";
 			}
-			Settings.SmtpSsl = chkEnableSslForSmtp.Checked;
+			GlobalSettings.SmtpSsl = chkEnableSslForSmtp.Checked;
 
-			
 			// Save content configuration
-			Settings.SetTheme(null, ThemeRootSelector.SelectedProvider + "|" + ThemeRootSelector.SelectedThemes);
-			Settings.DefaultPage = lstMainPage.SelectedValue;
-			Settings.DateTimeFormat = txtDateTimeFormat.Text;
-			Settings.DefaultLanguage = lstDefaultLanguage.SelectedValue;
-			Settings.DefaultTimezone = int.Parse(lstDefaultTimeZone.SelectedValue);
-			Settings.MaxRecentChangesToDisplay = int.Parse(txtMaxRecentChangesToDisplay.Text);
-			Settings.RssFeedsMode = (RssFeedsMode)Enum.Parse(typeof(RssFeedsMode), lstRssFeedsMode.SelectedValue);
-			Settings.EnableDoubleClickEditing = chkEnableDoubleClickEditing.Checked;
-			Settings.EnableSectionEditing = chkEnableSectionEditing.Checked;
-			Settings.EnableSectionAnchors = chkEnableSectionAnchors.Checked;
-			Settings.EnablePageToolbar = chkEnablePageToolbar.Checked;
-			Settings.EnableViewPageCodeFeature = chkEnableViewPageCode.Checked;
-			Settings.EnablePageInfoDiv = chkEnablePageInfoDiv.Checked;
-			Settings.DisableBreadcrumbsTrail = !chkEnableBreadcrumbsTrail.Checked;
-			Settings.AutoGeneratePageNames = chkAutoGeneratePageNames.Checked;
-			Settings.ProcessSingleLineBreaks = chkProcessSingleLineBreaks.Checked;
-			Settings.UseVisualEditorAsDefault = chkUseVisualEditorAsDefault.Checked;
-			if(txtKeptBackupNumber.Text == "") Settings.KeptBackupNumber = -1;
-			else Settings.KeptBackupNumber = int.Parse(txtKeptBackupNumber.Text);
-			Settings.DisplayGravatars = chkDisplayGravatars.Checked;
-			Settings.ListSize = int.Parse(txtListSize.Text);
+			Settings.SetTheme(currentWiki, null, ThemeRootSelector.SelectedProvider + "|" + ThemeRootSelector.SelectedThemes);
+			Settings.SetDefaultPage(currentWiki, lstMainPage.SelectedValue);
+			Settings.SetDateTimeFormat(currentWiki, txtDateTimeFormat.Text);
+			Settings.SetDefaultLanguage(currentWiki, lstDefaultLanguage.SelectedValue);
+			Settings.SetDefaultTimezone(currentWiki, int.Parse(lstDefaultTimeZone.SelectedValue));
+			Settings.SetMaxRecentChangesToDisplay(currentWiki, int.Parse(txtMaxRecentChangesToDisplay.Text));
+			Settings.SetRssFeedsMode(currentWiki, (RssFeedsMode)Enum.Parse(typeof(RssFeedsMode), lstRssFeedsMode.SelectedValue));
+			Settings.SetEnableDoubleClickEditing(currentWiki, chkEnableDoubleClickEditing.Checked);
+			Settings.SetEnableSectionEditing(currentWiki, chkEnableSectionEditing.Checked);
+			Settings.SetEnableSectionAnchors(currentWiki, chkEnableSectionAnchors.Checked);
+			Settings.SetEnablePageToolbar(currentWiki, chkEnablePageToolbar.Checked);
+			Settings.SetEnableViewPageCodeFeature(currentWiki, chkEnableViewPageCode.Checked);
+			Settings.SetEnablePageInfoDiv(currentWiki, chkEnablePageInfoDiv.Checked);
+			Settings.SetDisableBreadcrumbsTrail(currentWiki, !chkEnableBreadcrumbsTrail.Checked);
+			Settings.SetAutoGeneratePageNames(currentWiki, chkAutoGeneratePageNames.Checked);
+			Settings.SetProcessSingleLineBreaks(currentWiki, chkProcessSingleLineBreaks.Checked);
+			Settings.SetUseVisualEditorAsDefault(currentWiki, chkUseVisualEditorAsDefault.Checked);
+			if(txtKeptBackupNumber.Text == "") Settings.SetKeptBackupNumber(currentWiki, -1);
+			else Settings.SetKeptBackupNumber(currentWiki, int.Parse(txtKeptBackupNumber.Text));
+			Settings.SetDisplayGravatars(currentWiki, chkDisplayGravatars.Checked);
+			Settings.SetListSize(currentWiki, int.Parse(txtListSize.Text));
 			if(txtBoxOldPassword.Text != "" && txtBoxOldPassword.Text != null && txtBoxOldPassword.Text.Length != 0) {
 				if (txtNewPassword.Text.Length != 0){
 						if	(Hash.Compute(txtNewPassword.Text) == Hash.Compute(txtReNewPassword.Text))	
-							Settings.MasterPassword = Hash.Compute(txtNewPassword.Text);
+							Settings.SetMasterPassword(currentWiki, Hash.Compute(txtNewPassword.Text));
 					}
 				}
 			// Save security configuration
-			Settings.UsersCanRegister = chkAllowUsersToRegister.Checked;
-			Settings.UsernameRegex = txtUsernameRegEx.Text;
-			Settings.PasswordRegex = txtPasswordRegEx.Text;
+			Settings.SetUsersCanRegister(currentWiki, chkAllowUsersToRegister.Checked);
+			GlobalSettings.UsernameRegex = txtUsernameRegEx.Text;
+			GlobalSettings.PasswordRegex = txtPasswordRegEx.Text;
 			AccountActivationMode mode = AccountActivationMode.Email;
 			switch(lstAccountActivationMode.SelectedValue.ToLowerInvariant()) {
 				case "email":
@@ -489,39 +495,39 @@ namespace ScrewTurn.Wiki {
 					mode = AccountActivationMode.Auto;
 					break;
 			}
-			Settings.AccountActivationMode = mode;
-			Settings.UsersGroup = lstDefaultUsersGroup.SelectedValue;
-			Settings.AdministratorsGroup = lstDefaultAdministratorsGroup.SelectedValue;
-			Settings.AnonymousGroup = lstDefaultAnonymousGroup.SelectedValue;
-			Settings.DisableCaptchaControl = !chkEnableCaptchaControl.Checked;
-			Settings.DisableConcurrentEditing = chkPreventConcurrentEditing.Checked;
+			Settings.SetAccountActivationMode(currentWiki, mode);
+			Settings.SetUsersGroup(currentWiki, lstDefaultUsersGroup.SelectedValue);
+			Settings.SetAdministratorsGroup(currentWiki, lstDefaultAdministratorsGroup.SelectedValue);
+			Settings.SetAnonymousGroup(currentWiki, lstDefaultAnonymousGroup.SelectedValue);
+			Settings.SetDisableCaptchaControl(currentWiki, !chkEnableCaptchaControl.Checked);
+			Settings.SetDisableConcurrentEditing(currentWiki, chkPreventConcurrentEditing.Checked);
 
-			if(rdoNoModeration.Checked) Settings.ChangeModerationMode = ChangeModerationMode.None;
-			else if(rdoRequirePageViewingPermissions.Checked) Settings.ChangeModerationMode = ChangeModerationMode.RequirePageViewingPermissions;
-			else if(rdoRequirePageEditingPermissions.Checked) Settings.ChangeModerationMode = ChangeModerationMode.RequirePageEditingPermissions;
+			if(rdoNoModeration.Checked) Settings.SetModerationMode(currentWiki, ChangeModerationMode.None);
+			else if(rdoRequirePageViewingPermissions.Checked) Settings.SetModerationMode(currentWiki, ChangeModerationMode.RequirePageViewingPermissions);
+			else if(rdoRequirePageEditingPermissions.Checked) Settings.SetModerationMode(currentWiki, ChangeModerationMode.RequirePageEditingPermissions);
 
-			Settings.AllowedFileTypes = GetAllowedFileExtensions();
+			Settings.SetAllowedFileTypes(currentWiki, GetAllowedFileExtensions());
 
-			Settings.FileDownloadCountFilterMode = (FileDownloadCountFilterMode)Enum.Parse(typeof(FileDownloadCountFilterMode), lstFileDownloadCountFilterMode.SelectedValue);
-			Settings.FileDownloadCountFilter = txtFileDownloadCountFilter.Text.Replace(" ", "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+			Settings.SetFileDownloadCountFilterMode(currentWiki, (FileDownloadCountFilterMode)Enum.Parse(typeof(FileDownloadCountFilterMode), lstFileDownloadCountFilterMode.SelectedValue));
+			Settings.SetFileDownloadCountFilter(currentWiki, txtFileDownloadCountFilter.Text.Replace(" ", "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
 
-			Settings.MaxFileSize = int.Parse(txtMaxFileSize.Text);
-			Settings.ScriptTagsAllowed = chkAllowScriptTags.Checked;
+			GlobalSettings.MaxFileSize = int.Parse(txtMaxFileSize.Text);
+			Settings.SetScriptTagsAllowed(currentWiki, chkAllowScriptTags.Checked);
 			LoggingLevel level = LoggingLevel.AllMessages;
 			if(rdoAllMessages.Checked) level = LoggingLevel.AllMessages;
 			else if(rdoWarningsAndErrors.Checked) level = LoggingLevel.WarningsAndErrors;
 			else if(rdoErrorsOnly.Checked) level = LoggingLevel.ErrorsOnly;
 			else level = LoggingLevel.DisableLog;
-			Settings.LoggingLevel = level;
-			Settings.MaxLogSize = int.Parse(txtMaxLogSize.Text);
-			Settings.IpHostFilter = txtIpHostFilter.Text;
+			GlobalSettings.LoggingLevel = level;
+			GlobalSettings.MaxLogSize = int.Parse(txtMaxLogSize.Text);
+			Settings.SetIpHostFilter(currentWiki, txtIpHostFilter.Text);
 
 			// Save advanced configuration
-			Settings.DisableAutomaticVersionCheck = !chkEnableAutomaticUpdateChecks.Checked;
-			Settings.EnableViewStateCompression = chkEnableViewStateCompression.Checked;
-			Settings.EnableHttpCompression = chkEnableHttpCompression.Checked;
+			GlobalSettings.DisableAutomaticVersionCheck = !chkEnableAutomaticUpdateChecks.Checked;
+			GlobalSettings.EnableViewStateCompression = chkEnableViewStateCompression.Checked;
+			GlobalSettings.EnableHttpCompression = chkEnableHttpCompression.Checked;
 
-			Settings.EndBulkUpdate();
+			Settings.EndBulkUpdate(currentWiki);
 
 			Content.InvalidateAllPages();
 

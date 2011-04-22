@@ -13,15 +13,17 @@ namespace ScrewTurn.Wiki {
 
 		private PageInfo currentPage = null;
 		private PageContent currentContent = null;
+		private string currentWiki = null;
 
 		private bool discussMode = false;
 		private bool viewCodeMode = false;
 
 		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = DetectWiki();
 
 			discussMode = Request["Discuss"] != null;
 			viewCodeMode = Request["Code"] != null && !discussMode;
-			if(!Settings.EnableViewPageCodeFeature) viewCodeMode = false;
+			if(!Settings.GetEnableViewPageCodeFeature(currentWiki)) viewCodeMode = false;
 
 			currentPage = DetectPageInfo(true);
 
@@ -36,14 +38,14 @@ namespace ScrewTurn.Wiki {
 			// - Post discussion (for button display in discuss mode)
 
 			string currentUsername = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			bool canView = authChecker.CheckActionForPage(currentPage, Actions.ForPages.ReadPage, currentUsername, currentGroups);
 			bool canEdit = false;
 			bool canEditWithApproval = false;
-			Pages.CanEditPage(currentPage, currentUsername, currentGroups, out canEdit, out canEditWithApproval);
+			Pages.CanEditPage(currentWiki, currentPage, currentUsername, currentGroups, out canEdit, out canEditWithApproval);
 			if(canEditWithApproval && canEdit) canEditWithApproval = false;
 			bool canDownloadAttachments = authChecker.CheckActionForPage(currentPage, Actions.ForPages.DownloadAttachments, currentUsername, currentGroups);
 			bool canSetPerms = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, currentUsername, currentGroups);
@@ -61,7 +63,7 @@ namespace ScrewTurn.Wiki {
 			attachmentViewer.PageInfo = currentPage;
 			currentContent = Content.GetPageContent(currentPage);
 
-			pnlPageInfo.Visible = Settings.EnablePageInfoDiv;
+			pnlPageInfo.Visible = Settings.GetEnablePageInfoDiv(currentWiki);
 
 			SetupTitles();
 
@@ -75,7 +77,7 @@ namespace ScrewTurn.Wiki {
 			SetupNavigationPaths();
 			SetupAdjacentPages();
 
-			SessionFacade.Breadcrumbs.AddPage(currentPage);
+			SessionFacade.Breadcrumbs(currentWiki).AddPage(currentPage);
 			SetupBreadcrumbsTrail();
 
 			SetupDoubleClickHandler();
@@ -104,8 +106,8 @@ namespace ScrewTurn.Wiki {
 		/// Sets the titles used in the page.
 		/// </summary>
 		private void SetupTitles() {
-			string title = FormattingPipeline.PrepareTitle(currentContent.Title, false, FormattingContext.PageContent, currentPage);
-			Page.Title = title + " - " + Settings.WikiTitle;
+			string title = FormattingPipeline.PrepareTitle(currentWiki, currentContent.Title, false, FormattingContext.PageContent, currentPage);
+			Page.Title = title + " - " + Settings.GetWikiTitle(currentWiki);
 			lblPageTitle.Text = title;
 		}
 
@@ -126,10 +128,10 @@ namespace ScrewTurn.Wiki {
 			if(lblDiscussLink.Visible) {
 				lblDiscussLink.Text = string.Format(@"<a id=""DiscussLink"" title=""{0}"" href=""{3}?Discuss=1"">{1} ({2})</a>",
 					Properties.Messages.Discuss, Properties.Messages.Discuss, Pages.GetMessageCount(currentPage),
-					UrlTools.BuildUrl(NameTools.GetLocalName(currentPage.FullName), Settings.PageExtension));
+					UrlTools.BuildUrl(NameTools.GetLocalName(currentPage.FullName), GlobalSettings.PageExtension));
 			}
 
-			lblEditLink.Visible = Settings.EnablePageToolbar && !discussMode && !viewCodeMode && canEdit;
+			lblEditLink.Visible = Settings.GetEnablePageToolbar(currentWiki) && !discussMode && !viewCodeMode && canEdit;
 			if(lblEditLink.Visible) {
 				lblEditLink.Text = string.Format(@"<a id=""EditLink"" title=""{0}"" href=""{1}"">{2}</a>",
 					Properties.Messages.EditThisPage,
@@ -137,17 +139,17 @@ namespace ScrewTurn.Wiki {
 					Properties.Messages.Edit);
 			}
 
-			if(Settings.EnablePageToolbar && Settings.EnableViewPageCodeFeature) {
+			if(Settings.GetEnablePageToolbar(currentWiki) && Settings.GetEnableViewPageCodeFeature(currentWiki)) {
 				lblViewCodeLink.Visible = !discussMode && !viewCodeMode && !canEdit;
 				if(lblViewCodeLink.Visible) {
 					lblViewCodeLink.Text = string.Format(@"<a id=""ViewCodeLink"" title=""{0}"" href=""{2}?Code=1"">{1}</a>",
 						Properties.Messages.ViewPageCode, Properties.Messages.ViewPageCode,
-						UrlTools.BuildUrl(NameTools.GetLocalName(currentPage.FullName), Settings.PageExtension));
+						UrlTools.BuildUrl(NameTools.GetLocalName(currentPage.FullName), GlobalSettings.PageExtension));
 				}
 			}
 			else lblViewCodeLink.Visible = false;
 
-			lblHistoryLink.Visible = Settings.EnablePageToolbar && !discussMode && !viewCodeMode && canViewDiscussion;
+			lblHistoryLink.Visible = Settings.GetEnablePageToolbar(currentWiki) && !discussMode && !viewCodeMode && canViewDiscussion;
 			if(lblHistoryLink.Visible) {
 				lblHistoryLink.Text = string.Format(@"<a id=""HistoryLink"" title=""{0}"" href=""{1}"">{2}</a>",
 					Properties.Messages.ViewPageHistory,
@@ -164,7 +166,7 @@ namespace ScrewTurn.Wiki {
 			attachmentViewer.Visible = lblAttachmentsLink.Visible;
 
 			int bakCount = GetBackupCount();
-			lblAdminToolsLink.Visible = Settings.EnablePageToolbar && !discussMode && !viewCodeMode &&
+			lblAdminToolsLink.Visible = Settings.GetEnablePageToolbar(currentWiki) && !discussMode && !viewCodeMode &&
 				((canRollback && bakCount > 0)|| canAdmin || canSetPerms);
 			if(lblAdminToolsLink.Visible) {
 				lblAdminToolsLink.Text = string.Format(@"<a id=""AdminToolsLink"" title=""{0}"" href=""#"" onclick=""javascript:return __ToggleAdminToolsMenu(event.clientX, event.clientY);"">{1}</a>",
@@ -204,7 +206,7 @@ namespace ScrewTurn.Wiki {
 			if(lblBackLink.Visible) {
 				lblBackLink.Text = string.Format(@"<a id=""BackLink"" title=""{0}"" href=""{1}"">{2}</a>",
 					Properties.Messages.Back,
-					UrlTools.BuildUrl(Tools.UrlEncode(currentPage.FullName), Settings.PageExtension, "?NoRedirect=1"),
+					UrlTools.BuildUrl(Tools.UrlEncode(currentPage.FullName), GlobalSettings.PageExtension, "?NoRedirect=1"),
 					Properties.Messages.Back);
 			}
 		}
@@ -223,7 +225,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The number of attachments.</returns>
 		private int GetAttachmentCount() {
 			int count = 0;
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 				count += prov.ListPageAttachments(currentPage).Length;
 			}
 			return count;
@@ -241,15 +243,15 @@ namespace ScrewTurn.Wiki {
 				lblCategorizedAs.Visible = false;
 				lblPageCategories.Visible = false;
 				lblNavigationPaths.Visible = false;
-				lblDiscussedPage.Text = "<b>" + FormattingPipeline.PrepareTitle(currentContent.Title, false, FormattingContext.PageContent, currentPage) + "</b>";
+				lblDiscussedPage.Text = "<b>" + FormattingPipeline.PrepareTitle(currentWiki, currentContent.Title, false, FormattingContext.PageContent, currentPage) + "</b>";
 			}
 			else {
 				lblPageDiscussionFor.Visible = false;
 				lblDiscussedPage.Visible = false;
 
 				lblModifiedDateTime.Text =
-					Preferences.AlignWithTimezone(currentContent.LastModified).ToString(Settings.DateTimeFormat);
-				lblAuthor.Text = Users.UserLink(currentContent.User);
+					Preferences.AlignWithTimezone(currentWiki, currentContent.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki));
+				lblAuthor.Text = Users.UserLink(currentWiki, currentContent.User);
 				lblPageCategories.Text = GetFormattedPageCategories();
 			}
 		}
@@ -263,7 +265,7 @@ namespace ScrewTurn.Wiki {
 					UrlTools.BuildUrl("Print.aspx?Page=", Tools.UrlEncode(currentPage.FullName), discussMode ? "&amp;Discuss=1" : ""),
 					Properties.Messages.PrinterFriendlyVersion, Properties.Messages.Print);
 
-				if(Settings.RssFeedsMode != RssFeedsMode.Disabled) {
+				if(Settings.GetRssFeedsMode(currentWiki) != RssFeedsMode.Disabled) {
 					lblRssLink.Text = string.Format(@"<a id=""RssLink"" href=""{0}"" title=""{1}"" target=""_blank""{2}>RSS</a>",
 						UrlTools.BuildUrl("RSS.aspx?Page=", Tools.UrlEncode(currentPage.FullName), discussMode ? "&amp;Discuss=1" : ""),
 						discussMode ? Properties.Messages.RssForThisDiscussion : Properties.Messages.RssForThisPage,
@@ -348,14 +350,14 @@ namespace ScrewTurn.Wiki {
 			if(currentPage == null) return;
 
 			// Force formatting so that the destination can be detected
-			Content.GetFormattedPageContent(currentPage);
+			Content.GetFormattedPageContent(currentWiki, currentPage);
 
 			PageInfo dest = Redirections.GetDestination(currentPage);
 			if(dest == null) return;
 
 			if(dest != null) {
 				if(Request["NoRedirect"] != "1") {
-					UrlTools.Redirect(dest.FullName + Settings.PageExtension + "?From=" + currentPage.FullName, false);
+					UrlTools.Redirect(dest.FullName + GlobalSettings.PageExtension + "?From=" + currentPage.FullName, false);
 				}
 				else {
 					// Write redirection hint
@@ -364,10 +366,10 @@ namespace ScrewTurn.Wiki {
 					sb.Append(Properties.Messages.ThisPageRedirectsTo);
 					sb.Append(": ");
 					sb.Append(@"<a href=""");
-					UrlTools.BuildUrl(sb, "++", Tools.UrlEncode(dest.FullName), Settings.PageExtension, "?From=", Tools.UrlEncode(currentPage.FullName));
+					UrlTools.BuildUrl(currentWiki, sb, "++", Tools.UrlEncode(dest.FullName), GlobalSettings.PageExtension, "?From=", Tools.UrlEncode(currentPage.FullName));
 					sb.Append(@""">");
 					PageContent k = Content.GetPageContent(dest);
-					sb.Append(FormattingPipeline.PrepareTitle(k.Title, false, FormattingContext.PageContent, currentPage));
+					sb.Append(FormattingPipeline.PrepareTitle(currentWiki, k.Title, false, FormattingContext.PageContent, currentPage));
 					sb.Append("</a></div>");
 					Literal literal = new Literal();
 					literal.Text = sb.ToString();
@@ -380,7 +382,7 @@ namespace ScrewTurn.Wiki {
 		/// Sets the breadcrumbs trail, if appropriate.
 		/// </summary>
 		private void SetupBreadcrumbsTrail() {
-			if(Settings.DisableBreadcrumbsTrail || discussMode || viewCodeMode) {
+			if(Settings.GetDisableBreadcrumbsTrail(currentWiki) || discussMode || viewCodeMode) {
 				lblBreadcrumbsTrail.Visible = false;
 				return;
 			}
@@ -389,7 +391,7 @@ namespace ScrewTurn.Wiki {
 
 			sb.Append(@"<div id=""BreadcrumbsDiv"">");
 
-			PageInfo[] pageTrail = SessionFacade.Breadcrumbs.AllPages;
+			PageInfo[] pageTrail = SessionFacade.Breadcrumbs(currentWiki).GetAllPages(currentWiki);
 			int min = 3;
 			if(pageTrail.Length < 3) min = pageTrail.Length;
 
@@ -440,8 +442,8 @@ namespace ScrewTurn.Wiki {
 			sb.Append("&raquo; ");
 			if(comp.Compare(page, currentPage) == 0) sb.Append("<b>");
 			sb.AppendFormat(@"<a href=""{0}"" title=""{1}""{2}{3}{4}>{1}</a>",
-				Tools.UrlEncode(page.FullName) + Settings.PageExtension,
-				FormattingPipeline.PrepareTitle(pc.Title, false, FormattingContext.PageContent, currentPage) + (string.IsNullOrEmpty(nspace) ? "" : (" (" + NameTools.GetNamespace(page.FullName) + ")")),
+				Tools.UrlEncode(page.FullName) + GlobalSettings.PageExtension,
+				FormattingPipeline.PrepareTitle(currentWiki, pc.Title, false, FormattingContext.PageContent, currentPage) + (string.IsNullOrEmpty(nspace) ? "" : (" (" + NameTools.GetNamespace(page.FullName) + ")")),
 				(id != null ? @" onmouseover=""javascript:return __ShowDropDown(event, '" + id + @"', this);""" : ""),
 				(id != null ? @" id=""lnk" + id + @"""" : ""),
 				(id != null ? @" onmouseout=""javascript:return __HideDropDown('" + id + @"');""" : ""));
@@ -461,7 +463,7 @@ namespace ScrewTurn.Wiki {
 			// Generate list DIV
 			// Return DIV's ID
 
-			string[] outgoingLinks = Pages.GetPageOutgoingLinks(page);
+			string[] outgoingLinks = Pages.GetPageOutgoingLinks(currentWiki, page);
 			if(outgoingLinks == null || outgoingLinks.Length == 0) return null;
 
 			string id = dbPrefix + Guid.NewGuid().ToString();
@@ -471,14 +473,14 @@ namespace ScrewTurn.Wiki {
 			buffer.AppendFormat(@"<div id=""{0}"" style=""display: none;"" class=""pageoutgoinglinksmenu"" onmouseover=""javascript:return __CancelHideTimer();"" onmouseout=""javascript:return __HideDropDown('{0}');"">", id);
 			int count = 0;
 			foreach(string link in outgoingLinks) {
-				PageInfo target = Pages.FindPage(link);
+				PageInfo target = Pages.FindPage(currentWiki, link);
 				if(target != null) {
 					count++;
 					PageContent cont = Content.GetPageContent(target);
 
-					string title = FormattingPipeline.PrepareTitle(cont.Title, false, FormattingContext.PageContent, currentPage);
+					string title = FormattingPipeline.PrepareTitle(currentWiki, cont.Title, false, FormattingContext.PageContent, currentPage);
 
-					buffer.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"">{2}</a>", link, Settings.PageExtension, title, title);
+					buffer.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"">{2}</a>", link, GlobalSettings.PageExtension, title, title);
 				}
 				if(count >= 20) break;
 			}
@@ -496,7 +498,7 @@ namespace ScrewTurn.Wiki {
 		private void SetupRedirectionSource() {
 			if(Request["From"] != null) {
 
-				PageInfo source = Pages.FindPage(Request["From"]);
+				PageInfo source = Pages.FindPage(currentWiki, Request["From"]);
 
 				if(source != null) {
 					StringBuilder sb = new StringBuilder(300);
@@ -504,10 +506,10 @@ namespace ScrewTurn.Wiki {
 					sb.Append(Properties.Messages.RedirectedFrom);
 					sb.Append(": ");
 					sb.Append(@"<a href=""");
-					sb.Append(UrlTools.BuildUrl("++", Tools.UrlEncode(source.FullName), Settings.PageExtension, "?NoRedirect=1"));
+					sb.Append(UrlTools.BuildUrl("++", Tools.UrlEncode(source.FullName), GlobalSettings.PageExtension, "?NoRedirect=1"));
 					sb.Append(@""">");
 					PageContent w = Content.GetPageContent(source);
-					sb.Append(FormattingPipeline.PrepareTitle(w.Title, false, FormattingContext.PageContent, currentPage));
+					sb.Append(FormattingPipeline.PrepareTitle(currentWiki, w.Title, false, FormattingContext.PageContent, currentPage));
 					sb.Append("</a></div>");
 
 					lblRedirectionSource.Text = sb.ToString();
@@ -521,7 +523,7 @@ namespace ScrewTurn.Wiki {
 		/// Sets the navigation paths label.
 		/// </summary>
 		private void SetupNavigationPaths() {
-			string[] paths = NavigationPaths.PathsPerPage(currentPage);
+			string[] paths = NavigationPaths.PathsPerPage(currentWiki, currentPage);
 
 			string currentPath = Request["NavPath"];
 			if(!string.IsNullOrEmpty(currentPath)) currentPath = currentPath.ToLowerInvariant();
@@ -531,7 +533,7 @@ namespace ScrewTurn.Wiki {
 				sb.Append(Properties.Messages.Paths);
 				sb.Append(": ");
 				for(int i = 0; i < paths.Length; i++) {
-					NavigationPath path = NavigationPaths.Find(paths[i]);
+					NavigationPath path = NavigationPaths.Find(currentWiki, paths[i]);
 					if(path != null) {
 						if(currentPath != null && paths[i].ToLowerInvariant().Equals(currentPath)) sb.Append("<b>");
 
@@ -562,33 +564,33 @@ namespace ScrewTurn.Wiki {
 			StringBuilder prev = new StringBuilder(50), next = new StringBuilder(50);
 
 			if(Request["NavPath"] != null) {
-				NavigationPath path = NavigationPaths.Find(Request["NavPath"]);
+				NavigationPath path = NavigationPaths.Find(currentWiki, Request["NavPath"]);
 
 				if(path != null) {
 					int idx = Array.IndexOf(path.Pages, currentPage.FullName);
 					if(idx != -1) {
 						if(idx > 0) {
-							PageInfo prevPage = Pages.FindPage(path.Pages[idx - 1]);
+							PageInfo prevPage = Pages.FindPage(currentWiki, path.Pages[idx - 1]);
 							prev.Append(@"<a href=""");
-							UrlTools.BuildUrl(prev, "Default.aspx?Page=", Tools.UrlEncode(prevPage.FullName),
+							UrlTools.BuildUrl(currentWiki, prev, "Default.aspx?Page=", Tools.UrlEncode(prevPage.FullName),
 								"&amp;NavPath=", Tools.UrlEncode(path.FullName));
 
 							prev.Append(@""" title=""");
 							prev.Append(Properties.Messages.PrevPage);
 							prev.Append(": ");
-							prev.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(prevPage).Title, false, FormattingContext.PageContent, currentPage));
+							prev.Append(FormattingPipeline.PrepareTitle(currentWiki, Content.GetPageContent(prevPage).Title, false, FormattingContext.PageContent, currentPage));
 							prev.Append(@"""><b>&laquo;</b></a> ");
 						}
 						if(idx < path.Pages.Length - 1) {
-							PageInfo nextPage = Pages.FindPage(path.Pages[idx + 1]);
+							PageInfo nextPage = Pages.FindPage(currentWiki, path.Pages[idx + 1]);
 							next.Append(@" <a href=""");
-							UrlTools.BuildUrl(next, "Default.aspx?Page=", Tools.UrlEncode(nextPage.FullName),
+							UrlTools.BuildUrl(currentWiki, next, "Default.aspx?Page=", Tools.UrlEncode(nextPage.FullName),
 								"&amp;NavPath=", Tools.UrlEncode(path.FullName));
 
 							next.Append(@""" title=""");
 							next.Append(Properties.Messages.NextPage);
 							next.Append(": ");
-							next.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(nextPage).Title, false, FormattingContext.PageContent, currentPage));
+							next.Append(FormattingPipeline.PrepareTitle(currentWiki, Content.GetPageContent(nextPage).Title, false, FormattingContext.PageContent, currentPage));
 							next.Append(@"""><b>&raquo;</b></a>");
 						}
 					}
@@ -610,7 +612,7 @@ namespace ScrewTurn.Wiki {
 		/// Sets the JavaScript double-click editing handler.
 		/// </summary>
 		private void SetupDoubleClickHandler() {
-			if(Settings.EnableDoubleClickEditing && !discussMode && !viewCodeMode) {
+			if(Settings.GetEnableDoubleClickEditing(currentWiki) && !discussMode && !viewCodeMode) {
 				StringBuilder sb = new StringBuilder(200);
 				sb.Append(@"<script type=""text/javascript"">" + "\n");
 				sb.Append("<!--\n");
@@ -635,7 +637,7 @@ namespace ScrewTurn.Wiki {
 				bool pageChanges = false;
 				bool discussionMessages = false;
 
-				UserInfo user = SessionFacade.GetCurrentUser();
+				UserInfo user = SessionFacade.GetCurrentUser(currentWiki);
 				if(user != null && user.Provider.UsersDataReadOnly) {
 					btnEmailNotification.Visible = false;
 					return;
@@ -669,16 +671,16 @@ namespace ScrewTurn.Wiki {
 			bool pageChanges = false;
 			bool discussionMessages = false;
 
-			UserInfo user = SessionFacade.GetCurrentUser();
+			UserInfo user = SessionFacade.GetCurrentUser(currentWiki);
 			if(user != null) {
 				Users.GetEmailNotification(user, currentPage, out pageChanges, out discussionMessages);
 			}
 
 			if(discussMode) {
-				Users.SetEmailNotification(user, currentPage, pageChanges, !discussionMessages);
+				Users.SetEmailNotification(currentWiki, user, currentPage, pageChanges, !discussionMessages);
 			}
 			else {
-				Users.SetEmailNotification(user, currentPage, !pageChanges, discussionMessages);
+				Users.SetEmailNotification(currentWiki, user, currentPage, !pageChanges, discussionMessages);
 			}
 
 			SetupEmailNotification();
@@ -692,11 +694,11 @@ namespace ScrewTurn.Wiki {
 		private void SetupPageContent(bool canPostMessages, bool canManageDiscussion) {
 			if(!discussMode && !viewCodeMode) {
 				Literal literal = new Literal();
-				literal.Text = Content.GetFormattedPageContent(currentPage);
+				literal.Text = Content.GetFormattedPageContent(currentWiki, currentPage);
 				plhContent.Controls.Add(literal);
 			}
 			else if(!discussMode && viewCodeMode) {
-				if(Settings.EnableViewPageCodeFeature) {
+				if(Settings.GetEnableViewPageCodeFeature(currentWiki)) {
 					Literal literal = new Literal();
 					StringBuilder sb = new StringBuilder(currentContent.Content.Length + 100);
 					sb.Append(@"<textarea style=""width: 98%; height: 500px;"" readonly=""true"">");

@@ -12,13 +12,14 @@ namespace ScrewTurn.Wiki {
 	public partial class AdminMaster : System.Web.UI.MasterPage {
 
 		protected void Page_Load(object sender, EventArgs e) {
+			string currentWiki = Tools.DetectCurrentWiki();
 			StringBuilder sb = new StringBuilder(100);
 			sb.Append("<script type=\"text/javascript\">\r\n<!--\r\n");
 			sb.AppendFormat("\tvar ConfirmMessage = \"{0}\";\r\n", Properties.Messages.ConfirmOperation);
 			sb.Append("// -->\r\n</script>");
 			lblStrings.Text = sb.ToString();
 
-			Page.Title = Properties.Messages.AdminTitle + " - " + Settings.WikiTitle;
+			Page.Title = Properties.Messages.AdminTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
 			if(!string.IsNullOrEmpty(Request.UserAgent) && Request.UserAgent.ToLowerInvariant().Contains("konqueror") ||
 				Request.UserAgent.ToLowerInvariant().Contains("safari")) {
@@ -29,7 +30,7 @@ namespace ScrewTurn.Wiki {
 
 			SetupButtons();
 
-			SetupButtonsVisibility();
+			SetupButtonsVisibility(currentWiki);
 		}
 
 		/// <summary>
@@ -85,9 +86,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Sets up the buttons visibility based on the current user's permissions.
 		/// </summary>
-		private void SetupButtonsVisibility() {
+		/// <param name="wiki">The wiki.</param>
+		private void SetupButtonsVisibility(string currentWiki) {
 			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
 			// Categories (can manage categories in at least one NS)
 			lnkSelectCategories.Visible = CanManageCategories(currentUser, currentGroups);
@@ -133,7 +135,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage the configuration, <c>false</c> otherwise.</returns>
 		public static bool CanManageConfiguration(string username, string[] groups) {
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			bool canManageConfiguration = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageConfiguration, username, groups);
 			return canManageConfiguration;
 		}
@@ -145,10 +147,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage categories in at least one namespace, <c>false</c> otherwise.</returns>
 		public static bool CanManageCategories(string username, string[] groups) {
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			if(authChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManageCategories, username, groups)) return true;
 
-			foreach(NamespaceInfo ns in Pages.GetNamespaces()) {
+			foreach(NamespaceInfo ns in Pages.GetNamespaces(Tools.DetectCurrentWiki())) {
 				if(authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManageCategories, username, groups)) return true;
 			}
 
@@ -162,7 +164,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage groups, <c>false</c> otherwise.</returns>
 		public static bool CanManageGroups(string username, string[] groups) {
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			bool canManageGroups = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageGroups, username, groups);
 			return canManageGroups;
 		}
@@ -174,7 +176,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage permissions, <c>false</c> otherwise.</returns>
 		public static bool CanManagePermissions(string username, string[] groups) {
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			bool canManagePermissions = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, username, groups);
 			return canManagePermissions;
 		}
@@ -186,7 +188,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage namespace, <c>false</c> otherwise.</returns>
 		public static bool CanManageNamespaces(string username, string[] groups) {
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			bool canManageNamespaces = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageNamespaces, username, groups);
 			return canManageNamespaces;
 		}
@@ -198,10 +200,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the the user can manage pages in at least one namespace, <c>false</c> otherwise.</returns>
 		public static bool CanManagePages(string username, string[] groups) {
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			if(authChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManagePages, username, groups)) return true;
 
-			foreach(NamespaceInfo ns in Pages.GetNamespaces()) {
+			foreach(NamespaceInfo ns in Pages.GetNamespaces(Tools.DetectCurrentWiki())) {
 				if(authChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManagePages, username, groups)) return true;
 			}
 
@@ -215,7 +217,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage providers, <c>false</c> otherwise.</returns>
 		public static bool CanManageProviders(string username, string[] groups) {
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			bool canManageProviders = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageProviders, username, groups);
 			return canManageProviders;
 		}
@@ -227,7 +229,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage snippets and templates, <c>false</c> otherwise.</returns>
 		public static bool CanManageSnippetsAndTemplates(string username, string[] groups) {
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			bool canManageSnippets = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageSnippetsAndTemplates, username, groups);
 			return canManageSnippets;
 		}
@@ -239,7 +241,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage user accounts, <c>false</c> otherwise.</returns>
 		public static bool CanManageUsers(string username, string[] groups) {
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			bool canManageUsers = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageAccounts, username, groups);
 			return canManageUsers;
 		}
@@ -252,7 +254,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can approve/reject a draft of the page, <c>false</c> otherwise.</returns>
 		public static bool CanApproveDraft(PageInfo page, string username, string[] groups) {
-			return Pages.CanApproveDraft(page, username, groups);
+			return Pages.CanApproveDraft(Tools.DetectCurrentWiki(), page, username, groups);
 		}
 
 	}

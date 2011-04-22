@@ -11,10 +11,14 @@ namespace ScrewTurn.Wiki {
 
 	public partial class AdminProviders : BasePage {
 
+		private string currentWiki = null;
+
 		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = DetectWiki();
+
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageProviders(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageProviders(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) UrlTools.Redirect("AccessDenied.aspx");
 
 			if(!Page.IsPostBack) {
 				// Load providers and related data
@@ -50,24 +54,24 @@ namespace ScrewTurn.Wiki {
 			int enabledCount = 0;
 
 			if(rdoPages.Checked) {
-				enabledCount = Collectors.CollectorsBox.PagesProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.CollectorsBox.PagesProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki).Length;
+				providers.AddRange(Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki));
 			}
 			else if(rdoUsers.Checked) {
-				enabledCount = Collectors.CollectorsBox.UsersProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.CollectorsBox.UsersProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki).Length;
+				providers.AddRange(Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki));
 			}
 			else if(rdoFiles.Checked) {
-				enabledCount = Collectors.CollectorsBox.FilesProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.CollectorsBox.FilesProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki).Length;
+				providers.AddRange(Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki));
 			}
 			else if(rdoThemes.Checked) {
-				enabledCount = Collectors.CollectorsBox.ThemeProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.CollectorsBox.ThemeProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki).Length;
+				providers.AddRange(Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki));
 			}
 			else if(rdoFormatter.Checked) {
-				enabledCount = Collectors.CollectorsBox.FormatterProviderCollector.AllProviders.Length;
-				providers.AddRange(Collectors.CollectorsBox.FormatterProviderCollector.AllProviders);
+				enabledCount = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki).Length;
+				providers.AddRange(Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki));
 			}
 
 			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
@@ -90,7 +94,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="info">The component information.</param>
 		/// <returns>The update status.</returns>
 		private string GetUpdateStatus(ComponentInformation info) {
-			if(!Settings.DisableAutomaticVersionCheck) {
+			if(!GlobalSettings.DisableAutomaticVersionCheck) {
 				if(string.IsNullOrEmpty(info.UpdateUrl)) return "n/a";
 				else {
 					string newVersion = null;
@@ -120,6 +124,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled">A value indicating whether the returned provider is enabled.</param>
 		/// <param name="canDisable">A value indicating whether the returned provider can be disabled.</param>
 		private IProviderV30 GetCurrentProvider(out bool enabled, out bool canDisable) {
+			enabled = true;
+			canDisable = false;
 			return null; //Collectors.FindProvider(txtCurrentProvider.Value, out enabled, out canDisable);
 		}
 
@@ -132,7 +138,7 @@ namespace ScrewTurn.Wiki {
 				IProviderV30 provider = GetCurrentProvider(out enabled, out canDisable);
 
 				// Cannot disable the provider that handles the default page of the root namespace
-				if(Pages.FindPage(Settings.DefaultPage).Provider == provider) canDisable = false;
+				if(Pages.FindPage(currentWiki, Settings.GetDefaultPage(currentWiki)).Provider == provider) canDisable = false;
 
 				pnlProviderDetails.Visible = true;
 				lblProviderName.Text = provider.Information.Name + " (" + provider.Information.Version + ")";
@@ -191,7 +197,6 @@ namespace ScrewTurn.Wiki {
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
 			Log.LogEntry("Deactivation requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
-			ProviderLoader.DisableProvider(txtCurrentProvider.Value);
 			PerformPostProviderChangeActions();
 
 			lblResult.CssClass = "resultok";
@@ -208,7 +213,6 @@ namespace ScrewTurn.Wiki {
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
 			Log.LogEntry("Activation requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
-			ProviderLoader.EnableProvider(txtCurrentProvider.Value);
 			PerformPostProviderChangeActions();
 
 			lblResult.CssClass = "resultok";
@@ -248,16 +252,12 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Providers auto-update requested", EntryType.General, SessionFacade.CurrentUsername);
 
-			ProviderUpdater updater = new ProviderUpdater(Settings.Provider,
+			ProviderUpdater updater = new ProviderUpdater(GlobalSettings.Provider,
 				Collectors.FileNames,
-				Collectors.CollectorsBox.PagesProviderCollector.AllProviders,
-				Collectors.CollectorsBox.DisabledPagesProviderCollector.AllProviders,
-				Collectors.CollectorsBox.UsersProviderCollector.AllProviders,
-				Collectors.CollectorsBox.DisabledUsersProviderCollector.AllProviders,
-				Collectors.CollectorsBox.FilesProviderCollector.AllProviders,
-				Collectors.CollectorsBox.DisabledFilesProviderCollector.AllProviders,
-				Collectors.CollectorsBox.FormatterProviderCollector.AllProviders,
-				Collectors.CollectorsBox.DisabledFormatterProviderCollector.AllProviders);
+				Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki),
+				Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki),
+				Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki),
+				Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki));
 
 			int count = updater.UpdateAll();
 
@@ -284,12 +284,10 @@ namespace ScrewTurn.Wiki {
 		protected void btnSaveDefaultProviders_Click(object sender, EventArgs e) {
 			Log.LogEntry("Default providers change requested", EntryType.General, SessionFacade.CurrentUsername);
 
-			Settings.BeginBulkUpdate();
-			Settings.DefaultPagesProvider = lstPagesProvider.SelectedProvider;
-			Settings.DefaultUsersProvider = lstUsersProvider.SelectedProvider;
-			Settings.DefaultFilesProvider = lstFilesProvider.SelectedProvider;
-			Settings.EndBulkUpdate();
-
+			GlobalSettings.DefaultPagesProvider = lstPagesProvider.SelectedProvider;
+			GlobalSettings.DefaultUsersProvider = lstUsersProvider.SelectedProvider;
+			GlobalSettings.DefaultFilesProvider = lstFilesProvider.SelectedProvider;
+			
 			lblDefaultProvidersResult.CssClass = "resultok";
 			lblDefaultProvidersResult.Text = Properties.Messages.DefaultProvidersSaved;
 
@@ -305,7 +303,7 @@ namespace ScrewTurn.Wiki {
 		/// Loads all the providers' DLLs.
 		/// </summary>
 		private void LoadDlls() {
-			string[] files = Settings.Provider.ListPluginAssemblies();
+			string[] files = GlobalSettings.Provider.ListPluginAssemblies();
 			lstDlls.Items.Clear();
 			lstDlls.Items.Add(new ListItem("- " + Properties.Messages.SelectAndDelete + " -", ""));
 			for(int i = 0; i < files.Length; i++) {
@@ -318,7 +316,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnDeleteDll_Click(object sender, EventArgs e) {
-			if(Settings.Provider.DeletePluginAssembly(lstDlls.SelectedValue)) {
+			if(GlobalSettings.Provider.DeletePluginAssembly(lstDlls.SelectedValue)) {
 				LoadDlls();
 				lstDlls_SelectedIndexChanged(sender, e);
 				lblDllResult.CssClass = "resultok";
@@ -343,7 +341,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Provider DLL upload requested " + upDll.FileName, EntryType.General, SessionFacade.CurrentUsername);
 
-			string[] asms = Settings.Provider.ListPluginAssemblies();
+			string[] asms = GlobalSettings.Provider.ListPluginAssemblies();
 			if(Array.Find<string>(asms, delegate(string v) {
 				if(v.Equals(file)) return true;
 				else return false;
@@ -354,9 +352,9 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 			else {
-				Settings.Provider.StorePluginAssembly(file, upDll.FileBytes);
+				GlobalSettings.Provider.StorePluginAssembly(file, upDll.FileBytes);
 
-				int count = ProviderLoader.LoadFromAuto(file);
+				int count = ProviderLoader.LoadFormatterProvidersFromAuto(file);
 
 				lblUploadResult.CssClass = "resultok";
 				lblUploadResult.Text = Properties.Messages.LoadedProviders.Replace("###", count.ToString());
@@ -381,7 +379,7 @@ namespace ScrewTurn.Wiki {
 		private void LoadSourceProviders() {
 			lstPagesSource.Items.Clear();
 			lstPagesSource.Items.Add(new ListItem("", ""));
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
 				if(!prov.ReadOnly) {
 					lstPagesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 				}
@@ -389,7 +387,7 @@ namespace ScrewTurn.Wiki {
 
 			lstUsersSource.Items.Clear();
 			lstUsersSource.Items.Add(new ListItem("", ""));
-			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki)) {
 				if(IsUsersProviderFullWriteEnabled(prov)) {
 					lstUsersSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 				}
@@ -397,29 +395,29 @@ namespace ScrewTurn.Wiki {
 
 			lstFilesSource.Items.Clear();
 			lstFilesSource.Items.Add(new ListItem("", ""));
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 				if(!prov.ReadOnly) {
 					lstFilesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 				}
 			}
 
-			lblSettingsSource.Text = Settings.Provider.Information.Name;
+			lblSettingsSource.Text = Settings.GetProvider(currentWiki).Information.Name;
 			lstSettingsDestination.Items.Clear();
 			lstSettingsDestination.Items.Add(new ListItem("", ""));
-			if(Settings.Provider.GetType().FullName != typeof(SettingsStorageProvider).FullName) {
+			if(Settings.GetProvider(currentWiki).GetType().FullName != typeof(SettingsStorageProvider).FullName) {
 				lstSettingsDestination.Items.Add(new ListItem(SettingsStorageProvider.ProviderName, typeof(SettingsStorageProvider).FullName));
 			}
-			foreach(ISettingsStorageProviderV30 prov in ProviderLoader.LoadAllSettingsStorageProviders(Settings.Provider)) {
-				if(prov.GetType().FullName != Settings.Provider.GetType().FullName) {
-					lstSettingsDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().FullName));
-				}
-			}
+			//foreach(ISettingsStorageProviderV30 prov in ProviderLoader..LoadAllSettingsStorageProviders(GlobalSettings.Provider)) {
+			//    if(prov.GetType().FullName != Settings.Provider.GetType().FullName) {
+			//        lstSettingsDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().FullName));
+			//    }
+			//}
 		}
 
 		protected void lstPagesSource_SelectedIndexChanged(object sender, EventArgs e) {
 			lstPagesDestination.Items.Clear();
 			if(lstPagesSource.SelectedValue != "") {
-				foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+				foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
 					if(!prov.ReadOnly && lstPagesSource.SelectedValue != prov.GetType().ToString()) {
 						lstPagesDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 					}
@@ -431,7 +429,7 @@ namespace ScrewTurn.Wiki {
 		protected void lstUsersSource_SelectedIndexChanged(object sender, EventArgs e) {
 			lstUsersDestination.Items.Clear();
 			if(lstUsersSource.SelectedValue != "") {
-				foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
+				foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki)) {
 					if(IsUsersProviderFullWriteEnabled(prov) && lstUsersSource.SelectedValue != prov.GetType().ToString()) {
 						lstUsersDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 					}
@@ -443,7 +441,7 @@ namespace ScrewTurn.Wiki {
 		protected void lstFilesSource_SelectedIndexChanged(object sender, EventArgs e) {
 			lstFilesDestination.Items.Clear();
 			if(lstFilesSource.SelectedValue != "") {
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 					if(!prov.ReadOnly && lstFilesSource.SelectedValue != prov.GetType().ToString()) {
 						lstFilesDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 					}
@@ -457,36 +455,36 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnMigratePages_Click(object sender, EventArgs e) {
-			IPagesStorageProviderV30 from = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue);
-			IPagesStorageProviderV30 to = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue);
+			IPagesStorageProviderV30 from = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue, currentWiki);
+			IPagesStorageProviderV30 to = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue, currentWiki);
 
 			Log.LogEntry("Pages data migration requested from " + from.Information.Name + " to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
-			DataMigrator.MigratePagesStorageProviderData(from, to);
+			//DataMigrator.MigratePagesStorageProviderData(from, to);
 
 			lblMigratePagesResult.CssClass = "resultok";
 			lblMigratePagesResult.Text = Properties.Messages.DataMigrated;
 		}
 
 		protected void btnMigrateUsers_Click(object sender, EventArgs e) {
-			IUsersStorageProviderV30 from = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue);
-			IUsersStorageProviderV30 to = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue);
+			IUsersStorageProviderV30 from = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue, currentWiki);
+			IUsersStorageProviderV30 to = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue, currentWiki);
 
 			Log.LogEntry("Users data migration requested from " + from.Information.Name + " to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
-			DataMigrator.MigrateUsersStorageProviderData(from, to, true);
+			//DataMigrator.MigrateUsersStorageProviderData(from, to, true);
 
 			lblMigrateUsersResult.CssClass = "resultok";
 			lblMigrateUsersResult.Text = Properties.Messages.DataMigrated;
 		}
 
 		protected void btnMigrateFiles_Click(object sender, EventArgs e) {
-			IFilesStorageProviderV30 from = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue);
-			IFilesStorageProviderV30 to = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue);
+			IFilesStorageProviderV30 from = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue, currentWiki);
+			IFilesStorageProviderV30 to = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue, currentWiki);
 
 			Log.LogEntry("Files data migration requested from " + from.Information.Name + " to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
-			DataMigrator.MigrateFilesStorageProviderData(from, to, Settings.Provider);
+			//DataMigrator.MigrateFilesStorageProviderData(from, to, Settings.Provider);
 
 			lblMigrateFilesResult.CssClass = "resultok";
 			lblMigrateFilesResult.Text = Properties.Messages.DataMigrated;
@@ -495,18 +493,18 @@ namespace ScrewTurn.Wiki {
 		protected void btnCopySettings_Click(object sender, EventArgs e) {
 			ISettingsStorageProviderV30 to = null;
 
-			ISettingsStorageProviderV30[] allProviders = ProviderLoader.LoadAllSettingsStorageProviders(Settings.Provider);
-			foreach(ISettingsStorageProviderV30 prov in allProviders) {
-				if(prov.GetType().ToString() == lstSettingsDestination.SelectedValue) {
-					to = prov;
-					break;
-				}
-			}
+			//ISettingsStorageProviderV30[] allProviders = ProviderLoader.LoadAllSettingsStorageProviders(Settings.Provider);
+			//foreach(ISettingsStorageProviderV30 prov in allProviders) {
+			//    if(prov.GetType().ToString() == lstSettingsDestination.SelectedValue) {
+			//        to = prov;
+			//        break;
+			//    }
+			//}
 
 			Log.LogEntry("Settings data copy requested to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
 			try {
-				to.Init(Host.Instance, txtSettingsDestinationConfig.Text);
+				to.Init(Host.Instance, txtSettingsDestinationConfig.Text, currentWiki);
 			}
 			catch(InvalidConfigurationException ex) {
 				Log.LogEntry("Provider rejected configuration: " + ex.ToString(), EntryType.Error, Log.SystemUsername);
@@ -517,11 +515,11 @@ namespace ScrewTurn.Wiki {
 
 			// Find namespaces
 			List<string> namespaces = new List<string>(5);
-			foreach(NamespaceInfo ns in Pages.GetNamespaces()) {
+			foreach(NamespaceInfo ns in Pages.GetNamespaces(currentWiki)) {
 				namespaces.Add(ns.Name);
 			}
 
-			DataMigrator.CopySettingsStorageProviderData(Settings.Provider, to, namespaces.ToArray(), Collectors.GetAllProviders());
+			//DataMigrator.CopySettingsStorageProviderData(Settings.Provider, to, namespaces.ToArray(), Collectors.GetAllProviders());
 
 			lblCopySettingsResult.CssClass = "resultok";
 			lblCopySettingsResult.Text = Properties.Messages.DataCopied;

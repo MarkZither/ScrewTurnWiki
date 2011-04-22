@@ -17,8 +17,12 @@ namespace ScrewTurn.Wiki {
 
 	public partial class Diff : BasePage {
 
+		private string currentWiki = null;
+
 		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = Properties.Messages.DiffTitle + " - " + Settings.WikiTitle;
+			currentWiki = DetectWiki();
+
+			Page.Title = Properties.Messages.DiffTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
 			PrintDiff();
 		}
@@ -31,16 +35,16 @@ namespace ScrewTurn.Wiki {
 
 			StringBuilder sb = new StringBuilder();
 
-			PageInfo page = Pages.FindPage(Request["Page"]);
+			PageInfo page = Pages.FindPage(currentWiki, Request["Page"]);
 			if(page == null) {
 				Redirect();
 				return;
 			}
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			bool canView = authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
-				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
+				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			if(!canView) UrlTools.Redirect("AccessDenied.aspx");
 
 			int rev1 = -1;
@@ -92,7 +96,7 @@ namespace ScrewTurn.Wiki {
 			PageContent content = Content.GetPageContent(page);
 
 			lblTitle.Text = Properties.Messages.DiffingPageTitle.Replace("##PAGETITLE##",
-				FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page)).Replace("##REV1##", rev1Text).Replace("##REV2##", rev2Text);
+				FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page)).Replace("##REV1##", rev1Text).Replace("##REV2##", rev2Text);
 
 			lblBack.Text = string.Format(@"<a href=""{0}"">&laquo; {1}</a>",
 				UrlTools.BuildUrl("History.aspx?Page=", Tools.UrlEncode(Request["Page"]), "&amp;Rev1=", Request["Rev1"], "&amp;Rev2=", Request["Rev2"]),
@@ -110,7 +114,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private void Redirect() {
-			UrlTools.RedirectHome();
+			UrlTools.RedirectHome(currentWiki);
 		}
 
 	}

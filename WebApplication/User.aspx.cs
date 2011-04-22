@@ -14,18 +14,21 @@ namespace ScrewTurn.Wiki {
 
 		private string currentUsername = null;
 		private UserInfo currentUser = null;
+		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = Properties.Messages.UserTitle + " - " + Settings.WikiTitle;
+			currentWiki = DetectWiki();
+
+			Page.Title = Properties.Messages.UserTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
 			currentUsername = Request["User"];
 			if(string.IsNullOrEmpty(currentUsername)) currentUsername = Request["Username"];
 			if(string.IsNullOrEmpty(currentUsername)) UrlTools.Redirect("Default.aspx");
 
 			if(currentUsername == "admin") {
-				currentUser = Users.GetAdministratorAccount();
+				currentUser = Users.GetAdministratorAccount(currentWiki);
 			}
-			else currentUser = Users.FindUser(currentUsername);
+			else currentUser = Users.FindUser(currentWiki, currentUsername);
 
 			if(currentUser == null) UrlTools.Redirect("Default.aspx");
 
@@ -48,7 +51,7 @@ namespace ScrewTurn.Wiki {
 		/// Displays the gravatar of the user.
 		/// </summary>
 		private void DisplayGravatar() {
-			if(Settings.DisplayGravatars) {
+			if(Settings.GetDisplayGravatars(currentWiki)) {
 				lblGravatar.Text = string.Format(@"<img src=""http://www.gravatar.com/avatar/{0}?d=identicon"" alt=""Gravatar"" />",
 					GetGravatarHash(currentUser.Email));
 			}
@@ -75,9 +78,9 @@ namespace ScrewTurn.Wiki {
 		/// Displays the recent activity.
 		/// </summary>
 		private void DisplayRecentActivity() {
-			RecentChange[] changes = RecentChanges.GetAllChanges();
+			RecentChange[] changes = RecentChanges.GetAllChanges(currentWiki);
 
-			List<RecentChange> result = new List<RecentChange>(Settings.MaxRecentChangesToDisplay);
+			List<RecentChange> result = new List<RecentChange>(Settings.GetMaxRecentChangesToDisplay(currentWiki));
 
 			foreach(RecentChange c in changes) {
 				if(c.User == currentUser.Username) {
@@ -90,7 +93,7 @@ namespace ScrewTurn.Wiki {
 
 			lblNoActivity.Visible = result.Count == 0;
 
-			lblRecentActivity.Text = Formatter.BuildRecentChangesTable(result, FormattingContext.Other, null);
+			lblRecentActivity.Text = Formatter.BuildRecentChangesTable(currentWiki, result, FormattingContext.Other, null);
 		}
 
 		protected void btnSend_Click(object sender, EventArgs e) {
@@ -100,13 +103,13 @@ namespace ScrewTurn.Wiki {
 			Page.Validate();
 			if(!Page.IsValid) return;
 
-			UserInfo loggedUser = SessionFacade.GetCurrentUser();
+			UserInfo loggedUser = SessionFacade.GetCurrentUser(currentWiki);
 
 			Log.LogEntry("Sending Email to " + currentUser.Username, EntryType.General, loggedUser.Username);
 			EmailTools.AsyncSendEmail(currentUser.Email,
-				"\"" + Users.GetDisplayName(loggedUser) + "\" <" + Settings.SenderEmail + ">",
+				"\"" + Users.GetDisplayName(loggedUser) + "\" <" + GlobalSettings.SenderEmail + ">",
 				txtSubject.Text,
-				Users.GetDisplayName(loggedUser) + " sent you this message from " + Settings.WikiTitle + ". To reply, please go to " + Settings.MainUrl + "User.aspx?Username=" + Tools.UrlEncode(loggedUser.Username) + "&Subject=" + Tools.UrlEncode("Re: " + txtSubject.Text) + "\nPlease do not reply to this Email.\n\n------------\n\n" + txtBody.Text,
+				Users.GetDisplayName(loggedUser) + " sent you this message from " + Settings.GetWikiTitle(currentWiki) + ". To reply, please go to " + GlobalSettings.MainUrl + "User.aspx?Username=" + Tools.UrlEncode(loggedUser.Username) + "&Subject=" + Tools.UrlEncode("Re: " + txtSubject.Text) + "\nPlease do not reply to this Email.\n\n------------\n\n" + txtBody.Text,
 				false);
 			lblSendResult.Text = Properties.Messages.MessageSent;
 			lblSendResult.CssClass = "resultok";

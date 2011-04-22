@@ -18,34 +18,37 @@ namespace ScrewTurn.Wiki {
 	public partial class PopupWYSIWYG : BasePage {
 
 		private PageInfo currentPage = null;
+		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = DetectWiki();
+			
 			Literal l = new Literal();
-			l.Text = Tools.GetIncludes(DetectNamespace());
+			l.Text = Tools.GetIncludes(currentWiki, DetectNamespace());
 			Page.Header.Controls.AddAt(0, l);
 
 			if(string.IsNullOrEmpty(Request["Feature"])) return;
 
 			// Get instance of Current Page, if any
 			if(!string.IsNullOrEmpty(Request["CurrentPage"])) {
-				currentPage = Pages.FindPage(Request["CurrentPage"]);
+				currentPage = Pages.FindPage(currentWiki, Request["CurrentPage"]);
 			}
 			else currentPage = null;
 
 			if(!Page.IsPostBack) {
 
 				// Load FilesStorageProviders
-				IFilesStorageProviderV30[] provs = Collectors.CollectorsBox.FilesProviderCollector.AllProviders;
+				IFilesStorageProviderV30[] provs = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki);
 				foreach(IFilesStorageProviderV30 p in provs) {
 					lstProviderFiles.Items.Add(new ListItem(p.Information.Name, p.GetType().FullName));
 					// Select the default files provider
-					if (p.GetType().FullName == Settings.DefaultFilesProvider)
+					if (p.GetType().FullName == GlobalSettings.DefaultFilesProvider)
 					{
 						lstProviderFiles.Items[lstProviderFiles.Items.Count - 1].Selected = true;
 					}
 					lstProviderImages.Items.Add(new ListItem(p.Information.Name, p.GetType().FullName));
 					// Select the default images provider
-					if (p.GetType().FullName == Settings.DefaultFilesProvider)
+					if (p.GetType().FullName == GlobalSettings.DefaultFilesProvider)
 					{
 						lstProviderImages.Items[lstProviderImages.Items.Count - 1].Selected = true;
 					}
@@ -56,7 +59,7 @@ namespace ScrewTurn.Wiki {
 				if(string.IsNullOrEmpty(currentNamespace)) currentNamespace = "";
 				lstNamespace.Items.Clear();
 				lstNamespace.Items.Add(new ListItem("<root>", ""));
-				foreach(NamespaceInfo ns in Pages.GetNamespaces()) {
+				foreach(NamespaceInfo ns in Pages.GetNamespaces(currentWiki)) {
 					lstNamespace.Items.Add(new ListItem(ns.Name, ns.Name));
 				}
 				foreach(ListItem itm in lstNamespace.Items) {
@@ -151,12 +154,12 @@ namespace ScrewTurn.Wiki {
 		protected List<TreeElement> ctPages_Populate(object sender, PopulateEventArgs e) {
 			List<TreeElement> result = new List<TreeElement>(100);
 
-			NamespaceInfo selectedNamespace = Pages.FindNamespace(lstNamespace.SelectedValue);
+			NamespaceInfo selectedNamespace = Pages.FindNamespace(currentWiki, lstNamespace.SelectedValue);
 			NamespaceInfo currentNamespace = DetectNamespaceInfo();
 
-			foreach(PageInfo pi in Pages.GetPages(selectedNamespace)) {
+			foreach(PageInfo pi in Pages.GetPages(currentWiki, selectedNamespace)) {
 				PageContent cont = Content.GetPageContent(pi);
-				string formattedTitle = FormattingPipeline.PrepareTitle(cont.Title, false, FormattingContext.Other, pi);
+				string formattedTitle = FormattingPipeline.PrepareTitle(currentWiki, cont.Title, false, FormattingContext.Other, pi);
 				string onClickJavascript = "javascript:";
 				// Populate the page title box if the title is different to the page name
 				if (pi.FullName != cont.Title) {
@@ -187,7 +190,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected List<TreeElement> ctFiles_Populate(object sender, PopulateEventArgs e) {
-			IFilesStorageProviderV30 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviderFiles.SelectedValue);
+			IFilesStorageProviderV30 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(currentWiki, lstProviderFiles.SelectedValue);
 			return BuildFilesSubTree(p, "/");
 		}
 
@@ -241,7 +244,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected List<TreeElement> cibImages_Populate(object sender, PopulateEventArgs e) {
-			IFilesStorageProviderV30 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviderImages.SelectedValue);
+			IFilesStorageProviderV30 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviderImages.SelectedValue, currentWiki);
 			return BuildImagesSubTree(p, "/");
 		}
 

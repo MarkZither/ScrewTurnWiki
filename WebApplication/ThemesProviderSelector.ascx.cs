@@ -13,8 +13,10 @@ namespace ScrewTurn.Wiki {
 		private ProviderType providerType = ProviderType.Themes;
 		private bool excludeReadOnly = false;
 		private UsersProviderIntendedUse usersProviderIntendedUse = UsersProviderIntendedUse.AccountsManagement;
+		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = Tools.DetectCurrentWiki();
 			
 			object t = ViewState["ProviderType"];
 			if(t != null) providerType = (ProviderType)t;
@@ -35,7 +37,7 @@ namespace ScrewTurn.Wiki {
 			IProviderV30[] allProviders = null;
 			string defaultProvider = null;
 
-			allProviders = Collectors.CollectorsBox.ThemeProviderCollector.AllProviders;
+			allProviders = Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki);
 			lstThemesProviders.Items.Clear();
 
 			int count = 0;
@@ -103,7 +105,7 @@ namespace ScrewTurn.Wiki {
 		private void FillThemes(string provider) { 
 			lstThemes.Items.Clear();
 			lstThemes.Items.Add(new ListItem(Properties.Messages.SelectTheme, ""));
-			foreach(string th in Themes.ListThemes(provider)) {
+			foreach(string th in Themes.ListThemes(currentWiki, provider)) {
 				lstThemes.Items.Add(new ListItem(th, th));
 			}
 		}

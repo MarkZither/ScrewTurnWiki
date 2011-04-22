@@ -17,11 +17,12 @@ namespace ScrewTurn.Wiki {
 	public partial class Error : BasePage {
 
 		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = Properties.Messages.ErrorTitle + " - " + Settings.WikiTitle;
+			string currentWiki = DetectWiki();
+			Page.Title = Properties.Messages.ErrorTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
 			Exception ex = Session["LastError"] as Exception;
 			if(ex != null && SessionFacade.LoginKey != null &&
-				AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) {
+				AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) {
 
 				lblException.Text = ex.ToString();
 			}

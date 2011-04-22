@@ -15,7 +15,7 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageNamespaces(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageNamespaces(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(DetectWiki()))) UrlTools.Redirect("AccessDenied.aspx");
 
 			if(!Page.IsPostBack) {
 				rptNamespaces.DataBind();
@@ -23,23 +23,25 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptNamespaces_DataBinding(object sender, EventArgs e) {
-			List<NamespaceInfo> namespaces = Pages.GetNamespaces();
+			string currentWiki = DetectWiki();
+
+			List<NamespaceInfo> namespaces = Pages.GetNamespaces(currentWiki);
 
 			List<NamespaceRow> result = new List<NamespaceRow>(namespaces.Count);
 
-			bool canSetPermissions = AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
+			bool canSetPermissions = AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 
-			PageInfo defaultPage = Pages.FindPage(Settings.DefaultPage);
+			PageInfo defaultPage = Pages.FindPage(currentWiki, Settings.GetDefaultPage(currentWiki));
 
 			// Inject the root namespace as first entry, retrieving the default page in Settings
 			result.Add(new NamespaceRow(new NamespaceInfo(RootName, defaultPage.Provider, defaultPage),
-				Settings.GetTheme(null),
-				Pages.GetPages(null).Count, Pages.GetCategories(null).Count,
+				Settings.GetTheme(currentWiki, null),
+				Pages.GetPages(currentWiki, null).Count, Pages.GetCategories(currentWiki, null).Count,
 				canSetPermissions, txtCurrentNamespace.Value == RootName));
 
 			foreach(NamespaceInfo ns in namespaces) {
-				result.Add(new NamespaceRow(ns, Settings.GetTheme(ns.Name),
-					Pages.GetPages(ns).Count, Pages.GetCategories(ns).Count,
+				result.Add(new NamespaceRow(ns, Settings.GetTheme(currentWiki, ns.Name),
+					Pages.GetPages(currentWiki, ns).Count, Pages.GetCategories(currentWiki, ns).Count,
 					canSetPermissions, txtCurrentNamespace.Value == ns.Name));
 			}
 
@@ -49,13 +51,15 @@ namespace ScrewTurn.Wiki {
 		protected void rptNamespaces_ItemCommand(object sender, RepeaterCommandEventArgs e) {
 			txtCurrentNamespace.Value = e.CommandArgument as string;
 
+			string currentWiki = DetectWiki();
+
 			NamespaceInfo nspace = txtCurrentNamespace.Value != RootName ?
-				Pages.FindNamespace(txtCurrentNamespace.Value) : null;
+				Pages.FindNamespace(currentWiki, txtCurrentNamespace.Value) : null;
 
 			if(e.CommandName == "Select") {
 				// rptNamespaces.DataBind(); Not needed because the list is hidden on select
 
-				string theme = Settings.GetTheme(nspace != null ? nspace.Name : null);
+				string theme = Settings.GetTheme(currentWiki, nspace != null ? nspace.Name : null);
 
 				txtName.Enabled = false;
 				txtName.Text = nspace != null ? nspace.Name : RootNameUnescaped;
@@ -79,7 +83,7 @@ namespace ScrewTurn.Wiki {
 				lblResult.CssClass = "";
 			}
 			else if(e.CommandName == "Perms") {
-				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 				permissionsManager.CurrentResourceName = nspace != null ? nspace.Name : null;
 
@@ -94,84 +98,90 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnPublic_Click(object sender, EventArgs e) {
-			NamespaceInfo nspace = Pages.FindNamespace(txtCurrentNamespace.Value);
+			string currentWiki = DetectWiki();
+
+			NamespaceInfo nspace = Pages.FindNamespace(currentWiki, txtCurrentNamespace.Value);
 
 			RemoveAllPermissions(nspace);
 
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			// Set permissions
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.FullControl,
-				Users.FindUserGroup(Settings.AdministratorsGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAdministratorsGroup(currentWiki)));
 
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.CreatePages,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ManageCategories,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ModifyPages,
-				Users.FindUserGroup(Settings.AnonymousGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
-				Users.FindUserGroup(Settings.AnonymousGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
-				Users.FindUserGroup(Settings.AnonymousGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)));
 
 			RefreshPermissionsManager();
 		}
 
 		protected void btnNormal_Click(object sender, EventArgs e) {
-			NamespaceInfo nspace = Pages.FindNamespace(txtCurrentNamespace.Value);
+			string currentWiki = DetectWiki();
+
+			NamespaceInfo nspace = Pages.FindNamespace(currentWiki, txtCurrentNamespace.Value);
 
 			RemoveAllPermissions(nspace);
 
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			// Set permissions
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.FullControl,
-				Users.FindUserGroup(Settings.AdministratorsGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAdministratorsGroup(currentWiki)));
 
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.CreatePages,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ManageCategories,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ReadPages,
-				Users.FindUserGroup(Settings.AnonymousGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ReadDiscussion,
-				Users.FindUserGroup(Settings.AnonymousGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
-				Users.FindUserGroup(Settings.AnonymousGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)));
 
 			RefreshPermissionsManager();
 		}
 
 		protected void btnPrivate_Click(object sender, EventArgs e) {
-			NamespaceInfo nspace = Pages.FindNamespace(txtCurrentNamespace.Value);
+			string currentWiki = DetectWiki();
+
+			NamespaceInfo nspace = Pages.FindNamespace(currentWiki, txtCurrentNamespace.Value);
 
 			RemoveAllPermissions(nspace);
 
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			// Set permissions
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.FullControl,
-				Users.FindUserGroup(Settings.AdministratorsGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetAdministratorsGroup(currentWiki)));
 
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.CreatePages,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.ManageCategories,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.PostDiscussion,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, nspace, Actions.ForNamespaces.DownloadAttachments,
-				Users.FindUserGroup(Settings.UsersGroup));
+				Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)));
 
 			RefreshPermissionsManager();
 		}
@@ -189,14 +199,16 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		private void RemoveAllPermissions(NamespaceInfo nspace) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
-			authWriter.RemoveEntriesForNamespace(Users.FindUserGroup(Settings.AnonymousGroup), nspace);
-			authWriter.RemoveEntriesForNamespace(Users.FindUserGroup(Settings.UsersGroup), nspace);
-			authWriter.RemoveEntriesForNamespace(Users.FindUserGroup(Settings.AdministratorsGroup), nspace);
+			string currentWiki = DetectWiki();
+
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
+			authWriter.RemoveEntriesForNamespace(Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)), nspace);
+			authWriter.RemoveEntriesForNamespace(Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)), nspace);
+			authWriter.RemoveEntriesForNamespace(Users.FindUserGroup(currentWiki, Settings.GetAdministratorsGroup(currentWiki)), nspace);
 		}
 
 		protected void cvName_ServerValidate(object sender, ServerValidateEventArgs e) {
-			e.IsValid = Pages.FindNamespace(txtName.Text) == null;
+			e.IsValid = Pages.FindNamespace(DetectWiki(), txtName.Text) == null;
 		}
 
 		protected void cvName2_ServerValidate(object sender, ServerValidateEventArgs e) {
@@ -204,30 +216,32 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnCreate_Click(object sender, EventArgs e) {
+			string currentWiki = DetectWiki();
+
 			txtName.Text = txtName.Text.Trim();
 
 			Page.Validate("namespace");
 			if(!Page.IsValid) return;
 
 			// Create new namespace and the default page (MainPage)
-			bool done = Pages.CreateNamespace(txtName.Text,
-				Collectors.CollectorsBox.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider));
+			bool done = Pages.CreateNamespace(currentWiki, txtName.Text,
+				Collectors.CollectorsBox.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider, currentWiki));
 
 			if(done) {
-				NamespaceInfo nspace = Pages.FindNamespace(txtName.Text);
-				done = Pages.CreatePage(nspace, "MainPage");
-				PageInfo page = Pages.FindPage(NameTools.GetFullName(nspace.Name, "MainPage"));
+				NamespaceInfo nspace = Pages.FindNamespace(currentWiki, txtName.Text);
+				done = Pages.CreatePage(currentWiki, nspace, "MainPage");
+				PageInfo page = Pages.FindPage(currentWiki, NameTools.GetFullName(nspace.Name, "MainPage"));
 
 				if(done) {
-					done = Pages.ModifyPage(page, "Main Page", Log.SystemUsername,
+					done = Pages.ModifyPage(currentWiki, page, "Main Page", Log.SystemUsername,
 						DateTime.Now, "", Defaults.MainPageContentForSubNamespace,
 						new string[0], "", SaveMode.Normal);
 
 					if(done) {
-						done = Pages.SetNamespaceDefaultPage(nspace, page);
+						done = Pages.SetNamespaceDefaultPage(currentWiki, nspace, page);
 
 						if(done) {
-							Settings.SetTheme(nspace.Name, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
+							Settings.SetTheme(currentWiki, nspace.Name, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
 
 							if(done) {
 								RefreshList();
@@ -264,17 +278,19 @@ namespace ScrewTurn.Wiki {
 		protected void btnSave_Click(object sender, EventArgs e) {
 			// This can rarely occur
 			if(string.IsNullOrEmpty(lstDefaultPage.SelectedValue)) return;
+			
+			string currentWiki = DetectWiki();
 
 			NamespaceInfo nspace = txtCurrentNamespace.Value != RootName ?
-				Pages.FindNamespace(txtCurrentNamespace.Value) : null;
+				Pages.FindNamespace(currentWiki, txtCurrentNamespace.Value) : null;
 
-			bool done = Pages.SetNamespaceDefaultPage(nspace, Pages.FindPage(lstDefaultPage.SelectedValue));
+			bool done = Pages.SetNamespaceDefaultPage(currentWiki, nspace, Pages.FindPage(currentWiki, lstDefaultPage.SelectedValue));
 
 			if(done) {
 				if(string.IsNullOrEmpty(providerThSelector.SelectedThemes)) done = false;
 				
 				if(done) {
-					Settings.SetTheme(nspace != null ? nspace.Name : null, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
+					Settings.SetTheme(currentWiki, nspace != null ? nspace.Name : null, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
 					RefreshList();
 					lblResult.CssClass = "resultok";
 					lblResult.Text = Properties.Messages.NamespaceSaved;
@@ -296,7 +312,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnConfirmDeletion_Click(object sender, EventArgs e) {
-			bool done = Pages.RemoveNamespace(Pages.FindNamespace(txtCurrentNamespace.Value));
+			bool done = Pages.RemoveNamespace(DetectWiki(), Pages.FindNamespace(DetectWiki(), txtCurrentNamespace.Value));
 
 			if(done) {
 				RefreshList();
@@ -346,12 +362,14 @@ namespace ScrewTurn.Wiki {
 		private void LoadDefaultPages() {
 			// Populate default page, if there is a namespace selected
 			if(!string.IsNullOrEmpty(txtCurrentNamespace.Value)) {
+				string currentWiki = DetectWiki();
+
 				NamespaceInfo nspace = Pages.FindNamespace(
-					txtCurrentNamespace.Value != RootName ? txtCurrentNamespace.Value : null);
+					currentWiki, txtCurrentNamespace.Value != RootName ? txtCurrentNamespace.Value : null);
 
-				List<PageInfo> pages = Pages.GetPages(nspace);
+				List<PageInfo> pages = Pages.GetPages(currentWiki, nspace);
 
-				string currentDefaultPage = nspace != null ? nspace.DefaultPage.FullName : Settings.DefaultPage;
+				string currentDefaultPage = nspace != null ? nspace.DefaultPage.FullName : Settings.GetDefaultPage(currentWiki);
 
 				lstDefaultPage.Items.Clear();
 				foreach(PageInfo page in pages) {
@@ -393,7 +411,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void cvNewName_ServerValidate(object sender, ServerValidateEventArgs e) {
-			e.IsValid = Pages.FindNamespace(txtNewName.Text) == null;
+			e.IsValid = Pages.FindNamespace(DetectWiki(), txtNewName.Text) == null;
 		}
 
 		protected void cvNewName2_ServerValidate(object sender, ServerValidateEventArgs e) {
@@ -409,11 +427,13 @@ namespace ScrewTurn.Wiki {
 			Page.Validate("rename");
 			if(!Page.IsValid) return;
 
-			NamespaceInfo nspace = Pages.FindNamespace(txtCurrentNamespace.Value);
-			string theme = Settings.GetTheme(nspace.Name);
+			string currentWiki = DetectWiki();
 
-			if(Pages.RenameNamespace(nspace, txtNewName.Text)) {
-				Settings.SetTheme(txtNewName.Text, theme);
+			NamespaceInfo nspace = Pages.FindNamespace(currentWiki, txtCurrentNamespace.Value);
+			string theme = Settings.GetTheme(currentWiki, nspace.Name);
+
+			if(Pages.RenameNamespace(currentWiki, nspace, txtNewName.Text)) {
+				Settings.SetTheme(currentWiki, txtNewName.Text, theme);
 				RefreshList();
 				lblRenameResult.CssClass = "resultok";
 				lblRenameResult.Text = Properties.Messages.NamespaceRenamed;

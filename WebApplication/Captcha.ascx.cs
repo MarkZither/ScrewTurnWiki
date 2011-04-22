@@ -37,7 +37,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void cvCaptcha_ServerValidate(object source, ServerValidateEventArgs args) {
-			if(!Settings.DisableCaptchaControl) {
+			if(!Settings.GetDisableCaptchaControl(Tools.DetectCurrentWiki())) {
 				args.IsValid = txtCaptcha.Text == (string)Session["__Captcha"];
 			}
 			else {

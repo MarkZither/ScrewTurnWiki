@@ -13,8 +13,11 @@ namespace ScrewTurn.Wiki {
 
 		private PageInfo currentPage = null;
         private bool inWYSIWYG = false;
+		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = Tools.DetectCurrentWiki();
+
 			if(!Page.IsPostBack) {
 				NamespaceInfo currentNamespace = Tools.DetectCurrentNamespaceInfo();
 				string currentNamespaceName = currentNamespace != null ? currentNamespace.Name + "." : "";
@@ -134,8 +137,10 @@ namespace ScrewTurn.Wiki {
 
             //added for WYSIWYG
             //if last view was WYSIWYG take text from WYSIWYG to Markup
-            if(inWYSIWYG)
-                txtMarkup.Text = ReverseFormatter.ReverseFormat(lblWYSIWYG.Text);
+			if(inWYSIWYG) {
+				ReverseFormatter reverseFormatter = new ReverseFormatter();
+				txtMarkup.Text = reverseFormatter.ReverseFormat(currentWiki, lblWYSIWYG.Text);
+			}
             //end
 		}
 
@@ -145,7 +150,7 @@ namespace ScrewTurn.Wiki {
             //added for WYSIWYG
 			//lblWYSIWYG.Text = FormattingPipeline.FormatWithPhase1And2(txtMarkup.Text, null);
 			string[] links = null;
-			lblWYSIWYG.Text = Formatter.Format(txtMarkup.Text.Replace("<", "&lt;").Replace(">", "&gt;"),
+			lblWYSIWYG.Text = Formatter.Format(currentWiki, txtMarkup.Text.Replace("<", "&lt;").Replace(">", "&gt;"),
 				false, FormattingContext.Unknown, null, out links, true);
             //end
 		}
@@ -158,14 +163,15 @@ namespace ScrewTurn.Wiki {
             //in both cases I need to synchronize WYSIWYG and Markup view
             if(inWYSIWYG) {
 				lblPreview.Text = lblWYSIWYG.Text.Replace("&lt;", "<").Replace("&gt;", ">");
-                txtMarkup.Text = ReverseFormatter.ReverseFormat(lblWYSIWYG.Text);
+				ReverseFormatter reverseFormatter = new ReverseFormatter();
+                txtMarkup.Text = reverseFormatter.ReverseFormat(currentWiki, lblWYSIWYG.Text);
             }
             else {
-                lblPreview.Text = FormattingPipeline.FormatWithPhase3(FormattingPipeline.FormatWithPhase1And2(txtMarkup.Text, false, FormattingContext.Unknown, null),
+                lblPreview.Text = FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, txtMarkup.Text, false, FormattingContext.Unknown, null),
 					FormattingContext.Unknown, null);
                 //lblWYSIWYG.Text = lblPreview.Text;
 				string[] links = null;
-				lblWYSIWYG.Text = Formatter.Format(txtMarkup.Text, false, FormattingContext.Unknown, null, out links, true);
+				lblWYSIWYG.Text = Formatter.Format(currentWiki, txtMarkup.Text, false, FormattingContext.Unknown, null, out links, true);
             }
             //end
 		}
@@ -201,7 +207,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void LoadSnippets() {
 			StringBuilder sb = new StringBuilder(1000);
-			foreach(Snippet s in Snippets.GetSnippets()) {
+			foreach(Snippet s in Snippets.GetSnippets(currentWiki)) {
 				string[] parameters = Snippets.ExtractParameterNames(s);
 				int paramCount = parameters.Length;
 				string label;
@@ -279,7 +285,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The content.</returns>
 		public string GetContent() {
-			if(inWYSIWYG) return ReverseFormatter.ReverseFormat(lblWYSIWYG.Text);
+			if(inWYSIWYG) {
+				ReverseFormatter reverseFormatter = new ReverseFormatter();
+				return reverseFormatter.ReverseFormat(currentWiki, lblWYSIWYG.Text);
+			}
 			else return txtMarkup.Text;
 		}
 

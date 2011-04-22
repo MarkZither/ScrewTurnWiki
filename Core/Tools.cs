@@ -461,6 +461,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Detects the name of the current wiki using the <b>Wiki</b> parameter in the query string.
+		/// </summary>
+		/// <returns>The name of the wiki, or null.</returns>
+		public static string DetectCurrentWiki() {
+			return HttpContext.Current.Request["Wiki"] != null ? HttpContext.Current.Request["Wiki"] : null;
+		}
+
+		/// <summary>
 		/// Gets the message ID for HTML anchors.
 		/// </summary>
 		/// <param name="messageDateTime">The message date/time.</param>

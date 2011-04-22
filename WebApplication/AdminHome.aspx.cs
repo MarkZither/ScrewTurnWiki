@@ -18,7 +18,9 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			string currentWiki = DetectWiki();
+
+			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) UrlTools.Redirect("AccessDenied.aspx");
 
 			PrintSystemStatus();
 
@@ -28,8 +30,8 @@ namespace ScrewTurn.Wiki {
 
 				DisplayOrphansCount();
 
-				string anon = Settings.AnonymousGroup;
-				foreach(UserGroup group in Users.GetUserGroups()) {
+				string anon = Settings.GetAnonymousGroup(currentWiki);
+				foreach(UserGroup group in Users.GetUserGroups(currentWiki)) {
 					if(group.Name != anon) {
 						ListItem item = new ListItem(group.Name, group.Name);
 						item.Selected = true;
@@ -43,9 +45,10 @@ namespace ScrewTurn.Wiki {
 		/// Displays the orphan pages count.
 		/// </summary>
 		private void DisplayOrphansCount() {
-			int orphans = Pages.GetOrphanedPages(null).Length;
-			foreach(NamespaceInfo nspace in Pages.GetNamespaces()) {
-				orphans += Pages.GetOrphanedPages(nspace).Length;
+			string currentWiki = DetectWiki();
+			int orphans = Pages.GetOrphanedPages(currentWiki, null).Length;
+			foreach(NamespaceInfo nspace in Pages.GetNamespaces(currentWiki)) {
+				orphans += Pages.GetOrphanedPages(currentWiki, nspace).Length;
 			}
 			lblOrphanPagesCount.Text = orphans.ToString();
 		}
@@ -67,20 +70,21 @@ namespace ScrewTurn.Wiki {
 			Page.Validate("email");
 			if(!Page.IsValid) return;
 
+			string currentWiki = DetectWiki();
 			List<string> emails = new List<string>();
 			foreach(ListItem item in lstGroups.Items) {
 				if(item.Selected) {
-					UserGroup group = Users.FindUserGroup(item.Value);
+					UserGroup group = Users.FindUserGroup(currentWiki, item.Value);
 					if(group != null) {
 						foreach(string user in group.Users) {
-							UserInfo u = Users.FindUser(user);
+							UserInfo u = Users.FindUser(currentWiki, user);
 							if(u != null) emails.Add(u.Email);
 						}
 					}
 				}
 			}
 
-			EmailTools.AsyncSendMassEmail(emails.ToArray(), Settings.SenderEmail,
+			EmailTools.AsyncSendMassEmail(emails.ToArray(), GlobalSettings.SenderEmail,
 				txtSubject.Text, txtBody.Text, false);
 
 			lblEmailResult.CssClass = "resultok";
@@ -90,13 +94,15 @@ namespace ScrewTurn.Wiki {
 		protected void rptPages_DataBinding(object sender, EventArgs e) {
 			List<WantedPageRow> result = new List<WantedPageRow>(50);
 
-			Dictionary<string, List<string>> links = Pages.GetWantedPages(null);
+			string currentWiki = DetectWiki();
+
+			Dictionary<string, List<string>> links = Pages.GetWantedPages(currentWiki, null);
 			foreach(KeyValuePair<string, List<string>> pair in links) {
 				result.Add(new WantedPageRow("&lt;root&gt;", "", pair.Key, pair.Value));
 			}
 
-			foreach(NamespaceInfo nspace in Pages.GetNamespaces()) {
-				links = Pages.GetWantedPages(nspace.Name);
+			foreach(NamespaceInfo nspace in Pages.GetNamespaces(currentWiki)) {
+				links = Pages.GetWantedPages(currentWiki, nspace.Name);
 				foreach(KeyValuePair<string, List<string>> pair in links) {
 					result.Add(new WantedPageRow(nspace.Name, nspace.Name + ".", pair.Key, pair.Value));
 				}
@@ -106,9 +112,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnRebuildPageLinks_Click(object sender, EventArgs e) {
-			RebuildPageLinks(Pages.GetPages(null));
-			foreach(NamespaceInfo nspace in Pages.GetNamespaces()) {
-				RebuildPageLinks(Pages.GetPages(nspace));
+			string currentWiki = DetectWiki();
+
+			RebuildPageLinks(Pages.GetPages(currentWiki, null));
+			foreach(NamespaceInfo nspace in Pages.GetNamespaces(currentWiki)) {
+				RebuildPageLinks(Pages.GetPages(currentWiki, nspace));
 			}
 
 			DisplayOrphansCount();
@@ -119,16 +127,18 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="pages">The pages.</param>
 		private void RebuildPageLinks(IList<PageInfo> pages) {
+			string currentWiki = DetectWiki();
+
 			foreach(PageInfo page in pages) {
 				PageContent content = Content.GetPageContent(page);
-				Pages.StorePageOutgoingLinks(page, content.Content);				
+				Pages.StorePageOutgoingLinks(currentWiki, page, content.Content);				
 			}
 		}
 
 		protected void rptIndex_DataBinding(object sender, EventArgs e) {
 			List<IndexRow> result = new List<IndexRow>(5);
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(DetectWiki())) {
 				result.Add(new IndexRow(prov));
 			}
 
@@ -138,7 +148,7 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_ItemCommand(object sender, CommandEventArgs e) {
 			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername());
 
-			IPagesStorageProviderV30 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string);
+			IPagesStorageProviderV30 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, DetectWiki());
 			provider.RebuildIndex();
 
 			Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername);
@@ -160,12 +170,12 @@ namespace ScrewTurn.Wiki {
 			StringBuilder sb = new StringBuilder(500);
 			int inactive = 0;
 
-			List<UserInfo> users = Users.GetUsers();
+			List<UserInfo> users = Users.GetUsers(DetectWiki());
 			for(int i = 0; i < users.Count; i++) {
 				if(!users[i].Active) inactive++;
 			}
 			sb.Append(Properties.Messages.UserCount + ": <b>" + users.Count.ToString() + "</b> (" + inactive.ToString() + " " + Properties.Messages.InactiveUsers + ")<br />" + "\n");
-			sb.Append(Properties.Messages.WikiVersion + ": <b>" + Settings.WikiVersion + "</b>" + "\n");
+			sb.Append(Properties.Messages.WikiVersion + ": <b>" + GlobalSettings.WikiVersion + "</b>" + "\n");
 			if(!Page.IsPostBack) {
 				sb.Append(CheckVersion());
 			}
@@ -177,7 +187,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private string CheckVersion() {
-			if(Settings.DisableAutomaticVersionCheck) return "";
+			if(GlobalSettings.DisableAutomaticVersionCheck) return "";
 
 			StringBuilder sb = new StringBuilder(100);
 			sb.Append("(");
@@ -185,7 +195,7 @@ namespace ScrewTurn.Wiki {
 			string newVersion = null;
 			string ignored = null;
 			UpdateStatus status = Tools.GetUpdateStatus("http://www.screwturn.eu/Version/Wiki/3.htm",
-				Settings.WikiVersion, out newVersion, out ignored);
+				GlobalSettings.WikiVersion, out newVersion, out ignored);
 
 			if(status == UpdateStatus.Error) {
 				sb.Append(@"<span class=""resulterror"">" + Properties.Messages.VersionCheckError + "</span>");
@@ -223,14 +233,16 @@ namespace ScrewTurn.Wiki {
 			this.nspacePrefix = nspacePrefix;
 			this.name = name;
 
+			string currentWiki = Tools.DetectCurrentWiki();
+
 			StringBuilder sb = new StringBuilder(100);
 			for(int i = 0; i < linkingPages.Count; i++) {
-				PageInfo page = Pages.FindPage(linkingPages[i]);
+				PageInfo page = Pages.FindPage(currentWiki, linkingPages[i]);
 				if(page != null) {
 					PageContent content = Content.GetPageContent(page);
 
-					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" target=""_blank"">{2}</a>, ", page.FullName, Settings.PageExtension,
-						FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page));
+					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" target=""_blank"">{2}</a>, ", page.FullName, GlobalSettings.PageExtension,
+						FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.Other, page));
 				}
 			}
 			this.linkingPages = sb.ToString().TrimEnd(' ', ',');

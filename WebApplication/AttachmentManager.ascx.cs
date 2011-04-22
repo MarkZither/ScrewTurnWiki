@@ -26,6 +26,7 @@ namespace ScrewTurn.Wiki {
 		private bool isAdmin = false;
 
 		protected void Page_Load(object sender, EventArgs e) {
+			string currentWiki = Tools.DetectCurrentWiki();
 
 			if(!Page.IsPostBack) {
 				// Localized strings for JavaScript
@@ -41,9 +42,9 @@ namespace ScrewTurn.Wiki {
 				lblStrings.Text = sb.ToString();
 
 				// Setup upload information (max file size, allowed file types)
-				lblUploadFilesInfo.Text = lblUploadFilesInfo.Text.Replace("$1", Tools.BytesToString(Settings.MaxFileSize * 1024));
+				lblUploadFilesInfo.Text = lblUploadFilesInfo.Text.Replace("$1", Tools.BytesToString(GlobalSettings.MaxFileSize * 1024));
 				sb = new StringBuilder();
-				string[] aft = Settings.AllowedFileTypes;
+				string[] aft = Settings.GetAllowedFileTypes(currentWiki);
 				for(int i = 0; i < aft.Length; i++) {
 					sb.Append(aft[i].ToUpper());
 					if(i != aft.Length - 1) sb.Append(", ");
@@ -51,9 +52,9 @@ namespace ScrewTurn.Wiki {
 				lblUploadFilesInfo.Text = lblUploadFilesInfo.Text.Replace("$2", sb.ToString());
 
 				// Load Providers
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 					ListItem item = new ListItem(prov.Information.Name, prov.GetType().FullName);
-					if(item.Value == Settings.DefaultFilesProvider) {
+					if(item.Value == GlobalSettings.DefaultFilesProvider) {
 						item.Selected = true;
 					}
 					lstProviders.Items.Add(item);
@@ -63,7 +64,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Set provider
-			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue, currentWiki);
 
 			if(!Page.IsPostBack) {
 				rptItems.DataBind();
@@ -78,13 +79,14 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void DetectPermissions() {
 			if(CurrentPage != null) {
+				string currentWiki = Tools.DetectCurrentWiki();
 				string currentUser = SessionFacade.GetCurrentUsername();
-				string[] currentGroups = SessionFacade.GetCurrentGroupNames();
-				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+				string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
+				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 				canDownload = authChecker.CheckActionForPage(CurrentPage, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
 				canUpload = authChecker.CheckActionForPage(CurrentPage, Actions.ForPages.UploadAttachments, currentUser, currentGroups);
 				canDelete = authChecker.CheckActionForPage(CurrentPage, Actions.ForPages.DeleteAttachments, currentUser, currentGroups);
-				isAdmin = Array.Find(currentGroups, delegate(string g) { return g == Settings.AdministratorsGroup; }) != null;
+				isAdmin = Array.Find(currentGroups, delegate(string g) { return g == Settings.GetAdministratorsGroup(currentWiki); }) != null;
 			}
 			else {
 				canDownload = false;
@@ -112,7 +114,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <remarks>This property must be set at page load.</remarks>
 		public PageInfo CurrentPage {
-			get { return Pages.FindPage(ViewState["CP"] as string); }
+			get { return Pages.FindPage(Tools.DetectCurrentWiki(), ViewState["CP"] as string); }
 			set {
 				if(value == null) ViewState["CP"] = null;
 				else ViewState["CP"] = value.FullName;
@@ -125,7 +127,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptItems_DataBinding(object sender, EventArgs e) {
-			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue, Tools.DetectCurrentWiki());
 
 			if(provider == null || CurrentPage == null) {
 				return;
@@ -178,13 +180,13 @@ namespace ScrewTurn.Wiki {
 			if(canUpload) {
 				lblUploadResult.Text = "";				
 				if(fileUpload.HasFile) {
-					if(fileUpload.FileBytes.Length > Settings.MaxFileSize * 1024) {
+					if(fileUpload.FileBytes.Length > GlobalSettings.MaxFileSize * 1024) {
 						lblUploadResult.Text = Properties.Messages.FileTooBig;
 						lblUploadResult.CssClass = "resulterror";
 					}
 					else {
 						// Check file extension
-						string[] aft = Settings.AllowedFileTypes;
+						string[] aft = Settings.GetAllowedFileTypes(Tools.DetectCurrentWiki());
 						bool allowed = false;
 
 						if(aft.Length > 0 && aft[0] == "*") allowed = true;
@@ -212,7 +214,7 @@ namespace ScrewTurn.Wiki {
 								lblUploadResult.CssClass = "resulterror";
 							}
 							else {
-								Host.Instance.OnAttachmentActivity(provider.GetType().FullName,
+								Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 									fileUpload.FileName, CurrentPage.FullName, null, FileActivity.AttachmentUploaded);
 							}
 							rptItems.DataBind();
@@ -227,7 +229,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void lstProviders_SelectedIndexChanged(object sender, EventArgs e) {
-			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviders.SelectedValue, Tools.DetectCurrentWiki());
 			rptItems.DataBind();
 		}
 
@@ -249,7 +251,7 @@ namespace ScrewTurn.Wiki {
 						bool d = provider.DeletePageAttachment(CurrentPage, (string)e.CommandArgument);
 
 						if(d) {
-							Host.Instance.OnAttachmentActivity(provider.GetType().FullName,
+							Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 								(string)e.CommandArgument, CurrentPage.FullName, null, FileActivity.AttachmentDeleted);
 						}
 
@@ -289,7 +291,7 @@ namespace ScrewTurn.Wiki {
 					rptItems.Visible = true;
 					rptItems.DataBind();
 
-					Host.Instance.OnAttachmentActivity(provider.GetType().FullName,
+					Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 						txtNewName.Text, CurrentPage.FullName, lblItem.Text, FileActivity.AttachmentRenamed);
 				}
 				else {

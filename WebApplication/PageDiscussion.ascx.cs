@@ -146,20 +146,22 @@ namespace ScrewTurn.Wiki {
 			sb.Append(@"<div>");
 			sb.AppendFormat(@"<a id=""{0}"" href=""#{0}"" title=""Permalink"">&#0182;</a> ", Tools.GetMessageIdForAnchor(message.DateTime));
 
+			string currentWiki = Tools.DetectCurrentWiki();
+
 			// Print subject
 			if(message.Subject.Length > 0) {
 				sb.Append(@"<span class=""messagesubject"">");
-				sb.Append(FormattingPipeline.PrepareTitle(message.Subject, false, FormattingContext.MessageBody, currentPage));
+				sb.Append(FormattingPipeline.PrepareTitle(currentWiki, message.Subject, false, FormattingContext.MessageBody, currentPage));
 				sb.Append("</span>");
 			}
 
 			// Print message date/time
 			sb.Append(@"<span class=""messagedatetime"">");
-			sb.Append(Preferences.AlignWithTimezone(message.DateTime).ToString(Settings.DateTimeFormat));
+			sb.Append(Preferences.AlignWithTimezone(currentWiki, message.DateTime).ToString(Settings.GetDateTimeFormat(currentWiki)));
 			sb.Append(" ");
 			sb.Append(Properties.Messages.By);
 			sb.Append(" ");
-			sb.Append(Users.UserLink(message.Username));
+			sb.Append(Users.UserLink(currentWiki, message.Username));
 			sb.Append("</span>");
 
 			sb.Append("</div>");
@@ -168,7 +170,7 @@ namespace ScrewTurn.Wiki {
 
 			// Print body
 			sb.Append(@"<div class=""messagebody"">");
-			sb.Append(FormattingPipeline.FormatWithPhase3(FormattingPipeline.FormatWithPhase1And2(message.Body, false, FormattingContext.MessageBody, currentPage),
+			sb.Append(FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, message.Body, false, FormattingContext.MessageBody, currentPage),
 				FormattingContext.MessageBody, currentPage));
 			sb.Append("</div>");
 		}

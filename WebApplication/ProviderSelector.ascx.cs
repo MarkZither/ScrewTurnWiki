@@ -15,7 +15,11 @@ namespace ScrewTurn.Wiki {
 		private bool excludeReadOnly = false;
 		private UsersProviderIntendedUse usersProviderIntendedUse = UsersProviderIntendedUse.AccountsManagement;
 
+		private string currentWiki = null;
+
 		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = Tools.DetectCurrentWiki();
+			
 			object t = ViewState["ProviderType"];
 			if(t != null) providerType = (ProviderType)t;
 
@@ -38,19 +42,19 @@ namespace ScrewTurn.Wiki {
 			string defaultProvider = null;
 			switch(providerType) {
 				case ProviderType.Users:
-					allProviders = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
-					defaultProvider = Settings.DefaultUsersProvider;
+					allProviders = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki);
+					defaultProvider = GlobalSettings.DefaultUsersProvider;
 					break;
 				case ProviderType.Pages:
-					allProviders = Collectors.CollectorsBox.PagesProviderCollector.AllProviders;
-					defaultProvider = Settings.DefaultPagesProvider;
+					allProviders = Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki);
+					defaultProvider = GlobalSettings.DefaultPagesProvider;
 					break;
 				case ProviderType.Themes:
-					allProviders = Collectors.CollectorsBox.ThemeProviderCollector.AllProviders;
+					allProviders = Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki);
 					break;
 				case ProviderType.Files:
-					allProviders = Collectors.CollectorsBox.FilesProviderCollector.AllProviders;
-					defaultProvider = Settings.DefaultFilesProvider;
+					allProviders = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki);
+					defaultProvider = GlobalSettings.DefaultFilesProvider;
 					break;
 				default:
 					throw new NotSupportedException();

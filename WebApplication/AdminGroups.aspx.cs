@@ -15,12 +15,12 @@ namespace ScrewTurn.Wiki {
 			AdminMaster.RedirectToLoginIfNeeded();
 
 			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(DetectWiki());
 
 			if(!AdminMaster.CanManageGroups(currentUser, currentGroups)) UrlTools.Redirect("AccessDenied.aspx");
 			aclActionsSelector.Visible = AdminMaster.CanManagePermissions(currentUser, currentGroups);
 
-			revName.ValidationExpression = Settings.UsernameRegex;
+			revName.ValidationExpression = GlobalSettings.UsernameRegex;
 
 			if(!Page.IsPostBack) {
 				rptGroups.DataBind();
@@ -30,7 +30,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptGroups_DataBinding(object sender, EventArgs e) {
-			List<UserGroup> allGroups = Users.GetUserGroups();
+			List<UserGroup> allGroups = Users.GetUserGroups(DetectWiki());
 
 			List<UserGroupRow> result = new List<UserGroupRow>(allGroups.Count);
 
@@ -43,10 +43,11 @@ namespace ScrewTurn.Wiki {
 
 		protected void rptGroups_ItemCommand(object sender, RepeaterCommandEventArgs e) {
 			if(e.CommandName == "Select") {
+				string currentWiki = DetectWiki();
 				txtCurrentName.Value = e.CommandArgument as string;
 				//rptGroups.DataBind(); Not needed because the list is hidden on select
 
-				UserGroup group = Users.FindUserGroup(txtCurrentName.Value);
+				UserGroup group = Users.FindUserGroup(DetectWiki(), txtCurrentName.Value);
 
 				txtName.Text = group.Name;
 				txtName.Enabled = false;
@@ -55,7 +56,7 @@ namespace ScrewTurn.Wiki {
 				providerSelector.Enabled = false;
 
 				// Select group's global permissions
-				AuthReader authReader = new AuthReader(Collectors.CollectorsBox.SettingsProvider);
+				AuthReader authReader = new AuthReader(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 				aclActionsSelector.GrantedActions = authReader.RetrieveGrantsForGlobals(group);
 				aclActionsSelector.DeniedActions = authReader.RetrieveDenialsForGlobals(group);
 
@@ -63,9 +64,9 @@ namespace ScrewTurn.Wiki {
 				btnSave.Visible = true;
 				btnDelete.Visible = true;
 				bool isDefaultGroup =
-					group.Name == Settings.AdministratorsGroup ||
-					group.Name == Settings.UsersGroup ||
-					group.Name == Settings.AnonymousGroup;
+					group.Name == Settings.GetAdministratorsGroup(currentWiki) ||
+					group.Name == Settings.GetUsersGroup(currentWiki) ||
+					group.Name == Settings.GetAnonymousGroup(currentWiki);
 				
 				pnlEditGroup.Visible = true;
 				pnlList.Visible = false;
@@ -109,7 +110,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void cvName_ServerValidate(object sender, ServerValidateEventArgs e) {
-			if(txtName.Enabled) e.IsValid = Users.FindUserGroup(txtName.Text) == null;
+			if(txtName.Enabled) e.IsValid = Users.FindUserGroup(DetectWiki(), txtName.Text) == null;
 			else e.IsValid = true;
 		}
 
@@ -124,6 +125,8 @@ namespace ScrewTurn.Wiki {
 		protected void btnCreate_Click(object sender, EventArgs e) {
 			if(!Page.IsValid) return;
 
+			string currentWiki = DetectWiki();
+
 			txtName.Text = txtName.Text.Trim();
 
 			lblResult.CssClass = "";
@@ -132,12 +135,12 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Group creation requested for " + txtName.Text, EntryType.General, SessionFacade.CurrentUsername);
 
 			// Add the new group then set its global permissions
-			bool done = Users.AddUserGroup(txtName.Text, txtDescription.Text,
-				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider));
+			bool done = Users.AddUserGroup(currentWiki, txtName.Text, txtDescription.Text,
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider, currentWiki));
 
 			UserGroup currentGroup = null;
 			if(done) {
-				currentGroup = Users.FindUserGroup(txtName.Text);
+				currentGroup = Users.FindUserGroup(currentWiki, txtName.Text);
 				done = AddAclEntries(currentGroup, aclActionsSelector.GrantedActions, aclActionsSelector.DeniedActions);
 
 				if(done) {
@@ -165,7 +168,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Group update requested for " + txtCurrentName.Value, EntryType.General, SessionFacade.CurrentUsername);
 
-			UserGroup currentGroup = Users.FindUserGroup(txtCurrentName.Value);
+			UserGroup currentGroup = Users.FindUserGroup(DetectWiki(), txtCurrentName.Value);
 
 			// Perform proper actions based on provider read-only settings
 			// 1. If possible, modify group
@@ -210,14 +213,16 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Group deletion requested for " + txtCurrentName.Value, EntryType.General, SessionFacade.CurrentUsername);
 
-			UserGroup currentGroup = Users.FindUserGroup(txtCurrentName.Value);
+			string currentWiki = DetectWiki();
+
+			UserGroup currentGroup = Users.FindUserGroup(currentWiki, txtCurrentName.Value);
 
 			if(currentGroup.Provider.UserGroupsReadOnly) return;
 
 			// Remove all global permissions for the group then delete it
 			bool done = RemoveAllAclEntries(currentGroup);
 			if(done) {
-				done = Users.RemoveUserGroup(currentGroup);
+				done = Users.RemoveUserGroup(currentWiki, currentGroup);
 
 				if(done) {
 					RefreshList();
@@ -247,7 +252,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="group">The group.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private bool RemoveAllAclEntries(UserGroup group) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(DetectWiki()));
 			return authWriter.RemoveEntriesForGlobals(group);
 		}
 
@@ -259,7 +264,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="denials">The denied actions.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private bool AddAclEntries(UserGroup group, string[] grants, string[] denials) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(DetectWiki()));
 			foreach(string action in grants) {
 				bool done = authWriter.SetPermissionForGlobals(AuthStatus.Grant, action, group);
 				if(!done) return false;

@@ -12,10 +12,12 @@ namespace ScrewTurn.Wiki {
 	public partial class MasterPageSA : System.Web.UI.MasterPage {
 
 		private string currentNamespace = null;
+		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
 			// Try to detect current namespace
 			currentNamespace = Tools.DetectCurrentNamespace();
+			currentWiki = Tools.DetectCurrentWiki();
 
 			lblStrings.Text = string.Format("<script type=\"text/javascript\">\r\n<!--\r\n__BaseName = \"{0}\";\r\n__ConfirmMessage = \"{1}\";\r\n// -->\r\n</script>",
 				CphMasterSA.ClientID + "_", Properties.Messages.ConfirmOperation);
@@ -44,7 +46,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public void PrintHtmlHead() {
 			Literal c = new Literal();
-			c.Text = Tools.GetIncludes(Tools.DetectCurrentNamespace());
+			c.Text = Tools.GetIncludes(currentWiki, Tools.DetectCurrentNamespace());
 			Page.Header.Controls.Add(c);
 		}
 		
@@ -52,20 +54,20 @@ namespace ScrewTurn.Wiki {
 		/// Prints the header.
 		/// </summary>
 		public void PrintHeader() {
-			string h = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Header, currentNamespace),
+			string h = FormattingPipeline.FormatWithPhase1And2(currentWiki, Settings.GetProvider(currentWiki).GetMetaDataItem(MetaDataItem.Header, currentNamespace),
 					false, FormattingContext.Header, null);
 
-			lblHeaderDiv.Text = FormattingPipeline.FormatWithPhase3(h, FormattingContext.Header, null);
+			lblHeaderDiv.Text = FormattingPipeline.FormatWithPhase3(currentWiki, h, FormattingContext.Header, null);
 		}
 
 		/// <summary>
 		/// Prints the footer.
 		/// </summary>
 		public void PrintFooter() {
-			string f = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Footer, currentNamespace),
+			string f = FormattingPipeline.FormatWithPhase1And2(currentWiki, Settings.GetProvider(currentWiki).GetMetaDataItem(MetaDataItem.Footer, currentNamespace),
 					false, FormattingContext.Footer, null);
 
-			lblFooterDiv.Text = FormattingPipeline.FormatWithPhase3(f, FormattingContext.Footer, null);
+			lblFooterDiv.Text = FormattingPipeline.FormatWithPhase3(currentWiki, f, FormattingContext.Footer, null);
 		}
 
 	}

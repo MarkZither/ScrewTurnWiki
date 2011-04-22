@@ -17,24 +17,26 @@ namespace ScrewTurn.Wiki {
 	public partial class Language : BasePage {
 
 		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = "Language/Time Zone - " + Settings.WikiTitle;
+			string currentWiki = DetectWiki();
+
+			Page.Title = "Language/Time Zone - " + Settings.GetWikiTitle(currentWiki);
 
 			if(SessionFacade.LoginKey != null && SessionFacade.GetCurrentUsername() != "admin") UrlTools.Redirect("Profile.aspx");
 
 			if(!Page.IsPostBack) {
 				// Load values stored in cookie
-				HttpCookie cookie = Request.Cookies[Settings.CultureCookieName];
+				HttpCookie cookie = Request.Cookies[GlobalSettings.CultureCookieName];
 
 				languageSelector.LoadLanguages();
 
 				string culture = null;
 				if(cookie != null) culture = cookie["C"];
-				else culture = Settings.DefaultLanguage;
+				else culture = Settings.GetDefaultLanguage(currentWiki);
 				languageSelector.SelectedLanguage = culture;
 
 				string timezone = null;
 				if(cookie != null) timezone = cookie["T"];
-				else timezone = Settings.DefaultTimezone.ToString();
+				else timezone = Settings.GetDefaultTimezone(currentWiki).ToString();
 				languageSelector.SelectedTimezone = timezone;
 
 				if(!string.IsNullOrEmpty(Request["Language"])) {

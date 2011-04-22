@@ -16,13 +16,14 @@ namespace ScrewTurn.Wiki {
 	public partial class AccessDenied : BasePage {
 
 		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = Properties.Messages.AccessDeniedTitle + " - " + Settings.WikiTitle;
+			string currentWiki = DetectWiki();
+			Page.Title = Properties.Messages.AccessDeniedTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
-			string n = Settings.Provider.GetMetaDataItem(MetaDataItem.AccessDeniedNotice, null);
+			string n = Settings.GetProvider(currentWiki).GetMetaDataItem(MetaDataItem.AccessDeniedNotice, null);
 			if(!string.IsNullOrEmpty(n)) {
-				n = FormattingPipeline.FormatWithPhase1And2(n, false, FormattingContext.Other, null);
+				n = FormattingPipeline.FormatWithPhase1And2(currentWiki, n, false, FormattingContext.Other, null);
 			}
-			if(!string.IsNullOrEmpty(n)) lblDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
+			if(!string.IsNullOrEmpty(n)) lblDescription.Text = FormattingPipeline.FormatWithPhase3(currentWiki, n, FormattingContext.Other, null);
 		}
 
 	}

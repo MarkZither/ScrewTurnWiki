@@ -21,6 +21,7 @@ namespace ScrewTurn.Wiki {
 
 		private PageInfo currentPage = null;
 		private PageContent currentContent = null;
+		private string currentWiki = null;
 		private bool isDraft = false;
 		private int currentSection = -1;
 
@@ -37,14 +38,14 @@ namespace ScrewTurn.Wiki {
 		/// <remarks><b>currentPage</b> should be set before calling this method.</remarks>
 		private void DetectPermissions() {
 			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			if(currentPage != null) {
-				Pages.CanEditPage(currentPage, currentUser, currentGroups, out canEdit, out canEditWithApproval);
+				Pages.CanEditPage(currentWiki, currentPage, currentUser, currentGroups, out canEdit, out canEditWithApproval);
 				canCreateNewPages = false; // Least privilege
-				canCreateNewCategories = authChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(currentPage.FullName)),
+				canCreateNewCategories = authChecker.CheckActionForNamespace(Pages.FindNamespace(currentWiki, NameTools.GetNamespace(currentPage.FullName)),
 					Actions.ForNamespaces.ManageCategories, currentUser, currentGroups);
 				canManagePageCategories = authChecker.CheckActionForPage(currentPage, Actions.ForPages.ManageCategories, currentUser, currentGroups);
 				canDownloadAttachments = authChecker.CheckActionForPage(currentPage, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
@@ -59,10 +60,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = DetectWiki();
 
-			Page.Title = Properties.Messages.EditTitle + " - " + Settings.WikiTitle;
+			Page.Title = Properties.Messages.EditTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
-			lblEditNotice.Text = Formatter.FormatPhase3(Formatter.Format(Settings.Provider.GetMetaDataItem(
+			lblEditNotice.Text = Formatter.FormatPhase3(currentWiki, Formatter.Format(currentWiki, Settings.GetProvider(currentWiki).GetMetaDataItem(
 				MetaDataItem.EditNotice, DetectNamespace()), false, FormattingContext.Other, null), FormattingContext.Other, null);
 
 			// Prepare page unload warning
@@ -88,7 +90,7 @@ namespace ScrewTurn.Wiki {
 			if(!Page.IsPostBack) {
 				PopulateCategories(new CategoryInfo[0]);
 
-				if(Settings.AutoGeneratePageNames) {
+				if(Settings.GetAutoGeneratePageNames(currentWiki)) {
 					pnlPageName.Visible = false;
 					pnlManualName.Visible = true;
 				}
@@ -98,7 +100,7 @@ namespace ScrewTurn.Wiki {
 			if(Request["Page"] != null) {
 				string name = Request["Page"];
 
-				currentPage = Pages.FindPage(name);
+				currentPage = Pages.FindPage(currentWiki, name);
 
 				// If page already exists, load the content and disable page name,
 				// otherwise pre-fill page name
@@ -137,11 +139,11 @@ namespace ScrewTurn.Wiki {
 							int startIndex, len;
 							string dummy = "";
 							ExtractSection(currentContent.Content, currentSection, out startIndex, out len, out dummy);
-							editor.SetContent(currentContent.Content.Substring(startIndex, len), Settings.UseVisualEditorAsDefault);
+							editor.SetContent(currentContent.Content.Substring(startIndex, len), Settings.GetUseVisualEditorAsDefault(currentWiki));
 						}
 						else {
 							// Select default editor view (WikiMarkup or Visual) and populate content
-							editor.SetContent(currentContent.Content, Settings.UseVisualEditorAsDefault);
+							editor.SetContent(currentContent.Content, Settings.GetUseVisualEditorAsDefault(currentWiki));
 						}
 					}
 				}
@@ -153,7 +155,7 @@ namespace ScrewTurn.Wiki {
 						pnlManualName.Visible = false;
 						txtName.Text = NameTools.GetLocalName(name);
 						txtTitle.Text = txtName.Text;
-						editor.SetContent(LoadTemplateIfAppropriate(), Settings.UseVisualEditorAsDefault);
+						editor.SetContent(LoadTemplateIfAppropriate(), Settings.GetUseVisualEditorAsDefault(currentWiki));
 					}
 				}
 			}
@@ -162,7 +164,7 @@ namespace ScrewTurn.Wiki {
 					chkMinorChange.Visible = false;
 					chkSaveAsDraft.Visible = false;
 
-					editor.SetContent(LoadTemplateIfAppropriate(), Settings.UseVisualEditorAsDefault);
+					editor.SetContent(LoadTemplateIfAppropriate(), Settings.GetUseVisualEditorAsDefault(currentWiki));
 				}
 			}
 
@@ -208,7 +210,7 @@ namespace ScrewTurn.Wiki {
 			attachmentManager.Visible = canDownloadAttachments;
 
 			// CAPTCHA
-			pnlCaptcha.Visible = SessionFacade.LoginKey == null && !Settings.DisableCaptchaControl;
+			pnlCaptcha.Visible = SessionFacade.LoginKey == null && !Settings.GetDisableCaptchaControl(currentWiki);
 			captcha.Visible = pnlCaptcha.Visible;
 
 			// Moderation notice
@@ -233,7 +235,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void ManageTemplatesDisplay() {
 			// Hide templates selection if there aren't any or if the editor is not in WikiMarkup mode
-			if(Templates.GetTemplates().Count == 0 || !editor.IsInWikiMarkup()) {
+			if(Templates.GetTemplates(currentWiki).Count == 0 || !editor.IsInWikiMarkup()) {
 				btnTemplates.Visible = false;
 				pnlTemplates.Visible = false;
 			}
@@ -250,7 +252,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The content of the selected template.</returns>
 		private string LoadTemplateIfAppropriate() {
 			if(string.IsNullOrEmpty(Request["Template"])) return "";
-			ContentTemplate template = Templates.Find(Request["Template"]);
+			ContentTemplate template = Templates.Find(currentWiki, Request["Template"]);
 			if(template == null) return "";
 			else {
 				lblAutoTemplate.Text = lblAutoTemplate.Text.Replace("##TEMPLATE##", template.Name);
@@ -291,8 +293,8 @@ namespace ScrewTurn.Wiki {
 
 			if(Collisions.IsPageBeingEdited(currentPage, username)) {
 				pnlCollisions.Visible = true;
-				lblConcurrentEditingUsername.Text = "(" + Users.UserLink(Collisions.WhosEditing(currentPage)) + ")";
-				if(Settings.DisableConcurrentEditing) {
+				lblConcurrentEditingUsername.Text = "(" + Users.UserLink(currentWiki, Collisions.WhosEditing(currentPage)) + ")";
+				if(Settings.GetDisableConcurrentEditing(currentWiki)) {
 					lblSaveDisabled.Visible = true;
 					lblSaveDangerous.Visible = false;
 					btnSave.Enabled = false;
@@ -322,8 +324,8 @@ namespace ScrewTurn.Wiki {
 				chkMinorChange.Enabled = false;
 				pnlDraft.Visible = true;
 				lblDraftInfo.Text = lblDraftInfo.Text.Replace("##USER##",
-					Users.UserLink(currentContent.User, true)).Replace("##DATETIME##",
-					Preferences.AlignWithTimezone(currentContent.LastModified).ToString(Settings.DateTimeFormat)).Replace("##VIEWCHANGES##",
+					Users.UserLink(currentWiki, currentContent.User, true)).Replace("##DATETIME##",
+					Preferences.AlignWithTimezone(currentWiki, currentContent.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki))).Replace("##VIEWCHANGES##",
 					string.Format("<a href=\"{0}\" target=\"_blank\">{1}</a>", UrlTools.BuildUrl("Diff.aspx?Page=",
 					Tools.UrlEncode(currentPage.FullName), "&amp;Rev1=Current&amp;Rev2=Draft"),
 					Properties.Messages.ViewChanges));
@@ -339,7 +341,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="toSelect">The categories to select.</param>
 		private void PopulateCategories(CategoryInfo[] toSelect) {
 			IPagesStorageProviderV30 provider = FindAppropriateProvider();
-			List<CategoryInfo> cats = Pages.GetCategories(DetectNamespaceInfo());
+			List<CategoryInfo> cats = Pages.GetCategories(currentWiki, DetectNamespaceInfo());
 			lstCategories.Items.Clear();
 			foreach(CategoryInfo c in cats) {
 				if(c.Provider == provider) {
@@ -437,7 +439,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnCancel_Click(object sender, EventArgs e) {
-			if(currentPage == null && txtName.Visible) currentPage = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text));
+			if(currentPage == null && txtName.Visible) currentPage = Pages.FindPage(currentWiki, NameTools.GetFullName(DetectNamespace(), txtName.Text));
 			if(currentPage != null) {
 				// Try redirecting to proper section
 				string anchor = null;
@@ -446,7 +448,7 @@ namespace ScrewTurn.Wiki {
 					ExtractSection(Content.GetPageContent(currentPage).Content, currentSection, out start, out len, out anchor);
 				}
 
-				UrlTools.Redirect(Tools.UrlEncode(currentPage.FullName) + Settings.PageExtension + (anchor != null ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
+				UrlTools.Redirect(Tools.UrlEncode(currentPage.FullName) + GlobalSettings.PageExtension + (anchor != null ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
 			}
 			else UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
 		}
@@ -456,7 +458,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void cvName2_ServerValidate(object sender, ServerValidateEventArgs e) {
-			e.IsValid = !txtName.Enabled || Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text)) == null;
+			e.IsValid = !txtName.Enabled || Pages.FindPage(currentWiki, NameTools.GetFullName(DetectNamespace(), txtName.Text)) == null;
 		}
 
 		protected void chkMinorChange_CheckedChanged(object sender, EventArgs e) {
@@ -493,7 +495,7 @@ namespace ScrewTurn.Wiki {
 				NamespaceInfo currentNamespace = DetectNamespaceInfo();
 				provider =
 					currentNamespace == null ?
-					Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider) :
+					Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, currentWiki) :
 					currentNamespace.Provider;
 			}
 
@@ -504,7 +506,7 @@ namespace ScrewTurn.Wiki {
 			bool wasVisible = pnlPageName.Visible;
 			pnlPageName.Visible = true;
 
-			if(!wasVisible && Settings.AutoGeneratePageNames && txtName.Enabled) {
+			if(!wasVisible && Settings.GetAutoGeneratePageNames(currentWiki) && txtName.Enabled) {
 				txtName.Text = GenerateAutoName(txtTitle.Text);
 			}
 
@@ -542,7 +544,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Check for scripts (Administrators can always add SCRIPT tags)
-			if(!SessionFacade.GetCurrentGroupNames().Contains(Settings.AdministratorsGroup) && !Settings.ScriptTagsAllowed) {
+			if(!SessionFacade.GetCurrentGroupNames(currentWiki).Contains(Settings.GetAdministratorsGroup(currentWiki)) && !Settings.GetScriptTagsAllowed(currentWiki)) {
 				Regex r = new Regex(@"\<script.*?\>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 				if(r.Match(editor.GetContent()).Success) {
 					lblResult.Text = @"<span style=""color: #FF0000;"">" + Properties.Messages.ScriptDetected + "</span>";
@@ -566,7 +568,7 @@ namespace ScrewTurn.Wiki {
 			List<CategoryInfo> categories = new List<CategoryInfo>();
 			for(int i = 0; i < lstCategories.Items.Count; i++) {
 				if(lstCategories.Items[i].Selected) {
-					CategoryInfo cat = Pages.FindCategory(lstCategories.Items[i].Value);
+					CategoryInfo cat = Pages.FindCategory(currentWiki, lstCategories.Items[i].Value);
 
 					// Sanity check
 					if(cat.Provider == provider) categories.Add(cat);
@@ -584,14 +586,14 @@ namespace ScrewTurn.Wiki {
 				// Find page, if inexistent create it
 				PageInfo pg = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text), provider);
 				if(pg == null) {
-					Pages.CreatePage(DetectNamespaceInfo(), txtName.Text, provider);
+					Pages.CreatePage(currentWiki, DetectNamespaceInfo(), txtName.Text, provider);
 					pg = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text), provider);
 					saveMode = SaveMode.Normal;
 					attachmentManager.CurrentPage = pg;
 				}
 				Log.LogEntry("Page update requested for " + txtName.Text, EntryType.General, username);
 
-				Pages.ModifyPage(pg, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+				Pages.ModifyPage(currentWiki, pg, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
 					GetKeywords(), txtDescription.Text, saveMode);
 
 				// Save categories binding
@@ -613,7 +615,7 @@ namespace ScrewTurn.Wiki {
 				// No notification must be sent for drafts awaiting approval
 				if(redirect) {
 					Collisions.CancelEditingSession(pg, username);
-					string target = UrlTools.BuildUrl(Tools.UrlEncode(txtName.Text), Settings.PageExtension, "?NoRedirect=1");
+					string target = UrlTools.BuildUrl(Tools.UrlEncode(txtName.Text), GlobalSettings.PageExtension, "?NoRedirect=1");
 					UrlTools.Redirect(target);
 				}
 				else {
@@ -626,7 +628,7 @@ namespace ScrewTurn.Wiki {
 				// Used for redirecting to a specific section after editing it
 				string anchor = "";
 
-				if(currentPage == null) currentPage = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text));
+				if(currentPage == null) currentPage = Pages.FindPage(currentWiki, NameTools.GetFullName(DetectNamespace(), txtName.Text));
 
 				// Save data
 				Log.LogEntry("Page update requested for " + currentPage.FullName, EntryType.General, username);
@@ -638,11 +640,11 @@ namespace ScrewTurn.Wiki {
 					if(start > 0) sb.Append(cont.Content.Substring(0, start));
 					sb.Append(editor.GetContent());
 					if(start + len < cont.Content.Length - 1) sb.Append(cont.Content.Substring(start + len));
-					Pages.ModifyPage(currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, sb.ToString(),
+					Pages.ModifyPage(currentWiki, currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, sb.ToString(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				else {
-					Pages.ModifyPage(currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+					Pages.ModifyPage(currentWiki, currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				
@@ -667,12 +669,12 @@ namespace ScrewTurn.Wiki {
 				// clicking "Save & Continue" but not "Save" or "Cancel" - in other words, it is necessary
 				// to take every chance to send a notification because no more chances might be available
 				if(!canEdit && canEditWithApproval) {
-					Pages.SendEmailNotificationForDraft(currentPage, txtTitle.Text, txtComment.Text, username);
+					Pages.SendEmailNotificationForDraft(currentWiki, currentPage, txtTitle.Text, txtComment.Text, username);
 				}
 
 				if(redirect) {
 					Collisions.CancelEditingSession(currentPage, username);
-					string target = UrlTools.BuildUrl(Tools.UrlEncode(currentPage.FullName), Settings.PageExtension, "?NoRedirect=1",
+					string target = UrlTools.BuildUrl(Tools.UrlEncode(currentPage.FullName), GlobalSettings.PageExtension, "?NoRedirect=1",
 						(!string.IsNullOrEmpty(anchor) ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
 					UrlTools.Redirect(target);
 				}
@@ -711,7 +713,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void cvCategory2_ServerValidate(object sender, ServerValidateEventArgs e) {
-			e.IsValid = Pages.FindCategory(NameTools.GetFullName(DetectNamespace(), txtCategory.Text)) == null;
+			e.IsValid = Pages.FindCategory(currentWiki, NameTools.GetFullName(DetectNamespace(), txtCategory.Text)) == null;
 		}
 
 		protected void btnCreateCategory_Click(object sender, EventArgs e) {
@@ -725,13 +727,13 @@ namespace ScrewTurn.Wiki {
 				if(!Page.IsValid) return;
 
 				string fullName = NameTools.GetFullName(DetectNamespace(), txtCategory.Text);
-				Pages.CreateCategory(DetectNamespaceInfo(), txtCategory.Text, FindAppropriateProvider());
+				Pages.CreateCategory(currentWiki, DetectNamespaceInfo(), txtCategory.Text, FindAppropriateProvider());
 
 				// Save selected categories
 				List<CategoryInfo> selected = new List<CategoryInfo>();
 				for(int i = 0; i < lstCategories.Items.Count; i++) {
 					if(lstCategories.Items[i].Selected) {
-						selected.Add(Pages.FindCategory(lstCategories.Items[i].Value));
+						selected.Add(Pages.FindCategory(currentWiki, lstCategories.Items[i].Value));
 					}
 				}
 
@@ -756,7 +758,7 @@ namespace ScrewTurn.Wiki {
 			// Load templates
 			lstTemplates.Items.Clear();
 			lstTemplates.Items.Add(new ListItem(Properties.Messages.SelectTemplate, ""));
-			foreach(ContentTemplate temp in Templates.GetTemplates()) {
+			foreach(ContentTemplate temp in Templates.GetTemplates(currentWiki)) {
 				lstTemplates.Items.Add(new ListItem(temp.Name, temp.Name));
 			}
 			// Hide select button and preview text because the user hasn't selected a template yet
@@ -765,7 +767,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void lstTemplates_SelectedIndexChanged(object sender, EventArgs e) {
-			ContentTemplate template = Templates.Find(lstTemplates.SelectedValue);
+			ContentTemplate template = Templates.Find(currentWiki, lstTemplates.SelectedValue);
 
 			if(template != null) {
 				lblTemplatePreview.Text = template.Content;
@@ -778,9 +780,9 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnUseTemplate_Click(object sender, EventArgs e) {
-			ContentTemplate template = Templates.Find(lstTemplates.SelectedValue);
+			ContentTemplate template = Templates.Find(currentWiki, lstTemplates.SelectedValue);
 
-			editor.SetContent(template.Content, Settings.UseVisualEditorAsDefault);
+			editor.SetContent(template.Content, Settings.GetUseVisualEditorAsDefault(currentWiki));
 			btnCancelTemplate_Click(sender, e);
 			// If there's a category matching the selected template name, select it automatically
 			for (int i = 0; i < lstCategories.Items.Count; i++)	{

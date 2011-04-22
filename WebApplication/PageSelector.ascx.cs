@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki {
 		private int selectedPage = 0;
 
 		protected PageSelector() {
-			pageSize = Settings.ListSize;
+			pageSize = Settings.GetListSize(Tools.DetectCurrentWiki());
 		}
 
 		protected void Page_Load(object sender, EventArgs e) {

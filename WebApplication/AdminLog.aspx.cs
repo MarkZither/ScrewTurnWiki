@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(DetectWiki()))) UrlTools.Redirect("AccessDenied.aspx");
 
 			if(!Page.IsPostBack) {
 				// Load log entries
@@ -87,8 +87,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="entry">The original log entry.</param>
 		public LogEntryRow(LogEntry entry) {
+			string currentWiki = Tools.DetectCurrentWiki();
 			imageTag = entry.EntryType.ToString();
-			dateTime = Preferences.AlignWithTimezone(entry.DateTime).ToString(Settings.DateTimeFormat).Replace(" ", "&nbsp;");
+			dateTime = Preferences.AlignWithTimezone(currentWiki, entry.DateTime).ToString(Settings.GetDateTimeFormat(currentWiki)).Replace(" ", "&nbsp;");
 			user = entry.User.Replace(" ", "&nbsp;");
 			message = entry.Message.Replace("&", "&amp;");
 

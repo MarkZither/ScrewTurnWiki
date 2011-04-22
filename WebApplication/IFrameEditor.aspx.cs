@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			// Inject the proper stylesheet in page head
 			Literal l = new Literal();
-			l.Text = Tools.GetIncludes(DetectNamespace());
+			l.Text = Tools.GetIncludes(DetectWiki(), DetectNamespace());
 			Page.Header.Controls.Add(l);
 		}
 

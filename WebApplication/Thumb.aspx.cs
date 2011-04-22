@@ -20,6 +20,7 @@ namespace ScrewTurn.Wiki {
 	public partial class Thumb : Page {
 
 		protected void Page_Load(object sender, EventArgs e) {
+			string currentWiki = Tools.DetectCurrentWiki();
 
 			string filename = Request["File"];
 			if(string.IsNullOrEmpty(filename)) {
@@ -31,7 +32,7 @@ namespace ScrewTurn.Wiki {
 			filename = filename.Replace("..", "");
 
 			string page = Request["Page"];
-			PageInfo pageInfo = Pages.FindPage(page);
+			PageInfo pageInfo = Pages.FindPage(currentWiki, page);
 			bool isPageAttachment = !string.IsNullOrEmpty(page);
 
 			if(isPageAttachment && pageInfo == null) {
@@ -42,10 +43,10 @@ namespace ScrewTurn.Wiki {
 
 			IFilesStorageProviderV30 provider = null;
 
-			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(Request["Provider"]);
+			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(Request["Provider"], currentWiki);
 			else {
-				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(pageInfo, filename);
-				else provider = FilesAndAttachments.FindFileProvider(filename);
+				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(currentWiki, pageInfo, filename);
+				else provider = FilesAndAttachments.FindFileProvider(currentWiki, filename);
 			}
 
 			if(provider == null) {
@@ -61,17 +62,17 @@ namespace ScrewTurn.Wiki {
 			// Verify permissions
 			bool canDownload = false;
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			if(pageInfo != null) {
 				canDownload = authChecker.CheckActionForPage(pageInfo, Actions.ForPages.DownloadAttachments,
-					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
+					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			}
 			else {
 				string dir = Tools.GetDirectoryName(filename);
 				canDownload = authChecker.CheckActionForDirectory(provider, dir,
 					 Actions.ForDirectories.DownloadFiles, SessionFacade.GetCurrentUsername(),
-					 SessionFacade.GetCurrentGroupNames());
+					 SessionFacade.GetCurrentGroupNames(currentWiki));
 			}
 			if(!canDownload) {
 				Response.StatusCode = 401;

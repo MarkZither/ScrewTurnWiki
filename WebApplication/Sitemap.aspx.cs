@@ -14,12 +14,14 @@ namespace ScrewTurn.Wiki {
 	public partial class Sitemap : System.Web.UI.Page {
 
 		protected void Page_Load(object sender, EventArgs e) {
+			string currentWiki = Tools.DetectCurrentWiki();
+
 			Response.ClearContent();
 			Response.ContentType = "text/xml;charset=UTF-8";
 			Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
 
-			string mainUrl = Settings.MainUrl;
-			string rootDefault = Settings.DefaultPage.ToLowerInvariant();
+			string mainUrl = GlobalSettings.MainUrl;
+			string rootDefault = Settings.GetDefaultPage(currentWiki).ToLowerInvariant();
 
 			using(XmlWriter writer = XmlWriter.Create(Response.OutputStream)) {
 				writer.WriteStartDocument();
@@ -29,20 +31,20 @@ namespace ScrewTurn.Wiki {
 				writer.WriteAttributeString("xsi", "schemaLocation", null, "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/09/sitemap.xsd");
 
 				string user = SessionFacade.GetCurrentUsername();
-				string[] groups = SessionFacade.GetCurrentGroupNames();
+				string[] groups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
 
-				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
-				foreach(PageInfo page in Pages.GetPages(null)) {
+				foreach(PageInfo page in Pages.GetPages(currentWiki, null)) {
 					if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
 						WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == rootDefault, writer);
 					}
 				}
-				foreach(NamespaceInfo nspace in Pages.GetNamespaces()) {
+				foreach(NamespaceInfo nspace in Pages.GetNamespaces(currentWiki)) {
 					string nspaceDefault = nspace.DefaultPage.FullName.ToLowerInvariant();
 
-					foreach(PageInfo page in Pages.GetPages(nspace)) {
+					foreach(PageInfo page in Pages.GetPages(currentWiki, nspace)) {
 						if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
 							WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == nspaceDefault, writer);
 						}
@@ -63,7 +65,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="writer">The writer.</param>
 		private void WritePage(string mainUrl, PageInfo page, bool isDefault, XmlWriter writer) {
 			writer.WriteStartElement("url");
-			writer.WriteElementString("loc", mainUrl + Tools.UrlEncode(page.FullName) + Settings.PageExtension);
+			writer.WriteElementString("loc", mainUrl + Tools.UrlEncode(page.FullName) + GlobalSettings.PageExtension);
 			writer.WriteElementString("priority", isDefault ? "0.75" : "0.5");
 			writer.WriteElementString("changefreq", "daily");
 			writer.WriteEndElement();

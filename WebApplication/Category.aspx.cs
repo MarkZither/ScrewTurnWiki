@@ -20,31 +20,32 @@ namespace ScrewTurn.Wiki {
 		private NamespaceInfo currentNamespace = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = Properties.Messages.CategoryTitle + " - " + Settings.WikiTitle;
+			string currentWiki = DetectWiki();
+			Page.Title = Properties.Messages.CategoryTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
-			LoginTools.VerifyReadPermissionsForCurrentNamespace();
+			LoginTools.VerifyReadPermissionsForCurrentNamespace(currentWiki);
 
 			currentNamespace = DetectNamespaceInfo();
 
-			PrintCat();
+			PrintCat(currentWiki);
 		}
 
-		public void PrintCat() {
+		public void PrintCat(string currentWiki) {
 			StringBuilder sb = new StringBuilder();
 			sb.Append("<ul>");
 			sb.Append(@"<li><a href=""");
-			UrlTools.BuildUrl(sb, "AllPages.aspx?Cat=-");
+			UrlTools.BuildUrl(currentWiki, sb, "AllPages.aspx?Cat=-");
 			sb.Append(@""">");
 			sb.Append(Properties.Messages.UncategorizedPages);
 			sb.Append("</a> (");
-			sb.Append(Pages.GetUncategorizedPages(currentNamespace).Length.ToString());
+			sb.Append(Pages.GetUncategorizedPages(currentWiki, currentNamespace).Length.ToString());
 			sb.Append(")");
 			sb.Append(@" - <small><a href=""");
-			UrlTools.BuildUrl(sb, "RSS.aspx?Category=-");
+			UrlTools.BuildUrl(currentWiki, sb, "RSS.aspx?Category=-");
 			sb.Append(@""" title=""");
 			sb.Append(Properties.Messages.RssForThisCategory);
 			sb.Append(@""">RSS</a> - <a href=""");
-			UrlTools.BuildUrl(sb, "RSS.aspx?Discuss=1&amp;Category=-");
+			UrlTools.BuildUrl(currentWiki, sb, "RSS.aspx?Discuss=1&amp;Category=-");
 			sb.Append(@""" title=""");
 			sb.Append(Properties.Messages.RssForThisCategoryDiscussion);
 			sb.Append(@""">");
@@ -55,24 +56,24 @@ namespace ScrewTurn.Wiki {
 
 			sb.Append("<ul>");
 
-			List<CategoryInfo> categories = Pages.GetCategories(currentNamespace);
+			List<CategoryInfo> categories = Pages.GetCategories(currentWiki, currentNamespace);
 
 			for(int i = 0; i < categories.Count; i++) {
 				if(categories[i].Pages.Length > 0) {
 					sb.Append(@"<li>");
 					sb.Append(@"<a href=""");
-					UrlTools.BuildUrl(sb, "AllPages.aspx?Cat=", Tools.UrlEncode(categories[i].FullName));
+					UrlTools.BuildUrl(currentWiki, sb, "AllPages.aspx?Cat=", Tools.UrlEncode(categories[i].FullName));
 					sb.Append(@""">");
 					sb.Append(NameTools.GetLocalName(categories[i].FullName));
 					sb.Append("</a> (");
 					sb.Append(categories[i].Pages.Length.ToString());
 					sb.Append(")");
 					sb.Append(@" - <small><a href=""");
-					UrlTools.BuildUrl(sb, "RSS.aspx?Category=", Tools.UrlEncode(categories[i].FullName));
+					UrlTools.BuildUrl(currentWiki, sb, "RSS.aspx?Category=", Tools.UrlEncode(categories[i].FullName));
 					sb.Append(@""" title=""");
 					sb.Append(Properties.Messages.RssForThisCategory);
 					sb.Append(@""">RSS</a> - <a href=""");
-					UrlTools.BuildUrl(sb, "RSS.aspx?Discuss=1&amp;Category=", Tools.UrlEncode(categories[i].FullName));
+					UrlTools.BuildUrl(currentWiki, sb, "RSS.aspx?Discuss=1&amp;Category=", Tools.UrlEncode(categories[i].FullName));
 					sb.Append(@""" title=""");
 					sb.Append(Properties.Messages.RssForThisCategoryDiscussion);
 					sb.Append(@""">");

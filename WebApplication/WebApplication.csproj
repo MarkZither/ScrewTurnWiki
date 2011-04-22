@@ -186,7 +186,6 @@
     <Compile Include="CreateMasterPassword.aspx.designer.cs">
       <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
     </Compile>
-    <Compile Include="IThemeProvider.cs" />
     <Compile Include="MasterPageClean.master.cs">
       <DependentUpon>MasterPageClean.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -413,13 +412,6 @@
     </Compile>
     <Compile Include="ImageEditor.aspx.designer.cs">
       <DependentUpon>ImageEditor.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Import.aspx.cs">
-      <DependentUpon>Import.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Import.aspx.designer.cs">
-      <DependentUpon>Import.aspx</DependentUpon>
     </Compile>
     <Compile Include="Language.aspx.cs">
       <DependentUpon>Language.aspx</DependentUpon>
@@ -1350,7 +1342,6 @@
     <Content Include="Images\Up.png" />
     <Content Include="Images\Void.png" />
     <Content Include="Images\Wait.gif" />
-    <Content Include="Import.aspx" />
     <Content Include="JS\Readme.txt" />
     <Content Include="JS\Scripts.js" />
     <Content Include="Language.aspx" />

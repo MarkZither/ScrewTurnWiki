@@ -17,10 +17,14 @@ namespace ScrewTurn.Wiki {
 
 	public partial class NavPath : BasePage {
 
-		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = Properties.Messages.NavPathTitle + " - " + Settings.WikiTitle;
+		private string currentWiki = null;
 
-			LoginTools.VerifyReadPermissionsForCurrentNamespace();
+		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = DetectWiki();
+
+			Page.Title = Properties.Messages.NavPathTitle + " - " + Settings.GetWikiTitle(currentWiki);
+
+			LoginTools.VerifyReadPermissionsForCurrentNamespace(currentWiki);
 
 			PrintNavPaths();
 		}
@@ -28,10 +32,10 @@ namespace ScrewTurn.Wiki {
 		public void PrintNavPaths() {
 			StringBuilder sb = new StringBuilder();
 			sb.Append("<ul>");
-			List<NavigationPath> paths = NavigationPaths.GetNavigationPaths(DetectNamespaceInfo());
+			List<NavigationPath> paths = NavigationPaths.GetNavigationPaths(currentWiki, DetectNamespaceInfo());
 			for(int i = 0; i < paths.Count; i++) {
 				sb.Append(@"<li><a href=""");
-				UrlTools.BuildUrl(sb, "Default.aspx?Page=", Tools.UrlEncode(paths[i].Pages[0]),
+				UrlTools.BuildUrl(currentWiki, sb, "Default.aspx?Page=", Tools.UrlEncode(paths[i].Pages[0]),
 					"&amp;NavPath=", Tools.UrlEncode(paths[i].FullName));
 
 				sb.Append(@""">");

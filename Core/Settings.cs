@@ -429,7 +429,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="defaultLanguage">The default language.</param>
-		public static void GetDefaultLanguage(string wiki, string defaultLanguage) {
+		public static void SetDefaultLanguage(string wiki, string defaultLanguage) {
 			GetProvider(wiki).SetSetting("DefaultLanguage", defaultLanguage);
 		}
 
@@ -887,7 +887,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="rssFeedMode">The RSS feed mode.</param>
-		public static void SetRssFeedsMode(string wiki, string rssFeedMode) {
+		public static void SetRssFeedsMode(string wiki, RssFeedsMode rssFeedMode) {
 			GetProvider(wiki).SetSetting("RssFeedsMode", rssFeedMode.ToString());
 		}
 

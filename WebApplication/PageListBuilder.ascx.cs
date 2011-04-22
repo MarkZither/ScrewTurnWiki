@@ -11,9 +11,12 @@ namespace ScrewTurn.Wiki {
 
 	public partial class PageListBuilder : System.Web.UI.UserControl {
 
+		private string currentWiki = null;
+
 		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = Tools.DetectCurrentWiki();
 			if(!Page.IsPostBack) {
-				CurrentProvider = Settings.DefaultPagesProvider;
+				CurrentProvider = GlobalSettings.DefaultPagesProvider;
 			}
 		}
 
@@ -70,7 +73,7 @@ namespace ScrewTurn.Wiki {
 
 			if(txtPageName.Text.Length == 0) return;
 
-			PageInfo[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, CurrentNamespace);
+			PageInfo[] pages = SearchTools.SearchSimilarPages(currentWiki, txtPageName.Text, CurrentNamespace);
 
 			string cp = CurrentProvider;
 
@@ -90,7 +93,7 @@ namespace ScrewTurn.Wiki {
 
 				if(!found) {
 					PageContent content = Content.GetPageContent(page);
-					lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page), page.FullName));
+					lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.Other, page), page.FullName));
 				}
 			}
 
@@ -98,10 +101,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnAddPage_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(lstAvailablePage.SelectedValue);
+			PageInfo page = Pages.FindPage(currentWiki, lstAvailablePage.SelectedValue);
 			PageContent content = Content.GetPageContent(page);
 
-			lstPages.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page), page.FullName));
+			lstPages.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.Other, page), page.FullName));
 
 			lstAvailablePage.Items.RemoveAt(lstAvailablePage.SelectedIndex);
 			btnAddPage.Enabled = lstAvailablePage.Items.Count > 0;

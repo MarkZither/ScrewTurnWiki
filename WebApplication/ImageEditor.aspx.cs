@@ -24,17 +24,20 @@ namespace ScrewTurn.Wiki {
 		private string file = "";
 		private string page = "";
 		private IFilesStorageProviderV30 provider = null;
+		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = DetectWiki();
+
 			SetProvider();
 			SetInputData();
 
 			string currentUser = SessionFacade.GetCurrentUsername();
-			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
+			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 			string dir = Tools.GetDirectoryName(file);
 
 			// Verify permissions
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			bool canUpload = authChecker.CheckActionForDirectory(provider, dir,
 				Actions.ForDirectories.UploadFiles, currentUser, currentGroups);
 			bool canDeleteFiles = authChecker.CheckActionForDirectory(provider, dir,
@@ -44,7 +47,7 @@ namespace ScrewTurn.Wiki {
 
 			// Inject the proper stylesheet in page head
 			Literal l = new Literal();
-			l.Text = Tools.GetIncludes(DetectNamespace());
+			l.Text = Tools.GetIncludes(currentWiki, DetectNamespace());
 			Page.Header.Controls.Add(l);
 
 			ResizeImage();
@@ -53,9 +56,9 @@ namespace ScrewTurn.Wiki {
 		private void SetProvider() {
 			string p = Request["Provider"];
 			if(string.IsNullOrEmpty(p)) {
-				p = Settings.DefaultFilesProvider;
+				p = GlobalSettings.DefaultFilesProvider;
 			}
-			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(p);
+			provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(p, currentWiki);
 		}
 
 		private void SetInputData() {
@@ -92,7 +95,7 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 			else {
-				PageInfo info = Pages.FindPage(page);
+				PageInfo info = Pages.FindPage(currentWiki, page);
 				if(info == null) {
 					Response.StatusCode = 404;
 					Response.WriteFile("Page not found.");
@@ -344,7 +347,7 @@ namespace ScrewTurn.Wiki {
 				done = provider.StoreFile(path + targetName, resultMemStream, overwrite);
 			}
 			else {
-				done = provider.StorePageAttachment(Pages.FindPage(page), targetName, resultMemStream, overwrite);
+				done = provider.StorePageAttachment(Pages.FindPage(currentWiki, page), targetName, resultMemStream, overwrite);
 			}
 
 			if(done) {

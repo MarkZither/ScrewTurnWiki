@@ -24,16 +24,19 @@ namespace ScrewTurn.Wiki {
 
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
-			PageSize = Settings.ListSize;
+
+			string currentWiki = DetectWiki();
+
+			PageSize = Settings.GetListSize(currentWiki);
 			rangeEnd = PageSize - 1;
 
-			if(!AdminMaster.CanManageUsers(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
-			aclActionsSelector.Visible = AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
+			if(!AdminMaster.CanManageUsers(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) UrlTools.Redirect("AccessDenied.aspx");
+			aclActionsSelector.Visible = AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 
-			revUsername.ValidationExpression = Settings.UsernameRegex;
-			revDisplayName.ValidationExpression = Settings.DisplayNameRegex;
-			revPassword1.ValidationExpression = Settings.PasswordRegex;
-			revEmail.ValidationExpression = Settings.EmailRegex;
+			revUsername.ValidationExpression = GlobalSettings.UsernameRegex;
+			revDisplayName.ValidationExpression = GlobalSettings.DisplayNameRegex;
+			revPassword1.ValidationExpression = GlobalSettings.PasswordRegex;
+			revEmail.ValidationExpression = GlobalSettings.EmailRegex;
 
 			if(!Page.IsPostBack) {
 				ResetUserList();
@@ -89,7 +92,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The users.</returns>
 		private IList<UserInfo> GetUsers() {
-			List<UserInfo> allUsers = Users.GetUsers();
+			List<UserInfo> allUsers = Users.GetUsers(DetectWiki());
 
 			// Apply filter
 			List<UserInfo> result = new List<UserInfo>(allUsers.Count);
@@ -142,7 +145,7 @@ namespace ScrewTurn.Wiki {
 				txtCurrentUsername.Value = e.CommandArgument as string;
 				//rptAccounts.DataBind(); Not needed because the list is hidden on select
 
-				UserInfo user = Users.FindUser(txtCurrentUsername.Value);
+				UserInfo user = Users.FindUser(DetectWiki(), txtCurrentUsername.Value);
 
 				txtUsername.Text = user.Username;
 				txtUsername.Enabled = false;
@@ -171,7 +174,7 @@ namespace ScrewTurn.Wiki {
 				}
 
 				// Select user's global permissions
-				AuthReader authReader = new AuthReader(Collectors.CollectorsBox.SettingsProvider);
+				AuthReader authReader = new AuthReader(Collectors.CollectorsBox.GetSettingsProvider(DetectWiki()));
 				aclActionsSelector.GrantedActions =
 					authReader.RetrieveGrantsForGlobals(user);
 				aclActionsSelector.DeniedActions =
@@ -225,7 +228,7 @@ namespace ScrewTurn.Wiki {
 		/// Populates the groups list according to the currently selected provider.
 		/// </summary>
 		private void PopulateGroups() {
-			List<UserGroup> groups = Users.GetUserGroups(Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider));
+			List<UserGroup> groups = Users.GetUserGroups(Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider, DetectWiki()));
 
 			lstGroups.Items.Clear();
 			foreach(UserGroup group in groups) {
@@ -235,7 +238,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void cvUsername_ServerValidate(object sender, ServerValidateEventArgs e) {
-			e.IsValid = Users.FindUser(txtUsername.Text) == null;
+			e.IsValid = Users.FindUser(DetectWiki(), txtUsername.Text) == null;
 		}
 
 		protected void cvPassword2_ServerValidate(object sender, ServerValidateEventArgs e) {
@@ -245,15 +248,16 @@ namespace ScrewTurn.Wiki {
 		protected void btnBulkDelete_Click(object sender, EventArgs e) {
 			Log.LogEntry("Bulk account deletion requested", EntryType.General, SessionFacade.CurrentUsername);
 
+			string currentWiki = DetectWiki();
 			DateTime now = DateTime.Now;
-			List<UserInfo> allUsers = Users.GetUsers();
+			List<UserInfo> allUsers = Users.GetUsers(currentWiki);
 			int count = 0;
 
 			for(int i = 0; i < allUsers.Count; i++) {
 				if(!allUsers[i].Active && !allUsers[i].Provider.UserAccountsReadOnly && (now - allUsers[i].DateTime).TotalDays >= 31) {
 					RemoveAllAclEntries(allUsers[i]);
 					RemoveGroupMembership(allUsers[i]);
-					Users.RemoveUser(allUsers[i]);
+					Users.RemoveUser(currentWiki, allUsers[i]);
 					count++;
 				}
 			}
@@ -276,14 +280,16 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("User creation requested for " + txtUsername.Text, EntryType.General, SessionFacade.CurrentUsername);
 
+			string currentWiki = DetectWiki();
+			
 			// Add the new user, set its global permissions, set its membership
-			bool done = Users.AddUser(txtUsername.Text, txtDisplayName.Text, txtPassword1.Text, txtEmail.Text,
+			bool done = Users.AddUser(currentWiki, txtUsername.Text, txtDisplayName.Text, txtPassword1.Text, txtEmail.Text,
 				chkSetActive.Checked,
-				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider));
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider, currentWiki));
 
 			UserInfo currentUser = null;
 			if(done) {
-				currentUser = Users.FindUser(txtUsername.Text);
+				currentUser = Users.FindUser(currentWiki, txtUsername.Text);
 
 				// Wipe old data, if any
 				RemoveAllAclEntries(currentUser);
@@ -330,7 +336,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("User update requested for " + txtCurrentUsername.Value, EntryType.General, SessionFacade.CurrentUsername);
 
-			UserInfo currentUser = Users.FindUser(txtCurrentUsername.Value);
+			UserInfo currentUser = Users.FindUser(DetectWiki(), txtCurrentUsername.Value);
 
 			bool done = true;
 
@@ -382,7 +388,8 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("User deletion requested for " + txtCurrentUsername.Value, EntryType.General, SessionFacade.CurrentUsername);
 
-			UserInfo currentUser = Users.FindUser(txtCurrentUsername.Value);
+			string currentWiki = DetectWiki();
+			UserInfo currentUser = Users.FindUser(currentWiki, txtCurrentUsername.Value);
 
 			if(currentUser.Provider.UserAccountsReadOnly) return;
 
@@ -392,7 +399,7 @@ namespace ScrewTurn.Wiki {
 				done = RemoveGroupMembership(currentUser);
 
 				if(done) {
-					done = Users.RemoveUser(currentUser);
+					done = Users.RemoveUser(currentWiki, currentUser);
 
 					if(done) {
 						ResetUserList();
@@ -454,7 +461,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private bool RemoveAllAclEntries(UserInfo user) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(DetectWiki()));
 			return authWriter.RemoveEntriesForGlobals(user);
 		}
 
@@ -466,7 +473,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="denials">The denied actions.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private bool AddAclEntries(UserInfo user, string[] grants, string[] denials) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(DetectWiki()));
 			foreach(string action in grants) {
 				bool done = authWriter.SetPermissionForGlobals(AuthStatus.Grant, action, user);
 				if(!done) return false;
@@ -534,7 +541,7 @@ namespace ScrewTurn.Wiki {
 			}
 			memberOf = sb.ToString();
 
-			regDateTime = user.DateTime.ToString(Settings.DateTimeFormat);
+			regDateTime = user.DateTime.ToString(Settings.GetDateTimeFormat(Tools.DetectCurrentWiki()));
 			provider = user.Provider.Information.Name;
 			additionalClass = (selected ? " selected" : "") + (!user.Active ? " inactive" : "");
 		}

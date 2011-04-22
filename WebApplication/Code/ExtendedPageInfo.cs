@@ -24,7 +24,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="lastAuthor">The last author.</param>
 		public ExtendedPageInfo(PageInfo pageInfo, string title, DateTime modificationDateTime, string creator, string lastAuthor) {
 			this.pageInfo = pageInfo;
-			this.title = FormattingPipeline.PrepareTitle(title, false, FormattingContext.PageContent, pageInfo);
+			this.title = FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), title, false, FormattingContext.PageContent, pageInfo);
 			this.modificationDateTime = modificationDateTime;
 			this.creator = creator;
 			this.lastAuthor = lastAuthor;

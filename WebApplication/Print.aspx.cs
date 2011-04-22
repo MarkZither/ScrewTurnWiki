@@ -20,27 +20,30 @@ namespace ScrewTurn.Wiki {
 
 		PageInfo page = null;
 		PageContent content = null;
+		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
-			page = Pages.FindPage(Request["Page"]);
-			if(page == null) UrlTools.RedirectHome();
+			currentWiki = DetectWiki();
+			
+			page = Pages.FindPage(currentWiki, Request["Page"]);
+			if(page == null) UrlTools.RedirectHome(currentWiki);
 
 			// Check permissions
 			bool canView = false;
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			if(Request["Discuss"] == null) {
 				canView = authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
-					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
+					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			}
 			else {
 				canView = authChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion,
-					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
+					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			}
 			if(!canView) UrlTools.Redirect("AccessDenied.aspx");
 
 			content = Content.GetPageContent(page);
 
-			Page.Title = FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page) + " - " + Settings.WikiTitle;
+			Page.Title = FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page) + " - " + Settings.GetWikiTitle(currentWiki);
 
             PrintContent();
 		}
@@ -50,26 +53,26 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public void PrintContent() {
 			StringBuilder sb = new StringBuilder(5000);
-			string title = FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page);
+			string title = FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page);
 
 			if(Request["Discuss"] == null) {
 				string[] categories =
 					(from c in Pages.GetCategoriesForPage(page)
 					 select NameTools.GetLocalName(c.FullName)).ToArray();
 
-				UserInfo user = Users.FindUser(content.User);
+				UserInfo user = Users.FindUser(currentWiki, content.User);
 
 				sb.Append(@"<h1 class=""pagetitle"">");
 				sb.Append(title);
 				sb.Append("</h1>");
 				sb.AppendFormat("<small>{0} {1} {2} {3} &mdash; {4}: {5}</small><br /><br />",
 					Properties.Messages.ModifiedOn,
-					Preferences.AlignWithTimezone(content.LastModified).ToString(Settings.DateTimeFormat),
+					Preferences.AlignWithTimezone(currentWiki, content.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki)),
 					Properties.Messages.By,
 					user != null ? Users.GetDisplayName(user) : content.User,
 					Properties.Messages.CategorizedAs,
 					categories.Length == 0 ? Properties.Messages.Uncategorized : string.Join(", ", categories));
-				sb.Append(Content.GetFormattedPageContent(page));
+				sb.Append(Content.GetFormattedPageContent(currentWiki, page));
 			}
 			else {
 				sb.Append(@"<h1 class=""pagetitle"">");
@@ -116,16 +119,16 @@ namespace ScrewTurn.Wiki {
 		private void PrintMessage(Message message, Message parent, StringBuilder sb) {
 			// Header
 			sb.Append(@"<div class=""messageheader"">");
-			sb.Append(Preferences.AlignWithTimezone(message.DateTime).ToString(Settings.DateTimeFormat));
+			sb.Append(Preferences.AlignWithTimezone(currentWiki, message.DateTime).ToString(Settings.GetDateTimeFormat(currentWiki)));
 			sb.Append(" ");
 			sb.Append(Properties.Messages.By);
 			sb.Append(" ");
-			sb.Append(Users.UserLink(message.Username));
+			sb.Append(Users.UserLink(currentWiki, message.Username));
 
 			// Subject
 			if(message.Subject.Length > 0) {
 				sb.Append(@"<br /><span class=""messagesubject"">");
-				sb.Append(FormattingPipeline.PrepareTitle(message.Subject, false, FormattingContext.MessageBody, page));
+				sb.Append(FormattingPipeline.PrepareTitle(currentWiki, message.Subject, false, FormattingContext.MessageBody, page));
 				sb.Append("</span>");
 			}
 
@@ -133,7 +136,7 @@ namespace ScrewTurn.Wiki {
 
 			// Body
 			sb.Append(@"<div class=""messagebody"">");
-			sb.Append(FormattingPipeline.FormatWithPhase3(FormattingPipeline.FormatWithPhase1And2(message.Body, false, FormattingContext.MessageBody, page),
+			sb.Append(FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, message.Body, false, FormattingContext.MessageBody, page),
 				FormattingContext.MessageBody, page));
 			sb.Append("</div>");
 		}

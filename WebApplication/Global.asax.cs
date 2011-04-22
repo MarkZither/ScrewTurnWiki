@@ -57,7 +57,7 @@ namespace ScrewTurn.Wiki {
 						Application.Lock();
 						if(Application["MasterPasswordOk"] == null) {
 							//Setup Master Password
-							if(!String.IsNullOrEmpty(Settings.MasterPassword))
+							if(!String.IsNullOrEmpty(Settings.GetMasterPassword(Tools.DetectCurrentWiki())))
 								Application["MasterPasswordOk"] = "OK";
 						}
 						Application.UnLock();
@@ -68,7 +68,7 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 			}
-			ScrewTurn.Wiki.UrlTools.RouteCurrentRequest();
+			ScrewTurn.Wiki.UrlTools.RouteCurrentRequest(Tools.DetectCurrentWiki());
 		}
 
 		protected void Application_AcquireRequestState(object sender, EventArgs e) {
@@ -77,7 +77,7 @@ namespace ScrewTurn.Wiki {
 				SessionCache.ClearData(HttpContext.Current.Session.SessionID);
 
 				// Try to automatically login the user through the cookie
-				ScrewTurn.Wiki.LoginTools.TryAutoLogin();
+				ScrewTurn.Wiki.LoginTools.TryAutoLogin(Tools.DetectCurrentWiki());
 			}
 		}
 
@@ -117,7 +117,7 @@ namespace ScrewTurn.Wiki {
 				// Try to redirect an inexistent .aspx page to a probably existing .ashx page
 				if(httpEx.GetHttpCode() == 404) {
 					string page = System.IO.Path.GetFileNameWithoutExtension(Request.PhysicalPath);
-					ScrewTurn.Wiki.UrlTools.Redirect(page + ScrewTurn.Wiki.Settings.PageExtension);
+					ScrewTurn.Wiki.UrlTools.Redirect(page + ScrewTurn.Wiki.GlobalSettings.PageExtension);
 					return;
 				}
 			}

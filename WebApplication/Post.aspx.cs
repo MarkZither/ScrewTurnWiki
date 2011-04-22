@@ -19,30 +19,33 @@ namespace ScrewTurn.Wiki {
 
 		private PageInfo page;
 		private PageContent content;
+		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
-			Page.Title = Properties.Messages.PostTitle + " - " + Settings.WikiTitle;
+			currentWiki = DetectWiki();
+			
+			Page.Title = Properties.Messages.PostTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
-			if(Request["Page"] == null) UrlTools.RedirectHome();
-			page = Pages.FindPage(Request["Page"]);
-			if(page == null) UrlTools.RedirectHome();
+			if(Request["Page"] == null) UrlTools.RedirectHome(currentWiki);
+			page = Pages.FindPage(currentWiki, Request["Page"]);
+			if(page == null) UrlTools.RedirectHome(currentWiki);
 			editor.CurrentPage = page;
 
-			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension));
+			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, GlobalSettings.PageExtension));
 
 			content = Content.GetPageContent(page);
-			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.MessageBody, page);
+			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.MessageBody, page);
 
 			// Verify permissions and setup captcha
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			bool canPostMessage = authChecker.CheckActionForPage(page, Actions.ForPages.PostDiscussion,
-				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
-			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(Tools.UrlEncode(page.FullName), Settings.PageExtension));
-			captcha.Visible = SessionFacade.LoginKey == null && !Settings.DisableCaptchaControl;
+				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
+			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(Tools.UrlEncode(page.FullName), GlobalSettings.PageExtension));
+			captcha.Visible = SessionFacade.LoginKey == null && !Settings.GetDisableCaptchaControl(currentWiki);
 
 			if(Page.IsPostBack) return;
 
-			editor.SetContent("", Settings.UseVisualEditorAsDefault);
+			editor.SetContent("", Settings.GetUseVisualEditorAsDefault(currentWiki));
 
 			string username = Request.UserHostAddress;
 			if(SessionFacade.LoginKey != null) username = SessionFacade.CurrentUsername;
@@ -55,7 +58,7 @@ namespace ScrewTurn.Wiki {
 						int.Parse(Request["Parent"]);
 					}
 					catch {
-						UrlTools.RedirectHome();
+						UrlTools.RedirectHome(currentWiki);
 					}
 					Message[] messages = Pages.GetPageMessages(page);
 					Message parent = Pages.FindMessage(messages, int.Parse(Request["Parent"]));
@@ -70,14 +73,14 @@ namespace ScrewTurn.Wiki {
 					int.Parse(Request["Edit"]);
 				}
 				catch {
-					UrlTools.RedirectHome();
+					UrlTools.RedirectHome(currentWiki);
 				}
 				Message[] messages = Pages.GetPageMessages(page);
 				Message msg = Pages.FindMessage(messages, int.Parse(Request["Edit"]));
 
 				if(msg != null) {
 					txtSubject.Text = msg.Subject;
-					editor.SetContent(msg.Body, Settings.UseVisualEditorAsDefault);
+					editor.SetContent(msg.Body, Settings.GetUseVisualEditorAsDefault(currentWiki));
 				}
 				else throw new Exception("Message not found (" + page.FullName + "." + Request["Edit"] + ").");
 			}
@@ -112,18 +115,18 @@ namespace ScrewTurn.Wiki {
 				}
 				catch { }
 
-				Pages.AddMessage(page, username, txtSubject.Text, DateTime.Now, content, parent);
+				Pages.AddMessage(currentWiki, page, username, txtSubject.Text, DateTime.Now, content, parent);
 			}
 			else {
 				Message[] messages = Pages.GetPageMessages(page);
 				Message msg = Pages.FindMessage(messages, int.Parse(Request["Edit"]));
-				Pages.ModifyMessage(page, int.Parse(Request["Edit"]), msg.Username, txtSubject.Text, DateTime.Now, content);
+				Pages.ModifyMessage(currentWiki, page, int.Parse(Request["Edit"]), msg.Username, txtSubject.Text, DateTime.Now, content);
 			}
-			UrlTools.Redirect(page.FullName + Settings.PageExtension + "?Discuss=1&NoRedirect=1");
+			UrlTools.Redirect(page.FullName + GlobalSettings.PageExtension + "?Discuss=1&NoRedirect=1");
 		}
 
 		protected void btnCancel_Click(object sender, EventArgs e) {
-			UrlTools.Redirect(page.FullName + Settings.PageExtension + "?Discuss=1&NoRedirect=1");
+			UrlTools.Redirect(page.FullName + GlobalSettings.PageExtension + "?Discuss=1&NoRedirect=1");
 		}
 
 	}

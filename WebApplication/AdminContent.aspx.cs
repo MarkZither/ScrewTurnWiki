@@ -13,14 +13,16 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			string currentWiki = DetectWiki();
+
+			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) UrlTools.Redirect("AccessDenied.aspx");
 
 			if(!Page.IsPostBack) {
 				// Load namespaces
 
 				// Add root namespace
 				lstNamespace.Items.Add(new ListItem("<root>", ""));
-				List<NamespaceInfo> namespaces = Pages.GetNamespaces();
+				List<NamespaceInfo> namespaces = Pages.GetNamespaces(currentWiki);
 				foreach(NamespaceInfo ns in namespaces) {
 					lstNamespace.Items.Add(new ListItem(ns.Name, ns.Name));
 				}
@@ -54,6 +56,7 @@ namespace ScrewTurn.Wiki {
 		};
 
 		protected void btn_Click(object sender, EventArgs e) {
+			string currentWiki = DetectWiki();
 			Control senderControl = sender as Control;
 			txtCurrentButton.Value = senderControl.ID;
 
@@ -61,8 +64,8 @@ namespace ScrewTurn.Wiki {
 
 			bool markupOnly = WikiMarkupOnlyItems.Contains(item);
 
-			string content = Settings.Provider.GetMetaDataItem(item, lstNamespace.SelectedValue);
-			editor.SetContent(content, !markupOnly && Settings.UseVisualEditorAsDefault);
+			string content = Settings.GetProvider(currentWiki).GetMetaDataItem(item, lstNamespace.SelectedValue);
+			editor.SetContent(content, !markupOnly && Settings.GetUseVisualEditorAsDefault(currentWiki));
 
 			editor.VisualVisible = !markupOnly;
 			editor.PreviewVisible = !markupOnly;
@@ -75,7 +78,7 @@ namespace ScrewTurn.Wiki {
 			lstCopyFromNamespace.Items.Clear();
 			string currentNamespace = lstNamespace.SelectedValue;
 			if(!string.IsNullOrEmpty(currentNamespace)) lstCopyFromNamespace.Items.Add(new ListItem("<root>", ""));
-			List<NamespaceInfo> namespaces = Pages.GetNamespaces();
+			List<NamespaceInfo> namespaces = Pages.GetNamespaces(currentWiki);
 			foreach(NamespaceInfo ns in namespaces) {
 				if(currentNamespace != ns.Name) lstCopyFromNamespace.Items.Add(new ListItem(ns.Name, ns.Name));
 			}
@@ -87,9 +90,9 @@ namespace ScrewTurn.Wiki {
 
 			if(Settings.IsMetaDataItemGlobal(item)) return;
 
-			string newValue = Settings.Provider.GetMetaDataItem(item, lstCopyFromNamespace.SelectedValue);
+			string newValue = Settings.GetProvider(DetectWiki()).GetMetaDataItem(item, lstCopyFromNamespace.SelectedValue);
 
-			editor.SetContent(newValue, Settings.UseVisualEditorAsDefault);
+			editor.SetContent(newValue, Settings.GetUseVisualEditorAsDefault(DetectWiki()));
 		}
 
 		protected void btnSave_Click(object sender, EventArgs e) {
@@ -104,7 +107,7 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Metadata file change requested for " + item.ToString() +
 				(tag != null ? ", ns: " + tag : "") + lstNamespace.SelectedValue, EntryType.General, SessionFacade.CurrentUsername);
 
-			Settings.Provider.SetMetaDataItem(item, tag, editor.GetContent());
+			Settings.GetProvider(DetectWiki()).SetMetaDataItem(item, tag, editor.GetContent());
 
 			pnlEditor.Visible = false;
 			pnlList.Visible = true;

@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageSnippetsAndTemplates(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageSnippetsAndTemplates(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(DetectWiki()))) UrlTools.Redirect("AccessDenied.aspx");
 
 			if(!Page.IsPostBack) {
 				// Load snippets
@@ -22,8 +22,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptSnippetsTemplates_DataBinding(object sender, EventArgs e) {
-			List<Snippet> snippets = Snippets.GetSnippets();
-			List<ContentTemplate> templates = Templates.GetTemplates();
+			string currentWiki = DetectWiki();
+
+			List<Snippet> snippets = Snippets.GetSnippets(currentWiki);
+			List<ContentTemplate> templates = Templates.GetTemplates(currentWiki);
 
 			List<SnippetTemplateRow> result = new List<SnippetTemplateRow>(snippets.Count + templates.Count);
 
@@ -80,9 +82,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name of the snippet.</param>
 		private void SelectSnippet(string name) {
-			Snippet snippet = Snippets.Find(name);
+			string currentWiki = DetectWiki();
+			Snippet snippet = Snippets.Find(currentWiki, name);
 			providerSelector.SelectedProvider = snippet.Provider.GetType().FullName;
-			editor.SetContent(snippet.Content, Settings.UseVisualEditorAsDefault);
+			editor.SetContent(snippet.Content, Settings.GetUseVisualEditorAsDefault(currentWiki));
 			lblEditSnippetWarning.Visible = true;
 			SetTitleForSnippet();
 		}
@@ -92,9 +95,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name of the template.</param>
 		private void SelectTemplate(string name) {
-			ContentTemplate template = Templates.Find(name);
+			string currentWiki = DetectWiki();
+			ContentTemplate template = Templates.Find(currentWiki, name);
 			providerSelector.SelectedProvider = template.Provider.GetType().FullName;
-			editor.SetContent(template.Content, Settings.UseVisualEditorAsDefault);
+			editor.SetContent(template.Content, Settings.GetUseVisualEditorAsDefault(currentWiki));
 			SetTitleForTemplate();
 		}
 
@@ -102,7 +106,7 @@ namespace ScrewTurn.Wiki {
 			pnlList.Visible = false;
 			pnlEditElement.Visible = true;
 
-			editor.SetContent("", Settings.UseVisualEditorAsDefault);
+			editor.SetContent("", Settings.GetUseVisualEditorAsDefault(DetectWiki()));
 			SetTitleForSnippet();
 			txtCurrentElement.Value = "S";
 
@@ -114,7 +118,7 @@ namespace ScrewTurn.Wiki {
 			pnlList.Visible = false;
 			pnlEditElement.Visible = true;
 
-			editor.SetContent("", Settings.UseVisualEditorAsDefault);
+			editor.SetContent("", Settings.GetUseVisualEditorAsDefault(DetectWiki()));
 			SetTitleForTemplate();
 			txtCurrentElement.Value = "T";
 
@@ -144,8 +148,10 @@ namespace ScrewTurn.Wiki {
 		private void CreateSnippet() {
 			Log.LogEntry("Snippet creation requested for " + txtName.Text, EntryType.General, Log.SystemUsername);
 
-			if(Snippets.AddSnippet(txtName.Text, editor.GetContent(),
-				Collectors.CollectorsBox.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider))) {
+			string currentWiki = DetectWiki();
+
+			if(Snippets.AddSnippet(currentWiki, txtName.Text, editor.GetContent(),
+				Collectors.CollectorsBox.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider, currentWiki))) {
 
 				RefreshList();
 				lblResult.CssClass = "resultok";
@@ -164,8 +170,9 @@ namespace ScrewTurn.Wiki {
 		private void CreateTemplate() {
 			Log.LogEntry("Content Template creation requested for " + txtName.Text, EntryType.General, Log.SystemUsername);
 
-			if(Templates.AddTemplate(txtName.Text, editor.GetContent(),
-				Collectors.CollectorsBox.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider))) {
+			string currentWiki = DetectWiki();
+			if(Templates.AddTemplate(currentWiki, txtName.Text, editor.GetContent(),
+				Collectors.CollectorsBox.PagesProviderCollector.GetProvider(providerSelector.SelectedProvider, currentWiki))) {
 
 				RefreshList();
 				lblResult.CssClass = "resultok";
@@ -191,7 +198,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name of the snippet to save.</param>
 		private void SaveSnippet(string name) {
-			Snippet snippet = Snippets.Find(name);
+			Snippet snippet = Snippets.Find(DetectWiki(), name);
 
 			Log.LogEntry("Snippet modification requested for " + name, EntryType.General, Log.SystemUsername);
 
@@ -212,7 +219,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name of the template to save.</param>
 		private void SaveTemplate(string name) {
-			ContentTemplate template = Templates.Find(name);
+			ContentTemplate template = Templates.Find(DetectWiki(), name);
 
 			Log.LogEntry("Content Template modification requested for " + name, EntryType.General, Log.SystemUsername);
 
@@ -241,7 +248,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name of the snippet to delete.</param>
 		private void DeleteSnippet(string name) {
-			Snippet snippet = Snippets.Find(name);
+			Snippet snippet = Snippets.Find(DetectWiki(), name);
 
 			Log.LogEntry("Snippet deletion requested for " + name, EntryType.General, Log.SystemUsername);
 
@@ -262,7 +269,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name of the template to delete.</param>
 		private void DeleteTemplate(string name) {
-			ContentTemplate snippet = Templates.Find(name);
+			ContentTemplate snippet = Templates.Find(DetectWiki(), name);
 
 			Log.LogEntry("Content Template deletion requested for " + name, EntryType.General, Log.SystemUsername);
 
@@ -307,7 +314,7 @@ namespace ScrewTurn.Wiki {
 			providerSelector.Enabled = true;
 			txtName.Text = "";
 			txtName.Enabled = true;
-			editor.SetContent("", Settings.UseVisualEditorAsDefault);
+			editor.SetContent("", Settings.GetUseVisualEditorAsDefault(DetectWiki()));
 
 			btnCreate.Visible = true;
 			btnSave.Visible = false;

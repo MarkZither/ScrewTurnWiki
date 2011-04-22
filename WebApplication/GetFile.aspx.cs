@@ -28,11 +28,13 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
+			string currentWiki = Tools.DetectCurrentWiki();
+
 			// Remove ".." sequences that might be a security issue
 			filename = filename.Replace("..", "");
 
 			bool isPageAttachment = !string.IsNullOrEmpty(Request["Page"]);
-			PageInfo pageInfo = isPageAttachment ? Pages.FindPage(Request["Page"]) : null;
+			PageInfo pageInfo = isPageAttachment ? Pages.FindPage(currentWiki, Request["Page"]) : null;
 			if(isPageAttachment && pageInfo == null) {
 				Response.StatusCode = 404;
 				Response.Write(Properties.Messages.FileNotFound);
@@ -41,10 +43,10 @@ namespace ScrewTurn.Wiki {
 
 			IFilesStorageProviderV30 provider;
 
-			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(Request["Provider"]);
+			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(Request["Provider"], currentWiki);
 			else {
-				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(pageInfo, filename);
-				else provider = FilesAndAttachments.FindFileProvider(filename);
+				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(currentWiki, pageInfo, filename);
+				else provider = FilesAndAttachments.FindFileProvider(currentWiki, filename);
 			}
 
 			if(provider == null) {
@@ -59,22 +61,22 @@ namespace ScrewTurn.Wiki {
 				filename = filename.Replace("\\", "/");
 			}
 
-			bool countHit = CountHit(filename);
+			bool countHit = CountHit(currentWiki, filename);
 
 			// Verify permissions
 			bool canDownload = false;
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			if(isPageAttachment) {
 				canDownload = authChecker.CheckActionForPage(pageInfo, Actions.ForPages.DownloadAttachments,
-					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
+					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			}
 			else {
 				string dir = Tools.GetDirectoryName(filename);
 				canDownload = authChecker.CheckActionForDirectory(provider, dir,
 					 Actions.ForDirectories.DownloadFiles, SessionFacade.GetCurrentUsername(),
-					 SessionFacade.GetCurrentGroupNames());
+					 SessionFacade.GetCurrentGroupNames(currentWiki));
 			}
 			if(!canDownload) {
 				Response.StatusCode = 401;
@@ -168,17 +170,18 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets a value indicating whether or not to count the hit.
 		/// </summary>
+		/// <param name="currentWiki">The wiki.</param>
 		/// <param name="file">The name of the file.</param>
 		/// <returns><c>true</c> if the hit must be counted, <c>false</c> otherwise.</returns>
-		private bool CountHit(string file) {
+		private bool CountHit(string currentWiki, string file) {
 			bool result = Request["NoHit"] != "1";
 
 			if(!result) return false;
 			else {
-				FileDownloadCountFilterMode mode = Settings.FileDownloadCountFilterMode;
+				FileDownloadCountFilterMode mode = Settings.GetFileDownloadCountFilterMode(currentWiki);
 				if(mode == FileDownloadCountFilterMode.CountAll) return true;
 				else {
-					string[] allowedExtensions = Settings.FileDownloadCountFilter;
+					string[] allowedExtensions = Settings.GetFileDownloadCountFilter(currentWiki);
 					string extension = Path.GetExtension(file);
 					if(string.IsNullOrEmpty(extension)) return false;
 					else extension = extension.Trim('.').ToLowerInvariant();
