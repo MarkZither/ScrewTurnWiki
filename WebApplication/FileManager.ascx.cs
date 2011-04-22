@@ -286,6 +286,7 @@ namespace ScrewTurn.Wiki {
 
 			if(!directory.StartsWith("/")) directory = "/" + directory;
 			if(!directory.EndsWith("/")) directory += "/";
+			directory = directory.Replace("//", "/");
 
 			LoadProviders();
 
@@ -370,10 +371,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private string CurrentDirectory {
 			get {
-				if(ViewState["CurrDir"] != null) return (string)ViewState["CurrDir"];
+				if(ViewState["CurrDir"] != null) return ((string)ViewState["CurrDir"]).Replace("//", "/");
 				else return "/";
 			}
-			set { ViewState["CurrDir"] = value; }
+			set { ViewState["CurrDir"] = value.Replace("//", "/"); }
 		}
 
 		protected void lnkRoot_Click(object sender, EventArgs e) {
