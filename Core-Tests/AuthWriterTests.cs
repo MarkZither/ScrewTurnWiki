@@ -38,7 +38,7 @@ namespace ScrewTurn.Wiki.Tests {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
-			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.Any();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.Any();
 
 			mocks.Replay(host);
 
@@ -47,7 +47,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		private ISettingsStorageProviderV30 MockProvider(List<AclEntry> entries) {
 			ISettingsStorageProviderV30 provider = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			provider.Init(MockHost(), "");
+			provider.Init(MockHost(), "", null);
 			LastCall.On(provider).Repeat.Any();
 
 			AclManagerBase aclManager = new StandardAclManager();

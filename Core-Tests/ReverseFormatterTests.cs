@@ -70,11 +70,12 @@ namespace ScrewTurn.Wiki.Tests {
 
 			using(mocks.Record()) {
 				Expect.Call(settingsProvider.GetSetting("ProcessSingleLineBreaks")).Return("true").Repeat.Any();
-				Expect.Call(collectorsBox.SettingsProvider).Return(settingsProvider).Repeat.Any();
+				Expect.Call(collectorsBox.GetSettingsProvider(null)).Return(settingsProvider).Repeat.Any();
 			}
 
 			using(mocks.Playback()) {
-				Assert.AreEqual(output, ReverseFormatter.ReverseFormat(input));
+				ReverseFormatter reverseFormatter = new ReverseFormatter();
+				Assert.AreEqual(output, reverseFormatter.ReverseFormat(null, input));
 			}
 		}
 

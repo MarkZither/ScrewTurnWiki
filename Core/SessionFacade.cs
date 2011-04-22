@@ -42,8 +42,9 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the current user, if any.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>The current user, or <c>null</c>.</returns>
-		public static UserInfo GetCurrentUser() {
+		public static UserInfo GetCurrentUser(string wiki) {
 			if(Session != null) {
 				string sessionId = Session.SessionID;
 
@@ -52,9 +53,9 @@ namespace ScrewTurn.Wiki {
 				else {
 					string un = CurrentUsername;
 					if(string.IsNullOrEmpty(un)) return null;
-					else if(un == AnonymousUsername) return Users.GetAnonymousAccount();
+					else if(un == AnonymousUsername) return Users.GetAnonymousAccount(wiki);
 					else {
-						current = Users.FindUser(un);
+						current = Users.FindUser(wiki, un);
 						if(current != null) {
 							SessionCache.SetCurrentUser(sessionId, current);
 							return current;
@@ -89,24 +90,25 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the current user groups.
 		/// </summary>
-		public static UserGroup[] GetCurrentGroups() {
+		/// <param name="wiki">The wiki.</param>
+		public static UserGroup[] GetCurrentGroups(string wiki) {
 			if(Session != null) {
 				string sessionId = Session.SessionID;
 				UserGroup[] groups = SessionCache.GetCurrentGroups(sessionId);
 
 				if(groups == null || groups.Length == 0) {
-					UserInfo current = GetCurrentUser();
+					UserInfo current = GetCurrentUser(wiki);
 					if(current != null) {
 						// This check is necessary because after group deletion the session might contain outdated data
 						List<UserGroup> temp = new List<UserGroup>(current.Groups.Length);
 						for(int i = 0; i < current.Groups.Length; i++) {
-							UserGroup tempGroup = Users.FindUserGroup(current.Groups[i]);
+							UserGroup tempGroup = Users.FindUserGroup(wiki, current.Groups[i]);
 							if(tempGroup != null) temp.Add(tempGroup);
 						}
 						groups = temp.ToArray();
 					}
 					else {
-						groups = new UserGroup[] { Users.FindUserGroup(Settings.AnonymousGroup) };
+						groups = new UserGroup[] { Users.FindUserGroup(wiki, Settings.GetAnonymousGroup(wiki)) };
 					}
 
 					SessionCache.SetCurrentGroups(sessionId, groups);
@@ -120,16 +122,18 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the current group names.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>The group names.</returns>
-		public static string[] GetCurrentGroupNames() {
-			return Array.ConvertAll(GetCurrentGroups(), delegate(UserGroup g) { return g.Name; });
+		public static string[] GetCurrentGroupNames(string wiki) {
+			return Array.ConvertAll(GetCurrentGroups(wiki), delegate(UserGroup g) { return g.Name; });
 		}
 
 		/// <summary>
 		/// Gets the Breadcrumbs Manager.
 		/// </summary>
-		public static BreadcrumbsManager Breadcrumbs {
-			get { return new BreadcrumbsManager(); }
+		/// <param name="wiki">The wiki.</param>
+		public static BreadcrumbsManager Breadcrumbs(string wiki) {
+			return new BreadcrumbsManager(wiki);
 		}
 
 	}

@@ -12,10 +12,11 @@ namespace ScrewTurn.Wiki {
 	public static class RecentChanges {
 
 		/// <summary>
-		/// Gets all the changes, sorted by date/time ascending.
+		/// Gets all the changes for the given wiki, sorted by date/time ascending.
 		/// </summary>
-		public static RecentChange[] GetAllChanges() {
-			RecentChange[] changes = Settings.Provider.GetRecentChanges();
+		/// <param name="wiki">The wiki.</param>
+		public static RecentChange[] GetAllChanges(string wiki) {
+			RecentChange[] changes = Settings.GetProvider(wiki).GetRecentChanges();
 
 			RecentChange[] myCopy = new RecentChange[changes.Length];
 			Array.Copy(changes, myCopy, changes.Length);
@@ -28,6 +29,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Adds a new change.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page name.</param>
 		/// <param name="title">The page title.</param>
 		/// <param name="messageSubject">The message subject.</param>
@@ -35,8 +37,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user.</param>
 		/// <param name="change">The change.</param>
 		/// <param name="descr">The description (optional).</param>
-		public static void AddChange(string page, string title, string messageSubject, DateTime dateTime, string user, Change change, string descr) {
-			RecentChange[] allChanges = GetAllChanges();
+		public static void AddChange(string wiki, string page, string title, string messageSubject, DateTime dateTime, string user, Change change, string descr) {
+			RecentChange[] allChanges = GetAllChanges(wiki);
 			if(allChanges.Length > 0) {
 				RecentChange lastChange = allChanges[allChanges.Length - 1];
 				if(lastChange.Page == page && lastChange.Title == title &&
@@ -49,8 +51,7 @@ namespace ScrewTurn.Wiki {
 					return;
 				}
 			}
-
-			Settings.Provider.AddRecentChange(page, title, messageSubject, dateTime, user, change, descr);
+			Settings.GetProvider(wiki).AddRecentChange(page, title, messageSubject, dateTime, user, change, descr);
 		}
 
 	}

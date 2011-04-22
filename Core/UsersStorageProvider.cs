@@ -17,9 +17,10 @@ namespace ScrewTurn.Wiki {
 		private const string GroupsFile = "Groups.cs";
 
 		private readonly ComponentInformation info = new ComponentInformation("Local Users Provider",
-			"Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			"Threeplicate Srl", GlobalSettings.WikiVersion, "http://www.screwturn.eu", null);
 
 		private IHostV30 host;
+		private string wiki;
 
 		private UserGroup[] groupsCache = null;
 		private UserInfo[] usersCache = null;
@@ -33,13 +34,15 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="host">The Host of the Provider.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config) {
+		public void Init(IHostV30 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
+			this.wiki = wiki;
 		}
 
 		/// <summary>
@@ -105,8 +108,8 @@ namespace ScrewTurn.Wiki {
 					host.LogEntry("Upgrading users format from 2.0 to 3.0", LogEntryType.General, null, this);
 
 					DumpUsers(users);
-					UserGroup adminsGroup = AddUserGroup(host.GetSettingValue(SettingName.AdministratorsGroup), "Built-in Administrators");
-					UserGroup usersGroup = AddUserGroup(host.GetSettingValue(SettingName.UsersGroup), "Built-in Users");
+					UserGroup adminsGroup = AddUserGroup(host.GetSettingValue(wiki, SettingName.AdministratorsGroup), "Built-in Administrators");
+					UserGroup usersGroup = AddUserGroup(host.GetSettingValue(wiki, SettingName.UsersGroup), "Built-in Users");
 
 					for(int i = 0; i < users.Length; i++) {
 						if(oldStyleAdmin[i]) {
@@ -117,7 +120,7 @@ namespace ScrewTurn.Wiki {
 						}
 					}
 
-					host.UpgradeSecurityFlagsToGroupsAcl(adminsGroup, usersGroup);
+					host.UpgradeSecurityFlagsToGroupsAcl(wiki, adminsGroup, usersGroup);
 				}
 			}
 		}

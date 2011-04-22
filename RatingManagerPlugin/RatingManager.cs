@@ -21,6 +21,7 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 		const string ratingFileName = "RatingManagerPluginRatingFile.dat";
 
 		private IHostV30 _host;
+		private string _wiki;
 		private bool _enableLogging = true;
         private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "3.0.3.555", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RatingManager2.txt");
 
@@ -327,10 +328,12 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config) {
+		public void Init(IHostV30 host, string config, string wiki) {
 			_host = host;
+			_wiki = wiki;
 
 			if(config != null) {
 				string[] configEntries = config.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -355,8 +358,8 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 
 
 		private IFilesStorageProviderV30 GetDefaultFilesStorageProvider() {
-			string defaultFilesStorageProviderName = _host.GetSettingValue(SettingName.DefaultFilesStorageProvider);
-			return _host.GetFilesStorageProviders(true).First(p => p.GetType().FullName == defaultFilesStorageProviderName);
+			string defaultFilesStorageProviderName = _host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider);
+			return _host.GetFilesStorageProviders(_wiki, true).First(p => p.GetType().FullName == defaultFilesStorageProviderName);
 		}
 
 		private bool DirectoryExists(IFilesStorageProviderV30 filesStorageProvider, string directoryName) {

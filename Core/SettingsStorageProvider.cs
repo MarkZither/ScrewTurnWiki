@@ -15,7 +15,6 @@ namespace ScrewTurn.Wiki {
 
 		// Filenames: Settings, Log, RecentChanges, MetaData
 		private const string ConfigFile = "Config.cs";
-		private const string LogFile = "Log.cs";
 		private const string RecentChangesFile = "RecentChanges3.cs"; // Old v2 format no more supported
 		private const string AccountActivationMessageFile = "AccountActivationMessage.cs";
 		private const string EditNoticeFile = "EditNotice.cs";
@@ -33,10 +32,6 @@ namespace ScrewTurn.Wiki {
 		private const string DiscussionChangeMessageFile = "DiscussionChangeMessage.cs";
 		private const string ApproveDraftMessageFile = "ApproveDraftMessage.cs";
 
-		private const string PluginsDirectory = "Plugins";
-		private const string PluginsStatusFile = "Status.cs";
-		private const string PluginsConfigDirectory = "Config";
-
 		private const string AclFile = "ACL.cs";
 
 		private const string LinksFile = "Links.cs";
@@ -49,9 +44,10 @@ namespace ScrewTurn.Wiki {
 		public static readonly string ProviderName = "Local Settings Provider";
 
 		private readonly ComponentInformation info =
-			new ComponentInformation(ProviderName, "Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			new ComponentInformation(ProviderName, "Threeplicate Srl", GlobalSettings.WikiVersion, "http://www.screwturn.eu", null);
 
 		private IHostV30 host;
+		private string wiki;
 
 		private IAclManager aclManager;
 		private AclStorerBase aclStorer;
@@ -65,26 +61,20 @@ namespace ScrewTurn.Wiki {
 			return Path.Combine(GetDataDirectory(host), name);
 		}
 
-		private string GetFullPathForPlugin(string name) {
-			return Path.Combine(Path.Combine(GetDataDirectory(host), PluginsDirectory), name);
-		}
-
-		private string GetFullPathForPluginConfig(string name) {
-			return Path.Combine(Path.Combine(Path.Combine(GetDataDirectory(host), PluginsDirectory), PluginsConfigDirectory), name);
-		}
-
 		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config) {
+		public void Init(IHostV30 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
+			this.wiki = wiki;
 
 			LoadConfig();
 
@@ -109,11 +99,6 @@ namespace ScrewTurn.Wiki {
 
 			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
-			}
-
-			// Create all needed pluginAssemblies
-			if(!File.Exists(GetFullPath(LogFile))) {
-				File.Create(GetFullPath(LogFile)).Close();
 			}
 
 			if(!File.Exists(GetFullPath(ConfigFile))) {
@@ -183,18 +168,6 @@ namespace ScrewTurn.Wiki {
 
 			if(!File.Exists(GetFullPath(ApproveDraftMessageFile))) {
 				File.Create(GetFullPath(ApproveDraftMessageFile)).Close();
-			}
-
-			if(!Directory.Exists(GetFullPath(PluginsDirectory))) {
-				Directory.CreateDirectory(GetFullPath(PluginsDirectory));
-			}
-
-			if(!Directory.Exists(GetFullPathForPlugin(PluginsConfigDirectory))) {
-				Directory.CreateDirectory(GetFullPathForPlugin(PluginsConfigDirectory));
-			}
-
-			if(!File.Exists(GetFullPathForPlugin(PluginsStatusFile))) {
-				File.Create(GetFullPathForPlugin(PluginsStatusFile)).Close();
 			}
 
 			if(!File.Exists(GetFullPath(LinksFile))) {
@@ -368,244 +341,6 @@ namespace ScrewTurn.Wiki {
 			lock(this) {
 				bulkUpdating = false;
 				DumpConfig();
-			}
-		}
-
-		/// <summary>
-		/// Sanitizes a stiring from all unfriendly characters.
-		/// </summary>
-		/// <param name="input">The input string.</param>
-		/// <returns>The sanitized result.</returns>
-		private static string Sanitize(string input) {
-			StringBuilder sb = new StringBuilder(input);
-			sb.Replace("|", "{PIPE}");
-			sb.Replace("\r", "");
-			sb.Replace("\n", "{BR}");
-			sb.Replace("<", "&lt;");
-			sb.Replace(">", "&gt;");
-			return sb.ToString();
-		}
-
-		/// <summary>
-		/// Re-sanitizes a string from all unfriendly characters.
-		/// </summary>
-		/// <param name="input">The input string.</param>
-		/// <returns>The sanitized result.</returns>
-		private static string Resanitize(string input) {
-			StringBuilder sb = new StringBuilder(input);
-			sb.Replace("<", "&lt;");
-			sb.Replace(">", "&gt;");
-			sb.Replace("{BR}", "\n");
-			sb.Replace("{PIPE}", "|");
-			return sb.ToString();
-		}
-
-		/// <summary>
-		/// Converts an <see cref="T:EntryType" /> to a string.
-		/// </summary>
-		/// <param name="type">The entry type.</param>
-		/// <returns>The corresponding string.</returns>
-		private static string EntryTypeToString(EntryType type) {
-			switch(type) {
-				case EntryType.General:
-					return "G";
-				case EntryType.Warning:
-					return "W";
-				case EntryType.Error:
-					return "E";
-				default:
-					return "G";
-			}
-		}
-
-		/// <summary>
-		/// Converts an entry type string to an <see cref="T:EntryType" />.
-		/// </summary>
-		/// <param name="value">The string.</param>
-		/// <returns>The <see cref="T:EntryType" />.</returns>
-		private static EntryType EntryTypeParse(string value) {
-			switch(value) {
-				case "G":
-					return EntryType.General;
-				case "W":
-					return EntryType.Warning;
-				case "E":
-					return EntryType.Error;
-				default:
-					return EntryType.General;
-			}
-		}
-
-		/// <summary>
-		/// Records a message to the System Log.
-		/// </summary>
-		/// <param name="message">The Log Message.</param>
-		/// <param name="entryType">The Type of the Entry.</param>
-		/// <param name="user">The User.</param>
-		/// <remarks>This method <b>should not</b> write messages to the Log using the method IHost.LogEntry.
-		/// This method should also never throw exceptions (except for parameter validation).</remarks>
-		/// <exception cref="ArgumentNullException">If <b>message</b> or <b>user</b> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>message</b> or <b>user</b> are empty.</exception>
-		public void LogEntry(string message, EntryType entryType, string user) {
-			if(message == null) throw new ArgumentNullException("message");
-			if(message.Length == 0) throw new ArgumentException("Message cannot be empty", "message");
-			if(user == null) throw new ArgumentNullException("user");
-			if(user.Length == 0) throw new ArgumentException("User cannot be empty", "user");
-
-			lock(this) {
-				message = Sanitize(message);
-				user = Sanitize(user);
-				LoggingLevel level = (LoggingLevel)Enum.Parse(typeof(LoggingLevel), host.GetSettingValue(SettingName.LoggingLevel));
-				switch(level) {
-					case LoggingLevel.AllMessages:
-						break;
-					case LoggingLevel.WarningsAndErrors:
-						if(entryType != EntryType.Error && entryType != EntryType.Warning) return;
-						break;
-					case LoggingLevel.ErrorsOnly:
-						if(entryType != EntryType.Error) return;
-						break;
-					case LoggingLevel.DisableLog:
-						return;
-					default:
-						break;
-				}
-
-				FileStream fs = null;
-				try {
-					fs = new FileStream(GetFullPath(LogFile), FileMode.Append, FileAccess.Write, FileShare.None);
-				}
-				catch {
-					return;
-				}
-
-				StreamWriter sw = new StreamWriter(fs, System.Text.UTF8Encoding.UTF8);
-				// Type | DateTime | Message | User
-				try {
-					sw.Write(EntryTypeToString(entryType) + "|" + string.Format("{0:yyyy'/'MM'/'dd' 'HH':'mm':'ss}", DateTime.Now) + "|" + message + "|" + user + "\r\n");
-				}
-				catch { }
-				finally {
-					try {
-						sw.Close();
-					}
-					catch { }
-				}
-
-				try {
-					FileInfo fi = new FileInfo(GetFullPath(LogFile));
-					if(fi.Length > (long)(int.Parse(host.GetSettingValue(SettingName.MaxLogSize)) * 1024)) {
-						CutLog((int)(fi.Length * 0.75));
-					}
-				}
-				catch { }
-			}
-		}
-
-		/// <summary>
-		/// Reduces the size of the Log to the specified size (or less).
-		/// </summary>
-		/// <param name="size">The size to shrink the log to (in bytes).</param>
-		private void CutLog(int size) {
-			lock(this) {
-				// Contains the log messages from oldest to newest, and reverse the list
-				List<LogEntry> entries = new List<LogEntry>(GetLogEntries());
-				entries.Reverse();
-
-				FileInfo fi = new FileInfo(GetFullPath(LogFile));
-				int difference = (int)(fi.Length - size);
-				int removeEntries = difference / EstimatedLogEntrySize * 2; // Double the number of removed entries in order to reduce the # of times Cut is needed
-				int preserve = entries.Count - removeEntries; // The number of entries to be preserved
-
-				// Copy the entries to preserve in a temp list
-				List<LogEntry> toStore = new List<LogEntry>();
-				for(int i = 0; i < preserve; i++) {
-					toStore.Add(entries[i]);
-				}
-
-				toStore.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
-
-				StringBuilder sb = new StringBuilder();
-				// Type | DateTime | Message | User
-				foreach(LogEntry e in toStore) {
-					sb.Append(EntryTypeToString(e.EntryType));
-					sb.Append("|");
-					sb.Append(e.DateTime.ToString("yyyy'/'MM'/'dd' 'HH':'mm':'ss"));
-					sb.Append("|");
-					sb.Append(e.Message);
-					sb.Append("|");
-					sb.Append(e.User);
-					sb.Append("\r\n");
-				}
-
-				FileStream fs = null;
-				try {
-					fs = new FileStream(GetFullPath(LogFile), FileMode.Create, FileAccess.Write, FileShare.None);
-				}
-				catch(Exception ex) {
-					throw new IOException("Unable to open the file: " + LogFile, ex);
-				}
-
-				StreamWriter sw = new StreamWriter(fs, System.Text.UTF8Encoding.UTF8);
-				// Type | DateTime | Message | User
-				try {
-					sw.Write(sb.ToString());
-				}
-				catch { }
-				sw.Close();
-			}
-		}
-
-		/// <summary>
-		/// Gets all the Log Entries, sorted by date/time (oldest to newest).
-		/// </summary>
-		/// <remarks>The Log Entries.</remarks>
-		public LogEntry[] GetLogEntries() {
-			lock(this) {
-				string content = File.ReadAllText(GetFullPath(LogFile)).Replace("\r", "");
-				List<LogEntry> result = new List<LogEntry>(50);
-				string[] lines = content.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-				string[] fields;
-				for(int i = 0; i < lines.Length; i++) {
-					fields = lines[i].Split('|');
-					try {
-						// Try/catch to avoid problems with corrupted file (raw method)
-						result.Add(new LogEntry(EntryTypeParse(fields[0]), DateTime.Parse(fields[1]), Resanitize(fields[2]), Resanitize(fields[3])));
-					}
-					catch { }
-				}
-
-				result.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
-
-				return result.ToArray();
-			}
-		}
-
-		/// <summary>
-		/// Clear the Log.
-		/// </summary>
-		public void ClearLog() {
-			lock(this) {
-				FileStream fs = null;
-				try {
-					fs = new FileStream(GetFullPath(LogFile), FileMode.Create, FileAccess.Write, FileShare.None);
-				}
-				catch(Exception ex) {
-					throw new IOException("Unable to access the file: " + LogFile, ex);
-				}
-				fs.Close();
-			}
-		}
-
-		/// <summary>
-		/// Gets the current size of the Log, in KB.
-		/// </summary>
-		public int LogSize {
-			get {
-				lock(this) {
-					FileInfo fi = new FileInfo(GetFullPath(LogFile));
-					return (int)(fi.Length / 1024);
-				}
 			}
 		}
 
@@ -795,7 +530,7 @@ namespace ScrewTurn.Wiki {
 				File.AppendAllText(GetFullPath(RecentChangesFile), sb.ToString());
 
 				// Delete old changes, if needed
-				int max = int.Parse(host.GetSettingValue(SettingName.MaxRecentChanges));
+				int max = int.Parse(host.GetSettingValue(wiki, SettingName.MaxRecentChanges));
 				if(GetRecentChanges().Length > max) CutRecentChanges((int)(max * 0.90));
 
 				return true;
@@ -832,207 +567,6 @@ namespace ScrewTurn.Wiki {
 					sb.Append("\r\n");
 				}
 				File.WriteAllText(GetFullPath(RecentChangesFile), sb.ToString());
-			}
-		}
-
-		/// <summary>
-		/// Lists the stored plugin assemblies.
-		/// </summary>
-		/// <returns></returns>
-		public string[] ListPluginAssemblies() {
-			lock(this) {
-				string[] files = Directory.GetFiles(GetFullPath(PluginsDirectory), "*.dll");
-				string[] result = new string[files.Length];
-				for(int i = 0; i < files.Length; i++) result[i] = Path.GetFileName(files[i]);
-				return result;
-			}
-		}
-
-		/// <summary>
-		/// Stores a plugin's assembly, overwriting existing ones if present.
-		/// </summary>
-		/// <param name="filename">The file name of the assembly, such as "Assembly.dll".</param>
-		/// <param name="assembly">The assembly content.</param>
-		/// <returns><c>true</c> if the assembly is stored, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>filename</b> or <b>assembly</b> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>filename</b> or <b>assembly</b> are empty.</exception>
-		public bool StorePluginAssembly(string filename, byte[] assembly) {
-			if(filename == null) throw new ArgumentNullException("filename");
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
-			if(assembly == null) throw new ArgumentNullException("assembly");
-			if(assembly.Length == 0) throw new ArgumentException("Assembly cannot be empty", "assembly");
-
-			lock(this) {
-				try {
-					File.WriteAllBytes(GetFullPathForPlugin(filename), assembly);
-				}
-				catch(IOException) {
-					return false;
-				}
-				return true;
-			}
-		}
-
-		/// <summary>
-		/// Retrieves a plugin's assembly.
-		/// </summary>
-		/// <param name="filename">The file name of the assembly.</param>
-		/// <returns>The assembly content, or <c>null</c>.</returns>
-		/// <exception cref="ArgumentNullException">If <b>filename</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>filename</b> is empty.</exception>
-		public byte[] RetrievePluginAssembly(string filename) {
-			if(filename == null) throw new ArgumentNullException("filename");
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
-
-			if(!File.Exists(GetFullPathForPlugin(filename))) return null;
-
-			lock(this) {
-				try {
-					return File.ReadAllBytes(GetFullPathForPlugin(filename));
-				}
-				catch(IOException) {
-					return null;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Removes a plugin's assembly.
-		/// </summary>
-		/// <param name="filename">The file name of the assembly to remove, such as "Assembly.dll".</param>
-		/// <returns><c>true</c> if the assembly is removed, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>filename</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>filename</b> is empty.</exception>
-		public bool DeletePluginAssembly(string filename) {
-			if(filename == null) throw new ArgumentNullException(filename);
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
-
-			lock(this) {
-				string fullName = GetFullPathForPlugin(filename);
-				if(!File.Exists(fullName)) return false;
-				try {
-					File.Delete(fullName);
-					return true;
-				}
-				catch(IOException) {
-					return false;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Sets the status of a plugin.
-		/// </summary>
-		/// <param name="typeName">The Type name of the plugin.</param>
-		/// <param name="enabled">The plugin status.</param>
-		/// <returns><c>true</c> if the status is stored, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
-		public bool SetPluginStatus(string typeName, bool enabled) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
-
-			lock(this) {
-				string data = File.ReadAllText(GetFullPathForPlugin(PluginsStatusFile)).Replace("\r", "");
-				string[] lines = data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-				int idx = -1;
-				for(int i = 0; i < lines.Length; i++) {
-					if(lines[i].Equals(typeName)) {
-						idx = i;
-						break;
-					}
-				}
-				if(enabled) {
-					if(idx >= 0) {
-						StringBuilder sb = new StringBuilder(200);
-						for(int i = 0; i < lines.Length; i++) {
-							if(i != idx) sb.Append(lines[i] + "\r\n");
-						}
-						File.WriteAllText(GetFullPathForPlugin(PluginsStatusFile), sb.ToString());
-					}
-					// Else nothing to do
-				}
-				else {
-					if(idx == -1) {
-						StringBuilder sb = new StringBuilder(200);
-						for(int i = 0; i < lines.Length; i++) {
-							if(i != idx) sb.Append(lines[i] + "\r\n");
-						}
-						sb.Append(typeName + "\r\n");
-						File.WriteAllText(GetFullPathForPlugin(PluginsStatusFile), sb.ToString());
-					}
-					// Else nothing to do
-				}
-			}
-			return true;
-		}
-
-		/// <summary>
-		/// Gets the status of a plugin.
-		/// </summary>
-		/// <param name="typeName">The Type name of the plugin.</param>
-		/// <returns>The status (<c>true</c> for enabled, <c>false</c> for disabled), or <c>true</c> if no status is found.</returns>
-		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
-		public bool GetPluginStatus(string typeName) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
-
-			lock(this) {
-				string data = File.ReadAllText(GetFullPathForPlugin(PluginsStatusFile)).Replace("\r", "");
-				string[] lines = data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-				for(int i = 0; i < lines.Length; i++) {
-					if(lines[i].Equals(typeName)) return false;
-				}
-				return true;
-			}
-		}
-
-		/// <summary>
-		/// Sets the configuration of a plugin.
-		/// </summary>
-		/// <param name="typeName">The Type name of the plugin.</param>
-		/// <param name="config">The configuration.</param>
-		/// <returns><c>true</c> if the configuration is stored, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
-		public bool SetPluginConfiguration(string typeName, string config) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
-
-			lock(this) {
-				try {
-					File.WriteAllText(GetFullPathForPluginConfig(typeName + ".cs"), config != null ? config : "");
-					return true;
-				}
-				catch(IOException) {
-					return false;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets the configuration of a plugin.
-		/// </summary>
-		/// <param name="typeName">The Type name of the plugin.</param>
-		/// <returns>The plugin configuration, or <b>String.Empty</b>.</returns>
-		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
-		public string GetPluginConfiguration(string typeName) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
-
-			lock(this) {
-				string file = GetFullPathForPluginConfig(typeName + ".cs");
-				if(!File.Exists(file)) return "";
-				else {
-					try {
-						return File.ReadAllText(file);
-					}
-					catch(IOException) {
-						return "";
-					}
-				}
 			}
 		}
 

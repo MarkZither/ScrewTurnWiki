@@ -82,6 +82,7 @@
     <Compile Include="AuthReaderTests.cs" />
     <Compile Include="AuthToolsTests.cs" />
     <Compile Include="AuthWriterTests.cs" />
+    <Compile Include="GlobalSettingsStorageProviderTests.cs" />
     <Compile Include="DataMigratorTests.cs" />
     <Compile Include="FilesStorageProviderTests.cs" />
     <Compile Include="FormatterTests.cs" />

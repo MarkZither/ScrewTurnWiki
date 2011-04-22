@@ -72,6 +72,7 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="GlobalSettingsStorageProviderTestScaffolding.cs" />
     <Compile Include="FilesStorageProviderTestScaffolding.cs" />
     <Compile Include="PagesStorageProviderTestScaffolding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

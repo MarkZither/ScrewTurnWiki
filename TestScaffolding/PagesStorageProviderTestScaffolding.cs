@@ -16,15 +16,15 @@ namespace ScrewTurn.Wiki.Tests {
 		private MockRepository mocks = new MockRepository();
 		private string testDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
 
-		private delegate string ToStringDelegate(PageInfo p, string input);
+		private delegate string ToStringDelegate(string wiki, PageInfo p, string input);
 
 		protected IHostV30 MockHost() {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
-			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
-			Expect.Call(host.PrepareContentForIndexing(null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(PageInfo p, string input) { return input; }).Repeat.Any();
-			Expect.Call(host.PrepareTitleForIndexing(null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(PageInfo p, string input) { return input; }).Repeat.Any();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
+			Expect.Call(host.PrepareContentForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, PageInfo p, string input) { return input; }).Repeat.Any();
+			Expect.Call(host.PrepareTitleForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, PageInfo p, string input) { return input; }).Repeat.Any();
 
 			mocks.Replay(host);
 
@@ -45,14 +45,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
 			IPagesStorageProviderV30 prov = GetProvider();
-			prov.Init(null, "");
+			prov.Init(null, "", null);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
 			IPagesStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), null);
+			prov.Init(MockHost(), null, null);
 		}
 
 		private void AssertNamespaceInfosAreEqual(NamespaceInfo expected, NamespaceInfo actual, bool checkProvider) {

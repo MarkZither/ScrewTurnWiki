@@ -9,17 +9,27 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Manages content templates.
 	/// </summary>
-	public static class Templates {
+	public class Templates {
+
+		private string _wiki;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Templates"/> class.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		public Templates(string wiki) {
+			_wiki = wiki;
+		}
 
 		/// <summary>
 		/// Gets all the content templates.
 		/// </summary>
 		/// <returns>The content templates, sorted by name.</returns>
-		public static List<ContentTemplate> GetTemplates() {
+		public List<ContentTemplate> GetTemplates() {
 			List<ContentTemplate> result = new List<ContentTemplate>(20);
 
 			// Retrieve templates from all providers
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(_wiki)) {
 				result.AddRange(prov.GetContentTemplates());
 			}
 
@@ -33,7 +43,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name of the template to find.</param>
 		/// <returns>The content template, or <c>null</c>.</returns>
-		public static ContentTemplate Find(string name) {
+		public ContentTemplate Find(string name) {
 			List<ContentTemplate> templates = GetTemplates();
 
 			int index = templates.BinarySearch(new ContentTemplate(name, "", null), new ContentTemplateNameComparer());
@@ -49,10 +59,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="content">The content of the template.</param>
 		/// <param name="provider">The target provider (<c>null</c> for the default provider).</param>
 		/// <returns><c>true</c> if the template is added, <c>false</c> otherwise.</returns>
-		public static bool AddTemplate(string name, string content, IPagesStorageProviderV30 provider) {
+		public bool AddTemplate(string name, string content, IPagesStorageProviderV30 provider) {
 			if(Find(name) != null) return false;
 
-			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, _wiki);
 
 			ContentTemplate result = provider.AddContentTemplate(name, content);
 
@@ -67,7 +77,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="template">The template to remove.</param>
 		/// <returns><c>true</c> if the template is removed, <c>false</c> otherwise.</returns>
-		public static bool RemoveTemplate(ContentTemplate template) {
+		public bool RemoveTemplate(ContentTemplate template) {
 			bool done = template.Provider.RemoveContentTemplate(template.Name);
 
 			if(done) Log.LogEntry("Content Template " + template.Name + " deleted", EntryType.General, Log.SystemUsername);
@@ -82,7 +92,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="template">The template to modify.</param>
 		/// <param name="content">The new content of the template.</param>
 		/// <returns><c>true</c> if the template is modified, <c>false</c> otherwise.</returns>
-		public static bool ModifyTemplate(ContentTemplate template, string content) {
+		public bool ModifyTemplate(ContentTemplate template, string content) {
 			ContentTemplate result = template.Provider.ModifyContentTemplate(template.Name, content);
 
 			if(result != null) Log.LogEntry("Content Template " + template.Name + " updated", EntryType.General, Log.SystemUsername);

@@ -83,6 +83,7 @@
     <Compile Include="FileDetails.cs" />
     <Compile Include="IFilesStorageProvider.cs" />
     <Compile Include="IFormatterProvider.cs" />
+    <Compile Include="IGlobalSettingsStorageProvider.cs" />
     <Compile Include="IHost.cs">
       <SubType>Code</SubType>
     </Compile>

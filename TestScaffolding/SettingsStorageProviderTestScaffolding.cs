@@ -24,11 +24,11 @@ namespace ScrewTurn.Wiki.Tests {
 			//Console.WriteLine("Temp dir: " + testDir);
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
-			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
 
-			Expect.Call(host.GetSettingValue(SettingName.LoggingLevel)).Return("3").Repeat.Any();
-			Expect.Call(host.GetSettingValue(SettingName.MaxLogSize)).Return(MaxLogSize.ToString()).Repeat.Any();
-			Expect.Call(host.GetSettingValue(SettingName.MaxRecentChanges)).Return(MaxRecentChanges.ToString()).Repeat.Any();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.LoggingLevel)).Return("3").Repeat.Any();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.MaxLogSize)).Return(MaxLogSize.ToString()).Repeat.Any();
+			Expect.Call(host.GetSettingValue(null, SettingName.MaxRecentChanges)).Return(MaxRecentChanges.ToString()).Repeat.Any();
 
 			mocks.Replay(host);
 
@@ -51,14 +51,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			prov.Init(null, "");
+			prov.Init(null, "", null);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), null);
+			prov.Init(MockHost(), null, null);
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
@@ -109,77 +109,7 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("Value2", settings["TS2"], "Wrong setting value");
 			Assert.AreEqual("Value3", settings["TS3"], "Wrong setting value");
 		}
-
-		[TestCase("Message", EntryType.General, "User")]
-		[TestCase("Message\nblah", EntryType.Error, "User\nggg")]
-		[TestCase("Message|ppp", EntryType.Warning, "User|ghghgh")]
-		public void LogEntry_GetLogEntries(string m, EntryType t, string u) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-
-			//Collectors.SettingsProvider = prov;
-
-			prov.LogEntry(m, t, u);
-
-			LogEntry[] entries = prov.GetLogEntries();
-			Assert.AreEqual(m, entries[entries.Length - 1].Message, "Wrong message");
-			Assert.AreEqual(t, entries[entries.Length - 1].EntryType, "Wrong entry type");
-			Assert.AreEqual(u, entries[entries.Length - 1].User, "Wrong user");
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void LogEntry_InvalidMessage(string m) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-
-			//Collectors.SettingsProvider = prov;
-
-			prov.LogEntry(m, EntryType.General, "NUnit");
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void LogEntry_InvalidUser(string u) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-
-			//Collectors.SettingsProvider = prov;
-
-			prov.LogEntry("Test", EntryType.General, u);
-		}
-
-		[Test]
-		public void ClearLog() {
-			ISettingsStorageProviderV30 prov = GetProvider();
-
-			//Collectors.SettingsProvider = prov;
-
-			prov.LogEntry("Test", EntryType.General, "User");
-			prov.LogEntry("Test", EntryType.Error, "User");
-			prov.LogEntry("Test", EntryType.Warning, "User");
-
-			Assert.AreEqual(3, prov.GetLogEntries().Length, "Wrong log entry count");
-
-			prov.ClearLog();
-
-			Assert.AreEqual(0, prov.GetLogEntries().Length, "Wrong log entry count");
-		}
-
-		[Test]
-		public void CutLog_LogSize() {
-			ISettingsStorageProviderV30 prov = GetProvider();
-
-			//Collectors.SettingsProvider = prov;
-
-			for(int i = 0; i < 100; i++) {
-				prov.LogEntry("Test", EntryType.General, "User");
-				prov.LogEntry("Test", EntryType.Error, "User");
-				prov.LogEntry("Test", EntryType.Warning, "User");
-			}
-
-			Assert.IsTrue(prov.LogSize > 0 && prov.LogSize < MaxLogSize, "Wrong size");
-
-			Assert.IsTrue(prov.GetLogEntries().Length < 300, "Wrong log entry count");
-		}
-
+		
 		[TestCase(MetaDataItem.AccountActivationMessage, "Activation mod")]
 		[TestCase(MetaDataItem.EditNotice, "Edit notice mod")]
 		[TestCase(MetaDataItem.Footer, "Footer mod")]
@@ -374,186 +304,6 @@ namespace ScrewTurn.Wiki.Tests {
 			RecentChange[] changes = prov.GetRecentChanges();
 
 			Assert.IsTrue(changes.Length > 0 && changes.Length <= MaxRecentChanges, "Wrong recent change count (" + changes.Length.ToString() + ")");
-		}
-
-		[Test]
-		public void StorePluginAssembly_RetrievePluginAssembly_ListPluginAssemblies() {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			byte[] stuff = new byte[50];
-			for(int i = 0; i < stuff.Length; i++) stuff[i] = (byte)i;
-
-			Assert.AreEqual(0, prov.ListPluginAssemblies().Length, "Wrong length");
-
-			Assert.IsTrue(prov.StorePluginAssembly("Plugin.dll", stuff), "StorePluginAssembly should return true");
-
-			string[] asms = prov.ListPluginAssemblies();
-			Assert.AreEqual(1, asms.Length, "Wrong length");
-			Assert.AreEqual("Plugin.dll", asms[0], "Wrong assembly name");
-
-			byte[] output = prov.RetrievePluginAssembly("Plugin.dll");
-			Assert.AreEqual(stuff.Length, output.Length, "Wrong content length");
-			for(int i = 0; i < stuff.Length; i++) Assert.AreEqual(stuff[i], output[i], "Wrong content");
-
-			stuff = new byte[30];
-			for(int i = stuff.Length - 1; i >= 0; i--) stuff[i] = (byte)i;
-
-			Assert.IsTrue(prov.StorePluginAssembly("Plugin.dll", stuff), "StorePluginAssembly should return true");
-
-			output = prov.RetrievePluginAssembly("Plugin.dll");
-			Assert.AreEqual(stuff.Length, output.Length, "Wrong content length");
-			for(int i = 0; i < stuff.Length; i++) Assert.AreEqual(stuff[i], output[i], "Wrong content");
-		}
-
-		[Test]
-		public void DeletePluginAssembly() {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			Assert.IsFalse(prov.DeletePluginAssembly("Assembly.dll"), "DeletePluginAssembly should return false");
-
-			byte[] stuff = new byte[50];
-			for(int i = 0; i < stuff.Length; i++) stuff[i] = (byte)i;
-
-			prov.StorePluginAssembly("Plugin.dll", stuff);
-			prov.StorePluginAssembly("Assembly.dll", stuff);
-
-			Assert.IsTrue(prov.DeletePluginAssembly("Assembly.dll"), "DeletePluginAssembly should return true");
-
-			string[] asms = prov.ListPluginAssemblies();
-
-			Assert.AreEqual(1, asms.Length, "Wrong length");
-			Assert.AreEqual("Plugin.dll", asms[0], "Wrong assembly");
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void DeletePluginAssembly_InvalidName(string n) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			prov.DeletePluginAssembly(n);
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void StorePluginAssembly_InvalidFilename(string fn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			prov.StorePluginAssembly(fn, new byte[10]);
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void StorePluginAssembly_NullAssembly() {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			prov.StorePluginAssembly("Test.dll", null);
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void StorePluginAssembly_EmptyAssembly() {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			prov.StorePluginAssembly("Test.dll", new byte[0]);
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RetrievePluginAssembly_InvalidFilename(string fn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			prov.RetrievePluginAssembly(fn);
-		}
-
-		[Test]
-		public void RetrievePluginAssembly_InexistentFilename() {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			Assert.IsNull(prov.RetrievePluginAssembly("Inexistent.dll"), "RetrievePluginAssembly should return null");
-		}
-
-		[Test]
-		public void SetPluginStatus_RetrievePluginStatus() {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			Assert.IsTrue(prov.GetPluginStatus("My.Test.Plugin"), "GetPluginStatus should return true");
-
-			Assert.IsTrue(prov.SetPluginStatus("My.Test.Plugin", true), "SetPluginStatus should return true");
-
-			Assert.IsTrue(prov.GetPluginStatus("My.Test.Plugin"), "GetPluginStatus should return true");
-
-			Assert.IsTrue(prov.SetPluginStatus("My.Test.Plugin", false), "SetPluginStatus should return true");
-
-			Assert.IsFalse(prov.GetPluginStatus("My.Test.Plugin"), "GetPluginStatus should return false");
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void SetPluginStatus_InvalidTypeName(string tn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			prov.SetPluginStatus(tn, false);
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void GetPluginStatus_InvalidTypeName(string tn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			prov.GetPluginStatus(tn);
-		}
-
-		[Test]
-		public void SetPluginConfiguration_GetPluginConfiguration() {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			Assert.IsEmpty(prov.GetPluginConfiguration("My.Test.Plugin"), "GetPluginConfiguration should return an empty string");
-
-			Assert.IsTrue(prov.SetPluginConfiguration("My.Test.Plugin", "config"), "SetPluginConfiguration should return true");
-
-			Assert.AreEqual("config", prov.GetPluginConfiguration("My.Test.Plugin"), "Wrong config");
-
-			Assert.IsTrue(prov.SetPluginConfiguration("My.Test.Plugin", "config222"), "SetPluginConfiguration should return true");
-
-			Assert.AreEqual("config222", prov.GetPluginConfiguration("My.Test.Plugin"), "Wrong config");
-
-			Assert.IsTrue(prov.SetPluginConfiguration("My.Test.Plugin", ""), "SetPluginConfiguration should return true");
-
-			Assert.AreEqual("", prov.GetPluginConfiguration("My.Test.Plugin"), "Wrong config");
-
-			Assert.IsTrue(prov.SetPluginConfiguration("My.Test.Plugin", null), "SetPluginConfiguration should return true");
-
-			Assert.AreEqual("", prov.GetPluginConfiguration("My.Test.Plugin"), "Wrong config");
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void SetPluginConfiguration_InvalidTypeName(string tn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			prov.SetPluginConfiguration(tn, "config");
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void GetPluginConfiguration_InvalidTypeName(string tn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
-			//Collectors.SettingsProvider = prov;
-
-			prov.GetPluginConfiguration(tn);
 		}
 
 		[Test]

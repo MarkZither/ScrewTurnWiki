@@ -19,6 +19,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private const int CurrentRevision = -1;
 		private const int DraftRevision = -100;
 
+		private string _wiki;
 		private IIndex index;
 
 		private bool alwaysGenerateDocument = false;
@@ -28,10 +29,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
-		public new void Init(IHostV30 host, string config) {
-			base.Init(host, config);
+		public new void Init(IHostV30 host, string config, string wiki) {
+			base.Init(host, config, wiki);
 
+			_wiki = wiki;
 			index = new SqlIndex(new IndexConnector(GetWordFetcher, GetSize, GetCount, ClearIndex, DeleteDataForDocument, SaveDataForDocument, TryFindWord));
 		}
 
@@ -595,13 +598,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			try {
 				string documentName = PageDocument.GetDocumentName(content.PageInfo);
 
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(content.PageInfo, content.Title),
+				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(_wiki, content.PageInfo, content.Title),
 					PageDocument.StandardTypeTag, content.LastModified);
 
 				// Store the document
 				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
 				int count = index.StoreDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent),
-					content.Keywords, host.PrepareContentForIndexing(content.PageInfo, content.Content), transaction);
+					content.Keywords, host.PrepareContentForIndexing(_wiki, content.PageInfo, content.Content), transaction);
 
 				if(count == 0 && content.Content.Length > 0) {
 					host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
@@ -624,7 +627,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private void UnindexPage(PageContent content, DbTransaction transaction) {
 			string documentName = PageDocument.GetDocumentName(content.PageInfo);
 
-			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(content.PageInfo, content.Title),
+			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(_wiki, content.PageInfo, content.Title),
 				PageDocument.StandardTypeTag, content.LastModified);
 			index.RemoveDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent), transaction);
 		}
@@ -659,13 +662,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				string documentName = MessageDocument.GetDocumentName(page, id);
 
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(null, subject),
+				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(_wiki, null, subject),
 					MessageDocument.StandardTypeTag, dateTime);
 
 				// Store the document
 				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
 				int count = index.StoreDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null,
-					host.PrepareContentForIndexing(null, body), transaction);
+					host.PrepareContentForIndexing(_wiki, null, body), transaction);
 
 				if(count == 0 && body.Length > 0) {
 					host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
@@ -709,7 +712,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string documentName = MessageDocument.GetDocumentName(page, id);
 
-			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(null, subject),
+			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(_wiki, null, subject),
 				MessageDocument.StandardTypeTag, DateTime.Now);
 			index.RemoveDocument(new MessageDocument(page, id, ddoc, TokenizeContent), transaction);
 		}

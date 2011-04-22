@@ -98,6 +98,8 @@
     <Compile Include="FilesStorageProvider.cs" />
     <Compile Include="Formatter.cs" />
     <Compile Include="FormattingPipeline.cs" />
+    <Compile Include="GlobalSettings.cs" />
+    <Compile Include="GlobalSettingsStorageProvider.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Host.cs" />
     <Compile Include="ICollectorsBox.cs" />
@@ -128,8 +130,11 @@
     <Compile Include="SessionFacade.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsStorageProvider.cs" />
+    <Compile Include="SettingsTools.cs" />
     <Compile Include="Snippets.cs" />
     <Compile Include="StartupTools.cs" />
+    <Compile Include="StorageProvider.cs" />
+    <Compile Include="StorageProviderHandler.cs" />
     <Compile Include="SubjectInfo.cs" />
     <Compile Include="Templates.cs" />
     <Compile Include="Themes.cs" />

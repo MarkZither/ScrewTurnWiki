@@ -18,6 +18,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private const int MaxParametersInQuery = 50;
 
 		private IAclManager aclManager;
+		private string _wiki;
 
 		/// <summary>
 		/// Holds a value indicating whether the application was started for the first time.
@@ -29,10 +30,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
-		public new void Init(IHostV30 host, string config) {
-			base.Init(host, config);
+		public new void Init(IHostV30 host, string config, string wiki) {
+			base.Init(host, config, wiki);
 
+			_wiki = wiki;
 			aclManager = new SqlAclManager(StoreEntry, DeleteEntries, RenameAclResource, RetrieveAllAclEntries, RetrieveAclEntriesForResource, RetrieveAclEntriesForSubject);
 		}
 		
@@ -278,7 +281,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				// No transaction - accurate log sizing is not really a concern
 
 				int logSize = LogSize;
-				if(logSize > int.Parse(host.GetSettingValue(SettingName.MaxLogSize))) {
+				if(logSize > int.Parse(host.GetGlobalSettingValue(GlobalSettingName.MaxLogSize))) {
 					CutLog((int)(logSize * 0.75));
 				}
 			}
@@ -658,7 +661,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteScalar<int>(command, -1, false);
 
-			int maxChanges = int.Parse(host.GetSettingValue(SettingName.MaxRecentChanges));
+			int maxChanges = int.Parse(host.GetSettingValue(_wiki, SettingName.MaxRecentChanges));
 
 			if(rows > maxChanges) {
 				// Remove 10% of old changes to avoid 1-by-1 deletion every time a change is made

@@ -14,14 +14,15 @@ namespace ScrewTurn.Wiki {
 	public class ProviderCollector<T> where T : class, IProviderV30 {
 
 		private Dictionary<Type, Assembly> assembliesDictionary;
-		private Dictionary<Type, T> instancesDictionary;
+		// wiki -> (providerType -> providerInstance)
+		private Dictionary<string, Dictionary<Type, T>> instancesDictionary;
 
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
 		public ProviderCollector() {
 			assembliesDictionary = new Dictionary<Type, Assembly>(3);
-			instancesDictionary = new Dictionary<Type, T>(3);
+			instancesDictionary = new Dictionary<string, Dictionary<Type, T>>();
 		}
 
 		/// <summary>
@@ -38,38 +39,46 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Removes a Provider from the Collector.
 		/// </summary>
-		/// <param name="provider">The Provider to remove.</param>
-		public void RemoveProvider(Type provider) {
+		/// <param name="typeName">The Provider to remove.</param>
+		public void RemoveProvider(string typeName) {
 			lock(this) {
-				if(instancesDictionary.ContainsKey(provider)) {
-					instancesDictionary[provider].Dispose();
-					instancesDictionary.Remove(provider);
+				foreach(Type type in assembliesDictionary.Keys) {
+					if(type.FullName.Equals(typeName)) {
+						foreach(string wiki in instancesDictionary.Keys) {
+							if(instancesDictionary[wiki].ContainsKey(type)) {
+								instancesDictionary[wiki][type].Dispose();
+								instancesDictionary[wiki].Remove(type);
+							}
+						}
+						assembliesDictionary.Remove(type);
+					}
 				}
-				assembliesDictionary.Remove(provider);
 			}
 		}
 
 		/// <summary>
 		/// Gets all the Providers (copied array).
 		/// </summary>
-		public T[] AllProviders {
-			get {
-				lock(this) {
-					List<T> providers = new List<T>(assembliesDictionary.Count);
-					foreach(Type key in assembliesDictionary.Keys) {
-						T provider = null;
-						if(instancesDictionary.ContainsKey(key)) {
-							provider = instancesDictionary[key];
-						}
-						else {
-							provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[key], key);
-							ProviderLoader.Initialize<T>(provider);
-							instancesDictionary[key] = provider;
-						}
-						providers.Add(provider);
+		public T[] GetAllProviders(string wiki) {
+			wiki = wiki != null ? wiki : "-";
+			lock(this) {
+				List<T> providers = new List<T>(assembliesDictionary.Count);
+				foreach(Type key in assembliesDictionary.Keys) {
+					T provider = null;
+					if(!instancesDictionary.ContainsKey(wiki)) {
+						instancesDictionary[wiki] = new Dictionary<Type, T>(3);
 					}
-					return providers.ToArray();
+					if(instancesDictionary[wiki].ContainsKey(key)) {
+						provider = instancesDictionary[wiki][key];
+					}
+					else {
+						provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[key], key);
+						ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadConfiguration(key.FullName), wiki);
+						instancesDictionary[wiki][key] = provider;
+					}
+					providers.Add(provider);
 				}
+				return providers.ToArray();
 			}
 		}
 
@@ -86,19 +95,24 @@ namespace ScrewTurn.Wiki {
 		/// Gets a Provider, searching for its Type Name.
 		/// </summary>
 		/// <param name="typeName">The Type Name.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>The Provider, or null if the Provider was not found.</returns>
-		public T GetProvider(string typeName) {
+		public T GetProvider(string typeName, string wiki) {
+			wiki = wiki != null ? wiki : "-";
 			lock(this) {
 				foreach(Type type in assembliesDictionary.Keys) {
 					if(type.FullName.Equals(typeName)) {
 						T provider = null;
-						if(instancesDictionary.ContainsKey(type)) {
-							provider = instancesDictionary[type];
+						if(!instancesDictionary.ContainsKey(wiki)) {
+							instancesDictionary[wiki] = new Dictionary<Type, T>(3);
+						}
+						if(instancesDictionary[wiki].ContainsKey(type)) {
+							provider = instancesDictionary[wiki][type];
 						}
 						else {
 							provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[type], type);
-							ProviderLoader.Initialize<T>(provider);
-							instancesDictionary[type] = provider;
+							ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadConfiguration(type.FullName), wiki);
+							instancesDictionary[wiki][type] = provider;
 						}
 						return provider;
 					}
@@ -123,8 +137,10 @@ namespace ScrewTurn.Wiki {
 		/// Releases resources
 		/// </summary>
 		public void Dispose() {
-			foreach(Type key in instancesDictionary.Keys) {
-				instancesDictionary[key].Dispose();
+			foreach(string wiki in instancesDictionary.Keys) {
+				foreach(Type key in instancesDictionary[wiki].Keys) {
+					instancesDictionary[wiki][key].Dispose();
+				}
 			}
 			instancesDictionary.Clear();
 		}

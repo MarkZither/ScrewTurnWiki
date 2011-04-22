@@ -17,26 +17,29 @@ namespace ScrewTurn.Wiki {
 		private static UserInfo anonAccount = null;
 
 		/// <summary>
-		/// Gets the built-in administrator account.
+		/// Gets the built-in administrator account for the given wiki.
 		/// </summary>
-		/// <returns>The account.</returns>
-		public static UserInfo GetAdministratorAccount() {
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The built-in administrator account.
+		/// </returns>
+		public static UserInfo GetAdministratorAccount(string wiki) {
 			if(adminAccount == null) {
-				adminAccount = new UserInfo("admin", "Administrator", Settings.ContactEmail, true, DateTime.MinValue, null);
-				adminAccount.Groups = new[] { Settings.AdministratorsGroup };
+				adminAccount = new UserInfo("admin", "Administrator", GlobalSettings.ContactEmail, true, DateTime.MinValue, null);
+				adminAccount.Groups = new[] { Settings.GetAdministratorsGroup(wiki) };
 			}
-
+			
 			return adminAccount;
 		}
 
 		/// <summary>
 		/// Gets the fake anonymous account.
 		/// </summary>
-		/// <returns>The account.</returns>
-		public static UserInfo GetAnonymousAccount() {
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The fake anonymous account.</returns>
+		public static UserInfo GetAnonymousAccount(string wiki) {
 			if(anonAccount == null) {
 				anonAccount = new UserInfo(SessionFacade.AnonymousUsername, null, null, false, DateTime.MinValue, null);
-				anonAccount.Groups = new[] { Settings.AnonymousGroup };
+				anonAccount.Groups = new[] { Settings.GetAnonymousGroup(wiki) };
 			}
 
 			return anonAccount;
@@ -63,15 +66,16 @@ namespace ScrewTurn.Wiki {
 		private const string NamespaceDiscussionMessagesKey = "NamespaceDiscussionMessages";
 
 		/// <summary>
-		/// Gets all the Users that the providers declare to manage.
+		/// Gets all the Users, of the given wiki, that the providers declare to manage.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>The users, sorted by username.</returns>
-		public static List<UserInfo> GetUsers() {
+		public static List<UserInfo> GetUsers(string wiki) {
 			List<UserInfo> allUsers = new List<UserInfo>(1000);
 
 			// Retrieve all the users from the Users Providers
 			int count = 0;
-			foreach(IUsersStorageProviderV30 provider in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 provider in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki)) {
 				count++;
 				allUsers.AddRange(provider.GetUsers());
 			}
@@ -84,23 +88,24 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Finds a user.
+		/// Finds a user in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The username.</param>
 		/// <returns>The user, or <c>null</c>.</returns>
-		public static UserInfo FindUser(string username) {
+		public static UserInfo FindUser(string wiki, string username) {
 			if(string.IsNullOrEmpty(username)) return null;
-
-			if(username == "admin") return GetAdministratorAccount();
+			
+			if(username == "admin") return GetAdministratorAccount(wiki);
 
 			// Try default provider first
-			IUsersStorageProviderV30 defaultProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
+			IUsersStorageProviderV30 defaultProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, wiki);
 			UserInfo temp = defaultProvider.GetUser(username);
 			if(temp != null) return temp;
 
 			// The try other providers
 			temp = null;
-			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
+			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki);
 			foreach(IUsersStorageProviderV30 p in providers) {
 				IUsersStorageProviderV30 extProv = p as IUsersStorageProviderV30;
 				if(extProv != null && extProv != defaultProvider) {
@@ -112,19 +117,20 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Finds a user by email.
+		/// Finds a user, in the given wiki, by email.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="email">The email address.</param>
 		/// <returns>The user, or <c>null</c>.</returns>
-		public static UserInfo FindUserByEmail(string email) {
+		public static UserInfo FindUserByEmail(string wiki, string email) {
 			// Try default provider first
-			IUsersStorageProviderV30 defaultProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
+			IUsersStorageProviderV30 defaultProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, wiki);
 			UserInfo temp = defaultProvider.GetUserByEmail(email);
 			if(temp != null) return temp;
 
 			// The try other providers
 			temp = null;
-			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
+			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki);
 			foreach(IUsersStorageProviderV30 p in providers) {
 				IUsersStorageProviderV30 extProv = p as IUsersStorageProviderV30;
 				if(extProv != null && extProv != defaultProvider) {
@@ -171,8 +177,9 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Adds a new User.
+		/// Adds a new User to the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="displayName">The display name.</param>
 		/// <param name="password">The Password (plain text).</param>
@@ -180,9 +187,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="active">A value specifying whether or not the account is active.</param>
 		/// <param name="provider">The Provider. If null, the default provider is used.</param>
 		/// <returns>True if the User has been created successfully.</returns>
-		public static bool AddUser(string username, string displayName, string password, string email, bool active, IUsersStorageProviderV30 provider) {
-			if(FindUser(username) != null) return false;
-			if(provider == null) provider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
+		public static bool AddUser(string wiki, string username, string displayName, string password, string email, bool active, IUsersStorageProviderV30 provider) {
+			if(FindUser(wiki, username) != null) return false;
+			if(provider == null) provider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, wiki);
 
 			if(provider.UserAccountsReadOnly) return false;
 
@@ -227,14 +234,16 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Removes a User.
+		/// Removes a User from the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="user">The User to remove.</param>
-		/// <returns>True if the User has been removed successfully.</returns>
-		public static bool RemoveUser(UserInfo user) {
+		/// <returns><c>true</c> if the User has been removed successfully.
+		/// </returns>
+		public static bool RemoveUser(string wiki, UserInfo user) {
 			if(user.Provider.UserAccountsReadOnly) return false;
 
-			RemovePermissions(user);
+			RemovePermissions(wiki, user);
 			
 			bool done = user.Provider.RemoveUser(user);
 			if(done) {
@@ -270,13 +279,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Removes all permissions for a user.
+		/// Removes all permissions for a user in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="user">The user.</param>
-		private static void RemovePermissions(UserInfo user) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+		private static void RemovePermissions(string wiki, UserInfo user) {
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				foreach(string dir in ListDirectories(prov)) {
 					authWriter.RemoveEntriesForDirectory(user, prov, dir);
 				}
@@ -285,7 +295,7 @@ namespace ScrewTurn.Wiki {
 			authWriter.RemoveEntriesForGlobals(user);
 
 			authWriter.RemoveEntriesForNamespace(user, null);
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				foreach(PageInfo page in prov.GetPages(null)) {
 					authWriter.RemoveEntriesForPage(user, page);
 				}
@@ -301,12 +311,13 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Removes all permissions for a group.
+		/// Removes all permissions for a group in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="group">The group.</param>
-		private static void RemovePermissions(UserGroup group) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+		private static void RemovePermissions(string wiki, UserGroup group) {
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				foreach(string dir in ListDirectories(prov)) {
 					authWriter.RemoveEntriesForDirectory(group, prov, dir);
 				}
@@ -315,7 +326,7 @@ namespace ScrewTurn.Wiki {
 			authWriter.RemoveEntriesForGlobals(group);
 
 			authWriter.RemoveEntriesForNamespace(group, null);
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				foreach(PageInfo page in prov.GetPages(null)) {
 					authWriter.RemoveEntriesForPage(group, page);
 				}
@@ -341,19 +352,20 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Sends the password reset message to a user.
+		/// Sends the password reset message to a user of the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="email">The email.</param>
 		/// <param name="dateTime">The user registration date/time.</param>
-		public static void SendPasswordResetMessage(string username, string email, DateTime dateTime) {
-			string mainLink = Settings.MainUrl + "Login.aspx?ResetCode=" + Tools.ComputeSecurityHash(username, email, dateTime) + "&Username=" + Tools.UrlEncode(username);
-			string body = Settings.Provider.GetMetaDataItem(MetaDataItem.PasswordResetProcedureMessage, null).Replace("##USERNAME##",
+		public static void SendPasswordResetMessage(string wiki, string username, string email, DateTime dateTime) {
+			string mainLink = GlobalSettings.MainUrl + "Login.aspx?ResetCode=" + Tools.ComputeSecurityHash(wiki, username, email, dateTime) + "&Username=" + Tools.UrlEncode(username);
+			string body = Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.PasswordResetProcedureMessage, null).Replace("##USERNAME##",
 				username).Replace("##LINK##", mainLink).Replace("##WIKITITLE##",
-				Settings.WikiTitle).Replace("##EMAILADDRESS##", Settings.ContactEmail);
+				Settings.GetWikiTitle(wiki)).Replace("##EMAILADDRESS##", GlobalSettings.ContactEmail);
 
-			EmailTools.AsyncSendEmail(email, Settings.SenderEmail,
-				Settings.WikiTitle + " - " + Exchanger.ResourceExchanger.GetResource("ResetPassword"), body, false);
+			EmailTools.AsyncSendEmail(email, GlobalSettings.SenderEmail,
+				Settings.GetWikiTitle(wiki) + " - " + Exchanger.ResourceExchanger.GetResource("ResetPassword"), body, false);
 		}
 
 		/// <summary>
@@ -377,14 +389,15 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets all the user groups.
+		/// Gets all the user groups in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>All the user groups, sorted by name.</returns>
-		public static List<UserGroup> GetUserGroups() {
+		public static List<UserGroup> GetUserGroups(string wiki) {
 			List<UserGroup> result = new List<UserGroup>(50);
 
 			int count = 0;
-			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki)) {
 				count++;
 				result.AddRange(prov.GetUserGroups());
 			}
@@ -429,12 +442,13 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Finds a user group.
+		/// Finds a user group in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The name of the user group to find.</param>
-		/// <returns>The <see cref="T:UserGroup" /> object or <c>null</c> if no data is found.</returns>
-		public static UserGroup FindUserGroup(string name) {
-			List<UserGroup> allGroups = GetUserGroups();
+		/// <returns>The <see cref="T:UserGroup"/> object or <c>null</c> if no data is found.</returns>
+		public static UserGroup FindUserGroup(string wiki, string name) {
+			List<UserGroup> allGroups = GetUserGroups(wiki);
 			int index = allGroups.BinarySearch(new UserGroup(name, "", null), new UserGroupComparer());
 
 			if(index < 0) return null;
@@ -442,18 +456,19 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Adds a new user group to a specific provider.
+		/// Adds a new user group for the give wiki, to a specific provider.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The name of the group.</param>
 		/// <param name="description">The description of the group.</param>
 		/// <param name="provider">The target provider.</param>
 		/// <returns><c>true</c> if the groups is added, <c>false</c> otherwise.</returns>
-		public static bool AddUserGroup(string name, string description, IUsersStorageProviderV30 provider) {
-			if(provider == null) provider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider);
+		public static bool AddUserGroup(string wiki, string name, string description, IUsersStorageProviderV30 provider) {
+			if(provider == null) provider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, wiki);
 
 			if(provider.UserGroupsReadOnly) return false;
 
-			if(FindUserGroup(name) != null) return false;
+			if(FindUserGroup(wiki, name) != null) return false;
 
 			UserGroup result = provider.AddUserGroup(name, description);
 
@@ -467,14 +482,15 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Adds a new user group to the default provider.
+		/// Adds a new user group for the given wiki to the default provider.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The name of the group.</param>
 		/// <param name="description">The description of the group.</param>
 		/// <returns><c>true</c> if the groups is added, <c>false</c> otherwise.</returns>
-		public static bool AddUserGroup(string name, string description) {
-			return AddUserGroup(name, description,
-				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider));
+		public static bool AddUserGroup(string wiki, string name, string description) {
+			return AddUserGroup(wiki, name, description,
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, wiki));
 		}
 
 		/// <summary>
@@ -498,14 +514,15 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Removes a user group.
+		/// Removes a user group from the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="group">The user group to remove.</param>
 		/// <returns><c>true</c> if the user group is removed, <c>false</c> otherwise.</returns>
-		public static bool RemoveUserGroup(UserGroup group) {
+		public static bool RemoveUserGroup(string wiki, UserGroup group) {
 			if(group.Provider.UserGroupsReadOnly) return false;
 
-			RemovePermissions(group);
+			RemovePermissions(wiki, group);
 
 			bool done = group.Provider.RemoveUserGroup(group);
 
@@ -539,26 +556,28 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Creates the correct link of a User.
+		/// Creates the correct link of a User of the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The Username.</param>
 		/// <returns>The User link.</returns>
-		public static string UserLink(string username) {
-			return UserLink(username, false);
+		public static string UserLink(string wiki, string username) {
+			return UserLink(wiki, username, false);
 		}
 
 		/// <summary>
-		/// Creates the correct link of a User.
+		/// Creates the correct link of a User of the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="newWindow">A value indicating whether to open the link in a new window.</param>
 		/// <returns>The User link.</returns>
-		public static string UserLink(string username, bool newWindow) {
+		public static string UserLink(string wiki, string username, bool newWindow) {
 			if(string.IsNullOrEmpty(username)) return "???";
 
 			if(username != null && (username.EndsWith("+" + Log.SystemUsername) || username == Log.SystemUsername)) return username;
 
-			UserInfo u = FindUser(username);
+			UserInfo u = FindUser(wiki, username);
 			if(u != null) {
 				return @"<a " +
 					(newWindow ? "target=\"_blank\" " : "") +
@@ -579,15 +598,16 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Tries to automatically login a user using the current HttpContext,
+		/// Tries to automatically login a user of the given wiki using the current HttpContext,
 		/// through any provider that supports the operation.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="context">The current HttpContext.</param>
 		/// <returns>The correct UserInfo, or <c>null</c>.</returns>
-		public static UserInfo TryAutoLogin(HttpContext context) {
+		public static UserInfo TryAutoLogin(string wiki, HttpContext context) {
 			// Try default provider first
 			IUsersStorageProviderV30 defaultProvider =
-				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider) as IUsersStorageProviderV30;
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, wiki) as IUsersStorageProviderV30;
 
 			if(defaultProvider != null) {
 				UserInfo temp = defaultProvider.TryAutoLogin(context);
@@ -595,7 +615,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Then try all other providers
-			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
+			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki);
 			foreach(IUsersStorageProviderV30 p in providers) {
 				IUsersStorageProviderV30 extProv = p as IUsersStorageProviderV30;
 				if(extProv != null && extProv != defaultProvider) {
@@ -608,20 +628,21 @@ namespace ScrewTurn.Wiki {
 
 
 		/// <summary>
-		/// Tries to manually login a user using all the available methods.
+		/// Tries to manually login a user of the given wiki using all the available methods.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="password">The password.</param>
 		/// <returns>The correct UserInfo, or <c>null</c>.</returns>
-		public static UserInfo TryLogin(string username, string password) {
+		public static UserInfo TryLogin(string wiki, string username, string password) {
 			string _password = Hash.Compute(password);
-			if(username == "admin" && Settings.MasterPassword.Equals(_password)) {
-				return GetAdministratorAccount();
+			if(username == "admin" && Settings.GetMasterPassword(wiki).Equals(_password)) {
+				return GetAdministratorAccount(wiki);
 			}
 
 			// Try default provider first
 			IUsersStorageProviderV30 defaultProvider =
-				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(Settings.DefaultUsersProvider) as IUsersStorageProviderV30;
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, wiki) as IUsersStorageProviderV30;
 
 			if(defaultProvider != null) {
 				UserInfo temp = defaultProvider.TryManualLogin(username, password);
@@ -629,7 +650,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Then try all other providers
-			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.AllProviders;
+			IUsersStorageProviderV30[] providers = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki);
 			foreach(IUsersStorageProviderV30 p in providers) {
 				IUsersStorageProviderV30 extProv = p as IUsersStorageProviderV30;
 				if(extProv != null && extProv != defaultProvider) {
@@ -641,23 +662,24 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Tries to login a user through the cookie-stored authentication data.
+		/// Tries to login a user of the given wiki through the cookie-stored authentication data.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="loginKey">The login key.</param>
 		/// <returns>The correct UserInfo object, or <c>null</c>.</returns>
-		public static UserInfo TryCookieLogin(string username, string loginKey) {
+		public static UserInfo TryCookieLogin(string wiki, string username, string loginKey) {
 			if(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(loginKey)) return null;
 
-			if(username == "admin" && loginKey == ComputeLoginKey(username, Settings.ContactEmail, DateTime.MinValue)) {
+			if(username == "admin" && loginKey == ComputeLoginKey(wiki, username, GlobalSettings.ContactEmail, DateTime.MinValue)) {
 				// Just return, no notification to providers because the "admin" account is fictitious
-				return GetAdministratorAccount();
+				return GetAdministratorAccount(wiki);
 			}
 
-			UserInfo user = FindUser(username);
+			UserInfo user = FindUser(wiki, username);
 
 			if(user != null && user.Active) {
-				if(loginKey == ComputeLoginKey(user.Username, user.Email, user.DateTime)) {
+				if(loginKey == ComputeLoginKey(wiki, user.Username, user.Email, user.DateTime)) {
 					// Notify provider
 					user.Provider.NotifyCookieLogin(user);
 					return user;
@@ -667,13 +689,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Notifies to the proper provider that a user has logged out.
+		/// Notifies to the proper provider that a user of the given wiki has logged out.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The username.</param>
-		public static void NotifyLogout(string username) {
+		public static void NotifyLogout(string wiki, string username) {
 			if(string.IsNullOrEmpty(username)) return;
 
-			UserInfo user = FindUser(username);
+			UserInfo user = FindUser(wiki, username);
 			if(user != null) {
 				IUsersStorageProviderV30 prov = user.Provider as IUsersStorageProviderV30;
 				if(prov != null) prov.NotifyLogout(user);
@@ -681,28 +704,30 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Copmputes the login key.
+		/// Copmputes the login key for the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="email">The email.</param>
 		/// <param name="dateTime">The registration date/time.</param>
 		/// <returns>The login key.</returns>
-		public static string ComputeLoginKey(string username, string email, DateTime dateTime) {
+		public static string ComputeLoginKey(string wiki, string username, string email, DateTime dateTime) {
 			if(username == null) throw new ArgumentNullException("username");
 			if(email == null) throw new ArgumentNullException("email");
 
-			return Tools.ComputeSecurityHash(username, email, dateTime);
+			return Tools.ComputeSecurityHash(wiki, username, email, dateTime);
 		}
 
 		/// <summary>
 		/// Sets the email notification status for a page.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="user">The user for which to set the notification status.</param>
 		/// <param name="page">The page subject of the notification.</param>
 		/// <param name="pageChanges">A value indicating whether page changes should be notified.</param>
 		/// <param name="discussionMessages">A value indicating whether discussion messages should be notified.</param>
 		/// <returns><c>true</c> if the notification is set, <c>false</c> otherwise.</returns>
-		public static bool SetEmailNotification(UserInfo user, PageInfo page, bool pageChanges, bool discussionMessages) {
+		public static bool SetEmailNotification(string wiki, UserInfo user, PageInfo page, bool pageChanges, bool discussionMessages) {
 			if(user == null || page == null) return false;
 
 			// Get user's data
@@ -735,7 +760,7 @@ namespace ScrewTurn.Wiki {
 						added = true;
 					}
 				}
-				else if(Pages.FindPage(entry) != null) pageChangesResult.Add(entry);
+				else if(Pages.FindPage(wiki, entry) != null) pageChangesResult.Add(entry);
 			}
 			if(!added && pageChanges) pageChangesResult.Add(page.FullName);
 
@@ -747,7 +772,7 @@ namespace ScrewTurn.Wiki {
 						added = true;
 					}
 				}
-				else if(Pages.FindPage(entry) != null) discussionMessagesResult.Add(entry);
+				else if(Pages.FindPage(wiki, entry) != null) discussionMessagesResult.Add(entry);
 			}
 			if(!added && discussionMessages) discussionMessagesResult.Add(page.FullName);
 
@@ -763,12 +788,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Sets the email notification status for a namespace.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="user">The user for which to set the notification status.</param>
 		/// <param name="nspace">The namespace subject of the notification.</param>
 		/// <param name="pageChanges">A value indicating whether page changes should be notified.</param>
 		/// <param name="discussionMessages">A value indicating whether discussion messages should be notified.</param>
 		/// <returns><c>true</c> if the notification is set, <c>false</c> otherwise.</returns>
-		public static bool SetEmailNotification(UserInfo user, NamespaceInfo nspace, bool pageChanges, bool discussionMessages) {
+		public static bool SetEmailNotification(string wiki, UserInfo user, NamespaceInfo nspace, bool pageChanges, bool discussionMessages) {
 			if(user == null) return false;
 
 			// Get user's data
@@ -804,7 +830,7 @@ namespace ScrewTurn.Wiki {
 				}
 				else {
 					if(entry == "<root>") pageChangesResult.Add("<root>");
-					else if(Pages.FindNamespace(entry) != null) pageChangesResult.Add(entry);
+					else if(Pages.FindNamespace(wiki, entry) != null) pageChangesResult.Add(entry);
 				}
 			}
 			if(!added && pageChanges) pageChangesResult.Add(namespaceName);
@@ -819,7 +845,7 @@ namespace ScrewTurn.Wiki {
 				}
 				else {
 					if(entry == "<root>") discussionMessagesResult.Add("<root>");
-					else if(Pages.FindNamespace(entry) != null) discussionMessagesResult.Add(entry);
+					else if(Pages.FindNamespace(wiki, entry) != null) discussionMessagesResult.Add(entry);
 				}
 			}
 			if(!added && discussionMessages) discussionMessagesResult.Add(namespaceName);
@@ -898,22 +924,23 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets all the users that must be notified of a page change.
+		/// Gets all the users that must be notified of a page change for the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <returns>The users to be notified.</returns>
-		public static UserInfo[] GetUsersToNotifyForPageChange(PageInfo page) {
+		public static UserInfo[] GetUsersToNotifyForPageChange(string wiki, PageInfo page) {
 			if(page == null) return new UserInfo[0];
 
-			UserInfo[] specific = GetUsersToNotify(page, PageChangesKey);
-			UserInfo[] nspace = GetUsersToNotify(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)),
+			UserInfo[] specific = GetUsersToNotify(wiki, page, PageChangesKey);
+			UserInfo[] nspace = GetUsersToNotify(wiki, Pages.FindNamespace(wiki, NameTools.GetNamespace(page.FullName)),
 				NamespacePageChangesKey);
 
 			UserInfo[] temp = MergeArrays(specific, nspace);
 			List<UserInfo> result = new List<UserInfo>(temp.Length);
 
 			// Verify read permissions
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 			foreach(UserInfo user in temp) {
 				if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user.Username, user.Groups)) {
 					result.Add(user);
@@ -924,22 +951,23 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets all the users that must be notified of a discussion message.
+		/// Gets all the users that must be notified of a discussion message in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <returns>The users to be notified.</returns>
-		public static UserInfo[] GetUsersToNotifyForDiscussionMessages(PageInfo page) {
+		public static UserInfo[] GetUsersToNotifyForDiscussionMessages(string wiki, PageInfo page) {
 			if(page == null) return new UserInfo[0];
 
-			UserInfo[] specific = GetUsersToNotify(page, DiscussionMessagesKey);
-			UserInfo[] nspace = GetUsersToNotify(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)),
+			UserInfo[] specific = GetUsersToNotify(wiki, page, DiscussionMessagesKey);
+			UserInfo[] nspace = GetUsersToNotify(wiki, Pages.FindNamespace(wiki, NameTools.GetNamespace(page.FullName)),
 				NamespaceDiscussionMessagesKey);
 
 			UserInfo[] temp = MergeArrays(specific, nspace);
 			List<UserInfo> result = new List<UserInfo>(temp.Length);
 
 			// Verify read permissions
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 			foreach(UserInfo user in temp) {
 				if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion, user.Username, user.Groups)) {
 					result.Add(user);
@@ -978,17 +1006,18 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the users to notify for either a page change or a discussion message.
+		/// Gets the users of the given wiki to notify for either a page change or a discussion message.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="key">The key to look for in the user's data.</param>
 		/// <returns>The users to be notified.</returns>
-		private static UserInfo[] GetUsersToNotify(PageInfo page, string key) {
+		private static UserInfo[] GetUsersToNotify(string wiki, PageInfo page, string key) {
 			List<UserInfo> result = new List<UserInfo>(200);
 
 			string lowercasePage = page.FullName.ToLowerInvariant();
 
-			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki)) {
 				IDictionary<UserInfo, string> users = prov.GetUsersWithData(key);
 
 				string[] fields;
@@ -1007,15 +1036,16 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the users to notify for either a page change or a discussion message in a namespace.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <param name="key">The key to look for in the user's data.</param>
 		/// <returns>The users to be notified.</returns>
-		private static UserInfo[] GetUsersToNotify(NamespaceInfo nspace, string key) {
+		private static UserInfo[] GetUsersToNotify(string wiki, NamespaceInfo nspace, string key) {
 			List<UserInfo> result = new List<UserInfo>(200);
 
 			string lowercaseNamespace = nspace != null ? nspace.Name.ToLowerInvariant() : "<root>";
 
-			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.AllProviders) {
+			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki)) {
 				IDictionary<UserInfo, string> users = prov.GetUsersWithData(key);
 
 				string[] fields;

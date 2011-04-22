@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki.Tests {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
-			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
 
 			mocks.Replay(host);
 
@@ -40,14 +40,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
 			IUsersStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), null);
+			prov.Init(MockHost(), null, null);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
 			IUsersStorageProviderV30 prov = GetProvider();
-			prov.Init(null, "");
+			prov.Init(null, "", null);
 		}
 
 		[Test]

@@ -21,6 +21,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		private IHostV30 _host;
 		private string _config;
+		private string _wiki;
 		private bool _enableLogging = true;
 		private static readonly ComponentInformation Info = new ComponentInformation("Download Counter Plugin", "Threeplicate Srl", "3.0.1.472", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/DownloadCounter2.txt");
 
@@ -230,7 +231,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			if(!fullFilePath.StartsWith("/")) fullFilePath = "/" + fullFilePath;
 
 			string directory = StDirectoryInfo.GetDirectory(fullFilePath);
-			StFileInfo[] files = _host.ListFiles(new StDirectoryInfo(directory, provider));
+			StFileInfo[] files = _host.ListFiles(_wiki, new StDirectoryInfo(directory, provider));
 
 			fullFilePath = fullFilePath.ToLowerInvariant();
 
@@ -255,7 +256,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			if(string.IsNullOrEmpty(attachmentName)) return 0;
 			if(string.IsNullOrEmpty(pageName)) return 0;
 
-			PageInfo page = _host.FindPage(pageName);
+			PageInfo page = _host.FindPage(_wiki, pageName);
 			if(page == null) {
 				LogWarning("Page " + pageName + " not found");
 				return 0;
@@ -264,7 +265,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			IFilesStorageProviderV30 provider = GetProvider(providerName);
 			if(provider == null) return 0;
 
-			StFileInfo[] attachments = _host.ListPageAttachments(page);
+			StFileInfo[] attachments = _host.ListPageAttachments(_wiki, page);
 
 			attachmentName = attachmentName.ToLowerInvariant();
 
@@ -284,10 +285,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="provider">The provider.</param>
 		/// <returns></returns>
 		private IFilesStorageProviderV30 GetProvider(string provider) {
-			if(string.IsNullOrEmpty(provider)) provider = _host.GetSettingValue(SettingName.DefaultFilesStorageProvider);
+			if(string.IsNullOrEmpty(provider)) provider = _host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider);
 			provider = provider.ToLowerInvariant();
 
-			IFilesStorageProviderV30[] all = _host.GetFilesStorageProviders(true);
+			IFilesStorageProviderV30[] all = _host.GetFilesStorageProviders(_wiki, true);
 			foreach(IFilesStorageProviderV30 prov in all) {
 				if(prov.GetType().FullName.ToLowerInvariant() == provider) return prov;
 			}
@@ -338,10 +339,12 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
-		public void Init(IHostV30 host, string config) {
+		public void Init(IHostV30 host, string config, string wiki) {
 			this._host = host;
 			this._config = config != null ? config : "";
+			this._wiki = wiki;
 
 			if(this._config.ToLowerInvariant() == "nolog") _enableLogging = false;
 		}

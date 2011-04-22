@@ -51,7 +51,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>
 		/// Creates or updates the database schema if necessary.
 		/// </summary>
-		protected abstract void CreateOrUpdateDatabaseIfNecessary();
+		/// <param name="wiki">The wiki.</param>
+		protected abstract void CreateOrUpdateDatabaseIfNecessary(string wiki);
 
 		/// <summary>
 		/// Tries to load the configuration from a corresponding v2 provider.
@@ -70,9 +71,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config) {
+		public void Init(IHostV30 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
@@ -93,6 +95,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ValidateConnectionString(config);
 
 			connString = config;
+
+			CreateOrUpdateDatabaseIfNecessary(wiki);
 		}
 
 		/// <summary>
@@ -105,10 +109,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public void SetUp(IHostV30 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
-
-			Init(host, config);
-
-			CreateOrUpdateDatabaseIfNecessary();
+			
 		}
 
 		/// <summary>

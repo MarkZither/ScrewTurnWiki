@@ -14,11 +14,12 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		void Init(IHostV30 host, string config);
+		void Init(IHostV30 host, string config, string wiki);
 
 		/// <summary>
 		/// Sets up the Storage Provider.

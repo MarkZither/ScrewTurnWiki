@@ -41,9 +41,9 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 			IHostV30 host = mocks.StrictMock<IHostV30>();
 			host.LogEntry(null, LogEntryType.Warning, null, null);
 			LastCall.On(host).IgnoreArguments().Repeat.Any();
-			Expect.Call(host.GetSettingValue(SettingName.DefaultFilesStorageProvider)).Return(
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider)).Return(
 				prov.GetType().FullName).Repeat.Times(4);
-			Expect.Call(host.GetFilesStorageProviders(true)).Return(
+			Expect.Call(host.GetFilesStorageProviders(null, true)).Return(
 				new IFilesStorageProviderV30[] { prov }).Repeat.Times(8);
 
 			StFileInfo[] myFiles = new StFileInfo[] {
@@ -61,14 +61,16 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 			};
 
 			// /my/*
-			Expect.Call(host.ListFiles(null)).IgnoreArguments().Constraints(
+			Expect.Call(host.ListFiles(null, null)).IgnoreArguments().Constraints(
+				RMC.Is.Anything(),
 				RMC.Is.Matching(
 					delegate(StDirectoryInfo dir) {
 						return dir.FullPath == "/my/";
 					})).Return(myFiles).Repeat.Times(2);
 
 			// /my/other/*
-			Expect.Call(host.ListFiles(null)).IgnoreArguments().Constraints(
+			Expect.Call(host.ListFiles(null, null)).IgnoreArguments().Constraints(
+				RMC.Is.Anything(),
 				RMC.Is.Matching(
 					delegate(StDirectoryInfo dir) {
 						return dir.FullPath == "/my/other/";
@@ -76,15 +78,15 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 
 			PageInfo page = new PageInfo("page", null, DateTime.Now);
 
-			Expect.Call(host.FindPage("page")).Return(page).Repeat.Times(4);
-			Expect.Call(host.FindPage("inexistent-page")).Return(null).Repeat.Twice();
+			Expect.Call(host.FindPage(null, "page")).Return(page).Repeat.Times(4);
+			Expect.Call(host.FindPage(null, "inexistent-page")).Return(null).Repeat.Twice();
 
-			Expect.Call(host.ListPageAttachments(page)).Return(attachments).Repeat.Times(4);
+			Expect.Call(host.ListPageAttachments(null, page)).Return(attachments).Repeat.Times(4);
 
 			mocks.ReplayAll();
 
 			DownloadCounter counter = new DownloadCounter();
-			counter.Init(host, "");
+			counter.Init(host, "", null);
 
 			string output = counter.Format(content, null, FormattingPhase.Phase3);
 

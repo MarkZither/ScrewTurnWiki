@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void Init() {
 			IUsersStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), "");
+			prov.Init(MockHost(), "", null);
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}
@@ -32,15 +32,15 @@ namespace ScrewTurn.Wiki.Tests {
 
 			MockRepository mocks = new MockRepository();
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
-			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
-			Expect.Call(host.GetSettingValue(SettingName.AdministratorsGroup)).Return("Administrators").Repeat.Once();
-			Expect.Call(host.GetSettingValue(SettingName.UsersGroup)).Return("Users").Repeat.Once();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
+			Expect.Call(host.GetSettingValue(null, SettingName.AdministratorsGroup)).Return("Administrators").Repeat.Once();
+			Expect.Call(host.GetSettingValue(null, SettingName.UsersGroup)).Return("Users").Repeat.Once();
 
-			Expect.Call(host.UpgradeSecurityFlagsToGroupsAcl(null, null)).IgnoreArguments().Repeat.Times(1).Return(true);
+			Expect.Call(host.UpgradeSecurityFlagsToGroupsAcl(null, null, null)).IgnoreArguments().Repeat.Times(1).Return(true);
 
 			mocks.Replay(host);
 
-			string file = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), "Users.cs");
+			string file = Path.Combine(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory), "Users.cs");
 
 			File.WriteAllText(file, "user|PASSHASH|user@users.com|Inactive|2008/10/31 15:15:15|USER\r\nsuperuser|SUPERPASSHASH|superuser@users.com|Active|2008/10/31 15:15:16|ADMIN");
 

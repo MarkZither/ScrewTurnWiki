@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The User that generated the Entry.</param>
 		public static void LogEntry(string message, EntryType type, string user) {
 			try {
-				Settings.Provider.LogEntry(message, type, user);
+				GlobalSettings.Provider.LogEntry(message, type, user);
 			}
 			catch { }
 		}
@@ -39,7 +39,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The Entries.</returns>
 		public static List<LogEntry> ReadEntries() {
-			List<LogEntry> entries = new List<LogEntry>(Settings.Provider.GetLogEntries());
+			List<LogEntry> entries = new List<LogEntry>(GlobalSettings.Provider.GetLogEntries());
 			entries.Reverse();
 			return entries;
 
@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki {
 		/// Clears the Log.
 		/// </summary>
 		public static void ClearLog() {
-			Settings.Provider.ClearLog();
+			GlobalSettings.Provider.ClearLog();
 		}
 
 	}

@@ -31,16 +31,17 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <b>BreadcrumbsManager</b> class.
+		/// Initializes a new instance of the <b>BreadcrumbsManager</b> class for the given wiki.
 		/// </summary>
-		public BreadcrumbsManager() {
+		/// <param name="wiki">The wiki.</param>
+		public BreadcrumbsManager(string wiki) {
 			pages = new List<PageInfo>(MaxPages);
 
 			HttpCookie cookie = GetCookie();
 			if(cookie != null && !string.IsNullOrEmpty(cookie.Values[CookieValue])) {
 				try {
 					foreach(string p in cookie.Values[CookieValue].Split('|')) {
-						PageInfo page = Pages.FindPage(p);
+						PageInfo page = Pages.FindPage(wiki, p);
 						if(page != null) pages.Add(page);
 					}
 				}
@@ -56,7 +57,7 @@ namespace ScrewTurn.Wiki {
 			if(cookie == null) {
 				cookie = new HttpCookie(CookieName);
 			}
-			cookie.Path = Settings.CookiePath;
+			cookie.Path = GlobalSettings.CookiePath;
 
 			StringBuilder sb = new StringBuilder(MaxPages * 20);
 			for(int i = 0; i < pages.Count; i++) {
@@ -133,16 +134,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets all the Pages in the trail that still exist.
 		/// </summary>
-		public PageInfo[] AllPages {
-			get {
-				lock(this) {
-					List<PageInfo> newPages = new List<PageInfo>(pages.Count);
-					foreach(PageInfo p in pages) {
-						if(Pages.FindPage(p.FullName) != null) newPages.Add(p);
-					}
-
-					return newPages.ToArray();
+		/// <param name="wiki">The wiki.</param>
+		public PageInfo[] GetAllPages(string wiki) {
+			lock(this) {
+				List<PageInfo> newPages = new List<PageInfo>(pages.Count);
+				foreach(PageInfo p in pages) {
+					if(Pages.FindPage(wiki, p.FullName) != null) newPages.Add(p);
 				}
+
+				return newPages.ToArray();
 			}
 		}
 

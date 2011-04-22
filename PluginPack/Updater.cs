@@ -24,9 +24,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config) {
+		public void Init(IHostV30 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
@@ -99,14 +100,14 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 				}
 
 				foreach(string dll in dllNames) {
-					_host.GetSettingsStorageProvider().StorePluginAssembly(dll, assemblies[dll]);
+					_host.GetGlobalSettingsStorageProvider().StorePluginAssembly(dll, assemblies[dll]);
 				}
 
 				foreach(string dll in dllNames) {
 					LoadProvider(dll);
 				}
 
-				_host.GetSettingsStorageProvider().DeletePluginAssembly("PluginPack.dll");
+				_host.GetGlobalSettingsStorageProvider().DeletePluginAssembly("PluginPack.dll");
 
 			}
 			catch(Exception ex) {

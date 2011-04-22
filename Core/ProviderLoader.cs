@@ -6,6 +6,7 @@ using System.Text;
 using System.Reflection;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Globalization;
+using System.Web.Configuration;
 
 namespace ScrewTurn.Wiki {
 
@@ -38,327 +39,6 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-
-		/// <summary>
-		/// Try to setup a provider.
-		/// </summary>
-		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
-		/// <param name="instance">The provider instance to setup.</param>
-		public static void SetUp<T>(Type instance) where T : class, IProviderV30 {
-			T provider = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(instance), instance);
-			provider.SetUp(Host.Instance, LoadConfiguration(instance.GetType().FullName));
-
-			// Verify constraints
-			VerifyConstraints<T>(provider);
-
-			// Dispose the provider
-			provider.Dispose();
-		}
-
-		/// <summary>
-		/// Tries to inizialize a provider.
-		/// </summary>
-		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
-		/// <param name="instance">The provider instance to initialize.</param>
-		public static void Initialize<T>(T instance) where T : class, IProviderV30 {
-			bool enabled = !IsDisabled(instance.GetType().FullName);
-			try {
-				if(enabled) {
-					instance.Init(Host.Instance, LoadConfiguration(instance.GetType().FullName));
-				}
-			}
-			catch(InvalidConfigurationException) {
-				// Disable Provider
-				enabled = false;
-				Log.LogEntry("Unable to load provider " + instance.Information.Name + " (configuration rejected), disabling it", EntryType.Error, Log.SystemUsername);
-				SaveStatus(instance.GetType().FullName, false);
-			}
-			catch {
-				// Disable Provider
-				enabled = false;
-				Log.LogEntry("Unable to load provider " + instance.Information.Name + " (unknown error), disabling it", EntryType.Error, Log.SystemUsername);
-				SaveStatus(instance.GetType().FullName, false);
-				throw; // Exception is rethrown because it's not a normal condition
-			}
-
-			Log.LogEntry("Provider " + instance.Information.Name + " loaded (" + (enabled ? "Enabled" : "Disabled") + ")", EntryType.General, Log.SystemUsername);
-		}
-
-		/// <summary>
-		/// Loads all the Providers and set-up them.
-		/// </summary>
-		/// <param name="loadUsers">A value indicating whether to load users storage providers.</param>
-		/// <param name="loadPages">A value indicating whether to load pages storage providers.</param>
-		/// <param name="loadFiles">A value indicating whether to load files storage providers.</param>
-		/// <param name="loadFormatters">A value indicating whether to load formatter providers.</param>
-		public static void FullLoad(bool loadUsers, bool loadPages, bool loadFiles, bool loadFormatters) {
-			string[] pluginAssemblies = Settings.Provider.ListPluginAssemblies();
-
-			List<Type> users = new List<Type>(2);
-			List<Type> dUsers = new List<Type>(2);
-			List<Type> pages = new List<Type>(2);
-			List<Type> dPages = new List<Type>(2);
-			List<Type> theme = new List<Type>(2);
-			List<Type> files = new List<Type>(2);
-			List<Type> dFiles = new List<Type>(2);
-			List<Type> forms = new List<Type>(2);
-			List<Type> dForms = new List<Type>(2);
-
-			for(int i = 0; i < pluginAssemblies.Length; i++) {
-				Type[] d;
-				Type[] u;
-				Type[] p;
-				Type[] t;
-				Type[] f;
-				LoadFrom(pluginAssemblies[i], out u, out p, out d, out t, out f);
-				if(loadFiles) files.AddRange(d);
-				if(loadUsers) users.AddRange(u);
-				if(loadPages) pages.AddRange(p);
-				if(loadFormatters) forms.AddRange(f);
-			}
-
-			// Init and add to the Collectors, starting from files providers
-			for(int i = 0; i < files.Count; i++) {
-				if(Collectors.CollectorsBox.FilesProviderCollector.GetProvider(files[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledFilesProviderCollector.GetProvider(files[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + files[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IFilesStorageProviderV30>(files[i]);
-				Collectors.AddProvider(files[i], Assembly.GetAssembly(files[i]), typeof(IFilesStorageProviderV30), !IsDisabled(files[i].FullName));
-			}
-
-			for(int i = 0; i < users.Count; i++) {
-				if(Collectors.CollectorsBox.UsersProviderCollector.GetProvider(users[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledUsersProviderCollector.GetProvider(users[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + users[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IUsersStorageProviderV30>(users[i]);
-				Collectors.AddProvider(users[i], Assembly.GetAssembly(users[i]), typeof(IUsersStorageProviderV30), !IsDisabled(users[i].FullName));
-			}
-
-			for(int i = 0; i < pages.Count; i++) {
-				if(Collectors.CollectorsBox.PagesProviderCollector.GetProvider(pages[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledPagesProviderCollector.GetProvider(pages[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + pages[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IPagesStorageProviderV30>(pages[i]);
-				Collectors.AddProvider(pages[i], Assembly.GetAssembly(pages[i]), typeof(IPagesStorageProviderV30), !IsDisabled(pages[i].FullName));
-			}
-
-			for(int i = 0; i < theme.Count; i++) {
-				if(Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(theme[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledThemeProviderCollector.GetProvider(theme[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + theme[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IThemeStorageProviderV30>(theme[i]);
-				Collectors.AddProvider(theme[i], Assembly.GetAssembly(theme[i]), typeof(IThemeStorageProviderV30), !IsDisabled(theme[i].FullName));
-			}
-
-			for(int i = 0; i < forms.Count; i++) {
-				if(Collectors.CollectorsBox.FormatterProviderCollector.GetProvider(forms[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledFormatterProviderCollector.GetProvider(forms[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + forms[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IFormatterProviderV30>(forms[i]);
-				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), typeof(IFormatterProviderV30), !IsDisabled(forms[i].FullName));
-			}
-		}
-
-
-		/// <summary>
-		/// Loads the Configuration data of a Provider.
-		/// </summary>
-		/// <param name="typeName">The Type Name of the Provider.</param>
-		/// <returns>The Configuration, if available, otherwise an empty string.</returns>
-		public static string LoadConfiguration(string typeName) {
-			return Settings.Provider.GetPluginConfiguration(typeName);
-		}
-
-		/// <summary>
-		/// Saves the Configuration data of a Provider.
-		/// </summary>
-		/// <param name="typeName">The Type Name of the Provider.</param>
-		/// <param name="config">The Configuration data to save.</param>
-		public static void SaveConfiguration(string typeName, string config) {
-			Settings.Provider.SetPluginConfiguration(typeName, config);
-		}
-
-		/// <summary>
-		/// Saves the Status of a Provider.
-		/// </summary>
-		/// <param name="typeName">The Type Name of the Provider.</param>
-		/// <param name="enabled">A value specifying whether or not the Provider is enabled.</param>
-		public static void SaveStatus(string typeName, bool enabled) {
-			Settings.Provider.SetPluginStatus(typeName, enabled);
-		}
-
-		/// <summary>
-		/// Returns a value specifying whether or not a Provider is disabled.
-		/// </summary>
-		/// <param name="typeName">The Type Name of the Provider.</param>
-		/// <returns>True if the Provider is disabled.</returns>
-		public static bool IsDisabled(string typeName) {
-			return !Settings.Provider.GetPluginStatus(typeName);
-		}
-
-		/// <summary>
-		/// Loads Providers from an assembly.
-		/// </summary>
-		/// <param name="assembly">The path of the Assembly to load the Providers from.</param>
-		public static int LoadFromAuto(string assembly) {
-			Type[] users;
-			Type[] pages;
-			Type[] files;
-			Type[] theme;
-			Type[] forms;
-			LoadFrom(assembly, out users, out pages, out files, out theme, out forms);
-
-			int count = 0;
-
-			// Init and add to the Collectors, starting from files providers
-			for(int i = 0; i < files.Length; i++) {
-				if(Collectors.CollectorsBox.FilesProviderCollector.GetProvider(files[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledFilesProviderCollector.GetProvider(files[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + files[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IFilesStorageProviderV30>(files[i]);
-				Collectors.AddProvider(files[i], Assembly.GetAssembly(files[i]), typeof(IFilesStorageProviderV30), !IsDisabled(files[i].FullName));
-				count++;
-			}
-
-			for(int i = 0; i < users.Length; i++) {
-				if(Collectors.CollectorsBox.UsersProviderCollector.GetProvider(users[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledUsersProviderCollector.GetProvider(users[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + users[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IUsersStorageProviderV30>(users[i]);
-				Collectors.AddProvider(users[i], Assembly.GetAssembly(users[i]), typeof(IUsersStorageProviderV30), !IsDisabled(users[i].FullName));
-				count++;
-			}
-
-			for(int i = 0; i < pages.Length; i++) {
-				if(Collectors.CollectorsBox.PagesProviderCollector.GetProvider(pages[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledPagesProviderCollector.GetProvider(pages[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + pages[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IPagesStorageProviderV30>(pages[i]);
-				Collectors.AddProvider(pages[i], Assembly.GetAssembly(pages[i]), typeof(IPagesStorageProviderV30), !IsDisabled(pages[i].FullName));
-				count++;
-			}
-
-			for(int i = 0; i < theme.Length; i++) {
-				if(Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(theme[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledThemeProviderCollector.GetProvider(theme[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + theme[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IThemeStorageProviderV30>(theme[i]);
-				Collectors.AddProvider(theme[i], Assembly.GetAssembly(theme[i]), typeof(IThemeStorageProviderV30), !IsDisabled(theme[i].FullName));
-				count++;
-			}
-
-			for(int i = 0; i < forms.Length; i++) {
-				if(Collectors.CollectorsBox.FormatterProviderCollector.GetProvider(forms[i].FullName) != null ||
-					Collectors.CollectorsBox.DisabledFormatterProviderCollector.GetProvider(forms[i].FullName) != null) {
-					Log.LogEntry("SetUp already colled on provider " + forms[i].FullName, EntryType.Warning, Log.SystemUsername);
-				}
-				SetUp<IFormatterProviderV30>(forms[i]);
-				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), typeof(IFormatterProviderV30), !IsDisabled(forms[i].FullName));
-				count++;
-			}
-
-			return count;
-		}
-
-		/// <summary>
-		/// Loads Providers from an assembly.
-		/// </summary>
-		/// <param name="assembly">The path of the Assembly to load the Providers from.</param>
-		/// <param name="users">The Users Providers.</param>
-		/// <param name="files">The Files Providers.</param>
-		/// <param name="pages">The Pages Providers.</param>
-		/// <param name="themes">The Themes Providers.</param>
-		/// <param name="formatters">The Formatter Providers.</param>
-		/// <remarks>The Components returned are <b>not</b> initialized.</remarks>
-		public static void LoadFrom(string assembly, out Type[] users, out Type[] pages,
-			out Type[] files, out Type[] themes, out Type[] formatters) {
-
-			Assembly asm = null;
-			try {
-				//asm = Assembly.LoadFile(assembly);
-				// This way the DLL is not locked and can be deleted at runtime
-				asm = Assembly.Load(LoadAssemblyFromProvider(Path.GetFileName(assembly)));
-			}
-			catch {
-				files = new Type[0];
-				users = new Type[0];
-				pages = new Type[0];
-				themes = new Type[0];
-				formatters = new Type[0];
-
-				Log.LogEntry("Unable to load assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
-				return;
-			}
-
-			Type[] types = null;
-
-			try {
-				types = asm.GetTypes();
-			}
-			catch(ReflectionTypeLoadException) {
-				files = new Type[0];
-				users = new Type[0];
-				pages = new Type[0];
-				themes = new Type[0];
-				formatters = new Type[0];
-
-				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
-				return;
-			}
-
-			List<Type> urs = new List<Type>();
-			List<Type> pgs = new List<Type>();
-			List<Type> fls = new List<Type>();
-			List<Type> thm = new List<Type>();
-			List<Type> frs = new List<Type>();
-			List<Type> che = new List<Type>();
-
-			Type[] interfaces;
-			for(int i = 0; i < types.Length; i++) {
-				// Avoid to load abstract classes as they cannot be instantiated
-				if(types[i].IsAbstract) continue;
-
-				interfaces = types[i].GetInterfaces();
-				foreach(Type iface in interfaces) {
-					if(iface == typeof(IUsersStorageProviderV30)) {
-						urs.Add(types[i]);
-						Collectors.FileNames[types[i].FullName] = assembly;
-					}
-					if(iface == typeof(IPagesStorageProviderV30)) {
-						pgs.Add(types[i]);
-						Collectors.FileNames[types[i].FullName] = assembly;
-					}
-					if(iface == typeof(IFilesStorageProviderV30)) {
-						fls.Add(types[i]);
-						Collectors.FileNames[types[i].FullName] = assembly;
-					}
-					if(iface == typeof(IThemeStorageProviderV30)) {
-						thm.Add(types[i]);
-						Collectors.FileNames[types[i].FullName] = assembly;
-					}
-					if(iface == typeof(IFormatterProviderV30)) {
-						frs.Add(types[i]);
-						Collectors.FileNames[types[i].FullName] = assembly;
-					}
-				}
-			}
-
-			users = urs.ToArray();
-			pages = pgs.ToArray();
-			files = fls.ToArray();
-			themes = thm.ToArray();
-			formatters = frs.ToArray();
-		}
-
 		/// <summary>
 		/// Creates an instance of a type implementing a provider interface.
 		/// </summary>
@@ -379,6 +59,162 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Try to setup a provider.
+		/// </summary>
+		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
+		/// <param name="provider">The provider to setup.</param>
+		/// <param name="configuration">The configuration string.</param>
+		public static void SetUp<T>(Type provider, string configuration) where T : class, IProviderV30 {
+			T providerInstance = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(provider), provider);
+			providerInstance.SetUp(Host.Instance, configuration);
+
+			// Verify constraints
+			VerifyConstraints<T>(providerInstance);
+
+			// Dispose the provider
+			providerInstance.Dispose();
+		}
+
+		/// <summary>
+		/// Tries to inizialize a provider.
+		/// </summary>
+		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
+		/// <param name="instance">The provider instance to initialize.</param>
+		/// <param name="configuration">The configuration string.</param>
+		/// <param name="wiki">The wiki that needs the provider.</param>
+		public static void Initialize<T>(T instance, string configuration, string wiki) where T : class, IProviderV30 {
+			bool enabled = !IsDisabled(instance.GetType().FullName);
+			try {
+				if(enabled) {
+					instance.Init(Host.Instance, configuration, wiki);
+				}
+			}
+			catch(InvalidConfigurationException) {
+				// Disable Provider
+				enabled = false;
+				Log.LogEntry("Unable to load provider " + instance.Information.Name + " (configuration rejected), disabling it", EntryType.Error, Log.SystemUsername);
+				SaveStatus(instance.GetType().FullName, false);
+			}
+			catch {
+				// Disable Provider
+				enabled = false;
+				Log.LogEntry("Unable to load provider " + instance.Information.Name + " (unknown error), disabling it", EntryType.Error, Log.SystemUsername);
+				SaveStatus(instance.GetType().FullName, false);
+				throw; // Exception is rethrown because it's not a normal condition
+			}
+
+			Log.LogEntry("Provider " + instance.Information.Name + " loaded (" + (enabled ? "Enabled" : "Disabled") + ")", EntryType.General, Log.SystemUsername);
+		}
+
+		/// <summary>
+		/// Loads the Configuration data of a Provider.
+		/// </summary>
+		/// <param name="typeName">The Type Name of the Provider.</param>
+		/// <returns>The Configuration, if available, otherwise an empty string.</returns>
+		public static string LoadConfiguration(string typeName) {
+			return GlobalSettings.Provider.GetPluginConfiguration(typeName);
+		}
+
+		/// <summary>
+		/// Saves the Configuration data of a Provider.
+		/// </summary>
+		/// <param name="typeName">The Type Name of the Provider.</param>
+		/// <param name="config">The Configuration data to save.</param>
+		public static void SaveConfiguration(string typeName, string config) {
+			GlobalSettings.Provider.SetPluginConfiguration(typeName, config);
+		}
+
+		/// <summary>
+		/// Saves the Status of a Provider.
+		/// </summary>
+		/// <param name="typeName">The Type Name of the Provider.</param>
+		/// <param name="enabled">A value specifying whether or not the Provider is enabled.</param>
+		public static void SaveStatus(string typeName, bool enabled) {
+			GlobalSettings.Provider.SetPluginStatus(typeName, enabled);
+		}
+
+		/// <summary>
+		/// Returns a value specifying whether or not a Provider is disabled.
+		/// </summary>
+		/// <param name="typeName">The Type Name of the Provider.</param>
+		/// <returns>True if the Provider is disabled.</returns>
+		public static bool IsDisabled(string typeName) {
+			return !GlobalSettings.Provider.GetPluginStatus(typeName);
+		}
+
+		/// <summary>
+		/// Loads Formatter Providers from an assembly.
+		/// </summary>
+		/// <param name="assembly">The path of the Assembly to load the Providers from.</param>
+		public static int LoadFormatterProvidersFromAuto(string assembly) {
+			Type[] forms;
+			LoadFormatterProvidersFromAssembly(assembly, out forms);
+
+			int count = 0;
+
+			// Setup and add to the Collectors
+			for(int i = 0; i < forms.Length; i++) {
+				SetUp<IFormatterProviderV30>(forms[i], LoadConfiguration(forms[i].FullName));
+				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), typeof(IFormatterProviderV30));
+				count++;
+			}
+
+			return count;
+		}
+
+		/// <summary>
+		/// Loads Providers from an assembly.
+		/// </summary>
+		/// <param name="assembly">The path of the Assembly to load the Providers from.</param>
+		/// <param name="formatters">The Formatter Providers.</param>
+		/// <remarks>The Components returned are <b>not</b> initialized.</remarks>
+		public static void LoadFormatterProvidersFromAssembly(string assembly, out Type[] formatters) {
+
+			Assembly asm = null;
+			try {
+				//asm = Assembly.LoadFile(assembly);
+				// This way the DLL is not locked and can be deleted at runtime
+				asm = Assembly.Load(LoadAssemblyFromProvider(Path.GetFileName(assembly)));
+			}
+			catch {
+				formatters = new Type[0];
+
+				Log.LogEntry("Unable to load assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
+				return;
+			}
+
+			Type[] types = null;
+
+			try {
+				types = asm.GetTypes();
+			}
+			catch(ReflectionTypeLoadException) {
+				formatters = new Type[0];
+
+				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
+				return;
+			}
+
+			List<Type> frs = new List<Type>();
+			
+			Type[] interfaces;
+			for(int i = 0; i < types.Length; i++) {
+				// Avoid to load abstract classes as they cannot be instantiated
+				if(types[i].IsAbstract) continue;
+
+				interfaces = types[i].GetInterfaces();
+				foreach(Type iface in interfaces) {
+					if(iface == typeof(IFormatterProviderV30)) {
+						frs.Add(types[i]);
+						Collectors.FileNames[types[i].FullName] = assembly;
+					}
+				}
+			}
+
+			formatters = frs.ToArray();
+		}
+
+		/// <summary>
 		/// Loads the content of an assembly from disk.
 		/// </summary>
 		/// <param name="assembly">The assembly file full path.</param>
@@ -393,14 +229,80 @@ namespace ScrewTurn.Wiki {
 		/// <param name="assemblyName">The name of the assembly, such as "Assembly.dll".</param>
 		/// <returns>The content fo the assembly.</returns>
 		private static byte[] LoadAssemblyFromProvider(string assemblyName) {
-			return Settings.Provider.RetrievePluginAssembly(assemblyName);
+			return GlobalSettings.Provider.RetrievePluginAssembly(assemblyName);
+		}
+
+		/// <summary>
+		/// Loads the proper Global Setting Storage Provider, given its name.
+		/// </summary>
+		/// <param name="name">The fully qualified name (such as "Namespace.ProviderClass, MyAssembly"), or <c>null</c>/<b>String.Empty</b>/"<b>default</b>" for the default provider.</param>
+		/// <returns>The global settings storage provider.</returns>
+		public static IGlobalSettingsStorageProviderV30 LoadGlobalSettingsStorageProvider(string name) {
+			if(name == null || name.Length == 0 || string.Compare(name, "default", true, CultureInfo.InvariantCulture) == 0) {
+				return new GlobalSettingsStorageProvider();
+			}
+
+			IGlobalSettingsStorageProviderV30 result = null;
+
+			Exception inner = null;
+
+			if(name.Contains(",")) {
+				string[] fields = name.Split(',');
+				if(fields.Length == 2) {
+					fields[0] = fields[0].Trim(' ', '"');
+					fields[1] = fields[1].Trim(' ', '"');
+					try {
+						// assemblyName should be an absolute path or a relative path in bin or public\Plugins
+
+						Assembly asm;
+						Type t;
+						string assemblyName = fields[1];
+						if(!assemblyName.ToLowerInvariant().EndsWith(".dll")) assemblyName += ".dll";
+
+						if(File.Exists(assemblyName)) {
+							asm = Assembly.Load(LoadAssemblyFromDisk(assemblyName));
+							t = asm.GetType(fields[0]);
+							SettingsStorageProviderAssemblyName = Path.GetFileName(assemblyName);
+						}
+						else {
+							string tentativePluginsPath = null;
+							try {
+								// Settings.PublicDirectory is only available when running the web app
+								tentativePluginsPath = Path.Combine(GlobalSettings.PublicDirectory, "Plugins");
+								tentativePluginsPath = Path.Combine(tentativePluginsPath, assemblyName);
+							}
+							catch { }
+
+							if(!string.IsNullOrEmpty(tentativePluginsPath) && File.Exists(tentativePluginsPath)) {
+								asm = Assembly.Load(LoadAssemblyFromDisk(tentativePluginsPath));
+								t = asm.GetType(fields[0]);
+								SettingsStorageProviderAssemblyName = Path.GetFileName(tentativePluginsPath);
+							}
+							else {
+								// Trim .dll
+								t = Type.GetType(fields[0] + "," + assemblyName.Substring(0, assemblyName.Length - 4), true, true);
+								SettingsStorageProviderAssemblyName = assemblyName;
+							}
+						}
+
+						result = t.GetConstructor(new Type[0]).Invoke(new object[0]) as IGlobalSettingsStorageProviderV30;
+					}
+					catch(Exception ex) {
+						inner = ex;
+						result = null;
+					}
+				}
+			}
+
+			if(result == null) throw new ArgumentException("Could not load the specified Global Settings Storage Provider", inner);
+			else return result;
 		}
 
 		/// <summary>
 		/// Loads the proper Setting Storage Provider, given its name.
 		/// </summary>
 		/// <param name="name">The fully qualified name (such as "Namespace.ProviderClass, MyAssembly"), or <c>null</c>/<b>String.Empty</b>/"<b>default</b>" for the default provider.</param>
-		/// <returns>The settings storage provider.</returns>
+		/// <returns>The global settings storage provider.</returns>
 		public static ISettingsStorageProviderV30 LoadSettingsStorageProvider(string name) {
 			if(name == null || name.Length == 0 || string.Compare(name, "default", true, CultureInfo.InvariantCulture) == 0) {
 				return new SettingsStorageProvider();
@@ -432,7 +334,7 @@ namespace ScrewTurn.Wiki {
 							string tentativePluginsPath = null;
 							try {
 								// Settings.PublicDirectory is only available when running the web app
-								tentativePluginsPath = Path.Combine(Settings.PublicDirectory, "Plugins");
+								tentativePluginsPath = Path.Combine(GlobalSettings.PublicDirectory, "Plugins");
 								tentativePluginsPath = Path.Combine(tentativePluginsPath, assemblyName);
 							}
 							catch { }
@@ -458,54 +360,78 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			if(result == null) throw new ArgumentException("Could not load the specified Settings Storage Provider", inner);
+			if(result == null) throw new ArgumentException("Could not load the specified Global Settings Storage Provider", inner);
 			else return result;
 		}
 
 		/// <summary>
-		/// Loads all settings storage providers available in all DLLs stored in a provider.
+		/// Loads the storage providers.
 		/// </summary>
-		/// <param name="repository">The input provider.</param>
-		/// <returns>The providers found (not initialized).</returns>
-		public static ISettingsStorageProviderV30[] LoadAllSettingsStorageProviders(ISettingsStorageProviderV30 repository) {
-			// This method is actually a memory leak because it can be executed multimple times
-			// Every time it loads a set of assemblies which cannot be unloaded (unless a separate AppDomain is used)
-
-			List<ISettingsStorageProviderV30> result = new List<ISettingsStorageProviderV30>();
-
-			foreach(string dll in repository.ListPluginAssemblies()) {
-				byte[] asmBin = repository.RetrievePluginAssembly(dll);
-				Assembly asm = Assembly.Load(asmBin);
-
-				Type[] types = null;
+		/// <typeparam name="T">The provider interface type</typeparam>
+		/// <param name="storageProviders">A list of StorageProvider.</param>
+		public static void LoadStorageProviders<T>(List<StorageProvider> storageProviders) where T : class, IProviderV30 {
+			foreach(StorageProvider storageProvider in storageProviders) {
 				try {
-					types = asm.GetTypes();
-				}
-				catch(ReflectionTypeLoadException) {
-					// Skip assembly
-					Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(dll), EntryType.Error, Log.SystemUsername);
-					continue;
-				}
+					// assemblyName should be an absolute path or a relative path in bin or public\Plugins
+					Assembly asm = null;
+					Type t;
+					string assemblyName = storageProvider.AssemblyName;
+					if(!assemblyName.ToLowerInvariant().EndsWith(".dll")) assemblyName += ".dll";
 
-				foreach(Type type in types) {
-					// Avoid to load abstract classes as they cannot be instantiated
-					if(type.IsAbstract) continue;
+					if(File.Exists(assemblyName)) {
+						asm = Assembly.Load(LoadAssemblyFromDisk(assemblyName));
+						t = asm.GetType(storageProvider.TypeName);
+						SettingsStorageProviderAssemblyName = Path.GetFileName(assemblyName);
+					}
+					else {
+						string tentativePluginsPath = null;
+						try {
+							// Settings.PublicDirectory is only available when running the web app
+							tentativePluginsPath = Path.Combine(GlobalSettings.PublicDirectory, "Plugins");
+							tentativePluginsPath = Path.Combine(tentativePluginsPath, assemblyName);
+						}
+						catch { }
 
-					Type[] interfaces = type.GetInterfaces();
-
-					foreach(Type iface in interfaces) {
-						if(iface == typeof(ISettingsStorageProviderV30)) {
-							try {
-								ISettingsStorageProviderV30 temp = asm.CreateInstance(type.ToString()) as ISettingsStorageProviderV30;
-								if(temp != null) result.Add(temp);
-							}
-							catch { }
+						if(!string.IsNullOrEmpty(tentativePluginsPath) && File.Exists(tentativePluginsPath)) {
+							asm = Assembly.Load(LoadAssemblyFromDisk(tentativePluginsPath));
+							t = asm.GetType(storageProvider.TypeName);
+							SettingsStorageProviderAssemblyName = Path.GetFileName(tentativePluginsPath);
+						}
+						else {
+							// Trim .dll
+							t = Type.GetType(storageProvider + "," + assemblyName.Substring(0, assemblyName.Length - 4), true, true);
+							SettingsStorageProviderAssemblyName = assemblyName;
 						}
 					}
+
+					Collectors.AddProvider(t, asm, typeof(T));
+					SetUp<T>(t, storageProvider.ConfigurationString);
+				}
+				catch(Exception ex) {
+					throw new ArgumentException("Could not load the provider with name: " + storageProvider, ex);
 				}
 			}
+		}
 
-			return result.ToArray();
+		/// <summary>
+		/// Loads all formatter providers from dlls.
+		/// </summary>
+		public static void LoadAllFormatterProviders() {
+			string[] pluginAssemblies = GlobalSettings.Provider.ListPluginAssemblies();
+
+			List<Type> forms = new List<Type>(2);
+
+			for(int i = 0; i < pluginAssemblies.Length; i++) {
+				Type[] f;
+				LoadFormatterProvidersFromAssembly(pluginAssemblies[i], out f);
+				forms.AddRange(f);
+			}
+
+			// Add to the Collectors and Setup
+			for(int i = 0; i < forms.Count; i++) {
+				SetUp<IFormatterProviderV30>(forms[i], LoadConfiguration(forms[i].FullName));
+				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), typeof(IFormatterProviderV30));
+			}
 		}
 
 		/// <summary>
@@ -518,46 +444,19 @@ namespace ScrewTurn.Wiki {
 		public static bool TryChangeConfiguration(string typeName, string configuration, out string error) {
 			error = null;
 
-			bool enabled, canDisable;
-			IProviderV30 provider = Collectors.FindProvider(typeName, out enabled, out canDisable);
+			//bool enabled, canDisable;
+			//IProviderV30 provider = Collectors.FindProvider(typeName, out enabled, out canDisable);
 
-			try {
-				provider.Init(Host.Instance, configuration);
-			}
-			catch(InvalidConfigurationException icex) {
-				error = icex.Message;
-				return false;
-			}
+			//try {
+			//    provider.Init(Host.Instance, configuration);
+			//}
+			//catch(InvalidConfigurationException icex) {
+			//    error = icex.Message;
+			//    return false;
+			//}
 
 			SaveConfiguration(typeName, configuration);
 			return true;
-		}
-
-		/// <summary>
-		/// Disables a provider.
-		/// </summary>
-		/// <param name="typeName">The provider to disable.</param>
-		public static void DisableProvider(string typeName) {
-			bool enabled, canDisable;
-			IProviderV30 provider = Collectors.FindProvider(typeName, out enabled, out canDisable);
-			if(enabled && canDisable) {
-				Collectors.TryDisable(typeName);
-				SaveStatus(typeName, false);
-			}
-		}
-
-		/// <summary>
-		/// Enables a provider.
-		/// </summary>
-		/// <param name="typeName">The provider to enable.</param>
-		public static void EnableProvider(string typeName) {
-			bool enabled, canDisable;
-			IProviderV30 provider = Collectors.FindProvider(typeName, out enabled, out canDisable);
-			if(!enabled) {
-				provider.Init(Host.Instance, LoadConfiguration(typeName));
-				Collectors.TryEnable(typeName);
-				SaveStatus(typeName, true);
-			}
 		}
 
 		/// <summary>
@@ -565,7 +464,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="typeName">The provider to unload.</param>
 		public static void UnloadProvider(string typeName) {
-			DisableProvider(typeName);
 			Collectors.TryUnload(typeName);
 		}
 

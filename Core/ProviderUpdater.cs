@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki {
 
 		private List<string> visitedUrls;
 
-		private ISettingsStorageProviderV30 settingsProvider;
+		private IGlobalSettingsStorageProviderV30 globalSettingsProvider;
 		private List<IProviderV30> providers;
 		private Dictionary<string, string> fileNamesForProviders;
 
@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="settingsProvider">The settings storage provider.</param>
 		/// <param name="fileNamesForProviders">A provider->file dictionary.</param>
 		/// <param name="providers">The providers to update.</param>
-		public ProviderUpdater(ISettingsStorageProviderV30 settingsProvider,
+		public ProviderUpdater(IGlobalSettingsStorageProviderV30 settingsProvider,
 			Dictionary<string, string> fileNamesForProviders,
 			params IProviderV30[][] providers) {
 
@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki {
 			if(providers == null) throw new ArgumentNullException("providers");
 			if(providers.Length == 0) throw new ArgumentException("Providers cannot be empty", "providers");
 
-			this.settingsProvider = settingsProvider;
+			this.globalSettingsProvider = settingsProvider;
 			this.fileNamesForProviders = fileNamesForProviders;
 
 			this.providers = new List<IProviderV30>(20);
@@ -114,7 +114,7 @@ namespace ScrewTurn.Wiki {
 				byte[] content = reader.ReadBytes((int)response.ContentLength);
 				reader.Close();
 
-				bool done = settingsProvider.StorePluginAssembly(filename, content);
+				bool done = globalSettingsProvider.StorePluginAssembly(filename, content);
 				if(done) Log.LogEntry("Provider " + provider.GetType().FullName + " updated", EntryType.General, Log.SystemUsername);
 				else Log.LogEntry("Update failed for provider " + provider.GetType().FullName + ": could not store assembly", EntryType.Error, Log.SystemUsername);
 

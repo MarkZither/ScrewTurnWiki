@@ -52,27 +52,22 @@ namespace ScrewTurn.Wiki {
 			if(rdoPages.Checked) {
 				enabledCount = Collectors.CollectorsBox.PagesProviderCollector.AllProviders.Length;
 				providers.AddRange(Collectors.CollectorsBox.PagesProviderCollector.AllProviders);
-				providers.AddRange(Collectors.CollectorsBox.DisabledPagesProviderCollector.AllProviders);
 			}
 			else if(rdoUsers.Checked) {
 				enabledCount = Collectors.CollectorsBox.UsersProviderCollector.AllProviders.Length;
 				providers.AddRange(Collectors.CollectorsBox.UsersProviderCollector.AllProviders);
-				providers.AddRange(Collectors.CollectorsBox.DisabledUsersProviderCollector.AllProviders);
 			}
 			else if(rdoFiles.Checked) {
 				enabledCount = Collectors.CollectorsBox.FilesProviderCollector.AllProviders.Length;
 				providers.AddRange(Collectors.CollectorsBox.FilesProviderCollector.AllProviders);
-				providers.AddRange(Collectors.CollectorsBox.DisabledFilesProviderCollector.AllProviders);
 			}
 			else if(rdoThemes.Checked) {
 				enabledCount = Collectors.CollectorsBox.ThemeProviderCollector.AllProviders.Length;
 				providers.AddRange(Collectors.CollectorsBox.ThemeProviderCollector.AllProviders);
-				providers.AddRange(Collectors.CollectorsBox.DisabledThemeProviderCollector.AllProviders);
 			}
 			else if(rdoFormatter.Checked) {
 				enabledCount = Collectors.CollectorsBox.FormatterProviderCollector.AllProviders.Length;
 				providers.AddRange(Collectors.CollectorsBox.FormatterProviderCollector.AllProviders);
-				providers.AddRange(Collectors.CollectorsBox.DisabledFormatterProviderCollector.AllProviders);
 			}
 
 			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
@@ -125,7 +120,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled">A value indicating whether the returned provider is enabled.</param>
 		/// <param name="canDisable">A value indicating whether the returned provider can be disabled.</param>
 		private IProviderV30 GetCurrentProvider(out bool enabled, out bool canDisable) {
-			return Collectors.FindProvider(txtCurrentProvider.Value, out enabled, out canDisable);
+			return null; //Collectors.FindProvider(txtCurrentProvider.Value, out enabled, out canDisable);
 		}
 
 		protected void rptProviders_ItemCommand(object sender, CommandEventArgs e) {

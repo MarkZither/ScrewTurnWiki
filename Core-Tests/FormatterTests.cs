@@ -36,7 +36,7 @@ second line";
 			PageInfo currentPage = null;
 			string[] linkedPages = null;
 
-			string _input = Formatter.Format(input, false, context, currentPage, out linkedPages, false);
+			string _input = Formatter.Format(null, input, false, context, currentPage, out linkedPages, false);
 
 			// Ignore \r characters
 			// Ignore \n characters
@@ -48,11 +48,13 @@ second line";
 		public void SetUp() {
 			mocks = new MockRepository();
 
+			Collectors.AddGlobalSettingsStorageProvider(typeof(DummyGlobalSettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyGlobalSettingsStorageProvider)));
+
 			//ISettingsStorageProviderV30 settingsProvider = new DummySettingsStorageProvider();
-			Collectors.AddSettingsProvider(typeof(DummySettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummySettingsStorageProvider)));
+			Collectors.AddProvider(typeof(DummySettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummySettingsStorageProvider)), typeof(ISettingsStorageProviderV30));
 			
 			Collectors.InitCollectors();
-			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), typeof(IPagesStorageProviderV30), true);
+			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), typeof(IPagesStorageProviderV30));
 			
 			Host.Instance = new Host();
 						
@@ -66,16 +68,12 @@ second line";
 			mocks.VerifyAll();
 		}
 
-		private class DummySettingsStorageProvider : ISettingsStorageProviderV30 {
+		private class DummyGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV30 {
 
-			#region ISettingsStorageProviderV30 Members
+			#region IGlobalSettingsStorageProviderV30 Members
 
 			public string GetSetting(string name) {
 				switch(name) {
-					case "ProcessSingleLineBreaks":
-						return "false";
-					case "WikiTitle":
-						return "Title";
 					case "DefaultPagesProvider":
 						return typeof(DummyPagesStorageProvider).FullName;
 					default:
@@ -83,51 +81,15 @@ second line";
 				}
 			}
 
-			public bool SetSetting(string name, string value) {
-				throw new NotImplementedException();
-			}
-
 			public IDictionary<string, string> GetAllSettings() {
 				throw new NotImplementedException();
 			}
 
-			public void BeginBulkUpdate() {
+			public bool SetSetting(string name, string value) {
 				throw new NotImplementedException();
 			}
 
-			public void EndBulkUpdate() {
-				throw new NotImplementedException();
-			}
-
-			public void LogEntry(string message, EntryType entryType, string user) {
-				// Nothing TODO
-			}
-
-			public LogEntry[] GetLogEntries() {
-				throw new NotImplementedException();
-			}
-
-			public void ClearLog() {
-				throw new NotImplementedException();
-			}
-
-			public int LogSize {
-				get { throw new NotImplementedException(); }
-			}
-
-			public string GetMetaDataItem(MetaDataItem item, string tag) {
-				throw new NotImplementedException();
-			}
-
-			public bool SetMetaDataItem(MetaDataItem item, string tag, string content) {
-				throw new NotImplementedException();
-			}
-
-			public RecentChange[] GetRecentChanges() {
-				throw new NotImplementedException();
-			}
-
-			public bool AddRecentChange(string page, string title, string messageSubject, DateTime dateTime, string user, Change change, string descr) {
+			public IList<string> AllWikis() {
 				throw new NotImplementedException();
 			}
 
@@ -165,6 +127,102 @@ second line";
 				return null;
 			}
 
+			public void LogEntry(string message, EntryType entryType, string user) {
+				throw new NotImplementedException();
+			}
+
+			public LogEntry[] GetLogEntries() {
+				throw new NotImplementedException();
+			}
+
+			public void ClearLog() {
+				throw new NotImplementedException();
+			}
+
+			public int LogSize {
+				get { throw new NotImplementedException(); }
+			}
+
+			#endregion
+
+			#region IProviderV30 Members
+
+			public void Init(IHostV30 host, string config, string wiki) {
+				// Nothing to-do
+			}
+
+			public void SetUp(IHostV30 host, string config) {
+				// Nothing to-do
+			}
+
+			public ComponentInformation Information {
+				get { throw new NotImplementedException(); }
+			}
+
+			public string ConfigHelpHtml {
+				get { throw new NotImplementedException(); }
+			}
+
+			#endregion
+
+			#region IDisposable Members
+
+			public void Dispose() {
+				throw new NotImplementedException();
+			}
+
+			#endregion
+		}
+
+		private class DummySettingsStorageProvider : ISettingsStorageProviderV30 {
+
+			#region ISettingsStorageProviderV30 Members
+
+			public string GetSetting(string name) {
+				switch(name) {
+					case "ProcessSingleLineBreaks":
+						return "false";
+					case "WikiTitle":
+						return "Title";
+					case "DefaultPagesProvider":
+						return typeof(DummyPagesStorageProvider).FullName;
+					default:
+						return null;
+				}
+			}
+
+			public bool SetSetting(string name, string value) {
+				throw new NotImplementedException();
+			}
+
+			public IDictionary<string, string> GetAllSettings() {
+				throw new NotImplementedException();
+			}
+
+			public void BeginBulkUpdate() {
+				throw new NotImplementedException();
+			}
+
+			public void EndBulkUpdate() {
+				throw new NotImplementedException();
+			}
+
+			public string GetMetaDataItem(MetaDataItem item, string tag) {
+				throw new NotImplementedException();
+			}
+
+			public bool SetMetaDataItem(MetaDataItem item, string tag, string content) {
+				throw new NotImplementedException();
+			}
+
+			public RecentChange[] GetRecentChanges() {
+				throw new NotImplementedException();
+			}
+
+			public bool AddRecentChange(string page, string title, string messageSubject, DateTime dateTime, string user, Change change, string descr) {
+				throw new NotImplementedException();
+			}
+
 			public AclEngine.IAclManager AclManager {
 				get { throw new NotImplementedException(); }
 			}
@@ -197,7 +255,7 @@ second line";
 
 			#region IProviderV30 Members
 
-			public void Init(IHostV30 host, string config) {
+			public void Init(IHostV30 host, string config, string wiki) {
 				//Nothing TODO
 			}
 
@@ -509,7 +567,7 @@ second line";
 			get { return false; }
 		}
 
-		public void Init(IHostV30 host, string config) { }
+		public void Init(IHostV30 host, string config, string wiki) { }
 
 		public void SetUp(IHostV30 host, string config) { }
 

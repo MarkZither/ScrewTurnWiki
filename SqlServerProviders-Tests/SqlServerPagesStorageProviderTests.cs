@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		public override IPagesStorageProviderV30 GetProvider() {
 			SqlServerPagesStorageProvider prov = new SqlServerPagesStorageProvider();
 			prov.SetUp(MockHost(), ConnString + InitialCatalog);
-			prov.Init(MockHost(), ConnString + InitialCatalog);
+			prov.Init(MockHost(), ConnString + InitialCatalog, null);
 
 			return prov;
 		}
@@ -94,7 +94,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		[Test]
 		public void Init() {
 			IPagesStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), ConnString + InitialCatalog);
+			prov.Init(MockHost(), ConnString + InitialCatalog, null);
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}
@@ -104,7 +104,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;", ExpectedException = typeof(InvalidConfigurationException))]
 		public void Init_InvalidConnString(string c) {
 			IPagesStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), c);
+			prov.Init(MockHost(), c, null);
 		}
 
 		[Test]
@@ -228,12 +228,13 @@ insert into [NavigationPathBinding] ([NavigationPath], [Page], [Number]) values 
 
 			MockRepository mocks = new MockRepository();
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
-			Expect.Call(host.UpgradePageStatusToAcl(null, 'L')).IgnoreArguments().Repeat.Twice().Return(true);
+			Expect.Call(host.UpgradePageStatusToAcl(null, null, 'L')).IgnoreArguments().Repeat.Twice().Return(true);
 
 			mocks.Replay(host);
 
 			SqlServerPagesStorageProvider prov = new SqlServerPagesStorageProvider();
 			prov.SetUp(host, ConnString + InitialCatalog);
+			prov.Init(host, ConnString + InitialCatalog, null);
 
 			Snippet[] snippets = prov.GetSnippets();
 			Assert.AreEqual(1, snippets.Length, "Wrong snippet count");

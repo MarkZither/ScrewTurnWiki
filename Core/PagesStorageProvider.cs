@@ -28,8 +28,9 @@ namespace ScrewTurn.Wiki {
 		private const string IndexMappingsFile = "IndexMappings.cs";
 
 		private readonly ComponentInformation info =
-			new ComponentInformation("Local Pages Provider", "Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			new ComponentInformation("Local Pages Provider", "Threeplicate Srl", GlobalSettings.WikiVersion, "http://www.screwturn.eu", null);
 		private IHostV30 host;
+		private string wiki;
 
 		// This cache is needed due to performance problems
 		private NamespaceInfo[] namespacesCache = null;
@@ -84,13 +85,15 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="host">The Host of the Provider.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config) {
+		public void Init(IHostV30 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
+			this.wiki = wiki;
 
 			// Prepare search index
 			index = new StandardIndex();
@@ -246,7 +249,7 @@ namespace ScrewTurn.Wiki {
 				for(int i = 0; i < oldStylePermissions.Length; i++) {
 					if(oldStylePermissions[i] != 'N') {
 						// Need to set permissions emulating old-style behavior
-						host.UpgradePageStatusToAcl(pages[i], oldStylePermissions[i]);
+						host.UpgradePageStatusToAcl(wiki, pages[i], oldStylePermissions[i]);
 					}
 				}
 
@@ -1203,13 +1206,13 @@ namespace ScrewTurn.Wiki {
 				try {
 					string documentName = PageDocument.GetDocumentName(content.PageInfo);
 
-					DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(content.PageInfo, content.Title),
+					DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, content.PageInfo, content.Title),
 						PageDocument.StandardTypeTag, content.LastModified);
 
 					// Store the document
 					// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
 					int count = index.StoreDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent),
-						content.Keywords, host.PrepareContentForIndexing(content.PageInfo, content.Content), null);
+						content.Keywords, host.PrepareContentForIndexing(wiki, content.PageInfo, content.Content), null);
 
 					if(count == 0 && content.Content.Length > 0) {
 						host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
@@ -1233,7 +1236,7 @@ namespace ScrewTurn.Wiki {
 			lock(this) {
 				string documentName = PageDocument.GetDocumentName(content.PageInfo);
 
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(content.PageInfo, content.Title),
+				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, content.PageInfo, content.Title),
 					PageDocument.StandardTypeTag, content.LastModified);
 				index.RemoveDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent), null);
 			}
@@ -2413,13 +2416,13 @@ namespace ScrewTurn.Wiki {
 
 					string documentName = MessageDocument.GetDocumentName(page, id);
 
-					DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(null, subject),
+					DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, null, subject),
 						MessageDocument.StandardTypeTag, dateTime);
 
 					// Store the document
 					// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
 					int count = index.StoreDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null,
-						host.PrepareContentForIndexing(null, body), null);
+						host.PrepareContentForIndexing(wiki, null, body), null);
 
 					if(count == 0 && body.Length > 0) {
 						host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
@@ -2463,7 +2466,7 @@ namespace ScrewTurn.Wiki {
 
 				string documentName = MessageDocument.GetDocumentName(page, id);
 
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(null, subject),
+				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, null, subject),
 					MessageDocument.StandardTypeTag, DateTime.Now);
 				index.RemoveDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null);
 			}

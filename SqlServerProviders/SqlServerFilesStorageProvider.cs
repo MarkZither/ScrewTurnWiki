@@ -133,7 +133,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <summary>
 		/// Creates or updates the database schema if necessary.
 		/// </summary>
-		protected override void CreateOrUpdateDatabaseIfNecessary() {
+		/// <param name="wiki">The wiki.</param>
+		protected override void CreateOrUpdateDatabaseIfNecessary(string wiki) {
 			if(!SchemaExists()) {
 				CreateStandardSchema();
 			}

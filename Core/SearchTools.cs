@@ -17,11 +17,12 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name to look for (<c>null</c> for the root).</param>
 		/// <param name="nspace">The namespace to search into.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>The similar pages, if any.</returns>
-		public static PageInfo[] SearchSimilarPages(string name, string nspace) {
+		public static PageInfo[] SearchSimilarPages(string name, string nspace, string wiki) {
 			if(string.IsNullOrEmpty(nspace)) nspace = null;
 
-			SearchResultCollection searchResults = Search(name, false, false, SearchOptions.AtLeastOneWord);
+			SearchResultCollection searchResults = Search(wiki, name, false, false, SearchOptions.AtLeastOneWord);
 
 			List<PageInfo> result = new List<PageInfo>(20);
 
@@ -38,7 +39,7 @@ namespace ScrewTurn.Wiki {
 			}
 			
 			// Search page names for matches
-			List<PageInfo> allPages = Pages.GetPages(Pages.FindNamespace(nspace));
+			List<PageInfo> allPages = Pages.GetPages(wiki, Pages.FindNamespace(wiki, nspace));
 			PageNameComparer comp = new PageNameComparer();
 			string currentName = name.ToLowerInvariant();
 			foreach(PageInfo page in allPages) {
@@ -55,17 +56,18 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Performs a search in the wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="query">The search query.</param>
 		/// <param name="fullText">A value indicating whether to perform a full-text search.</param>
 		/// <param name="searchFilesAndAttachments">A value indicating whether to search through files and attachments.</param>
 		/// <param name="options">The search options.</param>
 		/// <returns>The results collection.</returns>
-		public static SearchResultCollection Search(string query, bool fullText, bool searchFilesAndAttachments, SearchOptions options) {
+		public static SearchResultCollection Search(string wiki, string query, bool fullText, bool searchFilesAndAttachments, SearchOptions options) {
 
 			// First, search regular page content...
 			List<SearchResultCollection> allCollections = new List<SearchResultCollection>(3);
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				SearchResultCollection currentResults = prov.PerformSearch(new SearchParameters(query, options));
 
 				if(!fullText) {
@@ -87,7 +89,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// ... normalize relevance based on the number of providers
-			float providerNormalizationFactor = 1F / (float)Collectors.CollectorsBox.PagesProviderCollector.AllProviders.Length;
+			float providerNormalizationFactor = 1F / (float)Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki).Length;
 			foreach(SearchResultCollection coll in allCollections) {
 				foreach(SearchResult result in coll) {
 					result.Relevance.NormalizeAfterFinalization(providerNormalizationFactor);
@@ -115,20 +117,20 @@ namespace ScrewTurn.Wiki {
 				};
 				temporaryIndex.SetBuildDocumentDelegate(DetectFileOrAttachment);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					TraverseDirectories(temporaryIndex, prov, null);
 
 					string[] pagesWithAttachments = prov.GetPagesWithAttachments();
 					foreach(string page in pagesWithAttachments) {
 						// Store attachments for the current page in the index
-						PageInfo pageInfo = Pages.FindPage(page);
+						PageInfo pageInfo = Pages.FindPage(wiki, page);
 
 						// pageInfo can be null if the index is corrupted
 						if(pageInfo != null) {
 							foreach(string attachment in prov.ListPageAttachments(pageInfo)) {
 								FileDetails details = prov.GetPageAttachmentDetails(pageInfo, attachment);
 								temporaryIndex.StoreDocument(new PageAttachmentDocument(pageInfo,
-									attachment, prov.GetType().FullName, details.LastModified),
+									attachment, prov.GetType().FullName, wiki, details.LastModified),
 									new string[0], "", null);
 							}
 						}
@@ -137,7 +139,7 @@ namespace ScrewTurn.Wiki {
 
 				// ... then search in the temporary index and normalize relevance
 				SearchResultCollection filesAndAttachments = temporaryIndex.Search(new SearchParameters(query, options));
-				providerNormalizationFactor = 1F / (float)Collectors.CollectorsBox.FilesProviderCollector.AllProviders.Length;
+				providerNormalizationFactor = 1F / (float)Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki).Length;
 				foreach(SearchResult result in filesAndAttachments) {
 					result.Relevance.NormalizeAfterFinalization(providerNormalizationFactor);
 				}

@@ -31,15 +31,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The page.</param>
 		/// <param name="name">The attachment name.</param>
 		/// <param name="provider">The file provider.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="dateTime">The modification date/time.</param>
-		public PageAttachmentDocument(PageInfo page, string name, string provider, DateTime dateTime) {
+		public PageAttachmentDocument(PageInfo page, string name, string provider, string wiki, DateTime dateTime) {
 			if(page == null) throw new ArgumentNullException("page");
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
 			if(provider == null) throw new ArgumentNullException("provider");
 			if(provider.Length == 0) throw new ArgumentException("Provider cannot be empty", "provider");
 
-			this.name = page.FullName + "|" + provider + "|" + name;
+			this.name = page.FullName + "|" + provider + "|" + name + "|" + wiki;
 			id = Tools.HashDocumentNameForTemporaryIndex(this.name);
 			title = name;
 			this.dateTime = dateTime;
@@ -58,8 +59,9 @@ namespace ScrewTurn.Wiki {
 			name = doc.Name;
 			title = doc.Title;
 			dateTime = doc.DateTime;
-			provider = fields[0];
-			page = Pages.FindPage(fields[1]);
+			provider = fields[1];
+			string wiki = fields.Length > 3 ? fields[3] : null; // check fields lenght for compatibility with versions previous to 4
+			page = Pages.FindPage(wiki, fields[0]);
 		}
 
 		/// <summary>

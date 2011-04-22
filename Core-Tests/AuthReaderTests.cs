@@ -38,7 +38,7 @@ namespace ScrewTurn.Wiki.Tests {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
-			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.Any();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.Any();
 
 			mocks.Replay(host);
 
@@ -1185,7 +1185,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			#region IProviderV30 Members
 
-			public void Init(IHostV30 host, string config) {
+			public void Init(IHostV30 host, string config, string wiki) {
 				// Nothing TO-DO
 			}
 

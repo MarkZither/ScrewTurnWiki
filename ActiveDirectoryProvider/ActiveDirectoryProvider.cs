@@ -52,6 +52,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 			"Comments start with a semicolon \";\".";
 
 		private IHostV30 m_Host;
+		private string m_wiki;
 		private IUsersStorageProviderV30 m_StorageProvider;
 		private Random m_Random;
 		private Config m_Config;
@@ -706,10 +707,12 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config) {
+		public void Init(IHostV30 host, string config, string wiki) {
 			m_Host = host;
+			m_wiki = wiki;
 			m_Random = new Random();
 
 			InitConfig(config);
@@ -735,7 +738,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 				if(m_StorageProvider == null) {
 					lock(m_Host) {
 						if(m_StorageProvider == null) {
-							m_StorageProvider = (from a in m_Host.GetUsersStorageProviders(true)
+							m_StorageProvider = (from a in m_Host.GetUsersStorageProviders(m_wiki, true)
 												 where a.Information.Name != this.Information.Name
 												 select a).FirstOrDefault();
 

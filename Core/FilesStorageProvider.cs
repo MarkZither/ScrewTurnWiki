@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki {
 	public class FilesStorageProvider : ProviderBase, IFilesStorageProviderV30 {
 
 		private readonly ComponentInformation info = new ComponentInformation("Local Files Provider",
-			"Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			"Threeplicate Srl", GlobalSettings.WikiVersion, "http://www.screwturn.eu", null);
 
 		// The following strings MUST terminate with DirectorySeparatorPath in order to properly work
 		// in BuildFullPath method
@@ -28,6 +28,7 @@ namespace ScrewTurn.Wiki {
 		private const int BufferSize = 16384;
 
 		private IHostV30 host;
+		private string wiki;
 
 		private string GetFullPath(string finalChunk) {
 			return Path.Combine(GetDataDirectory(host), finalChunk);
@@ -38,13 +39,15 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config) {
+		public void Init(IHostV30 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
+			this.wiki = wiki;
 		}
 
 

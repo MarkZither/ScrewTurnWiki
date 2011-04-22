@@ -133,11 +133,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <summary>
 		/// Creates or updates the database schema if necessary.
 		/// </summary>
-		protected override void CreateOrUpdateDatabaseIfNecessary() {
+		/// <param name="wiki">The wiki.</param>
+		protected override void CreateOrUpdateDatabaseIfNecessary(string wiki) {
 			if(!SchemaExists()) {
 				// Verify if an upgrade from version 2.0 is possible
 				if(SchemaAllowsUpgradeFrom20()) {
-					UpgradeFrom20();
+					UpgradeFrom20(wiki);
 				}
 				else {
 					// If not, create the standard schema
@@ -180,7 +181,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <summary>
 		/// Upgrades the database schema and data from version 2.0.
 		/// </summary>
-		private void UpgradeFrom20() {
+		/// <param name="wiki">The wiki.</param>
+		private void UpgradeFrom20(string wiki) {
 			// Procedure
 			// 1. Rename old tables (_v2) and create new schema
 			// 2. Copy snippets
@@ -387,7 +389,7 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 			foreach(KeyValuePair<string, char> pair in pageStatus) {
 				if(pair.Value != 'N') {
 					// Need to set permissions emulating old-style behavior
-					host.UpgradePageStatusToAcl(new PageInfo(pair.Key, this, DateTime.MinValue), pair.Value);
+					host.UpgradePageStatusToAcl(wiki, new PageInfo(pair.Key, this, DateTime.MinValue), pair.Value);
 				}
 			}
 		}

@@ -17,20 +17,24 @@ namespace ScrewTurn.Wiki {
 	public static class Themes {
 
 		/// <summary>
-		/// Retrives the lists of avaiable themes.
+		/// Retrives the lists of avaiable themes in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="provider">The provider.</param>
 		/// <returns>A list of theme names.</returns>
-		public static List<String> ListThemes(string provider) {
+		public static List<String> ListThemes(string wiki, string provider) {
 			List<string> result = new List<string>();
 			if(provider == "standard") {
 				// Populate standard themes
-				string[] themes = Tools.AvailableThemes;
-				foreach(string theme in themes) {
-					result.Add(theme);
+				string[] dirs = Directory.GetDirectories(GlobalSettings.ThemesDirectory);
+				for(int i = 0; i < dirs.Length; i++) {
+					//if(dirs[i].EndsWith("\\")) dirs[i] = dirs[i].Substring(0, dirs[i].Length - 1);
+					dirs[i] = dirs[i].TrimEnd(Path.DirectorySeparatorChar);
+					result.Add(dirs[i].Substring(dirs[i].LastIndexOf(Path.DirectorySeparatorChar) + 1));
 				}
 			}
 			else {
-				foreach(IThemeStorageProviderV30 prov in Collectors.CollectorsBox.ThemeProviderCollector.AllProviders) {
+				foreach(IThemeStorageProviderV30 prov in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(wiki)) {
 					if(prov.ToString() == provider) result.AddRange(prov.ListThemes(provider));
 				}
 			}
@@ -38,13 +42,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Deletes the theme with the given name.
+		/// Deletes the theme with the given name from the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="themeName">The name of the theme to be deleted.</param>
 		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
-		public static bool DeleteTheme(string themeName) {
-			foreach(IThemeStorageProviderV30 themeDeleteProvider in Collectors.CollectorsBox.ThemeProviderCollector.AllProviders) {
-				if(!IsThemeInUse(themeName)) {
+		public static bool DeleteTheme(string wiki, string themeName) {
+			foreach(IThemeStorageProviderV30 themeDeleteProvider in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(wiki)) {
+				if(!IsThemeInUse(wiki, themeName)) {
 					string[] theme = themeName.Split('|');
 					if (theme[0] == themeDeleteProvider.ToString())	return themeDeleteProvider.DeleteTheme(theme[theme.Length-1]);
 				}
@@ -52,13 +57,13 @@ namespace ScrewTurn.Wiki {
 			return false;
 		}
 
-		private static bool IsThemeInUse(string themeName) {
-			List<NamespaceInfo> namespaces = Pages.GetNamespaces();
+		private static bool IsThemeInUse(string wiki, string themeName) {
+			List<NamespaceInfo> namespaces = Pages.GetNamespaces(wiki);
 			bool result = false;
 
-			if(themeName == Settings.GetTheme(null)) return true;
+			if(themeName == Settings.GetTheme(wiki, null)) return true;
 			foreach(NamespaceInfo ns in namespaces) {
-				if(themeName == Settings.GetTheme(ns.Name)) return true;
+				if(themeName == Settings.GetTheme(wiki, ns.Name)) return true;
 			}
 			return result;
 		}
@@ -66,10 +71,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Retrieves all files present in the selected theme.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="themeName">The name of the selected theme.</param>
 		/// <param name="searchPattern">The search string to match against the name of files.</param>
 		/// <returns>The list of files matching the searchPattern.</returns>
-		public static List<string> ListThemeFiles(string themeName, string searchPattern) {
+		public static List<string> ListThemeFiles(string wiki, string themeName, string searchPattern) {
 			string provider = "";
 			string theme = "";
 			string[] values = themeName.Split('|');
@@ -78,9 +84,9 @@ namespace ScrewTurn.Wiki {
 			theme = values[values.Length-1];
 			if(values.Length > 1) {
 				if(provider == "standard") {
-					foreach(string s in ListThemes(provider)) {
+					foreach(string s in ListThemes(wiki, provider)) {
 						if(s == theme) {
-							path = Path.Combine(Settings.ThemesDirectory, s);
+							path = Path.Combine(GlobalSettings.ThemesDirectory, s);
 							string[] files;
 							if(!String.IsNullOrEmpty(path) && Directory.Exists(path))
 								files = Directory.GetFiles(path, searchPattern);
@@ -93,7 +99,7 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 				else {
-					IThemeStorageProviderV30 themeListFileProvider = Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(provider);
+					IThemeStorageProviderV30 themeListFileProvider = Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(provider, wiki);
 					if(themeListFileProvider == null) return null;
 					List<string> lists = themeListFileProvider.ListThemeFiles(theme, searchPattern);
 					if((lists == null) || (lists.Count == 0)) return null;
@@ -109,30 +115,32 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Stores the theme.
+		/// Stores the theme for the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="themeName">The name of the theme.</param>
 		/// <param name="zipFile">The zipFile conteining the theme.</param>
 		/// <returns><c>true</c> if the theme is saved, <c>false</c> otherwise.</returns>
-		public static bool StoreTheme(string themeName, byte[] zipFile) {
+		public static bool StoreTheme(string wiki, string themeName, byte[] zipFile) {
 			string[] values = themeName.Split('|');
 			string provider = values[0];
 			string theme = values[values.Length - 1];
-			IThemeStorageProviderV30 themeStorageProvider = Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(provider);
+			IThemeStorageProviderV30 themeStorageProvider = Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(provider, wiki);
 			return themeStorageProvider.StoreTheme(theme, zipFile);
 		}
 
 		/// <summary>
-		/// Gets the relative path of the theme with the given name.
+		/// Gets the relative path of the theme with the given name for the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="themeName">The name of the theme.</param>
 		/// <returns>The relative path of the theme.</returns>
-		public static string GetThemePath(string themeName) {
+		public static string GetThemePath(string wiki, string themeName) {
 			string[] values = themeName.Split('|');
 			string provider = values[0];
 			string theme = values[values.Length-1];
-			if(provider == "standard") return "Themes/" + GetRelativePath(Path.Combine(Settings.ThemesDirectory, theme), theme) + "/";
-			IThemeStorageProviderV30 themePathProvider = Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(provider);
+			if(provider == "standard") return "Themes/" + GetRelativePath(Path.Combine(GlobalSettings.ThemesDirectory, theme), theme) + "/";
+			IThemeStorageProviderV30 themePathProvider = Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(provider, wiki);
 			return themePathProvider.GetThemePath(theme);
 		}
 	}

@@ -18,15 +18,16 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Finds the provider that has a file.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullName">The full name of the file.</param>
 		/// <returns>The provider that has the file, or <c>null</c> if the file could not be found.</returns>
-		public static IFilesStorageProviderV30 FindFileProvider(string fullName) {
+		public static IFilesStorageProviderV30 FindFileProvider(string wiki, string fullName) {
 			if(fullName == null) throw new ArgumentNullException("fullName");
 			if(string.IsNullOrEmpty(fullName)) throw new ArgumentException("Full Name cannot be empty", "fullName");
 
 			fullName = NormalizeFullName(fullName);
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				FileDetails details = provider.GetFileDetails(fullName);
 				if(details != null) return provider;
 			}
@@ -37,15 +38,16 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the details of a file.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullName">The full name of the file.</param>
 		/// <returns>The details of the file, or <c>null</c> if no file is found.</returns>
-		public static FileDetails GetFileDetails(string fullName) {
+		public static FileDetails GetFileDetails(string wiki, string fullName) {
 			if(fullName == null) throw new ArgumentNullException("fullName");
 			if(string.IsNullOrEmpty(fullName)) throw new ArgumentException("Full Name cannot be empty", "fullName");
 
 			fullName = NormalizeFullName(fullName);
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				FileDetails details = provider.GetFileDetails(fullName);
 				if(details != null) return details;
 			}
@@ -56,11 +58,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Retrieves a File.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullName">The full name of the File.</param>
 		/// <param name="output">The output stream.</param>
 		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the file is retrieved, <c>false</c> otherwise.</returns>
-		public static bool RetrieveFile(string fullName, Stream output, bool countHit) {
+		public static bool RetrieveFile(string wiki, string fullName, Stream output, bool countHit) {
 			if(fullName == null) throw new ArgumentNullException("fullName");
 			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
 			if(output == null) throw new ArgumentNullException("destinationStream");
@@ -68,7 +71,7 @@ namespace ScrewTurn.Wiki {
 
 			fullName = NormalizeFullName(fullName);
 
-			IFilesStorageProviderV30 provider = FindFileProvider(fullName);
+			IFilesStorageProviderV30 provider = FindFileProvider(wiki, fullName);
 
 			if(provider == null) return false;
 			else return provider.RetrieveFile(fullName, output, countHit);
@@ -81,9 +84,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Finds the provider that has a directory.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullPath">The full path of the directory.</param>
 		/// <returns>The provider that has the directory, or <c>null</c> if no directory is found.</returns>
-		public static IFilesStorageProviderV30 FindDirectoryProvider(string fullPath) {
+		public static IFilesStorageProviderV30 FindDirectoryProvider(string wiki, string fullPath) {
 			if(fullPath == null) throw new ArgumentNullException("fullPath");
 			if(fullPath.Length == 0) throw new ArgumentException("Full Path cannot be empty");
 
@@ -113,7 +117,7 @@ namespace ScrewTurn.Wiki {
 				allLevels.Add(oneLevelUp.ToLowerInvariant());
 			}
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				bool allLevelsFound = true;
 
 				for(int i = allLevels.Count - 1; i >= 1; i--) {
@@ -139,16 +143,17 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Lists the directories in a directory.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullPath">The full path.</param>
 		/// <returns>The directories.</returns>
 		/// <remarks>If the specified directory is the root, then the list is performed on all providers.</remarks>
-		public static string[] ListDirectories(string fullPath) {
+		public static string[] ListDirectories(string wiki, string fullPath) {
 			fullPath = NormalizeFullPath(fullPath);
 
 			if(fullPath == "/") {
 				List<string> directories = new List<string>(50);
 
-				foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					directories.AddRange(provider.ListDirectories(fullPath));
 				}
 
@@ -157,7 +162,7 @@ namespace ScrewTurn.Wiki {
 				return directories.ToArray();
 			}
 			else {
-				IFilesStorageProviderV30 provider = FindDirectoryProvider(fullPath);
+				IFilesStorageProviderV30 provider = FindDirectoryProvider(wiki, fullPath);
 				return provider.ListDirectories(fullPath);
 			}
 		}
@@ -165,16 +170,17 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Lists the files in a directory.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullPath">The full path.</param>
 		/// <returns>The files.</returns>
 		/// <remarks>If the specified directory is the root, then the list is performed on all providers.</remarks>
-		public static string[] ListFiles(string fullPath) {
+		public static string[] ListFiles(string wiki, string fullPath) {
 			fullPath = NormalizeFullPath(fullPath);
 
 			if(fullPath == "/") {
 				List<string> files = new List<string>(50);
 				
-				foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					files.AddRange(provider.ListFiles(fullPath));
 				}
 
@@ -183,7 +189,7 @@ namespace ScrewTurn.Wiki {
 				return files.ToArray();
 			}
 			else {
-				IFilesStorageProviderV30 provider = FindDirectoryProvider(fullPath);
+				IFilesStorageProviderV30 provider = FindDirectoryProvider(wiki, fullPath);
 				return provider.ListFiles(fullPath);
 			}
 		}
@@ -195,15 +201,16 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Finds the provider that has a page attachment.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="attachmentName">The name of the attachment.</param>
 		/// <returns>The provider that has the attachment, or <c>null</c> if the attachment could not be found.</returns>
-		public static IFilesStorageProviderV30 FindPageAttachmentProvider(PageInfo page, string attachmentName) {
+		public static IFilesStorageProviderV30 FindPageAttachmentProvider(string wiki, PageInfo page, string attachmentName) {
 			if(page == null) throw new ArgumentNullException("page");
 			if(attachmentName == null) throw new ArgumentNullException("attachmentName");
 			if(attachmentName.Length == 0) throw new ArgumentException("Attachment Name cannot be empty", "attachmentName");
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				FileDetails details = provider.GetPageAttachmentDetails(page, attachmentName);
 				if(details != null) return provider;
 			}
@@ -214,15 +221,16 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the details of a page attachment.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="attachmentName">The name of the attachment.</param>
 		/// <returns>The details of the attachment, or <c>null</c> if the attachment could not be found.</returns>
-		public static FileDetails GetPageAttachmentDetails(PageInfo page, string attachmentName) {
+		public static FileDetails GetPageAttachmentDetails(string wiki, PageInfo page, string attachmentName) {
 			if(page == null) throw new ArgumentNullException("page");
 			if(attachmentName == null) throw new ArgumentNullException("attachmentName");
 			if(attachmentName.Length == 0) throw new ArgumentException("Attachment Name cannot be empty", "attachmentName");
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				FileDetails details = provider.GetPageAttachmentDetails(page, attachmentName);
 				if(details != null) return details;
 			}
@@ -233,19 +241,20 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Retrieves a Page Attachment.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page Info that owns the Attachment.</param>
 		/// <param name="attachmentName">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <param name="output">The output stream.</param>
 		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the Attachment is retrieved, <c>false</c> otherwise.</returns>
-		public static bool RetrievePageAttachment(PageInfo page, string attachmentName, Stream output, bool countHit) {
+		public static bool RetrievePageAttachment(string wiki, PageInfo page, string attachmentName, Stream output, bool countHit) {
 			if(page == null) throw new ArgumentNullException("pageInfo");
 			if(attachmentName == null) throw new ArgumentNullException("name");
 			if(attachmentName.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
 			if(output == null) throw new ArgumentNullException("destinationStream");
 			if(!output.CanWrite) throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
 
-			IFilesStorageProviderV30 provider = FindPageAttachmentProvider(page, attachmentName);
+			IFilesStorageProviderV30 provider = FindPageAttachmentProvider(wiki, page, attachmentName);
 
 			if(provider == null) return false;
 			else return provider.RetrievePageAttachment(page, attachmentName, output, countHit);

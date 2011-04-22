@@ -18,14 +18,15 @@ namespace ScrewTurn.Wiki {
 		#region Namespaces
 
 		/// <summary>
-		/// Gets all the namespaces, sorted.
+		/// Gets all the namespaces of the given wiki, sorted.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>The namespaces, sorted.</returns>
-		public static List<NamespaceInfo> GetNamespaces() {
+		public static List<NamespaceInfo> GetNamespaces(string wiki) {
 			List<NamespaceInfo> result = new List<NamespaceInfo>(10);
 
 			int count = 0;
-			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				count++;
 				result.AddRange(provider.GetNamespaces());
 			}
@@ -38,18 +39,19 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Finds a namespace.
+		/// Finds a namespace in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The name of the namespace to find.</param>
 		/// <returns>The namespace, or <c>null</c> if no namespace is found.</returns>
-		public static NamespaceInfo FindNamespace(string name) {
+		public static NamespaceInfo FindNamespace(string wiki, string name) {
 			if(string.IsNullOrEmpty(name)) return null;
 
-			IPagesStorageProviderV30 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			IPagesStorageProviderV30 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
 			NamespaceInfo nspace = defProv.GetNamespace(name);
 			if(nspace != null) return nspace;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				if(prov != defProv) {
 					nspace = prov.GetNamespace(name);
 					if(nspace != null) return nspace;
@@ -72,31 +74,33 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Creates a new namespace in the default pages storage provider.
+		/// Creates a new namespace in the default pages storage provider in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The name of the namespace to add.</param>
 		/// <returns><c>true</c> if the namespace is created, <c>false</c> otherwise.</returns>
-		public static bool CreateNamespace(string name) {
-			return CreateNamespace(name, Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider));
+		public static bool CreateNamespace(string wiki, string name) {
+			return CreateNamespace(wiki, name, Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki));
 		}
 
 		/// <summary>
-		/// Creates a new namespace.
+		/// Creates a new namespace in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The name of the namespace to add.</param>
 		/// <param name="provider">The provider to create the namespace into.</param>
 		/// <returns><c>true</c> if the namespace is created, <c>false</c> otherwise.</returns>
-		public static bool CreateNamespace(string name, IPagesStorageProviderV30 provider) {
+		public static bool CreateNamespace(string wiki, string name, IPagesStorageProviderV30 provider) {
 			if(provider.ReadOnly) return false;
 
-			if(FindNamespace(name) != null) return false;
+			if(FindNamespace(wiki, name) != null) return false;
 
 			NamespaceInfo result = provider.AddNamespace(name);
 
 			if(result != null) {
-				InitMetaDataItems(name);
+				InitMetaDataItems(wiki, name);
 
-				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 				authWriter.ClearEntriesForNamespace(name, new List<string>());
 
 				Host.Instance.OnNamespaceActivity(result, null, NamespaceActivity.NamespaceAdded);
@@ -111,25 +115,26 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Removes a namespace.
+		/// Removes a namespace from the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace to remove.</param>
 		/// <returns><c>true</c> if the namespace is removed, <c>false</c> otherwise.</returns>
-		public static bool RemoveNamespace(NamespaceInfo nspace) {
+		public static bool RemoveNamespace(string wiki, NamespaceInfo nspace) {
 			if(nspace.Provider.ReadOnly) return false;
 
-			NamespaceInfo realNspace = FindNamespace(nspace.Name);
+			NamespaceInfo realNspace = FindNamespace(wiki, nspace.Name);
 			if(realNspace == null) return false;
 
-			List<PageInfo> pages = GetPages(realNspace);
+			List<PageInfo> pages = GetPages(wiki, realNspace);
 
 			bool done = realNspace.Provider.RemoveNamespace(realNspace);
 			if(done) {
-				DeleteAllAttachments(pages);
+				DeleteAllAttachments(wiki, pages);
 
-				ResetMetaDataItems(nspace.Name);
+				ResetMetaDataItems(wiki, nspace.Name);
 
-				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 				authWriter.ClearEntriesForNamespace(nspace.Name, pages.ConvertAll((p) => { return NameTools.GetLocalName(p.FullName); }));
 
 				Host.Instance.OnNamespaceActivity(realNspace, null, NamespaceActivity.NamespaceRemoved);
@@ -144,11 +149,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Deletes all page attachments for a whole namespace.
+		/// Deletes all page attachments for a whole namespace in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="pages">The pages in the namespace.</param>
-		private static void DeleteAllAttachments(List<PageInfo> pages) {
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+		private static void DeleteAllAttachments(string wiki, List<PageInfo> pages) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				foreach(PageInfo page in pages) {
 					string[] attachments = prov.ListPageAttachments(page);
 					foreach(string attachment in attachments) {
@@ -159,19 +165,20 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Renames a namespace.
+		/// Renames a namespace in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace to rename.</param>
 		/// <param name="newName">The new name.</param>
 		/// <returns><c>true</c> if the namespace is removed, <c>false</c> otherwise.</returns>
-		public static bool RenameNamespace(NamespaceInfo nspace, string newName) {
+		public static bool RenameNamespace(string wiki, NamespaceInfo nspace, string newName) {
 			if(nspace.Provider.ReadOnly) return false;
 
-			NamespaceInfo realNspace = FindNamespace(nspace.Name);
+			NamespaceInfo realNspace = FindNamespace(wiki, nspace.Name);
 			if(realNspace == null) return false;
-			if(FindNamespace(newName) != null) return false;
+			if(FindNamespace(wiki, newName) != null) return false;
 
-			List<PageInfo> pages = GetPages(nspace);
+			List<PageInfo> pages = GetPages(wiki, nspace);
 			List<string> pageNames = new List<string>(pages.Count);
 			foreach(PageInfo page in pages) pageNames.Add(NameTools.GetLocalName(page.FullName));
 			pages = null;
@@ -180,11 +187,11 @@ namespace ScrewTurn.Wiki {
 
 			NamespaceInfo newNspace = realNspace.Provider.RenameNamespace(realNspace, newName);
 			if(newNspace != null) {
-				NotifyFilesProvidersForNamespaceRename(pageNames, oldName, newName);
+				NotifyFilesProvidersForNamespaceRename(wiki, pageNames, oldName, newName);
 
-				UpdateMetaDataItems(oldName, newName);
+				UpdateMetaDataItems(wiki, oldName, newName);
 
-				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 				authWriter.ClearEntriesForNamespace(newName, new List<string>());
 				authWriter.ProcessNamespaceRenaming(oldName, pageNames, newName);
 
@@ -200,13 +207,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Notifies all files providers that a namespace was renamed.
+		/// Notifies all files providers that a namespace of the given wiki was renamed.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="pages">The pages in the renamed namespace.</param>
 		/// <param name="nspace">The name of the renamed namespace.</param>
 		/// <param name="newName">The new name of the namespace.</param>
-		private static void NotifyFilesProvidersForNamespaceRename(List<string> pages, string nspace, string newName) {
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+		private static void NotifyFilesProvidersForNamespaceRename(string wiki, List<string> pages, string nspace, string newName) {
+			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				foreach(string page in pages) {
 					PageInfo pageToNotify = new PageInfo(NameTools.GetFullName(nspace, page), null, DateTime.Now);
 					PageInfo newPage = new PageInfo(NameTools.GetFullName(newName, page), null, DateTime.Now);
@@ -217,73 +225,77 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Initializes the namespace-specific meta-data items for a namespace.
+		/// Initializes the namespace-specific meta-data items for a namespace in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace to initialize meta-data items for.</param>
-		private static void InitMetaDataItems(string nspace) {
+		private static void InitMetaDataItems(string wiki, string nspace) {
 			// Footer, Header, HtmlHead, PageFooter, PageHeader, Sidebar
 
-			Settings.Provider.SetMetaDataItem(MetaDataItem.EditNotice, nspace, Defaults.EditNoticeContent);
-			Settings.Provider.SetMetaDataItem(MetaDataItem.Footer, nspace, Defaults.FooterContent);
-			Settings.Provider.SetMetaDataItem(MetaDataItem.Header, nspace, Defaults.HeaderContent);
-			Settings.Provider.SetMetaDataItem(MetaDataItem.HtmlHead, nspace, "");
-			Settings.Provider.SetMetaDataItem(MetaDataItem.PageFooter, nspace, "");
-			Settings.Provider.SetMetaDataItem(MetaDataItem.PageHeader, nspace, "");
-			Settings.Provider.SetMetaDataItem(MetaDataItem.Sidebar, nspace, Defaults.SidebarContentForSubNamespace);
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.EditNotice, nspace, Defaults.EditNoticeContent);
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.Footer, nspace, Defaults.FooterContent);
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.Header, nspace, Defaults.HeaderContent);
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.HtmlHead, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.PageFooter, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.PageHeader, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.Sidebar, nspace, Defaults.SidebarContentForSubNamespace);
 		}
 
 		/// <summary>
-		/// Resets the namespace-specific meta-data items for a namespace.
+		/// Resets the namespace-specific meta-data items for a namespace in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace to reset meta-data items for.</param>
-		private static void ResetMetaDataItems(string nspace) {
+		private static void ResetMetaDataItems(string wiki, string nspace) {
 			// Footer, Header, HtmlHead, PageFooter, PageHeader, Sidebar
 
-			Settings.Provider.SetMetaDataItem(MetaDataItem.EditNotice, nspace, "");
-			Settings.Provider.SetMetaDataItem(MetaDataItem.Footer, nspace, "");
-			Settings.Provider.SetMetaDataItem(MetaDataItem.Header, nspace, "");
-			Settings.Provider.SetMetaDataItem(MetaDataItem.HtmlHead, nspace, "");
-			Settings.Provider.SetMetaDataItem(MetaDataItem.PageFooter, nspace, "");
-			Settings.Provider.SetMetaDataItem(MetaDataItem.PageHeader, nspace, "");
-			Settings.Provider.SetMetaDataItem(MetaDataItem.Sidebar, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.EditNotice, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.Footer, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.Header, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.HtmlHead, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.PageFooter, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.PageHeader, nspace, "");
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.Sidebar, nspace, "");
 		}
 
 		/// <summary>
-		/// Updates the namespace-specific meta-data items for a namespace when it is renamed.
+		/// Updates the namespace-specific meta-data items for a namespace in the given wiki when it is renamed.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The renamed namespace to update the meta-data items for.</param>
 		/// <param name="newName">The new name of the namespace.</param>
-		private static void UpdateMetaDataItems(string nspace, string newName) {
+		private static void UpdateMetaDataItems(string wiki, string nspace, string newName) {
 			// Footer, Header, HtmlHead, PageFooter, PageHeader, Sidebar
 
-			Settings.Provider.SetMetaDataItem(MetaDataItem.EditNotice, newName,
-				Settings.Provider.GetMetaDataItem(MetaDataItem.EditNotice, nspace));
-			Settings.Provider.SetMetaDataItem(MetaDataItem.Footer, newName,
-				Settings.Provider.GetMetaDataItem(MetaDataItem.Footer, nspace));
-			Settings.Provider.SetMetaDataItem(MetaDataItem.Header, newName,
-				Settings.Provider.GetMetaDataItem(MetaDataItem.Header, nspace));
-			Settings.Provider.SetMetaDataItem(MetaDataItem.HtmlHead, newName,
-				Settings.Provider.GetMetaDataItem(MetaDataItem.HtmlHead, nspace));
-			Settings.Provider.SetMetaDataItem(MetaDataItem.PageFooter, newName,
-				Settings.Provider.GetMetaDataItem(MetaDataItem.PageFooter, nspace));
-			Settings.Provider.SetMetaDataItem(MetaDataItem.PageHeader, newName,
-				Settings.Provider.GetMetaDataItem(MetaDataItem.PageHeader, nspace));
-			Settings.Provider.SetMetaDataItem(MetaDataItem.Sidebar, newName,
-				Settings.Provider.GetMetaDataItem(MetaDataItem.Sidebar, nspace));
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.EditNotice, newName,
+				Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.EditNotice, nspace));
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.Footer, newName,
+				Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.Footer, nspace));
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.Header, newName,
+				Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.Header, nspace));
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.HtmlHead, newName,
+				Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.HtmlHead, nspace));
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.PageFooter, newName,
+				Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.PageFooter, nspace));
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.PageHeader, newName,
+				Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.PageHeader, nspace));
+			Settings.GetProvider(wiki).SetMetaDataItem(MetaDataItem.Sidebar, newName,
+				Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.Sidebar, nspace));
 
-			ResetMetaDataItems(nspace);
+			ResetMetaDataItems(wiki, nspace);
 		}
 
 		/// <summary>
-		/// Sets the default page of a namespace.
+		/// Sets the default page of a namespace of the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <param name="page">The page.</param>
 		/// <returns><c>true</c> if the default page is set, <c>false</c> otherwise.</returns>
-		public static bool SetNamespaceDefaultPage(NamespaceInfo nspace, PageInfo page) {
+		public static bool SetNamespaceDefaultPage(string wiki, NamespaceInfo nspace, PageInfo page) {
 			if(nspace == null) {
 				// Root namespace, default to classic settings storage
-				Settings.DefaultPage = page.FullName;
+				Settings.SetDefaultPage(wiki, page.FullName);
 				return true;
 			}
 
@@ -315,18 +327,19 @@ namespace ScrewTurn.Wiki {
 		#region Pages
 
 		/// <summary>
-		/// Finds a Page.
+		/// Finds a Page in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullName">The full name of the page to find (case <b>unsensitive</b>).</param>
-		/// <returns>The correct <see cref="T:PageInfo" /> object, if any, <c>null</c> otherwise.</returns>
-		public static PageInfo FindPage(string fullName) {
+		/// <returns>The correct <see cref="T:PageInfo"/> object, if any, <c>null</c> otherwise.</returns>
+		public static PageInfo FindPage(string wiki, string fullName) {
 			if(string.IsNullOrEmpty(fullName)) return null;
 
-			IPagesStorageProviderV30 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			IPagesStorageProviderV30 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
 			PageInfo page = defProv.GetPage(fullName);
 			if(page != null) return page;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				if(prov != defProv) {
 					page = prov.GetPage(fullName);
 					if(page != null) return page;
@@ -419,11 +432,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Performs the rollpack of a Page.
+		/// Performs the rollpack of a Page of the specified wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page.</param>
 		/// <param name="version">The revision to rollback the Page to.</param>
-		public static bool Rollback(PageInfo page, int version) {
+		public static bool Rollback(string wiki, PageInfo page, int version) {
 			if(page.Provider.ReadOnly) return false;
 
 			bool done = page.Provider.RollbackPage(page, version);
@@ -435,16 +449,16 @@ namespace ScrewTurn.Wiki {
 
 				// Update page's outgoing links
 				string[] linkedPages;
-				Formatter.Format(pageContent.Content, false, FormattingContext.PageContent, page, out linkedPages);
+				Formatter.Format(wiki, pageContent.Content, false, FormattingContext.PageContent, page, out linkedPages);
 				string[] outgoingLinks = new string[linkedPages.Length];
 				for(int i = 0; i < outgoingLinks.Length; i++) {
 					outgoingLinks[i] = linkedPages[i];
 				}
 
-				Settings.Provider.StoreOutgoingLinks(page.FullName, outgoingLinks);
+				Settings.GetProvider(wiki).StoreOutgoingLinks(page.FullName, outgoingLinks);
 
 				Log.LogEntry("Rollback executed for " + page.FullName + " at revision " + version.ToString(), EntryType.General, Log.SystemUsername);
-				RecentChanges.AddChange(page.FullName, pageContent.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRolledBack, "");
+				RecentChanges.AddChange(wiki, page.FullName, pageContent.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRolledBack, "");
 				Host.Instance.OnPageActivity(page, null, SessionFacade.GetCurrentUsername(), PageActivity.PageRolledBack);
 				return true;
 			}
@@ -455,56 +469,60 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Creates a new Page.
+		/// Creates a new Page in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Page name.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(NamespaceInfo nspace, string name) {
+		public static bool CreatePage(string wiki, NamespaceInfo nspace, string name) {
 			string namespaceName = nspace != null ? nspace.Name : null;
-			return CreatePage(namespaceName, name, nspace != null ? nspace.Provider : null);
+			return CreatePage(wiki, namespaceName, name, nspace != null ? nspace.Provider : null);
 		}
 
 		/// <summary>
-		/// Creates a new Page.
+		/// Creates a new Page in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Page name.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(string nspace, string name) {
-			return CreatePage(nspace, name, Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider));
+		public static bool CreatePage(string wiki, string nspace, string name) {
+			return CreatePage(wiki, nspace, name, Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki));
 		}
 
 		/// <summary>
-		/// Creates a new Page.
+		/// Creates a new Page in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Page name.</param>
 		/// <param name="provider">The destination provider.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreatePage(string wiki, NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider) {
 			string namespaceName = nspace != null ? nspace.Name : null;
-			return CreatePage(namespaceName, name, provider);
+			return CreatePage(wiki, namespaceName, name, provider);
 		}
 
 		/// <summary>
-		/// Creates a new Page.
+		/// Creates a new Page in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Page name.</param>
 		/// <param name="provider">The destination provider.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(string nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreatePage(string wiki, string nspace, string name, IPagesStorageProviderV30 provider) {
 			if(provider.ReadOnly) return false;
 
 			string fullName = NameTools.GetFullName(nspace, name);
 
-			if(FindPage(fullName) != null) return false;
+			if(FindPage(wiki, fullName) != null) return false;
 
 			PageInfo newPage = provider.AddPage(nspace, name, DateTime.Now);
 
 			if(newPage != null) {
-				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 				authWriter.ClearEntriesForPage(fullName);
 
 				Content.InvalidateAllPages();
@@ -519,10 +537,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Deletes a Page.
+		/// Deletes a Page in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page to delete.</param>
-		public static bool DeletePage(PageInfo page) {
+		public static bool DeletePage(string wiki, PageInfo page) {
 			if(page.Provider.ReadOnly) return false;
 
 			string title = Content.GetPageContent(page).Title;
@@ -530,26 +549,26 @@ namespace ScrewTurn.Wiki {
 			bool done = page.Provider.RemovePage(page);
 
 			if(done) {
-				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 				authWriter.ClearEntriesForPage(page.FullName);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					foreach(string attn in prov.ListPageAttachments(page)) {
 						prov.DeletePageAttachment(page, attn);
 					}
 				}
 
 				// Remove the deleted page from the Breadcrumbs Trail and Redirections list
-				SessionFacade.Breadcrumbs.RemovePage(page);
+				SessionFacade.Breadcrumbs(wiki).RemovePage(page);
 				Redirections.WipePageOut(page);
 
 				Content.InvalidatePage(page);
 
 				// Remove outgoing links
-				Settings.Provider.DeleteOutgoingLinks(page.FullName);
+				Settings.GetProvider(wiki).DeleteOutgoingLinks(page.FullName);
 
 				Log.LogEntry("Page " + page.FullName + " deleted", EntryType.General, Log.SystemUsername);
-				RecentChanges.AddChange(page.FullName, title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageDeleted, "");
+				RecentChanges.AddChange(wiki, page.FullName, title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageDeleted, "");
 				Host.Instance.OnPageActivity(page, null, SessionFacade.GetCurrentUsername(), PageActivity.PageDeleted);
 				return true;
 			}
@@ -560,42 +579,43 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Renames a Page.
+		/// Renames a Page in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page to rename.</param>
 		/// <param name="name">The new name.</param>
-		public static bool RenamePage(PageInfo page, string name) {
+		public static bool RenamePage(string wiki, PageInfo page, string name) {
 			if(page.Provider.ReadOnly) return false;
 
 			string newFullName = NameTools.GetFullName(NameTools.GetNamespace(page.FullName), NameTools.GetLocalName(name));
 
-			if(FindPage(newFullName) != null) return false;
+			if(FindPage(wiki, newFullName) != null) return false;
 
 			string oldName = page.FullName;
 
 			PageContent originalContent = Content.GetPageContent(page);
 
-			Settings.Provider.StoreOutgoingLinks(page.FullName, new string[0]);
+			Settings.GetProvider(wiki).StoreOutgoingLinks(page.FullName, new string[0]);
 			PageInfo pg = page.Provider.RenamePage(page, name);
 			if(pg != null) {
-				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.SettingsProvider);
+				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 				authWriter.ClearEntriesForPage(newFullName);
 				authWriter.ProcessPageRenaming(oldName, newFullName);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), pg);
 				}
 
-				StorePageOutgoingLinks(pg, originalContent.Content);
+				StorePageOutgoingLinks(wiki, pg, originalContent.Content);
 
-				SessionFacade.Breadcrumbs.RemovePage(page);
+				SessionFacade.Breadcrumbs(wiki).RemovePage(page);
 				Redirections.Clear();
 				Content.InvalidateAllPages();
 
 				// Page redirect is implemented directly in AdminPages.aspx.cs
 
 				Log.LogEntry("Page " + oldName + " renamed to " + name, EntryType.General, Log.SystemUsername);
-				RecentChanges.AddChange(page.FullName, originalContent.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRenamed, "");
+				RecentChanges.AddChange(wiki, page.FullName, originalContent.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRenamed, "");
 				Host.Instance.OnPageActivity(page, oldName, SessionFacade.GetCurrentUsername(), PageActivity.PageRenamed);
 				return true;
 			}
@@ -606,22 +626,24 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Migrates a page.
+		/// Migrates a page of the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page to migrate.</param>
 		/// <param name="targetNamespace">The target namespace.</param>
 		/// <param name="copyCategories">A value indicating whether to copy the page categories to the target namespace.</param>
 		/// <returns><c>true</c> if the page is migrated, <c>false</c> otherwise.</returns>
-		public static bool MigratePage(PageInfo page, NamespaceInfo targetNamespace, bool copyCategories) {
+		public static bool MigratePage(string wiki, PageInfo page, NamespaceInfo targetNamespace, bool copyCategories) {
 			string oldName = page.FullName;
 
 			PageInfo result = page.Provider.MovePage(page, targetNamespace, copyCategories);
 			if(result != null) {
-				Settings.Provider.StoreOutgoingLinks(page.FullName, new string[0]);
+				Settings.GetProvider(wiki).StoreOutgoingLinks(page.FullName, new string[0]);
+				
 				PageContent content = Content.GetPageContent(result);
-				StorePageOutgoingLinks(result, content.Content);
+				StorePageOutgoingLinks(wiki, result, content.Content);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), result);
 				}
 			}
@@ -629,8 +651,9 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Modifies a Page.
+		/// Modifies a Page of the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page to modify.</param>
 		/// <param name="title">The Title of the Page.</param>
 		/// <param name="username">The Username of the user who modified the Page.</param>
@@ -641,7 +664,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="description">The description, usually used for SEO.</param>
 		/// <param name="saveMode">The save mode.</param>
 		/// <returns>True if the Page has been modified successfully.</returns>
-		public static bool ModifyPage(PageInfo page, string title, string username, DateTime dateTime, string comment, string content,
+		public static bool ModifyPage(string wiki, PageInfo page, string title, string username, DateTime dateTime, string comment, string content,
 			string[] keywords, string description, SaveMode saveMode) {
 
 			if(page.Provider.ReadOnly) return false;
@@ -658,12 +681,12 @@ namespace ScrewTurn.Wiki {
 			if(done) {
 				Log.LogEntry("Page Content updated for " + page.FullName, EntryType.General, Log.SystemUsername);
 
-				StorePageOutgoingLinks(page, content);
+				StorePageOutgoingLinks(wiki, page, content);
 
 				if(saveMode != SaveMode.Draft) {
-					RecentChanges.AddChange(page.FullName, title, null, dateTime, username, Change.PageUpdated, comment);
+					RecentChanges.AddChange(wiki, page.FullName, title, null, dateTime, username, Change.PageUpdated, comment);
 					Host.Instance.OnPageActivity(page, null, username, PageActivity.PageModified);
-					SendEmailNotificationForPage(page, Users.FindUser(username));
+					SendEmailNotificationForPage(wiki, page, Users.FindUser(wiki, username));
 				}
 				else {
 					Host.Instance.OnPageActivity(page, null, username, PageActivity.PageDraftSaved);
@@ -671,7 +694,7 @@ namespace ScrewTurn.Wiki {
 
 				if(saveMode == SaveMode.Backup) {
 					// Delete old backups, if needed
-					DeleteOldBackupsIfNeeded(page);
+					DeleteOldBackupsIfNeeded(wiki, page);
 				}
 			}
 			else Log.LogEntry("Page Content update failed for " + page.FullName, EntryType.Error, Log.SystemUsername);
@@ -679,13 +702,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Stores outgoing links for a page.
+		/// Stores outgoing links for a page of the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="content">The raw content.</param>
-		public static void StorePageOutgoingLinks(PageInfo page, string content) {
+		public static void StorePageOutgoingLinks(string wiki, PageInfo page, string content) {
 			string[] linkedPages;
-			Formatter.Format(content, false, FormattingContext.PageContent, page, out linkedPages);
+			Formatter.Format(wiki, content, false, FormattingContext.PageContent, page, out linkedPages);
 
 			string lowercaseName = page.FullName.ToLowerInvariant();
 
@@ -700,18 +724,19 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			bool doneLinks = Settings.Provider.StoreOutgoingLinks(page.FullName, cleanLinkedPages.ToArray());
+			bool doneLinks = Settings.GetProvider(wiki).StoreOutgoingLinks(page.FullName, cleanLinkedPages.ToArray());
 			if(!doneLinks) {
 				Log.LogEntry("Could not store outgoing links for page " + page.FullName, EntryType.Error, Log.SystemUsername);
 			}
 		}
 
 		/// <summary>
-		/// Deletes the old backups if the current number of backups exceeds the limit.
+		/// Deletes the old backups if the current number of backups exceeds the limit in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
-		private static void DeleteOldBackupsIfNeeded(PageInfo page) {
-			int maxBackups = Settings.KeptBackupNumber;
+		private static void DeleteOldBackupsIfNeeded(string wiki, PageInfo page) {
+			int maxBackups = Settings.GetKeptBackupNumber(wiki);
 			if(maxBackups == -1) return;
 
 			// Oldest to newest: 0, 1, 2, 3
@@ -739,48 +764,50 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Sends the email notification for a page change.
+		/// Sends the email notification for a page change in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page that was modified.</param>
 		/// <param name="author">The author of the modification.</param>
-		private static void SendEmailNotificationForPage(PageInfo page, UserInfo author) {
+		private static void SendEmailNotificationForPage(string wiki, PageInfo page, UserInfo author) {
 			if(page == null) return;
 
 			PageContent content = Content.GetPageContent(page);
 
-			UserInfo[] usersToNotify = Users.GetUsersToNotifyForPageChange(page);
+			UserInfo[] usersToNotify = Users.GetUsersToNotifyForPageChange(wiki, page);
 			usersToNotify = RemoveUserFromArray(usersToNotify, author);
 			string[] recipients = EmailTools.GetRecipients(usersToNotify);
 
-			string body = Settings.Provider.GetMetaDataItem(MetaDataItem.PageChangeMessage, null);
+			string body = Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.PageChangeMessage, null);
 
-			string title = FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page);
+			string title = FormattingPipeline.PrepareTitle(wiki, content.Title, false, FormattingContext.Other, page);
 
-			EmailTools.AsyncSendMassEmail(recipients, Settings.SenderEmail,
-				Settings.WikiTitle + " - " + title,
+			EmailTools.AsyncSendMassEmail(recipients, GlobalSettings.SenderEmail,
+				Settings.GetWikiTitle(wiki) + " - " + title,
 				body.Replace("##PAGE##", title).Replace("##USER##", author != null ? Users.GetDisplayName(author) : "anonymous").Replace("##DATETIME##",
-				Preferences.AlignWithServerTimezone(content.LastModified).ToString(Settings.DateTimeFormat)).Replace("##COMMENT##",
+				Preferences.AlignWithServerTimezone(wiki, content.LastModified).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##COMMENT##",
 				(string.IsNullOrEmpty(content.Comment) ? Exchanger.ResourceExchanger.GetResource("None") : content.Comment)).Replace("##LINK##",
-				Settings.MainUrl + Tools.UrlEncode(page.FullName) + Settings.PageExtension).Replace("##WIKITITLE##", Settings.WikiTitle),
+				GlobalSettings.MainUrl + Tools.UrlEncode(page.FullName) + GlobalSettings.PageExtension).Replace("##WIKITITLE##", Settings.GetWikiTitle(wiki)),
 				false);
 		}
 
 		/// <summary>
-		/// Determines whether a user can edit a page.
+		/// Determines whether a user of the given wiki can edit a page.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="groups">The groups.</param>
 		/// <param name="canEdit">A value indicating whether the user can edit the page.</param>
 		/// <param name="canEditWithApproval">A value indicating whether the user can edit the page with subsequent approval.</param>
-		public static void CanEditPage(PageInfo page, string username, string[] groups,
+		public static void CanEditPage(string wiki, PageInfo page, string username, string[] groups,
 			out bool canEdit, out bool canEditWithApproval) {
 
 			canEdit = false;
 			canEditWithApproval = false;
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
-			switch(Settings.ChangeModerationMode) {
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
+			switch(Settings.GetModerationMode(wiki)) {
 				case ChangeModerationMode.RequirePageEditingPermissions:
 					canEdit = authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, username, groups);
 					canEditWithApproval = authChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, username, groups);
@@ -798,20 +825,20 @@ namespace ScrewTurn.Wiki {
 
 			bool isAdminstrator = false;
 			foreach(string group in groups) {
-				if(group == Settings.AdministratorsGroup) isAdminstrator = true;
+				if(group == Settings.GetAdministratorsGroup(wiki)) isAdminstrator = true;
 			}
-			if(canEdit && !string.IsNullOrEmpty(Settings.IpHostFilter) && !isAdminstrator)
-				canEdit = VerifyIpHostFilter();
+			if(canEdit && !string.IsNullOrEmpty(Settings.GetIpHostFilter(wiki)) && !isAdminstrator)
+				canEdit = VerifyIpHostFilter(wiki);
 		}
 
 		/// <summary>
-		/// Verifies whether or not the current user's ip address is in the host filter or not.
+		/// Verifies whether or not the current user's ip address is in the host filter of the given wiki or not.
 		/// </summary>
-		/// <returns></returns>
-		private static bool VerifyIpHostFilter() {
+		/// <param name="wiki">The wiki.</param>
+		private static bool VerifyIpHostFilter(string wiki) {
 			const RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace;
 			var hostAddress = HttpContext.Current.Request.UserHostAddress;
-			var ips = Settings.IpHostFilter.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+			var ips = Settings.GetIpHostFilter(wiki).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
 			// For each IP in the host filter setting
 			foreach(var ip in ips) {
@@ -840,13 +867,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Determines whether a user can approve/reject a draft of a page.
+		/// Determines whether a user can approve/reject a draft of a page, in the specified wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can approve/reject a draft of the page, <c>false</c> otherwise.</returns>
-		public static bool CanApproveDraft(PageInfo page, string username, string[] groups) {
+		public static bool CanApproveDraft(string wiki, PageInfo page, string username, string[] groups) {
 			string requiredAction = Actions.ForPages.ManagePage;
 
 			// TODO: decide whether it is incorrect to require only ModifyPage permission
@@ -863,18 +891,19 @@ namespace ScrewTurn.Wiki {
 					throw new NotSupportedException();
 			}*/
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.SettingsProvider);
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 			return authChecker.CheckActionForPage(page, requiredAction, username, groups);
 		}
 
 		/// <summary>
-		/// Sends a draft notification to "administrators".
+		/// Sends a draft notification to "administrators" of the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="currentPage">The edited page.</param>
 		/// <param name="title">The title.</param>
 		/// <param name="comment">The comment.</param>
 		/// <param name="author">The author.</param>
-		public static void SendEmailNotificationForDraft(PageInfo currentPage, string title, string comment, string author) {
+		public static void SendEmailNotificationForDraft(string wiki, PageInfo currentPage, string title, string comment, string author) {
 			// Decide the users to notify based on the ChangeModerationMode
 			// Retrieve the list of matching users
 			// Asynchronously send the notification
@@ -882,40 +911,41 @@ namespace ScrewTurn.Wiki {
 			// Retrieve all the users that have a grant on requiredAction for the current page
 			// TODO: make this work when Users.GetUsers does not return all existing users but only a sub-set
 			List<UserInfo> usersToNotify = new List<UserInfo>(10);
-			foreach(UserInfo user in Users.GetUsers()) {
-				if(CanApproveDraft(currentPage, user.Username, user.Groups)) {
+			foreach(UserInfo user in Users.GetUsers(wiki)) {
+				if(CanApproveDraft(wiki, currentPage, user.Username, user.Groups)) {
 					usersToNotify.Add(user);
 				}
 			}
-			usersToNotify.Add(new UserInfo("admin", "Administrator", Settings.ContactEmail, true, DateTime.Now, null));
+			usersToNotify.Add(new UserInfo("admin", "Administrator", GlobalSettings.ContactEmail, true, DateTime.Now, null));
 
-			UserInfo actualUser = Users.FindUser(author);
+			UserInfo actualUser = Users.FindUser(wiki, author);
 			string displayName = actualUser == null ? author : Users.GetDisplayName(actualUser);
 
-			string subject = Settings.WikiTitle + " - " + Exchanger.ResourceExchanger.GetResource("ApproveRejectDraft") + ": " + title;
-			string body = Settings.Provider.GetMetaDataItem(MetaDataItem.ApproveDraftMessage, null);
+			string subject = Settings.GetWikiTitle(wiki) + " - " + Exchanger.ResourceExchanger.GetResource("ApproveRejectDraft") + ": " + title;
+			string body = Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.ApproveDraftMessage, null);
 			body = body.Replace("##PAGE##", title).Replace("##USER##", displayName).Replace("##DATETIME##",
-				Preferences.AlignWithServerTimezone(DateTime.Now).ToString(Settings.DateTimeFormat)).Replace("##COMMENT##",
+				Preferences.AlignWithServerTimezone(wiki, DateTime.Now).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##COMMENT##",
 				string.IsNullOrEmpty(comment) ? Exchanger.ResourceExchanger.GetResource("None") : comment).Replace("##LINK##",
-				Settings.MainUrl + UrlTools.BuildUrl("Edit.aspx?Page=", Tools.UrlEncode(currentPage.FullName))).Replace("##LINK2##",
-				Settings.MainUrl + "AdminPages.aspx?Admin=" + Tools.UrlEncode(currentPage.FullName)).Replace("##WIKITITLE##",
-				Settings.WikiTitle);
+				GlobalSettings.MainUrl + UrlTools.BuildUrl("Edit.aspx?Page=", Tools.UrlEncode(currentPage.FullName))).Replace("##LINK2##",
+				GlobalSettings.MainUrl + "AdminPages.aspx?Admin=" + Tools.UrlEncode(currentPage.FullName)).Replace("##WIKITITLE##",
+				Settings.GetWikiTitle(wiki));
 
 			EmailTools.AsyncSendMassEmail(EmailTools.GetRecipients(usersToNotify.ToArray()),
-				Settings.SenderEmail, subject, body, false);
+				GlobalSettings.SenderEmail, subject, body, false);
 		}
 
 		/// <summary>
-		/// Gets the list of all the Pages of a namespace.
+		/// Gets the list of all the Pages of a namespace in the specified wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The pages.</returns>
-		public static List<PageInfo> GetPages(NamespaceInfo nspace) {
+		public static List<PageInfo> GetPages(string wiki, NamespaceInfo nspace) {
 			List<PageInfo> allPages = new List<PageInfo>(10000);
 
 			// Retrieve all pages from Pages Providers
 			int count = 0;
-			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				count++;
 				allPages.AddRange(provider.GetPages(nspace));
 			}
@@ -928,13 +958,13 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the global number of pages.
+		/// Gets the global number of pages in a wiki.
 		/// </summary>
 		/// <returns>The number of pages.</returns>
-		public static int GetGlobalPageCount() {
+		public static int GetGlobalPageCount(string wiki) {
 			int count = 0;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				count += prov.GetPages(null).Length;
 				foreach(NamespaceInfo nspace in prov.GetNamespaces()) {
 					count += prov.GetPages(nspace).Length;
@@ -945,14 +975,15 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the incoming links for a page.
+		/// Gets the incoming links for a page in a wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <returns>The incoming links.</returns>
-		public static string[] GetPageIncomingLinks(PageInfo page) {
+		public static string[] GetPageIncomingLinks(string wiki, PageInfo page) {
 			if(page == null) return null;
 
-			IDictionary<string, string[]> allLinks = Settings.Provider.GetAllOutgoingLinks();
+			IDictionary<string, string[]> allLinks = Settings.GetProvider(wiki).GetAllOutgoingLinks();
 			string[] knownPages = new string[allLinks.Count];
 			allLinks.Keys.CopyTo(knownPages, 0);
 
@@ -969,23 +1000,25 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the outgoing links of a page.
+		/// Gets the outgoing links of a page in a wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <returns>The outgoing links.</returns>
-		public static string[] GetPageOutgoingLinks(PageInfo page) {
+		public static string[] GetPageOutgoingLinks(string wiki, PageInfo page) {
 			if(page == null) return null;
-			return Settings.Provider.GetOutgoingLinks(page.FullName);
+			return Settings.GetProvider(wiki).GetOutgoingLinks(page.FullName);
 		}
 
 		/// <summary>
-		/// Gets all the pages in a namespace without incoming links.
+		/// Gets all the pages in a namespace of a wiki without incoming links.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The orphaned pages.</returns>
-		public static PageInfo[] GetOrphanedPages(NamespaceInfo nspace) {
-			List<PageInfo> pages = GetPages(nspace);
-			IDictionary<string, string[]> allLinks = Settings.Provider.GetAllOutgoingLinks();
+		public static PageInfo[] GetOrphanedPages(string wiki, NamespaceInfo nspace) {
+			List<PageInfo> pages = GetPages(wiki, nspace);
+			IDictionary<string, string[]> allLinks = Settings.GetProvider(wiki).GetAllOutgoingLinks();
 			string[] knownPages = new string[allLinks.Count];
 			allLinks.Keys.CopyTo(knownPages, 0);
 
@@ -1005,14 +1038,15 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the wanted/inexistent pages in all namespaces.
+		/// Gets the wanted/inexistent pages in all namespaces of a wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
-		/// <returns>The wanted/inexistent pages (dictionary wanted_page->linking_pages).</returns>
-		public static Dictionary<string, List<string>> GetWantedPages(string nspace) {
+		/// <returns>The wanted/inexistent pages (dictionary wanted_page-&gt;linking_pages).</returns>
+		public static Dictionary<string, List<string>> GetWantedPages(string wiki, string nspace) {
 			if(string.IsNullOrEmpty(nspace)) nspace = null;
 
-			IDictionary<string, string[]> allLinks = Settings.Provider.GetAllOutgoingLinks();
+			IDictionary<string, string[]> allLinks = Settings.GetProvider(wiki).GetAllOutgoingLinks();
 			string[] knownPages = new string[allLinks.Count];
 			allLinks.Keys.CopyTo(knownPages, 0);
 
@@ -1023,7 +1057,7 @@ namespace ScrewTurn.Wiki {
 					string linkNamespace = NameTools.GetNamespace(link);
 					if(linkNamespace == nspace) {
 
-						PageInfo tempPage = FindPage(link);
+						PageInfo tempPage = FindPage(wiki, link);
 						if(tempPage == null) {
 							if(!result.ContainsKey(link)) result.Add(link, new List<string>(3));
 							result[link].Add(key);
@@ -1067,18 +1101,19 @@ namespace ScrewTurn.Wiki {
 		#region Categories
 
 		/// <summary>
-		/// Finds a Category.
+		/// Finds a Category in the specified wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullName">The full name of the Category to Find (case <b>unsensitive</b>).</param>
-		/// <returns>The correct <see cref="T:CategoryInfo" /> object or <c>null</c> if no category is found.</returns>
-		public static CategoryInfo FindCategory(string fullName) {
+		/// <returns>The correct <see cref="T:CategoryInfo"/> object or <c>null</c> if no category is found.</returns>
+		public static CategoryInfo FindCategory(string wiki, string fullName) {
 			if(string.IsNullOrEmpty(fullName)) return null;
 
-			IPagesStorageProviderV30 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			IPagesStorageProviderV30 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
 			CategoryInfo category = defProv.GetCategory(fullName);
 			if(category != null) return category;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				if(prov != defProv) {
 					category = prov.GetCategory(fullName);
 					if(category != null) return category;
@@ -1089,53 +1124,57 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Creates a new Category.
+		/// Creates a new Category in the specified wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Name of the Category.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(NamespaceInfo nspace, string name) {
+		public static bool CreateCategory(string wiki, NamespaceInfo nspace, string name) {
 			string namespaceName = nspace != null ? nspace.Name : null;
-			return CreateCategory(namespaceName, name);
+			return CreateCategory(wiki, namespaceName, name);
 		}
 
 		/// <summary>
-		/// Creates a new Category.
+		/// Creates a new Category in the specified wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Name of the Category.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(string nspace, string name) {
-			return CreateCategory(nspace, name, Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider));
+		public static bool CreateCategory(string wiki, string nspace, string name) {
+			return CreateCategory(wiki, nspace, name, Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki));
 		}
 
 		/// <summary>
-		/// Creates a new Category in the specifued Provider.
+		/// Creates a new Category for the given wiki in the specified Provider.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Name of the Category.</param>
 		/// <param name="provider">The Provider.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreateCategory(string wiki, NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider) {
 			string namespaceName = nspace != null ? nspace.Name : null;
-			return CreateCategory(namespaceName, name, provider);
+			return CreateCategory(wiki, namespaceName, name, provider);
 		}
 
 		/// <summary>
-		/// Creates a new Category in the specifued Provider.
+		/// Creates a new Category for the given wiki in the specified Provider.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Name of the Category.</param>
 		/// <param name="provider">The Provider.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(string nspace, string name, IPagesStorageProviderV30 provider) {
-			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+		public static bool CreateCategory(string wiki, string nspace, string name, IPagesStorageProviderV30 provider) {
+			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
 
 			if(provider.ReadOnly) return false;
 
 			string fullName = NameTools.GetFullName(nspace, name);
 
-			if(FindCategory(fullName) != null) return false;
+			if(FindCategory(wiki, fullName) != null) return false;
 
 			CategoryInfo newCat = provider.AddCategory(nspace, name);
 			if(newCat != null) {
@@ -1171,17 +1210,18 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Renames a Category.
+		/// Renames a Category in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="category">The Category to rename.</param>
 		/// <param name="newName">The new Name of the Category.</param>
 		/// <returns>True if the Category has been renamed successfully.</returns>
-		public static bool RenameCategory(CategoryInfo category, string newName) {
+		public static bool RenameCategory(string wiki, CategoryInfo category, string newName) {
 			if(category.Provider.ReadOnly) return false;
 
 			string newFullName = NameTools.GetFullName(NameTools.GetNamespace(category.FullName), newName);
 
-			if(FindCategory(newFullName) != null) return false;
+			if(FindCategory(wiki, newFullName) != null) return false;
 
 			string oldName = category.FullName;
 
@@ -1209,16 +1249,17 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets all the Uncategorized Pages.
+		/// Gets all the Uncategorized Pages in a wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace.</param>
 		/// <returns>The Uncategorized Pages.</returns>
-		public static PageInfo[] GetUncategorizedPages(NamespaceInfo nspace) {
+		public static PageInfo[] GetUncategorizedPages(string wiki, NamespaceInfo nspace) {
 			if(nspace == null) {
 				List<PageInfo> pages = new List<PageInfo>(1000);
 
 				int count = 0;
-				foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+				foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 					count++;
 					pages.AddRange(prov.GetUncategorizedPages(null));
 				}
@@ -1236,30 +1277,32 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the valid Categories for a Page, i.e. the Categories managed by the Page's Provider and in the same namespace as the page.
+		/// Gets the valid Categories for a Page of a wiki, i.e. the Categories managed by the Page's Provider and in the same namespace as the page.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page, or <c>null</c> to use the default provider.</param>
 		/// <returns>The valid Categories.</returns>
-		public static CategoryInfo[] GetAvailableCategories(PageInfo page) {
-			NamespaceInfo pageNamespace = FindNamespace(NameTools.GetNamespace(page.FullName));
+		public static CategoryInfo[] GetAvailableCategories(string wiki, PageInfo page) {
+			NamespaceInfo pageNamespace = FindNamespace(wiki, NameTools.GetNamespace(page.FullName));
 
 			if(page != null) {
 				return page.Provider.GetCategories(pageNamespace);
 			}
 			else {
-				return Collectors.CollectorsBox.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider).GetCategories(pageNamespace);
+				return Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki).GetCategories(pageNamespace);
 			}
 		}
 
 		/// <summary>
-		/// Gets the other Categories of the Provider and Namespace of the specified Category.
+		/// Gets the other Categories of the Provider and Namespace of the specified Category in the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="category">The Category.</param>
 		/// <returns>The matching Categories.</returns>
-		public static CategoryInfo[] GetMatchingCategories(CategoryInfo category) {
-			NamespaceInfo nspace = FindNamespace(NameTools.GetNamespace(category.FullName));
+		public static CategoryInfo[] GetMatchingCategories(string wiki, CategoryInfo category) {
+			NamespaceInfo nspace = FindNamespace(wiki, NameTools.GetNamespace(category.FullName));
 
-			List<CategoryInfo> allCategories = GetCategories(nspace);
+			List<CategoryInfo> allCategories = GetCategories(wiki, nspace);
 			List<CategoryInfo> result = new List<CategoryInfo>(10);
 
 			for(int i = 0; i < allCategories.Count; i++) {
@@ -1323,16 +1366,17 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the list of all the Categories of a namespace. The list shouldn't be modified.
+		/// Gets the list of all the Categories of a namespace of a wiki. The list shouldn't be modified.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The categories, sorted by name.</returns>
-		public static List<CategoryInfo> GetCategories(NamespaceInfo nspace) {
+		public static List<CategoryInfo> GetCategories(string wiki, NamespaceInfo nspace) {
 			List<CategoryInfo> allCategories = new List<CategoryInfo>(50);
 
 			// Retrieve all the categories from Pages Provider
 			int count = 0;
-			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				count++;
 				allCategories.AddRange(provider.GetCategories(nspace));
 			}
@@ -1387,8 +1431,9 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Adds a new Message to a Page.
+		/// Adds a new Message to a Page of the given wiki.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="subject">The Subject.</param>
@@ -1396,16 +1441,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="body">The Body.</param>
 		/// <param name="parent">The Parent Message ID, or -1.</param>
 		/// <returns>True if the Message has been added successfully.</returns>
-		public static bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
+		public static bool AddMessage(string wiki, PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
 			if(page.Provider.ReadOnly) return false;
 
 			bool done = page.Provider.AddMessage(page, username, subject, dateTime, body, parent);
 			if(done) {
-				SendEmailNotificationForMessage(page, Users.FindUser(username),
+				SendEmailNotificationForMessage(wiki, page, Users.FindUser(wiki, username),
 					Tools.GetMessageIdForAnchor(dateTime), subject);
 
 				PageContent content = Content.GetPageContent(page);
-				RecentChanges.AddChange(page.FullName, content.Title, subject, dateTime, username, Change.MessagePosted, "");
+				RecentChanges.AddChange(wiki, page.FullName, content.Title, subject, dateTime, username, Change.MessagePosted, "");
 				Host.Instance.OnPageActivity(page, null, username, PageActivity.MessagePosted);
 			}
 			return done;
@@ -1414,40 +1459,42 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Sends the email notification for a new message.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page the message was posted to.</param>
 		/// <param name="author">The author of the message.</param>
 		/// <param name="id">The message ID to be used for anchors.</param>
 		/// <param name="subject">The message subject.</param>
-		private static void SendEmailNotificationForMessage(PageInfo page, UserInfo author, string id, string subject) {
+		private static void SendEmailNotificationForMessage(string wiki, PageInfo page, UserInfo author, string id, string subject) {
 			if(page == null) return;
 
 			PageContent content = Content.GetPageContent(page);
 
-			UserInfo[] usersToNotify = Users.GetUsersToNotifyForDiscussionMessages(page);
+			UserInfo[] usersToNotify = Users.GetUsersToNotifyForDiscussionMessages(wiki, page);
 			usersToNotify = RemoveUserFromArray(usersToNotify, author);
 			string[] recipients = EmailTools.GetRecipients(usersToNotify);
 
-			string body = Settings.Provider.GetMetaDataItem(MetaDataItem.DiscussionChangeMessage, null);
+			string body = Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.DiscussionChangeMessage, null);
 
-			string title = FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page);
+			string title = FormattingPipeline.PrepareTitle(wiki, content.Title, false, FormattingContext.Other, page);
 
-			EmailTools.AsyncSendMassEmail(recipients, Settings.SenderEmail,
-				Settings.WikiTitle + " - " + title,
+			EmailTools.AsyncSendMassEmail(recipients, GlobalSettings.SenderEmail,
+				Settings.GetWikiTitle(wiki) + " - " + title,
 				body.Replace("##PAGE##", title).Replace("##USER##", author != null ? Users.GetDisplayName(author) : "anonymous").Replace("##DATETIME##",
-				Preferences.AlignWithServerTimezone(content.LastModified).ToString(Settings.DateTimeFormat)).Replace("##SUBJECT##",
-				subject).Replace("##LINK##", Settings.MainUrl + Tools.UrlEncode(page.FullName) +
-				Settings.PageExtension + "?Discuss=1#" + id).Replace("##WIKITITLE##", Settings.WikiTitle),
+				Preferences.AlignWithServerTimezone(wiki, content.LastModified).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##SUBJECT##",
+				subject).Replace("##LINK##", GlobalSettings.MainUrl + Tools.UrlEncode(page.FullName) +
+				GlobalSettings.PageExtension + "?Discuss=1#" + id).Replace("##WIKITITLE##", Settings.GetWikiTitle(wiki)),
 				false);
 		}
 
 		/// <summary>
 		/// Removes a Message.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page.</param>
 		/// <param name="id">The ID of the Message to remove.</param>
 		/// <param name="removeReplies">A value specifying whether or not to remove the replies.</param>
 		/// <returns>True if the Message has been removed successfully.</returns>
-		public static bool RemoveMessage(PageInfo page, int id, bool removeReplies) {
+		public static bool RemoveMessage(string wiki, PageInfo page, int id, bool removeReplies) {
 			if(page.Provider.ReadOnly) return false;
 
 			Message[] messages = page.Provider.GetMessages(page);
@@ -1456,7 +1503,7 @@ namespace ScrewTurn.Wiki {
 			bool done = page.Provider.RemoveMessage(page, id, removeReplies);
 			if(done) {
 				PageContent content = Content.GetPageContent(page);
-				RecentChanges.AddChange(page.FullName, content.Title, msg.Subject, DateTime.Now, msg.Username, Change.MessageDeleted, "");
+				RecentChanges.AddChange(wiki, page.FullName, content.Title, msg.Subject, DateTime.Now, msg.Username, Change.MessageDeleted, "");
 				Host.Instance.OnPageActivity(page, null, null, PageActivity.MessageDeleted);
 			}
 			return done;
@@ -1483,6 +1530,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Modifies a Message.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page.</param>
 		/// <param name="id">The ID of the Message to modify.</param>
 		/// <param name="username">The Username.</param>
@@ -1490,13 +1538,13 @@ namespace ScrewTurn.Wiki {
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <returns>True if the Message has been modified successfully.</returns>
-		public static bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
+		public static bool ModifyMessage(string wiki, PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
 			if(page.Provider.ReadOnly) return false;
 
 			bool done = page.Provider.ModifyMessage(page, id, username, subject, dateTime, body);
 			if(done) {
 				PageContent content = Content.GetPageContent(page);
-				RecentChanges.AddChange(page.FullName, content.Title, subject, dateTime, username, Change.MessageEdited, "");
+				RecentChanges.AddChange(wiki, page.FullName, content.Title, subject, dateTime, username, Change.MessageEdited, "");
 				Host.Instance.OnPageActivity(page, null, username, PageActivity.MessageModified);
 			}
 			return done;

@@ -10,34 +10,17 @@ namespace ScrewTurn.Wiki {
 	public interface ICollectorsBox {
 
 		/// <summary>
+		/// The global settings storage provider.
+		/// </summary>
+		/// <returns>The globalSettingsProvider.</returns>
+		IGlobalSettingsStorageProviderV30 GlobalSettingsProvider { get; }
+
+		/// <summary>
 		/// Gets the settings provider.
 		/// </summary>
-		ISettingsStorageProviderV30 SettingsProvider { get; }
-
-		/// <summary>
-		/// Gets the disabled files provider collector.
-		/// </summary>
-		ProviderCollector<IFilesStorageProviderV30> DisabledFilesProviderCollector { get; }
-
-		/// <summary>
-		/// Gets the disabled formatter provider collector.
-		/// </summary>
-		ProviderCollector<IFormatterProviderV30> DisabledFormatterProviderCollector { get; }
-
-		/// <summary>
-		/// Gets the disabled pages provider collector.
-		/// </summary>
-		ProviderCollector<IPagesStorageProviderV30> DisabledPagesProviderCollector { get; }
-
-		/// <summary>
-		/// Gets the disabled theme provider collector.
-		/// </summary>
-		ProviderCollector<IThemeStorageProviderV30> DisabledThemeProviderCollector { get; }
-
-		/// <summary>
-		/// Gets the disabled users provider collector.
-		/// </summary>
-		ProviderCollector<IUsersStorageProviderV30> DisabledUsersProviderCollector { get; }
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The settingsProvider initialized for the given wiki.</returns>
+		ISettingsStorageProviderV30 GetSettingsProvider(string wiki);
 
 		/// <summary>
 		/// Gets the files provider collector.

@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void Init() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), "");
+			prov.Init(MockHost(), "", null);
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}

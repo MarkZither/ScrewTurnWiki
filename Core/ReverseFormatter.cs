@@ -13,9 +13,11 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements reverse formatting methods (HTML-&gt;WikiMarkup).
 	/// </summary>
-	public static class ReverseFormatter {
+	public class ReverseFormatter {
 
-		private static string ProcessList(XmlNodeList nodes, string marker) {
+		private string _wiki;
+
+		private string ProcessList(XmlNodeList nodes, string marker) {
 			string result = "";
 			string ul = "*";
 			string ol = "#";
@@ -55,7 +57,7 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
-		private static string ProcessImage(XmlNode node) {
+		private string ProcessImage(XmlNode node) {
 			string result = "";
 			if(node.Attributes.Count != 0) {
 				foreach(XmlAttribute attName in node.Attributes) {
@@ -69,7 +71,7 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
-		private static string ProcessLink(string link) {
+		private string ProcessLink(string link) {
 			string subLink = "";
 			string[] links = link.Split('=');
 			if(links[0] == "GetFile.aspx?File") {
@@ -83,7 +85,7 @@ namespace ScrewTurn.Wiki {
 			return link;
 		}
 
-		private static string ProcessChildImage(XmlNodeList nodes) {
+		private string ProcessChildImage(XmlNodeList nodes) {
 			string image = "";
 			string p = "";
 			string url = "";
@@ -115,7 +117,7 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 		
-		private static string ProcessTableImage(XmlNodeList nodes) {
+		private string ProcessTableImage(XmlNodeList nodes) {
 			string result = "";
 			foreach(XmlNode node in nodes) {
 				switch(node.Name.ToLowerInvariant()) {
@@ -164,7 +166,7 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
-		private static string ProcessTable(XmlNodeList nodes) {
+		private string ProcessTable(XmlNodeList nodes) {
 			string result = "";
 			foreach(XmlNode node in nodes) {
 				switch(node.Name.ToLowerInvariant()) {
@@ -202,7 +204,7 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
-		private static string ProcessChild(XmlNodeList nodes) {
+		private string ProcessChild(XmlNodeList nodes) {
 			string result = "";
 			foreach(XmlNode node in nodes) {
 				bool anchor = false;
@@ -271,7 +273,7 @@ namespace ScrewTurn.Wiki {
 								result += "\n";
 							}
 							else {
-								result += Settings.ProcessSingleLineBreaks ? "\n" : "\n\n";
+								result += Settings.GetProcessSingleLineBreaks(_wiki) ? "\n" : "\n\n";
 							}
 							break;
 						case "table":
@@ -315,7 +317,7 @@ namespace ScrewTurn.Wiki {
 							break;
 						case "p":
 							if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("imagedescription")) continue;
-							else result += ProcessChild(node.ChildNodes) + "\n" + (Settings.ProcessSingleLineBreaks ? "" : "\n");
+							else result += ProcessChild(node.ChildNodes) + "\n" + (Settings.GetProcessSingleLineBreaks(_wiki) ? "" : "\n");
 							break;
 						case "div":
 							if(node.Attributes["class"] != null) {
@@ -328,14 +330,14 @@ namespace ScrewTurn.Wiki {
 							else {
 								result += "\n";
 								if(node.PreviousSibling != null && node.PreviousSibling.Name != "div") {
-									result += Settings.ProcessSingleLineBreaks ? "" : "\n";
+									result += Settings.GetProcessSingleLineBreaks(_wiki) ? "" : "\n";
 								}
 								if(node.FirstChild != null && node.FirstChild.Name == "br") {
 									node.RemoveChild(node.FirstChild);
 								}
 								if(node.HasChildNodes) {
 									result += ProcessChild(node.ChildNodes);
-									result += Settings.ProcessSingleLineBreaks ? "\n" : "\n\n";
+									result += Settings.GetProcessSingleLineBreaks(_wiki) ? "\n" : "\n\n";
 								}
 							}
 							break;
@@ -402,7 +404,7 @@ namespace ScrewTurn.Wiki {
 			return result;
 		}
 
-		private static XmlDocument FromHTML(TextReader reader) {
+		private XmlDocument FromHTML(TextReader reader) {
 			// setup SgmlReader
 			Sgml.SgmlReader sgmlReader = new Sgml.SgmlReader();
 			sgmlReader.DocType = "HTML";
@@ -422,9 +424,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Reverse formats HTML content into WikiMarkup.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="html">The input HTML.</param>
 		/// <returns>The corresponding WikiMarkup.</returns>
-		public static string ReverseFormat(string html) {
+		public string ReverseFormat(string wiki, string html) {
+			_wiki = wiki;
 			StringReader strReader = new StringReader(html);
 			XmlDocument x = FromHTML((TextReader)strReader);
 			if(x != null && x.HasChildNodes && x.FirstChild.HasChildNodes) return ProcessChild(x.FirstChild.ChildNodes);

@@ -133,11 +133,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <summary>
 		/// Creates or updates the database schema if necessary.
 		/// </summary>
-		protected override void CreateOrUpdateDatabaseIfNecessary() {
+		/// <param name="wiki">The wiki.</param>
+		protected override void CreateOrUpdateDatabaseIfNecessary(string wiki) {
 			if(!SchemaExists()) {
 				// Verify if an upgrade from version 2.0 is possible
 				if(SchemaAllowsUpgradeFrom20()) {
-					UpgradeFrom20();
+					UpgradeFrom20(wiki);
 				}
 				else {
 					// If not, create the standard schema
@@ -166,7 +167,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <summary>
 		/// Upgrades the database schema and data from version 2.0.
 		/// </summary>
-		private void UpgradeFrom20() {
+		/// <param name="wiki">The wiki.</param>
+		private void UpgradeFrom20(string wiki) {
 			// 1. Load all user data in memory
 			// 2. Rename old tables so they won't get in the way but the can still be recovered (_v2)
 			// 3. Create new schema
@@ -177,8 +179,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
 			SqlDataReader reader = cmd.ExecuteReader();
 
-			string administratorsGroup = host.GetSettingValue(SettingName.AdministratorsGroup);
-			string usersGroup = host.GetSettingValue(SettingName.UsersGroup);
+			string administratorsGroup = host.GetSettingValue(wiki, SettingName.AdministratorsGroup);
+			string usersGroup = host.GetSettingValue(wiki, SettingName.UsersGroup);
 
 			List<UserInfo> newUsers = new List<UserInfo>(100);
 			List<string> passwordHashes = new List<string>(100);
@@ -225,7 +227,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 				SetUserMembership(newUsers[i], newUsers[i].Groups);
 			}
 
-			host.UpgradeSecurityFlagsToGroupsAcl(admins, users);
+			host.UpgradeSecurityFlagsToGroupsAcl(wiki, admins, users);
 		}
 
 		/// <summary>

@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki {
 	/// Contains the Contents.
 	/// </summary>
 	public static class Content {
-		
+
 		/// <summary>
 		/// Reads the Content of a Page.
 		/// </summary>
@@ -32,14 +32,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the formatted Page Content, properly handling content caching and the Formatting Pipeline.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page to get the formatted Content of.</param>
 		/// <returns>The formatted content.</returns>
-		public static string GetFormattedPageContent(PageInfo page) {
+		public static string GetFormattedPageContent(string wiki, PageInfo page) {
 			PageContent pg = GetPageContent(page);
 			string[] linkedPages;
-			string content = FormattingPipeline.FormatWithPhase1And2(pg.Content, false, FormattingContext.PageContent, page, out linkedPages);
+			string content = FormattingPipeline.FormatWithPhase1And2(wiki, pg.Content, false, FormattingContext.PageContent, page, out linkedPages);
 			pg.LinkedPages = linkedPages;
-			return FormattingPipeline.FormatWithPhase3(content, FormattingContext.PageContent, page);
+			return FormattingPipeline.FormatWithPhase3(wiki, content, FormattingContext.PageContent, page);
 		}
 
 		/// <summary>

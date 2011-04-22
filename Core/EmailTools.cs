@@ -58,13 +58,13 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The generates SMTP client.</returns>
 		private static SmtpClient GenerateSmtpClient() {
-			SmtpClient client = new SmtpClient(Settings.SmtpServer);
-			if(Settings.SmtpUsername.Length > 0) {
-				client.Credentials = new NetworkCredential(Settings.SmtpUsername, Settings.SmtpPassword);
+			SmtpClient client = new SmtpClient(GlobalSettings.SmtpServer);
+			if(GlobalSettings.SmtpUsername.Length > 0) {
+				client.Credentials = new NetworkCredential(GlobalSettings.SmtpUsername, GlobalSettings.SmtpPassword);
 			}
-			client.EnableSsl = Settings.SmtpSsl;
-			if(Settings.SmtpPort != -1) client.Port = Settings.SmtpPort;
-			else if(Settings.SmtpSsl) client.Port = 465;
+			client.EnableSsl = GlobalSettings.SmtpSsl;
+			if(GlobalSettings.SmtpPort != -1) client.Port = GlobalSettings.SmtpPort;
+			else if(GlobalSettings.SmtpSsl) client.Port = 465;
 			return client;
 		}
 
@@ -117,12 +117,12 @@ namespace ScrewTurn.Wiki {
 		/// <param name="url">The URL that caused the error, if any.</param>
 		public static void NotifyError(Exception ex, string url) {
 			try {
-				string[] recipients = Settings.ErrorsEmails;
+				string[] recipients = GlobalSettings.ErrorsEmails;
 
 				if(recipients.Length > 0) {
-					AsyncSendMassEmail(recipients, Settings.SenderEmail, "Error Notification", "An error occurred on " +
+					AsyncSendMassEmail(recipients, GlobalSettings.SenderEmail, "Error Notification", "An error occurred on " +
 						DateTime.Now.ToString("yyyy'/'MM'/'dd' 'HH':'mm':'ss") + " (server time) in the wiki hosted at " +
-						Settings.MainUrl + " - server stack trace follows.\r\n\r\n" +
+						GlobalSettings.MainUrl + " - server stack trace follows.\r\n\r\n" +
 						(!string.IsNullOrEmpty(url) ? url + "\r\n\r\n" : "") +
 						ex.ToString(), false);
 				}

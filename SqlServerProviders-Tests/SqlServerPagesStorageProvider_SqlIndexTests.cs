@@ -23,15 +23,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		private MockRepository mocks = new MockRepository();
 		private string testDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
 
-		private delegate string ToStringDelegate(PageInfo p, string input);
+		private delegate string ToStringDelegate(string wiki, PageInfo p, string input);
 
 		protected IHostV30 MockHost() {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
-			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
-			Expect.Call(host.PrepareContentForIndexing(null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(PageInfo p, string input) { return input; }).Repeat.Any();
-			Expect.Call(host.PrepareTitleForIndexing(null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(PageInfo p, string input) { return input; }).Repeat.Any();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
+			Expect.Call(host.PrepareContentForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, PageInfo p, string input) { return input; }).Repeat.Any();
+			Expect.Call(host.PrepareTitleForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, PageInfo p, string input) { return input; }).Repeat.Any();
 
 			mocks.Replay(host);
 
@@ -41,7 +41,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		public IPagesStorageProviderV30 GetProvider() {
 			SqlServerPagesStorageProvider prov = new SqlServerPagesStorageProvider();
 			prov.SetUp(MockHost(), ConnString + InitialCatalog);
-			prov.Init(MockHost(), ConnString + InitialCatalog);
+			prov.Init(MockHost(), ConnString + InitialCatalog, null);
 
 			return prov;
 		}

@@ -14,7 +14,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public override IPagesStorageProviderV30 GetProvider() {
 			PagesStorageProvider prov = new PagesStorageProvider();
 			prov.SetUp(MockHost(), "");
-			prov.Init(MockHost(), "");
+			prov.Init(MockHost(), "", null);
 			return prov;
 		}
 
@@ -32,17 +32,17 @@ namespace ScrewTurn.Wiki.Tests {
 
 			MockRepository mocks = new MockRepository();
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
-			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
 
-			Expect.Call(host.UpgradePageStatusToAcl(null, 'L')).IgnoreArguments().Repeat.Twice().Return(true);
+			Expect.Call(host.UpgradePageStatusToAcl(null, null, 'L')).IgnoreArguments().Repeat.Twice().Return(true);
 
 			mocks.Replay(host);
 
-			string file = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), "Pages.cs");
-			string categoriesFile = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), "Categories.cs");
-			string navPathsFile = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), "NavigationPaths.cs");
-			string directory = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), "Pages");
-			string messagesDirectory = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), "Messages");
+			string file = Path.Combine(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory), "Pages.cs");
+			string categoriesFile = Path.Combine(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory), "Categories.cs");
+			string navPathsFile = Path.Combine(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory), "NavigationPaths.cs");
+			string directory = Path.Combine(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory), "Pages");
+			string messagesDirectory = Path.Combine(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory), "Messages");
 			Directory.CreateDirectory(directory);
 			Directory.CreateDirectory(messagesDirectory);
 
@@ -69,7 +69,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			PagesStorageProvider prov = new PagesStorageProvider();
 			prov.SetUp(host, "");
-			prov.Init(host, "");
+			prov.Init(host, "", null);
 
 			PageInfo[] pages = prov.GetPages(null);
 
@@ -110,14 +110,14 @@ namespace ScrewTurn.Wiki.Tests {
 			// Simulate another startup - upgrade not needed anymore
 
 			mocks.BackToRecord(host);
-			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
-			Expect.Call(host.UpgradePageStatusToAcl(null, 'L')).IgnoreArguments().Repeat.Times(0).Return(false);
+			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
+			Expect.Call(host.UpgradePageStatusToAcl(null, null, 'L')).IgnoreArguments().Repeat.Times(0).Return(false);
 
 			mocks.Replay(host);
 
 			prov = new PagesStorageProvider();
 			prov.SetUp(host, "");
-			prov.Init(host, "");
+			prov.Init(host, "", null);
 
 			mocks.Verify(host);
 
