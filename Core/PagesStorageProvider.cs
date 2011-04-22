@@ -1189,6 +1189,8 @@ namespace ScrewTurn.Wiki {
 		private int IndexPage(PageContent content) {
 			lock(this) {
 				try {
+					if(string.IsNullOrEmpty(content.Title) || string.IsNullOrEmpty(content.Content)) return 0;
+
 					string documentName = PageDocument.GetDocumentName(content.PageInfo);
 
 					DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(content.PageInfo, content.Title),
@@ -2396,6 +2398,8 @@ namespace ScrewTurn.Wiki {
 		private int IndexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body) {
 			lock(this) {
 				try {
+					if(string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(body)) return 0;
+
 					// Trim "RE:" to avoid polluting the search engine index
 					if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
 
