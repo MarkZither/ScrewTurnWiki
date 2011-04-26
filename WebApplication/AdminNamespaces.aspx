@@ -31,7 +31,7 @@
 				</HeaderTemplate>
 				<ItemTemplate>
 					<tr class='tablerow<%# Eval("AdditionalClass") %>'>
-						<td><a href='<%# Eval("DefaultPage") %><%= ScrewTurn.Wiki.Settings.PageExtension %>' title='<%= ScrewTurn.Wiki.Properties.Messages.GoToMainPage %>' target="_blank"><%# Eval("Name") %></a></td>
+						<td><a href='<%# Eval("DefaultPage") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>' title='<%= ScrewTurn.Wiki.Properties.Messages.GoToMainPage %>' target="_blank"><%# Eval("Name") %></a></td>
 						<td><%# ScrewTurn.Wiki.PluginFramework.NameTools.GetLocalName((string)Eval("DefaultPage")) %></td>
 						<td><%# Eval("PageCount") %></td>
 						<td><%# Eval("CategoryCount") %></td>
@@ -46,7 +46,7 @@
 				</ItemTemplate>
 				<AlternatingItemTemplate>
 					<tr class='tablerowalternate<%# Eval("AdditionalClass") %>'>
-						<td><a href='<%# Eval("DefaultPage") %><%= ScrewTurn.Wiki.Settings.PageExtension %>' title='<%= ScrewTurn.Wiki.Properties.Messages.GoToMainPage %>' target="_blank"><%# Eval("Name") %></a></td>
+						<td><a href='<%# Eval("DefaultPage") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>' title='<%= ScrewTurn.Wiki.Properties.Messages.GoToMainPage %>' target="_blank"><%# Eval("Name") %></a></td>
 						<td><%# ScrewTurn.Wiki.PluginFramework.NameTools.GetLocalName((string)Eval("DefaultPage")) %></td>
 						<td><%# Eval("PageCount") %></td>
 						<td><%# Eval("CategoryCount") %></td>

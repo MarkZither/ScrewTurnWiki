@@ -98,21 +98,21 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The Provider, or null if the Provider was not found.</returns>
 		public T GetProvider(string typeName, string wiki) {
-			wiki = wiki != null ? wiki : "-";
+			string wikiKey = wiki != null ? wiki : "-";
 			lock(this) {
 				foreach(Type type in assembliesDictionary.Keys) {
 					if(type.FullName.Equals(typeName)) {
 						T provider = null;
-						if(!instancesDictionary.ContainsKey(wiki)) {
-							instancesDictionary[wiki] = new Dictionary<Type, T>(3);
+						if(!instancesDictionary.ContainsKey(wikiKey)) {
+							instancesDictionary[wikiKey] = new Dictionary<Type, T>(3);
 						}
-						if(instancesDictionary[wiki].ContainsKey(type)) {
-							provider = instancesDictionary[wiki][type];
+						if(instancesDictionary[wikiKey].ContainsKey(type)) {
+							provider = instancesDictionary[wikiKey][type];
 						}
 						else {
 							provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[type], type);
 							ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadConfiguration(type.FullName), wiki);
-							instancesDictionary[wiki][type] = provider;
+							instancesDictionary[wikiKey][type] = provider;
 						}
 						return provider;
 					}

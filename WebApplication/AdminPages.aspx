@@ -71,17 +71,17 @@
 				</HeaderTemplate>
 				<ItemTemplate>
 					<tr class='tablerow<%# Eval("AdditionalClass") %>'>
-						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.Settings.PageExtension %>' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPage %>'><%# ScrewTurn.Wiki.PluginFramework.NameTools.GetLocalName((string)Eval("FullName")) %></a></td>
+						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPage %>'><%# ScrewTurn.Wiki.PluginFramework.NameTools.GetLocalName((string)Eval("FullName")) %></a></td>
 						<td><%# Eval("Title") %></td>
 						<td><%# Eval("CreatedOn") %></td>
 						<td><%# Eval("CreatedBy") %></td>
 						<td><%# Eval("LastModifiedOn") %></td>
 						<td><%# Eval("LastModifiedBy") %></td>
-						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.Settings.PageExtension %>?Discuss=1' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPageDiscussion %>'><%# Eval("Discussion") %></a></td>
-						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.Settings.PageExtension %>?History=1' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPageHistory %>'><%# Eval("Revisions") %></a></td>
+						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>?Discuss=1' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPageDiscussion %>'><%# Eval("Discussion") %></a></td>
+						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>?History=1' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPageHistory %>'><%# Eval("Revisions") %></a></td>
 						<td><%# (bool)Eval("IsOrphan") ? "<span class=\"resulterror\">" + ScrewTurn.Wiki.Properties.Messages.Yes + "</span>" : ""%></td>
 						<td><%# Eval("Provider") %></td>
-						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.Settings.PageExtension %>?Edit=1' title='<%= ScrewTurn.Wiki.Properties.Messages.EditThisPage %>'><asp:Literal ID="lblEdit" runat="server" Text="Edit" EnableViewState="False" meta:resourcekey="lblEditResource1" /></a>
+						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>?Edit=1' title='<%= ScrewTurn.Wiki.Properties.Messages.EditThisPage %>'><asp:Literal ID="lblEdit" runat="server" Text="Edit" EnableViewState="False" meta:resourcekey="lblEditResource1" /></a>
 							&bull;
 							<asp:LinkButton ID="btnSelect" runat="server" Visible='<%# (bool)Eval("CanSelect") %>' Text="Select" 
 								ToolTip="Select this Page for administration" CommandName="Select" CommandArgument='<%# Eval("FullName") %>' meta:resourcekey="btnSelectResource1" />
@@ -93,18 +93,18 @@
 				</ItemTemplate>
 				<AlternatingItemTemplate>
 					<tr class='tablerowalternate<%# Eval("AdditionalClass") %>'>
-						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.Settings.PageExtension %>' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPage %>'><%# ScrewTurn.Wiki.PluginFramework.NameTools.GetLocalName((string)Eval("FullName")) %></a></td>
+						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPage %>'><%# ScrewTurn.Wiki.PluginFramework.NameTools.GetLocalName((string)Eval("FullName")) %></a></td>
 						<td><%# Eval("Title") %></td>
 						<td><%# Eval("CreatedOn") %></td>
 						<td><%# Eval("CreatedBy") %></td>
 						<td><%# Eval("LastModifiedOn") %></td>
 						<td><%# Eval("LastModifiedBy") %></td>
-						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.Settings.PageExtension %>?Discuss=1' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPageDiscussion %>'><%# Eval("Discussion") %></a></td>
-						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.Settings.PageExtension %>?History=1' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPageHistory %>'><%# Eval("Revisions") %></a></td>
+						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>?Discuss=1' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPageDiscussion %>'><%# Eval("Discussion") %></a></td>
+						<td><a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>?History=1' target="_blank" title='<%= ScrewTurn.Wiki.Properties.Messages.GoToPageHistory %>'><%# Eval("Revisions") %></a></td>
 						<td><%# (bool)Eval("IsOrphan") ? "<span class=\"resulterror\">" + ScrewTurn.Wiki.Properties.Messages.Yes + "</span>" : ""%></td>
 						<td><%# Eval("Provider") %></td>
 						<td>
-							<a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.Settings.PageExtension %>?Edit=1' title='<%= ScrewTurn.Wiki.Properties.Messages.EditThisPage %>'><asp:Literal ID="lblEdit" runat="server" Text="Edit" EnableViewState="False" meta:resourcekey="lblEditResource2" /></a>
+							<a href='<%# Eval("FullName") %><%= ScrewTurn.Wiki.GlobalSettings.PageExtension %>?Edit=1' title='<%= ScrewTurn.Wiki.Properties.Messages.EditThisPage %>'><asp:Literal ID="lblEdit" runat="server" Text="Edit" EnableViewState="False" meta:resourcekey="lblEditResource2" /></a>
 							&bull;
 							<asp:LinkButton ID="btnSelect" runat="server" Visible='<%# (bool)Eval("CanSelect") %>' Text="Select" 
 								ToolTip="Select this Page for administration" CommandName="Select" CommandArgument='<%# Eval("FullName") %>' meta:resourcekey="btnSelectResource2" />
