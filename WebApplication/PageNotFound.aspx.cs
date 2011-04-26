@@ -27,7 +27,7 @@ namespace ScrewTurn.Wiki {
 				lblDescription.Text = lblDescription.Text.Replace("##PAGENAME##", Request["Page"]);
 			}
 			else {
-				UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
+				UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Default.aspx"));
 			}
 
 			PrintSearchResults();

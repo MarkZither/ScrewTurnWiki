@@ -102,6 +102,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="parent">The parent message, or <c>null</c>.</param>
 		/// <param name="sb">The output <see cref="T:StringBuilder" />.</param>
 		private void PrintMessage(Message message, Message parent, StringBuilder sb) {
+			string currentWiki = Tools.DetectCurrentWiki();
+
 			// Print header
 			sb.Append(@"<div class=""messageheader"">");
 			//sb.AppendFormat(@"<a id=""MSG_{0}""></a>", message.ID);
@@ -112,7 +114,7 @@ namespace ScrewTurn.Wiki {
 
 				if(canPostMessages) {
 					sb.Append(@"<a class=""reply"" href=""");
-					sb.Append(UrlTools.BuildUrl("Post.aspx?Page=", Tools.UrlEncode(currentPage.FullName), "&amp;Parent=", message.ID.ToString()));
+					sb.Append(UrlTools.BuildUrl(currentWiki, "Post.aspx?Page=", Tools.UrlEncode(currentPage.FullName), "&amp;Parent=", message.ID.ToString()));
 
 					sb.Append(@""">");
 					sb.Append(Properties.Messages.Reply);
@@ -123,7 +125,7 @@ namespace ScrewTurn.Wiki {
 				// A message can be edited only if the user is authenticated - anonymous users cannot edit their messages
 				if(SessionFacade.LoginKey != null && ((message.Username == SessionFacade.CurrentUsername && canPostMessages) || canManageDiscussion)) {
 					sb.Append(@" <a class=""edit"" href=""");
-					sb.Append(UrlTools.BuildUrl("Post.aspx?Page=", Tools.UrlEncode(currentPage.FullName), "&amp;Edit=", message.ID.ToString()));
+					sb.Append(UrlTools.BuildUrl(currentWiki, "Post.aspx?Page=", Tools.UrlEncode(currentPage.FullName), "&amp;Edit=", message.ID.ToString()));
 
 					sb.Append(@""">");
 					sb.Append(Properties.Messages.Edit);
@@ -133,7 +135,7 @@ namespace ScrewTurn.Wiki {
 				// If the current user is an admin, print the delete hyperLink
 				if(SessionFacade.LoginKey != null && canManageDiscussion) {
 					sb.Append(@" <a class=""delete"" href=""");
-					sb.Append(UrlTools.BuildUrl("Operation.aspx?Operation=DeleteMessage&amp;Message=", message.ID.ToString(),
+					sb.Append(UrlTools.BuildUrl(currentWiki, "Operation.aspx?Operation=DeleteMessage&amp;Message=", message.ID.ToString(),
 						"&amp;Page=", Tools.UrlEncode(currentPage.FullName)));
 
 					sb.Append(@""">");
@@ -145,8 +147,6 @@ namespace ScrewTurn.Wiki {
 
 			sb.Append(@"<div>");
 			sb.AppendFormat(@"<a id=""{0}"" href=""#{0}"" title=""Permalink"">&#0182;</a> ", Tools.GetMessageIdForAnchor(message.DateTime));
-
-			string currentWiki = Tools.DetectCurrentWiki();
 
 			// Print subject
 			if(message.Subject.Length > 0) {

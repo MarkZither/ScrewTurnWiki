@@ -40,7 +40,7 @@ namespace ScrewTurn.Wiki {
 				if(user != null) {
 					SetupSession(wiki, user);
 					Log.LogEntry("User " + user.Username + " logged in through cookie", EntryType.General, Log.SystemUsername);
-					TryRedirect(false);
+					TryRedirect(wiki, false);
 				}
 				else {
 					// Cookie is not valid, delete it
@@ -54,7 +54,7 @@ namespace ScrewTurn.Wiki {
 				if(user != null) {
 					SetupSession(wiki, user);
 					Log.LogEntry("User " + user.Username + " logged in via " + user.Provider.GetType().FullName + " autologin", EntryType.General, Log.SystemUsername);
-					TryRedirect(false);
+					TryRedirect(wiki, false);
 				}
 			}
 		}
@@ -81,13 +81,13 @@ namespace ScrewTurn.Wiki {
 		/// Tries to redirect the user to any specified URL.
 		/// </summary>
 		/// <param name="goHome">A value indicating whether to redirect to the home page if no explicit redirect URL is found.</param>
-		public static void TryRedirect(bool goHome) {
+		public static void TryRedirect(string wiki, bool goHome) {
 			if(HttpContext.Current.Request["Redirect"] != null) {
 				string target = HttpContext.Current.Request["Redirect"];
 				if(target.StartsWith("http:") || target.StartsWith("https:")) HttpContext.Current.Response.Redirect(target);
-				else UrlTools.Redirect(UrlTools.BuildUrl(target));
+				else UrlTools.Redirect(UrlTools.BuildUrl(wiki, target));
 			}
-			else if(goHome) UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
+			else if(goHome) UrlTools.Redirect(UrlTools.BuildUrl(wiki, "Default.aspx"));
 		}
 
 		/// <summary>

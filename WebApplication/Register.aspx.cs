@@ -34,7 +34,7 @@ namespace ScrewTurn.Wiki {
 			IUsersStorageProviderV30 p = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, currentWiki);
 			if(p.UserAccountsReadOnly) {
 				Log.LogEntry("Default Users Provider (" + p.Information.Name + ") is read-only, aborting Account Creation", EntryType.Warning, Log.SystemUsername);
-				UrlTools.Redirect(UrlTools.BuildUrl("Error.aspx"));
+				UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Error.aspx"));
 			}
 
 			PrintRegisterNotice();
@@ -42,7 +42,7 @@ namespace ScrewTurn.Wiki {
 			Page.Title = Properties.Messages.RegisterTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
 			if(!Settings.UsersCanRegister(currentWiki)) {
-				UrlTools.Redirect(UrlTools.BuildUrl("AccessDenied.aspx"));
+				UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "AccessDenied.aspx"));
 			}
 
 			switch(Settings.GetAccountActivationMode(currentWiki)) {

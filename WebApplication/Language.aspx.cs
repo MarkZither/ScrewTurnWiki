@@ -45,8 +45,8 @@ namespace ScrewTurn.Wiki {
 					SavePreferences(lang, languageSelector.SelectedTimezone);
 					languageSelector.SelectedLanguage = lang;
 
-					if(Request["Redirect"] != null) UrlTools.Redirect(UrlTools.BuildUrl(Request["Redirect"]));
-					else if(Request.UrlReferrer != null && !string.IsNullOrEmpty(Request.UrlReferrer.ToString())) UrlTools.Redirect(UrlTools.BuildUrl(Request.UrlReferrer.FixHost().ToString()));
+					if(Request["Redirect"] != null) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, Request["Redirect"]));
+					else if(Request.UrlReferrer != null && !string.IsNullOrEmpty(Request.UrlReferrer.ToString())) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, Request.UrlReferrer.FixHost().ToString()));
 				}
 			}
 

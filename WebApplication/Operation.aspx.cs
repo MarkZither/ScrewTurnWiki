@@ -52,7 +52,7 @@ namespace ScrewTurn.Wiki {
 
 			PageInfo page = Pages.FindPage(currentWiki, pg);
 			if(page == null) UrlTools.RedirectHome(currentWiki);
-			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, GlobalSettings.PageExtension));
+			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, page.FullName, GlobalSettings.PageExtension));
 
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			bool canManageDiscussion = authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion,
@@ -93,11 +93,11 @@ namespace ScrewTurn.Wiki {
 			PageInfo page = Pages.FindPage(currentWiki, Request["Page"]);
 			Log.LogEntry("Message deletion requested for " + page.FullName + "." + id.ToString(), EntryType.General, SessionFacade.GetCurrentUsername());
 			bool done = Pages.RemoveMessage(currentWiki, page, id, chkDeleteMessageReplies.Checked);
-			UrlTools.Redirect(UrlTools.BuildUrl(Request["Page"], GlobalSettings.PageExtension + "?Discuss=1"));
+			UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, Request["Page"], GlobalSettings.PageExtension + "?Discuss=1"));
 		}
 
 		protected void btnCancelDeleteMessage_Click(object sender, EventArgs e) {
-			UrlTools.Redirect(UrlTools.BuildUrl(Request["Page"], GlobalSettings.PageExtension, "?Discuss=1"));
+			UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, Request["Page"], GlobalSettings.PageExtension, "?Discuss=1"));
 		}
 
 		#endregion

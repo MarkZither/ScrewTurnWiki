@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki {
 			if(page == null) UrlTools.RedirectHome(currentWiki);
 			editor.CurrentPage = page;
 
-			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, GlobalSettings.PageExtension));
+			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, page.FullName, GlobalSettings.PageExtension));
 
 			content = Content.GetPageContent(page);
 			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.MessageBody, page);
@@ -40,7 +40,7 @@ namespace ScrewTurn.Wiki {
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			bool canPostMessage = authChecker.CheckActionForPage(page, Actions.ForPages.PostDiscussion,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
-			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(Tools.UrlEncode(page.FullName), GlobalSettings.PageExtension));
+			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, Tools.UrlEncode(page.FullName), GlobalSettings.PageExtension));
 			captcha.Visible = SessionFacade.LoginKey == null && !Settings.GetDisableCaptchaControl(currentWiki);
 
 			if(Page.IsPostBack) return;

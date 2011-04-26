@@ -125,7 +125,7 @@ namespace ScrewTurn.Wiki {
 				}
 				LoginTools.SetupSession(currentWiki, user);
 				Log.LogEntry("User " + user.Username + " logged in", EntryType.General, Log.SystemUsername);
-				LoginTools.TryRedirect(true);
+				LoginTools.TryRedirect(currentWiki, true);
 			}
 			else {
 				lblResult.CssClass = "resulterror";
@@ -135,7 +135,7 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnLogout_Click(object sender, EventArgs e) {
 			Logout();
-			UrlTools.Redirect(UrlTools.BuildUrl("Login.aspx?Logout=1"));
+			UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Login.aspx?Logout=1"));
 		}
 
 		/// <summary>

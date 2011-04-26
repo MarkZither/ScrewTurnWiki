@@ -581,7 +581,7 @@ namespace ScrewTurn.Wiki {
 			if(u != null) {
 				return @"<a " +
 					(newWindow ? "target=\"_blank\" " : "") +
-					@"href=""" + UrlTools.BuildUrl("User.aspx?Username=", Tools.UrlEncode(u.Username)) + @""">" +
+					@"href=""" + UrlTools.BuildUrl(wiki, "User.aspx?Username=", Tools.UrlEncode(u.Username)) + @""">" +
 					GetDisplayName(u) + "</a>";
 			}
 			else return username;

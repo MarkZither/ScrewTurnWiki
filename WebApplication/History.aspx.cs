@@ -172,7 +172,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnCompare_Click(object sender, EventArgs e) {
-			UrlTools.Redirect(UrlTools.BuildUrl("Diff.aspx?Page=", Tools.UrlEncode(page.FullName), "&Rev1=", lstRev1.SelectedValue,
+			UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Diff.aspx?Page=", Tools.UrlEncode(page.FullName), "&Rev1=", lstRev1.SelectedValue,
 				"&Rev2=", lstRev2.SelectedValue));
 		}
 

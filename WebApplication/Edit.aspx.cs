@@ -285,7 +285,7 @@ namespace ScrewTurn.Wiki {
 			if(currentPage == null) return;
 
 			lblRefreshLink.Text = @"<a href=""" +
-				UrlTools.BuildUrl("Edit.aspx?Page=", Tools.UrlEncode(currentPage.FullName), (Request["Section"] != null ? "&amp;Section=" + currentSection.ToString() : "")) +
+				UrlTools.BuildUrl(currentWiki, "Edit.aspx?Page=", Tools.UrlEncode(currentPage.FullName), (Request["Section"] != null ? "&amp;Section=" + currentSection.ToString() : "")) +
 				@""">" + Properties.Messages.Refresh + " &raquo;</a>";
 
 			string username = Request.UserHostAddress;
@@ -326,7 +326,7 @@ namespace ScrewTurn.Wiki {
 				lblDraftInfo.Text = lblDraftInfo.Text.Replace("##USER##",
 					Users.UserLink(currentWiki, currentContent.User, true)).Replace("##DATETIME##",
 					Preferences.AlignWithTimezone(currentWiki, currentContent.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki))).Replace("##VIEWCHANGES##",
-					string.Format("<a href=\"{0}\" target=\"_blank\">{1}</a>", UrlTools.BuildUrl("Diff.aspx?Page=",
+					string.Format("<a href=\"{0}\" target=\"_blank\">{1}</a>", UrlTools.BuildUrl(currentWiki, "Diff.aspx?Page=",
 					Tools.UrlEncode(currentPage.FullName), "&amp;Rev1=Current&amp;Rev2=Draft"),
 					Properties.Messages.ViewChanges));
 			}
@@ -450,7 +450,7 @@ namespace ScrewTurn.Wiki {
 
 				UrlTools.Redirect(Tools.UrlEncode(currentPage.FullName) + GlobalSettings.PageExtension + (anchor != null ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
 			}
-			else UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
+			else UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Default.aspx"));
 		}
 
 		protected void cvName1_ServerValidate(object sender, ServerValidateEventArgs e) {
@@ -615,7 +615,7 @@ namespace ScrewTurn.Wiki {
 				// No notification must be sent for drafts awaiting approval
 				if(redirect) {
 					Collisions.CancelEditingSession(pg, username);
-					string target = UrlTools.BuildUrl(Tools.UrlEncode(txtName.Text), GlobalSettings.PageExtension, "?NoRedirect=1");
+					string target = UrlTools.BuildUrl(currentWiki, Tools.UrlEncode(txtName.Text), GlobalSettings.PageExtension, "?NoRedirect=1");
 					UrlTools.Redirect(target);
 				}
 				else {
@@ -674,7 +674,7 @@ namespace ScrewTurn.Wiki {
 
 				if(redirect) {
 					Collisions.CancelEditingSession(currentPage, username);
-					string target = UrlTools.BuildUrl(Tools.UrlEncode(currentPage.FullName), GlobalSettings.PageExtension, "?NoRedirect=1",
+					string target = UrlTools.BuildUrl(currentWiki, Tools.UrlEncode(currentPage.FullName), GlobalSettings.PageExtension, "?NoRedirect=1",
 						(!string.IsNullOrEmpty(anchor) ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
 					UrlTools.Redirect(target);
 				}

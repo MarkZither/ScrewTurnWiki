@@ -45,8 +45,8 @@ namespace ScrewTurn.Wiki {
 			}
 
 			if(!Page.IsPostBack) {
-				lnkCategories.NavigateUrl = UrlTools.BuildUrl("Category.aspx");
-				lnkSearch.NavigateUrl = UrlTools.BuildUrl("Search.aspx");
+				lnkCategories.NavigateUrl = UrlTools.BuildUrl(currentWiki, "Category.aspx");
+				lnkSearch.NavigateUrl = UrlTools.BuildUrl(currentWiki, "Search.aspx");
 
 				currentPages = GetAllPages();
 				pageSelector.ItemCount = currentPages.Count;

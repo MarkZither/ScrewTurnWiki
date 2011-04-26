@@ -99,7 +99,7 @@ namespace ScrewTurn.Wiki {
 				FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page)).Replace("##REV1##", rev1Text).Replace("##REV2##", rev2Text);
 
 			lblBack.Text = string.Format(@"<a href=""{0}"">&laquo; {1}</a>",
-				UrlTools.BuildUrl("History.aspx?Page=", Tools.UrlEncode(Request["Page"]), "&amp;Rev1=", Request["Rev1"], "&amp;Rev2=", Request["Rev2"]),
+				UrlTools.BuildUrl(currentWiki, "History.aspx?Page=", Tools.UrlEncode(Request["Page"]), "&amp;Rev1=", Request["Rev1"], "&amp;Rev2=", Request["Rev2"]),
 				Properties.Messages.Back);
 			lblBack.Visible = !draft;
 

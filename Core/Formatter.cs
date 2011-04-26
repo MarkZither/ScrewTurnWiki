@@ -303,7 +303,7 @@ namespace ScrewTurn.Wiki {
 								case "RSSPAGE":
 									if(current != null) {
 										sb.Insert(match.Index, @"<a href=""" +
-											UrlTools.BuildUrl("RSS.aspx?Page=", Tools.UrlEncode(current.FullName)) +
+											UrlTools.BuildUrl(wiki, "RSS.aspx?Page=", Tools.UrlEncode(current.FullName)) +
 											@""" title=""" + Exchanger.ResourceExchanger.GetResource("RssForThisPage") + @"""><img src=""" +
 											Themes.ListThemeFiles(wiki, Settings.GetTheme(wiki, Tools.DetectCurrentNamespace()), "Images/RSS.png") + @""" alt=""RSS"" /></a>");
 									}
@@ -2454,14 +2454,14 @@ namespace ScrewTurn.Wiki {
 						break;
 					case "USERNAME":
 						if(SessionFacade.LoginKey != null) sb.Insert(match.Index, GetProfileLink(wiki, SessionFacade.CurrentUsername));
-						else sb.Insert(match.Index, GetLanguageLink(Exchanger.ResourceExchanger.GetResource("Guest")));
+						else sb.Insert(match.Index, GetLanguageLink(wiki, Exchanger.ResourceExchanger.GetResource("Guest")));
 						break;
 					case "PAGENAME":
 						if(current != null) sb.Insert(match.Index, current.FullName);
 						break;
 					case "LOGINLOGOUT":
-						if(SessionFacade.LoginKey != null) sb.Insert(match.Index, GetLogoutLink());
-						else sb.Insert(match.Index, GetLoginLink());
+						if(SessionFacade.LoginKey != null) sb.Insert(match.Index, GetLogoutLink(wiki));
+						else sb.Insert(match.Index, GetLoginLink(wiki));
 						break;
 				}
 				match = Phase3SpecialTagRegex.Match(sb.ToString());
@@ -2650,7 +2650,7 @@ namespace ScrewTurn.Wiki {
 
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append("<a href=\"");
-			sb.Append(UrlTools.BuildUrl("Profile.aspx"));
+			sb.Append(UrlTools.BuildUrl(wiki, "Profile.aspx"));
 			sb.Append("\" class=\"systemlink\" title=\"");
 			sb.Append(Exchanger.ResourceExchanger.GetResource("GoToYourProfile"));
 			sb.Append("\">");
@@ -2662,12 +2662,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the link to the language page.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The username.</param>
 		/// <returns>The link.</returns>
-		private static string GetLanguageLink(string username) {
+		private static string GetLanguageLink(string wiki, string username) {
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append("<a href=\"");
-			sb.Append(UrlTools.BuildUrl("Language.aspx"));
+			sb.Append(UrlTools.BuildUrl(wiki, "Language.aspx"));
 			sb.Append("\" class=\"systemlink\" title=\"");
 			sb.Append(Exchanger.ResourceExchanger.GetResource("SelectYourLanguage"));
 			sb.Append("\">");
@@ -2679,12 +2680,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the login link.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>The login link.</returns>
-		private static string GetLoginLink() {
+		private static string GetLoginLink(string wiki) {
 			string login = Exchanger.ResourceExchanger.GetResource("Login");
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append("<a href=\"");
-			sb.Append(UrlTools.BuildUrl("Login.aspx?Redirect=", Tools.UrlEncode(Tools.GetCurrentUrlFixed())));
+			sb.Append(UrlTools.BuildUrl(wiki, "Login.aspx?Redirect=", Tools.UrlEncode(Tools.GetCurrentUrlFixed())));
 			sb.Append("\" class=\"systemlink\" title=\"");
 			sb.Append(login);
 			sb.Append("\">");
@@ -2696,12 +2698,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the logout link.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>The logout link.</returns>
-		private static string GetLogoutLink() {
+		private static string GetLogoutLink(string wiki) {
 			string login = Exchanger.ResourceExchanger.GetResource("Logout");
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append("<a href=\"");
-			sb.Append(UrlTools.BuildUrl("Login.aspx?ForceLogout=1&amp;Redirect=", Tools.UrlEncode(Tools.GetCurrentUrlFixed())));
+			sb.Append(UrlTools.BuildUrl(wiki, "Login.aspx?ForceLogout=1&amp;Redirect=", Tools.UrlEncode(Tools.GetCurrentUrlFixed())));
 			sb.Append("\" class=\"systemlink\" title=\"");
 			sb.Append(login);
 			sb.Append("\">");

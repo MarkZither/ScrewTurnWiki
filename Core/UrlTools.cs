@@ -171,7 +171,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		public static void RedirectHome(string wiki) {
-			Redirect(BuildUrl(Settings.GetDefaultPage(wiki), GlobalSettings.PageExtension));
+			Redirect(BuildUrl(wiki, Settings.GetDefaultPage(wiki), GlobalSettings.PageExtension));
 		}
 
 	}

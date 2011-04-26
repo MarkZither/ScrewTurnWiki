@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki {
 			Page.Title = Properties.Messages.ProfileTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
 			if(SessionFacade.LoginKey == null) {
-				UrlTools.Redirect(UrlTools.BuildUrl("Login.aspx?Redirect=Profile.aspx"));
+				UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Login.aspx?Redirect=Profile.aspx"));
 			}
 
 			currentUser = SessionFacade.GetCurrentUser(currentWiki);

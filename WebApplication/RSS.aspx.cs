@@ -92,7 +92,7 @@ namespace ScrewTurn.Wiki {
 						// Build the channel element
 						BuildChannelHead(rss, Settings.GetWikiTitle(currentWiki) + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page)),
 							GlobalSettings.MainUrl + page.FullName + GlobalSettings.PageExtension,
-							GlobalSettings.MainUrl + UrlTools.BuildUrl("RSS.aspx?Page=", page.FullName),
+							GlobalSettings.MainUrl + UrlTools.BuildUrl(currentWiki, "RSS.aspx?Page=", page.FullName),
 							Formatter.StripHtml(content.Title) + " - " + Properties.Messages.PageUpdates);
 
 						// Write the item element
@@ -164,7 +164,7 @@ namespace ScrewTurn.Wiki {
 						// Build the channel element
 						BuildChannelHead(rss, Settings.GetWikiTitle(currentWiki) + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page)) + " - Discussion Updates",
 							GlobalSettings.MainUrl + page.FullName + GlobalSettings.PageExtension + "?Discuss=1",
-							GlobalSettings.MainUrl + UrlTools.BuildUrl("RSS.aspx?Page=", page.FullName, "&Discuss=1"),
+							GlobalSettings.MainUrl + UrlTools.BuildUrl(currentWiki, "RSS.aspx?Page=", page.FullName, "&Discuss=1"),
 							Settings.GetWikiTitle(currentWiki) + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page)) + " - Discussion Updates");
 
 						for (int i = 0; i < messages.Count; i++)
@@ -237,7 +237,7 @@ namespace ScrewTurn.Wiki {
 						// Build the channel element
 						BuildChannelHead(rss, Settings.GetWikiTitle(currentWiki) + " - " + Properties.Messages.PageUpdates,
 							GlobalSettings.MainUrl,
-							GlobalSettings.MainUrl + UrlTools.BuildUrl("RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
+							GlobalSettings.MainUrl + UrlTools.BuildUrl(currentWiki, "RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
 							Properties.Messages.RecentPageUpdates);
 
 						RecentChange[] ch = RecentChanges.GetAllChanges(currentWiki);
@@ -369,7 +369,7 @@ namespace ScrewTurn.Wiki {
 						// Build the channel element
 						BuildChannelHead(rss, Settings.GetWikiTitle(currentWiki) + " - " + Properties.Messages.DiscussionUpdates,
 							GlobalSettings.MainUrl,
-							GlobalSettings.MainUrl + UrlTools.BuildUrl("RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
+							GlobalSettings.MainUrl + UrlTools.BuildUrl(currentWiki, "RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
 							Properties.Messages.RecentDiscussionUpdates);
 
 						RecentChange[] ch = RecentChanges.GetAllChanges(currentWiki);

@@ -111,7 +111,7 @@ namespace ScrewTurn.Wiki {
 			// Redirect firing the search
 			string query = ScrewTurn.Wiki.SearchEngine.Tools.RemoveDiacriticsAndPunctuation(txtQuery.Text, false);
 
-			UrlTools.Redirect(UrlTools.BuildUrl("Search.aspx?Query=", Tools.UrlEncode(txtQuery.Text),
+			UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Search.aspx?Query=", Tools.UrlEncode(txtQuery.Text),
 				"&SearchUncategorized=", chkUncategorizedPages.Checked ? "1" : "0",
 				"&Categories=", GetCategories(),
 				"&Mode=", GetMode(),
