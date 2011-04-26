@@ -399,7 +399,7 @@ namespace ScrewTurn.Wiki {
 						}
 						else {
 							// Trim .dll
-							t = Type.GetType(storageProvider + "," + assemblyName.Substring(0, assemblyName.Length - 4), true, true);
+							t = Type.GetType(storageProvider.TypeName + "," + assemblyName.Substring(0, assemblyName.Length - 4), true, true);
 							SettingsStorageProviderAssemblyName = assemblyName;
 						}
 					}
