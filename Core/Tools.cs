@@ -402,8 +402,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>If <b>Page</b> is specified and exists, the correct <see cref="T:PageInfo"/>, otherwise <c>null</c> if <b>loadDefault</b> is <c>false</c>,
 		/// or the <see cref="T:PageInfo"/> object representing the default page of the specified namespace if <b>loadDefault</b> is <c>true</c>.</returns>
 		public static PageInfo DetectCurrentPageInfo(bool loadDefault) {
-			string wiki = HttpContext.Current.Request["Wiki"];
-			wiki = string.IsNullOrEmpty(wiki) ? "" : wiki;
+			string wiki = DetectCurrentWiki();
 			string nspace = HttpContext.Current.Request["NS"];
 			NamespaceInfo nsinfo = nspace != null ? Pages.FindNamespace(wiki, nspace) : null;
 
@@ -445,8 +444,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The correct <see cref="T:NamespaceInfo" /> object, or <c>null</c>.</returns>
 		public static NamespaceInfo DetectCurrentNamespaceInfo() {
-			string wiki = HttpContext.Current.Request["Wiki"];
-			wiki = string.IsNullOrEmpty(wiki) ? "" : wiki;
+			string wiki = DetectCurrentWiki();
 			string nspace = HttpContext.Current.Request["NS"];
 			NamespaceInfo nsinfo = nspace != null ? Pages.FindNamespace(wiki, nspace) : null;
 			return nsinfo;
@@ -465,7 +463,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The name of the wiki, or null.</returns>
 		public static string DetectCurrentWiki() {
-			return HttpContext.Current.Request["Wiki"] != null ? HttpContext.Current.Request["Wiki"] : null;
+			string[] host = HttpContext.Current.Request.Url.Host.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+			string wiki = host.Length == 3 ? host[0] : "";
+			return wiki;
 		}
 
 		/// <summary>

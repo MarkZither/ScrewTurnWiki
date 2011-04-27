@@ -28,9 +28,6 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			string[] host = HttpContext.Current.Request.Url.Host.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-			string wiki = host.Length == 3 ? host[0] : "";
-
 			// Extract the physical page name, e.g. MainPage, Edit or Category
 			string pageName = Path.GetFileNameWithoutExtension(physicalPath);
 			// Exctract the extension, e.g. .ashx or .aspx
@@ -46,7 +43,7 @@ namespace ScrewTurn.Wiki {
 			string nspace = GetCurrentNamespace() + "";
 			if(!string.IsNullOrEmpty(nspace)) {
 				// Verify that namespace exists
-				if(Pages.FindNamespace(wiki, nspace) == null) HttpContext.Current.Response.Redirect("~/PageNotFound.aspx?Page=" + pageName);
+				if(Pages.FindNamespace(Tools.DetectCurrentWiki(), nspace) == null) HttpContext.Current.Response.Redirect("~/PageNotFound.aspx?Page=" + pageName);
 			}
 			// Trim Namespace. from pageName
 			if(!string.IsNullOrEmpty(nspace)) pageName = pageName.Substring(nspace.Length + 1);
@@ -61,10 +58,10 @@ namespace ScrewTurn.Wiki {
 			if(ext.Equals("ashx")) {
 				// Content page requested, process it via Default.aspx
 				if(!queryString.Contains("NS=")) {
-					HttpContext.Current.RewritePath("~/Default.aspx?Wiki=" + wiki + "&Page=" + Tools.UrlEncode(pageName) + "&NS=" + Tools.UrlEncode(nspace) + queryString);
+					HttpContext.Current.RewritePath("~/Default.aspx?Page=" + Tools.UrlEncode(pageName) + "&NS=" + Tools.UrlEncode(nspace) + queryString);
 				}
 				else {
-					HttpContext.Current.RewritePath("~/Default.aspx?Wiki=" + wiki + "&Page=" + Tools.UrlEncode(pageName) + queryString);
+					HttpContext.Current.RewritePath("~/Default.aspx?Page=" + Tools.UrlEncode(pageName) + queryString);
 				}
 			}
 			else if(ext.Equals("aspx")) {
@@ -72,10 +69,9 @@ namespace ScrewTurn.Wiki {
 				// For example: http://www.server.com/Namespace.Edit.aspx?Page=MainPage -> http://www.server.com/Edit.aspx?Page=MainPage&NS=Namespace
 				if(!string.IsNullOrEmpty(nspace)) {
 					if(!queryString.Contains("NS=")) {
-						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + "?Wiki=" + wiki + "&NS=" + Tools.UrlEncode(nspace) + queryString);
+						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + "?NS=" + Tools.UrlEncode(nspace) + queryString);
 					}
 					else {
-						queryString = "?Wiki=" + wiki + queryString;
 						if(queryString.Length > 1) queryString = "?" + queryString.Substring(1);
 						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + queryString);
 					}
