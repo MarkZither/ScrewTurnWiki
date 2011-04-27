@@ -16,8 +16,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Properly routes the current virtual request to a physical ASP.NET page.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		public static void RouteCurrentRequest(string wiki) {
+		public static void RouteCurrentRequest() {
 			string physicalPath = null;
 
 			try {
@@ -28,6 +27,9 @@ namespace ScrewTurn.Wiki {
 				HttpContext.Current.Response.Redirect("~/PageNotFound.aspx");
 				return;
 			}
+
+			string[] host = HttpContext.Current.Request.Url.Host.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+			string wiki = host.Length == 3 ? host[0] : "";
 
 			// Extract the physical page name, e.g. MainPage, Edit or Category
 			string pageName = Path.GetFileNameWithoutExtension(physicalPath);

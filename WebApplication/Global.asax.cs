@@ -68,7 +68,7 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 			}
-			ScrewTurn.Wiki.UrlTools.RouteCurrentRequest(Tools.DetectCurrentWiki());
+			ScrewTurn.Wiki.UrlTools.RouteCurrentRequest();
 		}
 
 		protected void Application_AcquireRequestState(object sender, EventArgs e) {
