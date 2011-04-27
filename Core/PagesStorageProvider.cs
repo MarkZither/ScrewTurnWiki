@@ -41,15 +41,15 @@ namespace ScrewTurn.Wiki {
 		private IndexStorerBase indexStorer;
 
 		private string GetFullPath(string filename) {
-			return Path.Combine(GetDataDirectory(host), filename);
+			return Path.Combine(Path.Combine(GetDataDirectory(host), wiki), filename);
 		}
 
 		private string GetFullPathForPageContent(string filename) {
-			return Path.Combine(Path.Combine(GetDataDirectory(host), PagesDirectory), filename);
+			return Path.Combine(Path.Combine(Path.Combine(GetDataDirectory(host), wiki), PagesDirectory), filename);
 		}
 
 		private string GetFullPathForPageDrafts(string filename) {
-			return Path.Combine(Path.Combine(GetDataDirectory(host), DraftsDirectory), filename);
+			return Path.Combine(Path.Combine(Path.Combine(GetDataDirectory(host), wiki), DraftsDirectory), filename);
 		}
 
 		private string GetDraftFullPath(LocalPageInfo page) {
@@ -59,15 +59,15 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private string GetFullPathForMessages(string filename) {
-			return Path.Combine(Path.Combine(GetDataDirectory(host), MessagesDirectory), filename);
+			return Path.Combine(Path.Combine(Path.Combine(GetDataDirectory(host), wiki), MessagesDirectory), filename);
 		}
 
 		private string GetFullPathForSnippets(string filename) {
-			return Path.Combine(Path.Combine(GetDataDirectory(host), SnippetsDirectory), filename);
+			return Path.Combine(Path.Combine(Path.Combine(GetDataDirectory(host), wiki), SnippetsDirectory), filename);
 		}
 
 		private string GetFullPathForContentTemplate(string filename) {
-			return Path.Combine(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory), filename);
+			return Path.Combine(Path.Combine(Path.Combine(GetDataDirectory(host), wiki), ContentTemplatesDirectory), filename);
 		}
 
 		/// <summary>
@@ -93,7 +93,56 @@ namespace ScrewTurn.Wiki {
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
-			this.wiki = wiki;
+			this.wiki = string.IsNullOrEmpty(wiki) ? "" : wiki;
+
+			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), this.wiki))) {
+				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), this.wiki));
+			}
+
+			if(!Directory.Exists(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), PagesDirectory))) {
+				Directory.CreateDirectory(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), PagesDirectory));
+			}
+			if(!Directory.Exists(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), MessagesDirectory))) {
+				Directory.CreateDirectory(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), MessagesDirectory));
+			}
+			if(!Directory.Exists(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), SnippetsDirectory))) {
+				Directory.CreateDirectory(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), SnippetsDirectory));
+			}
+			if(!Directory.Exists(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), ContentTemplatesDirectory))) {
+				Directory.CreateDirectory(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), ContentTemplatesDirectory));
+			}
+			if(!Directory.Exists(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), DraftsDirectory))) {
+				Directory.CreateDirectory(Path.Combine(Path.Combine(GetDataDirectory(host), this.wiki), DraftsDirectory));
+			}
+
+			bool upgradeNeeded = false;
+
+			if(!File.Exists(GetFullPath(NamespacesFile))) {
+				File.Create(GetFullPath(NamespacesFile)).Close();
+			}
+
+			upgradeNeeded = VerifyIfPagesFileNeedsAnUpgrade();
+
+			if(!File.Exists(GetFullPath(PagesFile))) {
+				File.Create(GetFullPath(PagesFile)).Close();
+			}
+			else if(upgradeNeeded) {
+				VerifyAndPerformUpgradeForPages();
+			}
+
+			if(!File.Exists(GetFullPath(CategoriesFile))) {
+				File.Create(GetFullPath(CategoriesFile)).Close();
+			}
+			else if(upgradeNeeded) {
+				VerifyAndPerformUpgradeForCategories();
+			}
+
+			if(!File.Exists(GetFullPath(NavigationPathsFile))) {
+				File.Create(GetFullPath(NavigationPathsFile)).Close();
+			}
+			else if(upgradeNeeded) {
+				VerifyAndPerformUpgradeForNavigationPaths();
+			}
 
 			// Prepare search index
 			index = new StandardIndex();
@@ -310,51 +359,6 @@ namespace ScrewTurn.Wiki {
 
 			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
-			}
-
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), PagesDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), PagesDirectory));
-			}
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), MessagesDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), MessagesDirectory));
-			}
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), SnippetsDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), SnippetsDirectory));
-			}
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), ContentTemplatesDirectory));
-			}
-			if(!Directory.Exists(Path.Combine(GetDataDirectory(host), DraftsDirectory))) {
-				Directory.CreateDirectory(Path.Combine(GetDataDirectory(host), DraftsDirectory));
-			}
-
-			bool upgradeNeeded = false;
-
-			if(!File.Exists(GetFullPath(NamespacesFile))) {
-				File.Create(GetFullPath(NamespacesFile)).Close();
-			}
-
-			upgradeNeeded = VerifyIfPagesFileNeedsAnUpgrade();
-
-			if(!File.Exists(GetFullPath(PagesFile))) {
-				File.Create(GetFullPath(PagesFile)).Close();
-			}
-			else if(upgradeNeeded) {
-				VerifyAndPerformUpgradeForPages();
-			}
-
-			if(!File.Exists(GetFullPath(CategoriesFile))) {
-				File.Create(GetFullPath(CategoriesFile)).Close();
-			}
-			else if(upgradeNeeded) {
-				VerifyAndPerformUpgradeForCategories();
-			}
-
-			if(!File.Exists(GetFullPath(NavigationPathsFile))) {
-				File.Create(GetFullPath(NavigationPathsFile)).Close();
-			}
-			else if(upgradeNeeded) {
-				VerifyAndPerformUpgradeForNavigationPaths();
 			}
 		}
 

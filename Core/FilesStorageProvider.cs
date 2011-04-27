@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki {
 		private string wiki;
 
 		private string GetFullPath(string finalChunk) {
-			return Path.Combine(GetDataDirectory(host), finalChunk);
+			return Path.Combine(Path.Combine(GetDataDirectory(host), wiki), finalChunk);
 		}
 
 		/// <summary>
@@ -47,7 +47,25 @@ namespace ScrewTurn.Wiki {
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
-			this.wiki = wiki;
+			this.wiki = string.IsNullOrEmpty(wiki) ? "" : wiki;
+
+			// Create directories, if needed
+			if(!Directory.Exists(GetFullPath(""))) {
+				Directory.CreateDirectory(GetFullPath(""));
+			}
+
+			if(!Directory.Exists(GetFullPath(UploadDirectory))) {
+				Directory.CreateDirectory(GetFullPath(UploadDirectory));
+			}
+			if(!Directory.Exists(GetFullPath(AttachmentsDirectory))) {
+				Directory.CreateDirectory(GetFullPath(AttachmentsDirectory));
+			}
+			if(!File.Exists(GetFullPath(FileDownloadsFile))) {
+				File.Create(GetFullPath(FileDownloadsFile)).Close();
+			}
+			if(!File.Exists(GetFullPath(AttachmentDownloadsFile))) {
+				File.Create(GetFullPath(AttachmentDownloadsFile)).Close();
+			}
 		}
 
 
@@ -66,20 +84,6 @@ namespace ScrewTurn.Wiki {
 
 			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
-			}
-
-			// Create directories, if needed
-			if(!Directory.Exists(GetFullPath(UploadDirectory))) {
-				Directory.CreateDirectory(GetFullPath(UploadDirectory));
-			}
-			if(!Directory.Exists(GetFullPath(AttachmentsDirectory))) {
-				Directory.CreateDirectory(GetFullPath(AttachmentsDirectory));
-			}
-			if(!File.Exists(GetFullPath(FileDownloadsFile))) {
-				File.Create(GetFullPath(FileDownloadsFile)).Close();
-			}
-			if(!File.Exists(GetFullPath(AttachmentDownloadsFile))) {
-				File.Create(GetFullPath(AttachmentDownloadsFile)).Close();
 			}
 		}
 
