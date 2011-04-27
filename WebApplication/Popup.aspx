@@ -202,7 +202,7 @@
 					<asp:DropDownList ID="lstProviderFiles" runat="server"
 						OnSelectedIndexChanged="lstProviderFiles_SelectedIndexChanged" meta:resourcekey="lstProviderFilesResource1" /><br />
 					<asp:CheckBox ID="chkFilesAttachments" runat="server" Text="Browse Page Attachments"
-						OnCheckedChanged="chkFilesAttachments_CheckedChanged" meta:resourcekey="chkFilesAttachmentsResource1" />
+						OnCheckedChanged="chkFilesAttachments_CheckedChanged" meta:resourcekey="chkFilesAttachmentsResource1" AutoPostBack="true" />
 					<br /><br />
 							
 					<div id="ClientTreeFilesDiv">
