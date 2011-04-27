@@ -14,6 +14,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public override IUsersStorageProviderV30 GetProvider() {
 			UsersStorageProvider prov = new UsersStorageProvider();
 			prov.SetUp(MockHost(), "");
+			prov.Init(MockHost(), "", null);
 			return prov;
 		}
 
@@ -33,8 +34,8 @@ namespace ScrewTurn.Wiki.Tests {
 			MockRepository mocks = new MockRepository();
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
-			Expect.Call(host.GetSettingValue(null, SettingName.AdministratorsGroup)).Return("Administrators").Repeat.Once();
-			Expect.Call(host.GetSettingValue(null, SettingName.UsersGroup)).Return("Users").Repeat.Once();
+			Expect.Call(host.GetSettingValue("", SettingName.AdministratorsGroup)).Return("Administrators").Repeat.Once();
+			Expect.Call(host.GetSettingValue("", SettingName.UsersGroup)).Return("Users").Repeat.Once();
 
 			Expect.Call(host.UpgradeSecurityFlagsToGroupsAcl(null, null, null)).IgnoreArguments().Repeat.Times(1).Return(true);
 
@@ -46,6 +47,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			UsersStorageProvider prov = new UsersStorageProvider();
 			prov.SetUp(host, "");
+			prov.Init(host, "", "");
 
 			UserInfo[] users = prov.GetUsers();
 

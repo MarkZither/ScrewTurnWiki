@@ -47,6 +47,10 @@ second line";
 		[SetUp]
 		public void SetUp() {
 			mocks = new MockRepository();
+			
+			//System.Web.UI.HtmlTextWriter writer = new System.Web.UI.HtmlTextWriter(new System.IO.StreamWriter(new System.IO.MemoryStream()));
+			//System.Web.Hosting.SimpleWorkerRequest request = new System.Web.Hosting.SimpleWorkerRequest("Default.aspx", "?Page=MainPage", writer);
+			System.Web.HttpContext.Current = new System.Web.HttpContext(new DummyRequest());
 
 			Collectors.AddGlobalSettingsStorageProvider(typeof(DummyGlobalSettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyGlobalSettingsStorageProvider)));
 
@@ -57,10 +61,6 @@ second line";
 			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), typeof(IPagesStorageProviderV30));
 			
 			Host.Instance = new Host();
-						
-			//System.Web.UI.HtmlTextWriter writer = new System.Web.UI.HtmlTextWriter(new System.IO.StreamWriter(new System.IO.MemoryStream()));
-			//System.Web.Hosting.SimpleWorkerRequest request = new System.Web.Hosting.SimpleWorkerRequest("Default.aspx", "?Page=MainPage", writer);
-			System.Web.HttpContext.Current = new System.Web.HttpContext(new DummyRequest());
 		}
 
 		[TearDown]
@@ -284,7 +284,7 @@ second line";
 
 	}
 
-	public class DummyRequest : System.Web.HttpWorkerRequest {
+	public class DummyRequest : System.Web.HttpWorkerRequest{
 
 		public override void EndOfRequest() {
 		}

@@ -76,7 +76,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The current namespace (<c>null</c> for the root).</returns>
 		private static NamespaceInfo DetectNamespaceInfo(string wiki, PageInfo currentPage) {
 			if(currentPage == null) {
-				return Tools.DetectCurrentNamespaceInfo();
+				return Tools.DetectCurrentNamespaceInfo(wiki);
 			}
 			else {
 				string ns = NameTools.GetNamespace(currentPage.FullName);

@@ -442,12 +442,21 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Detects the correct <see cref="T:NamespaceInfo" /> object associated to the current namespace using the <b>NS</b> parameter in the query string.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <returns>The correct <see cref="T:NamespaceInfo" /> object, or <c>null</c>.</returns>
-		public static NamespaceInfo DetectCurrentNamespaceInfo() {
-			string wiki = DetectCurrentWiki();
+		public static NamespaceInfo DetectCurrentNamespaceInfo(string wiki) {
 			string nspace = HttpContext.Current.Request["NS"];
 			NamespaceInfo nsinfo = nspace != null ? Pages.FindNamespace(wiki, nspace) : null;
 			return nsinfo;
+		}
+
+		/// <summary>
+		/// Detects the correct <see cref="T:NamespaceInfo" /> object associated to the current namespace using the <b>NS</b> parameter in the query string.
+		/// </summary>
+		/// <returns>The correct <see cref="T:NamespaceInfo" /> object, or <c>null</c>.</returns>
+		public static NamespaceInfo DetectCurrentNamespaceInfo() {
+			string wiki = DetectCurrentWiki();
+			return DetectCurrentNamespaceInfo(wiki);
 		}
 
 		/// <summary>

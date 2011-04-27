@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.LoggingLevel)).Return("3").Repeat.Any();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.MaxLogSize)).Return(MaxLogSize.ToString()).Repeat.Any();
-			Expect.Call(host.GetSettingValue(null, SettingName.MaxRecentChanges)).Return(MaxRecentChanges.ToString()).Repeat.Any();
+			Expect.Call(host.GetSettingValue("", SettingName.MaxRecentChanges)).Return(MaxRecentChanges.ToString()).Repeat.Any();
 
 			mocks.Replay(host);
 
@@ -51,14 +51,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			prov.Init(null, "", null);
+			prov.Init(null, "", "");
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
 			ISettingsStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), null, null);
+			prov.Init(MockHost(), null, "");
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
