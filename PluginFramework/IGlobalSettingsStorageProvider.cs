@@ -41,7 +41,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Alls the wikis.
 		/// </summary>
 		/// <returns>A list of wiki identifiers.</returns>
-		IList<string> AllWikis();
+		IList<Wiki> AllWikis();
 
 		/// <summary>
 		/// Lists the stored plugin assemblies.

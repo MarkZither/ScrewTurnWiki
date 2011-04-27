@@ -114,8 +114,8 @@ namespace ScrewTurn.Wiki {
 			ProviderLoader.LoadAllFormatterProviders();
 
 
-			foreach(string wiki in Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis()) {
-				ISettingsStorageProviderV30 ssp = Collectors.CollectorsBox.GetSettingsProvider(wiki);
+			foreach(Wiki.PluginFramework.Wiki wiki in Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis()) {
+				ISettingsStorageProviderV30 ssp = Collectors.CollectorsBox.GetSettingsProvider(wiki.WikiName);
 				if(ssp.IsFirstApplicationStart()) {
 					if(ssp.GetMetaDataItem(MetaDataItem.AccountActivationMessage, null) == "")
 						ssp.SetMetaDataItem(MetaDataItem.AccountActivationMessage, null, Defaults.AccountActivationMessageContent);
@@ -138,35 +138,35 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 
-				bool groupsCreated = VerifyAndCreateDefaultGroups(wiki);
+				bool groupsCreated = VerifyAndCreateDefaultGroups(wiki.WikiName);
 
 				if(groupsCreated) {
 					// It is necessary to set default permissions for file management
-					UserGroup administratorsGroup = Users.FindUserGroup(wiki, Settings.GetAdministratorsGroup(wiki));
-					UserGroup anonymousGroup = Users.FindUserGroup(wiki, Settings.GetAnonymousGroup(wiki));
-					UserGroup usersGroup = Users.FindUserGroup(wiki, Settings.GetUsersGroup(wiki));
+					UserGroup administratorsGroup = Users.FindUserGroup(wiki.WikiName, Settings.GetAdministratorsGroup(wiki.WikiName));
+					UserGroup anonymousGroup = Users.FindUserGroup(wiki.WikiName, Settings.GetAnonymousGroup(wiki.WikiName));
+					UserGroup usersGroup = Users.FindUserGroup(wiki.WikiName, Settings.GetUsersGroup(wiki.WikiName));
 
-					SetAdministratorsGroupDefaultPermissions(wiki, administratorsGroup);
-					SetUsersGroupDefaultPermissions(wiki, usersGroup);
-					SetAnonymousGroupDefaultPermissions(wiki, anonymousGroup);
+					SetAdministratorsGroupDefaultPermissions(wiki.WikiName, administratorsGroup);
+					SetUsersGroupDefaultPermissions(wiki.WikiName, usersGroup);
+					SetAnonymousGroupDefaultPermissions(wiki.WikiName, anonymousGroup);
 				}
 
 				// Create the Main Page, if needed
-				if(Pages.FindPage(wiki, Settings.GetDefaultPage(wiki)) == null) CreateMainPage(wiki);
+				if(Pages.FindPage(wiki.WikiName, Settings.GetDefaultPage(wiki.WikiName)) == null) CreateMainPage(wiki.WikiName);
 
 				Log.LogEntry("Wiki " + wiki + " is ready", EntryType.General, Log.SystemUsername);
 			}
 
 			System.Threading.ThreadPool.QueueUserWorkItem(state => {
 				using(((WindowsIdentity)state).Impersonate()) {
-					foreach(string wiki in GlobalSettings.Provider.AllWikis()) {
-						if((DateTime.Now - Settings.GetLastPageIndexing(wiki)).TotalDays > 7) {
-							Settings.SetLastPageIndexing(wiki, DateTime.Now);
+					foreach(Wiki.PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
+						if((DateTime.Now - Settings.GetLastPageIndexing(wiki.WikiName)).TotalDays > 7) {
+							Settings.SetLastPageIndexing(wiki.WikiName, DateTime.Now);
 							System.Threading.Thread.Sleep(10000);
 							using(MemoryStream ms = new MemoryStream()) {
 								using(StreamWriter wr = new System.IO.StreamWriter(ms)) {
 									System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
-									foreach(var provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+									foreach(var provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki.WikiName)) {
 										if(!provider.ReadOnly) {
 											Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
 											provider.RebuildIndex();

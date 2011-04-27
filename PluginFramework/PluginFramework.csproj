@@ -116,6 +116,7 @@
     <Compile Include="UserGroupActivityEventArgs.cs" />
     <Compile Include="UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wiki.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AclEngine\AclEngine.csproj">
