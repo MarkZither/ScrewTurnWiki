@@ -271,7 +271,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>A list of wiki identifiers.</returns>
 		public IList<string> AllWikis() {
-			return new List<string>() { "" };
+			return new List<string>() { "x", "y", "" };
 		}
 
 

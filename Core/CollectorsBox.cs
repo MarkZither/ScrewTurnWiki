@@ -79,12 +79,12 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The settingsProvider initialized for the given wiki.</returns>
 		public ISettingsStorageProviderV30 GetSettingsProvider(string wiki) {
-			wiki = wiki != null ? wiki : "-";
-			if(!_settingsProvider.ContainsKey(wiki)) {
-				_settingsProvider[wiki] = ProviderLoader.CreateInstance<ISettingsStorageProviderV30>(_settingsProviderAssembly, _settingsProviderType);
-				_settingsProvider[wiki].Init(Host.Instance, StartupTools.GetSettingsStorageProviderConfiguration(), wiki);
+			string wikiKey = wiki != null ? wiki : "-";
+			if(!_settingsProvider.ContainsKey(wikiKey)) {
+				_settingsProvider[wikiKey] = ProviderLoader.CreateInstance<ISettingsStorageProviderV30>(_settingsProviderAssembly, _settingsProviderType);
+				_settingsProvider[wikiKey].Init(Host.Instance, StartupTools.GetSettingsStorageProviderConfiguration(), wiki);
 			}
-			return _settingsProvider[wiki];
+			return _settingsProvider[wikiKey];
 		}
 
 		/// <summary>

@@ -430,8 +430,8 @@ namespace ScrewTurn.Wiki {
 
 			// Add to the Collectors and Setup
 			for(int i = 0; i < forms.Count; i++) {
-				SetUp<IFormatterProviderV30>(forms[i], LoadConfiguration(forms[i].FullName));
 				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), typeof(IFormatterProviderV30));
+				SetUp<IFormatterProviderV30>(forms[i], LoadConfiguration(forms[i].FullName));
 			}
 		}
 

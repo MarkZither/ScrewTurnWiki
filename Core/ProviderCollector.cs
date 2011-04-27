@@ -60,21 +60,21 @@ namespace ScrewTurn.Wiki {
 		/// Gets all the Providers (copied array).
 		/// </summary>
 		public T[] GetAllProviders(string wiki) {
-			wiki = wiki != null ? wiki : "-";
+			string wikiKey = wiki != null ? wiki : "-";
 			lock(this) {
 				List<T> providers = new List<T>(assembliesDictionary.Count);
 				foreach(Type key in assembliesDictionary.Keys) {
 					T provider = null;
-					if(!instancesDictionary.ContainsKey(wiki)) {
-						instancesDictionary[wiki] = new Dictionary<Type, T>(3);
+					if(!instancesDictionary.ContainsKey(wikiKey)) {
+						instancesDictionary[wikiKey] = new Dictionary<Type, T>(3);
 					}
-					if(instancesDictionary[wiki].ContainsKey(key)) {
-						provider = instancesDictionary[wiki][key];
+					if(instancesDictionary[wikiKey].ContainsKey(key)) {
+						provider = instancesDictionary[wikiKey][key];
 					}
 					else {
 						provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[key], key);
 						ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadConfiguration(key.FullName), wiki);
-						instancesDictionary[wiki][key] = provider;
+						instancesDictionary[wikiKey][key] = provider;
 					}
 					providers.Add(provider);
 				}

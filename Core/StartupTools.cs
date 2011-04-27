@@ -115,8 +115,6 @@ namespace ScrewTurn.Wiki {
 
 
 			foreach(string wiki in Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis()) {
-				bool groupsCreated = VerifyAndCreateDefaultGroups(wiki);
-
 				ISettingsStorageProviderV30 ssp = Collectors.CollectorsBox.GetSettingsProvider(wiki);
 				if(ssp.IsFirstApplicationStart()) {
 					if(ssp.GetMetaDataItem(MetaDataItem.AccountActivationMessage, null) == "")
@@ -139,6 +137,8 @@ namespace ScrewTurn.Wiki {
 						ssp.SetMetaDataItem(MetaDataItem.ApproveDraftMessage, null, Defaults.ApproveDraftMessage);
 					}
 				}
+
+				bool groupsCreated = VerifyAndCreateDefaultGroups(wiki);
 
 				if(groupsCreated) {
 					// It is necessary to set default permissions for file management
@@ -174,6 +174,8 @@ namespace ScrewTurn.Wiki {
 						}
 					}
 				}, WindowsIdentity.GetCurrent());
+
+				Log.LogEntry("Wiki " + wiki + " is ready", EntryType.General, Log.SystemUsername);
 			}
 
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername);
