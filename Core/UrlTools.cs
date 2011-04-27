@@ -61,10 +61,10 @@ namespace ScrewTurn.Wiki {
 			if(ext.Equals("ashx")) {
 				// Content page requested, process it via Default.aspx
 				if(!queryString.Contains("NS=")) {
-					HttpContext.Current.RewritePath("~/Default.aspx?Page=" + Tools.UrlEncode(pageName) + "&NS=" + Tools.UrlEncode(nspace) + queryString);
+					HttpContext.Current.RewritePath("~/Default.aspx?Wiki=" + wiki + "&Page=" + Tools.UrlEncode(pageName) + "&NS=" + Tools.UrlEncode(nspace) + queryString);
 				}
 				else {
-					HttpContext.Current.RewritePath("~/Default.aspx?Page=" + Tools.UrlEncode(pageName) + queryString);
+					HttpContext.Current.RewritePath("~/Default.aspx?Wiki=" + wiki + "&Page=" + Tools.UrlEncode(pageName) + queryString);
 				}
 			}
 			else if(ext.Equals("aspx")) {
@@ -72,9 +72,10 @@ namespace ScrewTurn.Wiki {
 				// For example: http://www.server.com/Namespace.Edit.aspx?Page=MainPage -> http://www.server.com/Edit.aspx?Page=MainPage&NS=Namespace
 				if(!string.IsNullOrEmpty(nspace)) {
 					if(!queryString.Contains("NS=")) {
-						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + "?NS=" + Tools.UrlEncode(nspace) + queryString);
+						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + "?Wiki=" + wiki + "&NS=" + Tools.UrlEncode(nspace) + queryString);
 					}
 					else {
+						queryString = "?Wiki=" + wiki + queryString;
 						if(queryString.Length > 1) queryString = "?" + queryString.Substring(1);
 						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + queryString);
 					}
