@@ -154,8 +154,12 @@ namespace ScrewTurn.Wiki {
 				// Create the Main Page, if needed
 				if(Pages.FindPage(wiki, Settings.GetDefaultPage(wiki)) == null) CreateMainPage(wiki);
 
-				System.Threading.ThreadPool.QueueUserWorkItem(state => {
-					using(((WindowsIdentity)state).Impersonate()) {
+				Log.LogEntry("Wiki " + wiki + " is ready", EntryType.General, Log.SystemUsername);
+			}
+
+			System.Threading.ThreadPool.QueueUserWorkItem(state => {
+				using(((WindowsIdentity)state).Impersonate()) {
+					foreach(string wiki in GlobalSettings.Provider.AllWikis()) {
 						if((DateTime.Now - Settings.GetLastPageIndexing(wiki)).TotalDays > 7) {
 							Settings.SetLastPageIndexing(wiki, DateTime.Now);
 							System.Threading.Thread.Sleep(10000);
@@ -173,10 +177,8 @@ namespace ScrewTurn.Wiki {
 							}
 						}
 					}
-				}, WindowsIdentity.GetCurrent());
-
-				Log.LogEntry("Wiki " + wiki + " is ready", EntryType.General, Log.SystemUsername);
-			}
+				}
+			}, WindowsIdentity.GetCurrent());
 
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername);
 

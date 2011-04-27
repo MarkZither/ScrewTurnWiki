@@ -53,17 +53,20 @@ namespace ScrewTurn.Wiki {
 			// All non-interesting files are not processed, such as GIF, CSS, etc.
 			if(ext == "ashx" || ext == "aspx") {
 				if(!Request.PhysicalPath.ToLowerInvariant().Contains("createmasterpassword.aspx")) {
-					if(Application["MasterPasswordOk"] == null) {
+					string currentWiki = Tools.DetectCurrentWiki();
+					if(Application["MasterPasswordOk"] == null || !((List<string>)Application["MasterPasswordOk"]).Contains(currentWiki)) {
 						Application.Lock();
-						if(Application["MasterPasswordOk"] == null) {
+						if(Application["MasterPasswordOk"] == null || !((List<string>)Application["MasterPasswordOk"]).Contains(currentWiki)) {
 							//Setup Master Password
-							if(!String.IsNullOrEmpty(Settings.GetMasterPassword(Tools.DetectCurrentWiki())))
-								Application["MasterPasswordOk"] = "OK";
+							if(!String.IsNullOrEmpty(Settings.GetMasterPassword(currentWiki))) {
+								if(Application["MasterPasswordOk"] == null) Application["MasterPasswordOk"] = new List<string>();
+								((List<string>)Application["MasterPasswordOk"]).Add(currentWiki);
+							}
 						}
 						Application.UnLock();
 					}
 
-					if(Application["MasterPasswordOk"] == null) {
+					if(Application["MasterPasswordOk"] == null || !((List<string>)Application["MasterPasswordOk"]).Contains(currentWiki)) {
 						ScrewTurn.Wiki.UrlTools.Redirect("CreateMasterPassword.aspx");
 					}
 				}
