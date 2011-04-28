@@ -472,9 +472,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The name of the wiki, or null.</returns>
 		public static string DetectCurrentWiki() {
-			string[] host = HttpContext.Current.Request.Url.Host.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-			string wiki = host.Length == 3 ? host[0] : "";
-			return wiki;
+			return GlobalSettings.Provider.ExtractWikiName(HttpContext.Current.Request.Url.Host);
 		}
 
 		/// <summary>

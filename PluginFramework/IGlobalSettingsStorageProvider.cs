@@ -44,6 +44,13 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		IList<Wiki> AllWikis();
 
 		/// <summary>
+		/// Extracts the name of the wiki from the given host.
+		/// </summary>
+		/// <param name="host">The host.</param>
+		/// <returns>The name of the wiki</returns>
+		string ExtractWikiName(string host);
+
+		/// <summary>
 		/// Lists the stored plugin assemblies.
 		/// </summary>
 		/// <returns></returns>

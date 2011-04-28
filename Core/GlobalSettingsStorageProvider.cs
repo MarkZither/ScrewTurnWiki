@@ -271,10 +271,25 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>A list of wiki identifiers.</returns>
 		public IList<ScrewTurn.Wiki.PluginFramework.Wiki> AllWikis() {
-			return new List<ScrewTurn.Wiki.PluginFramework.Wiki>() { new ScrewTurn.Wiki.PluginFramework.Wiki("x", new List<string>() {"x.acme.com"}),
-																	 new ScrewTurn.Wiki.PluginFramework.Wiki("y", new List<string>() {"y.acme.com"})};
+			return new List<ScrewTurn.Wiki.PluginFramework.Wiki>() { new ScrewTurn.Wiki.PluginFramework.Wiki("x", new List<string>() {"wiki1.acme.com"}),
+																	 new ScrewTurn.Wiki.PluginFramework.Wiki("y", new List<string>() {"wiki2.acme.com"})};
 		}
 
+		/// <summary>
+		/// Extracts the name of the wiki from the given host.
+		/// </summary>
+		/// <param name="host">The host.</param>
+		/// <returns>The name of the wiki</returns>
+		public string ExtractWikiName(string host) {
+			switch(host) {
+				case "wiki1.acme.com":
+					return "x";
+				case "wiki2.acme.com":
+					return "y";
+				default:
+					return "";
+			}
+		}
 
 		/// <summary>
 		/// Lists the stored plugin assemblies.

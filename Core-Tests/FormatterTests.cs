@@ -93,6 +93,10 @@ second line";
 				throw new NotImplementedException();
 			}
 
+			public string ExtractWikiName(string host) {
+				throw new NotImplementedException();
+			}
+
 			public string[] ListPluginAssemblies() {
 				throw new NotImplementedException();
 			}
