@@ -15,17 +15,7 @@ namespace ScrewTurn.Wiki {
 	/// Provides tools for starting and shutting down the wiki engine.
 	/// </summary>
 	public static class StartupTools {
-
-		/// <summary>
-		/// Gets the Settings Storage Provider configuration string from web.config.
-		/// </summary>
-		/// <returns>The configuration string.</returns>
-		public static string GetSettingsStorageProviderConfiguration() {
-			string config = WebConfigurationManager.AppSettings["SettingsStorageProviderConfig"];
-			if(config != null) return config;
-			else return "";
-		}
-
+		
 		/// <summary>
 		/// Gets the Global Settings Storage Provider configuration string from web.config.
 		/// </summary>
@@ -93,26 +83,19 @@ namespace ScrewTurn.Wiki {
 			globalSettingsStorageProvider.SetUp(Host.Instance, GetGlobalSettingsStorageProviderConfiguration());
 			globalSettingsStorageProvider.Dispose();
 
-			// Add StorageProviders, from WebConfig, to Collectors and Setup them
-			// Load SettingsStorageProvider
-			ISettingsStorageProviderV30 settingsStorageProvider = ProviderLoader.LoadSettingsStorageProvider(WebConfigurationManager.AppSettings["SettingsStorageProvider"]);
-			if(!(settingsStorageProvider is SettingsStorageProvider)) {
+			if(!(globalSettingsStorageProvider is GlobalSettingsStorageProvider)) {
 				// Update DLLs from public\Plugins
 				UpdateDllsIntoSettingsProvider(Collectors.CollectorsBox.GlobalSettingsProvider, ProviderLoader.SettingsStorageProviderAssemblyName);
 			}
-			Collectors.AddProvider(settingsStorageProvider.GetType(), Assembly.GetAssembly(settingsStorageProvider.GetType()), typeof(ISettingsStorageProviderV30));
-			// SetUp SettingsStorageProvider
-			settingsStorageProvider.SetUp(Host.Instance, GetSettingsStorageProviderConfiguration());
-			settingsStorageProvider.Dispose();
 
+			// Add StorageProviders, from WebConfig, to Collectors and Setup them
+			ProviderLoader.LoadStorageProviders<ISettingsStorageProviderV30>(new List<StorageProvider>() { ((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/settingsProvider"))[0] });
 			ProviderLoader.LoadStorageProviders<IFilesStorageProviderV30>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/filesProviders"));
 			ProviderLoader.LoadStorageProviders<IThemeStorageProviderV30>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/themesProviders"));
 			ProviderLoader.LoadStorageProviders<IUsersStorageProviderV30>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/usersProviders"));
-
 			ProviderLoader.LoadStorageProviders<IPagesStorageProviderV30>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/pagesProviders"));
 
 			ProviderLoader.LoadAllFormatterProviders();
-
 
 			foreach(Wiki.PluginFramework.Wiki wiki in Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis()) {
 				ISettingsStorageProviderV30 ssp = Collectors.CollectorsBox.GetSettingsProvider(wiki.WikiName);

@@ -92,7 +92,7 @@
     <Compile Include="ProviderLoaderTests.cs" />
     <Compile Include="ReverseFormatterTests.cs" />
     <Compile Include="SettingsStorageProviderTests.cs" />
-    <Compile Include="TestSettingsStorageProvider.cs" />
+    <Compile Include="TestGlobalSettingsStorageProvider.cs" />
     <Compile Include="UsersStorageProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -299,72 +299,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Loads the proper Setting Storage Provider, given its name.
-		/// </summary>
-		/// <param name="name">The fully qualified name (such as "Namespace.ProviderClass, MyAssembly"), or <c>null</c>/<b>String.Empty</b>/"<b>default</b>" for the default provider.</param>
-		/// <returns>The global settings storage provider.</returns>
-		public static ISettingsStorageProviderV30 LoadSettingsStorageProvider(string name) {
-			if(name == null || name.Length == 0 || string.Compare(name, "default", true, CultureInfo.InvariantCulture) == 0) {
-				return new SettingsStorageProvider();
-			}
-
-			ISettingsStorageProviderV30 result = null;
-
-			Exception inner = null;
-
-			if(name.Contains(",")) {
-				string[] fields = name.Split(',');
-				if(fields.Length == 2) {
-					fields[0] = fields[0].Trim(' ', '"');
-					fields[1] = fields[1].Trim(' ', '"');
-					try {
-						// assemblyName should be an absolute path or a relative path in bin or public\Plugins
-
-						Assembly asm;
-						Type t;
-						string assemblyName = fields[1];
-						if(!assemblyName.ToLowerInvariant().EndsWith(".dll")) assemblyName += ".dll";
-
-						if(File.Exists(assemblyName)) {
-							asm = Assembly.Load(LoadAssemblyFromDisk(assemblyName));
-							t = asm.GetType(fields[0]);
-							SettingsStorageProviderAssemblyName = Path.GetFileName(assemblyName);
-						}
-						else {
-							string tentativePluginsPath = null;
-							try {
-								// Settings.PublicDirectory is only available when running the web app
-								tentativePluginsPath = Path.Combine(GlobalSettings.PublicDirectory, "Plugins");
-								tentativePluginsPath = Path.Combine(tentativePluginsPath, assemblyName);
-							}
-							catch { }
-
-							if(!string.IsNullOrEmpty(tentativePluginsPath) && File.Exists(tentativePluginsPath)) {
-								asm = Assembly.Load(LoadAssemblyFromDisk(tentativePluginsPath));
-								t = asm.GetType(fields[0]);
-								SettingsStorageProviderAssemblyName = Path.GetFileName(tentativePluginsPath);
-							}
-							else {
-								// Trim .dll
-								t = Type.GetType(fields[0] + "," + assemblyName.Substring(0, assemblyName.Length - 4), true, true);
-								SettingsStorageProviderAssemblyName = assemblyName;
-							}
-						}
-
-						result = t.GetConstructor(new Type[0]).Invoke(new object[0]) as ISettingsStorageProviderV30;
-					}
-					catch(Exception ex) {
-						inner = ex;
-						result = null;
-					}
-				}
-			}
-
-			if(result == null) throw new ArgumentException("Could not load the specified Global Settings Storage Provider", inner);
-			else return result;
-		}
-
-		/// <summary>
 		/// Loads the storage providers.
 		/// </summary>
 		/// <typeparam name="T">The provider interface type</typeparam>
@@ -407,6 +341,7 @@ namespace ScrewTurn.Wiki {
 
 					Collectors.AddProvider(t, asm, typeof(T));
 					SetUp<T>(t, storageProvider.ConfigurationString);
+					GlobalSettings.Provider.SetPluginConfiguration(storageProvider.TypeName, storageProvider.ConfigurationString);
 				}
 				catch(Exception ex) {
 					throw new ArgumentException("Could not load the provider with name: " + storageProvider, ex);
