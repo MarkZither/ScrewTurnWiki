@@ -317,7 +317,7 @@ second line";
 		}
 
 		public override string GetRawUrl() {
-			return "http://localhost/Default.aspx";
+			return "/Default.aspx";
 		}
 
 		public override string GetRemoteAddress() {
