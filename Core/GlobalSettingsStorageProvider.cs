@@ -271,7 +271,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>A list of wiki identifiers.</returns>
 		public IList<ScrewTurn.Wiki.PluginFramework.Wiki> AllWikis() {
-			return new List<ScrewTurn.Wiki.PluginFramework.Wiki>() { new ScrewTurn.Wiki.PluginFramework.Wiki("x", new List<string>() {"wiki1.acme.com"}),
+			return new List<ScrewTurn.Wiki.PluginFramework.Wiki>() { new ScrewTurn.Wiki.PluginFramework.Wiki("", new List<string>() {"localhost"}),
+																	 new ScrewTurn.Wiki.PluginFramework.Wiki("x", new List<string>() {"wiki1.acme.com"}),
 																	 new ScrewTurn.Wiki.PluginFramework.Wiki("y", new List<string>() {"wiki2.acme.com"})};
 		}
 
