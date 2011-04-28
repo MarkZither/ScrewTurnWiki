@@ -197,14 +197,6 @@
     <value>Dieses Benutzerkonto selektieren</value>
     <comment>Select this Account</comment>
   </data>
-  <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Auswählen</value>
-    <comment>Select</comment>
-  </data>
-  <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Dieses Benutzerkonto auswählen</value>
-    <comment>Select this Account</comment>
-  </data>
   <data name="chkActiveResource1.Text" xml:space="preserve">
     <value>Aktive Benutzerkonten</value>
     <comment>Active Accounts</comment>
