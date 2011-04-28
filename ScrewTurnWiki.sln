@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnfuddleTicketsPlugin", "Un
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingManagerPlugin", "RatingManagerPlugin\RatingManagerPlugin.csproj", "{B65C793F-62C4-4B81-95C4-3E4805E80411}"
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "Azure", "Azure\Azure.ccproj", "{FF5560A4-C856-447B-9CFE-083C8B203A8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{B65C793F-62C4-4B81-95C4-3E4805E80411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B65C793F-62C4-4B81-95C4-3E4805E80411}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B65C793F-62C4-4B81-95C4-3E4805E80411}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF5560A4-C856-447B-9CFE-083C8B203A8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF5560A4-C856-447B-9CFE-083C8B203A8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF5560A4-C856-447B-9CFE-083C8B203A8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF5560A4-C856-447B-9CFE-083C8B203A8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
