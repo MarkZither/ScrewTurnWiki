@@ -16,7 +16,7 @@ namespace AzureTableStorageProviders_Tests {
 		public override ISettingsStorageProviderV30 GetProvider() {
 			AzureTableStorageSettingsProvider settingsProvider = new AzureTableStorageSettingsProvider();
 			settingsProvider.SetUp(MockHost(), "testonazurestorage|GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==");
-			settingsProvider.Init(MockHost(), "testonazurestorage|GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", "");
+			settingsProvider.Init(MockHost(), "testonazurestorage|GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", "wiki1");
 
 			return settingsProvider;
 		}
