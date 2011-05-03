@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.LoggingLevel)).Return("3").Repeat.Any();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.MaxLogSize)).Return(MaxLogSize.ToString()).Repeat.Any();
-			Expect.Call(host.GetSettingValue("", SettingName.MaxRecentChanges)).Return(MaxRecentChanges.ToString()).Repeat.Any();
+			Expect.Call(host.GetSettingValue("-", SettingName.MaxRecentChanges)).Return(MaxRecentChanges.ToString()).Repeat.Any();
 
 			mocks.Replay(host);
 
