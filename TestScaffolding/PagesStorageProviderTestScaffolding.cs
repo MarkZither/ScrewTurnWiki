@@ -252,7 +252,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Assert.IsNull(prov.SetNamespaceDefaultPage(ns, new PageInfo(NameTools.GetFullName(ns.Name, "Inexistent"), prov, DateTime.Now)),
 				"SetNamespaceDefaultPage should return null when the page does not exist");
-			
+
 			NamespaceInfo result = prov.SetNamespaceDefaultPage(ns, page);
 
 			AssertNamespaceInfosAreEqual(new NamespaceInfo(ns.Name, prov, page), result, true);
@@ -388,8 +388,8 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(2, prov.GetCategories(ns).Length, "Wrong category count");
 
 			CategoryInfo[] expectedCategories = new CategoryInfo[] {
-				new CategoryInfo(NameTools.GetFullName(ns.Name, NameTools.GetLocalName(cat1.FullName)), prov),
-				new CategoryInfo(NameTools.GetFullName(ns.Name, NameTools.GetLocalName(cat3.FullName)), prov) };
+		        new CategoryInfo(NameTools.GetFullName(ns.Name, NameTools.GetLocalName(cat1.FullName)), prov),
+		        new CategoryInfo(NameTools.GetFullName(ns.Name, NameTools.GetLocalName(cat3.FullName)), prov) };
 			expectedCategories[0].Pages = new string[] { NameTools.GetFullName(ns.Name, "Page") };
 
 			CategoryInfo[] actualCategories = prov.GetCategories(ns);
@@ -472,8 +472,8 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(2, prov.GetCategories(ns).Length, "Wrong category count");
 
 			CategoryInfo[] expectedCategories = new CategoryInfo[] {
-				new CategoryInfo(NameTools.GetLocalName(cat1.FullName), prov),
-				new CategoryInfo(NameTools.GetLocalName(cat2.FullName), prov) };
+		        new CategoryInfo(NameTools.GetLocalName(cat1.FullName), prov),
+		        new CategoryInfo(NameTools.GetLocalName(cat2.FullName), prov) };
 			expectedCategories[1].Pages = new string[] { "Page" };
 
 			CategoryInfo[] actualCategories = prov.GetCategories(null);
@@ -558,8 +558,8 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(2, prov.GetCategories(ns1).Length, "Wrong category count");
 
 			CategoryInfo[] expectedCategories = new CategoryInfo[] {
-				new CategoryInfo(NameTools.GetFullName(ns2.Name, NameTools.GetLocalName(cat2.FullName)), prov),
-				new CategoryInfo(NameTools.GetFullName(ns2.Name, NameTools.GetLocalName(cat3.FullName)), prov) };
+		        new CategoryInfo(NameTools.GetFullName(ns2.Name, NameTools.GetLocalName(cat2.FullName)), prov),
+		        new CategoryInfo(NameTools.GetFullName(ns2.Name, NameTools.GetLocalName(cat3.FullName)), prov) };
 			expectedCategories[0].Pages = new string[] { moved.FullName };
 
 			CategoryInfo[] actualCategories = prov.GetCategories(ns2);
@@ -1877,7 +1877,7 @@ namespace ScrewTurn.Wiki.Tests {
 			IPagesStorageProviderV30 prov = GetProvider();
 			prov.SetBackupContent(null, 0);
 		}
-		
+
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void SetBackupContent_InvalidRevision() {
@@ -2904,7 +2904,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void RemoveMessage_InvalidId() {
 			IPagesStorageProviderV30 prov = GetProvider();
-			
+
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
 			prov.RemoveMessage(page, -1, true);
@@ -3625,27 +3625,27 @@ namespace ScrewTurn.Wiki.Tests {
 
 		private static readonly string[] PagesContent =
 		{
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis non massa eu erat imperdiet porta nec eu ipsum. Nulla ullamcorper massa et dui tincidunt eget volutpat velit pellentesque.",
-			"Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc venenatis vestibulum velit, at molestie dui blandit eget.",
-			"Praesent bibendum accumsan nulla quis convallis. Quisque eget est metus. Praesent cursus mauris at diam aliquam luctus sit amet sed odio.",
-			"Cras dignissim eros quis risus vehicula quis ultrices ipsum mattis. Praesent hendrerit sodales volutpat.",
-			"Sed laoreet, quam at tempus rhoncus, ipsum ipsum tempus libero, in sodales justo nisl a tortor. Mauris non enim libero, ac rutrum tortor. Quisque at lacus mauris. Aenean non tortor a eros fermentum fringilla. Mauris tincidunt scelerisque mattis.",
-			"Ut ut augue ut sapien dapibus ullamcorper a imperdiet lorem. Maecenas rhoncus nibh nec purus ullamcorper dapibus. Sed blandit, dui eget aliquet adipiscing, nunc orci semper leo, eu fringilla ipsum neque ut augue.",
-			"Vestibulum cursus lectus dolor, eget lobortis libero. Sed nulla lacus, vulputate at vestibulum sit amet, faucibus id sapien. Nunc egestas semper laoreet.",
-			"Nunc tempus molestie velit, eu imperdiet ante luctus ut. Praesent diam sapien, mattis nec feugiat a, gravida sit amet quam.",
-			"Sed eu erat sed nulla vulputate molestie vel ut justo. Cras vestibulum ultrices mauris in consectetur. In bibendum enim neque, id tempus erat.",
-			"Aenean blandit, justo et tempus dignissim, arcu odio vestibulum erat, sed venenatis odio turpis sed nulla. Aenean venenatis rhoncus sem, sed tincidunt est cursus id. Nam ut sem id dui varius porta.",
+		    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis non massa eu erat imperdiet porta nec eu ipsum. Nulla ullamcorper massa et dui tincidunt eget volutpat velit pellentesque.",
+		    "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc venenatis vestibulum velit, at molestie dui blandit eget.",
+		    "Praesent bibendum accumsan nulla quis convallis. Quisque eget est metus. Praesent cursus mauris at diam aliquam luctus sit amet sed odio.",
+		    "Cras dignissim eros quis risus vehicula quis ultrices ipsum mattis. Praesent hendrerit sodales volutpat.",
+		    "Sed laoreet, quam at tempus rhoncus, ipsum ipsum tempus libero, in sodales justo nisl a tortor. Mauris non enim libero, ac rutrum tortor. Quisque at lacus mauris. Aenean non tortor a eros fermentum fringilla. Mauris tincidunt scelerisque mattis.",
+		    "Ut ut augue ut sapien dapibus ullamcorper a imperdiet lorem. Maecenas rhoncus nibh nec purus ullamcorper dapibus. Sed blandit, dui eget aliquet adipiscing, nunc orci semper leo, eu fringilla ipsum neque ut augue.",
+		    "Vestibulum cursus lectus dolor, eget lobortis libero. Sed nulla lacus, vulputate at vestibulum sit amet, faucibus id sapien. Nunc egestas semper laoreet.",
+		    "Nunc tempus molestie velit, eu imperdiet ante luctus ut. Praesent diam sapien, mattis nec feugiat a, gravida sit amet quam.",
+		    "Sed eu erat sed nulla vulputate molestie vel ut justo. Cras vestibulum ultrices mauris in consectetur. In bibendum enim neque, id tempus erat.",
+		    "Aenean blandit, justo et tempus dignissim, arcu odio vestibulum erat, sed venenatis odio turpis sed nulla. Aenean venenatis rhoncus sem, sed tincidunt est cursus id. Nam ut sem id dui varius porta.",
 
-			"Suspendisse potenti. Duis non dui ac nulla cursus varius. Morbi auctor diam quis urna lobortis sit amet laoreet leo egestas. Integer velit ante, dictum id faucibus quis, pulvinar vitae ipsum. Ut sed lorem lacus. Morbi a enim purus, quis tincidunt risus.",
-			"Maecenas ac odio quis magna vehicula faucibus. Ut arcu est, volutpat fringilla gravida non, mattis a diam. Nullam dapibus, arcu eget sagittis mattis, tortor leo consectetur tortor, eget mollis libero elit vel metus.",
-			"Vivamus faucibus ante at urna adipiscing pulvinar. Pellentesque ligula ante, sollicitudin a iaculis sed, dictum quis leo. Quisque augue ipsum, ultrices vitae pretium vel, vulputate vel arcu.",
-			"Nullam semper luctus dui. Morbi gravida tortor odio, et condimentum velit. Integer semper dapibus turpis, ac suscipit mauris eleifend et. Cras a quam tortor. Mauris lorem mauris, ultricies sed tristique ac, sollicitudin sit amet nibh.",
-			"Praesent scelerisque convallis risus, a tincidunt turpis porta nec. Aenean tristique malesuada diam, ut fringilla tortor congue vel. Duis id feugiat sapien. In hendrerit, nisl id porttitor convallis, sem est pretium sem, a tincidunt lorem ligula eget massa.",
-			"Aliquam neque quam, cursus eu iaculis non, laoreet et eros. Maecenas a lacus arcu. Mauris et placerat erat. Pellentesque ut felis est, sit amet sollicitudin turpis. Etiam non odio orci.",
-			"Nulla purus orci, elementum nec convallis in, feugiat sit amet lectus. Aenean eu elit sem. Quisque sit amet ante nibh, sed elementum magna. Quisque non est odio.",
-			"Morbi porta metus at mi vehicula sit amet scelerisque nulla vehicula. Sed eleifend venenatis velit. Nulla augue mauris, dignissim sed rhoncus non, luctus nec nulla. In hac habitasse platea dictumst.",
-			"Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nunc est, euismod et ullamcorper vitae, aliquam quis nulla.",
-			"Morbi porttitor vehicula placerat. Nunc et lorem mauris. Morbi in nunc lorem. Integer aliquet sem vel magna scelerisque lobortis. Integer nec suscipit libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam posuere cursus enim. Sed auctor semper vehicula. Phasellus volutpat est et sem ultricies ornare."
+		    "Suspendisse potenti. Duis non dui ac nulla cursus varius. Morbi auctor diam quis urna lobortis sit amet laoreet leo egestas. Integer velit ante, dictum id faucibus quis, pulvinar vitae ipsum. Ut sed lorem lacus. Morbi a enim purus, quis tincidunt risus.",
+		    "Maecenas ac odio quis magna vehicula faucibus. Ut arcu est, volutpat fringilla gravida non, mattis a diam. Nullam dapibus, arcu eget sagittis mattis, tortor leo consectetur tortor, eget mollis libero elit vel metus.",
+		    "Vivamus faucibus ante at urna adipiscing pulvinar. Pellentesque ligula ante, sollicitudin a iaculis sed, dictum quis leo. Quisque augue ipsum, ultrices vitae pretium vel, vulputate vel arcu.",
+		    "Nullam semper luctus dui. Morbi gravida tortor odio, et condimentum velit. Integer semper dapibus turpis, ac suscipit mauris eleifend et. Cras a quam tortor. Mauris lorem mauris, ultricies sed tristique ac, sollicitudin sit amet nibh.",
+		    "Praesent scelerisque convallis risus, a tincidunt turpis porta nec. Aenean tristique malesuada diam, ut fringilla tortor congue vel. Duis id feugiat sapien. In hendrerit, nisl id porttitor convallis, sem est pretium sem, a tincidunt lorem ligula eget massa.",
+		    "Aliquam neque quam, cursus eu iaculis non, laoreet et eros. Maecenas a lacus arcu. Mauris et placerat erat. Pellentesque ut felis est, sit amet sollicitudin turpis. Etiam non odio orci.",
+		    "Nulla purus orci, elementum nec convallis in, feugiat sit amet lectus. Aenean eu elit sem. Quisque sit amet ante nibh, sed elementum magna. Quisque non est odio.",
+		    "Morbi porta metus at mi vehicula sit amet scelerisque nulla vehicula. Sed eleifend venenatis velit. Nulla augue mauris, dignissim sed rhoncus non, luctus nec nulla. In hac habitasse platea dictumst.",
+		    "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nunc est, euismod et ullamcorper vitae, aliquam quis nulla.",
+		    "Morbi porttitor vehicula placerat. Nunc et lorem mauris. Morbi in nunc lorem. Integer aliquet sem vel magna scelerisque lobortis. Integer nec suscipit libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam posuere cursus enim. Sed auctor semper vehicula. Phasellus volutpat est et sem ultricies ornare."
 		};
 
 	}
