@@ -35,6 +35,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +46,8 @@
     <Compile Include="AzureTableStorageAclManager.cs" />
     <Compile Include="AzureTableStoragePagesStorageProvider.cs" />
     <Compile Include="AzureTableStorageSettingsProvider.cs" />
+    <Compile Include="AzureTableStorageUsersStorageProvider.cs" />
+    <Compile Include="Hash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryHelper.cs" />
     <Compile Include="TableStorage.cs" />

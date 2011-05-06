@@ -6,8 +6,9 @@ using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
 using NUnit.Framework;
 using AzureTableStorageProviders;
+using ScrewTurn.Wiki.Tests;
 
-namespace ScrewTurn.Wiki.Tests {
+namespace AzureTableStorageProviders_Tests {
 
 	public class AzureTableStoragePagesStorageProviderTests : PagesStorageProviderTestScaffolding {
 
