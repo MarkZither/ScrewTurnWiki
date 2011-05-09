@@ -145,7 +145,7 @@
     <value>Data / Hora</value>
   </data>
   <data name="lblFilterResource1.Text" xml:space="preserve">
-    <value>Display: </value>
+    <value>Mostrar:</value>
   </data>
   <data name="lblLogResource1.Text" xml:space="preserve">
     <value>System Log</value>
@@ -154,18 +154,18 @@
     <value>Mensagem</value>
   </data>
   <data name="lblUserResource1.Text" xml:space="preserve">
-    <value>User</value>
+    <value>Usuário</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
     <value>Administração</value>
   </data>
   <data name="btnNoLimitResource1.Text" xml:space="preserve">
-    <value>Display all</value>
+    <value>Mostrar Todos</value>
   </data>
   <data name="btnNoLimitResource1.ToolTip" xml:space="preserve">
     <value>Mostrar todas as entradas de log (pode demorar alguns segundos)</value>
   </data>
   <data name="lblLimitResource1.Text" xml:space="preserve">
-    <value>Atualmente mostra apenas 100 entradas de log&amp;mdash;</value>
+    <value>Atualmente mostrando apenas 100 entradas de log&amp;mdash;</value>
   </data>
 </root>
