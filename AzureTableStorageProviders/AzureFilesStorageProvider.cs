@@ -889,7 +889,7 @@ namespace AzureTableStorageProviders {
 		#region IDisposable Members
 
 		public void Dispose() {
-			throw new NotImplementedException();
+			// Nothing todo
 		}
 
 		#endregion
