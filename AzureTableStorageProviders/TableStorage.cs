@@ -14,7 +14,12 @@ namespace AzureTableStorageProviders {
 	/// </summary>
 	public static class TableStorage {
 
-		private static CloudStorageAccount StorageAccount(string accountName, string key) {
+		/// <summary>
+		/// Get the storage account.
+		/// </summary>
+		/// <param name="accountName">The name of the account.</param>
+		/// <param name="key">The key for the given account.</param>
+		public static CloudStorageAccount StorageAccount(string accountName, string key) {
 			return new CloudStorageAccount(new StorageCredentialsAccountAndKey(accountName, key), false);
 		}
 
@@ -68,5 +73,38 @@ namespace AzureTableStorageProviders {
 
 		private class DummyEntity : TableServiceEntity {
 		}
+
+		#region blobs
+
+		/// <summary>
+		/// Gets the default retry policy.
+		/// </summary>
+		public static RetryPolicy GetDefaultRetryPolicy() {
+			return RetryPolicies.RetryExponential(10, TimeSpan.FromSeconds(0.5));
+		}
+
+		/// <summary>
+		/// Deletes all blobs in all containers.
+		/// Used only in tests tear-down method
+		/// </summary>
+		/// <param name="accountName">Name of the account.</param>
+		/// <param name="key">The key.</param>
+		public static void DeleteAllBlobs(string accountName, string key) {
+			CloudBlobClient _client = TableStorage.StorageAccount(accountName, key).CreateCloudBlobClient();
+			_client.RetryPolicy = GetDefaultRetryPolicy();
+
+			foreach(CloudBlobContainer containerRef in _client.ListContainers()) {
+				BlobRequestOptions options = new BlobRequestOptions();
+				options.UseFlatBlobListing = true;
+				IEnumerable<IListBlobItem> blobs = containerRef.ListBlobs(options);
+				foreach(IListBlobItem blob in blobs) {
+					var blobRef = _client.GetBlobReference(blob.Uri.AbsoluteUri);
+					blobRef.DeleteIfExists();
+				}
+			}
+		}
+
+		#endregion
+
 	}
 }

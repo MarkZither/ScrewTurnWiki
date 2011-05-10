@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AzureFilesStorageProvider.cs" />
     <Compile Include="AzureTableStorageAclManager.cs" />
     <Compile Include="AzureTableStoragePagesStorageProvider.cs" />
     <Compile Include="AzureTableStorageSettingsProvider.cs" />
