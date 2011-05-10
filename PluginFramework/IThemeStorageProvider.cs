@@ -15,9 +15,8 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Retrives the lists of avaiable themes.
 		/// </summary>
-		/// <param name="providerName">The name of the provider selected.</param>
 		/// <returns>A list of theme names.</returns>
-		List<string> ListThemes(string providerName);
+		List<string> ListThemes();
 
 		/// <summary>
 		/// Retrieves all files present in the selected theme.
@@ -26,7 +25,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="searchPattern">The search string to match against the name of files.</param>
 		/// <returns>The list of files matching the searchPattern.</returns>
 		List<string> ListThemeFiles(string themeName, string searchPattern);
-
 
 		/// <summary>
 		/// Stores the theme.

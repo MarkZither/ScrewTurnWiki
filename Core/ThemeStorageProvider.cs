@@ -38,7 +38,7 @@ namespace ScrewTurn.Wiki {
 		/// Retrives the lists of avaiable themes.
 		/// </summary>
 		/// <returns>A list of theme names.</returns>
-		public List<string> ListThemes(string provider) {
+		public List<string> ListThemes() {
 			List<string> listTheme = new List<string>();
 			string parent = GetDataDirectory(host);
 			string pathFolders = GetPath(parent, ThemeDirectory);

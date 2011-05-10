@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki {
 			}
 			else {
 				foreach(IThemeStorageProviderV30 prov in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(wiki)) {
-					if(prov.ToString() == provider) result.AddRange(prov.ListThemes(provider));
+					if(prov.ToString() == provider) result.AddRange(prov.ListThemes());
 				}
 			}
 			return result;
