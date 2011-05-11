@@ -8,7 +8,7 @@ using Microsoft.WindowsAzure.StorageClient;
 using System.Data.Services.Client;
 using ScrewTurn.Wiki.AclEngine;
 
-namespace AzureTableStorageProviders {
+namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 	/// <summary>
 	/// Implements a Azure Table Storage settings storage provider.

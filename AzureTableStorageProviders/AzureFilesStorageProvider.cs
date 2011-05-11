@@ -7,7 +7,7 @@ using ScrewTurn.Wiki.PluginFramework;
 using Microsoft.WindowsAzure.StorageClient;
 using System.IO;
 
-namespace AzureTableStorageProviders {
+namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 	public class AzureFilesStorageProvider : IFilesStorageProviderV30 {
 

@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.WindowsAzure.StorageClient;
 using System.Threading;
 
-namespace AzureTableStorageProviders {
+namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 	
 	/// <summary>
 	/// Query helper class.

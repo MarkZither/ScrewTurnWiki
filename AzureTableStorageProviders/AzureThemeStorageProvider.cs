@@ -8,7 +8,7 @@ using Microsoft.WindowsAzure.StorageClient;
 using Ionic.Zip;
 using System.IO;
 
-namespace AzureTableStorageProviders {
+namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 	/// <summary>
 	/// Implements the methods to view, add or delete Themes

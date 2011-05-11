@@ -7,7 +7,7 @@ using Microsoft.WindowsAzure.StorageClient;
 using Microsoft.WindowsAzure;
 using System.Data.Services.Client;
 
-namespace AzureTableStorageProviders {
+namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 	/// <summary>
 	/// 

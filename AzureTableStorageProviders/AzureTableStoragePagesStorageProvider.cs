@@ -6,7 +6,7 @@ using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
 using Microsoft.WindowsAzure.StorageClient;
 
-namespace AzureTableStorageProviders {
+namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 	/// <summary>
 	/// Implements a Pages Storage Provider.

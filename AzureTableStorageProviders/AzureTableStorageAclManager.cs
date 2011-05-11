@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using ScrewTurn.Wiki.AclEngine;
 
-namespace AzureTableStorageProviders {
+namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 	/// <summary>
 	/// Implements an Azure Table Storage ACL manager.
