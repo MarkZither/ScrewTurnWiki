@@ -69,9 +69,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingManagerPlugin", "Rati
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "Azure", "Azure\Azure.ccproj", "{FF5560A4-C856-447B-9CFE-083C8B203A8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureTableStorageProviders", "AzureTableStorageProviders\AzureTableStorageProviders.csproj", "{F38D7FDA-08CA-4FE1-9E0D-F49FFFA12E79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorageProviders", "AzureStorageProviders\AzureStorageProviders.csproj", "{F38D7FDA-08CA-4FE1-9E0D-F49FFFA12E79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureTableStorageProviders-Tests", "AzureTableStorageProviders-Tests\AzureTableStorageProviders-Tests.csproj", "{46426630-5731-4253-888A-CAAE1F4149F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorageProviders-Tests", "AzureStorageProviders-Tests\AzureStorageProviders-Tests.csproj", "{46426630-5731-4253-888A-CAAE1F4149F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
