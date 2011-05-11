@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip.Reduced">
+      <HintPath>..\References\Lib\DotNetZipLib-DevKit-v1.9\Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,6 +51,7 @@
     <Compile Include="AzureTableStoragePagesStorageProvider.cs" />
     <Compile Include="AzureTableStorageSettingsProvider.cs" />
     <Compile Include="AzureTableStorageUsersStorageProvider.cs" />
+    <Compile Include="AzureThemeStorageProvider.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryHelper.cs" />
