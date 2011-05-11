@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public static void AssertDateTimesAreEqual(DateTime expected, DateTime actual, bool ignoreUpToTenSecondsDifference) {
 			if(ignoreUpToTenSecondsDifference) {
 				TimeSpan span = expected - actual;
-				Assert.IsTrue(Math.Abs(span.TotalSeconds) <= 10, "Wrong date/time value");
+				Assert.IsTrue(Math.Abs(span.TotalSeconds) <= 30, "Wrong date/time value");
 				/*Assert.AreEqual(
 					PrintDateTime(expected).Substring(0, DateTimeFormat.Length - 1),
 					PrintDateTime(actual).Substring(0, DateTimeFormat.Length - 1),
