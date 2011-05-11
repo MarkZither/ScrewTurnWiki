@@ -9,6 +9,7 @@ using ScrewTurn.Wiki.Tests;
 
 namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
+	[TestFixture]
 	public class AzureTableStoragePagesStorageProviderTests : PagesStorageProviderTestScaffolding {
 
 		public override IPagesStorageProviderV30 GetProvider() {
