@@ -659,7 +659,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(config == null) throw new ArgumentNullException("config");
 
 			_host = host;
-			_wiki = string.IsNullOrEmpty(wiki) ? "-" : wiki;
+			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki.ToLowerInvariant();
 			string[] connectionStrings = config.Split(new char[] { '|' });
 			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
 

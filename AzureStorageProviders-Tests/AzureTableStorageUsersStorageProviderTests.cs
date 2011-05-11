@@ -15,7 +15,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 		public override IUsersStorageProviderV30 GetProvider() {
 			AzureTableStorageUsersStorageProvider prov = new AzureTableStorageUsersStorageProvider();
 			prov.SetUp(MockHost(), "testonazurestorage|GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==");
-			prov.Init(MockHost(), "testonazurestorage|GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", "wiki1");
+			prov.Init(MockHost(), "testonazurestorage|GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", "");
 			return prov;
 		}
 

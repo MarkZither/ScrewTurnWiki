@@ -1293,6 +1293,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					}
 				}
 				foreach(string category in categories) {
+					if(category == null) throw new ArgumentNullException("categories", "A category name cannot be null");
+					if(category.Length == 0) throw new ArgumentException("A category name cannot be empty", "categories");
+
 					CategoriesEntity categoryEntity = categoriesEntities.FirstOrDefault((e) => { return e.RowKey == category; });
 					// If the category does not exists return false
 					if(categoryEntity == null) return false;
@@ -2028,7 +2031,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(config == null) throw new ArgumentNullException("config");
 
 			_host = host;
-			_wiki = string.IsNullOrEmpty(wiki) ? "-" : wiki;
+			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki.ToLowerInvariant();
 			string[] connectionStrings = config.Split(new char[] { '|' });
 			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
 
