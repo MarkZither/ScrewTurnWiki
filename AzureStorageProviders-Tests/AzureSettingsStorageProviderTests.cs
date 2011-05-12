@@ -10,10 +10,10 @@ using ScrewTurn.Wiki.Tests;
 namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 	[TestFixture]
-	public class AzureTableStorageSettingsProviderTests : SettingsStorageProviderTestScaffolding {
+	public class AzureSettingsStorageProviderTests : SettingsStorageProviderTestScaffolding {
 
 		public override ISettingsStorageProviderV30 GetProvider() {
-			AzureTableStorageSettingsProvider settingsProvider = new AzureTableStorageSettingsProvider();
+			AzureSettingsStorageProvider settingsProvider = new AzureSettingsStorageProvider();
 			settingsProvider.SetUp(MockHost(), "testonazurestorage|GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==");
 			settingsProvider.Init(MockHost(), "testonazurestorage|GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", "");
 
@@ -24,11 +24,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 		public new void TearDown() {
 			base.TearDown();
 
-			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureTableStorageSettingsProvider.SettingsTable);
-			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureTableStorageSettingsProvider.MetadataTable);
-			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureTableStorageSettingsProvider.OutgoingLinksTable);
-			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureTableStorageSettingsProvider.RecentChangesTable);
-			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureTableStorageSettingsProvider.AclEntriesTable);
+			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureSettingsStorageProvider.SettingsTable);
+			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureSettingsStorageProvider.MetadataTable);
+			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureSettingsStorageProvider.OutgoingLinksTable);
+			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureSettingsStorageProvider.RecentChangesTable);
+			TableStorage.TruncateTable("testonazurestorage", "GxMxHoP/2yNh+I9PVXWZStP+qTX7rWagK09EWW5gYPmb8+qnpdC5dCjEDid+7Q6KSS8fMWZFeK4cD+UYoB38AA==", AzureSettingsStorageProvider.AclEntriesTable);
 		}
 
 		[Test]

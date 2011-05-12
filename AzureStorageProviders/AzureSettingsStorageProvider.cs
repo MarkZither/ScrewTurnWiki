@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 	/// <summary>
 	/// Implements a Azure Table Storage settings storage provider.
 	/// </summary>
-	public class AzureTableStorageSettingsProvider : ISettingsStorageProviderV30 {
+	public class AzureSettingsStorageProvider : ISettingsStorageProviderV30 {
 
 		private IHostV30 _host;
 		private string _wiki;

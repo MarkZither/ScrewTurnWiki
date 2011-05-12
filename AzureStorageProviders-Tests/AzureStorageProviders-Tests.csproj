@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AzureTableStorageSettingsProviderTests.cs" />
+    <Compile Include="AzureSettingsStorageProviderTests.cs" />
     <Compile Include="AzureTableStoragePagesStorageProviderTests.cs" />
     <Compile Include="AzureFilesStorageProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
