@@ -258,7 +258,7 @@
 					<asp:DropDownList ID="lstProviderImages" runat="server"
 						OnSelectedIndexChanged="lstProviderImages_SelectedIndexChanged" meta:resourcekey="lstProviderImagesResource1" />
 					<asp:CheckBox ID="chkImageAttachments" runat="server" Text="Browse Page Attachments"
-						OnCheckedChanged="chkImageAttachments_CheckedChanged" meta:resourcekey="chkImageAttachmentsResource1" />
+						OnCheckedChanged="chkImageAttachments_CheckedChanged" meta:resourcekey="chkImageAttachmentsResource1" AutoPostBack="true" />
 				
 					<table id="ImageBrowserTable">
 						<tr>

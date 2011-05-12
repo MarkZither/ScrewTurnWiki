@@ -315,7 +315,7 @@
 					<asp:DropDownList ID="lstProviderFiles" runat="server"
 						OnSelectedIndexChanged="lstProviderFiles_SelectedIndexChanged" meta:resourcekey="lstProviderFilesResource1" /><br />
 					<asp:CheckBox ID="chkFilesAttachments" runat="server" Text="Browse Page Attachments"
-						OnCheckedChanged="chkFilesAttachments_CheckedChanged" meta:resourcekey="chkFilesAttachmentsResource1" />
+						OnCheckedChanged="chkFilesAttachments_CheckedChanged" meta:resourcekey="chkFilesAttachmentsResource1" AutoPostBack="true" />
 					<br /><br />
 							
 					<div id="ClientTreeFilesDiv">
@@ -371,7 +371,7 @@
 					<asp:DropDownList ID="lstProviderImages" runat="server"
 						OnSelectedIndexChanged="lstProviderImages_SelectedIndexChanged" meta:resourcekey="lstProviderImagesResource1" />
 					<asp:CheckBox ID="chkImageAttachments" runat="server" Text="Browse Page Attachments"
-						OnCheckedChanged="chkImageAttachments_CheckedChanged" meta:resourcekey="chkImageAttachmentsResource1" />
+						OnCheckedChanged="chkImageAttachments_CheckedChanged" meta:resourcekey="chkImageAttachmentsResource1" AutoPostBack="true" />
 				
 					<table id="ImageBrowserTable">
 						<tr>
