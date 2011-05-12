@@ -33,7 +33,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					_settingsDictionary = new Dictionary<string, string>();
 					IList<SettingsEntity> settingsEntities = GetSettingsEntities(_wiki);
 					foreach(SettingsEntity settingsEntity in settingsEntities) {
-						_settingsDictionary.Add(settingsEntity.RowKey, settingsEntity.Value);
+						_settingsDictionary.Add(settingsEntity.RowKey, settingsEntity.Value + "");
 					}
 				}
 				return _settingsDictionary;
@@ -571,6 +571,29 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		#region AclManager backend methods
 
+		private List<AclEntry> _aclEntriesList;
+
+		private List<AclEntry> _aclEntries {
+			get {
+				if(_aclEntriesList == null) {
+					IList<AclEntriesEntity> aclEntriesEntities = GetAclEntriesEntities(_wiki);
+					List<AclEntry> aclEntries = new List<AclEntry>(aclEntriesEntities == null ? 0 : aclEntriesEntities.Count);
+					foreach(AclEntriesEntity entity in aclEntriesEntities) {
+						aclEntries.Add(new AclEntry(entity.Resource, entity.Action, entity.Subject, AclEntryValueFromString(entity.Value)));
+					}
+					_aclEntriesList = aclEntries;
+				}
+				return _aclEntriesList;
+			}
+		}
+
+		private IList<AclEntriesEntity> GetAclEntriesEntities(string wiki) {
+			var query = (from e in _context.CreateQuery<AclEntriesEntity>(AclEntriesTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<AclEntriesEntity>.All(query);
+		}
+
 		/// <summary>
 		/// Converts a <see cref="T:Value" /> to its corresponding string representation.
 		/// </summary>
@@ -608,23 +631,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		/// <returns>The ACL entries.</returns>
 		private AclEntry[] RetrieveAllAclEntries() {
-			try {
-				var query = (from e in _context.CreateQuery<AclEntriesEntity>(AclEntriesTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki)
-							 select e).AsTableServiceQuery();
-				IList<AclEntriesEntity> aclEntriesEntities = QueryHelper<AclEntriesEntity>.All(query);
-
-				if(aclEntriesEntities == null) return new AclEntry[0];
-
-				List<AclEntry> aclEntries = new List<AclEntry>(aclEntriesEntities.Count);
-				foreach(AclEntriesEntity entity in aclEntriesEntities) {
-					aclEntries.Add(new AclEntry(entity.Resource, entity.Action, entity.Subject, AclEntryValueFromString(entity.Value)));
-				}
-				return aclEntries.ToArray();
-			}
-			catch(Exception ex) {
-				throw ex;
-			}
+			return _aclEntries.ToArray();
 		}
 
 		/// <summary>
@@ -633,23 +640,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="resource">The resource.</param>
 		/// <returns>The ACL entries for the resource.</returns>
 		private AclEntry[] RetrieveAclEntriesForResource(string resource) {
-			try {
-				var query = (from e in _context.CreateQuery<AclEntriesEntity>(AclEntriesTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.Resource.Equals(resource)
-							 select e).AsTableServiceQuery();
-				IList<AclEntriesEntity> aclEntriesEntities = QueryHelper<AclEntriesEntity>.All(query);
-
-				if(aclEntriesEntities == null) return new AclEntry[0];
-
-				List<AclEntry> aclEntries = new List<AclEntry>(aclEntriesEntities.Count);
-				foreach(AclEntriesEntity entity in aclEntriesEntities) {
-					aclEntries.Add(new AclEntry(entity.Resource, entity.Action, entity.Subject, AclEntryValueFromString(entity.Value)));
-				}
-				return aclEntries.ToArray();
-			}
-			catch(Exception ex) {
-				throw ex;
-			}
+			return _aclEntries.FindAll(e => e.Resource == resource).ToArray();
 		}
 
 		/// <summary>
@@ -658,23 +649,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="subject">The subject.</param>
 		/// <returns>The ACL entries for the subject.</returns>
 		private AclEntry[] RetrieveAclEntriesForSubject(string subject) {
-			try {
-				var query = (from e in _context.CreateQuery<AclEntriesEntity>(AclEntriesTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.Subject.Equals(subject)
-							 select e).AsTableServiceQuery();
-				IList<AclEntriesEntity> aclEntriesEntities = QueryHelper<AclEntriesEntity>.All(query);
-
-				if(aclEntriesEntities == null) return new AclEntry[0];
-
-				List<AclEntry> aclEntries = new List<AclEntry>(aclEntriesEntities.Count);
-				foreach(AclEntriesEntity entity in aclEntriesEntities) {
-					aclEntries.Add(new AclEntry(entity.Resource, entity.Action, entity.Subject, AclEntryValueFromString(entity.Value)));
-				}
-				return aclEntries.ToArray();
-			}
-			catch(Exception ex) {
-				throw ex;
-			}
+			return _aclEntries.FindAll(e => e.Subject == subject).ToArray();
 		}
 
 		/// <summary>
@@ -684,11 +659,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <returns><c>true</c> if one or more entries were deleted, <c>false</c> otherwise.</returns>
 		private bool DeleteEntries(AclEntry[] entries) {
 			try {
-				var query = (from e in _context.CreateQuery<AclEntriesEntity>(AclEntriesTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki)
-							 select e).AsTableServiceQuery();
-				IList<AclEntriesEntity> aclEntriesEntities = QueryHelper<AclEntriesEntity>.All(query);
-
+				_aclEntriesList = null;
+				IList<AclEntriesEntity> aclEntriesEntities = GetAclEntriesEntities(_wiki);
 				if(aclEntriesEntities == null || aclEntriesEntities.Count == 0) return false;
 
 				bool deleteExecuted = false;
