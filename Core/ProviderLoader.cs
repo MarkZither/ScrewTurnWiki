@@ -88,6 +88,7 @@ namespace ScrewTurn.Wiki {
 				if(enabled) {
 					instance.Init(Host.Instance, configuration, wiki);
 				}
+				Log.LogEntry("Provider " + instance.Information.Name + " loaded (" + (enabled ? "Enabled" : "Disabled") + ")", EntryType.General, Log.SystemUsername);
 			}
 			catch(InvalidConfigurationException) {
 				// Disable Provider
@@ -102,8 +103,6 @@ namespace ScrewTurn.Wiki {
 				SaveStatus(instance.GetType().FullName, false);
 				throw; // Exception is rethrown because it's not a normal condition
 			}
-
-			Log.LogEntry("Provider " + instance.Information.Name + " loaded (" + (enabled ? "Enabled" : "Disabled") + ")", EntryType.General, Log.SystemUsername);
 		}
 
 		/// <summary>
@@ -342,6 +341,7 @@ namespace ScrewTurn.Wiki {
 					Collectors.AddProvider(t, asm, typeof(T));
 					SetUp<T>(t, storageProvider.ConfigurationString);
 					GlobalSettings.Provider.SetPluginConfiguration(storageProvider.TypeName, storageProvider.ConfigurationString);
+					GlobalSettings.Provider.SetPluginStatus(storageProvider.TypeName, true);
 				}
 				catch(Exception ex) {
 					throw new ArgumentException("Could not load the provider with name: " + storageProvider, ex);

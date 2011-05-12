@@ -870,6 +870,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
+			_host = host;
+
 			string[] connectionStrings = config.Split(new char[] { '|' });
 			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
 
@@ -877,7 +879,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		public ComponentInformation Information {
-			get { return new ComponentInformation("Azure Blob Storage Files Storage Provider", "Threeplicate Srl", _host.GetGlobalSettingValue(GlobalSettingName.WikiVersion), "", ""); }
+			get { return new ComponentInformation("Azure Blob Storage Files Storage Provider", "Threeplicate Srl", "", "", ""); }
 		}
 
 		public string ConfigHelpHtml {

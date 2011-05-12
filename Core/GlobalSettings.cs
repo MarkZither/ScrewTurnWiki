@@ -6,6 +6,7 @@ using System.Text;
 using System.IO;
 using System.Web.Configuration;
 using ScrewTurn.Wiki.PluginFramework;
+using ScrewTurn.Wiki.Plugins.AzureStorage;
 
 namespace ScrewTurn.Wiki {
 
@@ -340,7 +341,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultUsersProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultUsersProvider"), typeof(UsersStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultUsersProvider"), typeof(AzureTableStorageUsersStorageProvider).ToString());
 			}
 			set {
 				Provider.SetSetting("DefaultUsersProvider", value);
@@ -352,7 +353,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultPagesProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultPagesProvider"), typeof(PagesStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultPagesProvider"), typeof(AzureTableStoragePagesStorageProvider).ToString());
 			}
 			set {
 				Provider.SetSetting("DefaultPagesProvider", value);
@@ -364,7 +365,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultFilesProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultFilesProvider"), typeof(FilesStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultFilesProvider"), typeof(AzureFilesStorageProvider).ToString());
 			}
 			set {
 				Provider.SetSetting("DefaultFilesProvider", value);

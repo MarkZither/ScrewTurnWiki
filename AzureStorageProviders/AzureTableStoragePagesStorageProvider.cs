@@ -569,7 +569,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		public void RebuildIndex() {
-			throw new NotImplementedException();
+			return;
 		}
 
 		public void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size) {
@@ -577,7 +577,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		public bool IsIndexCorrupted {
-			get { throw new NotImplementedException(); }
+			get { return false; }
 		}
 
 		private PagesInfoEntity GetPagesInfoEntity(string wiki, string pageFullName) {

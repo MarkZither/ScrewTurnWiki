@@ -597,7 +597,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 							 select e).AsTableServiceQuery();
 				IList<AclEntriesEntity> aclEntriesEntities = QueryHelper<AclEntriesEntity>.All(query);
 
-				if(aclEntriesEntities == null) return null;
+				if(aclEntriesEntities == null) return new AclEntry[0];
 
 				List<AclEntry> aclEntries = new List<AclEntry>(aclEntriesEntities.Count);
 				foreach(AclEntriesEntity entity in aclEntriesEntities) {
@@ -622,7 +622,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 							 select e).AsTableServiceQuery();
 				IList<AclEntriesEntity> aclEntriesEntities = QueryHelper<AclEntriesEntity>.All(query);
 
-				if(aclEntriesEntities == null || aclEntriesEntities.Count == 0) return null;
+				if(aclEntriesEntities == null) return new AclEntry[0];
 
 				List<AclEntry> aclEntries = new List<AclEntry>(aclEntriesEntities.Count);
 				foreach(AclEntriesEntity entity in aclEntriesEntities) {
@@ -647,7 +647,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 							 select e).AsTableServiceQuery();
 				IList<AclEntriesEntity> aclEntriesEntities = QueryHelper<AclEntriesEntity>.All(query);
 
-				if(aclEntriesEntities == null || aclEntriesEntities.Count == 0) return null;
+				if(aclEntriesEntities == null) return new AclEntry[0];
 
 				List<AclEntry> aclEntries = new List<AclEntry>(aclEntriesEntities.Count);
 				foreach(AclEntriesEntity entity in aclEntriesEntities) {
