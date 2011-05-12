@@ -65,8 +65,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("name");
 			try {
-				string value;
-				return _settings.TryGetValue(name, out value) ? value : "";
+				string val = null;
+				if(_settings.TryGetValue(name, out val)) return val;
+				else return null;
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -86,6 +87,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(name.Length == 0) throw new ArgumentException("name");
 
 			_settingsDictionary = null;
+
+			// Nulls are converted to empty strings
+			if(value == null) value = "";
 
 			SettingsEntity settingsEntity = GetSettingsEntity(_wiki, name);
 
