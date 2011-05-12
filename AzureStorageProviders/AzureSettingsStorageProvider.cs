@@ -24,6 +24,36 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		private IAclManager _aclManager;
 
+		private Dictionary<string, string> _settingsDictionary;
+
+		// Cache of settings as dictionary settingKey -> settingValue
+		private Dictionary<string, string> _settings {
+			get {
+				if(_settingsDictionary == null) {
+					_settingsDictionary = new Dictionary<string, string>();
+					IList<SettingsEntity> settingsEntities = GetSettingsEntities(_wiki);
+					foreach(SettingsEntity settingsEntity in settingsEntities) {
+						_settingsDictionary.Add(settingsEntity.RowKey, settingsEntity.Value);
+					}
+				}
+				return _settingsDictionary;
+			}
+		}
+
+		private IList<SettingsEntity> GetSettingsEntities(string wiki) {
+			var query = (from e in _context.CreateQuery<SettingsEntity>(SettingsTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<SettingsEntity>.All(query);
+		}
+
+		private SettingsEntity GetSettingsEntity(string wiki, string settingName) {
+			var query = (from e in _context.CreateQuery<SettingsEntity>(SettingsTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(settingName)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<SettingsEntity>.FirstOrDefault(query);
+		}
+
 		/// <summary>
 		/// Retrieves the value of a Setting.
 		/// </summary>
@@ -35,12 +65,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("name");
 			try {
-				var query = (from e in _context.CreateQuery<SettingsEntity>(SettingsTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(name)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<SettingsEntity>.FirstOrDefault(query);
-				if(entity == null) return null;
-				return string.IsNullOrEmpty(entity.Value) ? "" : entity.Value;
+				string value;
+				return _settings.TryGetValue(name, out value) ? value : "";
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -59,19 +85,24 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("name");
 
-			try {
-				SettingsEntity settingsEntity = new SettingsEntity() {
+			_settingsDictionary = null;
+
+			SettingsEntity settingsEntity = GetSettingsEntity(_wiki, name);
+
+			if(settingsEntity == null) {
+				settingsEntity = new SettingsEntity() {
 					PartitionKey = _wiki,
 					RowKey = name,
 					Value = value
 				};
 				_context.AddObject(SettingsTable, settingsEntity);
-				_context.SaveChangesStandard();
-				return true;
 			}
-			catch(Exception ex) {
-				throw ex;
+			else {
+				settingsEntity.Value = value;
+				_context.UpdateObject(settingsEntity);
 			}
+			_context.SaveChangesStandard();
+			return true;
 		}
 
 		/// <summary>
@@ -79,21 +110,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		/// <returns>All the settings.</returns>
 		public IDictionary<string, string> GetAllSettings() {
-			try {
-				var query = (from e in _context.CreateQuery<SettingsEntity>(SettingsTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki)
-							 select e).AsTableServiceQuery();
-				IList<SettingsEntity> settingsEntities = QueryHelper<SettingsEntity>.All(query);
-
-				Dictionary<string, string> settings = new Dictionary<string, string>(settingsEntities.Count);
-				foreach(SettingsEntity entity in settingsEntities) {
-					settings.Add(entity.RowKey, entity.Value);
-				}
-				return settings;
-			}
-			catch(Exception ex) {
-				throw ex;
-			}
+			return _settings;
 		}
 
 		/// <summary>
