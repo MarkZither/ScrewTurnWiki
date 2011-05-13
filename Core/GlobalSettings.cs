@@ -341,7 +341,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultUsersProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultUsersProvider"), typeof(AzureTableStorageUsersStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultUsersProvider"), typeof(AzureUsersStorageProvider).ToString());
 			}
 			set {
 				Provider.SetSetting("DefaultUsersProvider", value);

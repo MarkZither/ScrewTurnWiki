@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 	public class UsersStorageProviderTests : UsersStorageProviderTestScaffolding {
 
 		public override IUsersStorageProviderV30 GetProvider() {
-			AzureTableStorageUsersStorageProvider prov = new AzureTableStorageUsersStorageProvider();
+			AzureUsersStorageProvider prov = new AzureUsersStorageProvider();
 			prov.SetUp(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==");
 			prov.Init(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "");
 			return prov;
@@ -31,9 +31,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 		public new void TearDown() {
 			base.TearDown();
 
-			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureTableStorageUsersStorageProvider.UsersTable);
-			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureTableStorageUsersStorageProvider.UserGroupsTable);
-			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureTableStorageUsersStorageProvider.UserDataTable);
+			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureUsersStorageProvider.UsersTable);
+			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureUsersStorageProvider.UserGroupsTable);
+			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureUsersStorageProvider.UserDataTable);
 		}
 
 	}

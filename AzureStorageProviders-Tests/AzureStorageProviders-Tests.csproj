@@ -48,7 +48,7 @@
     <Compile Include="AzureFilesStorageProviderTests.cs" />
     <Compile Include="AzureGlobalSettingsStorageProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AzureTableStorageUsersStorageProviderTests.cs" />
+    <Compile Include="AzureUsersStorageProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AzureStorageProviders\AzureStorageProviders.csproj">

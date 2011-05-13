@@ -55,7 +55,7 @@
     <Compile Include="AzureTableStorageAclManager.cs" />
     <Compile Include="AzurePagesStorageProvider.cs" />
     <Compile Include="AzureSettingsStorageProvider.cs" />
-    <Compile Include="AzureTableStorageUsersStorageProvider.cs" />
+    <Compile Include="AzureUsersStorageProvider.cs" />
     <Compile Include="AzureThemeStorageProvider.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

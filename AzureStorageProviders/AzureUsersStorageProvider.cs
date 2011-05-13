@@ -8,7 +8,7 @@ using Microsoft.WindowsAzure.StorageClient;
 
 namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
-	public class AzureTableStorageUsersStorageProvider : IUsersStorageProviderV30 {
+	public class AzureUsersStorageProvider : IUsersStorageProviderV30 {
 
 		private IHostV30 _host;
 		private string _wiki;
