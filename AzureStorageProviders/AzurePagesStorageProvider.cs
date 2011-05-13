@@ -823,10 +823,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				// Find the PageInfo; if not found return null
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(page.FullName)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = GetPagesInfoEntity(_wiki, page.FullName);
 				if(entity == null) return null;
 
 				// Find the associated PageContent; if not found return an empty PageContent
@@ -854,10 +851,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				// Find the PageInfo; if not found return null
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(page.FullName)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = GetPagesInfoEntity(_wiki, page.FullName);
 				if(entity == null) return null;
 
 				// Find the associated draft PageContent; if not found return an empty PageContent
@@ -885,10 +879,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				// Find the PageInfo; if not found return null
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(page.FullName)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = GetPagesInfoEntity(_wiki, page.FullName);
 				if(entity == null) return false;
 
 				// Find the associated draft PageContent; if not found return an empty PageContent
@@ -919,10 +910,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				// Find the PageInfo; if not found return null
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(page.FullName)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = GetPagesInfoEntity(_wiki, page.FullName);
 				if(entity == null) return null;
 
 				// Find the associated PageContent
@@ -960,10 +948,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				// Find the PageInfo; if not found return null
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(page.FullName)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = GetPagesInfoEntity(_wiki, page.FullName);
 				if(entity == null) return null;
 
 				// Find the associated PageContent
@@ -994,10 +979,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				// Find the PageInfo; if not found return null
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(content.PageInfo.FullName)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = GetPagesInfoEntity(_wiki, content.PageInfo.FullName);
 				if(entity == null) return false;
 
 				// Find the associated PageContent
@@ -1174,10 +1156,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				// Find the PageInfo; if not found return false
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(page.FullName)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = GetPagesInfoEntity(_wiki, page.FullName);
 				if(entity == null) return false;
 
 				switch(saveMode) {
@@ -1302,10 +1281,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				// Find the PageInfo; if not found return false
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(page.FullName)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = GetPagesInfoEntity(_wiki, page.FullName);
 				if(entity == null) return false;
 
 				// Find the associated PageContent
@@ -1374,10 +1350,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			
 			try {
 				// Find the PageInfo; if not found return false
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(page.FullName)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = GetPagesInfoEntity(_wiki, page.FullName);
 				if(entity == null) return false;
 
 				// Find the associated PageContent
