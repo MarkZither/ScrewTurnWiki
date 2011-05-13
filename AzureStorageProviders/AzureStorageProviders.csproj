@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="AzureFilesStorageProvider.cs" />
     <Compile Include="AzureTableStorageAclManager.cs" />
-    <Compile Include="AzureTableStoragePagesStorageProvider.cs" />
+    <Compile Include="AzurePagesStorageProvider.cs" />
     <Compile Include="AzureSettingsStorageProvider.cs" />
     <Compile Include="AzureTableStorageUsersStorageProvider.cs" />
     <Compile Include="AzureThemeStorageProvider.cs" />

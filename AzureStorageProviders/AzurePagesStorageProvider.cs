@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 	/// <summary>
 	/// Implements a Pages Storage Provider.
 	/// </summary>
-	public class AzureTableStoragePagesStorageProvider :IPagesStorageProviderV30 {
+	public class AzurePagesStorageProvider :IPagesStorageProviderV30 {
 
 		private IHostV30 _host;
 		private string _wiki;

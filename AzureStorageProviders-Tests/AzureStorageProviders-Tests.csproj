@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureSettingsStorageProviderTests.cs" />
-    <Compile Include="AzureTableStoragePagesStorageProviderTests.cs" />
+    <Compile Include="AzurePagesStorageProviderTests.cs" />
     <Compile Include="AzureFilesStorageProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AzureTableStorageUsersStorageProviderTests.cs" />
