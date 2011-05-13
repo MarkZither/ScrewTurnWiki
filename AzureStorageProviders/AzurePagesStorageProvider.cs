@@ -140,6 +140,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				}
 				_context.SaveChangesStandard();
 
+				// Invalidate pagesInfoCache
+				_pagesInfoCache = null;
+
 				List<CategoriesEntity> categoryEntities = GetCategoriesEntities(_wiki, nspace.Name);
 				foreach(CategoriesEntity categoryEntity in categoryEntities) {
 					CategoriesEntity newCategoryEntity = new CategoriesEntity() {
@@ -317,6 +320,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.AddObject(PagesInfoTable, newPageInfoEntity);
 				_context.DeleteObject(oldPageInfoEntity);
 				_context.SaveChangesStandard();
+
+				// Invalidate pageInfoCache
+				_pagesInfoCache = null;
 
 				PageInfo newPage = new PageInfo(newPageFullName, this, page.CreationDateTime);
 				return newPage;
@@ -703,11 +709,19 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			return words;
 		}
 
+		private Dictionary<string, PagesInfoEntity> _pagesInfoCache;
+
 		private PagesInfoEntity GetPagesInfoEntity(string wiki, string pageFullName) {
-			var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-						 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(pageFullName)
-						 select e).AsTableServiceQuery();
-			return QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+			if(_pagesInfoCache == null) _pagesInfoCache = new Dictionary<string, PagesInfoEntity>();
+
+			if(!_pagesInfoCache.ContainsKey(pageFullName)) {
+				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
+							 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(pageFullName)
+							 select e).AsTableServiceQuery();
+				_pagesInfoCache[pageFullName] = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				
+			}
+			return _pagesInfoCache[pageFullName];
 		}
 
 		private List<PagesInfoEntity> GetPagesInfoEntities(string wiki, string namespaceName) {
@@ -1051,6 +1065,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.AddObject(PagesInfoTable, pageInfoEntity);
 				_context.SaveChangesStandard();
 
+				// Invalidate pagesInfoCache
+				_pagesInfoCache = null;
+
 				return new PageInfo(NameTools.GetFullName(nspace, name), this, creationDateTime);
 			}
 			catch(Exception ex) {
@@ -1120,6 +1137,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.AddObject(PagesInfoTable, newPage);
 				_context.DeleteObject(oldPageEntity);
 				_context.SaveChangesStandard();
+
+				// Invalidate pagesInfoCache
+				_pagesInfoCache = null;
 
 				return new PageInfo(newPageFullName, this, newPage.CreationDateTime.ToLocalTime());
 			}
@@ -1378,6 +1398,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				// Delete the PageInfo entity
 				_context.DeleteObject(entity);
 				_context.SaveChangesStandard();
+
+				// Invalidate pagesInfoCache
+				_pagesInfoCache = null;
 
 				return deleteExecuted;
 			}
