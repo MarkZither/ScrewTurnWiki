@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
 using Microsoft.WindowsAzure.StorageClient;
+using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
@@ -17,6 +18,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		private string _wiki;
 
 		private TableServiceContext _context;
+
+		private IIndex index;
 
 		private const string CurrentRevision = "CurrentRevision";
 		private const string Draft = "Draft";
@@ -564,12 +567,40 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
+		/// <summary>
+		/// Performs a search in the index.
+		/// </summary>
+		/// <param name="parameters">The search parameters.</param>
+		/// <returns>The results.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
 		public ScrewTurn.Wiki.SearchEngine.SearchResultCollection PerformSearch(ScrewTurn.Wiki.SearchEngine.SearchParameters parameters) {
-			throw new NotImplementedException();
+			if(parameters == null) throw new ArgumentNullException("parameters");
+
+			return index.Search(parameters);
 		}
 
+		/// <summary>
+		/// Rebuilds the search index.
+		/// </summary>
 		public void RebuildIndex() {
-			return;
+			index.Clear(null);
+
+			List<NamespaceInfo> allNamespaces = new List<NamespaceInfo>(GetNamespaces());
+			allNamespaces.Add(null);
+
+			int indexedElements = 0;
+
+			foreach(NamespaceInfo nspace in allNamespaces) {
+				foreach(PageInfo page in GetPages(nspace)) {
+					IndexPage(GetContent(page));
+					indexedElements++;
+
+					foreach(Message msg in GetMessages(page)) {
+						IndexMessageTree(page, msg);
+						indexedElements++;
+					}
+				}
+			}
 		}
 
 		public void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size) {
@@ -578,6 +609,98 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		public bool IsIndexCorrupted {
 			get { return false; }
+		}
+
+		/// <summary>
+		/// Indexes a page.
+		/// </summary>
+		/// <param name="content">The page content.</param>
+		/// <param name="transaction">The current transaction.</param>
+		/// <returns>The number of indexed words, including duplicates.</returns>
+		private int IndexPage(PageContent content) {
+			try {
+				string documentName = PageDocument.GetDocumentName(content.PageInfo);
+
+				DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, content.PageInfo, content.Title),
+					PageDocument.StandardTypeTag, content.LastModified);
+
+				// Store the document
+				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
+				int count = index.StoreDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent),
+					content.Keywords, _host.PrepareContentForIndexing(_wiki, content.PageInfo, content.Content), null);
+
+				if(count == 0 && content.Content.Length > 0) {
+					_host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
+						LogEntryType.Warning, null, this);
+				}
+
+				return count;
+			}
+			catch(Exception ex) {
+				_host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this);
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Indexes a message tree.
+		/// </summary>
+		/// <param name="page">The page.</param>
+		/// <param name="root">The root message.</param>
+		/// <param name="transaction">The current transaction.</param>
+		private void IndexMessageTree(PageInfo page, Message root) {
+			IndexMessage(page, root.ID, root.Subject, root.DateTime, root.Body);
+			foreach(Message reply in root.Replies) {
+				IndexMessageTree(page, reply);
+			}
+		}
+
+		/// <summary>
+		/// Indexes a message.
+		/// </summary>
+		/// <param name="page">The page.</param>
+		/// <param name="id">The message ID.</param>
+		/// <param name="subject">The subject.</param>
+		/// <param name="dateTime">The date/time.</param>
+		/// <param name="body">The body.</param>
+		/// <param name="transaction">The current transaction.</param>
+		/// <returns>The number of indexed words, including duplicates.</returns>
+		private int IndexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body) {
+			try {
+				// Trim "RE:" to avoid polluting the search engine index
+				if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
+
+				string documentName = MessageDocument.GetDocumentName(page, id);
+
+				DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, null, subject),
+					MessageDocument.StandardTypeTag, dateTime);
+
+				// Store the document
+				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
+				int count = index.StoreDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null,
+					_host.PrepareContentForIndexing(_wiki, null, body), null);
+
+				if(count == 0 && body.Length > 0) {
+					_host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
+						LogEntryType.Warning, null, this);
+				}
+
+				return count;
+			}
+			catch(Exception ex) {
+				_host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this);
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Tokenizes page content.
+		/// </summary>
+		/// <param name="content">The content to tokenize.</param>
+		/// <returns>The tokenized words.</returns>
+		private static WordInfo[] TokenizeContent(string content) {
+			WordInfo[] words = SearchEngine.Tools.Tokenize(content);
+			return words;
 		}
 
 		private PagesInfoEntity GetPagesInfoEntity(string wiki, string pageFullName) {
@@ -2036,6 +2159,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
 
 			_context = TableStorage.GetContext(connectionStrings[0], connectionStrings[1]);
+
+			index = new AzureIndex();
 		}
 
 		/// <summary>

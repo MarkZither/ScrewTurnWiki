@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureFilesStorageProvider.cs" />
+    <Compile Include="AzureGlobalSettingsStorageProvider.cs" />
+    <Compile Include="AzureIndex.cs" />
     <Compile Include="AzureTableStorageAclManager.cs" />
     <Compile Include="AzurePagesStorageProvider.cs" />
     <Compile Include="AzureSettingsStorageProvider.cs" />

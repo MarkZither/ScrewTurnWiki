@@ -353,7 +353,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultPagesProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultPagesProvider"), typeof(AzureTableStoragePagesStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultPagesProvider"), typeof(AzurePagesStorageProvider).ToString());
 			}
 			set {
 				Provider.SetSetting("DefaultPagesProvider", value);
