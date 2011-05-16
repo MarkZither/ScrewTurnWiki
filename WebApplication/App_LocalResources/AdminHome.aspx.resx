@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnRebuildResource1.Text" xml:space="preserve">
     <value>Rebuild</value>
@@ -144,9 +144,6 @@
   <data name="lblAppShutdownResource1.Text" xml:space="preserve">
     <value>Web Application Shutdown</value>
   </data>
-  <data name="lblDocCountResource1.Text" xml:space="preserve">
-    <value>Docs</value>
-  </data>
   <data name="lblIndexStatusResource1.Text" xml:space="preserve">
     <value>Search Index Status</value>
   </data>
@@ -159,9 +156,6 @@
   <data name="lblNamespaceResource1.Text" xml:space="preserve">
     <value>Namespace</value>
   </data>
-  <data name="lblOccurrenceCountResource1.Text" xml:space="preserve">
-    <value>Matches</value>
-  </data>
   <data name="lblPageResource1.Text" xml:space="preserve">
     <value>Page Name</value>
   </data>
@@ -171,17 +165,11 @@
   <data name="lblRebuildIndexInfoResource1.Text" xml:space="preserve">
     <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. After the index is rebuilt, it is recommended to restart the application.</value>
   </data>
-  <data name="lblSizeResource1.Text" xml:space="preserve">
-    <value>Size</value>
-  </data>
   <data name="lblStatusResource1.Text" xml:space="preserve">
     <value>Status</value>
   </data>
   <data name="lblSystemStatusContentResource1.Text" xml:space="preserve">
     <value />
-  </data>
-  <data name="lblWordCountResource1.Text" xml:space="preserve">
-    <value>Words</value>
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
     <value>Administration</value>

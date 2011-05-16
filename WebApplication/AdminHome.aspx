@@ -127,10 +127,6 @@
 				<thead>
 				<tr class="tableheader">
 					<th><asp:Literal ID="lblProvider" runat="server" Text="Provider" EnableViewState="False" meta:resourcekey="lblProviderResource1" /></th>
-					<th><asp:Literal ID="lblDocCount" runat="server" Text="Docs" EnableViewState="False" meta:resourcekey="lblDocCountResource1" /></th>
-					<th><asp:Literal ID="lblWordCount" runat="server" Text="Words" EnableViewState="False" meta:resourcekey="lblWordCountResource1" /></th>
-					<th><asp:Literal ID="lblOccurrenceCount" runat="server" Text="Matches" EnableViewState="False" meta:resourcekey="lblOccurrenceCountResource1" /></th>
-					<th><asp:Literal ID="lblSize" runat="server" Text="Size" EnableViewState="False" meta:resourcekey="lblSizeResource1" /></th>
 					<th><asp:Literal ID="lblStatus" runat="server" Text="Status" EnableViewState="False" meta:resourcekey="lblStatusResource1" /></th>
 					<th>&nbsp;</th>
 				</tr>
@@ -140,10 +136,6 @@
 		<ItemTemplate>
 			<tr class="tablerow">
 				<td><%# Eval("Provider") %></td>
-				<td><%# Eval("Documents") %></td>
-				<td><%# Eval("Words") %></td>
-				<td><%# Eval("Occurrences") %></td>
-				<td><%# Eval("Size") %></td>
 				<td><%# ((bool)Eval("IsOK") ? ScrewTurn.Wiki.Properties.Messages.OK : "<span class=\"resulterror\">" + ScrewTurn.Wiki.Properties.Messages.Corrupted + "</span>")%></td>
 				<td><asp:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" CommandName="Rebuild" CommandArgument='<%# Eval("ProviderType") %>'
 					meta:resourcekey="btnRebuildResource1" /></td>
@@ -152,10 +144,6 @@
 		<AlternatingItemTemplate>
 			<tr class="tablerowalternate">
 				<td><%# Eval("Provider") %></td>
-				<td><%# Eval("Documents") %></td>
-				<td><%# Eval("Words") %></td>
-				<td><%# Eval("Occurrences") %></td>
-				<td><%# Eval("Size") %></td>
 				<td><%# ((bool)Eval("IsOK") ? ScrewTurn.Wiki.Properties.Messages.OK : "<span class=\"resulterror\">" + ScrewTurn.Wiki.Properties.Messages.Corrupted + "</span>")%></td>
 				<td><asp:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" CommandName="Rebuild" CommandArgument='<%# Eval("ProviderType") %>'
 					meta:resourcekey="btnRebuildResource2" /></td>

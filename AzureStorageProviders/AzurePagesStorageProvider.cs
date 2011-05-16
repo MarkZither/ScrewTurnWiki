@@ -573,13 +573,67 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
+		private bool alwaysGenerateDocument = false;
+
+		private IList<IndexWordMappingEntity> GetIndexWordMappingEntities(string wiki) {
+			var query = (from e in _context.CreateQuery<IndexWordMappingEntity>(IndexWordMappingTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<IndexWordMappingEntity>.All(query);
+		}
+
+		private IList<IndexWordMappingEntity> GetIndexWordMappingEntitiesByDocumentName(string wiki, string documentName) {
+			var query = (from e in _context.CreateQuery<IndexWordMappingEntity>(IndexWordMappingTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki) && e.DocumentName.Equals(documentName)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<IndexWordMappingEntity>.All(query);
+		}
+
+		private IList<IndexWordMappingEntity> GetIndexWordMappingEntitiesByWord(string wiki, string word) {
+			var query = (from e in _context.CreateQuery<IndexWordMappingEntity>(IndexWordMappingTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki) && e.Word.Equals(word)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<IndexWordMappingEntity>.All(query);
+		}
+
+		private IList<IndexWordMappingEntity> GetIndexWordMappingEntitiesByTypeTag(string wiki, string typeTag) {
+			var query = (from e in _context.CreateQuery<IndexWordMappingEntity>(IndexWordMappingTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki) && e.TypeTag.Equals(typeTag)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<IndexWordMappingEntity>.All(query);
+		}
+
+		/// <summary>
+		/// Sets test flags (to be used only for tests).
+		/// </summary>
+		/// <param name="alwaysGenerateDocument">A value indicating whether to always generate a result when resolving a document, 
+		/// even when the page does not exist.</param>
+		public void SetFlags(bool alwaysGenerateDocument) {
+			this.alwaysGenerateDocument = alwaysGenerateDocument;
+		}
+
+		/// <summary>
+		/// Gets a word fetcher.
+		/// </summary>
+		/// <returns>The word fetcher.</returns>
+		private IWordFetcher GetWordFetcher() {
+			return new AzureWordFetcher(TryFindWord);
+		}
+
+		/// <summary>
+		/// Gets the search index (only used for testing purposes).
+		/// </summary>
+		public IIndex Index {
+			get { return index; }
+		}
+
 		/// <summary>
 		/// Performs a search in the index.
 		/// </summary>
 		/// <param name="parameters">The search parameters.</param>
 		/// <returns>The results.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
-		public ScrewTurn.Wiki.SearchEngine.SearchResultCollection PerformSearch(ScrewTurn.Wiki.SearchEngine.SearchParameters parameters) {
+		public SearchResultCollection PerformSearch(SearchParameters parameters) {
 			if(parameters == null) throw new ArgumentNullException("parameters");
 
 			return index.Search(parameters);
@@ -609,8 +663,234 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
+		/// <summary>
+		/// Deletes all data associated to a document.
+		/// </summary>
+		/// <param name="document">The document.</param>
+		private void DeleteDataForDocument(IDocument document) {
+			// 1. Delete all data related to a document
+			// 2. Delete all words that have no more mappings
+
+			IList<IndexWordMappingEntity> indexWordMappingEntitites = GetIndexWordMappingEntitiesByDocumentName(_wiki, document.Name);
+
+			foreach(IndexWordMappingEntity indexWordMappingEntity in indexWordMappingEntitites) {
+				_context.DeleteObject(indexWordMappingEntity);
+			}
+			_context.SaveChangesStandard();
+		}
+
+		/// <summary>
+		/// Saves data for a new document.
+		/// </summary>
+		/// <param name="document">The document.</param>
+		/// <param name="content">The content words.</param>
+		/// <param name="title">The title words.</param>
+		/// <param name="keywords">The keywords.</param>
+		/// <returns>The number of stored occurrences.</returns>
+		private int SaveDataForDocument(IDocument document, WordInfo[] content, WordInfo[] title, WordInfo[] keywords) {
+			// 1. Insert document
+			// 2. Insert all new words
+			// 3. Load all word IDs
+			// 4. Insert mappings
+
+			List<WordInfo> allWords = new List<WordInfo>(content.Length + title.Length + keywords.Length);
+			allWords.AddRange(content);
+			allWords.AddRange(title);
+			allWords.AddRange(keywords);
+
+			foreach(WordInfo word in allWords) {
+				IndexWordMappingEntity indexWordMappingEntity = new IndexWordMappingEntity() {
+					PartitionKey = _wiki,
+					RowKey = word.Text + "|" + document.Name + "|" + word.WordIndex,
+					Word = word.Text,
+					DocumentName = document.Name,
+					FirstCharIndex = word.FirstCharIndex,
+					Location = word.Location.Location,
+					DocumentTitle = document.Title,
+					TypeTag = document.TypeTag,
+					DateTime = document.DateTime
+				};
+				_context.AddObject(IndexWordMappingTable, indexWordMappingEntity);
+			}
+			_context.SaveChangesStandard();
+			return allWords.Count;
+		}
+		
+		/// <summary>
+		/// Tries to load all data related to a word from the database.
+		/// </summary>
+		/// <param name="text">The word text.</param>
+		/// <param name="word">The returned word.</param>
+		/// <returns><c>true</c> if the word is found, <c>false</c> otherwise.</returns>
+		private bool TryFindWord(string text, out Word word) {
+			// 1. Find word - if not found, return
+			// 2. Read all raw word mappings
+			// 3. Read all documents (unique)
+			// 4. Build result data structure
+
+			// Read all raw mappings
+			IList<IndexWordMappingEntity> indexWordMappingEntitites = GetIndexWordMappingEntitiesByWord(_wiki, text);
+
+			if(indexWordMappingEntitites == null || indexWordMappingEntitites.Count <= 0) {
+				word = null;
+				return false;
+			}
+
+			Dictionary<string, IDocument> documents = new Dictionary<string, IDocument>(64);
+			foreach(IndexWordMappingEntity indexWordMappingEntity in indexWordMappingEntitites) {
+				string documentName = indexWordMappingEntity.DocumentName;
+				if(documents.ContainsKey(documentName)) continue;
+
+				DumpedDocument dumpedDoc = new DumpedDocument(1,
+						documentName, indexWordMappingEntity.DocumentTitle,
+						indexWordMappingEntity.TypeTag,
+						indexWordMappingEntity.DateTime.ToLocalTime());
+
+				IDocument document = BuildDocument(dumpedDoc);
+
+				if(document != null) documents.Add(documentName, document);
+			}
+
+			OccurrenceDictionary occurrences = new OccurrenceDictionary(indexWordMappingEntitites.Count);
+			foreach(IndexWordMappingEntity indexWordMappingEntity in indexWordMappingEntitites) {
+				if(!occurrences.ContainsKey(documents[indexWordMappingEntity.DocumentName])) {
+					occurrences.Add(documents[indexWordMappingEntity.DocumentName], new SortedBasicWordInfoSet(2));
+				}
+
+				occurrences[documents[indexWordMappingEntity.DocumentName]].Add(new BasicWordInfo(
+					(ushort)indexWordMappingEntity.FirstCharIndex, ushort.Parse(indexWordMappingEntity.RowKey.Split(new char[] {'|'})[2]), WordLocation.GetInstance((byte)indexWordMappingEntity.Location)));
+			}
+
+			word = new Word(1, text, occurrences);
+			return true;
+		}
+
+		/// <summary>
+		/// Handles the construction of an <see cref="T:IDocument" /> for the search engine.
+		/// </summary>
+		/// <param name="dumpedDocument">The input dumped document.</param>
+		/// <returns>The resulting <see cref="T:IDocument" />.</returns>
+		private IDocument BuildDocument(DumpedDocument dumpedDocument) {
+			if(alwaysGenerateDocument) {
+				return new DummyDocument() {
+					ID = dumpedDocument.ID,
+					Name = dumpedDocument.Name,
+					Title = dumpedDocument.Title,
+					TypeTag = dumpedDocument.TypeTag,
+					DateTime = dumpedDocument.DateTime
+				};
+			}
+
+			if(dumpedDocument.TypeTag == PageDocument.StandardTypeTag) {
+				string pageName = PageDocument.GetPageName(dumpedDocument.Name);
+
+				PageInfo page = GetPage(pageName);
+
+				if(page == null) return null;
+				else return new PageDocument(page, dumpedDocument, TokenizeContent);
+			}
+			else if(dumpedDocument.TypeTag == MessageDocument.StandardTypeTag) {
+				string pageFullName;
+				int id;
+				MessageDocument.GetMessageDetails(dumpedDocument.Name, out pageFullName, out id);
+
+				PageInfo page = GetPage(pageFullName);
+				if(page == null) return null;
+				else return new MessageDocument(page, id, dumpedDocument, TokenizeContent);
+			}
+			else return null;
+		}
+
+		// Extremely dirty way for testing the search engine in combination with alwaysGenerateDocument
+		private class DummyDocument : IDocument {
+
+			public uint ID { get; set; }
+
+			public string Name { get; set; }
+
+			public string Title { get; set; }
+
+			public string TypeTag { get; set; }
+
+			public DateTime DateTime { get; set; }
+
+			public WordInfo[] Tokenize(string content) {
+				return ScrewTurn.Wiki.SearchEngine.Tools.Tokenize(content);
+			}
+		}
+
+		/// <summary>
+		/// Gets some statistics about the search engine index.
+		/// </summary>
+		/// <param name="documentCount">The total number of documents.</param>
+		/// <param name="wordCount">The total number of unique words.</param>
+		/// <param name="occurrenceCount">The total number of word-document occurrences.</param>
+		/// <param name="size">The approximated size, in bytes, of the search engine index.</param>
 		public void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size) {
-			throw new NotImplementedException();
+			documentCount = index.TotalDocuments;
+			wordCount = index.TotalWords;
+			occurrenceCount = index.TotalOccurrences;
+			size = GetSize();
+		}
+
+		/// <summary>
+		/// Gets the approximate size, in bytes, of the search engine index.
+		/// </summary>
+		private long GetSize() {
+			// 1. Size of documents: 8 + 2*20 + 2*30 + 2*1 + 8 = 118 bytes
+			// 2. Size of words: 8 + 2*8 = 24 bytes
+			// 3. Size of mappings: 8 + 8 + 2 + 2 + 1 = 21 bytes
+			// 4. Size = Size * 2
+
+			long size = 0;
+
+			int rows = GetCount(IndexElementType.Documents);
+
+			if(rows == -1) return 0;
+			size += rows * 118;
+
+			rows = GetCount(IndexElementType.Words);
+
+			if(rows == -1) return 0;
+			size += rows * 24;
+
+			rows = GetCount(IndexElementType.Occurrences);
+
+			if(rows == -1) return 0;
+			size += rows * 21;
+			
+			return size * 2;
+		}
+
+		/// <summary>
+		/// Gets the number of elements in the index.
+		/// </summary>
+		/// <param name="element">The type of elements.</param>
+		/// <returns>The number of elements.</returns>
+		private int GetCount(IndexElementType element) {
+			int count = 0;
+
+			IList<IndexWordMappingEntity> indexWordMappingEntities = GetIndexWordMappingEntities(_wiki);
+
+			if(element == IndexElementType.Documents) count = indexWordMappingEntities.Distinct<IndexWordMappingEntity>(new IndexWordMappingEntityComparerByDocumentName()).Count();
+			else if(element == IndexElementType.Words) count = indexWordMappingEntities.Distinct<IndexWordMappingEntity>(new IndexWordMappingEntityComparerByWord()).Count();
+			else if(element == IndexElementType.Occurrences) count = indexWordMappingEntities.Count;
+			else throw new NotSupportedException("Unsupported element type");
+
+			return count;
+		}
+
+		/// <summary>
+		/// Clears the index.
+		/// </summary>
+		/// <param name="state">A state object passed from the index.</param>
+		private void ClearIndex() {
+			IList<IndexWordMappingEntity> indexWordMappingEntities = GetIndexWordMappingEntities(_wiki);
+
+			foreach(IndexWordMappingEntity indexWordMappingEntity in indexWordMappingEntities) {
+				_context.DeleteObject(indexWordMappingEntity);
+			}
+			_context.SaveChangesStandard();
 		}
 
 		public bool IsIndexCorrupted {
@@ -646,6 +926,19 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this);
 				return 0;
 			}
+		}
+
+		/// <summary>
+		/// Removes a page from the search engine index.
+		/// </summary>
+		/// <param name="content">The content of the page to remove.</param>
+		/// <param name="transaction">The current transaction.</param>
+		private void UnindexPage(PageContent content) {
+			string documentName = PageDocument.GetDocumentName(content.PageInfo);
+
+			DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, content.PageInfo, content.Title),
+				PageDocument.StandardTypeTag, content.LastModified);
+			index.RemoveDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent), null);
 		}
 
 		/// <summary>
@@ -696,6 +989,40 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			catch(Exception ex) {
 				_host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this);
 				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Removes a message from the search engine index.
+		/// </summary>
+		/// <param name="page">The page.</param>
+		/// <param name="id">The message ID.</param>
+		/// <param name="subject">The subject.</param>
+		/// <param name="dateTime">The date/time.</param>
+		/// <param name="body">The body.</param>
+		/// <param name="transaction">The current transaction.</param>
+		/// <returns>The number of indexed words, including duplicates.</returns>
+		private void UnindexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body) {
+			// Trim "RE:" to avoid polluting the search engine index
+			if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
+
+			string documentName = MessageDocument.GetDocumentName(page, id);
+
+			DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, null, subject),
+				MessageDocument.StandardTypeTag, DateTime.Now);
+			index.RemoveDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null);
+		}
+
+		/// <summary>
+		/// Removes a message tree from the search engine index.
+		/// </summary>
+		/// <param name="page">The page.</param>
+		/// <param name="root">The tree root.</param>
+		/// <param name="transaction">The current transaction.</param>
+		private void UnindexMessageTree(PageInfo page, Message root) {
+			UnindexMessage(page, root.ID, root.Subject, root.DateTime, root.Body);
+			foreach(Message reply in root.Replies) {
+				UnindexMessageTree(page, reply);
 			}
 		}
 
@@ -1120,10 +1447,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.DeleteObject(oldPageEntity);
 				_context.SaveChangesStandard();
 
+				PageInfo newPageInfo = new PageInfo(newPageFullName, this, newPage.CreationDateTime.ToLocalTime());
+
 				// Invalidate pagesInfoCache
 				_pagesInfoCache = null;
 
-				return new PageInfo(newPageFullName, this, newPage.CreationDateTime.ToLocalTime());
+				return newPageInfo;
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1237,6 +1566,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 							_context.AddObject(PagesContentsTable, currentPageContentEntity);
 						}
 						_context.SaveChangesStandard();
+
+						IndexPage(new PageContent(
+								new PageInfo(entity.RowKey, this, entity.CreationDateTime.ToLocalTime()),
+								currentPageContentEntity.Title,
+								currentPageContentEntity.User,
+								currentPageContentEntity.LastModified.ToLocalTime(),
+								currentPageContentEntity.Comment,
+								currentPageContentEntity.Content,
+								currentPageContentEntity.Keywords != null ? currentPageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries) : null,
+								currentPageContentEntity.Description));
 						break;
 				}
 				return true;
@@ -1258,13 +1597,21 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(page == null) throw new ArgumentNullException("page");
 			if(revision < 0) throw new ArgumentOutOfRangeException("revision");
 
+			UnindexPage(GetContent(page));
+
 			// Get the pageContet at the specified revision
 			PageContent rollbackPageContent = GetBackupContent(page, revision);
 			// If rollbackPageContent is null, the page does not exists and return false
 			if(rollbackPageContent == null) return false;
 
 			// Save a new version of the page with the content at the given revision
-			return ModifyPage(page, rollbackPageContent.Title, rollbackPageContent.User, rollbackPageContent.LastModified, rollbackPageContent.Comment, rollbackPageContent.Content, rollbackPageContent.Keywords, rollbackPageContent.Description, SaveMode.Backup);
+			bool success = ModifyPage(page, rollbackPageContent.Title, rollbackPageContent.User, rollbackPageContent.LastModified, rollbackPageContent.Comment, rollbackPageContent.Content, rollbackPageContent.Keywords, rollbackPageContent.Description, SaveMode.Backup);
+
+			if(success) {
+				IndexPage(rollbackPageContent);
+			}
+
+			return success;
 		}
 
 		/// <summary>
@@ -1363,6 +1710,17 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				// Delete all the pageContent including draft and backups
 				bool deleteExecuted = false;
 				foreach(PagesContentsEntity pageContentEntity in pageContentEntities) {
+					if(pageContentEntity.RowKey == CurrentRevision) {
+						PageContent currentContent = new PageContent(page, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(),
+							pageContentEntity.Comment,
+							pageContentEntity.Content,
+							pageContentEntity.Keywords != null ? pageContentEntity.Keywords.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries) : null,
+							pageContentEntity.Description);
+						UnindexPage(currentContent);
+						foreach(Message msg in GetMessages(page)) {
+							UnindexMessageTree(page, msg);
+						}
+					}
 					_context.DeleteObject(pageContentEntity);
 					deleteExecuted = true;
 				}
@@ -1541,6 +1899,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
 				if(pageInfoEntity == null) return false;
 
+				foreach(Message msg in GetMessages(page)) {
+					UnindexMessageTree(page, msg);
+				}
+
 				// Validate IDs by using a dictionary as a way of validation
 				try {
 					Dictionary<int, byte> ids = new Dictionary<int, byte>(50);
@@ -1566,6 +1928,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					}
 				}
 				_context.SaveChangesStandard();
+
+				foreach(Message msg in messages) {
+					IndexMessageTree(page, msg);
+				}
+
 				return true;
 			}
 			catch(Exception ex) {
@@ -1616,6 +1983,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var messageEntity = BuildMessageEntity(pageInfoEntity.PageId, GetNextMessageId(pageInfoEntity.PageId), username, subject, dateTime, body, parent);
 				_context.AddObject(MessagesTable, messageEntity);
 				_context.SaveChangesStandard();
+
+				IndexMessage(page, 1, subject, dateTime, body);
+
 				return true;
 			}
 			catch(Exception ex) {
@@ -1642,12 +2012,15 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				var messageEntity = GetMessageEntity(pageInfoEntity.PageId, id);
 				if(messageEntity == null) return false;
+
+				UnindexMessage(page, int.Parse(messageEntity.RowKey), messageEntity.Subject, messageEntity.DateTime.ToLocalTime(), messageEntity.Body);
 				_context.DeleteObject(messageEntity);
 
 				var messagesEntities = GetMessagesEntities(pageInfoEntity.PageId);
 				foreach(var entity in messagesEntities) {
 					if(entity.ParetnId == id.ToString()) {
 						if(removeReplies) {
+							UnindexMessage(page, int.Parse(entity.RowKey), entity.Subject, entity.DateTime.ToLocalTime(), entity.Body);
 							_context.DeleteObject(entity);
 						}
 						else {
@@ -1657,6 +2030,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					}
 				}
 				_context.SaveChangesStandard();
+
+
 				return true;
 			}
 			catch(Exception ex) {
@@ -1693,6 +2068,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var messageEntity = GetMessageEntity(pageInfoEntity.PageId, id);
 				if(messageEntity == null) return false;
 
+				UnindexMessage(page, int.Parse(messageEntity.RowKey), messageEntity.Subject, messageEntity.DateTime.ToLocalTime(), messageEntity.Body);
+
 				messageEntity.Username = username;
 				messageEntity.Subject = subject;
 				messageEntity.DateTime = dateTime.ToUniversalTime();
@@ -1700,6 +2077,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				_context.UpdateObject(messageEntity);
 				_context.SaveChangesStandard();
+
+				IndexMessage(page, int.Parse(messageEntity.RowKey), messageEntity.Subject, messageEntity.DateTime.ToLocalTime(), messageEntity.Body);
+
 				return true;
 			}
 			catch(Exception ex) {
@@ -2138,6 +2518,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		public static readonly string ContentTemplatesTable = "ContentTemplates";
 
 		/// <summary>
+		/// The IndexWordMapping table name.
+		/// </summary>
+		public static readonly string IndexWordMappingTable = "IndexWordMapping";
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
@@ -2156,7 +2541,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			_context = TableStorage.GetContext(connectionStrings[0], connectionStrings[1]);
 
-			index = new AzureIndex();
+			index = new AzureIndex(new IndexConnector(GetWordFetcher, GetSize, GetCount, ClearIndex, DeleteDataForDocument, SaveDataForDocument, TryFindWord));
 		}
 
 		/// <summary>
@@ -2181,6 +2566,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], NavigationPathsTable);
 			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], SnippetsTable);
 			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], ContentTemplatesTable);
+			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], IndexWordMappingTable);
 		}
 
 		/// <summary>
@@ -2276,6 +2662,71 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		// RowKey = snippetName
 
 		public string Content { get; set; }
+	}
+
+	internal class IndexWordMappingEntity : TableServiceEntity {
+		// PartitionKey = wiki
+		// RowKey = word|documentName|wordIndex
+
+		public string Word { get; set; }
+		public string DocumentName { get; set; }
+		public int FirstCharIndex { get; set; }
+		public int Location { get; set; }
+		public string DocumentTitle { get; set; }
+		public string TypeTag { get; set; }
+		public DateTime DateTime { get; set; }
+	}
+
+	internal class IndexWordMappingEntityComparerByDocumentName : IEqualityComparer<IndexWordMappingEntity> {
+
+		public bool Equals(IndexWordMappingEntity x, IndexWordMappingEntity y) {
+			//Check whether the compared objects reference the same data.
+			if(Object.ReferenceEquals(x, y)) return true;
+
+			//Check whether any of the compared objects is null.
+			if(Object.ReferenceEquals(x, null) || Object.ReferenceEquals(y, null))
+				return false;
+
+			//Check whether the entities DocumentName property are equal.
+			return x.DocumentName == y.DocumentName;
+		}
+
+		public int GetHashCode(IndexWordMappingEntity entity) {
+			//Check whether the object is null
+			if(Object.ReferenceEquals(entity, null)) return 0;
+
+			//Get hash code for the DocumentName field if it is not null.
+			int hashDocumentName = entity.DocumentName == null ? 0 : entity.DocumentName.GetHashCode();
+
+			return hashDocumentName;
+		}
+
+	}
+
+	internal class IndexWordMappingEntityComparerByWord : IEqualityComparer<IndexWordMappingEntity> {
+
+		public bool Equals(IndexWordMappingEntity x, IndexWordMappingEntity y) {
+			//Check whether the compared objects reference the same data.
+			if(Object.ReferenceEquals(x, y)) return true;
+
+			//Check whether any of the compared objects is null.
+			if(Object.ReferenceEquals(x, null) || Object.ReferenceEquals(y, null))
+				return false;
+
+			//Check whether the entities DocumentName property are equal.
+			return x.Word == y.Word;
+		}
+
+		public int GetHashCode(IndexWordMappingEntity entity) {
+			//Check whether the object is null
+			if(Object.ReferenceEquals(entity, null)) return 0;
+
+			//Get hash code for the DocumentName field if it is not null.
+			int hashWord = entity.Word == null ? 0 : entity.Word.GetHashCode();
+
+			return hashWord;
+		}
+
 	}
 
 }

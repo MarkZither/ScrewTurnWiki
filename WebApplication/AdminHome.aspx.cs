@@ -283,7 +283,7 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public class IndexRow {
 
-		private string provider, providerType, documents, words, occurrences, size;
+		private string provider, providerType;
 		private bool isOk;
 
 		/// <summary>
@@ -293,15 +293,6 @@ namespace ScrewTurn.Wiki {
 		public IndexRow(IPagesStorageProviderV30 provider) {
 			this.provider = provider.Information.Name;
 			providerType = provider.GetType().FullName;
-
-			int docCount, wordCount, matchCount;
-			long size;
-			provider.GetIndexStats(out docCount, out wordCount, out matchCount, out size);
-
-			this.documents = docCount.ToString();
-			this.words = wordCount.ToString();
-			this.occurrences = matchCount.ToString();
-			this.size = Tools.BytesToString(size);
 
 			this.isOk = !provider.IsIndexCorrupted;
 		}
@@ -318,34 +309,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public string ProviderType {
 			get { return providerType; }
-		}
-
-		/// <summary>
-		/// Gets the number of documents.
-		/// </summary>
-		public string Documents {
-			get { return documents; }
-		}
-
-		/// <summary>
-		/// Gets the number of words.
-		/// </summary>
-		public string Words {
-			get { return words; }
-		}
-
-		/// <summary>
-		/// Gets the number of occurrences.
-		/// </summary>
-		public string Occurrences {
-			get { return occurrences; }
-		}
-
-		/// <summary>
-		/// Gets the size of the index.
-		/// </summary>
-		public string Size {
-			get { return size; }
 		}
 
 		/// <summary>

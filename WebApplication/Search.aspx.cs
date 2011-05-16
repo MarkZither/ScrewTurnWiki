@@ -250,33 +250,8 @@ namespace ScrewTurn.Wiki {
 
 			rptResults.DataSource = rows;
 			rptResults.DataBind();
-
-			PrintStats(end - begin, rows.Count);
 		}
-
-		/// <summary>
-		/// Prints the search statistics.
-		/// </summary>
-		/// <param name="time">The time the search required.</param>
-		/// <param name="results">The number of results.</param>
-		private void PrintStats(TimeSpan time, int results) {
-			int totalDocuments = 0;
-			int totalWords = 0;
-			long totalSize = 0;
-
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
-				int dc, wc, oc;
-				long s;
-				prov.GetIndexStats(out dc, out wc, out oc, out s);
-				totalDocuments += dc;
-				totalWords += wc;
-				totalSize += s;
-			}
-
-			lblStats.Text = string.Format(Properties.Messages.SearchStats,
-				Tools.BytesToString(totalSize), totalDocuments, totalWords, time.TotalSeconds, results);
-		}
-
+		
 		/// <summary>
 		/// Generates the OpenSearch description XML document and renders it to output.
 		/// </summary>

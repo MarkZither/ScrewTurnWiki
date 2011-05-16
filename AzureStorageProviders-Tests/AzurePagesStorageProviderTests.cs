@@ -31,6 +31,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.PagesContentsTable);
 			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.PagesInfoTable);
 			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.SnippetsTable);
+			TableStorage.TruncateTable("unittestonazurestorage", "YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.IndexWordMappingTable);
 		}
 
 		[Test]
