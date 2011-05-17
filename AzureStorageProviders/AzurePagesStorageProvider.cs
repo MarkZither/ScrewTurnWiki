@@ -1196,6 +1196,56 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
+		// pageId -> (revision -> pageContentEntity)
+		private Dictionary<string, Dictionary<string, PagesContentsEntity>> _pagesContentCache;
+
+		// if true allPagesContent has been called and doesn't need to be called again
+		private bool allPagesContentRetireved = false;
+
+		private PagesContentsEntity GetPagesContentsEntityByRevision(string pageId, string revision) {
+			if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
+
+			if(!_pagesContentCache.ContainsKey(pageId)) _pagesContentCache[pageId] = new Dictionary<string, PagesContentsEntity>();
+			
+			if(!_pagesContentCache[pageId].ContainsKey(revision)) {
+				var query = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
+							 where e.PartitionKey.Equals(pageId) && e.RowKey.Equals(revision)
+							 select e).AsTableServiceQuery();
+				var entity = QueryHelper<PagesContentsEntity>.FirstOrDefault(query);
+				if(entity == null) {
+					return null;
+				}
+				else {
+					_pagesContentCache[pageId][revision] = entity;
+				}
+			}
+			return _pagesContentCache[pageId][revision];
+		}
+
+		private List<PagesContentsEntity> GetPagesContentEntities(string pageId) {
+			if(!(allPagesContentRetireved && _pagesContentCache != null && _pagesContentCache.ContainsKey(pageId))) {
+				// pagesContents not present in temp local cache retrieve from table storage
+				if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
+				_pagesContentCache[pageId] = new Dictionary<string, PagesContentsEntity>();
+				allPagesContentRetireved = true;
+
+				var query = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
+							 where e.PartitionKey.Equals(pageId)
+							 select e).AsTableServiceQuery();
+				var entities = QueryHelper<PagesContentsEntity>.All(query);
+
+				foreach(PagesContentsEntity entity in entities) {
+					if(entity != null) _pagesContentCache[pageId][entity.RowKey] = entity;
+				}
+			}
+
+			List<PagesContentsEntity> pagesContentsEntities = new List<PagesContentsEntity>();
+			foreach(var item in _pagesContentCache[pageId]) {
+				pagesContentsEntities.Add(item.Value);
+			}
+			return pagesContentsEntities;
+		}
+
 		/// <summary>
 		/// Gets the Content of a Page.
 		/// </summary>
@@ -1213,10 +1263,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(entity == null) return null;
 
 				// Find the associated PageContent; if not found return an empty PageContent
-				var pageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-						 where e.PartitionKey.Equals(entity.PageId) && e.RowKey.Equals(CurrentRevision)
-						 select e).AsTableServiceQuery();
-				var pageContentEntity = QueryHelper<PagesContentsEntity>.FirstOrDefault(pageContentQuery);
+				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, CurrentRevision);
 				if(pageContentEntity == null) return null;
 
 				return new PageContent(page, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
@@ -1241,10 +1288,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(entity == null) return null;
 
 				// Find the associated draft PageContent; if not found return an empty PageContent
-				var pageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-										where e.PartitionKey.Equals(entity.PageId) && e.RowKey.Equals(Draft)
-										select e).AsTableServiceQuery();
-				var pageContentEntity = QueryHelper<PagesContentsEntity>.FirstOrDefault(pageContentQuery);
+				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, Draft);
 				if(pageContentEntity == null) return null;
 
 				return new PageContent(page, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
@@ -1269,14 +1313,15 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(entity == null) return false;
 
 				// Find the associated draft PageContent; if not found return an empty PageContent
-				var pageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-										where e.PartitionKey.Equals(entity.PageId) && e.RowKey.Equals(Draft)
-										select e).AsTableServiceQuery();
-				var pageContentEntity = QueryHelper<PagesContentsEntity>.FirstOrDefault(pageContentQuery);
+				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, Draft);
 				if(pageContentEntity == null) return false;
 
 				_context.DeleteObject(pageContentEntity);
 				_context.SaveChangesStandard();
+
+				// Invalidate pagesContentCache
+				_pagesContentCache = null;
+				allPagesContentRetireved = false;
 
 				return true;
 			}
@@ -1300,10 +1345,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(entity == null) return null;
 
 				// Find the associated PageContent
-				var pageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-										where e.PartitionKey.Equals(entity.PageId)
-										select e).AsTableServiceQuery();
-				var pageContentEntities = QueryHelper<PagesContentsEntity>.All(pageContentQuery);
+				var pageContentEntities = GetPagesContentEntities(entity.PageId);
 				if(pageContentEntities == null) return null;
 
 				List<int> revisions = new List<int>(pageContentEntities.Count);
@@ -1338,10 +1380,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(entity == null) return null;
 
 				// Find the associated PageContent
-				var pageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-										where e.PartitionKey.Equals(entity.PageId) && e.RowKey.Equals(revision.ToString())
-										select e).AsTableServiceQuery();
-				var pageContentEntity = QueryHelper<PagesContentsEntity>.FirstOrDefault(pageContentQuery);
+				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, revision.ToString());
 				if(pageContentEntity == null) return null;
 
 				return new PageContent(page, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
@@ -1369,10 +1408,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(entity == null) return false;
 
 				// Find the associated PageContent
-				var pageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-										where e.PartitionKey.Equals(entity.PageId) && e.RowKey.Equals(revision.ToString())
-										select e).AsTableServiceQuery();
-				var pageContentEntity = QueryHelper<PagesContentsEntity>.FirstOrDefault(pageContentQuery);
+				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, revision.ToString());
 				if(pageContentEntity != null) {
 					pageContentEntity.Title = content.Title;
 					pageContentEntity.User = content.User;
@@ -1383,6 +1419,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					pageContentEntity.Description = content.Description;
 					_context.UpdateObject(pageContentEntity);
 					_context.SaveChangesStandard();
+
+					// Invalidate pagesContetnCache
+					_pagesContentCache = null;
+					allPagesContentRetireved = false;
+
 					return true;
 				}
 				else {
@@ -1399,6 +1440,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					};
 					_context.AddObject(PagesContentsTable, pageContentEntity);
 					_context.SaveChangesStandard();
+
+					// Invalidate pagesContetnCache
+					_pagesContentCache = null;
+					allPagesContentRetireved = false;
+
 					return true;
 				}
 			}
@@ -1573,10 +1619,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					case SaveMode.Draft:
 						bool newDraft = false;
 						// Find the "Draft" PageContent if present
-						var draftPageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-													 where e.PartitionKey.Equals(entity.PageId) && e.RowKey.Equals(Draft)
-													 select e).AsTableServiceQuery();
-						var draftPageContentEntity = QueryHelper<PagesContentsEntity>.FirstOrDefault(draftPageContentQuery);
+						var draftPageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, Draft);
 						if(draftPageContentEntity == null) {
 							newDraft = true;
 							draftPageContentEntity = new PagesContentsEntity();
@@ -1600,11 +1643,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 						break;
 					default:
 						bool update = false;
-						// Find the "Draft" PageContent if present
-						var currentPageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-													   where e.PartitionKey.Equals(entity.PageId) && e.RowKey.Equals(CurrentRevision)
-													   select e).AsTableServiceQuery();
-						var currentPageContentEntity = QueryHelper<PagesContentsEntity>.FirstOrDefault(currentPageContentQuery);
+						// Find the "CurrentRevision" PageContent if present
+						var currentPageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, CurrentRevision);
 
 						// If currentPageContent is not found the page has never been saved and has no backups
 						if(currentPageContentEntity != null) {
@@ -1659,6 +1699,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 								currentPageContentEntity.Description));
 						break;
 				}
+
+				// Invalidate pagesContetnCache
+				_pagesContentCache = null;
+				allPagesContentRetireved = false;
+
 				return true;
 			}
 			catch(Exception ex) {
@@ -1695,6 +1740,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(success) {
 				IndexPage(rollbackPageContent);
 			}
+
+			// Invalidate pagesContetnCache
+			_pagesContentCache = null;
+			allPagesContentRetireved = false;
 
 			return success;
 		}
@@ -1764,6 +1813,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					}
 				}
 
+				// Invalidate pagesContetnCache
+				_pagesContentCache = null;
+				allPagesContentRetireved = false;
+
 				return true;
 			}
 			catch(Exception ex) {
@@ -1786,10 +1839,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(entity == null) return false;
 
 				// Find the associated PageContent
-				var pageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-										where e.PartitionKey.Equals(entity.PageId)
-										select e).AsTableServiceQuery();
-				var pageContentEntities = QueryHelper<PagesContentsEntity>.All(pageContentQuery);
+				var pageContentEntities = GetPagesContentEntities(entity.PageId);
 				if(pageContentEntities == null) return false;
 
 				// Delete all the pageContent including draft and backups
@@ -1817,6 +1867,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				// Invalidate pagesInfoCache
 				_pagesInfoCache = null;
+
+				// Invalidate pagesContetnCache
+				_pagesContentCache = null;
+				allPagesContentRetireved = false;
 
 				return deleteExecuted;
 			}
