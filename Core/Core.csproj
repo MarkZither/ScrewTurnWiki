@@ -38,7 +38,7 @@
     <WarningLevel>4</WarningLevel>
     <FileAlignment>512</FileAlignment>
     <DocumentationFile>bin\Release\ScrewTurn.Wiki.Core.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
