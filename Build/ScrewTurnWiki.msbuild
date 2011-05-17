@@ -66,21 +66,23 @@
 		<MakeDir Directories="@(WebAppOutput_SqlServer_PublicDirectory_Plugins)" />
 		
 		<!-- Plugins Assemblies -->
-		<!-- Disabled on Mono -->
-		<!-- <CreateItem Include="Temp\SqlServerProviders.dll;Temp\ActiveDirectoryProvider.dll;Temp\*Plugin.dll">
+		<!-- ActiveDirectoryProvider Disabled on Mono -->
+		<CreateItem Include="Temp\SqlServerProviders.dll*;Temp\*Plugin.dll*;Temp\MySql.Data.dll">
 			<Output ItemName="BuiltPlugins" TaskParameter="Include" />
-		</CreateItem> -->
+		</CreateItem>
 		<Copy SourceFiles="@(BuiltPlugins)" DestinationFolder=".\Artifacts\Plugins\" />
 		
-		<!-- SqlServerProviders.dll for SQL Server -->
+		<!-- SqlServerProviders.dll for MySQL -->
 		<Copy SourceFiles=".\Artifacts\Plugins\SqlServerProviders.dll" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
+		<Copy SourceFiles=".\Artifacts\Plugins\MySql.Data.dll" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
+		<Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles=".\Artifacts\Plugins\SqlServerProviders.dll.mdb" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
 		
 		<!-- Install.txt, Install-SqlServer.txt -->
 		<Copy SourceFiles=".\Install.txt" DestinationFolder=".\Artifacts\" />
 		<Copy SourceFiles=".\Install-SqlServer.txt" DestinationFolder=".\Artifacts\" />
 		
 		<!-- Tests Assemblies -->
-		<CreateItem Include="Temp\*.dll;Temp\*.pdb">
+		<CreateItem Include="Temp\*.dll;Temp\*.pdb;Temp\*.mdb">
 			<Output ItemName="BuiltTests" TaskParameter="Include" />
 		</CreateItem>
 		<Copy SourceFiles="@(BuiltTests)" DestinationFolder=".\Artifacts\Tests\" />
