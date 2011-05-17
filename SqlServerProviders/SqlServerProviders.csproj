@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="MySql.Data, Version=6.0.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Lib\MySQL\mysql.data.dll</HintPath>
+      <HintPath>..\References\Lib\MySQL\MySql.Data.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
