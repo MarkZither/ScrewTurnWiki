@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using ScrewTurn.Wiki.Plugins.SqlCommon;
 using System.Data.Common;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
@@ -17,21 +17,21 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// Gets the table and column name prefix.
 		/// </summary>
 		public string ObjectNamePrefix {
-			get { return "["; }
+			get { return "`"; }
 		}
 
 		/// <summary>
 		/// Gets the table and column name suffix.
 		/// </summary>
 		public string ObjectNameSuffix {
-			get { return "]"; }
+			get { return "`"; }
 		}
 
 		/// <summary>
 		/// Gets the parameter name prefix.
 		/// </summary>
 		public string ParameterNamePrefix {
-			get { return "@"; }
+			get { return "?"; }
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <param name="connString">The connection string.</param>
 		/// <returns>The connection.</returns>
 		public DbConnection GetConnection(string connString) {
-			DbConnection cn = new SqlConnection(connString);
+			DbConnection cn = new MySqlConnection(connString);
 			cn.Open();
 
 			return cn;
@@ -98,7 +98,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			cmd.CommandText = preparedQuery;
 
 			foreach(Parameter param in parameters) {
-				cmd.Parameters.Add(new SqlParameter("@" + param.Name, param.Value));
+				cmd.Parameters.Add(new MySqlParameter("?" + param.Name, param.Value));
 			}
 
 			return cmd;
@@ -117,7 +117,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			cmd.CommandText = preparedQuery;
 
 			foreach(Parameter param in parameters) {
-				cmd.Parameters.Add(new SqlParameter("@" + param.Name, param.Value));
+				cmd.Parameters.Add(new MySqlParameter("?" + param.Name, param.Value));
 			}
 
 			return cmd;

@@ -1,75 +1,81 @@
 ﻿
-create table [Setting] (
-	[Name] varchar(100) not null,
-	[Value] nvarchar(4000) not null,
-	constraint [PK_Setting] primary key clustered ([Name])
-)
+CREATE TABLE `Setting` (
+	`Name` VARCHAR(100) NOT NULL,
+	`Value` VARCHAR(4000) NOT NULL,
+	CONSTRAINT `PK_Setting` PRIMARY KEY (`Name`)
+);
 
-create table [Log] (
-	[Id] int not null identity,
-	[DateTime] datetime not null,
-	[EntryType] char not null,
-	[User] nvarchar(100) not null,
-	[Message] nvarchar(4000) not null,
-	constraint [PK_Log] primary key clustered ([Id])
-)
+CREATE TABLE `Log` (
+	`Id` INT NOT NULL AUTO_INCREMENT,
+	`DateTime` DATETIME NOT NULL,
+	`EntryType` CHAR NOT NULL,
+	`User` VARCHAR(100) NOT NULL,
+	`Message` VARCHAR(4000) NOT NULL,
+	CONSTRAINT `PK_Log` PRIMARY KEY (`Id`)
+);
 
-create table [MetaDataItem] (
-	[Name] varchar(100) not null,
-	[Tag] nvarchar(100) not null,
-	[Data] nvarchar(4000) not null,
-	constraint [PK_MetaDataItem] primary key clustered ([Name], [Tag])
-)
+CREATE TABLE `MetaDataItem` (
+	`Name` VARCHAR(100) NOT NULL,
+	`Tag` VARCHAR(100) NOT NULL,
+	`Data` VARCHAR(4000) NOT NULL,
+	CONSTRAINT `PK_MetaDataItem` PRIMARY KEY (`Name`, `Tag`)
+);
 
-create table [RecentChange] (
-	[Id] int not null identity,
-	[Page] nvarchar(200) not null,
-	[Title] nvarchar(200) not null,
-	[MessageSubject] nvarchar(200),
-	[DateTime] datetime not null,
-	[User] nvarchar(100) not null,
-	[Change] char not null,
-	[Description] nvarchar(4000),
-	constraint [PK_RecentChange] primary key clustered ([Id])
-)
+CREATE TABLE `RecentChange` (
+	`Id` int NOT NULL AUTO_INCREMENT,
+	`Page` VARCHAR(200) NOT NULL,
+	`Title` VARCHAR(200) NOT NULL,
+	`MessageSubject` VARCHAR(200),
+	`DateTime` DATETIME NOT NULL,
+	`User` VARCHAR(100) NOT NULL,
+	`Change` CHAR NOT NULL,
+	`Description` VARCHAR(4000),
+	CONSTRAINT `PK_RecentChange` PRIMARY KEY (`Id`)
+);
 
-create table [PluginAssembly] (
-	[Name] varchar(100) not null,
-	[Assembly] varbinary(max) not null,
-	constraint [PK_PluginAssembly] primary key clustered ([Name])
-)
+CREATE TABLE `PluginAssembly` (
+	`Name` VARCHAR(100) NOT NULL,
+	`Assembly` LONGBLOB NOT NULL,
+	CONSTRAINT `PK_PluginAssembly` PRIMARY KEY (`Name`)
+);
 
-create table [PluginStatus] (
-	[Name] varchar(150) not null,
-	[Enabled] bit not null,
-	[Configuration] nvarchar(4000) not null,
-	constraint [PK_PluginStatus] primary key clustered ([Name])
-)
+CREATE TABLE `PluginStatus` (
+	`Name` VARCHAR(150) NOT NULL,
+	`Enabled` BOOL NOT NULL,
+	`Configuration` VARCHAR(4000) NOT NULL,
+	CONSTRAINT `PK_PluginStatus` PRIMARY KEY (`Name`)
+);
 
-create table [OutgoingLink] (
-	[Source] nvarchar(100) not null,
-	[Destination] nvarchar(100) not null,
-	constraint [PK_OutgoingLink] primary key clustered ([Source], [Destination])
-)
+CREATE TABLE `OutgoingLink` (
+	`Source` VARCHAR(100) NOT NULL,
+	`Destination` VARCHAR(100) NOT NULL,
+	CONSTRAINT `PK_OutgoingLink` PRIMARY KEY (`Source`, `Destination`)
+);
 
-create table [AclEntry] (
-	[Resource] nvarchar(200) not null,
-	[Action] varchar(50) not null,
-	[Subject] nvarchar(100) not null,
-	[Value] char not null,
-	constraint [PK_AclEntry] primary key clustered ([Resource], [Action], [Subject])
-)
+CREATE TABLE `AclEntry` (
+	`Resource` VARCHAR(200) NOT NULL,
+	`Action` VARCHAR(50) NOT NULL,
+	`Subject` VARCHAR(100) NOT NULL,
+	`Value` CHAR NOT NULL,
+	CONSTRAINT `PK_AclEntry` PRIMARY KEY (`Resource`, `Action`, `Subject`)
+);
 
-if (select count(*) from sys.tables where [Name] = 'Version') = 0
-begin
-	create table [Version] (
-		[Component] varchar(100) not null,
-		[Version] int not null,
-		constraint [PK_Version] primary key clustered ([Component])
-	)
-end
-
-if (select count([Version]) from [Version] where [Component] = 'Settings') = 0
-begin
-	insert into [Version] ([Component], [Version]) values ('Settings', 3000)
-end
+DROP PROCEDURE IF EXISTS `testSettingsDatabase` ;
+CREATE PROCEDURE `testSettingsDatabase` ()
+BEGIN
+  DECLARE i INT DEFAULT -1;
+  SELECT COUNT(*) INTO i FROM INFORMATION_SCHEMA.TABLES WHERE table_name like 'Version';
+  IF i = 0 THEN
+  CREATE TABLE `Version` (
+    `Component` VARCHAR(100) NOT NULL,
+    `Version` INT NOT NULL,
+    CONSTRAINT `PK_Version` PRIMARY KEY (`Component`)
+  );
+  END IF;
+  SELECT COUNT(`Version`) INTO i FROM `Version` WHERE `Component` like 'Settings';
+  IF i = 0 THEN
+	INSERT INTO `Version` (`Component`, `Version`) VALUES ('Settings', 3000);
+  END IF;
+END ;
+CALL `testSettingsDatabase`();
+DROP PROCEDURE IF EXISTS `testSettingsDatabase`;

@@ -1,47 +1,55 @@
 ﻿
-create table [Directory] (
-	[FullPath] nvarchar(250) not null,
-	[Parent] nvarchar(250),
-	constraint [PK_Directory] primary key clustered ([FullPath])
-)
+DROP PROCEDURE IF EXISTS `testFilesDatabase`;
+CREATE PROCEDURE `testFilesDatabase` ()
+BEGIN
+  DECLARE i INT DEFAULT -1;
+  START TRANSACTION;
+	CREATE TABLE `Directory` (
+		`FullPath` VARCHAR(250) NOT NULL,
+		`Parent` VARCHAR(250),
+		CONSTRAINT `PK_Directory` PRIMARY KEY (`FullPath`)
+	);
 
-create table [File] (
-	[Name] nvarchar(200) not null,
-	[Directory] nvarchar(250) not null
-		constraint [FK_File_Directory] references [Directory]([FullPath])
-		on delete cascade on update cascade,
-	[Size] bigint not null,
-	[Downloads] int not null,
-	[LastModified] datetime not null,
-	[Data] varbinary(max) not null,
-	constraint [PK_File] primary key clustered ([Name], [Directory])
-)
+	CREATE TABLE `File` (
+		`Name` VARCHAR(200) NOT NULL,
+		`Directory` VARCHAR(250) NOT NULL,
+		`Size` BIGINT NOT NULL,
+		`Downloads` INT NOT NULL,
+		`LastModified` DATETIME NOT NULL,
+		`Data` LONGBLOB NOT NULL,
+		CONSTRAINT `PK_File` PRIMARY KEY (`Name`, `Directory`)
+	);
 
-create table [Attachment] (
-	[Name] nvarchar(200) not null,
-	[Page] nvarchar(200) not null,
-	[Size] bigint not null,
-	[Downloads] int not null,
-	[LastModified] datetime not null,
-	[Data] varbinary(max) not null,
-	constraint[PK_Attachment] primary key clustered ([Name], [Page])
-)
-
-if (select count(*) from sys.tables where [Name] = 'Version') = 0
-begin
-	create table [Version] (
-		[Component] varchar(100) not null,
-		[Version] int not null,
-		constraint [PK_Version] primary key clustered ([Component])
-	)
-end
-
-if (select count([Version]) from [Version] where [Component] = 'Files') = 0
-begin
-	insert into [Version] ([Component], [Version]) values ('Files', 3000)
-end
-
-if (select count([FullPath]) from [Directory] where [FullPath] = '/') = 0
-begin
-	insert into [Directory] ([FullPath], [Parent]) values ('/', NULL)
-end
+	CREATE TABLE `Attachment` (
+		`Name` VARCHAR(200) NOT NULL,
+		`Page` VARCHAR(200) NOT NULL,
+		`Size` BIGINT NOT NULL,
+		`Downloads` INT NOT NULL,
+		`LastModified` DATETIME NOT NULL,
+		`Data` LONGBLOB NOT NULL,
+		CONSTRAINT `PK_Attachment` PRIMARY KEY (`Name`, `Page`)
+	);
+  COMMIT;
+  START TRANSACTION;
+	ALTER TABLE `File` ADD CONSTRAINT `FK_File_Directory` FOREIGN KEY (`Directory`)
+		REFERENCES `Directory`(`FullPath`) ON DELETE CASCADE ON UPDATE CASCADE;
+  COMMIT;
+  SELECT COUNT(*) INTO i FROM INFORMATION_SCHEMA.TABLES WHERE table_name like 'Version';
+  IF i = 0 THEN
+  CREATE TABLE `Version` (
+    `Component` VARCHAR(100) NOT NULL,
+    `Version` INT NOT NULL,
+    CONSTRAINT `PK_Version` PRIMARY KEY (`Component`)
+  );
+  END IF;
+  SELECT COUNT(`Version`) INTO i FROM `Version` WHERE `Component` like 'Files';
+  IF i = 0 THEN
+	INSERT INTO `Version` (`Component`, `Version`) VALUES ('Files', 3000);
+  END IF;
+  SELECT COUNT(`FullPath`) INTO i FROM `Directory` WHERE `FullPath` like '/';
+  IF i = 0 THEN
+	INSERT INTO `Directory` (`FullPath`, `Parent`) VALUES ('/', NULL);
+  END IF;
+END;
+CALL `testFilesDatabase`();
+DROP PROCEDURE IF EXISTS `testFilesDatabase`;

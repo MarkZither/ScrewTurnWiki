@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using ScrewTurn.Wiki.Plugins.SqlCommon;
 using ScrewTurn.Wiki.PluginFramework;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace ScrewTurn.Wiki.Plugins.SqlServer {
 	
@@ -24,8 +24,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <param name="connString">The connection string.</param>
 		/// <returns>The command.</returns>
-		private SqlCommand GetCommand(string connString) {
-			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as SqlCommand;
+		private MySqlCommand GetCommand(string connString) {
+			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as MySqlCommand;
 		}
 
 		/// <summary>
@@ -42,11 +42,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <param name="connString">The connection string to validate.</param>
 		/// <remarks>If the connection string is invalid, the method throws <see cref="T:InvalidConfigurationException"/>.</remarks>
 		protected override void ValidateConnectionString(string connString) {
-			SqlCommand cmd = null;
+			MySqlCommand cmd = null;
 			try {
 				cmd = GetCommand(connString);
 			}
-			catch(SqlException ex) {
+			catch(MySqlException ex) {
 				throw new InvalidConfigurationException("Provided connection string is not valid", ex);
 			}
 			catch(InvalidOperationException ex) {
@@ -68,8 +68,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Users'";
+			MySqlCommand cmd = GetCommand(connString);
+			cmd.CommandText = "select Version from Version where Component = 'Users'";
 
 			bool exists = false;
 
@@ -78,7 +78,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 				if(version > CurrentSchemaVersion) throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
 				exists = version != -1;
 			}
-			catch(SqlException) {
+			catch(MySqlException) {
 				exists = false;
 			}
 			finally {
@@ -96,8 +96,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Users'";
+			MySqlCommand cmd = GetCommand(connString);
+			cmd.CommandText = "select Version from Version where Component = 'Users'";
 
 			bool exists = false;
 
@@ -105,7 +105,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 				int version = ExecuteScalar<int>(cmd, -1);
 				exists = version < CurrentSchemaVersion;
 			}
-			catch(SqlException) {
+			catch(MySqlException) {
 				exists = false;
 			}
 			finally {
@@ -121,14 +121,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <summary>
 		/// Creates the standard database schema.
 		/// </summary>
-		private void CreateStandardSchema() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = Properties.Resources.UsersDatabase;
+        private void CreateStandardSchema()
+        {
+            MySqlCommand cmd = GetCommand(connString);
+            cmd.CommandText = Properties.Resources.UsersDatabase;
 
-			cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
 
-			cmd.Connection.Close();
-		}
+            cmd.Connection.Close();
+        }
 
 		/// <summary>
 		/// Creates or updates the database schema if necessary.
@@ -155,8 +156,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <returns><c>true</c> if the upgrade is possible, <c>false</c> otherwise.</returns>
 		private bool SchemaAllowsUpgradeFrom20() {
 			// Look for 'UsersProviderVersion' tables
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select count(*) from sys.tables where [name] = 'UsersProviderVersion'";
+			MySqlCommand cmd = GetCommand(connString);
+            cmd.CommandText = "select count(*) from INFORMATION_SCHEMA.TABLES where table_name like 'UsersProviderVersion'";
 
 			int count = ExecuteScalar<int>(cmd, -1);
 
@@ -172,10 +173,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			// 3. Create new schema
 			// 4. Add new users and default groups (admins, users)
 
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select * from [User]";
+			MySqlCommand cmd = GetCommand(connString);
+			cmd.CommandText = "select * from User";
 
-			SqlDataReader reader = cmd.ExecuteReader();
+			MySqlDataReader reader = cmd.ExecuteReader();
 
 			string administratorsGroup = host.GetSettingValue(SettingName.AdministratorsGroup);
 			string usersGroup = host.GetSettingValue(SettingName.UsersGroup);
@@ -201,7 +202,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			cmd.Connection.Close();
 
 			cmd = GetCommand(connString);
-			cmd.CommandText = "exec sp_rename 'UsersProviderVersion', 'UsersProviderVersion_v2'; exec sp_rename 'User', 'User_v2';";
+            cmd.CommandText = "RENAME TABLE 'UsersProviderVersion' TO 'UsersProviderVersion_v2', 'User' TO 'User_v2';";
 			cmd.ExecuteNonQuery();
 			cmd.Connection.Close();
 
@@ -212,12 +213,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
 			for(int i = 0; i < newUsers.Count; i++) {
 				cmd = GetCommand(connString);
-				cmd.CommandText = "insert into [User] ([Username], [PasswordHash], [Email], [Active], [DateTime]) values (@Username, @PasswordHash, @Email, @Active, @DateTime)";
-				cmd.Parameters.Add(new SqlParameter("@Username", newUsers[i].Username));
-				cmd.Parameters.Add(new SqlParameter("@PasswordHash", passwordHashes[i]));
-				cmd.Parameters.Add(new SqlParameter("@Email", newUsers[i].Email));
-				cmd.Parameters.Add(new SqlParameter("@Active", newUsers[i].Active));
-				cmd.Parameters.Add(new SqlParameter("@DateTime", newUsers[i].DateTime));
+				cmd.CommandText = "insert into User (Username, PasswordHash, Email, Active, DateTime) values (?Username, ?PasswordHash, ?Email, ?Active, ?DateTime)";
+				cmd.Parameters.Add(new MySqlParameter("?Username", newUsers[i].Username));
+				cmd.Parameters.Add(new MySqlParameter("?PasswordHash", passwordHashes[i]));
+				cmd.Parameters.Add(new MySqlParameter("?Email", newUsers[i].Email));
+				cmd.Parameters.Add(new MySqlParameter("?Active", newUsers[i].Active));
+				cmd.Parameters.Add(new MySqlParameter("?DateTime", newUsers[i].DateTime));
 
 				cmd.ExecuteNonQuery();
 				cmd.Connection.Close();

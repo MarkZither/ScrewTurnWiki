@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using ScrewTurn.Wiki.Plugins.SqlCommon;
 using ScrewTurn.Wiki.PluginFramework;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
@@ -24,8 +24,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <param name="connString">The connection string.</param>
 		/// <returns>The command.</returns>
-		private SqlCommand GetCommand(string connString) {
-			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as SqlCommand;
+		private MySqlCommand GetCommand(string connString) {
+			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as MySqlCommand;
 		}
 
 		/// <summary>
@@ -42,11 +42,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <param name="connString">The connection string to validate.</param>
 		/// <remarks>If the connection string is invalid, the method throws <see cref="T:InvalidConfigurationException"/>.</remarks>
 		protected override void ValidateConnectionString(string connString) {
-			SqlCommand cmd = null;
+			MySqlCommand cmd = null;
 			try {
 				cmd = GetCommand(connString);
 			}
-			catch(SqlException ex) {
+			catch(MySqlException ex) {
 				throw new InvalidConfigurationException("Provided connection string is not valid", ex);
 			}
 			catch(InvalidOperationException ex) {
@@ -68,8 +68,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Files'";
+			MySqlCommand cmd = GetCommand(connString);
+			cmd.CommandText = "select Version from Version where Component = 'Files'";
 
 			bool exists = false;
 
@@ -78,7 +78,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 				if(version > CurrentSchemaVersion) throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
 				exists = version != -1;
 			}
-			catch(SqlException) {
+			catch(MySqlException) {
 				exists = false;
 			}
 			finally {
@@ -96,8 +96,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Files'";
+			MySqlCommand cmd = GetCommand(connString);
+			cmd.CommandText = "select Version from Version where Component = 'Files'";
 
 			bool exists = false;
 
@@ -105,7 +105,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 				int version = ExecuteScalar<int>(cmd, -1);
 				exists = version < CurrentSchemaVersion;
 			}
-			catch(SqlException) {
+            catch (MySqlException)
+            {
 				exists = false;
 			}
 			finally {
@@ -122,7 +123,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// Creates the standard database schema.
 		/// </summary>
 		private void CreateStandardSchema() {
-			SqlCommand cmd = GetCommand(connString);
+            MySqlCommand cmd = GetCommand(connString);
 			cmd.CommandText = Properties.Resources.FilesDatabase;
 
 			cmd.ExecuteNonQuery();

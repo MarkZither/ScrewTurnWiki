@@ -55,16 +55,24 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			long read = 0;
 			long totalRead = 0;
-			do {
-				read = reader.GetBytes(columnOrdinal, totalRead, buffer, 0, buffer.Length);
+            do
+            {
+                try
+                {
+                    read = reader.GetBytes(columnOrdinal, totalRead, buffer, 0, buffer.Length);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    read = 0;
+                }
+                if (totalRead + read > maxSize) return null;
 
-				if(totalRead + read > maxSize) return null;
-
-				if(read > 0) {
-					Buffer.BlockCopy(buffer, 0, tempResult, (int)totalRead, (int)read);
-				}
-				totalRead += read;
-			} while(read > 0);
+                if (read > 0)
+                {
+                    Buffer.BlockCopy(buffer, 0, tempResult, (int)totalRead, (int)read);
+                }
+                totalRead += read;
+            } while (read > 0);
 
 			// Copy tempBuffer in final array
 			buffer = null;
@@ -144,7 +152,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			}
 
 			if(temp != null) {
-				return (T)temp;
+                if(typeof(int) == typeof(T))
+                    return (T)(int.Parse(temp.ToString())as object);
+                if (typeof(string) == typeof(T))
+                    return (T)(temp.ToString() as object);
+                return (T)temp;
 			}
 			else return defaultValue;
 		}

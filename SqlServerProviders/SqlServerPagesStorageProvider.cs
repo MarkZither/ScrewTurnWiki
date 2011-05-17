@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.Plugins.SqlCommon;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 	/// </summary>
 	public class SqlServerPagesStorageProvider : SqlPagesStorageProviderBase, IPagesStorageProviderV30 {
 
-		private readonly ComponentInformation info = new ComponentInformation("SQL Server Pages Storage Provider", "Threeplicate Srl", "3.0.2.541", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Pages.txt");
+		private readonly ComponentInformation info = new ComponentInformation("SQL Server Pages Storage Provider", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Pages.txt");
 
 		private readonly SqlServerCommandBuilder commandBuilder = new SqlServerCommandBuilder();
 
@@ -24,8 +24,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <param name="connString">The connection string.</param>
 		/// <returns>The command.</returns>
-		private SqlCommand GetCommand(string connString) {
-			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as SqlCommand;
+		private MySqlCommand GetCommand(string connString) {
+			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as MySqlCommand;
 		}
 
 		/// <summary>
@@ -42,11 +42,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <param name="connString">The connection string to validate.</param>
 		/// <remarks>If the connection string is invalid, the method throws <see cref="T:InvalidConfigurationException"/>.</remarks>
 		protected override void ValidateConnectionString(string connString) {
-			SqlCommand cmd = null;
+			MySqlCommand cmd = null;
 			try {
 				cmd = GetCommand(connString);
 			}
-			catch(SqlException ex) {
+			catch(MySqlException ex) {
 				throw new InvalidConfigurationException("Provided connection string is not valid", ex);
 			}
 			catch(InvalidOperationException ex) {
@@ -68,8 +68,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Pages'";
+			MySqlCommand cmd = GetCommand(connString);
+			cmd.CommandText = "select Version from Version where Component = 'Pages'";
 
 			bool exists = false;
 
@@ -78,7 +78,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 				if(version > CurrentSchemaVersion) throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
 				exists = version != -1;
 			}
-			catch(SqlException) {
+			catch(MySqlException) {
 				exists = false;
 			}
 			finally {
@@ -96,8 +96,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Pages'";
+			MySqlCommand cmd = GetCommand(connString);
+			cmd.CommandText = "select Version from Version where Component = 'Pages'";
 
 			bool exists = false;
 
@@ -105,7 +105,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 				int version = ExecuteScalar<int>(cmd, -1);
 				exists = version < CurrentSchemaVersion;
 			}
-			catch(SqlException) {
+			catch(MySqlException) {
 				exists = false;
 			}
 			finally {
@@ -122,7 +122,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// Creates the standard database schema.
 		/// </summary>
 		private void CreateStandardSchema() {
-			SqlCommand cmd = GetCommand(connString);
+			MySqlCommand cmd = GetCommand(connString);
 			cmd.CommandText = Properties.Resources.PagesDatabase;
 
 			cmd.ExecuteNonQuery();
@@ -155,7 +155,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// Updates the database schema from version 3000 to version 3001.
 		/// </summary>
 		private void Update3000to3001() {
-			SqlCommand cmd = GetCommand(connString);
+			MySqlCommand cmd = GetCommand(connString);
 			cmd.CommandText = Properties.Resources.PagesDatabase_3000to3001;
 
 			cmd.ExecuteNonQuery();
@@ -169,8 +169,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <returns><c>true</c> if the upgrade is possible, <c>false</c> otherwise.</returns>
 		private bool SchemaAllowsUpgradeFrom20() {
 			// Look for 'PagesProviderVersion' table
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select count(*) from sys.tables where [name] = 'PagesProviderVersion'";
+			MySqlCommand cmd = GetCommand(connString);
+            cmd.CommandText = "select count(*) from INFORMATION_SCHEMA.TABLES where table_name like 'PagesProviderVersion'";
 
 			int count = ExecuteScalar<int>(cmd, -1);
 
@@ -192,37 +192,37 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			// 8. Rename offending pages and categories (names with dots) leveraging cascaded FKs
 			// 9. Update security to use ACL
 
-			SqlCommand cmd = GetCommand(connString);
+			MySqlCommand cmd = GetCommand(connString);
 			cmd.CommandText =
-@"exec sp_rename 'Page', 'Page_v2';
-exec sp_rename 'PageContent', 'PageContent_v2';
-exec sp_rename 'Category', 'Category_v2';
-exec sp_rename 'CategoryBinding', 'CategoryBinding_v2';
-exec sp_rename 'Message', 'Message_v2';
-exec sp_rename 'Snippet', 'Snippet_v2';
-exec sp_rename 'NavigationPath', 'NavigationPath_v2';
-exec sp_rename 'NavigationPathBinding', 'NavigationPathBinding_v2';
-exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
+@"RENAME TABLE `Page` TO `Page_v2`,
+`PageContent` TO `PageContent_v2`,
+`Category` TO `Category_v2`,
+`CategoryBinding` TO `CategoryBinding_v2`,
+`Message` TO `Message_v2`,
+`Snippet` TO `Snippet_v2`,
+`NavigationPath` TO `NavigationPath_v2`,
+`NavigationPathBinding` TO `NavigationPathBinding_v2`,
+`PagesProviderVersion` TO `PagesProviderVersion_v2`;";
 			cmd.ExecuteNonQuery();
 			cmd.Connection.Close();
 
 			CreateStandardSchema();
 
 			cmd = GetCommand(connString);
-			cmd.CommandText = "insert into [Snippet] select [Name], [Content] from [Snippet_v2]";
+            cmd.CommandText = "insert into Snippet (Name, Content) select Name, Content from Snippet_v2";
 			cmd.ExecuteNonQuery();
 
 			Dictionary<string, char> pageStatus = new Dictionary<string, char>(500);
 
-			cmd.CommandText = "select * from [Page_v2]";
-			using(SqlDataReader reader = cmd.ExecuteReader()) {
-				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [Page] ([Name], [Namespace], [CreationDateTime]) values (@Name, '', @CreationDateTime)";
+			cmd.CommandText = "select * from Page_v2";
+			using(MySqlDataReader reader = cmd.ExecuteReader()) {
+				MySqlCommand insertCmd = GetCommand(connString);
+				insertCmd.CommandText = "insert into Page (Name, Namespace, CreationDateTime) values (?Name, '', ?CreationDateTime)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
-					insertCmd.Parameters.Add(new SqlParameter("@Name", reader["Name"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@CreationDateTime", (DateTime)reader["CreationDateTime"]));
+					insertCmd.Parameters.Add(new MySqlParameter("?Name", reader["Name"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?CreationDateTime", (DateTime)reader["CreationDateTime"]));
 					pageStatus.Add(reader["Name"] as string, (reader["Status"] as string).ToUpperInvariant()[0]);
 
 					insertCmd.ExecuteNonQuery();
@@ -231,20 +231,20 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 				insertCmd.Connection.Close();
 			}
 
-			cmd.CommandText = "select * from [PageContent_v2]";
-			using(SqlDataReader reader = cmd.ExecuteReader()) {
-				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [PageContent] ([Page], [Namespace], [Revision], [Title], [User], [LastModified], [Comment], [Content], [Description]) values (@Page, '', @Revision, @Title, @User, @LastModified, @Comment, @Content, NULL)";
+			cmd.CommandText = "select * from PageContent_v2";
+			using(MySqlDataReader reader = cmd.ExecuteReader()) {
+				MySqlCommand insertCmd = GetCommand(connString);
+				insertCmd.CommandText = "insert into PageContent (Page, Namespace, Revision, Title, User, LastModified, Comment, Content, Description) values (?Page, '', ?Revision, ?Title, ?User, ?LastModified, ?Comment, ?Content, NULL)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
-					insertCmd.Parameters.Add(new SqlParameter("@Page", reader["Page"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@Revision", (short)(int)reader["Revision"]));
-					insertCmd.Parameters.Add(new SqlParameter("@Title", reader["Title"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@User", reader["Username"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@LastModified", (DateTime)reader["DateTime"]));
-					insertCmd.Parameters.Add(new SqlParameter("@Comment", reader["Comment"] as string)); // Cannot be null in v2
-					insertCmd.Parameters.Add(new SqlParameter("@Content", reader["Content"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?Page", reader["Page"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?Revision", (short)(int)reader["Revision"]));
+					insertCmd.Parameters.Add(new MySqlParameter("?Title", reader["Title"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?User", reader["Username"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?LastModified", (DateTime)reader["DateTime"]));
+					insertCmd.Parameters.Add(new MySqlParameter("?Comment", reader["Comment"] as string)); // Cannot be null in v2
+					insertCmd.Parameters.Add(new MySqlParameter("?Content", reader["Content"] as string));
 
 					insertCmd.ExecuteNonQuery();
 				}
@@ -252,22 +252,22 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 				insertCmd.Connection.Close();
 			}
 
-			cmd.CommandText = "select * from [Message_v2]";
-			using(SqlDataReader reader = cmd.ExecuteReader()) {
-				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [Message] ([Page], [Namespace], [Id], [Parent], [Username], [Subject], [DateTime], [Body]) values (@Page, '', @Id, @Parent, @Username, @Subject, @DateTime, @Body)";
+			cmd.CommandText = "select * from Message_v2";
+			using(MySqlDataReader reader = cmd.ExecuteReader()) {
+				MySqlCommand insertCmd = GetCommand(connString);
+				insertCmd.CommandText = "insert into Message (Page, Namespace, Id, Parent, Username, Subject, DateTime, Body) values (?Page, '', ?Id, ?Parent, ?Username, ?Subject, ?DateTime, ?Body)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
-					insertCmd.Parameters.Add(new SqlParameter("@Page", reader["Page"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@Id", (short)(int)reader["ID"]));
+					insertCmd.Parameters.Add(new MySqlParameter("?Page", reader["Page"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?Id", (short)(int)reader["ID"]));
 					int parent = (int)reader["Parent"];
-					if(parent == -1) insertCmd.Parameters.Add(new SqlParameter("@Parent", DBNull.Value));
-					else insertCmd.Parameters.Add(new SqlParameter("@Parent", (short)parent));
-					insertCmd.Parameters.Add(new SqlParameter("@Username", reader["Username"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@Subject", reader["Subject"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@DateTime", (DateTime)reader["DateTime"]));
-					insertCmd.Parameters.Add(new SqlParameter("@Body", reader["Body"] as string));
+					if(parent == -1) insertCmd.Parameters.Add(new MySqlParameter("?Parent", DBNull.Value));
+					else insertCmd.Parameters.Add(new MySqlParameter("?Parent", (short)parent));
+					insertCmd.Parameters.Add(new MySqlParameter("?Username", reader["Username"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?Subject", reader["Subject"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?DateTime", (DateTime)reader["DateTime"]));
+					insertCmd.Parameters.Add(new MySqlParameter("?Body", reader["Body"] as string));
 
 					insertCmd.ExecuteNonQuery();
 				}
@@ -275,14 +275,14 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 				insertCmd.Connection.Close();
 			}
 
-			cmd.CommandText = "select * from [Category_v2]";
-			using(SqlDataReader reader = cmd.ExecuteReader()) {
-				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [Category] ([Name], [Namespace]) values (@Name, '')";
+			cmd.CommandText = "select * from Category_v2";
+			using(MySqlDataReader reader = cmd.ExecuteReader()) {
+				MySqlCommand insertCmd = GetCommand(connString);
+				insertCmd.CommandText = "insert into Category (Name, Namespace) values (?Name, '')";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
-					insertCmd.Parameters.Add(new SqlParameter("@Name", reader["Name"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?Name", reader["Name"] as string));
 
 					insertCmd.ExecuteNonQuery();
 				}
@@ -290,15 +290,15 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 				insertCmd.Connection.Close();
 			}
 
-			cmd.CommandText = "select * from [CategoryBinding_v2]";
-			using(SqlDataReader reader = cmd.ExecuteReader()) {
-				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [CategoryBinding] ([Namespace], [Category], [Page]) values ('', @Category, @Page)";
+			cmd.CommandText = "select * from CategoryBinding_v2";
+			using(MySqlDataReader reader = cmd.ExecuteReader()) {
+				MySqlCommand insertCmd = GetCommand(connString);
+				insertCmd.CommandText = "insert into CategoryBinding (Namespace, Category, Page) values ('', ?Category, ?Page)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
-					insertCmd.Parameters.Add(new SqlParameter("@Category", reader["Category"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@Page", reader["Page"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?Category", reader["Category"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?Page", reader["Page"] as string));
 
 					insertCmd.ExecuteNonQuery();
 				}
@@ -306,16 +306,16 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 				insertCmd.Connection.Close();
 			}
 
-			cmd.CommandText = "select * from [NavigationPathBinding_v2]";
-			using(SqlDataReader reader = cmd.ExecuteReader()) {
-				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [NavigationPath] ([Name], [Namespace], [Page], [Number]) values (@Name, '', @Page, @Number)";
+			cmd.CommandText = "select * from NavigationPathBinding_v2";
+			using(MySqlDataReader reader = cmd.ExecuteReader()) {
+				MySqlCommand insertCmd = GetCommand(connString);
+				insertCmd.CommandText = "insert into NavigationPath (Name, Namespace, Page, Number) values (?Name, '', ?Page, ?Number)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
-					insertCmd.Parameters.Add(new SqlParameter("@Name", reader["NavigationPath"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@Page", reader["Page"] as string));
-					insertCmd.Parameters.Add(new SqlParameter("@Number", (short)(int)reader["Number"]));
+					insertCmd.Parameters.Add(new MySqlParameter("?Name", reader["NavigationPath"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?Page", reader["Page"] as string));
+					insertCmd.Parameters.Add(new MySqlParameter("?Number", (short)(int)reader["Number"]));
 
 					insertCmd.ExecuteNonQuery();
 				}
@@ -327,45 +327,45 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 			List<string> allPages = new List<string>(500);
 			List<string> allCategories = new List<string>(50);
 
-			cmd.CommandText = "select [Name] from [Page]";
-			using(SqlDataReader reader = cmd.ExecuteReader()) {
+			cmd.CommandText = "select Name from Page";
+			using(MySqlDataReader reader = cmd.ExecuteReader()) {
 				while(reader.Read()) {
 					allPages.Add(reader["Name"] as string);
 				}
 			}
 
-			cmd.CommandText = "select [Name] from [Category]";
-			using(SqlDataReader reader = cmd.ExecuteReader()) {
+			cmd.CommandText = "select Name from Category";
+			using(MySqlDataReader reader = cmd.ExecuteReader()) {
 				while(reader.Read()) {
 					allCategories.Add(reader["Name"] as string);
 				}
 			}
 
-			cmd.CommandText = "alter table [CategoryBinding] nocheck constraint all";
+            cmd.CommandText = "alter table CategoryBinding DISABLE KEYS; SET FOREIGN_KEY_CHECKS=0;";
 			cmd.ExecuteNonQuery();
 
-			cmd.CommandText = "update [Page] set [Name] = @NewName where [Name] = @OldName; update [CategoryBinding] set [Page] = @NewName2 where [Page] = @OldName2";
+			cmd.CommandText = "update Page set Name = ?NewName where Name = ?OldName; update CategoryBinding set Page = ?NewName2 where Page = ?OldName2";
 			foreach(string page in allPages) {
 				if(page.Contains(".")) {
 					cmd.Parameters.Clear();
-					cmd.Parameters.Add(new SqlParameter("@NewName", page.Replace(".", "_")));
-					cmd.Parameters.Add(new SqlParameter("@OldName", page));
-					cmd.Parameters.Add(new SqlParameter("@NewName2", page.Replace(".", "_")));
-					cmd.Parameters.Add(new SqlParameter("@OldName2", page));
+					cmd.Parameters.Add(new MySqlParameter("?NewName", page.Replace(".", "_")));
+					cmd.Parameters.Add(new MySqlParameter("?OldName", page));
+					cmd.Parameters.Add(new MySqlParameter("?NewName2", page.Replace(".", "_")));
+					cmd.Parameters.Add(new MySqlParameter("?OldName2", page));
 
 					cmd.ExecuteNonQuery();
 				}
 			}
 
-			cmd.CommandText = "alter table [CategoryBinding] with check check constraint all";
+            cmd.CommandText = "SET FOREIGN_KEY_CHECKS=1; alter table [CategoryBinding] ENABLE KEYS;";
 			cmd.ExecuteNonQuery();
 
-			cmd.CommandText = "update [Category] set [Name] = @NewName where [Name] = @OldName";
+			cmd.CommandText = "update Category set Name = ?NewName where Name = ?OldName";
 			foreach(string category in allCategories) {
 				if(category.Contains(".")) {
 					cmd.Parameters.Clear();
-					cmd.Parameters.Add(new SqlParameter("@NewName", category.Replace(".", "_")));
-					cmd.Parameters.Add(new SqlParameter("@OldName", category));
+					cmd.Parameters.Add(new MySqlParameter("?NewName", category.Replace(".", "_")));
+					cmd.Parameters.Add(new MySqlParameter("?OldName", category));
 
 					cmd.ExecuteNonQuery();
 				}
