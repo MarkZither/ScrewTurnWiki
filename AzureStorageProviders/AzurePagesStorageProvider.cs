@@ -127,6 +127,22 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				// Move all pages from old namespace to the new one
 				List<PagesInfoEntity> pagesInNamespace = GetPagesInfoEntities(_wiki, nspace.Name);
+
+				// Unindex pages
+				foreach(PagesInfoEntity pageInfoEntity in pagesInNamespace) {
+					PageInfo page = new PageInfo(pageInfoEntity.RowKey, this, pageInfoEntity.CreationDateTime.ToLocalTime());
+					PageContent content = GetContent(page);
+					if(content != null) {
+						UnindexPage(content);
+					}
+					Message[] messages = GetMessages(page);
+					if(messages != null) {
+						foreach(Message msg in messages) {
+							UnindexMessageTree(page, msg);
+						}
+					}
+				}
+	
 				foreach(PagesInfoEntity pageInfoEntity in pagesInNamespace) {
 					PagesInfoEntity newPage = new PagesInfoEntity() {
 						PartitionKey = pageInfoEntity.PartitionKey,
@@ -139,6 +155,21 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					_context.AddObject(PagesInfoTable, newPage);
 				}
 				_context.SaveChangesStandard();
+
+				// Index pages
+				foreach(PagesInfoEntity pageInfoEntity in pagesInNamespace) {
+					PageInfo page = new PageInfo(NameTools.GetFullName(newName, NameTools.GetLocalName(pageInfoEntity.RowKey)), this, pageInfoEntity.CreationDateTime.ToLocalTime());
+					PageContent content = GetContent(page);
+					if(content != null) {
+						IndexPage(content);
+					}
+					Message[] messages = GetMessages(page);
+					if(messages != null) {
+						foreach(Message msg in messages) {
+							IndexMessageTree(page, msg);
+						}
+					}
+				}
 
 				// Invalidate pagesInfoCache
 				_pagesInfoCache = null;
@@ -309,6 +340,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				}
 				_context.SaveChangesStandard();
 
+				// Unindex page with the old fullName
+				PageContent pageContent = GetContent(page);
+				UnindexPage(pageContent);
+				Message[] messages = GetMessages(page);
+				foreach(Message msg in messages) {
+					UnindexMessageTree(page, msg);
+				}
 
 				// Update the pageInfo with values from the new namespace
 				var newPageInfoEntity = new PagesInfoEntity();
@@ -325,6 +363,19 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_pagesInfoCache = null;
 
 				PageInfo newPage = new PageInfo(newPageFullName, this, page.CreationDateTime);
+
+				// Index page with the new fullName
+				IndexPage(new PageContent(newPage,
+					pageContent.Title,
+					pageContent.User,
+					pageContent.LastModified.ToUniversalTime(),
+					pageContent.Comment, pageContent.Content,
+					pageContent.Keywords,
+					pageContent.Description));
+				foreach(Message msg in messages) {
+					IndexMessageTree(newPage, msg);
+				}
+
 				return newPage;
 			}
 			catch(Exception ex) {
@@ -701,7 +752,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			foreach(WordInfo word in allWords) {
 				IndexWordMappingEntity indexWordMappingEntity = new IndexWordMappingEntity() {
 					PartitionKey = _wiki,
-					RowKey = word.Text + "|" + document.Name + "|" + word.WordIndex,
+					RowKey = document.Name + "|" + word.Text + "|" + word.Location + "|" + word.WordIndex,
 					Word = word.Text,
 					DocumentName = document.Name,
 					FirstCharIndex = word.FirstCharIndex,
@@ -758,7 +809,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				}
 
 				occurrences[documents[indexWordMappingEntity.DocumentName]].Add(new BasicWordInfo(
-					(ushort)indexWordMappingEntity.FirstCharIndex, ushort.Parse(indexWordMappingEntity.RowKey.Split(new char[] {'|'})[2]), WordLocation.GetInstance((byte)indexWordMappingEntity.Location)));
+					(ushort)indexWordMappingEntity.FirstCharIndex, ushort.Parse(indexWordMappingEntity.RowKey.Split(new char[] {'|'})[3]), WordLocation.GetInstance((byte)indexWordMappingEntity.Location)));
 			}
 
 			word = new Word(1, text, occurrences);
@@ -887,8 +938,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		private void ClearIndex() {
 			IList<IndexWordMappingEntity> indexWordMappingEntities = GetIndexWordMappingEntities(_wiki);
 
+			int count = 0;
 			foreach(IndexWordMappingEntity indexWordMappingEntity in indexWordMappingEntities) {
 				_context.DeleteObject(indexWordMappingEntity);
+				if(count > 98) {
+					_context.SaveChangesStandard();
+					count = 0;
+				}
+				else {
+					count++;
+				}
 			}
 			_context.SaveChangesStandard();
 		}
@@ -1158,7 +1217,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 						 where e.PartitionKey.Equals(entity.PageId) && e.RowKey.Equals(CurrentRevision)
 						 select e).AsTableServiceQuery();
 				var pageContentEntity = QueryHelper<PagesContentsEntity>.FirstOrDefault(pageContentQuery);
-				if(pageContentEntity == null) return PageContent.GetEmpty(page);
+				if(pageContentEntity == null) return null;
 
 				return new PageContent(page, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
 			}
@@ -1436,6 +1495,14 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				}
 				_context.SaveChangesStandard();
 
+				// Unindex page
+				PageContent currentContent = GetContent(page);
+				UnindexPage(currentContent);
+				Message[] messages = GetMessages(page);
+				foreach(Message msg in messages) {
+					UnindexMessageTree(page, msg);
+				}
+
 				PagesInfoEntity newPage = new PagesInfoEntity() {
 					PartitionKey = oldPageEntity.PartitionKey,
 					RowKey = newPageFullName,
@@ -1448,6 +1515,20 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.SaveChangesStandard();
 
 				PageInfo newPageInfo = new PageInfo(newPageFullName, this, newPage.CreationDateTime.ToLocalTime());
+
+				// Index page
+				IndexPage(new PageContent(
+					newPageInfo,
+					currentContent.Title,
+					currentContent.User,
+					currentContent.LastModified,
+					currentContent.Comment,
+					currentContent.Content,
+					currentContent.Keywords,
+					currentContent.Description));
+				foreach(Message msg in messages) {
+					IndexMessageTree(newPageInfo, msg);
+				}
 
 				// Invalidate pagesInfoCache
 				_pagesInfoCache = null;
@@ -1597,7 +1678,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(page == null) throw new ArgumentNullException("page");
 			if(revision < 0) throw new ArgumentOutOfRangeException("revision");
 
-			UnindexPage(GetContent(page));
+			PageContent currentContent = GetContent(page);
+			if(currentContent == null) return false;
+			
+			// Unindex the current page content
+			UnindexPage(currentContent);
 
 			// Get the pageContet at the specified revision
 			PageContent rollbackPageContent = GetBackupContent(page, revision);
@@ -1984,7 +2069,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.AddObject(MessagesTable, messageEntity);
 				_context.SaveChangesStandard();
 
-				IndexMessage(page, 1, subject, dateTime, body);
+				IndexMessage(page, int.Parse(messageEntity.RowKey), subject, dateTime, body);
 
 				return true;
 			}
@@ -2017,10 +2102,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.DeleteObject(messageEntity);
 
 				var messagesEntities = GetMessagesEntities(pageInfoEntity.PageId);
+				List<MessageEntity> messagesToBeUnindexed = new List<MessageEntity>();
 				foreach(var entity in messagesEntities) {
 					if(entity.ParetnId == id.ToString()) {
 						if(removeReplies) {
-							UnindexMessage(page, int.Parse(entity.RowKey), entity.Subject, entity.DateTime.ToLocalTime(), entity.Body);
+							messagesToBeUnindexed.Add(entity);
 							_context.DeleteObject(entity);
 						}
 						else {
@@ -2031,6 +2117,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				}
 				_context.SaveChangesStandard();
 
+				// Unindex messages previously marked to be unindexed
+				foreach(var entity in messagesToBeUnindexed) {
+					UnindexMessage(page, int.Parse(entity.RowKey), entity.Subject, entity.DateTime.ToLocalTime(), entity.Body);
+				}
 
 				return true;
 			}
@@ -2666,7 +2756,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 	internal class IndexWordMappingEntity : TableServiceEntity {
 		// PartitionKey = wiki
-		// RowKey = word|documentName|wordIndex
+		// RowKey = documentName|word|location|wordIndex
 
 		public string Word { get; set; }
 		public string DocumentName { get; set; }
