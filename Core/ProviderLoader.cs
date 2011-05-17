@@ -65,14 +65,26 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider to setup.</param>
 		/// <param name="configuration">The configuration string.</param>
 		public static void SetUp<T>(Type provider, string configuration) where T : class, IProviderV30 {
-			T providerInstance = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(provider), provider);
-			providerInstance.SetUp(Host.Instance, configuration);
+			try {
+				T providerInstance = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(provider), provider);
+				providerInstance.SetUp(Host.Instance, configuration);
 
-			// Verify constraints
-			VerifyConstraints<T>(providerInstance);
+				// Verify constraints
+				VerifyConstraints<T>(providerInstance);
 
-			// Dispose the provider
-			providerInstance.Dispose();
+				Log.LogEntry("Provider " + provider.FullName + " loaded.", EntryType.General, Log.SystemUsername);
+
+				// Dispose the provider
+				providerInstance.Dispose();
+			}
+			catch(InvalidConfigurationException) {
+				// Disable Provider
+				Log.LogEntry("Unable to load provider " + provider.FullName + " (configuration rejected).", EntryType.Error, Log.SystemUsername);
+			}
+			catch {
+				Log.LogEntry("Unable to load provider " + provider.FullName + " (unknown error).", EntryType.Error, Log.SystemUsername);
+				throw; // Exception is rethrown because it's not a normal condition
+			}
 		}
 
 		/// <summary>
@@ -84,24 +96,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki that needs the provider.</param>
 		public static void Initialize<T>(T instance, string configuration, string wiki) where T : class, IProviderV30 {
 			bool enabled = !IsDisabled(instance.GetType().FullName);
-			try {
-				if(enabled) {
-					instance.Init(Host.Instance, configuration, wiki);
-				}
-				Log.LogEntry("Provider " + instance.Information.Name + " loaded (" + (enabled ? "Enabled" : "Disabled") + ")", EntryType.General, Log.SystemUsername);
-			}
-			catch(InvalidConfigurationException) {
-				// Disable Provider
-				enabled = false;
-				Log.LogEntry("Unable to load provider " + instance.Information.Name + " (configuration rejected), disabling it", EntryType.Error, Log.SystemUsername);
-				SaveStatus(instance.GetType().FullName, false);
-			}
-			catch {
-				// Disable Provider
-				enabled = false;
-				Log.LogEntry("Unable to load provider " + instance.Information.Name + " (unknown error), disabling it", EntryType.Error, Log.SystemUsername);
-				SaveStatus(instance.GetType().FullName, false);
-				throw; // Exception is rethrown because it's not a normal condition
+			if(enabled) {
+				instance.Init(Host.Instance, configuration, wiki);
 			}
 		}
 
