@@ -131,6 +131,29 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			// Nothing todo
 		}
 
+		private Dictionary<string, string> _metadataCache;
+
+		// Cache of settings as dictionary metadataKey -> content
+		private Dictionary<string, string> _metadata {
+			get {
+				if(_metadataCache == null) {
+					_metadataCache = new Dictionary<string, string>();
+					IList<MetadataEntity> metadataEntities = GetMetadataEntities(_wiki);
+					foreach(MetadataEntity metadataEntity in metadataEntities) {
+						_metadataCache.Add(metadataEntity.RowKey, metadataEntity.Content + "");
+					}
+				}
+				return _metadataCache;
+			}
+		}
+
+		private IList<MetadataEntity> GetMetadataEntities(string wiki) {
+			var query = (from e in _context.CreateQuery<MetadataEntity>(MetadataTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<MetadataEntity>.All(query);
+		}
+
 		/// <summary>
 		/// Gets a meta-data item's content.
 		/// </summary>
@@ -139,12 +162,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <returns>The content.</returns>
 		public string GetMetaDataItem(MetaDataItem item, string tag) {
 			try {
-				var query = (from e in _context.CreateQuery<MetadataEntity>(MetadataTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(item + "|" + tag)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<MetadataEntity>.FirstOrDefault(query);
-				if(entity == null) return "";
-				return string.IsNullOrEmpty(entity.Content) ? "" : entity.Content;
+				string metadataContent = "";
+				_metadata.TryGetValue(item + "|" + tag, out metadataContent);
+				return metadataContent == null ? "" : metadataContent;
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -167,6 +187,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				};
 				_context.AddObject(MetadataTable, metadataEntity);
 				_context.SaveChangesStandard();
+
+				// Invalidate metadataCache
+				_metadataCache = null;
+
 				return true;
 			}
 			catch(Exception ex) {
