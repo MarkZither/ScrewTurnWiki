@@ -437,8 +437,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				if(entriesToDelete > 0) {
 
+					int count = 0;
 					for(int i = 0; i < entriesToDelete; i++) {
 						_context.DeleteObject(logEntities[i]);
+						if(count > 98) {
+							_context.SaveChangesStandard();
+							count = 0;
+						}
+						else {
+							count++;
+						}
 					}
 					_context.SaveChangesStandard();
 				}
@@ -470,8 +478,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 						 where e.PartitionKey.Equals("0")
 						 select e).AsTableServiceQuery();
 			IList<LogEntity> logEntities = QueryHelper<LogEntity>.All(query);
+			int count = 0;
 			foreach(LogEntity logEntity in logEntities) {
 				_context.DeleteObject(logEntity);
+				if(count > 98) {
+					_context.SaveChangesStandard();
+					count = 0;
+				}
+				else {
+					count++;
+				}
 			}
 			_context.SaveChangesStandard();
 		}
