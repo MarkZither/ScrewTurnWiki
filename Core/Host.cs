@@ -813,17 +813,18 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the configuration of a provider.
+		/// Gets the configuration of a generic provider.
 		/// </summary>
 		/// <param name="providerTypeName">The type name of the provider, such as 'Vendor.Namespace.Provider'.</param>
+		/// <param name="interfaceType">The Type of the interface implemented by the provider.</param>
 		/// <returns>The configuration (can be empty or <c>null</c>).</returns>
 		/// <exception cref="ArgumentNullException">If <b>providerTypeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>providerTypeName</b> is empty.</exception>
-		public string GetProviderConfiguration(string providerTypeName) {
+		public string GetProviderConfiguration(string providerTypeName, Type interfaceType) {
 			if(providerTypeName == null) throw new ArgumentNullException("providerTypeName");
 			if(providerTypeName.Length == 0) throw new ArgumentException("Provider Type Name cannot be empty", "providerTypeName");
 
-			return ProviderLoader.LoadConfiguration(providerTypeName);
+			return ProviderLoader.LoadProviderConfiguration(providerTypeName, interfaceType);
 		}
 
 		/// <summary>
@@ -833,16 +834,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="configuration">The configuration to set.</param>
 		/// <returns><c>true</c> if the configuration is set, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>provider</b> is <c>null</c>.</exception>
-		public bool SetProviderConfiguration(IProviderV30 provider, string configuration) {
+		public bool SetPluginConfiguration(IProviderV30 provider, string configuration) {
 			if(provider == null) throw new ArgumentNullException("provider");
 
 			if(configuration == null) configuration = "";
 
-			ProviderLoader.SaveConfiguration(provider.GetType().FullName, configuration);
+			ProviderLoader.SavePluginConfiguration(provider.GetType().FullName, configuration);
 
 			return true;
 		}
-
+		
 		/// <summary>
 		/// Upgrades the old Page Status to use the new ACL facilities.
 		/// </summary>

@@ -392,13 +392,14 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		IGlobalSettingsStorageProviderV30 GetGlobalSettingsStorageProvider();
 
 		/// <summary>
-		/// Gets the configuration of a provider.
+		/// Gets the configuration of a generic provider.
 		/// </summary>
 		/// <param name="providerTypeName">The type name of the provider, such as 'Vendor.Namespace.Provider'.</param>
+		/// <param name="interfaceType">The Type of the interface implemented by the provider.</param>
 		/// <returns>The configuration (can be empty or <c>null</c>).</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="providerTypeName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="providerTypeName"/> is empty.</exception>
-		string GetProviderConfiguration(string providerTypeName);
+		string GetProviderConfiguration(string providerTypeName, Type interfaceType);
 
 		/// <summary>
 		/// Sets the configuration of a provider.
@@ -407,7 +408,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="configuration">The configuration to set.</param>
 		/// <returns><c>true</c> if the configuration is set, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <c>null</c>.</exception>
-		bool SetProviderConfiguration(IProviderV30 provider, string configuration);
+		bool SetPluginConfiguration(IProviderV30 provider, string configuration);
 
 		/// <summary>
 		/// Upgrades the old Page Status to use the new ACL facilities.

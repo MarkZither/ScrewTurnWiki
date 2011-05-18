@@ -95,27 +95,34 @@ namespace ScrewTurn.Wiki {
 		/// <param name="configuration">The configuration string.</param>
 		/// <param name="wiki">The wiki that needs the provider.</param>
 		public static void Initialize<T>(T instance, string configuration, string wiki) where T : class, IProviderV30 {
-			bool enabled = !IsDisabled(instance.GetType().FullName);
-			if(enabled) {
-				instance.Init(Host.Instance, configuration, wiki);
+			bool enabled = true;
+			if(typeof(T) == typeof(IFormatterProviderV30)) {
+				enabled = !IsPluginDisabled(instance.GetType().FullName);
 			}
+			if(enabled) instance.Init(Host.Instance, configuration, wiki);
 		}
 
 		/// <summary>
-		/// Loads the Configuration data of a Provider.
+		/// Loads the Configuration data of a generic provider.
 		/// </summary>
-		/// <param name="typeName">The Type Name of the Provider.</param>
+		/// <param name="typeName">The Type Name of the Plugin.</param>
+		/// <param name="interfaceType">The Type of the interface.</param>
 		/// <returns>The Configuration, if available, otherwise an empty string.</returns>
-		public static string LoadConfiguration(string typeName) {
-			return GlobalSettings.Provider.GetPluginConfiguration(typeName);
+		public static string LoadProviderConfiguration(string typeName, Type interfaceType) {
+			if(interfaceType == typeof(IFormatterProviderV30)) {
+				return GlobalSettings.Provider.GetPluginConfiguration(typeName);
+			}
+			else {
+				return Collectors.GetStorageProviderConfiguration(typeName);
+			}	
 		}
-
+		
 		/// <summary>
 		/// Saves the Configuration data of a Provider.
 		/// </summary>
 		/// <param name="typeName">The Type Name of the Provider.</param>
 		/// <param name="config">The Configuration data to save.</param>
-		public static void SaveConfiguration(string typeName, string config) {
+		public static void SavePluginConfiguration(string typeName, string config) {
 			GlobalSettings.Provider.SetPluginConfiguration(typeName, config);
 		}
 
@@ -124,7 +131,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="typeName">The Type Name of the Provider.</param>
 		/// <param name="enabled">A value specifying whether or not the Provider is enabled.</param>
-		public static void SaveStatus(string typeName, bool enabled) {
+		public static void SavePluginStatus(string typeName, bool enabled) {
 			GlobalSettings.Provider.SetPluginStatus(typeName, enabled);
 		}
 
@@ -133,7 +140,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="typeName">The Type Name of the Provider.</param>
 		/// <returns>True if the Provider is disabled.</returns>
-		public static bool IsDisabled(string typeName) {
+		public static bool IsPluginDisabled(string typeName) {
 			return !GlobalSettings.Provider.GetPluginStatus(typeName);
 		}
 
@@ -149,8 +156,11 @@ namespace ScrewTurn.Wiki {
 
 			// Setup and add to the Collectors
 			for(int i = 0; i < forms.Length; i++) {
-				SetUp<IFormatterProviderV30>(forms[i], LoadConfiguration(forms[i].FullName));
-				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), typeof(IFormatterProviderV30));
+				string formatterProviderConfiguration = LoadProviderConfiguration(forms[i].FullName, typeof(IFormatterProviderV30));
+				SetUp<IFormatterProviderV30>(forms[i], formatterProviderConfiguration);
+				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), formatterProviderConfiguration, typeof(IFormatterProviderV30));
+				GlobalSettings.Provider.SetPluginConfiguration(forms[i].FullName, formatterProviderConfiguration);
+				GlobalSettings.Provider.SetPluginStatus(forms[i].FullName, false);
 				count++;
 			}
 
@@ -173,25 +183,21 @@ namespace ScrewTurn.Wiki {
 			}
 			catch {
 				formatters = new Type[0];
-
 				Log.LogEntry("Unable to load assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
 				return;
 			}
 
 			Type[] types = null;
-
 			try {
 				types = asm.GetTypes();
 			}
 			catch(ReflectionTypeLoadException) {
 				formatters = new Type[0];
-
 				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
 				return;
 			}
 
 			List<Type> frs = new List<Type>();
-			
 			Type[] interfaces;
 			for(int i = 0; i < types.Length; i++) {
 				// Avoid to load abstract classes as they cannot be instantiated
@@ -334,10 +340,8 @@ namespace ScrewTurn.Wiki {
 						}
 					}
 
-					Collectors.AddProvider(t, asm, typeof(T));
+					Collectors.AddProvider(t, asm, storageProvider.ConfigurationString, typeof(T));
 					SetUp<T>(t, storageProvider.ConfigurationString);
-					GlobalSettings.Provider.SetPluginConfiguration(storageProvider.TypeName, storageProvider.ConfigurationString);
-					GlobalSettings.Provider.SetPluginStatus(storageProvider.TypeName, true);
 				}
 				catch(Exception ex) {
 					throw new ArgumentException("Could not load the provider with name: " + storageProvider, ex);
@@ -361,8 +365,11 @@ namespace ScrewTurn.Wiki {
 
 			// Add to the Collectors and Setup
 			for(int i = 0; i < forms.Count; i++) {
-				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), typeof(IFormatterProviderV30));
-				SetUp<IFormatterProviderV30>(forms[i], LoadConfiguration(forms[i].FullName));
+				string formatterProviderConfiguration = LoadProviderConfiguration(forms[i].FullName, typeof(IFormatterProviderV30));
+				Collectors.AddProvider(forms[i], Assembly.GetAssembly(forms[i]), formatterProviderConfiguration, typeof(IFormatterProviderV30));
+				SetUp<IFormatterProviderV30>(forms[i], formatterProviderConfiguration);
+				GlobalSettings.Provider.SetPluginConfiguration(forms[i].FullName, formatterProviderConfiguration);
+				GlobalSettings.Provider.SetPluginStatus(forms[i].FullName, false);
 			}
 		}
 
@@ -373,7 +380,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="configuration">The new configuration.</param>
 		/// <param name="error">The error message, if any.</param>
 		/// <returns><c>true</c> if the configuration is saved, <c>false</c> if the provider rejected it.</returns>
-		public static bool TryChangeConfiguration(string typeName, string configuration, out string error) {
+		public static bool TryChangePluginConfiguration(string typeName, string configuration, out string error) {
 			error = null;
 
 			//bool enabled, canDisable;
@@ -387,16 +394,16 @@ namespace ScrewTurn.Wiki {
 			//    return false;
 			//}
 
-			SaveConfiguration(typeName, configuration);
+			SavePluginConfiguration(typeName, configuration);
 			return true;
 		}
 
 		/// <summary>
-		/// Unloads a provider from memory.
+		/// Unloads a plugin from memory.
 		/// </summary>
 		/// <param name="typeName">The provider to unload.</param>
-		public static void UnloadProvider(string typeName) {
-			Collectors.TryUnload(typeName);
+		public static void UnloadPlugin(string typeName) {
+			Collectors.TryUnloadPlugin(typeName);
 		}
 
 	}

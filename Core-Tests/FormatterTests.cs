@@ -55,10 +55,10 @@ second line";
 			Collectors.AddGlobalSettingsStorageProvider(typeof(DummyGlobalSettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyGlobalSettingsStorageProvider)));
 
 			//ISettingsStorageProviderV30 settingsProvider = new DummySettingsStorageProvider();
-			Collectors.AddProvider(typeof(DummySettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummySettingsStorageProvider)), typeof(ISettingsStorageProviderV30));
+			Collectors.AddProvider(typeof(DummySettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummySettingsStorageProvider)), "", typeof(ISettingsStorageProviderV30));
 			
 			Collectors.InitCollectors();
-			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), typeof(IPagesStorageProviderV30));
+			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), "", typeof(IPagesStorageProviderV30));
 			
 			Host.Instance = new Host();
 		}

@@ -235,7 +235,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <returns>The configuration, or an empty string.</returns>
 		protected override string TryLoadV2Configuration() {
-			return host.GetProviderConfiguration("ScrewTurn.Wiki.PluginPack.SqlServerUsersStorageProvider");
+			return host.GetProviderConfiguration("ScrewTurn.Wiki.PluginPack.SqlServerUsersStorageProvider", typeof(IUsersStorageProviderV30));
 		}
 
 		/// <summary>
@@ -243,7 +243,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <returns>The configuration, or an empty string.</returns>
 		protected override string TryLoadSettingsStorageProviderConfiguration() {
-			return host.GetProviderConfiguration(typeof(SqlServerSettingsStorageProvider).FullName);
+			return host.GetProviderConfiguration(typeof(SqlServerSettingsStorageProvider).FullName, typeof(ISettingsStorageProviderV30));
 		}
 
 		/// <summary>

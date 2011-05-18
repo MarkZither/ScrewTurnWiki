@@ -51,6 +51,11 @@ namespace ScrewTurn.Wiki {
 		/// Contains the file names of the DLLs containing each provider (provider->file).
 		/// </summary>
 		public static Dictionary<string, string> FileNames;
+
+		/// <summary>
+		/// Contains the configuration strings of each storage provider.
+		/// </summary>
+		private static Dictionary<string, string> StorageProvidersConfigurations;
 		
 		/// <summary>
 		/// The settings storage provider.
@@ -63,15 +68,15 @@ namespace ScrewTurn.Wiki {
 		private static System.Reflection.Assembly _settingsProviderAssembly;
 
 		/// <summary>
-		/// The settings storage provider.
+		/// The global settings storage provider.
 		/// </summary>
 		private static Type _globalSettingsProvider;
 
 		/// <summary>
-		/// The settings storage provider assembly.
+		/// The global settings storage provider assembly.
 		/// </summary>
 		private static System.Reflection.Assembly _globalSettingsProviderAssembly;
-
+		
 		/// <summary>
 		/// The Users Provider Collector instance.
 		/// </summary>
@@ -102,6 +107,7 @@ namespace ScrewTurn.Wiki {
 		/// Initializes the collectors.
 		/// </summary>
 		public static void InitCollectors() {
+			StorageProvidersConfigurations = new Dictionary<string, string>();
 			_usersProviderCollector = new ProviderCollector<IUsersStorageProviderV30>();
 			_pagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
 			_filesProviderCollector = new ProviderCollector<IFilesStorageProviderV30>();
@@ -113,32 +119,38 @@ namespace ScrewTurn.Wiki {
 		/// Tries to unload a provider.
 		/// </summary>
 		/// <param name="typeName">The provider.</param>
-		public static void TryUnload(string typeName) {
+		public static void TryUnloadPlugin(string typeName) {
 			_formatterProviderCollector.RemoveProvider(typeName);
 		}
-		
+
 		/// <summary>
 		/// Adds the given provider to the appropriate collector.
 		/// </summary>
 		/// <param name="provider">The provider.</param>
-		/// <param name="assembly">The assembly.</param>
+		/// <param name="assembly">The provider assembly.</param>
+		/// <param name="configuration">The provider configuration.</param>
 		/// <param name="providerInterface">The provider interface.</param>
-		public static void AddProvider(Type provider, System.Reflection.Assembly assembly, Type providerInterface) {
+		public static void AddProvider(Type provider, System.Reflection.Assembly assembly, string configuration, Type providerInterface) {
 			collectorsBox = null;
 			if(providerInterface.FullName == typeof(ISettingsStorageProviderV30).FullName) {
+				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_settingsProvider = provider;
 				_settingsProviderAssembly = assembly;
 			}
 			if(providerInterface.FullName == typeof(IPagesStorageProviderV30).FullName) {
+				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_pagesProviderCollector.AddProvider(provider, assembly);
 			}
 			else if(providerInterface.FullName == typeof(IThemeStorageProviderV30).FullName) {
+				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_themeProviderCollector.AddProvider(provider, assembly);
 			}
 			else if(providerInterface.FullName == typeof(IUsersStorageProviderV30).FullName) {
+				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_usersProviderCollector.AddProvider(provider, assembly);
 			}
 			else if(providerInterface.FullName == typeof(IFilesStorageProviderV30).FullName) {
+				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_filesProviderCollector.AddProvider(provider, assembly);
 			}
 			else if(providerInterface.FullName == typeof(IFormatterProviderV30).FullName) {
@@ -150,11 +162,22 @@ namespace ScrewTurn.Wiki {
 		/// Set the global settings storage provider.
 		/// </summary>
 		/// <param name="provider">The provider.</param>
-		/// <param name="assembly">The assembly.</param>
+		/// <param name="assembly">The provider assembly.</param>
 		public static void AddGlobalSettingsStorageProvider(Type provider, System.Reflection.Assembly assembly) {
 			collectorsBox = null;
 			_globalSettingsProvider = provider;
 			_globalSettingsProviderAssembly = assembly;
+		}
+
+		/// <summary>
+		/// Gets the storage provider configuration.
+		/// </summary>
+		/// <param name="typeName">The Type Name of the Storage Provider.</param>
+		/// <returns>The configuration string.</returns>
+		public static string GetStorageProviderConfiguration(string typeName) {
+			string configuration;
+	  		if(StorageProvidersConfigurations.TryGetValue(typeName, out configuration)) return configuration;
+			return "";
 		}
 	}
 

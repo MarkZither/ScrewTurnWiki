@@ -13,6 +13,7 @@ namespace ScrewTurn.Wiki {
 	/// <typeparam name="T">The type of the Collector.</typeparam>
 	public class ProviderCollector<T> where T : class, IProviderV30 {
 
+		// TypeName -> Assembly
 		private Dictionary<Type, Assembly> assembliesDictionary;
 		// wiki -> (providerType -> providerInstance)
 		private Dictionary<string, Dictionary<Type, T>> instancesDictionary;
@@ -29,7 +30,7 @@ namespace ScrewTurn.Wiki {
 		/// Adds a Provider to the Collector.
 		/// </summary>
 		/// <param name="provider">The Provider to add.</param>
-		/// <param name="assembly">The assembly.</param>
+		/// <param name="assembly">The provider assembly.</param>
 		public void AddProvider(Type provider, Assembly assembly) {
 			lock(this) {
 				assembliesDictionary[provider] = assembly;
@@ -73,7 +74,7 @@ namespace ScrewTurn.Wiki {
 					}
 					else {
 						provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[key], key);
-						ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadConfiguration(key.FullName), wiki);
+						ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadProviderConfiguration(key.FullName, typeof(T)), wiki);
 						instancesDictionary[wikiKey][key] = provider;
 					}
 					providers.Add(provider);
@@ -81,16 +82,7 @@ namespace ScrewTurn.Wiki {
 				return providers.ToArray();
 			}
 		}
-
-		/// <summary>
-		/// Gets the assembly associated with the given type.
-		/// </summary>
-		/// <param name="typeName">The Type Name.</param>
-		/// <returns>The assembly</returns>
-		public Assembly GetAssembly(Type typeName) {
-			return assembliesDictionary[typeName];
-		}
-
+		
 		/// <summary>
 		/// Gets a Provider, searching for its Type Name.
 		/// </summary>
@@ -111,7 +103,7 @@ namespace ScrewTurn.Wiki {
 						}
 						else {
 							provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[type], type);
-							ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadConfiguration(type.FullName), wiki);
+							ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadProviderConfiguration(type.FullName, typeof(T)), wiki);
 							instancesDictionary[wikiKey][type] = provider;
 						}
 						return provider;

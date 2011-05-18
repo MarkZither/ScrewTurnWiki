@@ -144,7 +144,7 @@ namespace ScrewTurn.Wiki {
 				lblProviderName.Text = provider.Information.Name + " (" + provider.Information.Version + ")";
 				string dll = provider.GetType().Assembly.FullName;
 				lblProviderDll.Text = dll.Substring(0, dll.IndexOf(",")) + ".dll";
-				txtConfigurationString.Text = ProviderLoader.LoadConfiguration(provider.GetType().FullName);
+				txtConfigurationString.Text = ProviderLoader.LoadProviderConfiguration(provider.GetType().FullName, typeof(IPagesStorageProviderV30));
 				if(provider.ConfigHelpHtml != null) {
 					lblProviderConfigHelp.Text = provider.ConfigHelpHtml;
 				}
@@ -176,7 +176,7 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Configuration change requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
 			string error;
-			if(ProviderLoader.TryChangeConfiguration(txtCurrentProvider.Value, txtConfigurationString.Text, out error)) {
+			if(ProviderLoader.TryChangePluginConfiguration(txtCurrentProvider.Value, txtConfigurationString.Text, out error)) {
 				PerformPostProviderChangeActions();
 
 				lblResult.CssClass = "resultok";
@@ -229,7 +229,7 @@ namespace ScrewTurn.Wiki {
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
 			Log.LogEntry("Unloading requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
-			ProviderLoader.UnloadProvider(txtCurrentProvider.Value);
+			ProviderLoader.UnloadPlugin(txtCurrentProvider.Value);
 			PerformPostProviderChangeActions();
 
 			lblResult.CssClass = "resultok";
