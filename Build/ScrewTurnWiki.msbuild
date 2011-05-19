@@ -67,14 +67,14 @@
 		
 		<!-- Plugins Assemblies -->
 		<!-- ActiveDirectoryProvider Disabled on Mono -->
-		<CreateItem Include="Temp\SqlServerProviders.dll*;Temp\*Plugin.dll*;Temp\MySql.Data.dll">
+		<CreateItem Include="Temp\SqlServerProviders.dll*;Temp\*Plugin.dll*">
 			<Output ItemName="BuiltPlugins" TaskParameter="Include" />
 		</CreateItem>
 		<Copy SourceFiles="@(BuiltPlugins)" DestinationFolder=".\Artifacts\Plugins\" />
 		
 		<!-- SqlServerProviders.dll for MySQL -->
 		<Copy SourceFiles=".\Artifacts\Plugins\SqlServerProviders.dll" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
-		<Copy SourceFiles=".\Artifacts\Plugins\MySql.Data.dll" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
+		<Copy SourceFiles="Temp\MySql.Data.dll" DestinationFolder=".\Artifacts\WebApplication-SqlServer\bin" />
 		<Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles=".\Artifacts\Plugins\SqlServerProviders.dll.mdb" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
 		
 		<!-- Install.txt, Install-SqlServer.txt -->
