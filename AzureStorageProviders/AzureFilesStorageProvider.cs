@@ -825,7 +825,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		#region IStorageProviderV30 Members
 
 		public bool ReadOnly {
-			get { throw new NotImplementedException(); }
+			get { return false; }
 		}
 
 		#endregion
