@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Register" Title="Untitled Page" EnableSessionState="True" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="Register.aspx.cs" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.Master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Register" Title="Untitled Page" EnableSessionState="True" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="Register.aspx.cs" %>
 <%@ Register TagPrefix="st" TagName="Captcha" Src="~/Captcha.ascx" %>
 
 <asp:Content ID="CtnRegister" ContentPlaceHolderID="CphMasterSA" Runat="Server">

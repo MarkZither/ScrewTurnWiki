@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Error" Title="Untitled Page" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="Error.aspx.cs" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.Master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Error" Title="Untitled Page" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="Error.aspx.cs" %>
 
 <asp:Content ID="ctnError" ContentPlaceHolderID="CphMasterSA" Runat="Server">
 

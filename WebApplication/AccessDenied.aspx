@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.AccessDenied" Title="Untitled Page" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="AccessDenied.aspx.cs" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.Master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.AccessDenied" Title="Untitled Page" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="AccessDenied.aspx.cs" %>
 
 <asp:Content ID="CtnAccessDenied" ContentPlaceHolderID="CphMasterSA" Runat="Server">
 

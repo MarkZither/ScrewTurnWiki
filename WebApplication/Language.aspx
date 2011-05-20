@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Language" Title="Untitled Page" Codebehind="Language.aspx.cs" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.Master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Language" Title="Untitled Page" Codebehind="Language.aspx.cs" %>
 
 <%@ Register TagPrefix="st" TagName="LanguageSelector" Src="~/LanguageSelector.ascx" %>
 

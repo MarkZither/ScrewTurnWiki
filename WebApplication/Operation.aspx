@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Operation" Title="Untitled Page" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="Operation.aspx.cs" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.Master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Operation" Title="Untitled Page" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="Operation.aspx.cs" %>
 
 <asp:Content ID="ctnOperation" ContentPlaceHolderID="CphMasterSA" Runat="Server">
 

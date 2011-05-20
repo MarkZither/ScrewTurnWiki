@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" CodeBehind="Edit.aspx.cs" Inherits="ScrewTurn.Wiki.Edit" ValidateRequest="false" culture="auto" meta:resourcekey="PageResource2" uiculture="auto" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.Master" AutoEventWireup="true" CodeBehind="Edit.aspx.cs" Inherits="ScrewTurn.Wiki.Edit" ValidateRequest="false" culture="auto" meta:resourcekey="PageResource2" uiculture="auto" %>
 
 <%@ Register TagPrefix="st" TagName="Editor" Src="~/Editor.ascx" %>
 <%@ Register TagPrefix="st" TagName="Captcha" Src="~/Captcha.ascx" %>
