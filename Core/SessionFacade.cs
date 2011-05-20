@@ -5,6 +5,7 @@ using System.Text;
 using System.Web.SessionState;
 using System.Web;
 using ScrewTurn.Wiki.PluginFramework;
+using System.Security.Cryptography;
 
 namespace ScrewTurn.Wiki {
 
@@ -13,13 +14,35 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public static class SessionFacade {
 
-		/// <summary>
-		/// Gets the current Session object.
-		/// </summary>
-		private static HttpSessionState Session {
+		private const string CookieName = "ScrewTurnWiki1";
+		private const string LoginKeyCookieName = "LK";
+		private const string UserNameKey = "UN";
+		private const string WikiKey = "WK";
+		private const string IsLoggingOutKey = "ILO";
+		private const string CaptchaKey = "CK";
+
+		private static HttpCookie Cookie {
 			get {
 				if(HttpContext.Current == null) return null;
-				else return HttpContext.Current.Session;
+				if(HttpContext.Current.Request == null) return null;
+
+				return HttpContext.Current.Request.Cookies[CookieName];
+			}
+		}
+
+		/// <summary>
+		/// Setups the session.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="user">The user.</param>
+		public static void SetupSession(string wiki, UserInfo user) {
+			if(HttpContext.Current != null) {
+				HttpCookie cookie = new HttpCookie(CookieName);
+				cookie.Values[UserNameKey] = user.Username;
+				cookie.Values[LoginKeyCookieName] = Users.ComputeLoginKey(wiki, user.Username, user.Email, user.DateTime);
+				cookie.Values[WikiKey] = wiki;
+
+				HttpContext.Current.Response.Cookies.Add(cookie);
 			}
 		}
 
@@ -27,16 +50,24 @@ namespace ScrewTurn.Wiki {
 		/// Gets or sets the Login Key.
 		/// </summary>
 		public static string LoginKey {
-			get { return Session != null ? (string)Session["LoginKey"] : null; }
-			set { if(Session != null) Session["LoginKey"] = value; }
+			get {
+				if(Cookie != null) {
+					return Cookie[LoginKeyCookieName];
+				}
+				return null;
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the current username, or <c>null</c>.
 		/// </summary>
 		public static string CurrentUsername {
-			get { return Session != null ? Session["Username"] as string : null; }
-			set { if(Session != null) Session["Username"] = value; }
+			get {
+				if(Cookie != null) {
+					return Cookie[UserNameKey];
+				}
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -45,31 +76,20 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The current user, or <c>null</c>.</returns>
 		public static UserInfo GetCurrentUser(string wiki) {
-			if(Session != null) {
-				string sessionId = Session.SessionID;
-
-				UserInfo current = SessionCache.GetCurrentUser(sessionId);
-				if(current != null) return current;
+			string un = CurrentUsername;
+			if(string.IsNullOrEmpty(un)) return null;
+			else if(un == AnonymousUsername) return Users.GetAnonymousAccount(wiki);
+			else {
+				UserInfo current = Users.FindUser(wiki, un);
+				if(current != null && Cookie[LoginKeyCookieName] == Users.ComputeLoginKey(wiki, current.Username, current.Email, current.DateTime)) {
+					return current;
+				}
 				else {
-					string un = CurrentUsername;
-					if(string.IsNullOrEmpty(un)) return null;
-					else if(un == AnonymousUsername) return Users.GetAnonymousAccount(wiki);
-					else {
-						current = Users.FindUser(wiki, un);
-						if(current != null) {
-							SessionCache.SetCurrentUser(sessionId, current);
-							return current;
-						}
-						else {
-							// Username is invalid
-							Session.Clear();
-							Session.Abandon();
-							return null;
-						}
-					}
+					// Username or cookie is invalid
+					Clear();
+					return null;
 				}
 			}
-			else return null;
 		}
 
 		/// <summary>
@@ -92,31 +112,22 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		public static UserGroup[] GetCurrentGroups(string wiki) {
-			if(Session != null) {
-				string sessionId = Session.SessionID;
-				UserGroup[] groups = SessionCache.GetCurrentGroups(sessionId);
-
-				if(groups == null || groups.Length == 0) {
-					UserInfo current = GetCurrentUser(wiki);
-					if(current != null) {
-						// This check is necessary because after group deletion the session might contain outdated data
-						List<UserGroup> temp = new List<UserGroup>(current.Groups.Length);
-						for(int i = 0; i < current.Groups.Length; i++) {
-							UserGroup tempGroup = Users.FindUserGroup(wiki, current.Groups[i]);
-							if(tempGroup != null) temp.Add(tempGroup);
-						}
-						groups = temp.ToArray();
-					}
-					else {
-						groups = new UserGroup[] { Users.FindUserGroup(wiki, Settings.GetAnonymousGroup(wiki)) };
-					}
-
-					SessionCache.SetCurrentGroups(sessionId, groups);
+			UserGroup[] groups;
+			UserInfo current = GetCurrentUser(wiki);
+			if(current != null) {
+				// This check is necessary because after group deletion the session might contain outdated data
+				List<UserGroup> temp = new List<UserGroup>();
+				foreach(string groupName in current.Groups) {
+					UserGroup tempGroup = Users.FindUserGroup(wiki, groupName);
+					if(tempGroup != null) temp.Add(tempGroup);
 				}
-
-				return groups;
+				groups = temp.ToArray();
 			}
-			else return new UserGroup[0];
+			else {
+				groups = new UserGroup[] { Users.FindUserGroup(wiki, Settings.GetAnonymousGroup(wiki)) };
+			}
+
+			return groups;
 		}
 
 		/// <summary>
@@ -136,77 +147,83 @@ namespace ScrewTurn.Wiki {
 			return new BreadcrumbsManager(wiki);
 		}
 
-	}
+		/// <summary>
+		/// Clears cookies after a logout.
+		/// </summary>
+		public static void Clear() {
+			HttpCookie cookie = new HttpCookie(CookieName);
+			cookie.Expires = DateTime.Now.ToUniversalTime().AddDays(-3000);
 
-	/// <summary>
-	/// Implements a session data cache whose lifetime is only limited to one request.
-	/// </summary>
-	public static class SessionCache {
+			HttpContext.Current.Response.Cookies.Add(cookie);
+		}
 
-		private static Dictionary<string, UserInfo> currentUsers = new Dictionary<string, UserInfo>(100);
-		private static Dictionary<string, UserGroup[]> currentGroups = new Dictionary<string, UserGroup[]>(100);
 
 		/// <summary>
-		/// Gets the current user, if any, of a session.
+		/// Gets or sets a value indicating whether the user is logging out.
 		/// </summary>
-		/// <param name="sessionId">The session ID.</param>
-		/// <returns>The current user, or <c>null</c>.</returns>
-		public static UserInfo GetCurrentUser(string sessionId) {
-			lock(currentUsers) {
-				UserInfo result = null;
-				currentUsers.TryGetValue(sessionId, out result);
-				return result;
+		/// <value><c>true</c> if this use is logging out; otherwise, <c>false</c>.</value>
+		public static bool IsLoggingOut {
+			get {
+				if(Cookie != null) {
+					return Cookie[IsLoggingOutKey] == "0" ? false : true;
+				}
+				return false;
+			}
+			set {
+				HttpCookie cookie = Cookie;
+				if(cookie == null) cookie = new HttpCookie(CookieName);
+
+				cookie.Values[IsLoggingOutKey] = value ? "1" : "0";
+				HttpContext.Current.Response.Cookies.Add(cookie);
 			}
 		}
 
 		/// <summary>
-		/// Sets the current user of a session.
+		/// Gets the captcha.
 		/// </summary>
-		/// <param name="sessionId">The session ID.</param>
-		/// <param name="user">The user.</param>
-		public static void SetCurrentUser(string sessionId, UserInfo user) {
-			lock(currentUsers) {
-				currentUsers[sessionId] = user;
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The captcha strings.</returns>
+		public static string GetCaptcha(string wiki) {
+			if(Cookie != null) {
+				TripleDESCryptoServiceProvider provider = new TripleDESCryptoServiceProvider();
+				provider.Key = Settings.GetMasterPasswordBytes(wiki);
+				provider.IV = new byte[] { 2, 5, 23, 21, 3, 8, 5, 38 };
+				return DecryptBytes(provider, Convert.FromBase64String(Cookie[CaptchaKey]));
 			}
+			return null;
 		}
 
 		/// <summary>
-		/// Gets the current groups, if any, of a session.
+		/// Sets the captcha.
 		/// </summary>
-		/// <param name="sessionId">The session ID.</param>
-		/// <returns>The groups, or <b>null.</b></returns>
-		public static UserGroup[] GetCurrentGroups(string sessionId) {
-			lock(currentGroups) {
-				UserGroup[] result = null;
-				currentGroups.TryGetValue(sessionId, out result);
-				return result;
-			}
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="captcha">The captcha string.</param>
+		public static void SetCaptcha(string wiki, string captcha) {
+			HttpCookie cookie = Cookie;
+			if(cookie == null) cookie = new HttpCookie(CookieName);
+			TripleDESCryptoServiceProvider provider = new TripleDESCryptoServiceProvider();
+			provider.Key = Settings.GetMasterPasswordBytes(wiki);
+			provider.IV = new byte[] { 2, 5, 23, 21, 3, 8, 5, 38 };
+			cookie.Values[CaptchaKey] = EncryptString(provider, captcha);
+			HttpContext.Current.Response.Cookies.Add(cookie);
 		}
 
-		/// <summary>
-		/// Sets the current groups of a session.
-		/// </summary>
-		/// <param name="sessionId">The session ID.</param>
-		/// <param name="groups">The groups.</param>
-		public static void SetCurrentGroups(string sessionId, UserGroup[] groups) {
-			lock(currentGroups) {
-				currentGroups[sessionId] = groups;
-			}
+		private static string EncryptString(SymmetricAlgorithm symAlg, string inString) {
+			byte[] inBlock = UnicodeEncoding.Unicode.GetBytes(inString);
+			ICryptoTransform xfrm = symAlg.CreateEncryptor();
+			byte[] outBlock = xfrm.TransformFinalBlock(inBlock, 0, inBlock.Length);
+
+			string temp = Convert.ToBase64String(outBlock);
+			return temp;
 		}
 
-		/// <summary>
-		/// Clears all cached data of a session.
-		/// </summary>
-		/// <param name="sessionId">The session ID.</param>
-		public static void ClearData(string sessionId) {
-			lock(currentUsers) {
-				currentUsers.Remove(sessionId);
-			}
-			lock(currentGroups) {
-				currentGroups.Remove(sessionId);
-			}
-		}
+		private static string DecryptBytes(SymmetricAlgorithm symAlg, byte[] inBytes) {
+			ICryptoTransform xfrm = symAlg.CreateDecryptor();
+			byte[] outBlock = xfrm.TransformFinalBlock(inBytes, 0, inBytes.Length);
 
+			string temp = UnicodeEncoding.Unicode.GetString(outBlock);
+			return temp;
+		}
 	}
 
 }

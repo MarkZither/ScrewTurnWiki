@@ -206,7 +206,6 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Account deletion requested", EntryType.General, currentUser.Username);
 			UserInfo user = Users.FindUser(currentWiki, currentUser.Username);
 			Users.RemoveUser(currentWiki, user);
-			Session.Abandon();
 			UrlTools.RedirectHome(currentWiki);
 		}
 

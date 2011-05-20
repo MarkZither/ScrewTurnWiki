@@ -20,12 +20,7 @@ namespace ScrewTurn.Wiki {
 		/// The username.
 		/// </summary>
 		public const string Username = "Username";
-
-		/// <summary>
-		/// A logout flag.
-		/// </summary>
-		public const string Logout = "Logout";
-
+		
 		/// <summary>
 		/// Tries to automatically login the current user.
 		/// </summary>
@@ -48,7 +43,7 @@ namespace ScrewTurn.Wiki {
 					SetupSession(wiki, null);
 				}
 			}
-			else if(SessionFacade.LoginKey == null && HttpContext.Current.Session[Logout] == null) { // Check for filtered autologin
+			else if(SessionFacade.LoginKey == null && !SessionFacade.IsLoggingOut) { // Check for filtered autologin
 				// If no cookie is available, try to autologin through providers
 				UserInfo user = Users.TryAutoLogin(wiki, HttpContext.Current);
 				if(user != null) {
@@ -66,14 +61,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user (<c>null</c> for anonymous).</param>
 		public static void SetupSession(string wiki, UserInfo user) {
 			if(user != null) {
-				SessionFacade.LoginKey = Users.ComputeLoginKey(wiki, user.Username, user.Email, user.DateTime);
-				SessionFacade.CurrentUsername = user.Username;
-
-				HttpContext.Current.Session[Logout] = null; // No session facade because this key is used only in this page
+				SessionFacade.SetupSession(wiki, user);
 			}
 			else {
-				SessionFacade.LoginKey = null;
-				SessionFacade.CurrentUsername = null;
+				SessionFacade.Clear();
 			}
 		}
 

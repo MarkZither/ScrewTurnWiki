@@ -32,13 +32,13 @@ namespace ScrewTurn.Wiki {
 				c += (char)r.Next(49, 58); // 1 - 9 (not 0)
 				c += (char)r.Next(80, 91); // P - Z
 				c += (char)r.Next(112, 123); // p - z
-				Session["__Captcha"] = c;
+				SessionFacade.SetCaptcha(Tools.DetectCurrentWiki(), c);
 			}
 		}
 
 		protected void cvCaptcha_ServerValidate(object source, ServerValidateEventArgs args) {
 			if(!Settings.GetDisableCaptchaControl(Tools.DetectCurrentWiki())) {
-				args.IsValid = txtCaptcha.Text == (string)Session["__Captcha"];
+				args.IsValid = txtCaptcha.Text == SessionFacade.GetCaptcha(Tools.DetectCurrentWiki());
 			}
 			else {
 				args.IsValid = true;

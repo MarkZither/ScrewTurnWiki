@@ -21,9 +21,6 @@ namespace ScrewTurn.Wiki {
 
 		protected override void OnInit(EventArgs e) {
 			base.OnInit(e);
-
-			// Mitigate Cross-Site Request Forgery (CSRF/XSRF) attacks
-			ViewStateUserKey = Session.SessionID;
 		}
 
 		protected override void OnLoad(EventArgs e) {

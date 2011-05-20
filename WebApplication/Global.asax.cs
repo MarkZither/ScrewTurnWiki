@@ -76,9 +76,6 @@ namespace ScrewTurn.Wiki {
 
 		protected void Application_AcquireRequestState(object sender, EventArgs e) {
 			if(HttpContext.Current.Session != null) {
-				// This should be performed on EndRequest, but Session is not available there
-				SessionCache.ClearData(HttpContext.Current.Session.SessionID);
-
 				// Try to automatically login the user through the cookie
 				ScrewTurn.Wiki.LoginTools.TryAutoLogin(Tools.DetectCurrentWiki());
 			}
@@ -132,7 +129,6 @@ namespace ScrewTurn.Wiki {
 			}
 			catch { }
 			EmailTools.NotifyError(ex, url);
-			Session["LastError"] = Server.GetLastError();
 			if(!Request.PhysicalPath.ToLowerInvariant().Contains("error.aspx")) ScrewTurn.Wiki.UrlTools.Redirect("Error.aspx");
 		}
 
