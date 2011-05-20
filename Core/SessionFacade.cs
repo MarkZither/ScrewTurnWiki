@@ -124,7 +124,8 @@ namespace ScrewTurn.Wiki {
 				groups = temp.ToArray();
 			}
 			else {
-				groups = new UserGroup[] { Users.FindUserGroup(wiki, Settings.GetAnonymousGroup(wiki)) };
+				UserGroup group = Users.FindUserGroup(wiki, Settings.GetAnonymousGroup(wiki));
+				groups = group != null ? new UserGroup[] { group } : new UserGroup[0];
 			}
 
 			return groups;
