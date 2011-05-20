@@ -39,6 +39,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				List<string> files = new List<string>();
 				foreach(IListBlobItem blobItem in blobItems) {
 					string blobName = blobItem.Uri.AbsoluteUri;
+					files.Add(blobName);
 				}
 				return files;
 			}
@@ -102,7 +103,14 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					foreach(ZipEntry e in zip) {
 						using(MemoryStream stream = new MemoryStream()) {
 							e.Extract(stream);
+							stream.Seek(0, SeekOrigin.Begin);
 							var blob = directoryRef.GetBlobReference(e.FileName);
+							BlobRequestOptions options = new BlobRequestOptions();
+							MimeTypes.Init();
+							string extension = Path.GetExtension(e.FileName).Trim('.');
+							if(MimeTypes.Types.ContainsKey(extension)) {
+								blob.Properties.ContentType = MimeTypes.Types[extension];
+							}
 							blob.UploadFromStream(stream);
 						}
 					}
@@ -159,7 +167,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(config == null) throw new ArgumentNullException("config");
 
 			_host = host;
-			_wiki = string.IsNullOrEmpty(wiki) ? "ROOT" : wiki;
+			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki.ToLowerInvariant();
 
 			string[] connectionStrings = config.Split(new char[] { '|' });
 			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
@@ -169,8 +177,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			CloudBlobContainer containerRef = _client.GetContainerReference(_wiki + "-themes");
 			BlobContainerPermissions permissions = new BlobContainerPermissions();
 			permissions.PublicAccess = BlobContainerPublicAccessType.Blob;
-			containerRef.SetPermissions(permissions);
 			containerRef.CreateIfNotExist();
+			containerRef.SetPermissions(permissions);
 		}
 
 		/// <summary>

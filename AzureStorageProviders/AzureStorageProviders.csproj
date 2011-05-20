@@ -60,6 +60,7 @@
     <Compile Include="Hash.cs" />
     <Compile Include="IIndexConnector.cs" />
     <Compile Include="IndexConnector.cs" />
+    <Compile Include="MimeTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryHelper.cs" />
     <Compile Include="TableStorage.cs" />

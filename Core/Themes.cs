@@ -87,11 +87,16 @@ namespace ScrewTurn.Wiki {
 					foreach(string s in ListThemes(wiki, provider)) {
 						if(s == theme) {
 							path = Path.Combine(GlobalSettings.ThemesDirectory, s);
-							string[] files;
-							if(!String.IsNullOrEmpty(path) && Directory.Exists(path))
-								files = Directory.GetFiles(path, searchPattern);
-							else return null;
-							for(int i = 0; i < files.Length; i++) {
+							List<string> files = new List<string>();
+							if(!String.IsNullOrEmpty(path) && Directory.Exists(path)) {
+								foreach(string file in Directory.GetFiles(path)) {
+									if(file.Contains(searchPattern)) files.Add(file);
+								}
+							}
+							else {
+								return null;
+							}
+							for(int i = 0; i < files.Count; i++) {
 								files[i] = "Themes/" + GetRelativePath(files[i], path).Replace(Path.DirectorySeparatorChar.ToString(), "/");
 							}
 							return new List<string>(files);
@@ -103,7 +108,7 @@ namespace ScrewTurn.Wiki {
 					if(themeListFileProvider == null) return null;
 					List<string> lists = themeListFileProvider.ListThemeFiles(theme, searchPattern);
 					if((lists == null) || (lists.Count == 0)) return null;
-					else return themeListFileProvider.ListThemeFiles(theme, searchPattern);
+					else return lists;
 				}
 			}
 			return null;

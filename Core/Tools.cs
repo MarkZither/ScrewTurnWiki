@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki {
 			StringBuilder result = new StringBuilder(300);
 			string nameTheme = Settings.GetTheme(wiki, nspace);
 			result.Append(GetJavaScriptIncludes());
-			List<string> cssList = Themes.ListThemeFiles(wiki, nameTheme, "*.css");
+			List<string> cssList = Themes.ListThemeFiles(wiki, nameTheme, ".css");
 			string firstChunk;
 			if(cssList != null) {
 				foreach(string cssFile in cssList) {
@@ -55,13 +55,13 @@ namespace ScrewTurn.Wiki {
 			// OpenSearch
 			result.AppendFormat(@"<link rel=""search"" href=""Search.aspx?OpenSearch=1"" type=""application/opensearchdescription+xml"" title=""{0}"" />", Settings.GetWikiTitle(wiki) + " - Search");
 
-			List<string> jsFiles = Themes.ListThemeFiles(wiki, nameTheme, "*.js");
+			List<string> jsFiles = Themes.ListThemeFiles(wiki, nameTheme, ".js");
 			if(jsFiles != null) {
 				foreach(string jsFile in jsFiles) {
 					result.Append(@"<script src=""" + jsFile + @""" type=""text/javascript""></script>" + "\n");
 				}
 			}
-			List<string> iconsList = Themes.ListThemeFiles(wiki, nameTheme, "Icon.*");
+			List<string> iconsList = Themes.ListThemeFiles(wiki, nameTheme, "Icon.");
 			if(iconsList != null) {
 				string[] icons = iconsList.ToArray();
 
