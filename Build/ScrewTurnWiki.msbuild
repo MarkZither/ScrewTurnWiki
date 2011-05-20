@@ -75,6 +75,22 @@
 		<!-- SqlServerProviders.dll for MySQL -->
 		<Copy SourceFiles=".\Artifacts\Plugins\SqlServerProviders.dll" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
 		<Copy SourceFiles="Temp\MySql.Data.dll" DestinationFolder=".\Artifacts\WebApplication-SqlServer\bin" />
+		
+		<!-- Mono stuff -->
+		<CreateItem Include="..\Mono\Plugins\Binary\*">
+			<Output ItemName="MonoPlugins" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(MonoPlugins)" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
+		<CreateItem Include="..\Mono\JavaScript\syntaxhighlighter_3.0.83\scripts\*">
+			<Output ItemName="MonoSyntaxJS" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(MonoSyntaxJS)" DestinationFolder=".\Artifacts\WebApplication-SqlServer\JS\sh\scripts" />
+		
+		<CreateItem Include="..\Mono\JavaScript\syntaxhighlighter_3.0.83\styles\*">
+			<Output ItemName="MonoSyntaxCSS" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(MonoSyntaxCSS)" DestinationFolder=".\Artifacts\WebApplication-SqlServer\JS\sh\styles" />
+		
 		<Copy Condition="'$(Configuration)' == 'Debug'" SourceFiles=".\Artifacts\Plugins\SqlServerProviders.dll.mdb" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
 		
 		<!-- Install.txt, Install-SqlServer.txt -->

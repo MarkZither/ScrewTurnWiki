@@ -1,0 +1,2 @@
+When updating anything in here, check the Build/ScrewTurnWiki.msbuild file off the top source
+directory to see if any paths need to be adjusted.
