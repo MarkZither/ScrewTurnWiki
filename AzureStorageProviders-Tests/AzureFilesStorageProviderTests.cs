@@ -10,7 +10,7 @@ using ScrewTurn.Wiki.Tests;
 namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 	[TestFixture]
-	public class FilesStorageProviderTests : FilesStorageProviderTestScaffolding {
+	public class AzureFilesStorageProviderTests : FilesStorageProviderTestScaffolding {
 
 		public override IFilesStorageProviderV30 GetProvider() {
 			AzureFilesStorageProvider prov = new AzureFilesStorageProvider();
