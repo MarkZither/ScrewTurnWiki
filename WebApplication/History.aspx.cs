@@ -18,8 +18,8 @@ namespace ScrewTurn.Wiki {
 
 	public partial class History : BasePage {
 
-        private PageInfo page;
-        private PageContent content;
+		private PageInfo page;
+		private PageContent content;
 		private string currentWiki = null;
 		private bool canRollback;
 
@@ -30,22 +30,22 @@ namespace ScrewTurn.Wiki {
 
 			page = Pages.FindPage(currentWiki, Request["Page"]);
 
-            if(page != null) {
+			if(page != null) {
 				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 				canRollback = authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 
-                content = Content.GetPageContent(page);
+				content = Content.GetPageContent(page);
 				lblTitle.Text = Properties.Messages.PageHistory + ": " + FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page);
 
 				bool canView = authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 				if(!canView) UrlTools.Redirect("AccessDenied.aspx");
-            }
-            else {
-                lblTitle.Text = Properties.Messages.PageNotFound;
+			}
+			else {
+				lblTitle.Text = Properties.Messages.PageNotFound;
 				return;
-            }
+			}
 
 			if(!Page.IsPostBack && page != null) {
 				List<int> revisions = Pages.GetBackups(page);
@@ -68,13 +68,13 @@ namespace ScrewTurn.Wiki {
 			}
 
 			PrintHistory();
-        }
+		}
 
 		/// <summary>
 		/// Prints the history.
 		/// </summary>
-        public void PrintHistory() {
-            if(page == null) return;
+		public void PrintHistory() {
+			if(page == null) return;
 
 			StringBuilder sb = new StringBuilder();
 
@@ -157,7 +157,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			lblHistory.Text = sb.ToString();
-        }
+		}
 
 		protected void rptHistory_ItemCommand(object sender, CommandEventArgs e) {
 			if(e.CommandName == "Rollback") {
@@ -183,7 +183,7 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public class RevisionRow {
 
-		private string page, revision, title, savedOn, savedBy, comment;
+		private string wiki, page, revision, title, savedOn, savedBy, comment;
 		private bool canRollback;
 
 		/// <summary>
@@ -195,6 +195,7 @@ namespace ScrewTurn.Wiki {
 		public RevisionRow(int revision, PageContent content, bool canRollback) {
 			string currentWiki = Tools.DetectCurrentWiki();
 
+			this.wiki = currentWiki;
 			this.page = content.PageInfo.FullName;
 			if(revision == -1) this.revision = Properties.Messages.Current;
 			else this.revision = revision.ToString();
@@ -203,6 +204,13 @@ namespace ScrewTurn.Wiki {
 			savedBy = Users.UserLink(currentWiki, content.User);
 			comment = content.Comment;
 			this.canRollback = canRollback;
+		}
+
+		/// <summary>
+		/// Gets the current wiki.
+		/// </summary>
+		public string Wiki {
+			get { return wiki; }
 		}
 
 		/// <summary>
