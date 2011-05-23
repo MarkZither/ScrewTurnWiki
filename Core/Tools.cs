@@ -321,7 +321,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Automatically replaces the host and port in the URL with those obtained from <see cref="GlobalSettings.GetMainUrl"/>.
+		/// Automatically replaces the host and port in the URL with those obtained from <see cref="Settings.GetMainUrl"/>.
 		/// </summary>
 		/// <param name="url">The URL.</param>
 		/// <returns>The URL with fixed host and port.</returns>
@@ -329,7 +329,7 @@ namespace ScrewTurn.Wiki {
 			// Make sure the host is replaced only once
 			string originalUrl = url.ToString();
 			string originalHost = url.GetComponents(UriComponents.HostAndPort, UriFormat.Unescaped);
-			Uri mainUrl = GlobalSettings.GetMainUrl();
+			Uri mainUrl = Settings.GetMainUrlOrDefault(DetectCurrentWiki());
 			string newHost = mainUrl.GetComponents(UriComponents.HostAndPort, UriFormat.Unescaped);
 
 			originalHost = CleanupPort(originalUrl, originalHost);

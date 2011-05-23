@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnAutoWikiUrlResource1.Text" xml:space="preserve">
     <value>autodetect</value>
@@ -147,12 +147,6 @@
   <data name="chkDisplayGravatarsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="chkEnableAutomaticUpdateChecksResource1.Text" xml:space="preserve">
-    <value>Enable automatic update checks (system and providers)</value>
-  </data>
-  <data name="chkEnableAutomaticUpdateChecksResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="chkEnableBreadcrumbsTrailResource1.Text" xml:space="preserve">
     <value>Enable Breadcrumbs Trail</value>
   </data>
@@ -169,12 +163,6 @@
     <value>Enable Double-Click editing</value>
   </data>
   <data name="chkEnableDoubleClickEditingResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="chkEnableHttpCompressionResource1.Text" xml:space="preserve">
-    <value>Enable HTTP compression</value>
-  </data>
-  <data name="chkEnableHttpCompressionResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkEnablePageInfoDivResource1.Text" xml:space="preserve">
@@ -195,22 +183,10 @@
   <data name="chkEnableSectionEditingResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="chkEnableSslForSmtpResource1.Text" xml:space="preserve">
-    <value>Enable SSL</value>
-  </data>
-  <data name="chkEnableSslForSmtpResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="chkEnableViewPageCodeResource1.Text" xml:space="preserve">
     <value>Enable 'View Page Code' feature</value>
   </data>
   <data name="chkEnableViewPageCodeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="chkEnableViewStateCompressionResource1.Text" xml:space="preserve">
-    <value>Enable ViewState compression</value>
-  </data>
-  <data name="chkEnableViewStateCompressionResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkPreventConcurrentEditingResource1.Text" xml:space="preserve">
@@ -240,47 +216,14 @@
   <data name="cvDateTimeFormatResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="cvErrorsEmailsResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid email address</value>
-  </data>
-  <data name="cvErrorsEmailsResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cvErrorsEmailsResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cvPasswordResource1.ErrorMessage" xml:space="preserve">
-    <value>Username is required</value>
-  </data>
-  <data name="cvPasswordResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cvPasswordResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cvUsernameResource1.ErrorMessage" xml:space="preserve">
-    <value>Password is required</value>
-  </data>
-  <data name="cvUsernameResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cvUsernameResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="lblActivationModeResource1.Text" xml:space="preserve">
     <value>Account activation mode</value>
-  </data>
-  <data name="lblAdvancedConfigResource1.Text" xml:space="preserve">
-    <value>Advanced Configuration</value>
   </data>
   <data name="lblChangeModerationModeResource1.Text" xml:space="preserve">
     <value>Page change moderation mode</value>
   </data>
   <data name="lblConfigResource1.Text" xml:space="preserve">
     <value>Configuration</value>
-  </data>
-  <data name="lblContactEmailResource1.Text" xml:space="preserve">
-    <value>Contact email</value>
   </data>
   <data name="lblContentConfigResource1.Text" xml:space="preserve">
     <value>Content Configuration</value>
@@ -306,9 +249,6 @@
   <data name="lblDefaultUsersGroupResource1.Text" xml:space="preserve">
     <value>Default Users Group</value>
   </data>
-  <data name="lblErrorsEmailsResource1.Text" xml:space="preserve">
-    <value>Email addresses to notify in case of errors (separate with commas)</value>
-  </data>
   <data name="lblExtensionsAllowedForUploadResource2.Text" xml:space="preserve">
     <value>File extensions allowed for upload (separate with commas, '*' for any type)</value>
   </data>
@@ -321,15 +261,6 @@
   <data name="lblKeptBackupNumberPreResource1.Text" xml:space="preserve">
     <value>Keep at most</value>
   </data>
-  <data name="lblLoggingLevelResource1.Text" xml:space="preserve">
-    <value>Logging level</value>
-  </data>
-  <data name="lblMaxFileSizeResource1.Text" xml:space="preserve">
-    <value>Max file size allowed for upload</value>
-  </data>
-  <data name="lblMaxLogSizeResource1.Text" xml:space="preserve">
-    <value>Max log size</value>
-  </data>
   <data name="lblMaxRecentChangesToDisplayPostResource1.Text" xml:space="preserve">
     <value>items in &lt;code&gt;{RecentChanges}&lt;/code&gt; tags</value>
   </data>
@@ -341,12 +272,6 @@
   </data>
   <data name="lblNamespaces2Resource1.Text" xml:space="preserve">
     <value>Namespaces</value>
-  </data>
-  <data name="lblPages1Resource1.Text" xml:space="preserve">
-    <value>pages</value>
-  </data>
-  <data name="lblPages2Resource1.Text" xml:space="preserve">
-    <value>pages</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -371,15 +296,6 @@
   </data>
   <data name="lblSelectFormatResource1.Text" xml:space="preserve">
     <value>Select...</value>
-  </data>
-  <data name="lblSenderEmailResource1.Text" xml:space="preserve">
-    <value>Sender email</value>
-  </data>
-  <data name="lblSmtpAuthenticationResource1.Text" xml:space="preserve">
-    <value>SMTP username and password</value>
-  </data>
-  <data name="lblSmtpServerResource1.Text" xml:space="preserve">
-    <value>SMTP server address and port</value>
   </data>
   <data name="lblStringsResource1.Text" xml:space="preserve">
     <value />
@@ -648,24 +564,6 @@
   <data name="PageResource2.Title" xml:space="preserve">
     <value>Administration</value>
   </data>
-  <data name="rdoAllMessagesResource1.Text" xml:space="preserve">
-    <value>All Messages</value>
-  </data>
-  <data name="rdoAllMessagesResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rdoDisableLogResource1.Text" xml:space="preserve">
-    <value>Disable Log</value>
-  </data>
-  <data name="rdoDisableLogResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rdoErrorsOnlyResource1.Text" xml:space="preserve">
-    <value>Errors Only</value>
-  </data>
-  <data name="rdoErrorsOnlyResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="rdoNoModerationResource1.Text" xml:space="preserve">
     <value>Disable Moderation</value>
   </data>
@@ -684,21 +582,6 @@
   <data name="rdoRequirePageViewingPermissionsResource1.ToolTip" xml:space="preserve">
     <value>Pages can be edited by users who have viewing permissions but not editing permissions, and the changes are help in moderation</value>
   </data>
-  <data name="rdoWarningsAndErrorsResource1.Text" xml:space="preserve">
-    <value>Warnings and Errors</value>
-  </data>
-  <data name="rdoWarningsAndErrorsResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="revContactEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid email address</value>
-  </data>
-  <data name="revContactEmailResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="revContactEmailResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="revMainUrlResource1.ErrorMessage" xml:space="preserve">
     <value>Invalid Wiki URL</value>
   </data>
@@ -708,24 +591,6 @@
   <data name="revMainUrlResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="revSenderEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid email address</value>
-  </data>
-  <data name="revSenderEmailResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="revSenderEmailResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="revSmtpServerResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid SMTP Server address</value>
-  </data>
-  <data name="revSmtpServerResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="revSmtpServerResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="revWikiTitleResource1.ErrorMessage" xml:space="preserve">
     <value>Invalid Wiki Title</value>
   </data>
@@ -733,15 +598,6 @@
     <value />
   </data>
   <data name="revWikiTitleResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvContactEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Contact Email is required</value>
-  </data>
-  <data name="rfvContactEmailResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvContactEmailResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rfvDateTimeFormatResource1.ErrorMessage" xml:space="preserve">
@@ -762,24 +618,6 @@
   <data name="rfvMainUrlResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rfvMaxFileSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Max File Size is required</value>
-  </data>
-  <data name="rfvMaxFileSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvMaxFileSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvMaxLogSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Max Log Size is required</value>
-  </data>
-  <data name="rfvMaxLogSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvMaxLogSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="rfvMaxRecentChangesToDisplayResource1.ErrorMessage" xml:space="preserve">
     <value>Number is required</value>
   </data>
@@ -787,24 +625,6 @@
     <value />
   </data>
   <data name="rfvMaxRecentChangesToDisplayResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvSenderEmailResource1.ErrorMessage" xml:space="preserve">
-    <value>Sender Email is required</value>
-  </data>
-  <data name="rfvSenderEmailResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvSenderEmailResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvSmtpServerResource1.ErrorMessage" xml:space="preserve">
-    <value>SMTP Server is required</value>
-  </data>
-  <data name="rfvSmtpServerResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rfvSmtpServerResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="rfvWikiTitleResource1.ErrorMessage" xml:space="preserve">
@@ -825,24 +645,6 @@
   <data name="rvKeptBackupNumberResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rvMaxFileSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid File Size (min. 256, max. 102400)</value>
-  </data>
-  <data name="rvMaxFileSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rvMaxFileSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rvMaxLogSizeResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Log Size (min. 16, max. 10240)</value>
-  </data>
-  <data name="rvMaxLogSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rvMaxLogSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="rvMaxRecentChangesToDisplayResource1.ErrorMessage" xml:space="preserve">
     <value>Number must be between 0 and 50</value>
   </data>
@@ -852,31 +654,10 @@
   <data name="rvMaxRecentChangesToDisplayResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rvSmtpPortResource1.ErrorMessage" xml:space="preserve">
-    <value>Invalid Port (min. 1, max. 65535)</value>
-  </data>
-  <data name="rvSmtpPortResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rvSmtpPortResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtContactEmailResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtContactEmailResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="txtDateTimeFormatResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtDateTimeFormatResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtErrorsEmailsResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtErrorsEmailsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="txtExtensionsAllowedResource1.Text" xml:space="preserve">
@@ -897,52 +678,10 @@
   <data name="txtMainUrlResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="txtMaxFileSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtMaxFileSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtMaxLogSizeResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtMaxLogSizeResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="txtMaxRecentChangesToDisplayResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtMaxRecentChangesToDisplayResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtPasswordResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtPasswordResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtSenderEmailResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtSenderEmailResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtSmtpPortResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtSmtpPortResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtSmtpServerResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtSmtpServerResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtUsernameResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtUsernameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="txtWikiTitleResource1.Text" xml:space="preserve">
@@ -998,12 +737,6 @@
   </data>
   <data name="ListItemResource44.Value" xml:space="preserve">
     <value>Disabled</value>
-  </data>
-  <data name="lblUsernameRegExResource2.Text" xml:space="preserve">
-    <value>Regular Expression for validating usernames and group names</value>
-  </data>
-  <data name="lblPasswordRegExResource2.Text" xml:space="preserve">
-    <value>Regular Expression for validating passwords</value>
   </data>
   <data name="chkAutoGeneratePageNamesResource1.Text" xml:space="preserve">
     <value>Auto-Generate Page Names in Editor by default</value>

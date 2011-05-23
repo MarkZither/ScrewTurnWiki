@@ -56,8 +56,6 @@ namespace ScrewTurn.Wiki {
 					return GlobalSettings.ContactEmail;
 				case GlobalSettingName.PublicDirectory:
 					return GlobalSettings.PublicDirectory;
-				case GlobalSettingName.MainUrl:
-					return GlobalSettings.MainUrl;
 				case GlobalSettingName.SenderEmail:
 					return GlobalSettings.SenderEmail;
 				case GlobalSettingName.UsernameRegex:
@@ -102,6 +100,8 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Setting's value.</returns>
 		public string GetSettingValue(string wiki, SettingName name) {
 			switch(name) {
+				case SettingName.MainUrl:
+					return Settings.GetMainUrl(wiki);
 				case SettingName.DateTimeFormat:
 					return Settings.GetDateTimeFormat(wiki);
 				case SettingName.DefaultLanguage:

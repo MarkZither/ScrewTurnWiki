@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki {
 			Response.ContentType = "text/xml;charset=UTF-8";
 			Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
 
-			string mainUrl = GlobalSettings.MainUrl;
+			string mainUrl = Settings.GetMainUrl(currentWiki);
 			string rootDefault = Settings.GetDefaultPage(currentWiki).ToLowerInvariant();
 
 			using(XmlWriter writer = XmlWriter.Create(Response.OutputStream)) {

@@ -109,7 +109,7 @@ namespace ScrewTurn.Wiki {
 			EmailTools.AsyncSendEmail(currentUser.Email,
 				"\"" + Users.GetDisplayName(loggedUser) + "\" <" + GlobalSettings.SenderEmail + ">",
 				txtSubject.Text,
-				Users.GetDisplayName(loggedUser) + " sent you this message from " + Settings.GetWikiTitle(currentWiki) + ". To reply, please go to " + GlobalSettings.MainUrl + "User.aspx?Username=" + Tools.UrlEncode(loggedUser.Username) + "&Subject=" + Tools.UrlEncode("Re: " + txtSubject.Text) + "\nPlease do not reply to this Email.\n\n------------\n\n" + txtBody.Text,
+				Users.GetDisplayName(loggedUser) + " sent you this message from " + Settings.GetWikiTitle(currentWiki) + ". To reply, please go to " + Settings.GetMainUrl(currentWiki) + "User.aspx?Username=" + Tools.UrlEncode(loggedUser.Username) + "&Subject=" + Tools.UrlEncode("Re: " + txtSubject.Text) + "\nPlease do not reply to this Email.\n\n------------\n\n" + txtBody.Text,
 				false);
 			lblSendResult.Text = Properties.Messages.MessageSent;
 			lblSendResult.CssClass = "resultok";

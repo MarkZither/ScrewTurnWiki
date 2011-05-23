@@ -498,10 +498,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		ContactEmail,
 		/// <summary>
-		/// The Main URL of the Wiki.
-		/// </summary>
-		MainUrl,
-		/// <summary>
 		/// The Sender Email.
 		/// </summary>
 		SenderEmail,
@@ -575,6 +571,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// The Title of the Wiki.
 		/// </summary>
 		WikiTitle,
+		/// <summary>
+		/// The Main URL of the Wiki.
+		/// </summary>
+		MainUrl,
 		/// <summary>
 		/// The default page of the root namespace.
 		/// </summary>

@@ -55,7 +55,8 @@ namespace ScrewTurn.Wiki {
 			{ "adminhome", "lnkSelectAdminHome" },
 			{ "adminnavpaths", "lnkSelectNavPaths" },
 			{ "adminproviders", "lnkSelectProviders" },
-			{ "admintheme", "lnkSelectTheme" }
+			{ "admintheme", "lnkSelectTheme" },
+			{ "adminglobalconfig", "lnkSelectGlobalConfig" }
 		};
 
 		/// <summary>
@@ -79,6 +80,7 @@ namespace ScrewTurn.Wiki {
 			lnkSelectNavPaths.CssClass = "tab";
 			lnkSelectProviders.CssClass = "tab";
 			lnkSelectTheme.CssClass = "tab";
+			lnkSelectGlobalConfig.CssClass = "tab red";
 
 			hyperLink.CssClass = "tabselected";
 		}
@@ -96,6 +98,9 @@ namespace ScrewTurn.Wiki {
 
 			// Configuration (can manage config)
 			lnkSelectConfig.Visible = CanManageConfiguration(currentUser, currentGroups);
+
+			// Global Configuration (can manage global config)
+			lnkSelectGlobalConfig.Visible = CanManageConfiguration(currentUser, currentGroups);
 
 			// Content (can manage config)
 			lnkSelectContent.Visible = CanManageConfiguration(currentUser, currentGroups);

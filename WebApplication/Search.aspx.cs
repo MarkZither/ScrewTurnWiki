@@ -273,7 +273,7 @@ namespace ScrewTurn.Wiki {
 				string.Format(xml,
 					Settings.GetWikiTitle(currentWiki),
 					Settings.GetWikiTitle(currentWiki) + " - Search",
-					GlobalSettings.MainUrl,
+					Settings.GetMainUrl(currentWiki),
 					"{searchTerms}",
 					"Images/SearchIcon.ico"));
 			Response.End();

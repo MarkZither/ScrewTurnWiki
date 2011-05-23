@@ -359,7 +359,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="email">The email.</param>
 		/// <param name="dateTime">The user registration date/time.</param>
 		public static void SendPasswordResetMessage(string wiki, string username, string email, DateTime dateTime) {
-			string mainLink = GlobalSettings.MainUrl + "Login.aspx?ResetCode=" + Tools.ComputeSecurityHash(wiki, username, email, dateTime) + "&Username=" + Tools.UrlEncode(username);
+			string mainLink = Settings.GetMainUrl(wiki) + "Login.aspx?ResetCode=" + Tools.ComputeSecurityHash(wiki, username, email, dateTime) + "&Username=" + Tools.UrlEncode(username);
 			string body = Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.PasswordResetProcedureMessage, null).Replace("##USERNAME##",
 				username).Replace("##LINK##", mainLink).Replace("##WIKITITLE##",
 				Settings.GetWikiTitle(wiki)).Replace("##EMAILADDRESS##", GlobalSettings.ContactEmail);

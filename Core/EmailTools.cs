@@ -122,7 +122,7 @@ namespace ScrewTurn.Wiki {
 				if(recipients.Length > 0) {
 					AsyncSendMassEmail(recipients, GlobalSettings.SenderEmail, "Error Notification", "An error occurred on " +
 						DateTime.Now.ToString("yyyy'/'MM'/'dd' 'HH':'mm':'ss") + " (server time) in the wiki hosted at " +
-						GlobalSettings.MainUrl + " - server stack trace follows.\r\n\r\n" +
+						Settings.GetMainUrl(Tools.DetectCurrentWiki()) + " - server stack trace follows.\r\n\r\n" +
 						(!string.IsNullOrEmpty(url) ? url + "\r\n\r\n" : "") +
 						ex.ToString(), false);
 				}

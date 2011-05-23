@@ -63,6 +63,8 @@
 				CssClass="tab" NavigateUrl="~/AdminConfig.aspx" meta:resourcekey="lnkSelectConfigResource1" />
 			<asp:HyperLink ID="lnkSelectTheme" runat="server" Text="Themes"
 				CssClass="tab" NavigateUrl="~/AdminTheme.aspx" meta:resourcekey="lnkSelectThemeResource1" />
+			<asp:HyperLink ID="lnkSelectGlobalConfig" runat="server" Text="Global Configuration"
+				CssClass="tab red" NavigateUrl="~/AdminGlobalConfig.aspx" meta:resourcekey="lnkSelectGlobalConfigResource1" />
 		</div>
 	
 		<asp:ContentPlaceHolder ID="cphAdmin" runat="server" />

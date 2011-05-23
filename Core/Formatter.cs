@@ -298,7 +298,7 @@ namespace ScrewTurn.Wiki {
 									sb.Insert(match.Index, GlobalSettings.WikiVersion);
 									break;
 								case "MAINURL":
-									sb.Insert(match.Index, GlobalSettings.MainUrl);
+									sb.Insert(match.Index, Settings.GetMainUrl(wiki));
 									break;
 								case "RSSPAGE":
 									if(current != null) {

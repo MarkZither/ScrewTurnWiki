@@ -289,38 +289,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets or sets the main URL of the Wiki.
-		/// </summary>
-		public static string MainUrl {
-			get {
-				string s = SettingsTools.GetString(Provider.GetSetting("MainUrl"), "http://www.server.com/");
-				if(!s.EndsWith("/")) s += "/";
-				return s;
-			}
-			set {
-				Provider.SetSetting("MainUrl", value);
-			}
-		}
-
-		/// <summary>
-		/// Gets the main URL of the wiki, defaulting to the current request URL if none is configured manually.
-		/// </summary>
-		/// <returns>The URL of the wiki.</returns>
-		public static Uri GetMainUrl() {
-			Uri mainUrl = new Uri(MainUrl);
-			if(mainUrl.Host == "www.server.com") {
-				try {
-					// STW never uses internal URLs with slashes, so trimming to the last slash should work
-					// Example: http://server/wiki/namespace.page.ashx
-					string temp = System.Web.HttpContext.Current.Request.Url.ToString();
-					mainUrl = new Uri(temp.Substring(0, temp.LastIndexOf("/") + 1));
-				}
-				catch { }
-			}
-			return mainUrl;
-		}
-
-		/// <summary>
 		/// Gets the correct path to use with Cookies.
 		/// </summary>
 		public static string CookiePath {

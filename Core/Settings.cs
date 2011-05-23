@@ -68,6 +68,44 @@ namespace ScrewTurn.Wiki {
 		#region Basic Settings and Associated Data
 
 		/// <summary>
+		/// Gets or sets the main URL of the Wiki.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The main URL associated with the given wiki.</returns>
+		public static string GetMainUrl(string wiki) {
+				string s = SettingsTools.GetString(GetProvider(wiki).GetSetting("MainUrl"), "http://www.server.com/");
+				if(!s.EndsWith("/")) s += "/";
+				return s;
+			}
+
+		/// <summary>
+		/// Sets the main URL.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="url">The main URL.</param>
+		public static void SetMainUrl(string wiki, string url) {
+			GetProvider(wiki).SetSetting("MainUrl", url);
+		}
+
+		/// <summary>
+		/// Gets the main URL of the wiki, defaulting to the current request URL if none is configured manually.
+		/// </summary>
+		/// <returns>The URL of the wiki.</returns>
+		public static Uri GetMainUrlOrDefault(string wiki) {
+			Uri mainUrl = new Uri(GetMainUrl(wiki));
+			if(mainUrl.Host == "www.server.com") {
+				try {
+					// STW never uses internal URLs with slashes, so trimming to the last slash should work
+					// Example: http://server/wiki/namespace.page.ashx
+					string temp = System.Web.HttpContext.Current.Request.Url.ToString();
+					mainUrl = new Uri(temp.Substring(0, temp.LastIndexOf("/") + 1));
+				}
+				catch { }
+			}
+			return mainUrl;
+		}
+
+		/// <summary>
 		/// Gets or sets the Title of the Wiki.
 		/// </summary>
 		public static string GetWikiTitle(string wiki) {

@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki {
 		private RssFeedsMode rssFeedsMode;
 		private string currentWiki = null;
 
-        protected void Page_Load(object sender, EventArgs e) {
+		protected void Page_Load(object sender, EventArgs e) {
 			currentWiki = DetectWiki();
 			
 			rssFeedsMode = Settings.GetRssFeedsMode(currentWiki);
@@ -64,11 +64,11 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-            Response.ClearContent();
-            Response.ContentType = "text/xml;charset=UTF-8";
-            Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
+			Response.ClearContent();
+			Response.ContentType = "text/xml;charset=UTF-8";
+			Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
 
-            if(Request["Page"] != null) {
+			if(Request["Page"] != null) {
 				PageInfo page = Pages.FindPage(currentWiki, Request["Page"]);
 				if(page == null) return;
 
@@ -91,8 +91,8 @@ namespace ScrewTurn.Wiki {
 
 						// Build the channel element
 						BuildChannelHead(rss, Settings.GetWikiTitle(currentWiki) + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page)),
-							GlobalSettings.MainUrl + page.FullName + GlobalSettings.PageExtension,
-							GlobalSettings.MainUrl + UrlTools.BuildUrl(currentWiki, "RSS.aspx?Page=", page.FullName),
+							Settings.GetMainUrl(currentWiki) + page.FullName + GlobalSettings.PageExtension,
+							Settings.GetMainUrl(currentWiki) + UrlTools.BuildUrl(currentWiki, "RSS.aspx?Page=", page.FullName),
 							Formatter.StripHtml(content.Title) + " - " + Properties.Messages.PageUpdates);
 
 						// Write the item element
@@ -100,7 +100,7 @@ namespace ScrewTurn.Wiki {
 						rss.WriteStartElement("title");
 						rss.WriteCData(Formatter.StripHtml(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page)));
 						rss.WriteEndElement();
-						rss.WriteElementString("link", GlobalSettings.MainUrl + page.FullName + GlobalSettings.PageExtension);
+						rss.WriteElementString("link", Settings.GetMainUrl(currentWiki) + page.FullName + GlobalSettings.PageExtension);
 
 						// Create the description tag
 						rss.WriteStartElement("description");
@@ -163,8 +163,8 @@ namespace ScrewTurn.Wiki {
 
 						// Build the channel element
 						BuildChannelHead(rss, Settings.GetWikiTitle(currentWiki) + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page)) + " - Discussion Updates",
-							GlobalSettings.MainUrl + page.FullName + GlobalSettings.PageExtension + "?Discuss=1",
-							GlobalSettings.MainUrl + UrlTools.BuildUrl(currentWiki, "RSS.aspx?Page=", page.FullName, "&Discuss=1"),
+							Settings.GetMainUrl(currentWiki) + page.FullName + GlobalSettings.PageExtension + "?Discuss=1",
+							Settings.GetMainUrl(currentWiki) + UrlTools.BuildUrl(currentWiki, "RSS.aspx?Page=", page.FullName, "&Discuss=1"),
 							Settings.GetWikiTitle(currentWiki) + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page)) + " - Discussion Updates");
 
 						for (int i = 0; i < messages.Count; i++)
@@ -175,7 +175,7 @@ namespace ScrewTurn.Wiki {
 							rss.WriteStartElement("title");
 							rss.WriteCData(Formatter.StripHtml(FormattingPipeline.PrepareTitle(currentWiki, messages[i].Subject, false, FormattingContext.MessageBody, page)));
 							rss.WriteEndElement();
-							rss.WriteElementString("link", GlobalSettings.MainUrl + page.FullName + GlobalSettings.PageExtension + "?Discuss=1");
+							rss.WriteElementString("link", Settings.GetMainUrl(currentWiki) + page.FullName + GlobalSettings.PageExtension + "?Discuss=1");
 
 							// Create the description tag
 							rss.WriteStartElement("description");
@@ -215,7 +215,7 @@ namespace ScrewTurn.Wiki {
 					}
 
 				}
-            }
+			}
 
 			else {
 				if(Request["Discuss"] == null) {
@@ -236,8 +236,8 @@ namespace ScrewTurn.Wiki {
 
 						// Build the channel element
 						BuildChannelHead(rss, Settings.GetWikiTitle(currentWiki) + " - " + Properties.Messages.PageUpdates,
-							GlobalSettings.MainUrl,
-							GlobalSettings.MainUrl + UrlTools.BuildUrl(currentWiki, "RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
+							Settings.GetMainUrl(currentWiki),
+							Settings.GetMainUrl(currentWiki) + UrlTools.BuildUrl(currentWiki, "RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
 							Properties.Messages.RecentPageUpdates);
 
 						RecentChange[] ch = RecentChanges.GetAllChanges(currentWiki);
@@ -292,9 +292,9 @@ namespace ScrewTurn.Wiki {
 							rss.WriteCData(Formatter.StripHtml(FormattingPipeline.PrepareTitle(currentWiki, ch[i].Title, false, FormattingContext.PageContent, p)));
 							rss.WriteEndElement();
 							if (ch[i].Change != Change.PageDeleted && p != null)
-								rss.WriteElementString("link", GlobalSettings.MainUrl + ch[i].Page + GlobalSettings.PageExtension);
+								rss.WriteElementString("link", Settings.GetMainUrl(currentWiki) + ch[i].Page + GlobalSettings.PageExtension);
 							else
-								rss.WriteElementString("link", GlobalSettings.MainUrl);
+								rss.WriteElementString("link", Settings.GetMainUrl(currentWiki));
 							BuildAuthorTag(rss, ch[i].User);
 
 							// Create the description tag
@@ -368,8 +368,8 @@ namespace ScrewTurn.Wiki {
 
 						// Build the channel element
 						BuildChannelHead(rss, Settings.GetWikiTitle(currentWiki) + " - " + Properties.Messages.DiscussionUpdates,
-							GlobalSettings.MainUrl,
-							GlobalSettings.MainUrl + UrlTools.BuildUrl(currentWiki, "RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
+							Settings.GetMainUrl(currentWiki),
+							Settings.GetMainUrl(currentWiki) + UrlTools.BuildUrl(currentWiki, "RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
 							Properties.Messages.RecentDiscussionUpdates);
 
 						RecentChange[] ch = RecentChanges.GetAllChanges(currentWiki);
@@ -419,9 +419,9 @@ namespace ScrewTurn.Wiki {
 								string id = Tools.GetMessageIdForAnchor(ch[i].DateTime);
 								if (ch[i].Change != Change.MessageDeleted)
 								{
-									rss.WriteElementString("link", GlobalSettings.MainUrl + ch[i].Page + GlobalSettings.PageExtension + "?Discuss=1#" + id);
+									rss.WriteElementString("link", Settings.GetMainUrl(currentWiki) + ch[i].Page + GlobalSettings.PageExtension + "?Discuss=1#" + id);
 								}
-								else rss.WriteElementString("link", GlobalSettings.MainUrl + ch[i].Page + GlobalSettings.PageExtension + "?Discuss=1");
+								else rss.WriteElementString("link", Settings.GetMainUrl(currentWiki) + ch[i].Page + GlobalSettings.PageExtension + "?Discuss=1");
 
 								string messageContent = FindMessageContent(ch[i].Page, id);
 
@@ -480,7 +480,7 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-        }
+		}
 
 		/// <summary>
 		/// Tries to find the content of a message.
@@ -613,6 +613,6 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-    }
+	}
 
 }

@@ -62,10 +62,10 @@ namespace ScrewTurn.Wiki {
 
 			if(Settings.GetRssFeedsMode(currentWiki) != RssFeedsMode.Disabled) {
 				sb.AppendFormat(@"<link rel=""alternate"" title=""{0}"" href=""{1}######______NAMESPACE______######RSS.aspx"" type=""application/rss+xml"" />",
-					Settings.GetWikiTitle(currentWiki), GlobalSettings.MainUrl);
+					Settings.GetWikiTitle(currentWiki), Settings.GetMainUrl(currentWiki));
 				sb.Append("\n");
 				sb.AppendFormat(@"<link rel=""alternate"" title=""{0}"" href=""{1}######______NAMESPACE______######RSS.aspx?Discuss=1"" type=""application/rss+xml"" />",
-					Settings.GetWikiTitle(currentWiki) + " - Discussions", GlobalSettings.MainUrl);
+					Settings.GetWikiTitle(currentWiki) + " - Discussions", Settings.GetMainUrl(currentWiki));
 				sb.Append("\n");
 			}
 

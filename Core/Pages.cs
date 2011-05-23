@@ -787,7 +787,7 @@ namespace ScrewTurn.Wiki {
 				body.Replace("##PAGE##", title).Replace("##USER##", author != null ? Users.GetDisplayName(author) : "anonymous").Replace("##DATETIME##",
 				Preferences.AlignWithServerTimezone(wiki, content.LastModified).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##COMMENT##",
 				(string.IsNullOrEmpty(content.Comment) ? Exchanger.ResourceExchanger.GetResource("None") : content.Comment)).Replace("##LINK##",
-				GlobalSettings.MainUrl + Tools.UrlEncode(page.FullName) + GlobalSettings.PageExtension).Replace("##WIKITITLE##", Settings.GetWikiTitle(wiki)),
+				Settings.GetMainUrl(wiki) + Tools.UrlEncode(page.FullName) + GlobalSettings.PageExtension).Replace("##WIKITITLE##", Settings.GetWikiTitle(wiki)),
 				false);
 		}
 
@@ -926,8 +926,8 @@ namespace ScrewTurn.Wiki {
 			body = body.Replace("##PAGE##", title).Replace("##USER##", displayName).Replace("##DATETIME##",
 				Preferences.AlignWithServerTimezone(wiki, DateTime.Now).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##COMMENT##",
 				string.IsNullOrEmpty(comment) ? Exchanger.ResourceExchanger.GetResource("None") : comment).Replace("##LINK##",
-				GlobalSettings.MainUrl + UrlTools.BuildUrl(wiki, "Edit.aspx?Page=", Tools.UrlEncode(currentPage.FullName))).Replace("##LINK2##",
-				GlobalSettings.MainUrl + "AdminPages.aspx?Admin=" + Tools.UrlEncode(currentPage.FullName)).Replace("##WIKITITLE##",
+				Settings.GetMainUrl(wiki) + UrlTools.BuildUrl(wiki, "Edit.aspx?Page=", Tools.UrlEncode(currentPage.FullName))).Replace("##LINK2##",
+				Settings.GetMainUrl(wiki) + "AdminPages.aspx?Admin=" + Tools.UrlEncode(currentPage.FullName)).Replace("##WIKITITLE##",
 				Settings.GetWikiTitle(wiki));
 
 			EmailTools.AsyncSendMassEmail(EmailTools.GetRecipients(usersToNotify.ToArray()),
@@ -1481,7 +1481,7 @@ namespace ScrewTurn.Wiki {
 				Settings.GetWikiTitle(wiki) + " - " + title,
 				body.Replace("##PAGE##", title).Replace("##USER##", author != null ? Users.GetDisplayName(author) : "anonymous").Replace("##DATETIME##",
 				Preferences.AlignWithServerTimezone(wiki, content.LastModified).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##SUBJECT##",
-				subject).Replace("##LINK##", GlobalSettings.MainUrl + Tools.UrlEncode(page.FullName) +
+				subject).Replace("##LINK##", Settings.GetMainUrl(wiki) + Tools.UrlEncode(page.FullName) +
 				GlobalSettings.PageExtension + "?Discuss=1#" + id).Replace("##WIKITITLE##", Settings.GetWikiTitle(wiki)),
 				false);
 		}

@@ -95,6 +95,11 @@ a:hover {
 	text-decoration: none;
 }
 
+.red, .red:visited, .red:hover {
+	background-color: #E03A3A;
+	border: solid 3px #E03A3A;
+}
+
 h1 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 18px;

@@ -172,6 +172,13 @@
     <Compile Include="AllPages.aspx.designer.cs">
       <DependentUpon>AllPages.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AdminGlobalConfig.aspx.cs">
+      <DependentUpon>AdminGlobalConfig.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminGlobalConfig.aspx.designer.cs">
+      <DependentUpon>AdminGlobalConfig.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CreateMasterPassword.aspx.cs">
       <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1309,6 +1316,7 @@
     <Content Include="Captcha.ascx" />
     <Content Include="Captcha.aspx" />
     <Content Include="Category.aspx" />
+    <Content Include="AdminGlobalConfig.aspx" />
     <Content Include="CreateMasterPassword.aspx" />
     <Content Include="Diff.aspx" />
     <Content Include="Error.aspx" />
@@ -1688,6 +1696,7 @@
     <Content Include="App_LocalResources\MasterPageClean.master.resx" />
     <Content Include="App_LocalResources\AdminTheme.aspx.resx" />
     <Content Include="App_LocalResources\ThemesProviderSelector.ascx.resx" />
+    <Content Include="App_LocalResources\AdminGlobalConfig.aspx.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>
