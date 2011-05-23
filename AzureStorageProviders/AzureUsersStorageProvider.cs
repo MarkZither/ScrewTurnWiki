@@ -17,18 +17,41 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		#region IUsersStorageProviderV30 Members
 
+
+		private Dictionary<string, UserEntity> _users;
+		bool allUsersRetrieved = false;
+
 		private UserEntity GetUserEntity(string wiki, string username) {
-			var userQuery = (from e in _context.CreateQuery<UserEntity>(UsersTable).AsTableServiceQuery()
+			if(_users == null) _users = new Dictionary<string, UserEntity>();
+
+			if(!_users.ContainsKey(username)) {
+				var userQuery = (from e in _context.CreateQuery<UserEntity>(UsersTable).AsTableServiceQuery()
 								 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(username)
 								 select e).AsTableServiceQuery();
-			return QueryHelper<UserEntity>.FirstOrDefault(userQuery);
+				var entity = QueryHelper<UserEntity>.FirstOrDefault(userQuery);
+				if(entity == null) return null;
+				_users[username] = entity;
+			}
+			return _users[username];
 		}
 
 		private IList<UserEntity> GetUsersEntities(string wiki) {
-			var usersQuery = (from e in _context.CreateQuery<UserEntity>(UsersTable).AsTableServiceQuery()
-								 where e.PartitionKey.Equals(wiki)
-								 select e).AsTableServiceQuery();
-			return QueryHelper<UserEntity>.All(usersQuery);
+			if(!(allUsersRetrieved && _users != null)) {
+				allUsersRetrieved = true;
+				var usersQuery = (from e in _context.CreateQuery<UserEntity>(UsersTable).AsTableServiceQuery()
+								  where e.PartitionKey.Equals(wiki)
+								  select e).AsTableServiceQuery();
+				var entities = QueryHelper<UserEntity>.All(usersQuery);
+				_users = new Dictionary<string, UserEntity>();
+				foreach(UserEntity entity in entities) {
+					_users[entity.RowKey] = entity;
+				}
+			}
+			IList<UserEntity> usersEntities = new List<UserEntity>();
+			foreach(var user in _users.Values) {
+				usersEntities.Add(user);
+			}
+			return usersEntities;
 		}
 
 		/// <summary>
@@ -107,6 +130,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.AddObject(UsersTable, userEntity);
 				_context.SaveChangesStandard();
 
+				_users = null;
+
 				return new UserInfo(username, displayName, email, active, dateTime, this);
 			}
 			catch(Exception ex) {
@@ -143,6 +168,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.UpdateObject(oldUserEntity);
 				_context.SaveChangesStandard();
 
+				_users = null;
+
 				return new UserInfo(user.Username, newDisplayName, newEmail, newActive, user.DateTime, this) {
 					Groups = user.Groups
 				};
@@ -175,6 +202,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.DeleteObject(userEntity);
 				_context.SaveChangesStandard();
 
+				_users = null;
+
 				return true;
 			}
 			catch(Exception ex) {
@@ -182,18 +211,41 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
+		private Dictionary<string, UserGroupEntity> _userGroups;
+		bool allGroupsRetrieved = false;
+
 		private UserGroupEntity GetUserGroupEntity(string wiki, string groupName) {
-			var userGroupQuery = (from e in _context.CreateQuery<UserGroupEntity>(UserGroupsTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(groupName)
-							 select e).AsTableServiceQuery();
-			return QueryHelper<UserGroupEntity>.FirstOrDefault(userGroupQuery);
+			if(_userGroups == null) _userGroups = new Dictionary<string, UserGroupEntity>();
+
+			if(!_userGroups.ContainsKey(groupName)) {
+				var userGroupQuery = (from e in _context.CreateQuery<UserGroupEntity>(UserGroupsTable).AsTableServiceQuery()
+									  where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(groupName)
+									  select e).AsTableServiceQuery();
+				var entity = QueryHelper<UserGroupEntity>.FirstOrDefault(userGroupQuery);
+				if(entity == null) return null;
+				_userGroups[groupName] = entity;
+			}
+			return _userGroups[groupName];
 		}
 
 		private IList<UserGroupEntity> GetUserGroupsEntities(string wiki) {
-			var userGroupsQuery = (from e in _context.CreateQuery<UserGroupEntity>(UserGroupsTable).AsTableServiceQuery()
-							  where e.PartitionKey.Equals(wiki)
-							  select e).AsTableServiceQuery();
-			return QueryHelper<UserGroupEntity>.All(userGroupsQuery);
+			if(!(allGroupsRetrieved && _userGroups != null)) {
+				allGroupsRetrieved = true;
+				var userGroupsQuery = (from e in _context.CreateQuery<UserGroupEntity>(UserGroupsTable).AsTableServiceQuery()
+									   where e.PartitionKey.Equals(wiki)
+									   select e).AsTableServiceQuery();
+				var entities = QueryHelper<UserGroupEntity>.All(userGroupsQuery);
+
+				_userGroups = new Dictionary<string, UserGroupEntity>();
+				foreach(UserGroupEntity entity in entities) {
+					_userGroups[entity.RowKey] = entity;
+				}
+			}
+			IList<UserGroupEntity> userGroups = new List<UserGroupEntity>();
+			foreach(var group in _userGroups.Values) {
+				userGroups.Add(group);
+			}
+			return userGroups;
 		}
 
 		/// <summary>
@@ -246,6 +298,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.AddObject(UserGroupsTable, userGroupEntity);
 				_context.SaveChangesStandard();
 
+				_userGroups = null;
+
 				return new UserGroup(name, description, this);
 			}
 			catch(Exception ex) {
@@ -274,6 +328,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.UpdateObject(userGroupEntity);
 				_context.SaveChangesStandard();
 
+				_userGroups = null;
+
 				return new UserGroup(group.Name, description, this) {
 					Users = (from u in GetUsers()
 							 where u.Groups.ToList().Contains(userGroupEntity.RowKey)
@@ -301,6 +357,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				_context.DeleteObject(userGroupEntity);
 				_context.SaveChangesStandard();
+
+				_userGroups = null;
 
 				return true;
 			}
@@ -333,6 +391,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				userEntity.Groups = string.Join("|", groups);
 				_context.UpdateObject(userEntity);
 				_context.SaveChangesStandard();
+
+				_users = null;
 
 				return new UserInfo(user.Username, user.DisplayName, user.Email, user.Active, user.DateTime, this) {
 					Groups = groups

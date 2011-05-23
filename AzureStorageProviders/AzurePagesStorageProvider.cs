@@ -43,7 +43,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		public NamespaceInfo GetNamespace(string name) {
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("name");
-
+			
 			try {
 				var entity = GetNamespacesEntity(_wiki, name);
 				if(entity == null) return null;
@@ -1104,7 +1104,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
 							 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(pageFullName)
 							 select e).AsTableServiceQuery();
-				_pagesInfoCache[pageFullName] = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
+				if(entity == null) return null;
+				_pagesInfoCache[pageFullName] = entity;
 				
 			}
 			return _pagesInfoCache[pageFullName];
