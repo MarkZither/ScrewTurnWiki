@@ -62,6 +62,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
+		private Dictionary<string, List<string>> _themeFiles;
+
 		/// <summary>
 		/// Retrieves all files present in the selected theme.
 		/// </summary>
@@ -70,10 +72,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <returns>The list of files matching the searchPattern.</returns>
 		public List<string> ListThemeFiles(string themeName, string searchPattern) {
 			try {
-				List<string> files = ListFilesForInternalUse(themeName, true);
+				if(_themeFiles == null) _themeFiles = new Dictionary<string, List<string>>();
+
+				if(!_themeFiles.ContainsKey(themeName)) _themeFiles[themeName] = ListFilesForInternalUse(themeName, true);
 
 				List<string> matchingFiles = new List<string>();
-				foreach(string file in files) {
+				foreach(string file in _themeFiles[themeName]) {
 					if(file.Contains(searchPattern)) matchingFiles.Add(file);
 				}
 				return matchingFiles;
