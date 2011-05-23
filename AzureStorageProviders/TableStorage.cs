@@ -56,11 +56,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
+		private class DummyEntity : TableServiceEntity {
+		}
+
 		/// <summary>
 		/// Gets the context.
 		/// </summary>
 		public static TableServiceContext GetContext(string accountName, string key) {
-			return TableClient(accountName, key).GetDataServiceContext();
+			TableServiceContext context = TableClient(accountName, key).GetDataServiceContext();
+			context.RetryPolicy = GetDefaultRetryPolicy();
+			return context;
 		}
 
 		/// <summary>
@@ -71,17 +76,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			context.SaveChangesWithRetries(SaveChangesOptions.Batch | SaveChangesOptions.ReplaceOnUpdate);
 		}
 
-		private class DummyEntity : TableServiceEntity {
-		}
-
 		#region blobs
-
-		/// <summary>
-		/// Gets the default retry policy.
-		/// </summary>
-		public static RetryPolicy GetDefaultRetryPolicy() {
-			return RetryPolicies.RetryExponential(10, TimeSpan.FromSeconds(0.5));
-		}
 
 		/// <summary>
 		/// Deletes all blobs in all containers.
@@ -106,5 +101,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		#endregion
 
+		/// <summary>
+		/// Gets the default retry policy.
+		/// </summary>
+		public static RetryPolicy GetDefaultRetryPolicy() {
+			return RetryPolicies.RetryExponential(10, TimeSpan.FromSeconds(0.5));
+		}
 	}
 }
