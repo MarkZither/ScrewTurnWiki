@@ -424,6 +424,7 @@ namespace ScrewTurn.Wiki {
 			SavePluginConfiguration(wiki, typeName, configuration);
 			try {
 				IFormatterProviderV30 provider = Collectors.CollectorsBox.FormatterProviderCollector.GetProvider(typeName, wiki);
+				SavePluginStatus(wiki, typeName, true);
 			}
 			catch(InvalidConfigurationException icex) {
 			    error = icex.Message;

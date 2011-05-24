@@ -40,42 +40,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblDisplay;
         
         /// <summary>
-        /// rdoPages control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoPages;
-        
-        /// <summary>
-        /// rdoUsers control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoUsers;
-        
-        /// <summary>
-        /// rdoFiles control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoFiles;
-        
-        /// <summary>
-        /// rdoThemes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoThemes;
-        
-        /// <summary>
         /// rdoFormatter control.
         /// </summary>
         /// <remarks>
@@ -245,87 +209,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField txtCurrentProvider;
-        
-        /// <summary>
-        /// lblDefaultProvidersTitle control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblDefaultProvidersTitle;
-        
-        /// <summary>
-        /// lblDefaultProvPages control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblDefaultProvPages;
-        
-        /// <summary>
-        /// lstPagesProvider control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::ScrewTurn.Wiki.ProviderSelector lstPagesProvider;
-        
-        /// <summary>
-        /// lblDefaultProvUsers control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblDefaultProvUsers;
-        
-        /// <summary>
-        /// lstUsersProvider control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::ScrewTurn.Wiki.ProviderSelector lstUsersProvider;
-        
-        /// <summary>
-        /// lblDefaultProvFiles control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblDefaultProvFiles;
-        
-        /// <summary>
-        /// lstFilesProvider control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::ScrewTurn.Wiki.ProviderSelector lstFilesProvider;
-        
-        /// <summary>
-        /// btnSaveDefaultProviders control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSaveDefaultProviders;
-        
-        /// <summary>
-        /// lblDefaultProvidersResult control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDefaultProvidersResult;
         
         /// <summary>
         /// lblUploadProvidersTitle control.

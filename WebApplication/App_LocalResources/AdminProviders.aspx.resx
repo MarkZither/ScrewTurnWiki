@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancelResource1.Text" xml:space="preserve">
     <value>Cancel</value>
@@ -163,12 +163,6 @@
     <value>Migrate</value>
   </data>
   <data name="btnMigrateUsersResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="btnSaveDefaultProvidersResource1.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="btnSaveDefaultProvidersResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
@@ -224,24 +218,6 @@
   </data>
   <data name="lblDataMigrationResource1.Text" xml:space="preserve">
     <value>Data Migration</value>
-  </data>
-  <data name="lblDefaultProvFilesResource1.Text" xml:space="preserve">
-    <value>Files Provider</value>
-  </data>
-  <data name="lblDefaultProvidersResultResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblDefaultProvidersResultResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblDefaultProvidersTitleResource1.Text" xml:space="preserve">
-    <value>Default Providers</value>
-  </data>
-  <data name="lblDefaultProvPagesResource1.Text" xml:space="preserve">
-    <value>Pages Provider</value>
-  </data>
-  <data name="lblDefaultProvUsersResource1.Text" xml:space="preserve">
-    <value>Users Provider</value>
   </data>
   <data name="lblDisplayResource1.Text" xml:space="preserve">
     <value>Display</value>
@@ -369,28 +345,10 @@
   <data name="pnlProviderDetailsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rdoFilesResource1.Text" xml:space="preserve">
-    <value>Files Providers</value>
-  </data>
-  <data name="rdoFilesResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="rdoFormatterResource1.Text" xml:space="preserve">
     <value>Formatter Providers</value>
   </data>
   <data name="rdoFormatterResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rdoPagesResource1.Text" xml:space="preserve">
-    <value>Pages Providers</value>
-  </data>
-  <data name="rdoPagesResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rdoUsersResource1.Text" xml:space="preserve">
-    <value>Users Providers</value>
-  </data>
-  <data name="rdoUsersResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="txtConfigurationStringResource1.Text" xml:space="preserve">
@@ -422,11 +380,5 @@
   </data>
   <data name="lblDefaultProvThemesResource1.Text" xml:space="preserve">
     <value>Themes Provider</value>
-  </data>
-  <data name="rdoThemesResource1.Text" xml:space="preserve">
-    <value>Themes Providers</value>
-  </data>
-  <data name="rdoThemesResource1.ToolTip" xml:space="preserve">
-    <value />
   </data>
 </root>

@@ -53,25 +53,10 @@ namespace ScrewTurn.Wiki {
 
 			int enabledCount = 0;
 
-			if(rdoPages.Checked) {
-				enabledCount = Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki).Length;
-				providers.AddRange(Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki));
-			}
-			else if(rdoUsers.Checked) {
-				enabledCount = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki).Length;
-				providers.AddRange(Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki));
-			}
-			else if(rdoFiles.Checked) {
-				enabledCount = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki).Length;
-				providers.AddRange(Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki));
-			}
-			else if(rdoThemes.Checked) {
-				enabledCount = Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki).Length;
-				providers.AddRange(Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki));
-			}
-			else if(rdoFormatter.Checked) {
-				enabledCount = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki).Length;
-				providers.AddRange(Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki));
+			if(rdoFormatter.Checked) {
+				IFormatterProviderV30[] formatterProviders = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
+				enabledCount = formatterProviders.Length;
+				providers.AddRange(formatterProviders);
 			}
 
 			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
@@ -126,7 +111,8 @@ namespace ScrewTurn.Wiki {
 		private IProviderV30 GetCurrentProvider(out bool enabled, out bool canDisable) {
 			enabled = true;
 			canDisable = false;
-			return null; //Collectors.FindProvider(txtCurrentProvider.Value, out enabled, out canDisable);
+
+			return Collectors.FindProvider(currentWiki, txtCurrentProvider.Value, out enabled, out canDisable);
 		}
 
 		protected void rptProviders_ItemCommand(object sender, CommandEventArgs e) {
@@ -197,6 +183,8 @@ namespace ScrewTurn.Wiki {
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
 			Log.LogEntry("Deactivation requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
 
+			ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, false);
+
 			PerformPostProviderChangeActions();
 
 			lblResult.CssClass = "resultok";
@@ -205,13 +193,14 @@ namespace ScrewTurn.Wiki {
 			ResetEditor();
 			rptProviders.DataBind();
 			LoadSourceProviders();
-			ReloadDefaultProviders();
 		}
 
 		protected void btnEnable_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
 			Log.LogEntry("Activation requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
+			
+			ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, true);
 
 			PerformPostProviderChangeActions();
 
@@ -221,7 +210,6 @@ namespace ScrewTurn.Wiki {
 			ResetEditor();
 			rptProviders.DataBind();
 			LoadSourceProviders();
-			ReloadDefaultProviders();
 		}
 
 		protected void btnUnload_Click(object sender, EventArgs e) {
@@ -238,7 +226,6 @@ namespace ScrewTurn.Wiki {
 			ResetEditor();
 			rptProviders.DataBind();
 			LoadSourceProviders();
-			ReloadDefaultProviders();
 		}
 
 		protected void btnCancel_Click(object sender, EventArgs e) {
@@ -265,33 +252,6 @@ namespace ScrewTurn.Wiki {
 			if(count > 0) lblAutoUpdateResult.Text = Properties.Messages.ProvidersUpdated;
 			else lblAutoUpdateResult.Text = Properties.Messages.NoProvidersToUpdate;
 
-			rptProviders.DataBind();
-		}
-
-		#endregion
-
-		#region Defaults
-
-		/// <summary>
-		/// Reloads the default providers.
-		/// </summary>
-		private void ReloadDefaultProviders() {
-			lstPagesProvider.Reload();
-			lstUsersProvider.Reload();
-			lstFilesProvider.Reload();
-		}
-
-		protected void btnSaveDefaultProviders_Click(object sender, EventArgs e) {
-			Log.LogEntry("Default providers change requested", EntryType.General, SessionFacade.CurrentUsername);
-
-			GlobalSettings.DefaultPagesProvider = lstPagesProvider.SelectedProvider;
-			GlobalSettings.DefaultUsersProvider = lstUsersProvider.SelectedProvider;
-			GlobalSettings.DefaultFilesProvider = lstFilesProvider.SelectedProvider;
-			
-			lblDefaultProvidersResult.CssClass = "resultok";
-			lblDefaultProvidersResult.Text = Properties.Messages.DefaultProvidersSaved;
-
-			ResetEditor();
 			rptProviders.DataBind();
 		}
 

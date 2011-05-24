@@ -121,6 +121,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="typeName">The provider.</param>
 		public static void TryUnloadPlugin(string typeName) {
 			_formatterProviderCollector.RemoveProvider(typeName);
+			collectorsBox = null;
 		}
 
 		/// <summary>
@@ -165,6 +166,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="assembly">The assembly.</param>
 		public static void AddPlugin(Type plugin, System.Reflection.Assembly assembly) {
 			_formatterProviderCollector.AddProvider(plugin, assembly);
+			collectorsBox = null;
 		}
 
 		/// <summary>
@@ -188,6 +190,29 @@ namespace ScrewTurn.Wiki {
 	  		if(StorageProvidersConfigurations.TryGetValue(typeName, out configuration)) return configuration;
 			return "";
 		}
+
+		/// <summary>
+		/// Finds a provider.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="typeName">The provider type name.</param>
+		/// <param name="enabled">A value indicating whether the provider is enabled.</param>
+		/// <param name="canDisable">A value indicating whether the provider can be disabled.</param>
+		/// <returns>The provider, or <c>null</c>.</returns>
+		public static IProviderV30 FindProvider(string wiki, string typeName, out bool enabled, out bool canDisable) {
+			enabled = false;
+			canDisable = true;
+			IProviderV30 prov = null;
+
+			prov = CollectorsBox.FormatterProviderCollector.GetProvider(typeName, wiki);
+			if(prov != null) {
+				enabled = Settings.GetProvider(wiki).GetPluginStatus(typeName);
+				return prov;
+			}
+
+			return null;
+		}
+
 	}
 
 }

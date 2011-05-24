@@ -43,6 +43,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="typeName">The Provider to remove.</param>
 		public void RemoveProvider(string typeName) {
 			lock(this) {
+				Type tempType = null;
 				foreach(Type type in assembliesDictionary.Keys) {
 					if(type.FullName.Equals(typeName)) {
 						foreach(string wiki in instancesDictionary.Keys) {
@@ -51,9 +52,10 @@ namespace ScrewTurn.Wiki {
 								instancesDictionary[wiki].Remove(type);
 							}
 						}
-						assembliesDictionary.Remove(type);
+						tempType = type;
 					}
 				}
+				if(tempType != null) assembliesDictionary.Remove(tempType);
 			}
 		}
 

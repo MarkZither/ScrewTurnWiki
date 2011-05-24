@@ -24,11 +24,7 @@
 
 	<asp:Panel ID="pnlList" runat="server" meta:resourcekey="pnlListResource1" >
 		<asp:Literal ID="lblDisplay" runat="server" Text="Display" EnableViewState="False" meta:resourcekey="lblDisplayResource1" />:
-		<asp:RadioButton ID="rdoPages" runat="server" Text="Pages Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoPagesResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoUsers" runat="server" Text="Users Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoUsersResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoFiles" runat="server" Text="Files Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFilesResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoThemes" runat="server" Text="Themes Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoThemesResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" AutoPostBack="true" />
 		<br />
 		
 		<div id="ProvidersListContainerDiv">
@@ -135,28 +131,6 @@
 	<div style="clear: both;"></div>
 	
 	<br />
-	<h2 class="separator"><asp:Literal ID="lblDefaultProvidersTitle" runat="server" Text="Default Providers" EnableViewState="False" meta:resourcekey="lblDefaultProvidersTitleResource1" /></h2>
-				
-	<div class="defaultprov">
-		<asp:Literal ID="lblDefaultProvPages" runat="server" Text="Pages Provider" EnableViewState="False" meta:resourcekey="lblDefaultProvPagesResource1" /><br />
-		<st:ProviderSelector ID="lstPagesProvider" runat="server" ProviderType="Pages" ExcludeReadOnly="true" />
-	</div>
-	<div class="defaultprov">
-		<asp:Literal ID="lblDefaultProvUsers" runat="server" Text="Users Provider" EnableViewState="False" meta:resourcekey="lblDefaultProvUsersResource1" /><br />
-		<st:ProviderSelector ID="lstUsersProvider" runat="server" ProviderType="Users" ExcludeReadOnly="true" />
-	</div>
-	<div class="defaultprov">
-		<asp:Literal ID="lblDefaultProvFiles" runat="server" Text="Files Provider" EnableViewState="False" meta:resourcekey="lblDefaultProvFilesResource1" /><br />
-		<st:ProviderSelector ID="lstFilesProvider" runat="server" ProviderType="Files" ExcludeReadOnly="true" />
-	</div>
-	<div class="defaultprovbutton">
-		<asp:Button ID="btnSaveDefaultProviders" runat="server" Text="Save" OnClick="btnSaveDefaultProviders_Click" meta:resourcekey="btnSaveDefaultProvidersResource1" />
-		<asp:Label ID="lblDefaultProvidersResult" runat="server" meta:resourcekey="lblDefaultProvidersResultResource1" />
-	</div>
-	
-	<div style="clear: both;"></div>
-	
-	<br />
 	<h2 class="separator"><asp:Literal ID="lblUploadProvidersTitle" runat="server" Text="Providers DLLs Management" EnableViewState="False" meta:resourcekey="lblUploadProvidersTitleResource1" /></h2>
 	
 	<h4><asp:Literal ID="lblUploadNewDll" runat="server" Text="Upload new DLL" EnableViewState="False" meta:resourcekey="lblUploadNewDllResource1" /></h4>
@@ -192,7 +166,7 @@
 	
 	<h4><asp:Literal ID="lblMigratePages" runat="server" Text="Migrate Pages and related data" EnableViewState="False" meta:resourcekey="lblMigratePagesResource1" /></h4>
 	<asp:DropDownList ID="lstPagesSource" runat="server" 
-		OnSelectedIndexChanged="lstPagesSource_SelectedIndexChanged" meta:resourcekey="lstPagesSourceResource1" />
+		OnSelectedIndexChanged="lstPagesSource_SelectedIndexChanged" AutoPostBack="true" meta:resourcekey="lstPagesSourceResource1" />
 	<img src="Images/ArrowRight.png" alt="->" />
 	<asp:DropDownList ID="lstPagesDestination" runat="server" meta:resourcekey="lstPagesDestinationResource1"  />
 	<asp:Button ID="btnMigratePages" runat="server" Text="Migrate" Enabled="False" 
@@ -203,7 +177,7 @@
 	
 	<h4><asp:Literal ID="lblMigrateUsers" runat="server" Text="Migrate Users and related data" EnableViewState="False" meta:resourcekey="lblMigrateUsersResource1" /></h4>
 	<asp:DropDownList ID="lstUsersSource" runat="server" 
-		OnSelectedIndexChanged="lstUsersSource_SelectedIndexChanged" meta:resourcekey="lstUsersSourceResource1" />
+		OnSelectedIndexChanged="lstUsersSource_SelectedIndexChanged" AutoPostBack="true" meta:resourcekey="lstUsersSourceResource1" />
 	<img src="Images/ArrowRight.png" alt="->" />
 	<asp:DropDownList ID="lstUsersDestination" runat="server" meta:resourcekey="lstUsersDestinationResource1" />
 	<asp:Button ID="btnMigrateUsers" runat="server" Text="Migrate" Enabled="False"
@@ -219,7 +193,7 @@
 	
 	<h4><asp:Literal ID="lblMigrateFiles" runat="server" Text="Migrate Files and related data" EnableViewState="False" meta:resourcekey="lblMigrateFilesResource1" /></h4>
 	<asp:DropDownList ID="lstFilesSource" runat="server" 
-		OnSelectedIndexChanged="lstFilesSource_SelectedIndexChanged" meta:resourcekey="lstFilesSourceResource1" />
+		OnSelectedIndexChanged="lstFilesSource_SelectedIndexChanged" AutoPostBack="true" meta:resourcekey="lstFilesSourceResource1" />
 	<img src="Images/ArrowRight.png" alt="->" />
 	<asp:DropDownList ID="lstFilesDestination" runat="server" meta:resourcekey="lstFilesDestinationResource1"  />
 	<asp:Button ID="btnMigrateFiles" runat="server" Text="Migrate" Enabled="False"
