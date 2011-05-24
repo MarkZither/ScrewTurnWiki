@@ -16,6 +16,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -222,6 +223,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.pl-PL.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Messages.pt-BR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.pt-BR.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Messages.pt-PT.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -523,6 +529,11 @@
       <DependentUpon>Profile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Messages.vi-VN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.vi-VN.resx</DependentUpon>
+    </Compile>
     <Compile Include="RandPage.aspx.cs">
       <DependentUpon>RandPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1664,6 +1675,90 @@
     <Content Include="App_LocalResources\Search.aspx.ko-KR.resx" />
     <Content Include="App_LocalResources\Upload.aspx.ko-KR.resx" />
     <Content Include="App_LocalResources\User.aspx.ko-KR.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Admin.master.pt-BR.resx" />
+    <Content Include="App_LocalResources\Admin.master.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.pt-BR.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Category.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Category.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Default.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Default.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Error.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Error.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.pt-BR.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.vi-VN.resx" />
+    <Content Include="App_LocalResources\History.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\History.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Login.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Login.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.pt-BR.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.vi-VN.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.pt-BR.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.vi-VN.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.pt-BR.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Post.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Post.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Register.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Register.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Search.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Search.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\User.aspx.pt-BR.resx" />
+    <Content Include="App_LocalResources\User.aspx.vi-VN.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>
@@ -1732,6 +1827,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.pl-PL.designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Messages.pt-BR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.pt-BR.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.pt-PT.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.pt-PT.Designer.cs</LastGenOutput>
@@ -1771,6 +1870,10 @@
     <EmbeddedResource Include="Properties\Messages.uk-UA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.uk-UA.designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Messages.vi-VN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.vi-VN.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.zh-cn.resx">
       <SubType>Designer</SubType>
