@@ -131,6 +131,135 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			// Nothing todo
 		}
 
+		// wiki -> (typeName -> (enabled, config))
+		private Dictionary<string, Dictionary<string, Tuple<bool, string>>> _pluginsDictionary;
+
+		// Cache of plugin as dictionary typeName -> Tuple<status, configuration>
+		private Dictionary<string, Tuple<bool, string>> GetPlugins(string wiki) {
+			if(_pluginsDictionary == null) _pluginsDictionary = new Dictionary<string, Dictionary<string, Tuple<bool, string>>>();
+
+			if(!_pluginsDictionary.ContainsKey(wiki)) {
+				_pluginsDictionary[wiki] = new Dictionary<string, Tuple<bool, string>>();
+				IList<PluginEntity> pluginEntities = GetPluginEntities(wiki);
+				foreach(PluginEntity pluginEntity in pluginEntities) {
+					_pluginsDictionary[wiki].Add(pluginEntity.RowKey, new Tuple<bool, string>(pluginEntity.Status, pluginEntity.Configuration));
+				}
+			}
+			return _pluginsDictionary[wiki];
+		}
+
+		private IList<PluginEntity> GetPluginEntities(string wiki) {
+			var query = (from e in _context.CreateQuery<PluginEntity>(PluginsTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<PluginEntity>.All(query);
+		}
+
+		private PluginEntity GetPluginEntity(string wiki, string typeName) {
+			var query = (from e in _context.CreateQuery<PluginEntity>(PluginsTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(typeName)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<PluginEntity>.FirstOrDefault(query);
+		}
+
+		/// <summary>
+		/// Sets the status of a plugin.
+		/// </summary>
+		/// <param name="typeName">The Type name of the plugin.</param>
+		/// <param name="enabled">The plugin status.</param>
+		/// <returns><c>true</c> if the status is stored, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="typeName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="typeName"/> is empty.</exception>
+		public bool SetPluginStatus(string typeName, bool enabled) {
+			if(typeName == null) throw new ArgumentNullException("typeName");
+			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+
+			_pluginsDictionary = null;
+
+			PluginEntity pluginEntity = GetPluginEntity(_wiki, typeName);
+
+			if(pluginEntity == null) {
+				pluginEntity = new PluginEntity() {
+					PartitionKey = _wiki,
+					RowKey = typeName,
+					Status = enabled
+				};
+				_context.AddObject(PluginsTable, pluginEntity);
+			}
+			else {
+				pluginEntity.Status = enabled;
+				_context.UpdateObject(pluginEntity);
+			}
+			_context.SaveChangesStandard();
+			return true;
+		}
+
+		/// <summary>
+		/// Gets the status of a plugin.
+		/// </summary>
+		/// <param name="typeName">The Type name of the plugin.</param>
+		/// <returns>The status (<c>false</c> for disabled, <c>true</c> for enabled), or <c>true</c> if no status is found.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="typeName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="typeName"/> is empty.</exception>
+		public bool GetPluginStatus(string typeName) {
+			if(typeName == null) throw new ArgumentNullException("typeName");
+			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+
+			Tuple<bool, string> status = new Tuple<bool, string>(true, "");
+			if(GetPlugins(_wiki).TryGetValue(typeName, out status)) return status.Item1;
+			else return true;
+		}
+
+		/// <summary>
+		/// Sets the configuration of a plugin.
+		/// </summary>
+		/// <param name="typeName">The Type name of the plugin.</param>
+		/// <param name="config">The configuration.</param>
+		/// <returns><c>true</c> if the configuration is stored, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="typeName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="typeName"/> is empty.</exception>
+		public bool SetPluginConfiguration(string typeName, string config) {
+			if(typeName == null) throw new ArgumentNullException("typeName");
+			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+
+			_pluginsDictionary = null;
+
+			config = config != null ? config : "";
+
+			PluginEntity pluginEntity = GetPluginEntity(_wiki, typeName);
+
+			if(pluginEntity == null) {
+				pluginEntity = new PluginEntity() {
+					PartitionKey = _wiki,
+					RowKey = typeName,
+					Configuration = config
+				};
+				_context.AddObject(PluginsTable, pluginEntity);
+			}
+			else {
+				pluginEntity.Configuration = config;
+				_context.UpdateObject(pluginEntity);
+			}
+			_context.SaveChangesStandard();
+			return true;
+		}
+
+		/// <summary>
+		/// Gets the configuration of a plugin.
+		/// </summary>
+		/// <param name="typeName">The Type name of the plugin.</param>
+		/// <returns>The plugin configuration, or <b>String.Empty</b>.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="typeName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="typeName"/> is empty.</exception>
+		public string GetPluginConfiguration(string typeName) {
+			if(typeName == null) throw new ArgumentNullException("typeName");
+			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+
+			Tuple<bool, string> status = new Tuple<bool, string>(false, "");
+			if(GetPlugins(_wiki).TryGetValue(typeName, out status)) return status.Item2;
+			else return "";
+		}
+
 		private Dictionary<string, string> _metadataCache;
 
 		// Cache of settings as dictionary metadataKey -> content
@@ -530,6 +659,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		public static readonly string AclEntriesTable = "AclEntries";
 
 		/// <summary>
+		/// The Plugins table name.
+		/// </summary>
+		public static readonly string PluginsTable = "Plugins";
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
@@ -574,6 +708,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], RecentChangesTable);
 			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], OutgoingLinksTable);
 			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], AclEntriesTable);
+			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], PluginsTable);
 		}
 
 		/// <summary>
@@ -808,4 +943,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		public string Action { get; set; }
 		public string Value { get; set; }
 	}
+
+	internal class PluginEntity : TableServiceEntity {
+		// PartitionKey = wiki
+		// RowKey = typeName
+
+		public bool Status { get; set; }
+		public string Configuration { get; set; }
+	}
+
 }

@@ -51,6 +51,44 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		void EndBulkUpdate();
 
 		/// <summary>
+		/// Sets the status of a plugin.
+		/// </summary>
+		/// <param name="typeName">The Type name of the plugin.</param>
+		/// <param name="enabled">The plugin status.</param>
+		/// <returns><c>true</c> if the status is stored, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="typeName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="typeName"/> is empty.</exception>
+		bool SetPluginStatus(string typeName, bool enabled);
+
+		/// <summary>
+		/// Gets the status of a plugin.
+		/// </summary>
+		/// <param name="typeName">The Type name of the plugin.</param>
+		/// <returns>The status (<c>false</c> for disabled, <c>true</c> for enabled), or <c>true</c> if no status is found.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="typeName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="typeName"/> is empty.</exception>
+		bool GetPluginStatus(string typeName);
+
+		/// <summary>
+		/// Sets the configuration of a plugin.
+		/// </summary>
+		/// <param name="typeName">The Type name of the plugin.</param>
+		/// <param name="config">The configuration.</param>
+		/// <returns><c>true</c> if the configuration is stored, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="typeName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="typeName"/> is empty.</exception>
+		bool SetPluginConfiguration(string typeName, string config);
+
+		/// <summary>
+		/// Gets the configuration of a plugin.
+		/// </summary>
+		/// <param name="typeName">The Type name of the plugin.</param>
+		/// <returns>The plugin configuration, or <b>String.Empty</b>.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="typeName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="typeName"/> is empty.</exception>
+		string GetPluginConfiguration(string typeName);
+
+		/// <summary>
 		/// Gets a meta-data item's content.
 		/// </summary>
 		/// <param name="item">The item.</param>
@@ -213,100 +251,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// The content of the sidebar.
 		/// </summary>
 		Sidebar = 106
-	}
-
-	/// <summary>
-	/// Represents a Log Entry.
-	/// </summary>
-	public class LogEntry {
-
-		private EntryType type;
-		private DateTime dateTime;
-		private string message;
-		private string user;
-
-		/// <summary>
-		/// Initializes a new instance of the <b>LogEntry</b> class.
-		/// </summary>
-		/// <param name="type">The type of the Entry</param>
-		/// <param name="dateTime">The DateTime.</param>
-		/// <param name="message">The Message.</param>
-		/// <param name="user">The User.</param>
-		public LogEntry(EntryType type, DateTime dateTime, string message, string user) {
-			this.type = type;
-			this.dateTime = dateTime;
-			this.message = message;
-			this.user = user;
-		}
-
-		/// <summary>
-		/// Gets the EntryType.
-		/// </summary>
-		public EntryType EntryType {
-			get { return type; }
-		}
-
-		/// <summary>
-		/// Gets the DateTime.
-		/// </summary>
-		public DateTime DateTime {
-			get { return dateTime; }
-		}
-
-		/// <summary>
-		/// Gets the Message.
-		/// </summary>
-		public string Message {
-			get { return message; }
-		}
-
-		/// <summary>
-		/// Gets the User.
-		/// </summary>
-		public string User {
-			get { return user; }
-		}
-
-	}
-
-	/// <summary>
-	/// Enumerates the Types of Log Entries.
-	/// </summary>
-	public enum EntryType {
-		/// <summary>
-		/// Represents a simple Message.
-		/// </summary>
-		General,
-		/// <summary>
-		/// Represents a Warning.
-		/// </summary>
-		Warning,
-		/// <summary>
-		/// Represents an Error.
-		/// </summary>
-		Error
-	}
-
-	/// <summary>
-	/// Lists legal logging level values.
-	/// </summary>
-	public enum LoggingLevel {
-		/// <summary>
-		/// All messages are logged.
-		/// </summary>
-		AllMessages = 3,
-		/// <summary>
-		/// Warnings and errors are logged.
-		/// </summary>
-		WarningsAndErrors = 2,
-		/// <summary>
-		/// Errors only are logged.
-		/// </summary>
-		ErrorsOnly = 1,
-		/// <summary>
-		/// Logging is completely disabled.
-		/// </summary>
-		DisableLog = 0
 	}
 
 }

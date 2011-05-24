@@ -137,7 +137,7 @@ namespace ScrewTurn.Wiki {
 				_settingsProvider = provider;
 				_settingsProviderAssembly = assembly;
 			}
-			if(providerInterface.FullName == typeof(IPagesStorageProviderV30).FullName) {
+			else if(providerInterface.FullName == typeof(IPagesStorageProviderV30).FullName) {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_pagesProviderCollector.AddProvider(provider, assembly);
 			}
@@ -153,9 +153,18 @@ namespace ScrewTurn.Wiki {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_filesProviderCollector.AddProvider(provider, assembly);
 			}
-			else if(providerInterface.FullName == typeof(IFormatterProviderV30).FullName) {
-				_formatterProviderCollector.AddProvider(provider, assembly);
+			else {
+				throw new Exception("The provider with the given interface (" + providerInterface.FullName + ") could not be added to a colletor.");
 			}
+		}
+
+		/// <summary>
+		/// Adds the gine plugin (formatter provider) to the appropriate collector..
+		/// </summary>
+		/// <param name="plugin">The plugin.</param>
+		/// <param name="assembly">The assembly.</param>
+		public static void AddPlugin(Type plugin, System.Reflection.Assembly assembly) {
+			_formatterProviderCollector.AddProvider(plugin, assembly);
 		}
 
 		/// <summary>

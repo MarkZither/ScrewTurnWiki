@@ -288,7 +288,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			if(string.IsNullOrEmpty(provider)) provider = _host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider);
 			provider = provider.ToLowerInvariant();
 
-			IFilesStorageProviderV30[] all = _host.GetFilesStorageProviders(_wiki, true);
+			IFilesStorageProviderV30[] all = _host.GetFilesStorageProviders(_wiki);
 			foreach(IFilesStorageProviderV30 prov in all) {
 				if(prov.GetType().FullName.ToLowerInvariant() == provider) return prov;
 			}

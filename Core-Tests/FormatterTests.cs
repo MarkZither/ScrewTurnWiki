@@ -212,6 +212,22 @@ second line";
 				throw new NotImplementedException();
 			}
 
+			public bool SetPluginStatus(string typeName, bool enabled) {
+				throw new NotImplementedException();
+			}
+
+			public bool GetPluginStatus(string typeName) {
+				throw new NotImplementedException();
+			}
+
+			public bool SetPluginConfiguration(string typeName, string config) {
+				throw new NotImplementedException();
+			}
+
+			public string GetPluginConfiguration(string typeName) {
+				throw new NotImplementedException();
+			}
+
 			public string GetMetaDataItem(MetaDataItem item, string tag) {
 				throw new NotImplementedException();
 			}
@@ -285,6 +301,7 @@ second line";
 			}
 
 			#endregion
+
 		}
 
 	}

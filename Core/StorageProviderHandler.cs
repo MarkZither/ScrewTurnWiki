@@ -29,10 +29,14 @@ namespace ScrewTurn.Wiki {
 				string typeName = attributeCollection["name"].Value;
 				string assemblyName = attributeCollection["assembly"].Value;
 				string config = attributeCollection["config"].Value;
+				string isDefaultString = attributeCollection["isDefault"] != null ? attributeCollection["isDefault"].Value : null;
+				bool isDefault = false;
+				bool.TryParse(isDefaultString, out isDefault);
 				storageProviders.Add(new StorageProvider() {
 					TypeName = typeName,
 					AssemblyName = assemblyName,
-					ConfigurationString = config
+					ConfigurationString = config,
+					IsDefault = isDefault
 				});
 			}
 			return storageProviders;

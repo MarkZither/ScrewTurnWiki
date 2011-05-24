@@ -309,7 +309,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultUsersProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultUsersProvider"), typeof(AzureUsersStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultUsersProvider"), typeof(UsersStorageProvider).ToString());
 			}
 			set {
 				Provider.SetSetting("DefaultUsersProvider", value);
@@ -321,7 +321,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultPagesProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultPagesProvider"), typeof(AzurePagesStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultPagesProvider"), typeof(PagesStorageProvider).ToString());
 			}
 			set {
 				Provider.SetSetting("DefaultPagesProvider", value);
@@ -333,10 +333,22 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultFilesProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultFilesProvider"), typeof(AzureFilesStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultFilesProvider"), typeof(FilesStorageProvider).ToString());
 			}
 			set {
 				Provider.SetSetting("DefaultFilesProvider", value);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the Type name of the Default Themes Provider.
+		/// </summary>
+		public static string DefaultThemesProvider {
+			get {
+				return SettingsTools.GetString(Provider.GetSetting("DefaultThemesProvider"), typeof(ThemeStorageProvider).ToString());
+			}
+			set {
+				Provider.SetSetting("DefaultThemesProvider", value);
 			}
 		}
 

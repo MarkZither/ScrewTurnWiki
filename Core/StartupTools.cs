@@ -75,7 +75,7 @@ namespace ScrewTurn.Wiki {
 
 			// Initialize Collectors
 			Collectors.InitCollectors();
-			Collectors.FileNames = new System.Collections.Generic.Dictionary<string, string>(10);
+			Collectors.FileNames = new Dictionary<string, string>(10);
 
 			// Load Global Config
 			IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider = ProviderLoader.LoadGlobalSettingsStorageProvider(WebConfigurationManager.AppSettings["GlobalSettingsStorageProvider"]);
@@ -85,7 +85,7 @@ namespace ScrewTurn.Wiki {
 
 			if(!(globalSettingsStorageProvider is GlobalSettingsStorageProvider)) {
 				// Update DLLs from public\Plugins
-				UpdateDllsIntoSettingsProvider(Collectors.CollectorsBox.GlobalSettingsProvider, ProviderLoader.SettingsStorageProviderAssemblyName);
+				UpdateDllsIntoSettingsProvider(Collectors.CollectorsBox.GlobalSettingsProvider, ProviderLoader.GlobalSettingsStorageProviderAssemblyName);
 			}
 
 			// Add StorageProviders, from WebConfig, to Collectors and Setup them
@@ -99,7 +99,7 @@ namespace ScrewTurn.Wiki {
 
 			foreach(Wiki.PluginFramework.Wiki wiki in Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis()) {
 				ISettingsStorageProviderV30 ssp = Collectors.CollectorsBox.GetSettingsProvider(wiki.WikiName);
-				if(ssp.IsFirstApplicationStart()) {
+				//if(ssp.IsFirstApplicationStart()) {
 					if(ssp.GetMetaDataItem(MetaDataItem.AccountActivationMessage, null) == "")
 						ssp.SetMetaDataItem(MetaDataItem.AccountActivationMessage, null, Defaults.AccountActivationMessageContent);
 					if(ssp.GetMetaDataItem(MetaDataItem.EditNotice, null) == "")
@@ -119,7 +119,7 @@ namespace ScrewTurn.Wiki {
 					if(ssp.GetMetaDataItem(MetaDataItem.ApproveDraftMessage, null) == "") {
 						ssp.SetMetaDataItem(MetaDataItem.ApproveDraftMessage, null, Defaults.ApproveDraftMessage);
 					}
-				}
+				//}
 
 				bool groupsCreated = VerifyAndCreateDefaultGroups(wiki.WikiName);
 
@@ -164,7 +164,6 @@ namespace ScrewTurn.Wiki {
 			}, WindowsIdentity.GetCurrent());
 
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername);
-
 		}
 
 		/// <summary>

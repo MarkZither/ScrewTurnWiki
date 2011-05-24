@@ -399,7 +399,7 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 		/// </summary>
 		/// <returns>The configuration, or an empty string.</returns>
 		protected override string TryLoadV2Configuration() {
-			return host.GetProviderConfiguration("ScrewTurn.Wiki.PluginPack.SqlServerPagesStorageProvider", typeof(IPagesStorageProviderV30));
+			return host.GetProviderConfiguration("ScrewTurn.Wiki.PluginPack.SqlServerPagesStorageProvider");
 		}
 
 		/// <summary>
@@ -407,7 +407,7 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 		/// </summary>
 		/// <returns>The configuration, or an empty string.</returns>
 		protected override string TryLoadSettingsStorageProviderConfiguration() {
-			return host.GetProviderConfiguration(typeof(SqlServerSettingsStorageProvider).FullName, typeof(ISettingsStorageProviderV30));
+			return host.GetProviderConfiguration(typeof(SqlServerSettingsStorageProvider).FullName);
 		}
 
 		/// <summary>

@@ -22,8 +22,6 @@ namespace ScrewTurn.Wiki {
 		private Dictionary<string, string> configData = null;
 
 		private const string PluginsDirectory = "Plugins";
-		private const string PluginsStatusFile = "Status.cs";
-		private const string PluginsConfigDirectory = "Config";
 
 		private const int EstimatedLogEntrySize = 60; // bytes
 
@@ -41,10 +39,6 @@ namespace ScrewTurn.Wiki {
 
 		private string GetFullPathForPlugin(string name) {
 			return Path.Combine(Path.Combine(GetDataDirectory(host), PluginsDirectory), name);
-		}
-
-		private string GetFullPathForPluginConfig(string name) {
-			return Path.Combine(Path.Combine(Path.Combine(GetDataDirectory(host), PluginsDirectory), PluginsConfigDirectory), name);
 		}
 
 		/// <summary>
@@ -91,14 +85,6 @@ namespace ScrewTurn.Wiki {
 
 			if(!Directory.Exists(GetFullPath(PluginsDirectory))) {
 				Directory.CreateDirectory(GetFullPath(PluginsDirectory));
-			}
-
-			if(!Directory.Exists(GetFullPathForPlugin(PluginsConfigDirectory))) {
-				Directory.CreateDirectory(GetFullPathForPlugin(PluginsConfigDirectory));
-			}
-
-			if(!File.Exists(GetFullPathForPlugin(PluginsStatusFile))) {
-				File.Create(GetFullPathForPlugin(PluginsStatusFile)).Close();
 			}
 
 			LoadConfig();
@@ -373,122 +359,6 @@ namespace ScrewTurn.Wiki {
 				}
 				catch(IOException) {
 					return false;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Sets the status of a plugin.
-		/// </summary>
-		/// <param name="typeName">The Type name of the plugin.</param>
-		/// <param name="enabled">The plugin status.</param>
-		/// <returns><c>true</c> if the status is stored, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
-		public bool SetPluginStatus(string typeName, bool enabled) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
-
-			lock(this) {
-				string data = File.ReadAllText(GetFullPathForPlugin(PluginsStatusFile)).Replace("\r", "");
-				string[] lines = data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-				int idx = -1;
-				for(int i = 0; i < lines.Length; i++) {
-					if(lines[i].Equals(typeName)) {
-						idx = i;
-						break;
-					}
-				}
-				if(enabled) {
-					if(idx >= 0) {
-						StringBuilder sb = new StringBuilder(200);
-						for(int i = 0; i < lines.Length; i++) {
-							if(i != idx) sb.Append(lines[i] + "\r\n");
-						}
-						File.WriteAllText(GetFullPathForPlugin(PluginsStatusFile), sb.ToString());
-					}
-					// Else nothing to do
-				}
-				else {
-					if(idx == -1) {
-						StringBuilder sb = new StringBuilder(200);
-						for(int i = 0; i < lines.Length; i++) {
-							if(i != idx) sb.Append(lines[i] + "\r\n");
-						}
-						sb.Append(typeName + "\r\n");
-						File.WriteAllText(GetFullPathForPlugin(PluginsStatusFile), sb.ToString());
-					}
-					// Else nothing to do
-				}
-			}
-			return true;
-		}
-
-		/// <summary>
-		/// Gets the status of a plugin.
-		/// </summary>
-		/// <param name="typeName">The Type name of the plugin.</param>
-		/// <returns>The status (<c>true</c> for enabled, <c>false</c> for disabled), or <c>true</c> if no status is found.</returns>
-		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
-		public bool GetPluginStatus(string typeName) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
-
-			lock(this) {
-				string data = File.ReadAllText(GetFullPathForPlugin(PluginsStatusFile)).Replace("\r", "");
-				string[] lines = data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-				for(int i = 0; i < lines.Length; i++) {
-					if(lines[i].Equals(typeName)) return false;
-				}
-				return true;
-			}
-		}
-
-		/// <summary>
-		/// Sets the configuration of a plugin.
-		/// </summary>
-		/// <param name="typeName">The Type name of the plugin.</param>
-		/// <param name="config">The configuration.</param>
-		/// <returns><c>true</c> if the configuration is stored, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
-		public bool SetPluginConfiguration(string typeName, string config) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
-
-			lock(this) {
-				try {
-					File.WriteAllText(GetFullPathForPluginConfig(typeName + ".cs"), config != null ? config : "");
-					return true;
-				}
-				catch(IOException) {
-					return false;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets the configuration of a plugin.
-		/// </summary>
-		/// <param name="typeName">The Type name of the plugin.</param>
-		/// <returns>The plugin configuration, or <b>String.Empty</b>.</returns>
-		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
-		public string GetPluginConfiguration(string typeName) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
-
-			lock(this) {
-				string file = GetFullPathForPluginConfig(typeName + ".cs");
-				if(!File.Exists(file)) return "";
-				else {
-					try {
-						return File.ReadAllText(file);
-					}
-					catch(IOException) {
-						return "";
-					}
 				}
 			}
 		}

@@ -719,6 +719,8 @@ namespace ScrewTurn.Wiki {
 					return GlobalSettings.DefaultPagesProvider;
 				case ProviderLoader.FilesProviderInterfaceName:
 					return GlobalSettings.DefaultFilesProvider;
+				case ProviderLoader.ThemesProviderInterfaceName:
+					return GlobalSettings.DefaultThemesProvider;
 				default:
 					return null;
 			}
@@ -728,14 +730,11 @@ namespace ScrewTurn.Wiki {
 		/// Gets the pages storage providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		public IPagesStorageProviderV30[] GetPagesStorageProviders(string wiki, bool enabled) {
+		public IPagesStorageProviderV30[] GetPagesStorageProviders(string wiki) {
 			List<IPagesStorageProviderV30> pagesStorageProviders = new List<IPagesStorageProviderV30>();
 			foreach(IPagesStorageProviderV30 pagesStorageProvider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
-				if(enabled == GlobalSettings.Provider.GetPluginStatus(pagesStorageProviders.GetType().FullName)) {
-					pagesStorageProviders.Add(pagesStorageProvider);
-				}
+				pagesStorageProviders.Add(pagesStorageProvider);
 			}
 			return pagesStorageProviders.ToArray();
 		}
@@ -744,14 +743,11 @@ namespace ScrewTurn.Wiki {
 		/// Gets the users storage providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		public IUsersStorageProviderV30[] GetUsersStorageProviders(string wiki, bool enabled) {
+		public IUsersStorageProviderV30[] GetUsersStorageProviders(string wiki) {
 			List<IUsersStorageProviderV30> usersStorageProviders = new List<IUsersStorageProviderV30>();
 			foreach(IUsersStorageProviderV30 userStorageProvider in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki)) {
-				if(enabled == GlobalSettings.Provider.GetPluginStatus(userStorageProvider.GetType().FullName)) {
-					usersStorageProviders.Add(userStorageProvider);
-				}
+				usersStorageProviders.Add(userStorageProvider);
 			}
 			return usersStorageProviders.ToArray();
 		}
@@ -760,14 +756,11 @@ namespace ScrewTurn.Wiki {
 		/// Gets the files storage providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		public IFilesStorageProviderV30[] GetFilesStorageProviders(string wiki, bool enabled) {
+		public IFilesStorageProviderV30[] GetFilesStorageProviders(string wiki) {
 			List<IFilesStorageProviderV30> filesStorageProviders = new List<IFilesStorageProviderV30>();
 			foreach(IFilesStorageProviderV30 filesStorageProvider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
-				if(enabled == GlobalSettings.Provider.GetPluginStatus(filesStorageProviders.GetType().FullName)) {
-					filesStorageProviders.Add(filesStorageProvider);
-				}
+				filesStorageProviders.Add(filesStorageProvider);
 			}
 			return filesStorageProviders.ToArray();
 		}
@@ -776,14 +769,11 @@ namespace ScrewTurn.Wiki {
 		/// Gets the theme providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		public IThemeStorageProviderV30[] GetThemeProviders(string wiki, bool enabled) {
+		public IThemeStorageProviderV30[] GetThemeProviders(string wiki) {
 			List<IThemeStorageProviderV30> themesStorageProviders = new List<IThemeStorageProviderV30>();
 			foreach(IThemeStorageProviderV30 themesStorageProvider in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(wiki)) {
-				if(enabled == GlobalSettings.Provider.GetPluginStatus(themesStorageProvider.GetType().FullName)) {
-					themesStorageProviders.Add(themesStorageProvider);
-				}
+				themesStorageProviders.Add(themesStorageProvider);
 			}
 			return themesStorageProviders.ToArray();
 		}
@@ -797,7 +787,7 @@ namespace ScrewTurn.Wiki {
 		public IFormatterProviderV30[] GetFormatterProviders(string wiki, bool enabled) {
 			List<IFormatterProviderV30> formatterProviders = new List<IFormatterProviderV30>();
 			foreach(IFormatterProviderV30 formatterProvider in Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(wiki)) {
-				if(enabled == GlobalSettings.Provider.GetPluginStatus(formatterProvider.GetType().FullName)) {
+				if(enabled == Settings.GetProvider(wiki).GetPluginStatus(formatterProvider.GetType().FullName)) {
 					formatterProviders.Add(formatterProvider);
 				}
 			}
@@ -805,7 +795,16 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the current global settings storage provider initialized for the given wiki.
+		/// Gets the current settings storage provider initialized for the given wiki.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The global settings storage provider.</returns>
+		public ISettingsStorageProviderV30 GetSettingsStorageProvider(string wiki) {
+			return Collectors.CollectorsBox.GetSettingsProvider(wiki);
+		}
+
+		/// <summary>
+		/// Gets the current global settings storage provider.
 		/// </summary>
 		/// <returns>The global settings storage provider.</returns>
 		public IGlobalSettingsStorageProviderV30 GetGlobalSettingsStorageProvider() {
@@ -813,33 +812,48 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the configuration of a generic provider.
+		/// Gets the configuration of a storage provider.
 		/// </summary>
 		/// <param name="providerTypeName">The type name of the provider, such as 'Vendor.Namespace.Provider'.</param>
-		/// <param name="interfaceType">The Type of the interface implemented by the provider.</param>
 		/// <returns>The configuration (can be empty or <c>null</c>).</returns>
 		/// <exception cref="ArgumentNullException">If <b>providerTypeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>providerTypeName</b> is empty.</exception>
-		public string GetProviderConfiguration(string providerTypeName, Type interfaceType) {
+		public string GetProviderConfiguration(string providerTypeName) {
 			if(providerTypeName == null) throw new ArgumentNullException("providerTypeName");
 			if(providerTypeName.Length == 0) throw new ArgumentException("Provider Type Name cannot be empty", "providerTypeName");
 
-			return ProviderLoader.LoadProviderConfiguration(providerTypeName, interfaceType);
+			return ProviderLoader.LoadStorageProviderConfiguration(providerTypeName);
+		}
+
+		/// <summary>
+		/// Gets the configuration of a plugin (formatter provider).
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="providerTypeName">The type name of the provider, such as 'Vendor.Namespace.Provider'.</param>
+		/// <returns>The configuration (can be empty or <c>null</c>).</returns>
+		/// <exception cref="ArgumentNullException">If <b>providerTypeName</b> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <b>providerTypeName</b> is empty.</exception>
+		public string GetPluginConfiguration(string wiki, string providerTypeName) {
+			if(providerTypeName == null) throw new ArgumentNullException("providerTypeName");
+			if(providerTypeName.Length == 0) throw new ArgumentException("Provider Type Name cannot be empty", "providerTypeName");
+
+			return ProviderLoader.LoadPluginConfiguration(wiki, providerTypeName);
 		}
 
 		/// <summary>
 		/// Sets the configuration of a provider.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="provider">The provider of which to set the configuration.</param>
 		/// <param name="configuration">The configuration to set.</param>
 		/// <returns><c>true</c> if the configuration is set, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>provider</b> is <c>null</c>.</exception>
-		public bool SetPluginConfiguration(IProviderV30 provider, string configuration) {
+		public bool SetPluginConfiguration(string wiki, IProviderV30 provider, string configuration) {
 			if(provider == null) throw new ArgumentNullException("provider");
 
 			if(configuration == null) configuration = "";
 
-			ProviderLoader.SavePluginConfiguration(provider.GetType().FullName, configuration);
+			ProviderLoader.SavePluginConfiguration(wiki, provider.GetType().FullName, configuration);
 
 			return true;
 		}

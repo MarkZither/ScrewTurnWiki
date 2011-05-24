@@ -43,7 +43,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 			LastCall.On(host).IgnoreArguments().Repeat.Any();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider)).Return(
 				prov.GetType().FullName).Repeat.Times(4);
-			Expect.Call(host.GetFilesStorageProviders(null, true)).Return(
+			Expect.Call(host.GetFilesStorageProviders(null)).Return(
 				new IFilesStorageProviderV30[] { prov }).Repeat.Times(8);
 
 			StFileInfo[] myFiles = new StFileInfo[] {

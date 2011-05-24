@@ -82,7 +82,7 @@ namespace ScrewTurn.Wiki {
 			string wikiKey = wiki != null ? wiki : "-";
 			if(!_settingsProvider.ContainsKey(wikiKey)) {
 				_settingsProvider[wikiKey] = ProviderLoader.CreateInstance<ISettingsStorageProviderV30>(_settingsProviderAssembly, _settingsProviderType);
-				_settingsProvider[wikiKey].Init(Host.Instance, ProviderLoader.LoadProviderConfiguration(_settingsProviderType.FullName, typeof(ISettingsStorageProviderV30)), wiki);
+				_settingsProvider[wikiKey].Init(Host.Instance, ProviderLoader.LoadStorageProviderConfiguration(_settingsProviderType.FullName), wiki);
 			}
 			return _settingsProvider[wikiKey];
 		}

@@ -357,25 +357,22 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Gets the pages storage providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		IPagesStorageProviderV30[] GetPagesStorageProviders(string wiki, bool enabled);
+		IPagesStorageProviderV30[] GetPagesStorageProviders(string wiki);
 
 		/// <summary>
 		/// Gets the users storage providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		IUsersStorageProviderV30[] GetUsersStorageProviders(string wiki, bool enabled);
+		IUsersStorageProviderV30[] GetUsersStorageProviders(string wiki);
 
 		/// <summary>
 		/// Gets the files storage providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		IFilesStorageProviderV30[] GetFilesStorageProviders(string wiki, bool enabled);
+		IFilesStorageProviderV30[] GetFilesStorageProviders(string wiki);
 
 		/// <summary>
 		/// Gets the formatter providers, either enabled or disabled.
@@ -386,29 +383,46 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		IFormatterProviderV30[] GetFormatterProviders(string wiki, bool enabled);
 
 		/// <summary>
-		/// Gets the current global settings storage provider initialized for the given wiki.
+		/// Gets the current settings storage provider initialized for the given wiki.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The global settings storage provider.</returns>
+		ISettingsStorageProviderV30 GetSettingsStorageProvider(string wiki);
+
+		/// <summary>
+		/// Gets the current global settings storage provider.
 		/// </summary>
 		/// <returns>The global settings storage provider.</returns>
 		IGlobalSettingsStorageProviderV30 GetGlobalSettingsStorageProvider();
 
 		/// <summary>
-		/// Gets the configuration of a generic provider.
+		/// Gets the configuration of a storage provider.
 		/// </summary>
 		/// <param name="providerTypeName">The type name of the provider, such as 'Vendor.Namespace.Provider'.</param>
-		/// <param name="interfaceType">The Type of the interface implemented by the provider.</param>
 		/// <returns>The configuration (can be empty or <c>null</c>).</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="providerTypeName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="providerTypeName"/> is empty.</exception>
-		string GetProviderConfiguration(string providerTypeName, Type interfaceType);
+		string GetProviderConfiguration(string providerTypeName);
+
+		/// <summary>
+		/// Gets the configuration of a plugin(formatter provider).
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="providerTypeName">The type name of the provider, such as 'Vendor.Namespace.Provider'.</param>
+		/// <returns>The configuration (can be empty or <c>null</c>).</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="providerTypeName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="providerTypeName"/> is empty.</exception>
+		string GetPluginConfiguration(string wiki, string providerTypeName);
 
 		/// <summary>
 		/// Sets the configuration of a provider.
 		/// </summary>
+		/// <param name="wiki">The wiki.</param>
 		/// <param name="provider">The provider of which to set the configuration.</param>
 		/// <param name="configuration">The configuration to set.</param>
 		/// <returns><c>true</c> if the configuration is set, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <c>null</c>.</exception>
-		bool SetPluginConfiguration(IProviderV30 provider, string configuration);
+		bool SetPluginConfiguration(string wiki, IProviderV30 provider, string configuration);
 
 		/// <summary>
 		/// Upgrades the old Page Status to use the new ACL facilities.

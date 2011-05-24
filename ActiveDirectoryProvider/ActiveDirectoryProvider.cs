@@ -738,7 +738,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 				if(m_StorageProvider == null) {
 					lock(m_Host) {
 						if(m_StorageProvider == null) {
-							m_StorageProvider = (from a in m_Host.GetUsersStorageProviders(m_wiki, true)
+							m_StorageProvider = (from a in m_Host.GetUsersStorageProviders(m_wiki)
 												 where a.Information.Name != this.Information.Name
 												 select a).FirstOrDefault();
 

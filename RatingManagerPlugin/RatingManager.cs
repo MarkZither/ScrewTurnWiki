@@ -23,7 +23,7 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 		private IHostV30 _host;
 		private string _wiki;
 		private bool _enableLogging = true;
-        private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "3.0.3.555", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RatingManager2.txt");
+		private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "3.0.3.555", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RatingManager2.txt");
 
 		private bool foundRatings = false;
 
@@ -359,7 +359,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 
 		private IFilesStorageProviderV30 GetDefaultFilesStorageProvider() {
 			string defaultFilesStorageProviderName = _host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider);
-			return _host.GetFilesStorageProviders(_wiki, true).First(p => p.GetType().FullName == defaultFilesStorageProviderName);
+			return _host.GetFilesStorageProviders(_wiki).First(p => p.GetType().FullName == defaultFilesStorageProviderName);
 		}
 
 		private bool DirectoryExists(IFilesStorageProviderV30 filesStorageProvider, string directoryName) {

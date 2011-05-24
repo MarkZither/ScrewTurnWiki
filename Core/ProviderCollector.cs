@@ -74,7 +74,7 @@ namespace ScrewTurn.Wiki {
 					}
 					else {
 						provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[key], key);
-						ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadProviderConfiguration(key.FullName, typeof(T)), wiki);
+						ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadProviderConfiguration(key.FullName, typeof(T), wiki), wiki);
 						instancesDictionary[wikiKey][key] = provider;
 					}
 					providers.Add(provider);
@@ -103,7 +103,7 @@ namespace ScrewTurn.Wiki {
 						}
 						else {
 							provider = ProviderLoader.CreateInstance<T>(assembliesDictionary[type], type);
-							ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadProviderConfiguration(type.FullName, typeof(T)), wiki);
+							ProviderLoader.Initialize<T>(provider, ProviderLoader.LoadProviderConfiguration(type.FullName, typeof(T), wiki), wiki);
 							instancesDictionary[wikiKey][type] = provider;
 						}
 						return provider;
