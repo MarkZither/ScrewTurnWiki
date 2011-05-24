@@ -57,8 +57,8 @@
 				CssClass="tab" NavigateUrl="~/AdminContent.aspx" meta:resourcekey="lnkSelectContentResource1" />
 			<asp:HyperLink ID="lnkSelectLog" runat="server" Text="System Log" 
 				CssClass="tab" NavigateUrl="~/AdminLog.aspx" meta:resourcekey="lnkSelectLogResource1" />
-			<asp:HyperLink ID="lnkSelectProviders" runat="server" Text="Providers" 
-				CssClass="tab" NavigateUrl="~/AdminProviders.aspx" meta:resourcekey="lnkSelectProvidersResource1" />
+			<asp:HyperLink ID="lnkSelectPlugins" runat="server" Text="Plugins" 
+				CssClass="tab" NavigateUrl="~/AdminPlugins.aspx" meta:resourcekey="lnkSelectPluginsResource1" />
 			<asp:HyperLink ID="lnkSelectConfig" runat="server" Text="Configuration" 
 				CssClass="tab" NavigateUrl="~/AdminConfig.aspx" meta:resourcekey="lnkSelectConfigResource1" />
 			<asp:HyperLink ID="lnkSelectTheme" runat="server" Text="Themes"

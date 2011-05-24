@@ -54,7 +54,7 @@ namespace ScrewTurn.Wiki {
 			{ "admincategories", "lnkSelectCategories" },
 			{ "adminhome", "lnkSelectAdminHome" },
 			{ "adminnavpaths", "lnkSelectNavPaths" },
-			{ "adminproviders", "lnkSelectProviders" },
+			{ "adminplugins", "lnkSelectPlugins" },
 			{ "admintheme", "lnkSelectTheme" },
 			{ "adminglobalconfig", "lnkSelectGlobalConfig" }
 		};
@@ -78,7 +78,7 @@ namespace ScrewTurn.Wiki {
 			lnkSelectCategories.CssClass = "tab";
 			lnkSelectAdminHome.CssClass = "tab";
 			lnkSelectNavPaths.CssClass = "tab";
-			lnkSelectProviders.CssClass = "tab";
+			lnkSelectPlugins.CssClass = "tab";
 			lnkSelectTheme.CssClass = "tab";
 			lnkSelectGlobalConfig.CssClass = "tab red";
 
@@ -124,7 +124,7 @@ namespace ScrewTurn.Wiki {
 			// Always displayed because checking every page can take too much time
 
 			// Providers (can manage providers)
-			lnkSelectProviders.Visible = CanManageProviders(currentUser, currentGroups);
+			lnkSelectPlugins.Visible = CanManageProviders(currentUser, currentGroups);
 
 			// Snippets (can manage snippets)
 			lnkSelectSnippets.Visible = CanManageSnippetsAndTemplates(currentUser, currentGroups);

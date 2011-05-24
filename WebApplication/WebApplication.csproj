@@ -141,12 +141,12 @@
     <Compile Include="AdminPages.aspx.designer.cs">
       <DependentUpon>AdminPages.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AdminProviders.aspx.cs">
-      <DependentUpon>AdminProviders.aspx</DependentUpon>
+    <Compile Include="AdminPlugins.aspx.cs">
+      <DependentUpon>AdminPlugins.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AdminProviders.aspx.designer.cs">
-      <DependentUpon>AdminProviders.aspx</DependentUpon>
+    <Compile Include="AdminPlugins.aspx.designer.cs">
+      <DependentUpon>AdminPlugins.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdminSnippets.aspx.cs">
       <DependentUpon>AdminSnippets.aspx</DependentUpon>
@@ -2640,7 +2640,7 @@
     <Content Include="AdminNamespaces.aspx" />
     <Content Include="AdminNavPaths.aspx" />
     <Content Include="AdminPages.aspx" />
-    <Content Include="AdminProviders.aspx" />
+    <Content Include="AdminPlugins.aspx" />
     <Content Include="AdminSnippets.aspx" />
     <Content Include="AdminUsers.aspx" />
     <Content Include="Default.aspx" />

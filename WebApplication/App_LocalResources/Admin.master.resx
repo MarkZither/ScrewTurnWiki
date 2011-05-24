@@ -198,10 +198,10 @@
   <data name="lnkSelectPagesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="lnkSelectProvidersResource1.Text" xml:space="preserve">
-    <value>Providers</value>
+  <data name="lnkSelectPluginsResource1.Text" xml:space="preserve">
+    <value>Plugins</value>
   </data>
-  <data name="lnkSelectProvidersResource1.ToolTip" xml:space="preserve">
+  <data name="lnkSelectPluginsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lnkSelectSnippetsResource1.Text" xml:space="preserve">

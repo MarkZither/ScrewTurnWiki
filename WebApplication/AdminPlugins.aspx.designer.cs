@@ -10,204 +10,204 @@
 namespace ScrewTurn.Wiki {
     
     
-    public partial class AdminMaster {
+    public partial class AdminPlugins {
         
         /// <summary>
-        /// lblJS control.
+        /// lblProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblJS;
+        protected global::System.Web.UI.WebControls.Literal lblProviders;
         
         /// <summary>
-        /// head control.
+        /// pnlList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
+        protected global::System.Web.UI.WebControls.Panel pnlList;
         
         /// <summary>
-        /// frmAdmin control.
+        /// lblDisplay control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm frmAdmin;
+        protected global::System.Web.UI.WebControls.Literal lblDisplay;
         
         /// <summary>
-        /// lblStrings control.
+        /// rdoFormatter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblStrings;
+        protected global::System.Web.UI.WebControls.RadioButton rdoFormatter;
         
         /// <summary>
-        /// lblAdminTitle control.
+        /// rptProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblAdminTitle;
+        protected global::System.Web.UI.WebControls.Repeater rptProviders;
         
         /// <summary>
-        /// lblHomeLink control.
+        /// pnlProviderDetails control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblHomeLink;
+        protected global::System.Web.UI.WebControls.Panel pnlProviderDetails;
         
         /// <summary>
-        /// lblBrowserSupport control.
+        /// lblProviderName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblBrowserSupport;
+        protected global::System.Web.UI.WebControls.Literal lblProviderName;
         
         /// <summary>
-        /// lnkSelectAdminHome control.
+        /// lblProviderDll control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectAdminHome;
+        protected global::System.Web.UI.WebControls.Literal lblProviderDll;
         
         /// <summary>
-        /// lnkSelectGroups control.
+        /// lblConfigurationStringTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectGroups;
+        protected global::System.Web.UI.WebControls.Literal lblConfigurationStringTitle;
         
         /// <summary>
-        /// lnkSelectAccounts control.
+        /// lblConfigHelp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectAccounts;
+        protected global::System.Web.UI.WebControls.Literal lblConfigHelp;
         
         /// <summary>
-        /// lnkSelectNamespaces control.
+        /// txtConfigurationString control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectNamespaces;
+        protected global::System.Web.UI.WebControls.TextBox txtConfigurationString;
         
         /// <summary>
-        /// lnkSelectPages control.
+        /// btnSave control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectPages;
+        protected global::System.Web.UI.WebControls.Button btnSave;
         
         /// <summary>
-        /// lnkSelectCategories control.
+        /// btnDisable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectCategories;
+        protected global::System.Web.UI.WebControls.Button btnDisable;
         
         /// <summary>
-        /// lnkSelectSnippets control.
+        /// btnEnable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectSnippets;
+        protected global::System.Web.UI.WebControls.Button btnEnable;
         
         /// <summary>
-        /// lnkSelectNavPaths control.
+        /// btnUnload control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectNavPaths;
+        protected global::System.Web.UI.WebControls.Button btnUnload;
         
         /// <summary>
-        /// lnkSelectContent control.
+        /// btnCancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectContent;
+        protected global::System.Web.UI.WebControls.Button btnCancel;
         
         /// <summary>
-        /// lnkSelectLog control.
+        /// lblCannotDisable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectLog;
+        protected global::System.Web.UI.WebControls.Label lblCannotDisable;
         
         /// <summary>
-        /// lnkSelectPlugins control.
+        /// lblResult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectPlugins;
+        protected global::System.Web.UI.WebControls.Label lblResult;
         
         /// <summary>
-        /// lnkSelectConfig control.
+        /// lblProviderConfigHelp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectConfig;
+        protected global::System.Web.UI.WebControls.Label lblProviderConfigHelp;
         
         /// <summary>
-        /// lnkSelectTheme control.
+        /// btnAutoUpdateProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectTheme;
+        protected global::System.Web.UI.WebControls.Button btnAutoUpdateProviders;
         
         /// <summary>
-        /// lnkSelectGlobalConfig control.
+        /// lblAutoUpdateResult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectGlobalConfig;
+        protected global::System.Web.UI.WebControls.Label lblAutoUpdateResult;
         
         /// <summary>
-        /// cphAdmin control.
+        /// txtCurrentProvider control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder cphAdmin;
+        protected global::System.Web.UI.WebControls.HiddenField txtCurrentProvider;
     }
 }
