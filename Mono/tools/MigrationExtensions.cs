@@ -2,11 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Text;
 
 using MySql.Data.MySqlClient;
 
 static class MigrationExtensions
 {
+	public static string ToMySqlDateTime (this DateTime dt)
+	{
+		return String.Format ("{0:yyyyMMddHHmmss}", dt.ToUniversalTime ());
+	}
+	
 	public static MySqlCommand GetCommand (this MySqlConnection conn, string commandText, params Tuple <string, object>[] parameters)
 	{
 		var cmd = conn.CreateCommand ();
@@ -50,12 +56,21 @@ static class MigrationExtensions
 		return (T)temp;
 	}
 
+	public static string TinyBlobToString (this byte[] blob)
+	{
+		if (blob == null || blob.Length == 0)
+			return String.Empty;
+
+		return Encoding.UTF8.GetString (blob);
+	}
+	
 	public static string SqlEncode (this string text)
 	{
 		if (String.IsNullOrEmpty (text))
 			return String.Empty;
 
 		return text.
+			Replace ("\\", "\\\\").
 			Replace ("\"", "\\\"").
 			Replace ("'", "\\'").
 			Replace ("\n", "\\n").
@@ -63,6 +78,19 @@ static class MigrationExtensions
 			Replace ("\t", "\\t");
 	}
 
+	public static string SqlEncodeForName (this string text)
+	{
+		if (String.IsNullOrEmpty (text))
+			return String.Empty;
+		string ret = text.SqlEncode ();
+		if (ret [0] == '.')
+			ret = ret.Substring (1);
+		return ret.
+			Replace (".", "-").
+			Replace (":", "-").
+			Replace (" ", " ");
+	}
+	
 	public static string SqlAndWikiEncode (this string text)
 	{
 		if (String.IsNullOrEmpty (text))
@@ -84,6 +112,10 @@ static class MigrationExtensions
 		minute = Int32.Parse (dekiTime.Substring (10, 2));
 		second = Int32.Parse (dekiTime.Substring (12, 2));
 
-		return new DateTime (year, month, day, hour, minute, second);
+		try {
+			return new DateTime (year, month, day, hour, minute, second);
+		} catch {
+			return DateTime.MinValue;
+		}
 	}
 }
