@@ -3,7 +3,7 @@ using System.Reflection;
 
 [assembly: AssemblyCompany("Threeplicate Srl")]
 [assembly: AssemblyProduct("ScrewTurn Wiki")]
-[assembly: AssemblyCopyright("Copyright © Threeplicate Srl 2006-2010")]
+[assembly: AssemblyCopyright("Copyright © Threeplicate Srl 2006-2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

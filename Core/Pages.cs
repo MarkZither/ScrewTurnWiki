@@ -912,7 +912,7 @@ namespace ScrewTurn.Wiki {
 			// TODO: make this work when Users.GetUsers does not return all existing users but only a sub-set
 			List<UserInfo> usersToNotify = new List<UserInfo>(10);
 			foreach(UserInfo user in Users.GetUsers(wiki)) {
-				if(CanApproveDraft(wiki, currentPage, user.Username, user.Groups)) {
+				if(user.Active && CanApproveDraft(wiki, currentPage, user.Username, user.Groups)) {
 					usersToNotify.Add(user);
 				}
 			}
@@ -983,14 +983,17 @@ namespace ScrewTurn.Wiki {
 		public static string[] GetPageIncomingLinks(string wiki, PageInfo page) {
 			if(page == null) return null;
 
-			IDictionary<string, string[]> allLinks = Settings.GetProvider(wiki).GetAllOutgoingLinks();
-			string[] knownPages = new string[allLinks.Count];
-			allLinks.Keys.CopyTo(knownPages, 0);
+			return GetPageIncomingLinks(page, Settings.GetProvider(wiki).GetAllOutgoingLinks());
+		}
+
+		private static string[] GetPageIncomingLinks(PageInfo page, IDictionary<string, string[]> allOutgoingLinks) {
+			string[] knownPages = new string[allOutgoingLinks.Count];
+			allOutgoingLinks.Keys.CopyTo(knownPages, 0);
 
 			List<string> result = new List<string>(20);
 
 			foreach(string key in knownPages) {
-				if(Contains(allLinks[key], page.FullName)) {
+				if(Contains(allOutgoingLinks[key], page.FullName)) {
 					// result is likely to be very small, so a linear search is fine
 					if(!result.Contains(key)) result.Add(key);
 				}
@@ -1000,7 +1003,25 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the outgoing links of a page in a wiki.
+		/// Gets all the orphan pages.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="pages">The pages to analyze.</param>
+		/// <returns>The orphan pages.</returns>
+		public static List<string> GetOrphanedPages(string wiki, IList<PageInfo> pages) {
+			IDictionary<string, string[]> allLinks = Settings.GetProvider(wiki).GetAllOutgoingLinks();
+
+			List<string> orphans = new List<string>();
+			foreach(var p in pages) {
+				if(GetPageIncomingLinks(p, allLinks).Length == 0) {
+					orphans.Add(p.FullName);
+				}
+			}
+
+			return orphans;
+		}
+
+		/// <summary>
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
@@ -1446,8 +1467,7 @@ namespace ScrewTurn.Wiki {
 
 			bool done = page.Provider.AddMessage(page, username, subject, dateTime, body, parent);
 			if(done) {
-				SendEmailNotificationForMessage(wiki, page, Users.FindUser(wiki, username),
-					Tools.GetMessageIdForAnchor(dateTime), subject);
+				SendEmailNotificationForMessage(wiki, page, Users.FindUser(wiki, username), Tools.GetMessageIdForAnchor(dateTime), subject, dateTime);
 
 				PageContent content = Content.GetPageContent(page);
 				RecentChanges.AddChange(wiki, page.FullName, content.Title, subject, dateTime, username, Change.MessagePosted, "");
@@ -1464,7 +1484,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="author">The author of the message.</param>
 		/// <param name="id">The message ID to be used for anchors.</param>
 		/// <param name="subject">The message subject.</param>
-		private static void SendEmailNotificationForMessage(string wiki, PageInfo page, UserInfo author, string id, string subject) {
+		/// <param name="dateTime">The message date/time.</param>
+		private static void SendEmailNotificationForMessage(string wiki, PageInfo page, UserInfo author, string id, string subject, DateTime dateTime) {
 			if(page == null) return;
 
 			PageContent content = Content.GetPageContent(page);
@@ -1480,7 +1501,7 @@ namespace ScrewTurn.Wiki {
 			EmailTools.AsyncSendMassEmail(recipients, GlobalSettings.SenderEmail,
 				Settings.GetWikiTitle(wiki) + " - " + title,
 				body.Replace("##PAGE##", title).Replace("##USER##", author != null ? Users.GetDisplayName(author) : "anonymous").Replace("##DATETIME##",
-				Preferences.AlignWithServerTimezone(wiki, content.LastModified).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##SUBJECT##",
+				Preferences.AlignWithServerTimezone(wiki, dateTime).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##SUBJECT##",
 				subject).Replace("##LINK##", Settings.GetMainUrl(wiki) + Tools.UrlEncode(page.FullName) +
 				GlobalSettings.PageExtension + "?Discuss=1#" + id).Replace("##WIKITITLE##", Settings.GetWikiTitle(wiki)),
 				false);

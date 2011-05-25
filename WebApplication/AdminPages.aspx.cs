@@ -72,15 +72,19 @@ namespace ScrewTurn.Wiki {
 			NamespaceInfo nspace = Pages.FindNamespace(currentWiki, lstNamespace.SelectedValue);
 			List<PageInfo> pages = Pages.GetPages(currentWiki, nspace);
 
+			var orphanPages = Pages.GetOrphanedPages(currentWiki, pages);
 			List<PageInfo> result = new List<PageInfo>(pages.Count);
 
 			string filter = txtFilter.Text.Trim().ToLower(System.Globalization.CultureInfo.CurrentCulture);
 
 			foreach(PageInfo page in pages) {
 				if(NameTools.GetLocalName(page.FullName).ToLower(System.Globalization.CultureInfo.CurrentCulture).Contains(filter)) {
-					result.Add(page);
+					if(chkOrphansOnly.Checked && !orphanPages.Contains(page.FullName)) continue;
+					else result.Add(page);
 				}
 			}
+
+			result.Sort(new PageNameComparer());
 
 			return result;
 		}
@@ -203,6 +207,8 @@ namespace ScrewTurn.Wiki {
 			bool canSetPermissions = AdminMaster.CanManagePermissions(currentUser, currentGroups);
 			bool canDeletePages = authChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.DeletePages, currentUser, currentGroups);
 
+			var orphanPages = Pages.GetOrphanedPages(currentWiki, currentPages);
+
 			for(int i = rangeBegin; i <= rangeEnd; i++) {
 				PageInfo page = currentPages[i];
 
@@ -217,17 +223,13 @@ namespace ScrewTurn.Wiki {
 				if(!canDeletePages && !canManagePage) canManageDiscussion = authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, currentUser, currentGroups);
 				bool canSelect = canManagePage | canDeletePages | canManageDiscussion;
 
-				int incomingLinks = Pages.GetPageIncomingLinks(currentWiki, page).Length;
-
-				if(chkOrphansOnly.Checked && incomingLinks > 0) continue;
-
 				PageContent firstContent = null;
 				List<int> baks = Pages.GetBackups(page);
 				if(baks.Count == 0) firstContent = currentContent;
 				else firstContent = Pages.GetBackupContent(page, baks[0]);
 
 				result.Add(new PageRow(page, currentContent, firstContent,
-					Pages.GetMessageCount(page), baks.Count, incomingLinks == 0,
+					Pages.GetMessageCount(page), baks.Count, orphanPages.Contains(page.FullName),
 					canEdit, canSelect, canSetPermissions, txtCurrentPage.Value == page.FullName));
 			}
 

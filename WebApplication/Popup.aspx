@@ -174,19 +174,23 @@
 						document.getElementById("btnOkPageLink").onclick = ProcessPageLink;
 						document.getElementById("btnCancelPageLink").onclick = CancelAll;
 
-						$(function() {
-							$("#<%= txtPageName.ClientID %>").keyup(function() {
+						$(function () {
+							$("#<%= txtPageName.ClientID %>").keyup(function () {
 								var value = $("#<%= txtPageName.ClientID %>").val().toLowerCase();
-								$("div.treecontainer a.menulink").each(function() {
+								$("div.treecontainer a.menulink").each(function () {
 									var elem = $(this);
-									var match = elem.attr("title").toLowerCase().indexOf(value) != -1;
+									var txt = elem.attr("title");
+									txt = txt.substring(txt.indexOf(".") + 1);
+									value = value.replace(/_/g, '-');
+									var match = txt.toLowerCase().indexOf(value) != -1;
 									elem.css("display", match ? "" : "none");
 								});
 							});
-							$("#<%= txtPageTitle.ClientID %>").keyup(function() {
+							$("#<%= txtPageTitle.ClientID %>").keyup(function () {
 								var value = $("#<%= txtPageTitle.ClientID %>").val().toLowerCase();
-								$("div.treecontainer a.menulink").each(function() {
+								$("div.treecontainer a.menulink").each(function () {
 									var elem = $(this);
+									value = value.replace(/_/g, '-');
 									var match = elem.text().toLowerCase().indexOf(value) != -1;
 									elem.css("display", match ? "" : "none");
 								});

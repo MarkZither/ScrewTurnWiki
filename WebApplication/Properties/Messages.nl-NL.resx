@@ -121,16 +121,16 @@
     <value>Insert a new anchor or a link to an existing anchor</value>
   </data>
   <data name="BoldTitle" xml:space="preserve">
-    <value>Style selected text as bold</value>
+    <value>Maak geselecteerde teksten vet</value>
   </data>
   <data name="CodeEscapedTitle" xml:space="preserve">
     <value>Zet geselecteerde tekst als een codeblok</value>
   </data>
   <data name="CodeInlineTitle" xml:space="preserve">
-    <value>Set selected text as inline code</value>
+    <value>Maak geselecteerd tekst inspringen code</value>
   </data>
   <data name="CommentTitle" xml:space="preserve">
-    <value>Set selected text as comment (hidden from the rendered page output)</value>
+    <value>Maak geselecteerde tekst als opmerking (verborgen in de gegenereerde uitvoer)</value>
   </data>
   <data name="EscapeTitle" xml:space="preserve">
     <value>Wrap selected text in an 'escape' block that escapes all wiki- and HTML-related characters</value>
@@ -214,7 +214,7 @@
     <value>Meta Keywords</value>
   </data>
   <data name="AutoUpdateAvailable" xml:space="preserve">
-    <value>Auto-update available</value>
+    <value>Automatische update beschikbaar</value>
   </data>
   <data name="NAccountsDeleted" xml:space="preserve">
     <value>$ accounts verwijderd</value>
@@ -275,7 +275,7 @@
     <value>Up-to-date</value>
   </data>
   <data name="CouldNotMigratePage" xml:space="preserve">
-    <value>Could not migrate Page</value>
+    <value>Kan Pagina niet migreren</value>
   </data>
   <data name="DiscussionsRss" xml:space="preserve">
     <value>Discussions RSS</value>
@@ -284,7 +284,7 @@
     <value>Update notifications for this Category's Discussions (RSS 2.0)</value>
   </data>
   <data name="CodeEscaped" xml:space="preserve">
-    <value>Escaped Block Code</value>
+    <value>Escaped Blok Code</value>
   </data>
   <data name="HR" xml:space="preserve">
     <value>Horizontale Lijn</value>
@@ -308,13 +308,13 @@
     <value>Weergavenaam bewaard</value>
   </data>
   <data name="UserDeletedMessage" xml:space="preserve">
-    <value>##USER## deleted a message on the discussion of ##PAGE##.</value>
+    <value>##USER## verwijderde een reactie bij ##PAGE##.</value>
   </data>
   <data name="UserDeletedPage" xml:space="preserve">
     <value>##USER## heeft de pagina  ##PAGE## verwijderd.</value>
   </data>
   <data name="UserEditedMessage" xml:space="preserve">
-    <value>##USER## edited a message on the discussion of ##PAGE##.</value>
+    <value>##USER## heeft een bericht bewerkt bij ##PAGE##.</value>
   </data>
   <data name="UserPostedMessage" xml:space="preserve">
     <value>##USER## plaatste een bericht op de discussie van ##PAGE##.</value>
@@ -326,7 +326,7 @@
     <value>##USER## heeft een eerdere versie tergezet van de pagina ##PAGE##.</value>
   </data>
   <data name="UserUpdatedPage" xml:space="preserve">
-    <value>##USER## updated the page ##PAGE##.</value>
+    <value>##USER## heeft de pagina ##PAGE## gewijzigd.</value>
   </data>
   <data name="CreateThisPage" xml:space="preserve">
     <value>Maak deze Pagina</value>
@@ -353,7 +353,7 @@
     <value>Bezoeker</value>
   </data>
   <data name="CouldNotRenameNamespace" xml:space="preserve">
-    <value>Kon niet Namespace hernoemen</value>
+    <value>Kan namespace niet hernoemen</value>
   </data>
   <data name="NamespaceRenamed" xml:space="preserve">
     <value>Namespace hernoemd</value>
@@ -464,7 +464,7 @@
     <value>Niet bestaande of ongeldig bestand</value>
   </data>
   <data name="CouldNotDeleteDll" xml:space="preserve">
-    <value>Could not delete DLL</value>
+    <value>Kan DLL niet verwijderen</value>
   </data>
   <data name="DllDeleted" xml:space="preserve">
     <value>DLL deleted</value>
@@ -479,7 +479,7 @@
     <value>Kon Navigatie Pad niet maken</value>
   </data>
   <data name="CouldNotDeleteNavPath" xml:space="preserve">
-    <value>Could not delete Navigation Path</value>
+    <value>Kan het Navigatie Pad niet verwijderen</value>
   </data>
   <data name="CouldNotSaveNavPath" xml:space="preserve">
     <value>Could not save Navigation Path</value>
@@ -515,7 +515,7 @@
     <value>bekijk wijzigingen</value>
   </data>
   <data name="DiffingPageTitle" xml:space="preserve">
-    <value>Diffing &lt;i&gt;##PAGETITLE##&lt;/i&gt;, at revisions &lt;i&gt;##REV1##&lt;/i&gt; and &lt;i&gt;##REV2##&lt;/i&gt;</value>
+    <value>Verschillen&lt;i&gt;##PAGETITLE##&lt;/i&gt;, bij revisies &lt;i&gt;##REV1##&lt;/i&gt; en &lt;i&gt;##REV2##&lt;/i&gt;</value>
   </data>
   <data name="CouldNotCreateSnippet" xml:space="preserve">
     <value>Kon Fragment niet maken </value>
@@ -536,13 +536,13 @@
     <value>Kon Categorie niet verwijderen</value>
   </data>
   <data name="CouldNotMergeCategories" xml:space="preserve">
-    <value>Could not merge Categories</value>
+    <value>Kan Categorieën niet mengen</value>
   </data>
   <data name="CategoryCreated" xml:space="preserve">
     <value>Categorie gemaakt</value>
   </data>
   <data name="CouldNotRenameCategory" xml:space="preserve">
-    <value>Kon niet Categoriew hernoemen</value>
+    <value>Kan categorie niet hernoemen</value>
   </data>
   <data name="CategoryAlreadyExists" xml:space="preserve">
     <value>Categorie bestaat al</value>
@@ -563,7 +563,7 @@
     <value>Administrate</value>
   </data>
   <data name="AdministrateThisPage" xml:space="preserve">
-    <value>Administrate this Page</value>
+    <value>Beheer deze Pagina</value>
   </data>
   <data name="Permissions" xml:space="preserve">
     <value>Permissions</value>
@@ -599,7 +599,7 @@
     <value>Kon niet een of meer Berichten verwijderen</value>
   </data>
   <data name="CouldNotDeletePageBackups" xml:space="preserve">
-    <value>Could not delete Page backups</value>
+    <value>Kan de Pagina backups niet verwijderen</value>
   </data>
   <data name="CouldNotRollbackPage" xml:space="preserve">
     <value>Could not rollback Page</value>
@@ -626,7 +626,7 @@
     <value>Ga naar Pagina</value>
   </data>
   <data name="CouldNotDeletePermissions" xml:space="preserve">
-    <value>Could not delete permissions</value>
+    <value>Kan rechten niet verwijderen</value>
   </data>
   <data name="GroupCreatedCouldNotStorePermissions" xml:space="preserve">
     <value>Groep gemaakt, maar toegangsrechten konden niet worden bewaard</value>
@@ -647,7 +647,7 @@
     <value>Could not set the Theme for the Namespace</value>
   </data>
   <data name="NamespaceCreatedCouldNotCreateDefaultPage" xml:space="preserve">
-    <value>Namespace gemaakt, but could not create the default Page</value>
+    <value>Namespace gemaakt, maar niet de default Pagina</value>
   </data>
   <data name="NamespaceCreatedCouldNotSetDefaultPage" xml:space="preserve">
     <value>Namespace gemaakt, but could not set its default Page</value>
@@ -665,10 +665,10 @@
     <value>User created, but could not store Permissions</value>
   </data>
   <data name="UserUpdatedCouldNotDeleteOldPermissions" xml:space="preserve">
-    <value>User updated, but could not delete old Permissions</value>
+    <value>Gebruiker is bijgewerkt, niet alle oude toegangsrechten konden worden verwijderd</value>
   </data>
   <data name="UserUpdatedCouldNotStoreGroupMembership" xml:space="preserve">
-    <value>User updated, but could not store Group membership</value>
+    <value>Gebruiker is bijgewerkt, de deelname aan groepen kon niet worden bijgewerkt</value>
   </data>
   <data name="UserUpdatedCouldNotStoreNewPermissions" xml:space="preserve">
     <value>User updated, but could not store new Permissions</value>
@@ -872,7 +872,7 @@
     <value>Kan nieuwe Folder niet maken</value>
   </data>
   <data name="DiffColorKey" xml:space="preserve">
-    <value>Color key: &lt;span style="background-color: #88CC33;"&gt;added text&lt;/span&gt; / &lt;span style="background-color: #FFDF66;"&gt;removed text&lt;/span&gt;.</value>
+    <value>Kleur sleutel: &lt;span style="background-color: #88CC33;"&gt;toegevoegde tekst&lt;/span&gt; / &lt;span style="background-color: #FFDF66;"&gt;verwijderde tekst&lt;/span&gt;.</value>
   </data>
   <data name="EarlierThisMonth" xml:space="preserve">
     <value>Eerder deze maand</value>
@@ -998,7 +998,7 @@
     <value>&lt;b&gt;Let op&lt;/b&gt;: dit is slechts een preview! U moet op de Bewaar knop klikken om wijzigingen te bewaren!</value>
   </data>
   <data name="AccessDeniedTitle" xml:space="preserve">
-    <value>Toegang Geweigerd</value>
+    <value>Toegang geweigerd</value>
   </data>
   <data name="AccountActivated" xml:space="preserve">
     <value>Uw gebruikersprofiel is succesvol geactiveerd. U kunt nu inloggen.</value>
@@ -1094,10 +1094,10 @@
     <value>Categorieën</value>
   </data>
   <data name="CodeBlock" xml:space="preserve">
-    <value>CodeBlock</value>
+    <value>Code blok</value>
   </data>
   <data name="CodeInline" xml:space="preserve">
-    <value>Inline code</value>
+    <value>Inspringen code</value>
   </data>
   <data name="Comment" xml:space="preserve">
     <value>Opmerking</value>
@@ -1542,7 +1542,7 @@
     <value>Provider niet gevonden</value>
   </data>
   <data name="ProviderUnloaded" xml:space="preserve">
-    <value>Provider ontlaadt</value>
+    <value>Provider verwijderd</value>
   </data>
   <data name="RecentPageUpdates" xml:space="preserve">
     <value>Recente pagina Updates</value>

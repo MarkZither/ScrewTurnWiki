@@ -171,12 +171,6 @@
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
     <value>Обрати цей Обліковий Запис</value>
   </data>
-  <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Обрати</value>
-  </data>
-  <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value>Обрати цей Обліковий Запис</value>
-  </data>
   <data name="chkActiveResource1.Text" xml:space="preserve">
     <value>Активовані Облікові Записи</value>
   </data>

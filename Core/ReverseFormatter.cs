@@ -363,7 +363,7 @@ namespace ScrewTurn.Wiki {
 							string title = "";
 							bool isInternalLink = false;
 							bool childImg = false;
-							bool isUnknowLink = false;
+							bool pageLink = false;
 							if(node.FirstChild != null && node.FirstChild.Name == "img") childImg = true;
 							if(node.ParentNode.Name == "td") isTable = true;
 							if(node.Attributes.Count != 0) {
@@ -374,7 +374,7 @@ namespace ScrewTurn.Wiki {
 										if(attName.Name == "href") link += attName.Value.ToString();
 										if(attName.Name == "title") title += attName.Value.ToString();
 										if(attName.Value == "SystemLink".ToLowerInvariant()) isInternalLink = true;
-										if(attName.Value == "unknownlink") isUnknowLink = true;
+										if(attName.Value.ToLowerInvariant() == "unknownlink" || attName.Value.ToLowerInvariant() == "pagelink") pageLink = true;
 									}
 									else {
 										anchor = true;
@@ -386,10 +386,12 @@ namespace ScrewTurn.Wiki {
 									string[] splittedLink = link.Split('=');
 									link = "c:" + splittedLink[1];
 								}
+								else if(pageLink) link = link.Remove(link.IndexOf(GlobalSettings.PageExtension));
 								else link = ProcessLink(link);
-								if(!anchor && !isTable && !childImg && !isUnknowLink)
+								if(!anchor && !isTable && !childImg) {
 									if(title != link) result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
 									else result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
+								}
 								if(!anchor && !childImg && isTable) result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
 								if(!anchor && childImg && !isTable) result += ProcessChild(node.ChildNodes) + "|" + target + link + "]";
 							}

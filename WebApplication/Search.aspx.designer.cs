@@ -112,6 +112,33 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblCategoryFilter;
         
         /// <summary>
+        /// lblSelectAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblSelectAll;
+        
+        /// <summary>
+        /// lblSelectNone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblSelectNone;
+        
+        /// <summary>
+        /// lblSelectInverse control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblSelectInverse;
+        
+        /// <summary>
         /// chkUncategorizedPages control.
         /// </summary>
         /// <remarks>

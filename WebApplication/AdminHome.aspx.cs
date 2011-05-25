@@ -46,7 +46,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void DisplayOrphansCount() {
 			string currentWiki = DetectWiki();
-			int orphans = Pages.GetOrphanedPages(currentWiki, null).Length;
+			int orphans = Pages.GetOrphanedPages(currentWiki, null as NamespaceInfo).Length;
 			foreach(NamespaceInfo nspace in Pages.GetNamespaces(currentWiki)) {
 				orphans += Pages.GetOrphanedPages(currentWiki, nspace).Length;
 			}

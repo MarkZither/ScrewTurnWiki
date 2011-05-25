@@ -2594,7 +2594,6 @@ namespace ScrewTurn.Wiki {
 
 				}
 
-
 				match = TransclusionRegex.Match(sb.ToString());
 			}
 

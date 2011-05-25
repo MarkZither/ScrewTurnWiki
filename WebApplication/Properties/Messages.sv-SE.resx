@@ -1033,13 +1033,13 @@
     <value>&lt;rot&gt;</value>
   </data>
   <data name="CouldNotCreateNamespace" xml:space="preserve">
-    <value>Kunde inte skapa namnrymd</value>
+    <value>Kunde inte skapa namnområde</value>
   </data>
   <data name="InvalidNamespaceName" xml:space="preserve">
-    <value>Ogiltigt namnrymdsnamn</value>
+    <value>Ogiltigt namnområdesnamn</value>
   </data>
   <data name="NamespaceCreated" xml:space="preserve">
-    <value>Namnrymd skapad</value>
+    <value>Namnområde skapat</value>
   </data>
   <data name="CouldNotCreateUser" xml:space="preserve">
     <value>Kunde inte skapa användare</value>
@@ -1144,7 +1144,7 @@
     <value>Hantera sidföljder</value>
   </data>
   <data name="Action_Man_Ns" xml:space="preserve">
-    <value>Hantera namnrymder</value>
+    <value>Hantera namnområden</value>
   </data>
   <data name="Action_Man_Pg" xml:space="preserve">
     <value>Hantera sidor</value>
@@ -1189,13 +1189,13 @@
     <value>Kunde inte lagra rättigheter</value>
   </data>
   <data name="NamespaceSaved" xml:space="preserve">
-    <value>Namnrymd sparad</value>
+    <value>Namnområde sparat</value>
   </data>
   <data name="CouldNotDeleteNamespace" xml:space="preserve">
-    <value>Kunde inte ta bort namnrymd</value>
+    <value>Kunde inte ta bort namnområde</value>
   </data>
   <data name="NamespaceDeleted" xml:space="preserve">
-    <value>Namnrymd borttagen</value>
+    <value>Namnområde borttaget</value>
   </data>
   <data name="CouldNotDeletePermissions" xml:space="preserve">
     <value>Kunde inte ta bort rättigheter</value>
@@ -1213,22 +1213,22 @@
     <value>Rättigheter borttagna, men gruppen kunde inte tas bort</value>
   </data>
   <data name="CouldNotSetNamespaceDefaultPage" xml:space="preserve">
-    <value>Kunde inte ange standardsida för namnrymd</value>
+    <value>Kunde inte ange standardsida för namnområde</value>
   </data>
   <data name="CouldNotSetNamespaceTheme" xml:space="preserve">
-    <value>Kunde inte ange visuellt tema för namnrymd</value>
+    <value>Kunde inte ange visuellt tema för namnområde</value>
   </data>
   <data name="NamespaceCreatedCouldNotCreateDefaultPage" xml:space="preserve">
-    <value>Namnrymd skapad, men kunde inte skapa standardsidan</value>
+    <value>Namnområde skapat, men kunde inte skapa standardsidan</value>
   </data>
   <data name="NamespaceCreatedCouldNotSetDefaultPage" xml:space="preserve">
-    <value>Namnrymd skapad, men kunde inte ange dess standardsida</value>
+    <value>Namnområde skapat, men kunde inte ange dess standardsida</value>
   </data>
   <data name="NamespaceCreatedCouldNotSetTheme" xml:space="preserve">
-    <value>Namnrymd sparad, men kunde inte ange dess visuella tema</value>
+    <value>Namnområde sparat, men kunde inte ange dess visuella tema</value>
   </data>
   <data name="NamespaceCreatedCouldNotStoreDefaultPageContent" xml:space="preserve">
-    <value>Namnrymd skapad, men kunde inte lagra standardsidans innehåll</value>
+    <value>Namnområde skapat, men kunde inte lagra standardsidans innehåll</value>
   </data>
   <data name="UserCreatedCouldNotStoreGroupMembership" xml:space="preserve">
     <value>Användare skapad, men kunde inte lagra grupptillhörighet</value>
@@ -1510,10 +1510,10 @@
     <value>Välj mall...</value>
   </data>
   <data name="CouldNotRenameNamespace" xml:space="preserve">
-    <value>Kunde inte byta namn på namnrymd</value>
+    <value>Kunde inte byta namn på namnområde</value>
   </data>
   <data name="NamespaceRenamed" xml:space="preserve">
-    <value>Namnrymd namnändrad</value>
+    <value>Namnområde namnändrat</value>
   </data>
   <data name="GoToYourProfile" xml:space="preserve">
     <value>Gå till din profil</value>

@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 	/// </summary>
 	public class SqlServerPagesStorageProvider : SqlPagesStorageProviderBase, IPagesStorageProviderV30 {
 
-		private readonly ComponentInformation info = new ComponentInformation("SQL Server Pages Storage Provider", "Threeplicate Srl", "3.0.2.541", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Pages.txt");
+		private readonly ComponentInformation info = new ComponentInformation("SQL Server Pages Storage Provider", "Threeplicate Srl", "3.0.4.566", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Pages.txt");
 
 		private readonly SqlServerCommandBuilder commandBuilder = new SqlServerCommandBuilder();
 
