@@ -40,11 +40,20 @@ select {
 }
 
 #MainDiv {
-	 padding: 10px 20px 10px 20px;
+	 padding: 10px 5px 10px 5px;
 }
 
 #TabDiv {
+	width: 200px;
+	float: left;
+	margin-top: 20px;
 	white-space: nowrap;
+}
+
+#ContentDiv {
+	margin: 20px 0px 0px 200px;
+	padding: 10px 20px 20px 20px;
+	border: solid 3px #2D6BCE;
 }
 
 /* Small text */
@@ -68,36 +77,39 @@ a:hover {
 }
 
 .tab, .tab:visited {
-	background-color: #DDDDDD;
-	border: solid 3px #DDDDDD;
 	color: #214C9A;
-	font-size: 11px;
-	padding: 2px 4px 2px 4px;
+	font-size: 13px;
+	padding: 10px 8px;
 	text-decoration: none;
+	display: block;
 }
 
 .tab:hover {
-	background-color: #214C9A;
-	border: solid 3px #214C9A;
+	background-color: #2D6BCE;
 	color: #FFFFFF;
-	font-size: 11px;
-	padding: 2px 4px 2px 4px;
+	font-size: 13px;
+	padding: 10px 8px;
 	text-decoration: none;
+	display: block;
 }
 
 .tabselected, .tabselected:visited {
-	background-color: #214C9A;
-	border: solid 3px #214C9A;
+	background-color: #2D6BCE;
 	color: #FFFFFF;
-	font-size: 11px;
 	font-weight: bold;
-	padding: 2px 4px 2px 4px;
+	font-size: 13px;
+	padding: 10px 8px;
 	text-decoration: none;
+	display: block;
 }
 
-.red, .red:visited, .red:hover {
-	background-color: #E03A3A;
-	border: solid 3px #E03A3A;
+.red, .red:visited {
+	color: #00A859;
+}
+
+.red:hover, .red.selected, .red:hover.selected {
+	color: #FFFFFF;
+	background-color: #00A859;
 }
 
 h1 {
@@ -144,10 +156,10 @@ h1.admintitle {
 }
 
 h2.sectiontitle {
-	background-color: #214C9A;
-	color: #FFFFFF;
+	color: #214C9A;
+	font-weight: bold;
 	padding: 4px 24px 4px 24px;
-	margin: 5px -20px 10px -20px;
+	margin: 0px -20px 10px -20px;
 }
 
 h1.pagetitle {
@@ -216,7 +228,7 @@ div.warning {
 #LicenseInfoDiv {
 	background-color: #F0F0F0;
 	border-top: solid 3px #CCCCCC;
-	margin: -10px -20px -10px -20px;
+	margin: 20px 0px 0px 0px;
 	padding: 10px;
 }
 
@@ -502,10 +514,6 @@ input.searchtextbox {
 	padding-left: 10px;
 }
 
-#ButtonsDiv, #ButtonsDiv2, #ButtonsDiv3 {
-	clear: left;
-}
-
 #ButtonsDiv.log {
 	float: right;
 }
@@ -764,3 +772,8 @@ ul.spaced li {
 }
 
 /* END AdminContent.aspx */
+
+/* Div used for clearing floats */
+div.clear {
+	clear: both;
+}

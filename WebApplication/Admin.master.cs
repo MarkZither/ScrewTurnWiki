@@ -83,6 +83,7 @@ namespace ScrewTurn.Wiki {
 			lnkSelectGlobalConfig.CssClass = "tab red";
 
 			hyperLink.CssClass = "tabselected";
+			if(hyperLink.ID == "lnkSelectGlobalConfig") hyperLink.CssClass += " red selected";
 		}
 
 		/// <summary>

@@ -34,7 +34,8 @@
 		<asp:Label ID="lblBrowserSupport" runat="server" Visible="False" CssClass="resulterror" 
 			Text="Your Browser might present problems with this Page (Internet Explorer 7+ and Firefox 3+ are suggested)." 
 			meta:resourcekey="lblBrowserSupportResource1" />
-		<br />
+		
+		<div class="clear"></div>
 		
 		<div id="TabDiv">
 			<asp:HyperLink ID="lnkSelectAdminHome" runat="server" Text="Admin Home" 
@@ -67,9 +68,12 @@
 				CssClass="tab red" NavigateUrl="~/AdminGlobalConfig.aspx" meta:resourcekey="lnkSelectGlobalConfigResource1" />
 		</div>
 	
-		<asp:ContentPlaceHolder ID="cphAdmin" runat="server" />
-		<br /><br /><br />
+		<div id="ContentDiv">
+			<asp:ContentPlaceHolder ID="cphAdmin" runat="server" />
+		</div>
 		
+		<div class="clear"></div>
+
 		<div id="LicenseInfoDiv">
 			<h2 class="separator">GNU General Public License v2</h2>
 			<p>This Program is released under the GNU General Public License v2. You cannot remove this statement.<br />
