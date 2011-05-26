@@ -398,7 +398,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			List<CategoriesEntity> categoriesEntities = new List<CategoriesEntity>();
 			foreach(CategoriesEntity entity in entities) {
-				if(namespaceName == null && entity.Namespace == null || namespaceName != null && namespaceName == entity.Namespace) {
+				if(string.IsNullOrEmpty(namespaceName) && string.IsNullOrEmpty(entity.Namespace) || !string.IsNullOrEmpty(namespaceName) && namespaceName == entity.Namespace) {
 					categoriesEntities.Add(entity);
 				}
 			}
