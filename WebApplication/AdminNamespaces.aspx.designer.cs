@@ -31,15 +31,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Panel pnlList;
         
         /// <summary>
-        /// btnNewNamespace control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnNewNamespace;
-        
-        /// <summary>
         /// rptNamespaces control.
         /// </summary>
         /// <remarks>
@@ -47,6 +38,15 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptNamespaces;
+        
+        /// <summary>
+        /// btnNewNamespace control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnNewNamespace;
         
         /// <summary>
         /// pnlEditNamespace control.

@@ -22,15 +22,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblLog;
         
         /// <summary>
-        /// btnClearLog control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnClearLog;
-        
-        /// <summary>
         /// lblFilter control.
         /// </summary>
         /// <remarks>
@@ -83,6 +74,15 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnNoLimit;
+        
+        /// <summary>
+        /// btnClearLog control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClearLog;
         
         /// <summary>
         /// rptLog control.

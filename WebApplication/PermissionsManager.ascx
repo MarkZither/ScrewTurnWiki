@@ -5,7 +5,6 @@
 <div id="PermissionsManagerDiv">
 	
 	<div id="SubjectsDiv">
-	
 		<asp:Literal ID="lblSubjects" runat="server" Text="User Accounts and User Groups" EnableViewState="False" meta:resourcekey="lblSubjectsResource1" /><br />
 		<asp:ListBox ID="lstSubjects" runat="server" AutoPostBack="True" OnSelectedIndexChanged="lstSubjects_SelectedIndexChanged" CssClass="listbox" meta:resourcekey="lstSubjectsResource1" />	
 	</div>
@@ -22,10 +21,9 @@
 		<asp:Label ID="lblAddResult" runat="server" meta:resourcekey="lblAddResultResource1" />
 	</div>
 	
-	<div class="cleanupleft"></div>
+	<div class="clear"></div>
 	
 	<div id="AclSelectorDiv">
-	
 		<h3><asp:Literal ID="lblPermissionsFor" runat="server" Text="Permissions for:" EnableViewState="False" meta:resourcekey="lblPermissionsForResource1" />
 		<asp:Literal ID="lblSelectedSubject" runat="server" meta:resourcekey="lblSelectedSubjectResource1" /></h3>
 		

@@ -164,7 +164,7 @@ namespace ScrewTurn.Wiki {
 
 			string currentWiki = DetectWiki();
 
-			PageInfo[] pages = SearchTools.SearchSimilarPages(currentWiki, txtPageName.Text, lstNamespace.SelectedValue);
+			PageInfo[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, lstNamespace.SelectedValue, currentWiki);
 
 			lstAvailablePage.Items.Clear();
 
