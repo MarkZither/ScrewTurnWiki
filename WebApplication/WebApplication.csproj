@@ -178,6 +178,20 @@
     <Compile Include="AdminGlobalConfig.aspx.designer.cs">
       <DependentUpon>AdminGlobalConfig.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AdminProvidersManagement.aspx.cs">
+      <DependentUpon>AdminProvidersManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminProvidersManagement.aspx.designer.cs">
+      <DependentUpon>AdminProvidersManagement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminGlobalHome.aspx.cs">
+      <DependentUpon>AdminGlobalHome.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminGlobalHome.aspx.designer.cs">
+      <DependentUpon>AdminGlobalHome.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CreateMasterPassword.aspx.cs">
       <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1326,6 +1340,8 @@
     <Content Include="Captcha.aspx" />
     <Content Include="Category.aspx" />
     <Content Include="AdminGlobalConfig.aspx" />
+    <Content Include="AdminProvidersManagement.aspx" />
+    <Content Include="AdminGlobalHome.aspx" />
     <Content Include="CreateMasterPassword.aspx" />
     <Content Include="Diff.aspx" />
     <Content Include="Error.aspx" />
@@ -1790,6 +1806,8 @@
     <Content Include="App_LocalResources\Upload.aspx.vi-VN.resx" />
     <Content Include="App_LocalResources\User.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\User.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AdminProvidersManagement.aspx.resx" />
+    <Content Include="App_LocalResources\AdminGlobalHome.aspx.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>

@@ -117,133 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="btnShutdownConfirmResource2.Text" xml:space="preserve">
+    <value>Shutdown Application</value>
   </data>
-  <data name="btnCancelResource1.ToolTip" xml:space="preserve">
-    <value>Deselect the Provider</value>
-  </data>
-  <data name="btnDisableResource1.Text" xml:space="preserve">
-    <value>Disable</value>
-  </data>
-  <data name="btnDisableResource1.ToolTip" xml:space="preserve">
-    <value>Disable the Provider</value>
-  </data>
-  <data name="btnEnableResource1.Text" xml:space="preserve">
-    <value>Enable</value>
-  </data>
-  <data name="btnEnableResource1.ToolTip" xml:space="preserve">
-    <value>Enable the Provider</value>
-  </data>
-  <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="btnSaveResource1.ToolTip" xml:space="preserve">
-    <value>Save the Configuration String</value>
-  </data>
-  <data name="btnSelectResource1.Text" xml:space="preserve">
-    <value>Select</value>
-  </data>
-  <data name="btnSelectResource1.ToolTip" xml:space="preserve">
+  <data name="btnShutdownConfirmResource2.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
+  <data name="lblAdminHomeResource1.Text" xml:space="preserve">
+    <value>Administration Home</value>
   </data>
-  <data name="btnSelectResource2.ToolTip" xml:space="preserve">
+  <data name="lblAppShutdownInfoResource1.Text" xml:space="preserve">
+    <value>You can force a shutdown-and-restart cycle of the Web Application. You will be asked to confirm the restart twice, then the Web Application will restart at the first subsequent request.&lt;br /&gt;&lt;b&gt;Warning&lt;/b&gt;: all the open sessions will be lost, and users may experience errors.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: the restart will affect only this Web Application.</value>
+  </data>
+  <data name="lblAppShutdownResource1.Text" xml:space="preserve">
+    <value>Web Application Shutdown</value>
+  </data>
+  <data name="lblSystemStatusContentResource1.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="btnUnloadResource1.Text" xml:space="preserve">
-    <value>Unload</value>
-  </data>
-  <data name="btnUnloadResource1.ToolTip" xml:space="preserve">
-    <value>Unloads the Provider</value>
-  </data>
-  <data name="lblAuthorResource1.Text" xml:space="preserve">
-    <value>Author</value>
-  </data>
-  <data name="lblConfigHelpResource1.Text" xml:space="preserve">
-    <value>Help</value>
-  </data>
-  <data name="lblConfigurationStringTitleResource1.Text" xml:space="preserve">
-    <value>Configuration String</value>
-  </data>
-  <data name="lblDisplayResource1.Text" xml:space="preserve">
-    <value>Display</value>
-  </data>
-  <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="lblProviderConfigHelpResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblProviderConfigHelpResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblProviderNameResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblProvidersResource1.Text" xml:space="preserve">
-    <value>Providers</value>
-  </data>
-  <data name="lblResultResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblResultResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblSettingsSourceResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblSettingsSourceResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblVersionResource1.Text" xml:space="preserve">
-    <value>Ver.</value>
-  </data>
-  <data name="PageResource1.Title" xml:space="preserve">
+  <data name="PageResource2.Title" xml:space="preserve">
     <value>Administration</value>
   </data>
-  <data name="pnlListResource1.GroupingText" xml:space="preserve">
+  <data name="lnkPagesResource1.Text" xml:space="preserve">
+    <value>see Pages</value>
+  </data>
+  <data name="lnkPagesResource1.ToolTip" xml:space="preserve">
+    <value>Go to the Pages administration tab</value>
+  </data>
+  <data name="btnSendBulkEmailResource1.Text" xml:space="preserve">
+    <value>Send Bulk Email</value>
+  </data>
+  <data name="btnSendBulkEmailResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="pnlListResource1.ToolTip" xml:space="preserve">
-    <value />
+  <data name="cvGroupsResource1.ErrorMessage" xml:space="preserve">
+    <value>You must select at least one group</value>
   </data>
-  <data name="pnlProviderDetailsResource1.GroupingText" xml:space="preserve">
-    <value />
+  <data name="lblBulkEmailInfoResource1.Text" xml:space="preserve">
+    <value>You can send an email message to all users of one or more groups.</value>
   </data>
-  <data name="pnlProviderDetailsResource1.ToolTip" xml:space="preserve">
-    <value />
+  <data name="lblBulkEmailResource1.Text" xml:space="preserve">
+    <value>Mass Email</value>
   </data>
-  <data name="rdoFormatterResource1.Text" xml:space="preserve">
-    <value>Formatter Providers</value>
+  <data name="lblSubjectResource1.Text" xml:space="preserve">
+    <value>Subject</value>
   </data>
-  <data name="rdoFormatterResource1.ToolTip" xml:space="preserve">
-    <value />
+  <data name="rfvBodyResource1.ErrorMessage" xml:space="preserve">
+    <value>Body is required</value>
   </data>
-  <data name="txtConfigurationStringResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtConfigurationStringResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblUpdateStatusResource1.Text" xml:space="preserve">
-    <value>Update Status</value>
-  </data>
-  <data name="lblCannotDisableResource1.Text" xml:space="preserve">
-    <value>Cannot disable the provider because it is the default provider or,&lt;br /&gt;in case of a Pages Provider, it manages the default page of the root namespace</value>
-  </data>
-  <data name="lblCannotDisableResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">
-    <value>Auto-update Providers</value>
-  </data>
-  <data name="btnAutoUpdateProvidersResource1.ToolTip" xml:space="preserve">
-    <value>Automatically update all installed providers, of all types</value>
-  </data>
-  <data name="lblProviderDllResource1.Text" xml:space="preserve">
-    <value />
+  <data name="rfvSubjectResource1.ErrorMessage" xml:space="preserve">
+    <value>Subject is required</value>
   </data>
 </root>

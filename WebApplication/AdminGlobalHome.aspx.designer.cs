@@ -10,7 +10,7 @@
 namespace ScrewTurn.Wiki {
     
     
-    public partial class AdminHome {
+    public partial class AdminGlobalHome {
         
         /// <summary>
         /// lblAdminHome control.
@@ -22,120 +22,138 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblAdminHome;
         
         /// <summary>
-        /// lblMissingPages control.
+        /// lblSystemStatusContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblMissingPages;
+        protected global::System.Web.UI.WebControls.Literal lblSystemStatusContent;
         
         /// <summary>
-        /// rptPages control.
+        /// lblBulkEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptPages;
+        protected global::System.Web.UI.WebControls.Literal lblBulkEmail;
         
         /// <summary>
-        /// lblOrphanPages control.
+        /// lblBulkEmailInfo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblOrphanPages;
+        protected global::System.Web.UI.WebControls.Literal lblBulkEmailInfo;
         
         /// <summary>
-        /// lblOrphanPagesInfoPre control.
+        /// lstGroups control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblOrphanPagesInfoPre;
+        protected global::System.Web.UI.WebControls.CheckBoxList lstGroups;
         
         /// <summary>
-        /// lblOrphanPagesCount control.
+        /// lblSubject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblOrphanPagesCount;
+        protected global::System.Web.UI.WebControls.Literal lblSubject;
         
         /// <summary>
-        /// lblOrphanPagesInfoPost control.
+        /// txtSubject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblOrphanPagesInfoPost;
+        protected global::System.Web.UI.WebControls.TextBox txtSubject;
         
         /// <summary>
-        /// lnkPages control.
+        /// txtBody control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkPages;
+        protected global::System.Web.UI.WebControls.TextBox txtBody;
         
         /// <summary>
-        /// lblOrphanPagesInfo control.
+        /// btnSendBulkEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblOrphanPagesInfo;
+        protected global::System.Web.UI.WebControls.Button btnSendBulkEmail;
         
         /// <summary>
-        /// btnRebuildPageLinks control.
+        /// rfvSubject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRebuildPageLinks;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvSubject;
         
         /// <summary>
-        /// lblRebuildPageLinksInfo control.
+        /// rfvBody control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblRebuildPageLinksInfo;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBody;
         
         /// <summary>
-        /// lblIndexStatus control.
+        /// cvGroups control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblIndexStatus;
+        protected global::System.Web.UI.WebControls.CustomValidator cvGroups;
         
         /// <summary>
-        /// rptIndex control.
+        /// lblEmailResult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptIndex;
+        protected global::System.Web.UI.WebControls.Label lblEmailResult;
         
         /// <summary>
-        /// lblRebuildIndexInfo control.
+        /// lblAppShutdown control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblRebuildIndexInfo;
+        protected global::System.Web.UI.WebControls.Literal lblAppShutdown;
+        
+        /// <summary>
+        /// lblAppShutdownInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblAppShutdownInfo;
+        
+        /// <summary>
+        /// btnShutdownConfirm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnShutdownConfirm;
     }
 }

@@ -64,8 +64,12 @@
 				CssClass="tab" NavigateUrl="~/AdminConfig.aspx" meta:resourcekey="lnkSelectConfigResource1" />
 			<asp:HyperLink ID="lnkSelectTheme" runat="server" Text="Themes"
 				CssClass="tab" NavigateUrl="~/AdminTheme.aspx" meta:resourcekey="lnkSelectThemeResource1" />
+			<asp:HyperLink ID="lnkSelectAdminGlobalHome" runat="server" Text="Global Admin Home" 
+				CssClass="tab red" NavigateUrl="~/AdminGlobalHome.aspx" meta:resourcekey="lnkSelectGlobalAdminHomeResource1" />
 			<asp:HyperLink ID="lnkSelectGlobalConfig" runat="server" Text="Global Configuration"
 				CssClass="tab red" NavigateUrl="~/AdminGlobalConfig.aspx" meta:resourcekey="lnkSelectGlobalConfigResource1" />
+			<asp:HyperLink ID="lnkSelectProvidersManagement" runat="server" Text="Providers Management"
+				CssClass="tab red" NavigateUrl="~/AdminProvidersManagement.aspx" meta:resourcekey="lnkSelectProvidersManagementResource1" />
 		</div>
 	
 		<div id="ContentDiv">

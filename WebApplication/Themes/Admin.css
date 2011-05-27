@@ -103,11 +103,11 @@ a:hover {
 	display: block;
 }
 
-.red, .red:visited {
+a.red, a.red:visited {
 	color: #00A859;
 }
 
-.red:hover, .red.selected, .red:hover.selected {
+a.red:hover, a.red.selected, a.red:hover.selected {
 	color: #FFFFFF;
 	background-color: #00A859;
 }
@@ -321,8 +321,7 @@ tr.warning td {
 /* BEGIN AdminHome.aspx */
 
 #BulkEmailDiv {
-	float: right;
-	width: 33%;
+	margin: 40px 0px;
 	padding: 8px;
 	border: solid 1px #999999;
 	background-color: #FFFFFF;
@@ -441,7 +440,7 @@ div.defaultprovbutton {
 }
 
 /* AdminProviders.aspx - specific */
-#DllsListContainerDiv {
+#DllsListContainerDiv, #DllUploadContainerDiv {
 	margin-top: 16px;
 }
 #DllNoticeDiv {

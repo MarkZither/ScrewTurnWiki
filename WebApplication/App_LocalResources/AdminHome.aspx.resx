@@ -129,20 +129,8 @@
   <data name="btnRebuildResource2.ToolTip" xml:space="preserve">
     <value>Rebuild this index</value>
   </data>
-  <data name="btnShutdownConfirmResource2.Text" xml:space="preserve">
-    <value>Shutdown Application</value>
-  </data>
-  <data name="btnShutdownConfirmResource2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="lblAdminHomeResource1.Text" xml:space="preserve">
     <value>Administration Home</value>
-  </data>
-  <data name="lblAppShutdownInfoResource1.Text" xml:space="preserve">
-    <value>You can force a shutdown-and-restart cycle of the Web Application. You will be asked to confirm the restart twice, then the Web Application will restart at the first subsequent request.&lt;br /&gt;&lt;b&gt;Warning&lt;/b&gt;: all the open sessions will be lost, and users may experience errors.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: the restart will affect only this Web Application.</value>
-  </data>
-  <data name="lblAppShutdownResource1.Text" xml:space="preserve">
-    <value>Web Application Shutdown</value>
   </data>
   <data name="lblIndexStatusResource1.Text" xml:space="preserve">
     <value>Search Index Status</value>
@@ -167,9 +155,6 @@
   </data>
   <data name="lblStatusResource1.Text" xml:space="preserve">
     <value>Status</value>
-  </data>
-  <data name="lblSystemStatusContentResource1.Text" xml:space="preserve">
-    <value />
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
     <value>Administration</value>
@@ -200,29 +185,5 @@
   </data>
   <data name="lnkPagesResource1.ToolTip" xml:space="preserve">
     <value>Go to the Pages administration tab</value>
-  </data>
-  <data name="btnSendBulkEmailResource1.Text" xml:space="preserve">
-    <value>Send Bulk Email</value>
-  </data>
-  <data name="btnSendBulkEmailResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cvGroupsResource1.ErrorMessage" xml:space="preserve">
-    <value>You must select at least one group</value>
-  </data>
-  <data name="lblBulkEmailInfoResource1.Text" xml:space="preserve">
-    <value>You can send an email message to all users of one or more groups.</value>
-  </data>
-  <data name="lblBulkEmailResource1.Text" xml:space="preserve">
-    <value>Mass Email</value>
-  </data>
-  <data name="lblSubjectResource1.Text" xml:space="preserve">
-    <value>Subject</value>
-  </data>
-  <data name="rfvBodyResource1.ErrorMessage" xml:space="preserve">
-    <value>Body is required</value>
-  </data>
-  <data name="rfvSubjectResource1.ErrorMessage" xml:space="preserve">
-    <value>Subject is required</value>
   </data>
 </root>
