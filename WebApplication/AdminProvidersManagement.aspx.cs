@@ -193,36 +193,47 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnMigratePages_Click(object sender, EventArgs e) {
-			IPagesStorageProviderV30 from = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue, currentWiki);
-			IPagesStorageProviderV30 to = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue, currentWiki);
+			Log.LogEntry("Pages data migration requested from " + lstPagesSource.SelectedValue + " to " + lstPagesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername);
 
-			Log.LogEntry("Pages data migration requested from " + from.Information.Name + " to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
+			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
+				IPagesStorageProviderV30 from = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue, wiki.WikiName);
+				IPagesStorageProviderV30 to = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue, wiki.WikiName);
 
-			//DataMigrator.MigratePagesStorageProviderData(from, to);
+				Log.LogEntry("Pages data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername);	
 
+				DataMigrator.MigratePagesStorageProviderData(from, to);
+			}
 			lblMigratePagesResult.CssClass = "resultok";
 			lblMigratePagesResult.Text = Properties.Messages.DataMigrated;
 		}
 
 		protected void btnMigrateUsers_Click(object sender, EventArgs e) {
-			IUsersStorageProviderV30 from = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue, currentWiki);
-			IUsersStorageProviderV30 to = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue, currentWiki);
+			Log.LogEntry("Users data migration requested from " + lstUsersSource.SelectedValue + " to " + lstUsersDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername);
 
-			Log.LogEntry("Users data migration requested from " + from.Information.Name + " to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
+			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
+				IUsersStorageProviderV30 from = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue, wiki.WikiName);
+				IUsersStorageProviderV30 to = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue, wiki.WikiName);
 
-			//DataMigrator.MigrateUsersStorageProviderData(from, to, true);
+				Log.LogEntry("Users data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername);
+
+				DataMigrator.MigrateUsersStorageProviderData(wiki.WikiName, from, to, true);
+			}
 
 			lblMigrateUsersResult.CssClass = "resultok";
 			lblMigrateUsersResult.Text = Properties.Messages.DataMigrated;
 		}
 
 		protected void btnMigrateFiles_Click(object sender, EventArgs e) {
-			IFilesStorageProviderV30 from = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue, currentWiki);
-			IFilesStorageProviderV30 to = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue, currentWiki);
+			Log.LogEntry("Files data migration requested from " + lstFilesSource.SelectedValue + " to " + lstFilesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername);
 
-			Log.LogEntry("Files data migration requested from " + from.Information.Name + " to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
+			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
+				IFilesStorageProviderV30 from = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue, wiki.WikiName);
+				IFilesStorageProviderV30 to = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue, wiki.WikiName);
 
-			//DataMigrator.MigrateFilesStorageProviderData(from, to, Settings.Provider);
+				Log.LogEntry("Files data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername);
+
+				DataMigrator.MigrateFilesStorageProviderData(from, to, Settings.GetProvider(wiki.WikiName));
+			}
 
 			lblMigrateFilesResult.CssClass = "resultok";
 			lblMigrateFilesResult.Text = Properties.Messages.DataMigrated;
