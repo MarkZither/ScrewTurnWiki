@@ -251,11 +251,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="message">The Log Message.</param>
 		/// <param name="entryType">The Type of the Entry.</param>
 		/// <param name="user">The User.</param>
+		/// <param name="wiki">The wiki, <c>null</c> if is an application level log.</param>
 		/// <remarks>This method <b>should not</b> write messages to the Log using the method IHost.LogEntry.
 		/// This method should also never throw exceptions (except for parameter validation).</remarks>
 		/// <exception cref="ArgumentNullException">If <b>message</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>message</b> or <b>user</b> are empty.</exception>
-		public void LogEntry(string message, EntryType entryType, string user) {
+		public void LogEntry(string message, EntryType entryType, string user, string wiki) {
 			if(message == null) throw new ArgumentNullException("message");
 			if(message.Length == 0) throw new ArgumentException("Message cannot be empty", "message");
 			if(user == null) throw new ArgumentNullException("user");
@@ -265,13 +266,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.InsertInto("Log",
-				new string[] { "DateTime", "EntryType", "User", "Message" }, new string[] { "DateTime", "EntryType", "User", "Message" });
+				new string[] { "DateTime", "EntryType", "User", "Message" }, new string[] { "DateTime", "EntryType", "User", "Message", "Wiki" });
 
 			List<Parameter> parameters = new List<Parameter>(4);
 			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", DateTime.Now));
 			parameters.Add(new Parameter(ParameterType.Char, "EntryType", EntryTypeToChar(entryType)));
 			parameters.Add(new Parameter(ParameterType.String, "User", Sanitize(user)));
 			parameters.Add(new Parameter(ParameterType.String, "Message", Sanitize(message)));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", string.IsNullOrEmpty(wiki) ? "" : Sanitize(wiki)));
 
 			try {
 				DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -377,7 +379,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.SelectFrom("Log", new string[] { "DateTime", "EntryType", "User", "Message" });
+			string query = queryBuilder.SelectFrom("Log", new string[] { "DateTime", "EntryType", "User", "Message", "Wiki" });
 			query = queryBuilder.OrderBy(query, new string[] { "DateTime" }, new Ordering[] { Ordering.Asc });
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
@@ -389,7 +391,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				while(reader.Read()) {
 					result.Add(new LogEntry(EntryTypeFromChar((reader["EntryType"] as string)[0]),
-						(DateTime)reader["DateTime"], reader["Message"] as string, reader["User"] as string));
+						(DateTime)reader["DateTime"], reader["Message"] as string, reader["User"] as string, reader["Wiki"] as string));
 				}
 
 				CloseReader(command, reader);

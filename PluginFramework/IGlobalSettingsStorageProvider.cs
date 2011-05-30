@@ -90,11 +90,12 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="message">The Log Message.</param>
 		/// <param name="entryType">The Type of the Entry.</param>
 		/// <param name="user">The User.</param>
+		/// <param name="wiki">The wiki, <c>null</c> if is an application level log.</param>
 		/// <remarks>This method <b>should not</b> write messages to the Log using the method IHost.LogEntry.
 		/// This method should also never throw exceptions (except for parameter validation).</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="message"/> or <paramref name="user"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="message"/> or <paramref name="user"/> are empty.</exception>
-		void LogEntry(string message, EntryType entryType, string user);
+		void LogEntry(string message, EntryType entryType, string user, string wiki);
 
 		/// <summary>
 		/// Gets all the Log Entries, sorted by date/time (oldest to newest).
@@ -123,6 +124,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		private DateTime dateTime;
 		private string message;
 		private string user;
+		private string wiki;
 
 		/// <summary>
 		/// Initializes a new instance of the <b>LogEntry</b> class.
@@ -131,11 +133,13 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="dateTime">The DateTime.</param>
 		/// <param name="message">The Message.</param>
 		/// <param name="user">The User.</param>
-		public LogEntry(EntryType type, DateTime dateTime, string message, string user) {
+		/// <param name="wiki">The Wiki.</param>
+		public LogEntry(EntryType type, DateTime dateTime, string message, string user, string wiki) {
 			this.type = type;
 			this.dateTime = dateTime;
 			this.message = message;
 			this.user = user;
+			this.wiki = wiki;
 		}
 
 		/// <summary>
@@ -164,6 +168,13 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public string User {
 			get { return user; }
+		}
+
+		/// <summary>
+		/// Gets the wiki.
+		/// </summary>
+		public string Wiki {
+			get { return wiki; }
 		}
 
 	}

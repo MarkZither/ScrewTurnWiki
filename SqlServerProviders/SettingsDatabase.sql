@@ -11,6 +11,7 @@ create table [Log] (
 	[EntryType] char not null,
 	[User] nvarchar(100) not null,
 	[Message] nvarchar(4000) not null,
+	[Wiki] nvarchar(100) not null,
 	constraint [PK_Log] primary key clustered ([Id])
 )
 

@@ -445,11 +445,12 @@ namespace ScrewTurn.Wiki {
 		/// <param name="message">The Log Message.</param>
 		/// <param name="entryType">The Type of the Entry.</param>
 		/// <param name="user">The User.</param>
+		/// <param name="wiki">The wiki, <c>null</c> if is an application level log.</param>
 		/// <remarks>This method <b>should not</b> write messages to the Log using the method IHost.LogEntry.
 		/// This method should also never throw exceptions (except for parameter validation).</remarks>
 		/// <exception cref="ArgumentNullException">If <b>message</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>message</b> or <b>user</b> are empty.</exception>
-		public void LogEntry(string message, EntryType entryType, string user) {
+		public void LogEntry(string message, EntryType entryType, string user, string wiki) {
 			if(message == null) throw new ArgumentNullException("message");
 			if(message.Length == 0) throw new ArgumentException("Message cannot be empty", "message");
 			if(user == null) throw new ArgumentNullException("user");
@@ -458,6 +459,7 @@ namespace ScrewTurn.Wiki {
 			lock(this) {
 				message = Sanitize(message);
 				user = Sanitize(user);
+				wiki = string.IsNullOrEmpty(wiki) ? "" : Sanitize(wiki);
 				LoggingLevel level = (LoggingLevel)Enum.Parse(typeof(LoggingLevel), host.GetGlobalSettingValue(GlobalSettingName.LoggingLevel));
 				switch(level) {
 					case LoggingLevel.AllMessages:
@@ -485,7 +487,7 @@ namespace ScrewTurn.Wiki {
 				StreamWriter sw = new StreamWriter(fs, System.Text.UTF8Encoding.UTF8);
 				// Type | DateTime | Message | User
 				try {
-					sw.Write(EntryTypeToString(entryType) + "|" + string.Format("{0:yyyy'/'MM'/'dd' 'HH':'mm':'ss}", DateTime.Now) + "|" + message + "|" + user + "\r\n");
+					sw.Write(EntryTypeToString(entryType) + "|" + string.Format("{0:yyyy'/'MM'/'dd' 'HH':'mm':'ss}", DateTime.Now) + "|" + message + "|" + user + "|" + wiki + "\r\n");
 				}
 				catch { }
 				finally {
@@ -538,6 +540,8 @@ namespace ScrewTurn.Wiki {
 					sb.Append(e.Message);
 					sb.Append("|");
 					sb.Append(e.User);
+					sb.Append("|");
+					sb.Append(e.Wiki);
 					sb.Append("\r\n");
 				}
 
@@ -573,7 +577,7 @@ namespace ScrewTurn.Wiki {
 					fields = lines[i].Split('|');
 					try {
 						// Try/catch to avoid problems with corrupted file (raw method)
-						result.Add(new LogEntry(EntryTypeParse(fields[0]), DateTime.Parse(fields[1]), Resanitize(fields[2]), Resanitize(fields[3])));
+						result.Add(new LogEntry(EntryTypeParse(fields[0]), DateTime.Parse(fields[1]), Resanitize(fields[2]), Resanitize(fields[3]), Resanitize(fields[4])));
 					}
 					catch { }
 				}

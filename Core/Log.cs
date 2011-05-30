@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The User that generated the Entry.</param>
 		public static void LogEntry(string message, EntryType type, string user) {
 			try {
-				GlobalSettings.Provider.LogEntry(message, type, user);
+				GlobalSettings.Provider.LogEntry(message, type, user, wiki);
 			}
 			catch { }
 		}

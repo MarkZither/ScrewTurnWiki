@@ -64,7 +64,7 @@ namespace ScrewTurn.Wiki.Tests {
 			throw new NotImplementedException();
 		}
 
-		public void LogEntry(string message, EntryType entryType, string user) {
+		public void LogEntry(string message, EntryType entryType, string user, string wiki) {
 			throw new NotImplementedException();
 		}
 

@@ -110,15 +110,18 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("Value3", settings["TS3"], "Wrong setting value");
 		}
 
-		[TestCase("Message", EntryType.General, "User")]
-		[TestCase("Message\nblah", EntryType.Error, "User\nggg")]
-		[TestCase("Message|ppp", EntryType.Warning, "User|ghghgh")]
-		public void LogEntry_GetLogEntries(string m, EntryType t, string u) {
+		[TestCase("Message", EntryType.General, "User", null)]
+		[TestCase("Message\nblah", EntryType.Error, "User\nggg", null)]
+		[TestCase("Message|ppp", EntryType.Warning, "User|ghghgh", null)]
+		[TestCase("Message", EntryType.General, "User", "wiki1")]
+		[TestCase("Message\nblah", EntryType.Error, "User\nggg", "wiki1")]
+		[TestCase("Message|ppp", EntryType.Warning, "User|ghghgh", "wiki1")]
+		public void LogEntry_GetLogEntries(string m, EntryType t, string u, string w) {
 			IGlobalSettingsStorageProviderV30 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
-			prov.LogEntry(m, t, u);
+			prov.LogEntry(m, t, u, w);
 
 			LogEntry[] entries = prov.GetLogEntries();
 			Assert.AreEqual(m, entries[entries.Length - 1].Message, "Wrong message");
@@ -126,24 +129,28 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(u, entries[entries.Length - 1].User, "Wrong user");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void LogEntry_InvalidMessage(string m) {
+		[TestCase(null, null, ExpectedException = typeof(ArgumentNullException))]
+		[TestCase("", null, ExpectedException = typeof(ArgumentException))]
+		[TestCase(null, "wiki1", ExpectedException = typeof(ArgumentNullException))]
+		[TestCase("", "wiki1", ExpectedException = typeof(ArgumentException))]
+		public void LogEntry_InvalidMessage(string m, string w) {
 			IGlobalSettingsStorageProviderV30 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
-			prov.LogEntry(m, EntryType.General, "NUnit");
+			prov.LogEntry(m, EntryType.General, "NUnit", w);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void LogEntry_InvalidUser(string u) {
+		[TestCase(null, null, ExpectedException = typeof(ArgumentNullException))]
+		[TestCase("", null, ExpectedException = typeof(ArgumentException))]
+		[TestCase(null, "wiki1", ExpectedException = typeof(ArgumentNullException))]
+		[TestCase("", "wiki1", ExpectedException = typeof(ArgumentException))]
+		public void LogEntry_InvalidUser(string u, string w) {
 			IGlobalSettingsStorageProviderV30 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
-			prov.LogEntry("Test", EntryType.General, u);
+			prov.LogEntry("Test", EntryType.General, u, w);
 		}
 
 		[Test]
@@ -152,11 +159,14 @@ namespace ScrewTurn.Wiki.Tests {
 
 			//Collectors.SettingsProvider = prov;
 
-			prov.LogEntry("Test", EntryType.General, "User");
-			prov.LogEntry("Test", EntryType.Error, "User");
-			prov.LogEntry("Test", EntryType.Warning, "User");
+			prov.LogEntry("Test", EntryType.General, "User", null);
+			prov.LogEntry("Test", EntryType.Error, "User", null);
+			prov.LogEntry("Test", EntryType.Warning, "User", null);
+			prov.LogEntry("Test", EntryType.General, "User", "wiki1");
+			prov.LogEntry("Test", EntryType.Error, "User", "wiki1");
+			prov.LogEntry("Test", EntryType.Warning, "User", "wiki1");
 
-			Assert.AreEqual(3, prov.GetLogEntries().Length, "Wrong log entry count");
+			Assert.AreEqual(6, prov.GetLogEntries().Length, "Wrong log entry count");
 
 			prov.ClearLog();
 
@@ -170,9 +180,9 @@ namespace ScrewTurn.Wiki.Tests {
 			//Collectors.SettingsProvider = prov;
 
 			for(int i = 0; i < 100; i++) {
-				prov.LogEntry("Test", EntryType.General, "User");
-				prov.LogEntry("Test", EntryType.Error, "User");
-				prov.LogEntry("Test", EntryType.Warning, "User");
+				prov.LogEntry("Test", EntryType.General, "User", null);
+				prov.LogEntry("Test", EntryType.Error, "User", "wiki1");
+				prov.LogEntry("Test", EntryType.Warning, "User", "");
 			}
 
 			Assert.IsTrue(prov.LogSize > 0 && prov.LogSize < MaxLogSize, "Wrong size");

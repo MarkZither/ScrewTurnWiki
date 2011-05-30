@@ -263,9 +263,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="message">The Log Message.</param>
 		/// <param name="entryType">The Type of the Entry.</param>
 		/// <param name="user">The User.</param>
+		/// <param name="wiki">The wiki, <c>null</c> if is an application level log.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="message"/> or <paramref name="user"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="message"/> or <paramref name="user"/> are empty.</exception>
-		public void LogEntry(string message, EntryType entryType, string user) {
+		public void LogEntry(string message, EntryType entryType, string user, string wiki) {
 			if(message == null) throw new ArgumentNullException("message");
 			if(message.Length == 0) throw new ArgumentException("Message cannot be empty", "message");
 			if(user == null) throw new ArgumentNullException("user");
@@ -279,7 +280,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				Type = EntryTypeToString(entryType),
 				DateTime = dateTime,
 				User = user,
-				Message = message
+				Message = message,
+				Wiki = wiki
 			};
 			_context.AddObject(LogsTable, logEntity);
 			_context.SaveChangesStandard();
@@ -338,7 +340,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			List<LogEntry> logEntries = new List<LogEntry>();
 			foreach(LogEntity entity in logEntities) {
-				logEntries.Add(new LogEntry(EntryTypeParse(entity.Type), entity.DateTime.ToLocalTime(), entity.Message, entity.User));
+				logEntries.Add(new LogEntry(EntryTypeParse(entity.Type), entity.DateTime.ToLocalTime(), entity.Message, entity.User, entity.Wiki));
 			}
 			return logEntries.ToArray();
 		}
@@ -483,6 +485,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		public DateTime DateTime { get; set; }
 		public string Message { get; set; }
 		public string User { get; set; }
+		public string Wiki { get; set; }
 	}
 
 }
