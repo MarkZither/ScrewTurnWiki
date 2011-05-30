@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnClearLogResource1.Text" xml:space="preserve">
     <value>Clear Log</value>
@@ -167,5 +167,8 @@
   </data>
   <data name="lblLimitResource1.Text" xml:space="preserve">
     <value>Currently displaying only 100 log entries &amp;mdash;</value>
+  </data>
+  <data name="lblWikiResource1.Text" xml:space="preserve">
+    <value>Wiki</value>
   </data>
 </root>

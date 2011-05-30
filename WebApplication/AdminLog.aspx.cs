@@ -80,7 +80,7 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public class LogEntryRow {
 
-		private string imageTag, dateTime, user, message, additionalClass;
+		private string imageTag, dateTime, user, wiki, message, additionalClass;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:LogEntryRow" /> class.
@@ -91,6 +91,7 @@ namespace ScrewTurn.Wiki {
 			imageTag = entry.EntryType.ToString();
 			dateTime = Preferences.AlignWithTimezone(currentWiki, entry.DateTime).ToString(Settings.GetDateTimeFormat(currentWiki)).Replace(" ", "&nbsp;");
 			user = entry.User.Replace(" ", "&nbsp;");
+			wiki = string.IsNullOrEmpty(entry.Wiki) ? "" : entry.Wiki.Replace(" ", "&nbsp;");
 			message = entry.Message.Replace("&", "&amp;");
 
 			if(entry.EntryType == EntryType.Error) additionalClass = " error";
@@ -117,6 +118,13 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public string User {
 			get { return user; }
+		}
+
+		/// <summary>
+		/// Gets the wiki.
+		/// </summary>
+		public string Wiki {
+			get { return wiki; }
 		}
 
 		/// <summary>

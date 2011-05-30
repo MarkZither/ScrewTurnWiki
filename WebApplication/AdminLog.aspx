@@ -40,6 +40,7 @@
 							<th>&nbsp;</th>
 							<th><asp:Literal ID="lblDateTime" runat="server" Text="Date/Time" EnableViewState="False" meta:resourcekey="lblDateTimeResource1" /></th>
 							<th><asp:Literal ID="lblUser" runat="server" Text="User" EnableViewState="False" meta:resourcekey="lblUserResource1" /></th>
+							<th><asp:Literal ID="lblWiki" runat="server" Text="Wiki" EnableViewState="False" meta:resourcekey="lblWikiResource1" /></th>
 							<th><asp:Literal ID="lblMessage" runat="server" Text="Message" EnableViewState="False" meta:resourcekey="lblMessageResource1" /></th>
 						</tr>
 						</thead>
@@ -50,6 +51,7 @@
 						<td><img src='Images/Log<%# Eval("ImageTag") %>.png' alt="Log" /></td>
 						<td><%# Eval("DateTime") %></td>
 						<td><%# Eval("User") %></td>
+						<td><%# Eval("Wiki") %></td>
 						<td><%# Eval("Message") %></td>
 					</tr>
 				</ItemTemplate>
@@ -58,6 +60,7 @@
 						<td><img src='Images/Log<%# Eval("ImageTag") %>.png' alt="Log" /></td>
 						<td><%# Eval("DateTime") %></td>
 						<td><%# Eval("User") %></td>
+						<td><%# Eval("Wiki") %></td>
 						<td><%# Eval("Message") %></td>
 					</tr>
 				</AlternatingItemTemplate>
