@@ -1853,6 +1853,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 							pageContentEntity.Content,
 							pageContentEntity.Keywords != null ? pageContentEntity.Keywords.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries) : null,
 							pageContentEntity.Description);
+						_context.SaveChangesStandard();
 						UnindexPage(currentContent);
 						foreach(Message msg in GetMessages(page)) {
 							UnindexMessageTree(page, msg);
