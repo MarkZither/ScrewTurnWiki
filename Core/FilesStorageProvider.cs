@@ -141,7 +141,7 @@ namespace ScrewTurn.Wiki {
 		private string BuildFullPath(string partialPath) {
 			if(partialPath == null) partialPath = "";
 			partialPath = partialPath.Replace("/", Path.DirectorySeparatorChar.ToString()).TrimStart(Path.DirectorySeparatorChar);
-			string up = Path.Combine(GetDataDirectory(host), UploadDirectory);			
+			string up = Path.Combine(GetDataDirectory(host), Path.Combine(wiki, UploadDirectory));			
 			return CheckPath(Path.Combine(up, partialPath), up); // partialPath CANNOT start with "\" -> Path.Combine does not work
 		}
 
@@ -155,7 +155,7 @@ namespace ScrewTurn.Wiki {
 		private string BuildFullPathForAttachments(string partialPath) {
 			if(partialPath == null) partialPath = "";
 			partialPath = partialPath.Replace("/", Path.DirectorySeparatorChar.ToString()).TrimStart(Path.DirectorySeparatorChar);
-			string up = Path.Combine(GetDataDirectory(host), AttachmentsDirectory);
+			string up = Path.Combine(GetDataDirectory(host), Path.Combine(wiki, AttachmentsDirectory));
 			return CheckPath(Path.Combine(up, partialPath), up); // partialPath CANNOT start with "\" -> Path.Combine does not work
 		}
 
