@@ -14,6 +14,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		private IHostV30 host;
 		private string config;
+		private string wiki;
 		private ComponentInformation info = new ComponentInformation("Multilanguage Content Plugin", "Threeplicate Srl", "3.0.1.472", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/Multilanguage2.txt");
 
 		private string defaultLanguage = "en-us";
@@ -86,6 +87,13 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		}
 
 		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return wiki; }
+		}
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
@@ -95,6 +103,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		public void Init(IHostV30 host, string config, string wiki) {
 			this.host = host;
 			this.config = config != null ? config : "";
+			this.wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 			defaultLanguage = host.GetSettingValue(wiki, SettingName.DefaultLanguage);
 			displayWarning = config.ToLowerInvariant().Equals("display warning");
 		}

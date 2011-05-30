@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// <summary>
 	/// The interface that must be implemented in order to create a custom Theme Storage Provider for ScrewTurn Wiki.
 	/// </summary>
-	public interface IThemeStorageProviderV30 : IProviderV30 {
+	public interface IThemeStorageProviderV30 : IStorageProviderV30 {
 
 		/// <summary>
 		/// Retrives the lists of avaiable themes.

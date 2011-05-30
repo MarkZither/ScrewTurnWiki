@@ -26,11 +26,19 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		private string _config;
 		private IHostV30 _host;
+		private string _wiki;
 		private string _baseUrl;
 		private string _username;
 		private string _password;
 
 		private XslCompiledTransform _xslTransform = null;
+
+		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return _wiki; }
+		}
 
 		/// <summary>
 		/// Initializes the Storage Provider.
@@ -45,6 +53,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 			_host = host;
 			_config = config ?? string.Empty;
+			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 			var configEntries = _config.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
 			if(configEntries.Length != 3) throw new InvalidConfigurationException("Configuration is missing required parameters");

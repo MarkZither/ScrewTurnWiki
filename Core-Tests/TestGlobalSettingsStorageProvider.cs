@@ -80,6 +80,10 @@ namespace ScrewTurn.Wiki.Tests {
 			get { throw new NotImplementedException(); }
 		}
 
+		public string CurrentWiki {
+			get { throw new NotImplementedException(); }
+		}
+
 		public void Init(IHostV30 host, string config, string wiki) {
 			throw new NotImplementedException();
 		}

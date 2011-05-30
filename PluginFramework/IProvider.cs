@@ -12,6 +12,13 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	public interface IProviderV30 : IDisposable {
 
 		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		string CurrentWiki {
+			get;
+		}
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>

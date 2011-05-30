@@ -159,6 +159,20 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		#region IProviderV30 Members
 
 		/// <summary>
+		/// Gets a value specifying whether the provider is read-only, i.e. it can only provide data and not store it.
+		/// </summary>
+		public bool ReadOnly {
+			get { return false; }
+		}
+
+		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return _wiki; }
+		}
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
@@ -216,5 +230,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		#endregion
+
 	}
 }

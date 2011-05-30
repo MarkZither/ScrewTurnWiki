@@ -1185,6 +1185,10 @@ namespace ScrewTurn.Wiki.Tests {
 
 			#region IProviderV30 Members
 
+			public string CurrentWiki {
+				get { throw new NotImplementedException(); }
+			}
+
 			public void Init(IHostV30 host, string config, string wiki) {
 				// Nothing TO-DO
 			}

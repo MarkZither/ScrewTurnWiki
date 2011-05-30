@@ -11,6 +11,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 	public class AzureGlobalSettingsStorageProvider :IGlobalSettingsStorageProviderV30 {
 
 		private IHostV30 _host;
+		private string _wiki;
 
 		private TableServiceContext _context;
 		private CloudBlobClient _client;
@@ -396,6 +397,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		public static readonly string AssembliesContainer = "assemblies";
 
 		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return _wiki; }
+		}
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
@@ -408,6 +416,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(config == null) throw new ArgumentNullException("config");
 
 			_host = host;
+			_wiki = wiki;
 
 			string[] connectionStrings = config.Split(new char[] { '|' });
 			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");

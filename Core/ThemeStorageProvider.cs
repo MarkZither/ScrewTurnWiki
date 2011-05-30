@@ -141,6 +141,20 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Gets a value specifying whether the provider is read-only, i.e. it can only provide data and not store it.
+		/// </summary>
+		public bool ReadOnly {
+			get { return false; }
+		}
+
+		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return wiki; }
+		}
+
+		/// <summary>
 		/// Initializes the Theme Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>

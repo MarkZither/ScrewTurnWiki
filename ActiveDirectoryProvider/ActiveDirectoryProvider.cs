@@ -703,6 +703,13 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		}
 
 		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return m_wiki; }
+		}
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
@@ -957,5 +964,6 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 				throw new InvalidConfigurationException("Error parsing the configuration.", ex);
 			}
 		}
+
 	}
 }

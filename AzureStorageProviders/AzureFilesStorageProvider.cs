@@ -838,6 +838,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		public static readonly string FileRetrievalStatsTable = "FileRetrievalStats";
 
+		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return _wiki; }
+		}
+
 		public void Init(IHostV30 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");

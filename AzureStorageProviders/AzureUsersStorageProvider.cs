@@ -707,6 +707,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		public static readonly string UserDataTable = "UserData";
 
 		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return _wiki; }
+		}
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>

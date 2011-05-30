@@ -14,6 +14,7 @@ namespace ScrewTurn.Wiki {
 	public class GlobalSettingsStorageProvider : ProviderBase, IGlobalSettingsStorageProviderV30 {
 
 		private IHostV30 host;
+		private string wiki;
 
 		private const string ConfigFile = "GlobalConfig.cs";
 		private const string LogFile = "Log.cs";
@@ -42,6 +43,13 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return wiki; }
+		}
+
+		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
@@ -54,6 +62,7 @@ namespace ScrewTurn.Wiki {
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
+			this.wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 
 			LoadConfig();
 		}

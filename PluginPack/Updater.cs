@@ -16,8 +16,16 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		private static IHostV30 _host;
 		private static string _config;
+		private string _wiki;
 
 		private static readonly ComponentInformation _info = new ComponentInformation("Updater Plugin", "Threeplicate Srl", "3.0.2.538", "http://www.screwturn.eu", null);
+
+		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return _wiki; }
+		}
 
 		/// <summary>
 		/// Initializes the Storage Provider.
@@ -33,6 +41,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 			_host = host;
 			_config = config;
+			_wiki = wiki;
 		}
 
 		private void LoadProvider(string dll) {

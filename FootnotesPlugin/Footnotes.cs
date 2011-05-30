@@ -22,6 +22,14 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		private IHostV30 host = null;
 		private string config = "";
+		private string wiki;
+
+		/// <summary>
+		/// Gets the wiki that has been used to initialize the current instance of the provider.
+		/// </summary>
+		public string CurrentWiki {
+			get { return wiki; }
+		}
 
 		/// <summary>
 		/// Initializes the Storage Provider.
@@ -34,6 +42,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		public void Init(IHostV30 host, string config, string wiki) {
 			this.host = host;
 			this.config = config != null ? config : "";
+			this.wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 		}
 
 		/// <summary>

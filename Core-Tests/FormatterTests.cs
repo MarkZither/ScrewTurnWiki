@@ -151,6 +151,10 @@ second line";
 			#endregion
 
 			#region IProviderV30 Members
+			
+			public string CurrentWiki {
+				get { throw new NotImplementedException(); }
+			}
 
 			public void Init(IHostV30 host, string config, string wiki) {
 				// Nothing to-do
@@ -275,6 +279,10 @@ second line";
 			#endregion
 
 			#region IProviderV30 Members
+
+			public string CurrentWiki {
+				get { throw new NotImplementedException(); }
+			}
 
 			public void Init(IHostV30 host, string config, string wiki) {
 				//Nothing TODO
@@ -587,6 +595,10 @@ second line";
 
 		public bool ReadOnly {
 			get { return false; }
+		}
+
+		public string CurrentWiki {
+			get { throw new NotImplementedException(); }
 		}
 
 		public void Init(IHostV30 host, string config, string wiki) { }
