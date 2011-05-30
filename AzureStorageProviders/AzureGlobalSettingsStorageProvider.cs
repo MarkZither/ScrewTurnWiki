@@ -112,14 +112,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			return true;
 		}
 
+		private IList<PluginFramework.Wiki> GetWikiList() {
+			return (List<PluginFramework.Wiki>)System.Web.Configuration.WebConfigurationManager.GetWebApplicationSection("wikiList");
+		}
+
 		/// <summary>
 		/// Alls the wikis.
 		/// </summary>
 		/// <returns>A list of wiki identifiers.</returns>
 		public IList<PluginFramework.Wiki> AllWikis() {
-			return new List<ScrewTurn.Wiki.PluginFramework.Wiki>() { new ScrewTurn.Wiki.PluginFramework.Wiki("", new List<string>() {"testonazure.cloudapp.net"}),
-																	 new ScrewTurn.Wiki.PluginFramework.Wiki("sample1", new List<string>() {"sample1.threeplicate.com"}),
-																	 new ScrewTurn.Wiki.PluginFramework.Wiki("sample2", new List<string>() {"sample2.threeplicate.com"})};
+			return GetWikiList();
 		}
 
 		/// <summary>
@@ -128,14 +130,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="host">The host.</param>
 		/// <returns>The name of the wiki</returns>
 		public string ExtractWikiName(string host) {
-			switch(host) {
-				case "sample1.threeplicate.com":
-					return "sample1";
-				case "sample2.threeplicate.com":
-					return "sample2";
-				default:
-					return "";
+			foreach(PluginFramework.Wiki wiki in GetWikiList()) {
+				if(wiki.Hosts.Contains(host)) return wiki.WikiName;
 			}
+			throw new Exception("The given host: " + host + " does not correspond to any wiki.");
 		}
 
 		/// <summary>

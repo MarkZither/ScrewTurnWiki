@@ -261,14 +261,16 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
+		private IList<PluginFramework.Wiki> GetWikiList() {
+			return (List<PluginFramework.Wiki>)System.Web.Configuration.WebConfigurationManager.GetWebApplicationSection("wikiList");
+		}
+
 		/// <summary>
 		/// Alls the wikis.
 		/// </summary>
 		/// <returns>A list of wiki identifiers.</returns>
-		public IList<ScrewTurn.Wiki.PluginFramework.Wiki> AllWikis() {
-			return new List<ScrewTurn.Wiki.PluginFramework.Wiki>() { new ScrewTurn.Wiki.PluginFramework.Wiki("", new List<string>() {"localhost"}),
-																	 new ScrewTurn.Wiki.PluginFramework.Wiki("x", new List<string>() {"wiki1.acme.com"}),
-																	 new ScrewTurn.Wiki.PluginFramework.Wiki("y", new List<string>() {"wiki2.acme.com"})};
+		public IList<PluginFramework.Wiki> AllWikis() {
+			return GetWikiList();
 		}
 
 		/// <summary>
@@ -277,14 +279,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="host">The host.</param>
 		/// <returns>The name of the wiki</returns>
 		public string ExtractWikiName(string host) {
-			switch(host) {
-				case "wiki1.acme.com":
-					return "x";
-				case "wiki2.acme.com":
-					return "y";
-				default:
-					return "";
+			foreach(PluginFramework.Wiki wiki in GetWikiList()) {
+				if(wiki.Hosts.Contains(host)) return wiki.WikiName;
 			}
+			throw new Exception("The given host: " + host + " does not correspond to any wiki.");
 		}
 
 		/// <summary>

@@ -111,6 +111,7 @@
     <Compile Include="StandardIndex.cs" />
     <Compile Include="StDirectoryInfo.cs" />
     <Compile Include="StFileInfo.cs" />
+    <Compile Include="WikiListHandler.cs" />
     <Compile Include="Tokenizer.cs" />
     <Compile Include="UserAccountActivityEventArgs.cs" />
     <Compile Include="UserGroup.cs" />
