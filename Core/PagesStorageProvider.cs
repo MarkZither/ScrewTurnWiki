@@ -162,7 +162,7 @@ namespace ScrewTurn.Wiki {
 
 			if(indexStorer.DataCorrupted) {
 				host.LogEntry("Search Engine Index is corrupted and needs to be rebuilt\r\n" +
-					indexStorer.ReasonForDataCorruption.ToString(), LogEntryType.Warning, null, this);
+					indexStorer.ReasonForDataCorruption.ToString(), LogEntryType.Warning, null, this, wiki);
 			}
 		}
 
@@ -172,7 +172,7 @@ namespace ScrewTurn.Wiki {
 		private void VerifyAndPerformUpgradeForCategories() {
 			// Load file lines, replacing all dots with underscores in category names
 
-			host.LogEntry("Upgrading categories format from 2.0 to 3.0", LogEntryType.General, null, this);
+			host.LogEntry("Upgrading categories format from 2.0 to 3.0", LogEntryType.General, null, this, wiki);
 
 			string[] lines = File.ReadAllText(GetFullPath(CategoriesFile)).Replace("\r", "").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -234,7 +234,7 @@ namespace ScrewTurn.Wiki {
 			// If parsing is successful, then the file must be converted
 			// Conversion consists in removing the 'Status' field and properly modifying permissions of pages
 
-			host.LogEntry("Upgrading pages format from 2.0 to 3.0", LogEntryType.General, null, this);
+			host.LogEntry("Upgrading pages format from 2.0 to 3.0", LogEntryType.General, null, this, wiki);
 
 			//string[] lines = File.ReadAllLines(GetFullPath(PagesFile));
 			string[] lines = File.ReadAllText(GetFullPath(PagesFile)).Replace("\r", "").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -323,7 +323,7 @@ namespace ScrewTurn.Wiki {
 		private void VerifyAndPerformUpgradeForNavigationPaths() {
 			// Load file lines, replacing all dots with underscores in category names
 
-			host.LogEntry("Upgrading navigation paths format from 2.0 to 3.0", LogEntryType.General, null, this);
+			host.LogEntry("Upgrading navigation paths format from 2.0 to 3.0", LogEntryType.General, null, this, wiki);
 
 			string[] lines = File.ReadAllText(GetFullPath(NavigationPathsFile)).Replace("\r", "").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -1229,13 +1229,13 @@ namespace ScrewTurn.Wiki {
 
 					if(count == 0 && content.Content.Length > 0) {
 						host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
-							LogEntryType.Warning, null, this);
+							LogEntryType.Warning, null, this, wiki);
 					}
 
 					return count;
 				}
 				catch(Exception ex) {
-					host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this);
+					host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this, wiki);
 					return 0;
 				}
 			}
@@ -1513,7 +1513,7 @@ namespace ScrewTurn.Wiki {
 				}
 				catch(Exception ex) {
 					host.LogEntry("Could not load content file (" + local.File + ") for page " + local.FullName + " - returning empty (" + ex.Message + ")",
-						LogEntryType.Error, null, this);
+						LogEntryType.Error, null, this, wiki);
 					return PageContent.GetEmpty(page);
 				}
 
@@ -1531,7 +1531,7 @@ namespace ScrewTurn.Wiki {
 			data = data.Replace("\r", "");
 			string[] lines = data.Split('\n');
 			if(lines.Length < 4) {
-				host.LogEntry("Corrupted or malformed page data for page " + pageInfo.FullName + " - returning empty", LogEntryType.Error, null, this);
+				host.LogEntry("Corrupted or malformed page data for page " + pageInfo.FullName + " - returning empty", LogEntryType.Error, null, this, wiki);
 				return PageContent.GetEmpty(pageInfo);
 			}
 			string[] fields = lines[1].Split('|');
@@ -2441,13 +2441,13 @@ namespace ScrewTurn.Wiki {
 
 					if(count == 0 && body.Length > 0) {
 						host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
-							LogEntryType.Warning, null, this);
+							LogEntryType.Warning, null, this, wiki);
 					}
 
 					return count;
 				}
 				catch(Exception ex) {
-					host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this);
+					host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this, wiki);
 					return 0;
 				}
 			}

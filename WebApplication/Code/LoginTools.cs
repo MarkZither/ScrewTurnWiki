@@ -34,7 +34,7 @@ namespace ScrewTurn.Wiki {
 				UserInfo user = Users.TryCookieLogin(wiki, username, key);
 				if(user != null) {
 					SetupSession(wiki, user);
-					Log.LogEntry("User " + user.Username + " logged in through cookie", EntryType.General, Log.SystemUsername);
+					Log.LogEntry("User " + user.Username + " logged in through cookie", EntryType.General, Log.SystemUsername, wiki);
 					TryRedirect(wiki, false);
 				}
 				else {
@@ -48,7 +48,7 @@ namespace ScrewTurn.Wiki {
 				UserInfo user = Users.TryAutoLogin(wiki, HttpContext.Current);
 				if(user != null) {
 					SetupSession(wiki, user);
-					Log.LogEntry("User " + user.Username + " logged in via " + user.Provider.GetType().FullName + " autologin", EntryType.General, Log.SystemUsername);
+					Log.LogEntry("User " + user.Username + " logged in via " + user.Provider.GetType().FullName + " autologin", EntryType.General, Log.SystemUsername, wiki);
 					TryRedirect(wiki, false);
 				}
 			}

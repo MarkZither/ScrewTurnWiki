@@ -39,7 +39,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 			// Expected output: 138-2-16-68
 
 			IHostV30 host = mocks.StrictMock<IHostV30>();
-			host.LogEntry(null, LogEntryType.Warning, null, null);
+			host.LogEntry(null, LogEntryType.Warning, null, null, "wiki1");
 			LastCall.On(host).IgnoreArguments().Repeat.Any();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider)).Return(
 				prov.GetType().FullName).Repeat.Times(4);

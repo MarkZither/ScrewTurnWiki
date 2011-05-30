@@ -78,11 +78,11 @@ namespace ScrewTurn.Wiki {
 
 				if(done) {
 					Log.LogEntry(MessageDeleteSuccess + GetLogMessage(Actions.ForGlobals.ResourceMasterPrefix, "",
-					action, subject, Delete), EntryType.General, Log.SystemUsername);
+					action, subject, Delete), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
 					Log.LogEntry(MessageDeleteFailure + GetLogMessage(Actions.ForGlobals.ResourceMasterPrefix, "",
-					action, subject, Delete), EntryType.Error, Log.SystemUsername);
+					action, subject, Delete), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
 				return done;
@@ -93,11 +93,11 @@ namespace ScrewTurn.Wiki {
 
 				if(done) {
 					Log.LogEntry(MessageSetSuccess + GetLogMessage(Actions.ForGlobals.ResourceMasterPrefix, "",
-						action, subject, Set + status.ToString()), EntryType.General, Log.SystemUsername);
+						action, subject, Set + status.ToString()), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
 					Log.LogEntry(MessageSetFailure + GetLogMessage(Actions.ForGlobals.ResourceMasterPrefix, "",
-					action, subject, Set + status.ToString()), EntryType.Error, Log.SystemUsername);
+					action, subject, Set + status.ToString()), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
 				return done;
@@ -155,11 +155,11 @@ namespace ScrewTurn.Wiki {
 
 				if(done) {
 					Log.LogEntry(MessageDeleteSuccess + GetLogMessage(Actions.ForNamespaces.ResourceMasterPrefix, namespaceName,
-						action, subject, Delete), EntryType.General, Log.SystemUsername);
+						action, subject, Delete), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
 					Log.LogEntry(MessageDeleteFailure + GetLogMessage(Actions.ForNamespaces.ResourceMasterPrefix, namespaceName,
-						action, subject, Delete), EntryType.Error, Log.SystemUsername);
+						action, subject, Delete), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
 				return done;
@@ -170,11 +170,11 @@ namespace ScrewTurn.Wiki {
 
 				if(done) {
 					Log.LogEntry(MessageSetSuccess + GetLogMessage(Actions.ForNamespaces.ResourceMasterPrefix, namespaceName,
-						action, subject, Set + status.ToString()), EntryType.General, Log.SystemUsername);
+						action, subject, Set + status.ToString()), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
 					Log.LogEntry(MessageSetFailure + GetLogMessage(Actions.ForNamespaces.ResourceMasterPrefix, namespaceName,
-						action, subject, Set + status.ToString()), EntryType.Error, Log.SystemUsername);
+						action, subject, Set + status.ToString()), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
 				return done;
@@ -238,11 +238,11 @@ namespace ScrewTurn.Wiki {
 
 				if(done) {
 					Log.LogEntry(MessageDeleteSuccess + GetLogMessage(Actions.ForDirectories.ResourceMasterPrefix, directoryName,
-						action, subject, Delete), EntryType.General, Log.SystemUsername);
+						action, subject, Delete), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
 					Log.LogEntry(MessageDeleteFailure + GetLogMessage(Actions.ForDirectories.ResourceMasterPrefix, directoryName,
-						action, subject, Delete), EntryType.Error, Log.SystemUsername);
+						action, subject, Delete), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
 				return done;
@@ -253,11 +253,11 @@ namespace ScrewTurn.Wiki {
 
 				if(done) {
 					Log.LogEntry(MessageSetSuccess + GetLogMessage(Actions.ForDirectories.ResourceMasterPrefix, directoryName,
-						action, subject, Set + status.ToString()), EntryType.General, Log.SystemUsername);
+						action, subject, Set + status.ToString()), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
 					Log.LogEntry(MessageSetFailure + GetLogMessage(Actions.ForDirectories.ResourceMasterPrefix, directoryName,
-						action, subject, Set + status.ToString()), EntryType.Error, Log.SystemUsername);
+						action, subject, Set + status.ToString()), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
 				return done;
@@ -314,11 +314,11 @@ namespace ScrewTurn.Wiki {
 
 				if(done) {
 					Log.LogEntry(MessageDeleteSuccess + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, page.FullName,
-						action, subject, Delete), EntryType.General, Log.SystemUsername);
+						action, subject, Delete), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
 					Log.LogEntry(MessageDeleteFailure + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, page.FullName,
-						action, subject, Delete), EntryType.Error, Log.SystemUsername);
+						action, subject, Delete), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
 				return done;
@@ -329,11 +329,11 @@ namespace ScrewTurn.Wiki {
 
 				if(done) {
 					Log.LogEntry(MessageSetSuccess + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, page.FullName,
-						action, subject, Set + status.ToString()), EntryType.General, Log.SystemUsername);
+						action, subject, Set + status.ToString()), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
 					Log.LogEntry(MessageSetFailure + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, page.FullName,
-						action, subject, Set + status.ToString()), EntryType.Error, Log.SystemUsername);
+						action, subject, Set + status.ToString()), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
 				return done;

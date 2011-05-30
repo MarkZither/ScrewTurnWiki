@@ -90,7 +90,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 			try {
 				foreach(string dll in dllNames) {
-					_host.LogEntry("Downloading " + dll, LogEntryType.General, null, this);
+					_host.LogEntry("Downloading " + dll, LogEntryType.General, null, this, null);
 
 					HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(root + dll);
 					req.AllowAutoRedirect = true;
@@ -120,7 +120,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 			}
 			catch(Exception ex) {
-				_host.LogEntry("Error occurred during automatic DLL updating with Updater Plugin\n" + ex.ToString(), LogEntryType.Error, null, this);
+				_host.LogEntry("Error occurred during automatic DLL updating with Updater Plugin\n" + ex.ToString(), LogEntryType.Error, null, this, null);
 			}
 		}
 

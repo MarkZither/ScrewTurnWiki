@@ -47,9 +47,9 @@ namespace ScrewTurn.Wiki {
 			}
 			catch(Exception ex) {
 				if(ex is SmtpException) {
-					Log.LogEntry("Unable to send Email: " + ex.Message, EntryType.Error, Log.SystemUsername);
+					Log.LogEntry("Unable to send Email: " + ex.Message, EntryType.Error, Log.SystemUsername, null);
 				}
-				else Log.LogEntry(ex.ToString(), EntryType.Error, Log.SystemUsername);
+				else Log.LogEntry(ex.ToString(), EntryType.Error, Log.SystemUsername, null);
 			}
 		}
 

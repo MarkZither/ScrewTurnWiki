@@ -976,13 +976,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				if(count == 0 && content.Content.Length > 0) {
 					_host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
-						LogEntryType.Warning, null, this);
+						LogEntryType.Warning, null, this, _wiki);
 				}
 
 				return count;
 			}
 			catch(Exception ex) {
-				_host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this);
+				_host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this, _wiki);
 				return 0;
 			}
 		}
@@ -1040,13 +1040,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				if(count == 0 && body.Length > 0) {
 					_host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
-						LogEntryType.Warning, null, this);
+						LogEntryType.Warning, null, this, _wiki);
 				}
 
 				return count;
 			}
 			catch(Exception ex) {
-				_host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this);
+				_host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this, _wiki);
 				return 0;
 			}
 		}

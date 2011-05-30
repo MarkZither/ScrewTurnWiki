@@ -203,7 +203,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnConfirm_Click(object sender, EventArgs e) {
-			Log.LogEntry("Account deletion requested", EntryType.General, currentUser.Username);
+			Log.LogEntry("Account deletion requested", EntryType.General, currentUser.Username, currentWiki);
 			UserInfo user = Users.FindUser(currentWiki, currentUser.Username);
 			Users.RemoveUser(currentWiki, user);
 			UrlTools.RedirectHome(currentWiki);

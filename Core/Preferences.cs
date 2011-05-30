@@ -117,7 +117,7 @@ namespace ScrewTurn.Wiki {
 			}
 			else {
 				if(user == null) {
-					Log.LogEntry("Attempt to save user data when no user has logged in", EntryType.Warning, Log.SystemUsername);
+					Log.LogEntry("Attempt to save user data when no user has logged in", EntryType.Warning, Log.SystemUsername, wiki);
 				}
 				return false;
 			}

@@ -54,7 +54,7 @@ namespace ScrewTurn.Wiki {
 				return instance;
 			}
 			catch {
-				Log.LogEntry("Unable to create instance of " + type.ToString(), EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Unable to create instance of " + type.ToString(), EntryType.Error, Log.SystemUsername, null);
 				throw;
 			}
 		}
@@ -73,17 +73,17 @@ namespace ScrewTurn.Wiki {
 				// Verify constraints
 				VerifyConstraints<T>(providerInstance);
 
-				Log.LogEntry("Provider " + provider.FullName + " loaded.", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Provider " + provider.FullName + " loaded.", EntryType.General, Log.SystemUsername, null);
 
 				// Dispose the provider
 				providerInstance.Dispose();
 			}
 			catch(InvalidConfigurationException) {
 				// Disable Provider
-				Log.LogEntry("Unable to load provider " + provider.FullName + " (configuration rejected).", EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Unable to load provider " + provider.FullName + " (configuration rejected).", EntryType.Error, Log.SystemUsername, null);
 			}
 			catch {
-				Log.LogEntry("Unable to load provider " + provider.FullName + " (unknown error).", EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Unable to load provider " + provider.FullName + " (unknown error).", EntryType.Error, Log.SystemUsername, null);
 				throw; // Exception is rethrown because it's not a normal condition
 			}
 		}
@@ -207,7 +207,7 @@ namespace ScrewTurn.Wiki {
 			}
 			catch {
 				formatters = new Type[0];
-				Log.LogEntry("Unable to load assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Unable to load assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername, null);
 				return;
 			}
 
@@ -217,7 +217,7 @@ namespace ScrewTurn.Wiki {
 			}
 			catch(ReflectionTypeLoadException) {
 				formatters = new Type[0];
-				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername, null);
 				return;
 			}
 

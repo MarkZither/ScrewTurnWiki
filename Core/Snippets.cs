@@ -61,10 +61,10 @@ namespace ScrewTurn.Wiki {
 			Snippet newSnippet = provider.AddSnippet(name, content);
 
 			if(newSnippet != null) {
-				Log.LogEntry("Snippet " + name + " created", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Snippet " + name + " created", EntryType.General, Log.SystemUsername, wiki);
 				Content.InvalidateAllPages();
 			}
-			else Log.LogEntry("Creation failed for Snippet " + name, EntryType.Error, Log.SystemUsername);
+			else Log.LogEntry("Creation failed for Snippet " + name, EntryType.Error, Log.SystemUsername, wiki);
 
 			return newSnippet != null;
 		}
@@ -78,10 +78,10 @@ namespace ScrewTurn.Wiki {
 			bool done = snippet.Provider.RemoveSnippet(snippet.Name);
 
 			if(done) {
-				Log.LogEntry("Snippet " + snippet.Name + " deleted", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Snippet " + snippet.Name + " deleted", EntryType.General, Log.SystemUsername, snippet.Provider.CurrentWiki);
 				Content.InvalidateAllPages();
 			}
-			else Log.LogEntry("Deletion failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername);
+			else Log.LogEntry("Deletion failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername, snippet.Provider.CurrentWiki);
 
 			return done;
 		}
@@ -96,10 +96,10 @@ namespace ScrewTurn.Wiki {
 			Snippet newSnippet = snippet.Provider.ModifySnippet(snippet.Name, content);
 
 			if(newSnippet != null) {
-				Log.LogEntry("Snippet " + snippet.Name + " updated", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Snippet " + snippet.Name + " updated", EntryType.General, Log.SystemUsername, snippet.Provider.CurrentWiki);
 				Content.InvalidateAllPages();
 			}
-			else Log.LogEntry("Modification failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername);
+			else Log.LogEntry("Modification failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername, snippet.Provider.CurrentWiki);
 
 			return newSnippet != null;
 		}

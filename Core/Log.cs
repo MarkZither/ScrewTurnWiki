@@ -27,7 +27,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="message">The Message.</param>
 		/// <param name="type">The Type of the Entry.</param>
 		/// <param name="user">The User that generated the Entry.</param>
-		public static void LogEntry(string message, EntryType type, string user) {
+		/// <param name="wiki">The wiki, <c>null</c> if is an application level log.</param>
+		public static void LogEntry(string message, EntryType type, string user, string wiki) {
 			try {
 				GlobalSettings.Provider.LogEntry(message, type, user, wiki);
 			}

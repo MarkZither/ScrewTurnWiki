@@ -170,8 +170,8 @@ namespace ScrewTurn.Wiki {
 
 			bool done = user.Provider.StoreUserData(user, key, data);
 
-			if(done) Log.LogEntry("User data stored for " + user.Username, EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Could not store user data for " + user.Username, EntryType.Error, Log.SystemUsername);
+			if(done) Log.LogEntry("User data stored for " + user.Username, EntryType.General, Log.SystemUsername, user.Provider.CurrentWiki);
+			else Log.LogEntry("Could not store user data for " + user.Username, EntryType.Error, Log.SystemUsername, user.Provider.CurrentWiki);
 
 			return done;
 		}
@@ -195,11 +195,11 @@ namespace ScrewTurn.Wiki {
 
 			UserInfo u = provider.AddUser(username, displayName, password, email, active, DateTime.Now);
 			if(u == null) {
-				Log.LogEntry("User creation failed for " + username, EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("User creation failed for " + username, EntryType.Error, Log.SystemUsername, wiki);
 				return false;
 			}
 			else {
-				Log.LogEntry("User " + username + " created", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("User " + username + " created", EntryType.General, Log.SystemUsername, wiki);
 				Host.Instance.OnUserAccountActivity(u, UserAccountActivity.AccountAdded);
 				return true;
 			}
@@ -220,7 +220,7 @@ namespace ScrewTurn.Wiki {
 			UserInfo newUser = user.Provider.ModifyUser(user, displayName, password, email, active);
 
 			if(newUser != null) {
-				Log.LogEntry("User " + user.Username + " updated", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("User " + user.Username + " updated", EntryType.General, Log.SystemUsername, user.Provider.CurrentWiki);
 				Host.Instance.OnUserAccountActivity(newUser, UserAccountActivity.AccountModified);
 				if(user.Active != newUser.Active) {
 					Host.Instance.OnUserAccountActivity(newUser, newUser.Active ? UserAccountActivity.AccountActivated : UserAccountActivity.AccountDeactivated);
@@ -228,7 +228,7 @@ namespace ScrewTurn.Wiki {
 				return true;
 			}
 			else {
-				Log.LogEntry("User update failed for " + user.Username, EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("User update failed for " + user.Username, EntryType.Error, Log.SystemUsername, user.Provider.CurrentWiki);
 				return false;
 			}
 		}
@@ -247,12 +247,12 @@ namespace ScrewTurn.Wiki {
 			
 			bool done = user.Provider.RemoveUser(user);
 			if(done) {
-				Log.LogEntry("User " + user.Username + " removed", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("User " + user.Username + " removed", EntryType.General, Log.SystemUsername, wiki);
 				Host.Instance.OnUserAccountActivity(user, UserAccountActivity.AccountRemoved);
 				return true;
 			}
 			else {
-				Log.LogEntry("User deletion failed for " + user.Username, EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("User deletion failed for " + user.Username, EntryType.Error, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -474,9 +474,9 @@ namespace ScrewTurn.Wiki {
 
 			if(result != null) {
 				Host.Instance.OnUserGroupActivity(result, UserGroupActivity.GroupAdded);
-				Log.LogEntry("User Group " + name + " created", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("User Group " + name + " created", EntryType.General, Log.SystemUsername, wiki);
 			}
-			else Log.LogEntry("Creation failed for User Group " + name, EntryType.Error, Log.SystemUsername);
+			else Log.LogEntry("Creation failed for User Group " + name, EntryType.Error, Log.SystemUsername, wiki);
 
 			return result != null;
 		}
@@ -506,9 +506,9 @@ namespace ScrewTurn.Wiki {
 
 			if(result != null) {
 				Host.Instance.OnUserGroupActivity(result, UserGroupActivity.GroupModified);
-				Log.LogEntry("User Group " + group.Name + " updated", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("User Group " + group.Name + " updated", EntryType.General, Log.SystemUsername, group.Provider.CurrentWiki);
 			}
-			else Log.LogEntry("Update failed for User Group " + result.Name, EntryType.Error, Log.SystemUsername);
+			else Log.LogEntry("Update failed for User Group " + result.Name, EntryType.Error, Log.SystemUsername, group.Provider.CurrentWiki);
 
 			return result != null;
 		}
@@ -528,9 +528,9 @@ namespace ScrewTurn.Wiki {
 
 			if(done) {
 				Host.Instance.OnUserGroupActivity(group, UserGroupActivity.GroupRemoved);
-				Log.LogEntry("User Group " + group.Name + " deleted", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("User Group " + group.Name + " deleted", EntryType.General, Log.SystemUsername, wiki);
 			}
-			else Log.LogEntry("Deletion failed for User Group " + group.Name, EntryType.Error, Log.SystemUsername);
+			else Log.LogEntry("Deletion failed for User Group " + group.Name, EntryType.Error, Log.SystemUsername, wiki);
 
 			return done;
 		}
@@ -548,9 +548,9 @@ namespace ScrewTurn.Wiki {
 
 			if(result != null) {
 				Host.Instance.OnUserAccountActivity(result, UserAccountActivity.AccountMembershipChanged);
-				Log.LogEntry("Group membership set for User " + user.Username, EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Group membership set for User " + user.Username, EntryType.General, Log.SystemUsername, user.Provider.CurrentWiki);
 			}
-			else Log.LogEntry("Could not set group membership for User " + user.Username, EntryType.Error, Log.SystemUsername);
+			else Log.LogEntry("Could not set group membership for User " + user.Username, EntryType.Error, Log.SystemUsername, user.Provider.CurrentWiki);
 
 			return result != null;
 		}

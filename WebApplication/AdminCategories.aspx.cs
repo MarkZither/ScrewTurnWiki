@@ -11,8 +11,10 @@ namespace ScrewTurn.Wiki {
 
 	public partial class AdminCategories : BasePage {
 
+		string currentWiki;
+
 		protected void Page_Load(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
+			currentWiki = DetectWiki();
 			AdminMaster.RedirectToLoginIfNeeded();
 
 			bool canManageCategories = AdminMaster.CanManageCategories(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
@@ -64,7 +66,7 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 			else {
-				Log.LogEntry("Category creation requested for " + txtNewCategory.Text, EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Category creation requested for " + txtNewCategory.Text, EntryType.General, Log.SystemUsername, currentWiki);
 
 				if(Pages.CreateCategory(DetectWiki(), lstNamespace.SelectedValue, txtNewCategory.Text)) {
 					txtNewCategory.Text = "";
@@ -208,7 +210,7 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			Log.LogEntry("Category rename requested for " + txtCurrentCategory.Value + " to " + txtNewName.Text, EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Category rename requested for " + txtCurrentCategory.Value + " to " + txtNewName.Text, EntryType.General, Log.SystemUsername, currentWiki);
 
 			if(Pages.RenameCategory(currentWiki, Pages.FindCategory(currentWiki, txtCurrentCategory.Value), txtNewName.Text)) {
 				RefreshList();
@@ -230,7 +232,7 @@ namespace ScrewTurn.Wiki {
 			CategoryInfo source = Pages.FindCategory(currentWiki, txtCurrentCategory.Value);
 			CategoryInfo dest = Pages.FindCategory(currentWiki, lstDestinationCategory.SelectedValue);
 
-			Log.LogEntry("Category merge requested for " + txtCurrentCategory.Value + " into " + lstDestinationCategory.SelectedValue, EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Category merge requested for " + txtCurrentCategory.Value + " into " + lstDestinationCategory.SelectedValue, EntryType.General, Log.SystemUsername, currentWiki);
 
 			if(Pages.MergeCategories(source, dest)) {
 				RefreshList();
@@ -247,7 +249,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnDelete_Click(object sender, EventArgs e) {
 			if(!CanManageCategoriesInCurrentNamespace()) return;
 
-			Log.LogEntry("Category deletion requested for " + txtCurrentCategory.Value, EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Category deletion requested for " + txtCurrentCategory.Value, EntryType.General, Log.SystemUsername, currentWiki);
 
 			if(Pages.RemoveCategory(Pages.FindCategory(DetectWiki(), txtCurrentCategory.Value))) {
 				RefreshList();
@@ -352,7 +354,7 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			Log.LogEntry("Bulk rebind requested", EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Bulk rebind requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			foreach(PageInfo page in selectedPages) {
 				CategoryInfo[] cats = null;

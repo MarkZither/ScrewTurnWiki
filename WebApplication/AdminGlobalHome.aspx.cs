@@ -88,12 +88,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnShutdownConfirm_Click(object sender, EventArgs e) {
-			Log.LogEntry("WebApp shutdown requested", EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("WebApp shutdown requested", EntryType.General, SessionFacade.CurrentUsername, null);
 			Response.Clear();
 			Response.Write(@"Web Application has been shut down, please go to the <a href=""Default.aspx"">home page</a>." + "\n\n");
 			Response.Flush();
 			Response.Close();
-			Log.LogEntry("Executing WebApp shutdown", EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Executing WebApp shutdown", EntryType.General, Log.SystemUsername, null);
 			HttpRuntime.UnloadAppDomain();
 		}
 

@@ -128,7 +128,7 @@ namespace ScrewTurn.Wiki {
 					string backupFile = GetFullPath(Path.GetFileNameWithoutExtension(UsersFile) + "_v2" + Path.GetExtension(UsersFile));
 					File.Copy(GetFullPath(UsersFile), backupFile);
 
-					host.LogEntry("Upgrading users format from 2.0 to 3.0", LogEntryType.General, null, this);
+					host.LogEntry("Upgrading users format from 2.0 to 3.0", LogEntryType.General, null, this, wiki);
 
 					DumpUsers(users);
 					UserGroup adminsGroup = AddUserGroup(host.GetSettingValue(wiki, SettingName.AdministratorsGroup), "Built-in Administrators");

@@ -311,9 +311,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="entryType">The Entry Type.</param>
 		/// <param name="user">The user, or <c>null</c>. If <c>null</c>, the system will log "PluginName+System".</param>
 		/// <param name="caller">The Component that calls the method. The caller cannot be null.</param>
+		/// <param name="wiki">The wiki, <c>null</c> if is an application level log.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="message"/> or <paramref name="caller"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="message"/> is empty.</exception>
-		void LogEntry(string message, LogEntryType entryType, string user, object caller);
+		void LogEntry(string message, LogEntryType entryType, string user, object caller, string wiki);
 
 		/// <summary>
 		/// Changes the language of the current user for the fiven wiki.

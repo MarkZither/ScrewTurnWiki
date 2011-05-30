@@ -137,7 +137,7 @@ namespace ScrewTurn.Wiki {
 				// Create the Main Page, if needed
 				if(Pages.FindPage(wiki.WikiName, Settings.GetDefaultPage(wiki.WikiName)) == null) CreateMainPage(wiki.WikiName);
 
-				Log.LogEntry("Wiki " + wiki + " is ready", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Wiki " + wiki.WikiName + " is ready", EntryType.General, Log.SystemUsername, null);
 			}
 
 			System.Threading.ThreadPool.QueueUserWorkItem(state => {
@@ -151,9 +151,9 @@ namespace ScrewTurn.Wiki {
 									System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
 									foreach(var provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki.WikiName)) {
 										if(!provider.ReadOnly) {
-											Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+											Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name + " for wiki: " + wiki.WikiName, EntryType.General, Log.SystemUsername, null);
 											provider.RebuildIndex();
-											Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+											Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name + " for wiki: " + wiki.WikiName, EntryType.General, Log.SystemUsername, null);
 										}
 									}
 								}
@@ -163,7 +163,7 @@ namespace ScrewTurn.Wiki {
 				}
 			}, WindowsIdentity.GetCurrent());
 
-			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername);
+			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername, null);
 		}
 
 		/// <summary>

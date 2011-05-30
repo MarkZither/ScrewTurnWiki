@@ -39,7 +39,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="ex">The exception.</param>
 		protected override void LogException(Exception ex) {
 			try {
-				host.LogEntry(ex.ToString(), LogEntryType.Error, null, this);
+				host.LogEntry(ex.ToString(), LogEntryType.Error, null, this, wiki);
 			}
 			catch { }
 		}

@@ -623,9 +623,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="entryType">The Entry Type.</param>
 		/// <param name="user">The user, or <c>null</c>. If <c>null</c>, the system will log "PluginName+System".</param>
 		/// <param name="caller">The Component that calls the method. The caller cannot be null.</param>
+		/// <param name="wiki">The wiki, <c>null</c> if is an application level log.</param>
 		/// <exception cref="ArgumentNullException">If <b>message</b> or <b>caller</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>message is empty.</b></exception>
-		public void LogEntry(string message, LogEntryType entryType, string user, object caller) {
+		public void LogEntry(string message, LogEntryType entryType, string user, object caller, string wiki) {
 			if(message == null) throw new ArgumentNullException("message");
 			if(message.Length == 0) throw new ArgumentException("Message cannot be empty");
 			if(caller == null) throw new ArgumentNullException("caller");
@@ -652,7 +653,7 @@ namespace ScrewTurn.Wiki {
 				name += "+" + Log.SystemUsername;
 			}
 			else name = user;
-			Log.LogEntry(message, t, name);
+			Log.LogEntry(message, t, name, wiki);
 		}
 
 		/// <summary>

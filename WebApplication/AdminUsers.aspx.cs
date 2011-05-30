@@ -22,10 +22,12 @@ namespace ScrewTurn.Wiki {
 		private int rangeEnd = 49;
 		private int selectedPage = 0;
 
+		private string currentWiki = null;
+
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			string currentWiki = DetectWiki();
+			currentWiki = DetectWiki();
 
 			PageSize = Settings.GetListSize(currentWiki);
 			rangeEnd = PageSize - 1;
@@ -92,7 +94,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The users.</returns>
 		private IList<UserInfo> GetUsers() {
-			List<UserInfo> allUsers = Users.GetUsers(DetectWiki());
+			List<UserInfo> allUsers = Users.GetUsers(currentWiki);
 
 			// Apply filter
 			List<UserInfo> result = new List<UserInfo>(allUsers.Count);
@@ -147,7 +149,7 @@ namespace ScrewTurn.Wiki {
 				txtCurrentUsername.Value = e.CommandArgument as string;
 				//rptAccounts.DataBind(); Not needed because the list is hidden on select
 
-				UserInfo user = Users.FindUser(DetectWiki(), txtCurrentUsername.Value);
+				UserInfo user = Users.FindUser(currentWiki, txtCurrentUsername.Value);
 
 				txtUsername.Text = user.Username;
 				txtUsername.Enabled = false;
@@ -176,7 +178,7 @@ namespace ScrewTurn.Wiki {
 				}
 
 				// Select user's global permissions
-				AuthReader authReader = new AuthReader(Collectors.CollectorsBox.GetSettingsProvider(DetectWiki()));
+				AuthReader authReader = new AuthReader(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 				aclActionsSelector.GrantedActions =
 					authReader.RetrieveGrantsForGlobals(user);
 				aclActionsSelector.DeniedActions =
@@ -230,7 +232,7 @@ namespace ScrewTurn.Wiki {
 		/// Populates the groups list according to the currently selected provider.
 		/// </summary>
 		private void PopulateGroups() {
-			List<UserGroup> groups = Users.GetUserGroups(Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider, DetectWiki()));
+			List<UserGroup> groups = Users.GetUserGroups(Collectors.CollectorsBox.UsersProviderCollector.GetProvider(providerSelector.SelectedProvider, currentWiki));
 
 			lstGroups.Items.Clear();
 			foreach(UserGroup group in groups) {
@@ -240,7 +242,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void cvUsername_ServerValidate(object sender, ServerValidateEventArgs e) {
-			e.IsValid = Users.FindUser(DetectWiki(), txtUsername.Text) == null;
+			e.IsValid = Users.FindUser(currentWiki, txtUsername.Text) == null;
 		}
 
 		protected void cvPassword2_ServerValidate(object sender, ServerValidateEventArgs e) {
@@ -248,9 +250,8 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnBulkDelete_Click(object sender, EventArgs e) {
-			Log.LogEntry("Bulk account deletion requested", EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Bulk account deletion requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
-			string currentWiki = DetectWiki();
 			DateTime now = DateTime.Now;
 			List<UserInfo> allUsers = Users.GetUsers(currentWiki);
 			int count = 0;
@@ -264,7 +265,7 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			Log.LogEntry("Bulk account deletion completed - " + count.ToString() + " accounts deleted", EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Bulk account deletion completed - " + count.ToString() + " accounts deleted", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			ResetUserList();
 			RefreshList();
@@ -280,10 +281,8 @@ namespace ScrewTurn.Wiki {
 			lblResult.CssClass = "";
 			lblResult.Text = "";
 
-			Log.LogEntry("User creation requested for " + txtUsername.Text, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("User creation requested for " + txtUsername.Text, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
-			string currentWiki = DetectWiki();
-			
 			// Add the new user, set its global permissions, set its membership
 			bool done = Users.AddUser(currentWiki, txtUsername.Text, txtDisplayName.Text, txtPassword1.Text, txtEmail.Text,
 				chkSetActive.Checked,
@@ -336,9 +335,9 @@ namespace ScrewTurn.Wiki {
 			lblResult.CssClass = "";
 			lblResult.Text = "";
 
-			Log.LogEntry("User update requested for " + txtCurrentUsername.Value, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("User update requested for " + txtCurrentUsername.Value, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
-			UserInfo currentUser = Users.FindUser(DetectWiki(), txtCurrentUsername.Value);
+			UserInfo currentUser = Users.FindUser(currentWiki, txtCurrentUsername.Value);
 
 			bool done = true;
 
@@ -388,9 +387,8 @@ namespace ScrewTurn.Wiki {
 			lblResult.Text = "";
 			lblResult.CssClass = "";
 
-			Log.LogEntry("User deletion requested for " + txtCurrentUsername.Value, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("User deletion requested for " + txtCurrentUsername.Value, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
-			string currentWiki = DetectWiki();
 			UserInfo currentUser = Users.FindUser(currentWiki, txtCurrentUsername.Value);
 
 			if(currentUser.Provider.UserAccountsReadOnly) return;
@@ -463,7 +461,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private bool RemoveAllAclEntries(UserInfo user) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(DetectWiki()));
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			return authWriter.RemoveEntriesForGlobals(user);
 		}
 
@@ -475,7 +473,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="denials">The denied actions.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private bool AddAclEntries(UserInfo user, string[] grants, string[] denials) {
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(DetectWiki()));
+			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			foreach(string action in grants) {
 				bool done = authWriter.SetPermissionForGlobals(AuthStatus.Grant, action, user);
 				if(!done) return false;

@@ -156,9 +156,7 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsValid) return;
 
-			Log.LogEntry("Wiki Configuration change requested", EntryType.General, SessionFacade.CurrentUsername);
-
-			string currentWiki = DetectWiki();
+			Log.LogEntry("Wiki Configuration change requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			// Save general configuration
 			GlobalSettings.ContactEmail = txtContactEmail.Text;

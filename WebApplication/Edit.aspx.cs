@@ -591,7 +591,7 @@ namespace ScrewTurn.Wiki {
 					saveMode = SaveMode.Normal;
 					attachmentManager.CurrentPage = pg;
 				}
-				Log.LogEntry("Page update requested for " + txtName.Text, EntryType.General, username);
+				Log.LogEntry("Page update requested for " + txtName.Text, EntryType.General, username, currentWiki);
 
 				Pages.ModifyPage(currentWiki, pg, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
 					GetKeywords(), txtDescription.Text, saveMode);
@@ -631,7 +631,7 @@ namespace ScrewTurn.Wiki {
 				if(currentPage == null) currentPage = Pages.FindPage(currentWiki, NameTools.GetFullName(DetectNamespace(), txtName.Text));
 
 				// Save data
-				Log.LogEntry("Page update requested for " + currentPage.FullName, EntryType.General, username);
+				Log.LogEntry("Page update requested for " + currentPage.FullName, EntryType.General, username, currentWiki);
 				if(!isDraft && currentSection != -1) {
 					PageContent cont = Content.GetPageContent(currentPage);
 					StringBuilder sb = new StringBuilder(cont.Content.Length);

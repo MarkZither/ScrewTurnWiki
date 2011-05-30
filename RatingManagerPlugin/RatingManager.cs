@@ -309,7 +309,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		/// <param name="message">The message.</param>
 		private void LogWarning(string message) {
 			if(_enableLogging) {
-				_host.LogEntry(message, LogEntryType.Warning, null, this);
+				_host.LogEntry(message, LogEntryType.Warning, null, this, _wiki);
 			}
 		}
 

@@ -200,7 +200,7 @@ namespace ScrewTurn.Wiki {
 						cultureNames.Add(sb.ToString());
 					}
 					catch(Exception ex) {
-						Log.LogEntry("Error parsing culture info from " + s + Environment.NewLine + ex.Message, EntryType.Error, Log.SystemUsername);
+						Log.LogEntry("Error parsing culture info from " + s + Environment.NewLine + ex.Message, EntryType.Error, Log.SystemUsername, null);
 					}
 				}
 
@@ -357,7 +357,7 @@ namespace ScrewTurn.Wiki {
 		public static string UrlEncode(string input) {
 			if(HttpContext.Current != null && HttpContext.Current.Server != null) return HttpContext.Current.Server.UrlEncode(input).Replace("+", "%20");
 			else {
-				Log.LogEntry("HttpContext.Current or HttpContext.Current.Server were null (Tools.UrlEncode)", EntryType.Warning, Log.SystemUsername);
+				Log.LogEntry("HttpContext.Current or HttpContext.Current.Server were null (Tools.UrlEncode)", EntryType.Warning, Log.SystemUsername, null);
 				return input;
 			}
 		}

@@ -91,7 +91,7 @@ namespace ScrewTurn.Wiki {
 
 			if(details != null) size = details.Size;
 			else {
-				Log.LogEntry("Attempted to download an inexistent file/attachment (" + (pageInfo != null ? pageInfo.FullName + "/" : "") + filename + ")", EntryType.Warning, Log.SystemUsername);
+				Log.LogEntry("Attempted to download an inexistent file/attachment (" + (pageInfo != null ? pageInfo.FullName + "/" : "") + filename + ")", EntryType.Warning, Log.SystemUsername, currentWiki);
 				Response.StatusCode = 404;
 				Response.Write("File not found.");
 				return;
@@ -129,7 +129,7 @@ namespace ScrewTurn.Wiki {
 					retrieved = provider.RetrievePageAttachment(pageInfo, filename, Response.OutputStream, countHit);
 				}
 				catch(ArgumentException ex) {
-					Log.LogEntry("Attempted to download an inexistent attachment (" + pageInfo.FullName + "/" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername);
+					Log.LogEntry("Attempted to download an inexistent attachment (" + pageInfo.FullName + "/" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername, currentWiki);
 				}
 			}
 			else {
@@ -137,7 +137,7 @@ namespace ScrewTurn.Wiki {
 					retrieved = provider.RetrieveFile(filename, Response.OutputStream, countHit);
 				}
 				catch(ArgumentException ex) {
-					Log.LogEntry("Attempted to download an inexistent file/attachment (" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername);
+					Log.LogEntry("Attempted to download an inexistent file/attachment (" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername, currentWiki);
 				}
 			}
 

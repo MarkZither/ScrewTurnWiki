@@ -51,7 +51,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The number of updated DLLs.</returns>
 		public int UpdateAll() {
-			Log.LogEntry("Starting automatic providers update", EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Starting automatic providers update", EntryType.General, Log.SystemUsername, null);
 
 			int updatedDlls = 0;
 
@@ -71,7 +71,7 @@ namespace ScrewTurn.Wiki {
 						string dllName = null;
 
 						if(!fileNamesForProviders.TryGetValue(prov.GetType().FullName, out dllName)) {
-							Log.LogEntry("Could not determine DLL name for provider " + prov.GetType().FullName, EntryType.Error, Log.SystemUsername);
+							Log.LogEntry("Could not determine DLL name for provider " + prov.GetType().FullName, EntryType.Error, Log.SystemUsername, null);
 							continue;
 						}
 
@@ -83,12 +83,12 @@ namespace ScrewTurn.Wiki {
 					}
 					else {
 						// Skip DLL (already updated)
-						Log.LogEntry("Skipping provider " + prov.GetType().FullName + ": DLL already updated", EntryType.General, Log.SystemUsername);
+						Log.LogEntry("Skipping provider " + prov.GetType().FullName + ": DLL already updated", EntryType.General, Log.SystemUsername, null);
 					}
 				}
 			}
 
-			Log.LogEntry("Automatic providers update completed: updated " + updatedDlls.ToString() + " DLLs", EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Automatic providers update completed: updated " + updatedDlls.ToString() + " DLLs", EntryType.General, Log.SystemUsername, null);
 
 			return updatedDlls;
 		}
@@ -105,7 +105,7 @@ namespace ScrewTurn.Wiki {
 				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
 				if(response.StatusCode != HttpStatusCode.OK) {
-					Log.LogEntry("Update failed for provider " + provider.GetType().FullName + ": Status Code=" + response.StatusCode.ToString(), EntryType.Error, Log.SystemUsername);
+					Log.LogEntry("Update failed for provider " + provider.GetType().FullName + ": Status Code=" + response.StatusCode.ToString(), EntryType.Error, Log.SystemUsername, null);
 					response.Close();
 					return false;
 				}
@@ -115,13 +115,13 @@ namespace ScrewTurn.Wiki {
 				reader.Close();
 
 				bool done = globalSettingsProvider.StorePluginAssembly(filename, content);
-				if(done) Log.LogEntry("Provider " + provider.GetType().FullName + " updated", EntryType.General, Log.SystemUsername);
-				else Log.LogEntry("Update failed for provider " + provider.GetType().FullName + ": could not store assembly", EntryType.Error, Log.SystemUsername);
+				if(done) Log.LogEntry("Provider " + provider.GetType().FullName + " updated", EntryType.General, Log.SystemUsername, null);
+				else Log.LogEntry("Update failed for provider " + provider.GetType().FullName + ": could not store assembly", EntryType.Error, Log.SystemUsername, null);
 
 				return done;
 			}
 			catch(Exception ex) {
-				Log.LogEntry("Update failed for provider " + provider.GetType().FullName + ": " + ex.ToString(), EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Update failed for provider " + provider.GetType().FullName + ": " + ex.ToString(), EntryType.Error, Log.SystemUsername, null);
 				return false;
 			}
 		}

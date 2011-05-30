@@ -89,7 +89,7 @@ namespace ScrewTurn.Wiki {
 					retrieved = provider.RetrieveFile(filename, ms, false);
 				}
 				catch(ArgumentException ex) {
-					Log.LogEntry("Attempted to create thumb of inexistent file (" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername);
+					Log.LogEntry("Attempted to create thumb of inexistent file (" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername, currentWiki);
 				}
 
 				if(!retrieved) {
@@ -112,7 +112,7 @@ namespace ScrewTurn.Wiki {
 					retrieved = provider.RetrievePageAttachment(pageInfo, filename, ms, false);
 				}
 				catch(ArgumentException ex) {
-					Log.LogEntry("Attempted to create thumb of inexistent attachment (" + page + "/" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername);
+					Log.LogEntry("Attempted to create thumb of inexistent attachment (" + page + "/" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername, currentWiki);
 				}
 
 				if(!retrieved) {
@@ -140,25 +140,25 @@ namespace ScrewTurn.Wiki {
 				// Big thumb (outer size 200x200)
 				result = new Bitmap(200, 200, pixelFormat);
 			}
-            else if(size == "imgeditprev") {
-                // Image Editor Preview thumb (outer size from Request["dim"], if null 200x200)
-                if(!string.IsNullOrEmpty(Request["Width"]) && !string.IsNullOrEmpty(Request["Height"])) {
-                    try {
-                        result = new Bitmap(
+			else if(size == "imgeditprev") {
+				// Image Editor Preview thumb (outer size from Request["dim"], if null 200x200)
+				if(!string.IsNullOrEmpty(Request["Width"]) && !string.IsNullOrEmpty(Request["Height"])) {
+					try {
+						result = new Bitmap(
 							rotation != 90 && rotation != 270 ? int.Parse(Request["Width"]) : int.Parse(Request["Height"]),
 							rotation != 90 && rotation != 270 ? int.Parse(Request["Height"]) : int.Parse(Request["Width"]),
 							pixelFormat);
-                    }
-                    catch(FormatException) {
-                        result = new Bitmap(200, 200, pixelFormat);
-                    }
-                }
-                else result = new Bitmap(200, 200, pixelFormat);
-            }
-            else {
-                // Small thumb (outer size 48x48)
-                result = new Bitmap(48, 48, pixelFormat);
-            }
+					}
+					catch(FormatException) {
+						result = new Bitmap(200, 200, pixelFormat);
+					}
+				}
+				else result = new Bitmap(200, 200, pixelFormat);
+			}
+			else {
+				// Small thumb (outer size 48x48)
+				result = new Bitmap(48, 48, pixelFormat);
+			}
 
 			// Get Graphics object for destination bitmap
 			Graphics g = Graphics.FromImage(result);

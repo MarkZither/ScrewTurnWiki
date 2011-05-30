@@ -155,7 +155,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnSave_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
-			Log.LogEntry("Configuration change requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Configuration change requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			string error;
 			if(ProviderLoader.TryChangePluginConfiguration(txtCurrentProvider.Value, txtConfigurationString.Text, currentWiki, out error)) {
@@ -177,7 +177,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnDisable_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
-			Log.LogEntry("Deactivation requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Deactivation requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, false);
 
@@ -193,7 +193,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnEnable_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
-			Log.LogEntry("Activation requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Activation requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 			
 			ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, true);
 
@@ -209,7 +209,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnUnload_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
-			Log.LogEntry("Unloading requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Unloading requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			ProviderLoader.UnloadPlugin(txtCurrentProvider.Value);
 			PerformPostProviderChangeActions();
@@ -230,7 +230,7 @@ namespace ScrewTurn.Wiki {
 			lblAutoUpdateResult.CssClass = "";
 			lblAutoUpdateResult.Text = "";
 
-			Log.LogEntry("Providers auto-update requested", EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Providers auto-update requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			ProviderUpdater updater = new ProviderUpdater(GlobalSettings.Provider,
 				Collectors.FileNames,

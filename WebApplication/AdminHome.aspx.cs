@@ -15,10 +15,12 @@ namespace ScrewTurn.Wiki {
 
 	public partial class AdminHome : BasePage {
 
+		string currentWiki;
+
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			string currentWiki = DetectWiki();
+			currentWiki = DetectWiki();
 
 			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) UrlTools.Redirect("AccessDenied.aspx");
 
@@ -34,7 +36,6 @@ namespace ScrewTurn.Wiki {
 		/// Displays the orphan pages count.
 		/// </summary>
 		private void DisplayOrphansCount() {
-			string currentWiki = DetectWiki();
 			int orphans = Pages.GetOrphanedPages(currentWiki, null as NamespaceInfo).Length;
 			foreach(NamespaceInfo nspace in Pages.GetNamespaces(currentWiki)) {
 				orphans += Pages.GetOrphanedPages(currentWiki, nspace).Length;
@@ -44,8 +45,6 @@ namespace ScrewTurn.Wiki {
 
 		protected void rptPages_DataBinding(object sender, EventArgs e) {
 			List<WantedPageRow> result = new List<WantedPageRow>(50);
-
-			string currentWiki = DetectWiki();
 
 			Dictionary<string, List<string>> links = Pages.GetWantedPages(currentWiki, null);
 			foreach(KeyValuePair<string, List<string>> pair in links) {
@@ -63,8 +62,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnRebuildPageLinks_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
-
 			RebuildPageLinks(Pages.GetPages(currentWiki, null));
 			foreach(NamespaceInfo nspace in Pages.GetNamespaces(currentWiki)) {
 				RebuildPageLinks(Pages.GetPages(currentWiki, nspace));
@@ -78,8 +75,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="pages">The pages.</param>
 		private void RebuildPageLinks(IList<PageInfo> pages) {
-			string currentWiki = DetectWiki();
-
 			foreach(PageInfo page in pages) {
 				PageContent content = Content.GetPageContent(page);
 				Pages.StorePageOutgoingLinks(currentWiki, page, content.Content);				
@@ -89,7 +84,7 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_DataBinding(object sender, EventArgs e) {
 			List<IndexRow> result = new List<IndexRow>(5);
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(DetectWiki())) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
 				result.Add(new IndexRow(prov));
 			}
 
@@ -97,12 +92,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptIndex_ItemCommand(object sender, CommandEventArgs e) {
-			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername());
+			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
 
-			IPagesStorageProviderV30 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, DetectWiki());
+			IPagesStorageProviderV30 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
 			provider.RebuildIndex();
 
-			Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername, currentWiki);
 
 			rptIndex.DataBind();
 		}

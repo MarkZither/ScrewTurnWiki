@@ -33,7 +33,7 @@ namespace ScrewTurn.Wiki {
 			// Test whether the default Users Provider is read-only
 			IUsersStorageProviderV30 p = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, currentWiki);
 			if(p.UserAccountsReadOnly) {
-				Log.LogEntry("Default Users Provider (" + p.Information.Name + ") is read-only, aborting Account Creation", EntryType.Warning, Log.SystemUsername);
+				Log.LogEntry("Default Users Provider (" + p.Information.Name + ") is read-only, aborting Account Creation", EntryType.Warning, Log.SystemUsername, currentWiki);
 				UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Error.aspx"));
 			}
 
@@ -98,7 +98,7 @@ namespace ScrewTurn.Wiki {
 			if(!Page.IsValid) return;
 
 			// Ready to save the user
-			Log.LogEntry("Account creation requested for " + txtUsername.Text, EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Account creation requested for " + txtUsername.Text, EntryType.General, Log.SystemUsername, currentWiki);
 			Users.AddUser(currentWiki, txtUsername.Text, txtDisplayName.Text, txtPassword1.Text, txtEmail1.Text,
 				Settings.GetAccountActivationMode(currentWiki) == AccountActivationMode.Auto, null);
 

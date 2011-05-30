@@ -793,7 +793,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		/// <param name="args">The args.</param>
 		private void LogEntry(LogEntryType entryType, string message, params object[] args) {
 			string entry = String.Format(message, args);
-			m_Host.LogEntry(entry, entryType, null, this);
+			m_Host.LogEntry(entry, entryType, null, this, m_wiki);
 		}
 
 

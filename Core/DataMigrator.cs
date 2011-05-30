@@ -64,7 +64,7 @@ namespace ScrewTurn.Wiki {
 					PageInfo newPage = destination.AddPage(NameTools.GetNamespace(pages[i].FullName),
 						NameTools.GetLocalName(pages[i].FullName), pages[i].CreationDateTime);
 					if(newPage == null) {
-						Log.LogEntry("Unable to move Page " + pages[i].FullName + " - Skipping", EntryType.Error, Log.SystemUsername);
+						Log.LogEntry("Unable to move Page " + pages[i].FullName + " - Skipping", EntryType.Error, Log.SystemUsername, source.CurrentWiki);
 						continue;
 					}
 

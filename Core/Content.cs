@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki {
 
 			// result should NEVER be null
 			if(result == null) {
-				Log.LogEntry("PageContent could not be retrieved for page " + pageInfo.FullName + " - returning empty", EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("PageContent could not be retrieved for page " + pageInfo.FullName + " - returning empty", EntryType.Error, Log.SystemUsername, pageInfo.Provider.CurrentWiki);
 				result = PageContent.GetEmpty(pageInfo);
 			}
 

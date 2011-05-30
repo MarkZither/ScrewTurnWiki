@@ -79,7 +79,7 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			Log.LogEntry("Provider DLL upload requested " + upDll.FileName, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Provider DLL upload requested " + upDll.FileName, EntryType.General, SessionFacade.CurrentUsername, null);
 
 			string[] asms = GlobalSettings.Provider.ListPluginAssemblies();
 			if(Array.Find<string>(asms, delegate(string v) {
@@ -193,13 +193,13 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnMigratePages_Click(object sender, EventArgs e) {
-			Log.LogEntry("Pages data migration requested from " + lstPagesSource.SelectedValue + " to " + lstPagesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Pages data migration requested from " + lstPagesSource.SelectedValue + " to " + lstPagesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, null);
 
 			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
 				IPagesStorageProviderV30 from = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue, wiki.WikiName);
 				IPagesStorageProviderV30 to = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue, wiki.WikiName);
 
-				Log.LogEntry("Pages data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername);	
+				Log.LogEntry("Pages data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername, null);	
 
 				DataMigrator.MigratePagesStorageProviderData(from, to);
 			}
@@ -208,13 +208,13 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnMigrateUsers_Click(object sender, EventArgs e) {
-			Log.LogEntry("Users data migration requested from " + lstUsersSource.SelectedValue + " to " + lstUsersDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Users data migration requested from " + lstUsersSource.SelectedValue + " to " + lstUsersDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, null);
 
 			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
 				IUsersStorageProviderV30 from = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue, wiki.WikiName);
 				IUsersStorageProviderV30 to = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue, wiki.WikiName);
 
-				Log.LogEntry("Users data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername);
+				Log.LogEntry("Users data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername, null);
 
 				DataMigrator.MigrateUsersStorageProviderData(wiki.WikiName, from, to, true);
 			}
@@ -224,13 +224,13 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnMigrateFiles_Click(object sender, EventArgs e) {
-			Log.LogEntry("Files data migration requested from " + lstFilesSource.SelectedValue + " to " + lstFilesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Files data migration requested from " + lstFilesSource.SelectedValue + " to " + lstFilesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, null);
 
 			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
 				IFilesStorageProviderV30 from = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue, wiki.WikiName);
 				IFilesStorageProviderV30 to = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue, wiki.WikiName);
 
-				Log.LogEntry("Files data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername);
+				Log.LogEntry("Files data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername, null);
 
 				DataMigrator.MigrateFilesStorageProviderData(from, to, Settings.GetProvider(wiki.WikiName));
 			}
@@ -250,13 +250,13 @@ namespace ScrewTurn.Wiki {
 			//    }
 			//}
 
-			Log.LogEntry("Settings data copy requested to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Settings data copy requested to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername, null);
 
 			try {
 				to.Init(Host.Instance, txtSettingsDestinationConfig.Text, currentWiki);
 			}
 			catch(InvalidConfigurationException ex) {
-				Log.LogEntry("Provider rejected configuration: " + ex.ToString(), EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Provider rejected configuration: " + ex.ToString(), EntryType.Error, Log.SystemUsername, null);
 				lblCopySettingsResult.CssClass = "resulterror";
 				lblCopySettingsResult.Text = Properties.Messages.ProviderRejectedConfiguration;
 				return;

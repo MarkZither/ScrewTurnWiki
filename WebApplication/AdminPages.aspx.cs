@@ -23,10 +23,12 @@ namespace ScrewTurn.Wiki {
 
 		private PageInfo externallySelectedPage = null;
 
+		private string currentWiki;
+
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			string currentWiki = DetectWiki();
+			currentWiki = DetectWiki();
 
 			PageSize = Settings.GetListSize(currentWiki);
 			rangeEnd = PageSize - 1;
@@ -67,8 +69,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The pages.</returns>
 		private IList<PageInfo> GetPages() {
-			string currentWiki = DetectWiki();
-
 			NamespaceInfo nspace = Pages.FindNamespace(currentWiki, lstNamespace.SelectedValue);
 			List<PageInfo> pages = Pages.GetPages(currentWiki, nspace);
 
@@ -94,8 +94,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns><c>true</c> if a page was loaded, <c>false</c> otherwise.</returns>
 		private bool LoadExternallySelectedPage() {
-			string currentWiki = DetectWiki();
-
 			if(!string.IsNullOrEmpty(Request["Rollback"])) {
 				externallySelectedPage = Pages.FindPage(currentWiki, Request["Rollback"]);
 				if(externallySelectedPage != null) {
@@ -133,9 +131,9 @@ namespace ScrewTurn.Wiki {
 			if(backups.Count > 0) {
 				int targetRevision = backups[backups.Count - 1];
 
-				Log.LogEntry("Page rollback requested for " + txtCurrentPage.Value + " to rev. " + targetRevision.ToString(), EntryType.General, SessionFacade.GetCurrentUsername());
+				Log.LogEntry("Page rollback requested for " + txtCurrentPage.Value + " to rev. " + targetRevision.ToString(), EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
 
-				Pages.Rollback(DetectWiki(), externallySelectedPage, targetRevision);
+				Pages.Rollback(currentWiki, externallySelectedPage, targetRevision);
 
 				UrlTools.Redirect(externallySelectedPage.FullName + GlobalSettings.PageExtension);
 			}
@@ -162,8 +160,6 @@ namespace ScrewTurn.Wiki {
 			pageSelector.SelectPage(0);
 
 			rptPages.DataBind();
-
-			string currentWiki = DetectWiki();
 
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
@@ -197,8 +193,6 @@ namespace ScrewTurn.Wiki {
 			NamespaceInfo nspace = DetectNamespaceInfo();
 
 			List<PageRow> result = new List<PageRow>(PageSize);
-
-			string currentWiki = DetectWiki();
 
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
@@ -245,15 +239,13 @@ namespace ScrewTurn.Wiki {
 				ActivatePageEditor();
 			}
 			else if(e.CommandName == "Perms") {
-				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(DetectWiki()))) return;
+				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 				ActivatePagePermissionsManager();
 			}
 		}
 
 		protected void btnPublic_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
-
 			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 
 			RemoveAllPermissions(page);
@@ -270,7 +262,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnAsNamespace_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(DetectWiki(), txtCurrentPage.Value);
+			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 
 			RemoveAllPermissions(page);
 
@@ -278,8 +270,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnLocked_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
-
 			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 
 			RemoveAllPermissions(page);
@@ -308,8 +298,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		private void RemoveAllPermissions(PageInfo page) {
-			string currentWiki = DetectWiki();
-
 			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			authWriter.RemoveEntriesForPage(Users.FindUserGroup(currentWiki, Settings.GetAnonymousGroup(currentWiki)), page);
 			authWriter.RemoveEntriesForPage(Users.FindUserGroup(currentWiki, Settings.GetUsersGroup(currentWiki)), page);
@@ -322,8 +310,6 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The selected page.</param>
 		/// <returns><c>true</c> if there is at least one valid target namespace, <c>false</c> otherwise.</returns>
 		private bool PopulateTargetNamespaces(PageInfo page) {
-			string currentWiki = DetectWiki();
-
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
@@ -352,8 +338,6 @@ namespace ScrewTurn.Wiki {
 		/// Activates the page editor.
 		/// </summary>
 		private void ActivatePageEditor() {
-			string currentWiki = DetectWiki();
-
 			lblCurrentPage.Text = txtCurrentPage.Value;
 			txtNewName.Text = NameTools.GetLocalName(txtCurrentPage.Value);
 
@@ -427,8 +411,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="currentPage">The current page name.</param>
 		private void LoadDraft(string currentPage) {
-			string currentWiki = DetectWiki();
-
 			PageInfo page = Pages.FindPage(currentWiki, currentPage);
 			PageContent draft = Pages.GetDraft(page);
 
@@ -453,7 +435,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="pageName">The page.</param>
 		private void LoadBackups(string pageName) {
-			string currentWiki = DetectWiki();
 			PageInfo page = Pages.FindPage(currentWiki, pageName);
 			List<int> backups = Pages.GetBackups(page);
 
@@ -552,14 +533,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnApprove_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
-
 			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
 			PageContent draft = Pages.GetDraft(page);
 
-			Log.LogEntry("Page draft approval requested for " + draft.PageInfo.FullName, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Page draft approval requested for " + draft.PageInfo.FullName, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			bool done = Pages.ModifyPage(currentWiki, draft.PageInfo, draft.Title, draft.User, draft.LastModified, draft.Comment,
 				draft.Content, draft.Keywords, draft.Description, SaveMode.Backup);
@@ -580,12 +559,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnReject_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
-
 			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
-			Log.LogEntry("Page draft reject requested for " + page.FullName, EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Page draft reject requested for " + page.FullName, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			Pages.DeleteDraft(page);
 
@@ -600,8 +577,6 @@ namespace ScrewTurn.Wiki {
 			// Check name for change, validity and existence of another page with same name
 			// Perform rename
 			// Create shadow page, if needed
-
-			string currentWiki = DetectWiki();
 
 			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
@@ -625,7 +600,7 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			Log.LogEntry("Page rename requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Page rename requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername, currentWiki);
 
 			PageInfo oldPage = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			PageContent oldContent = Content.GetPageContent(oldPage);
@@ -677,8 +652,6 @@ namespace ScrewTurn.Wiki {
 			lblMigrateResult.CssClass = "";
 			lblMigrateResult.Text = "";
 
-			string currentWiki = DetectWiki();
-
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 
@@ -710,8 +683,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnRollback_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
-
 			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
@@ -721,7 +692,7 @@ namespace ScrewTurn.Wiki {
 			// This should never occur
 			if(!int.TryParse(lstRevision.SelectedValue, out targetRevision)) return;
 
-			Log.LogEntry("Page rollback requested for " + txtCurrentPage.Value + " to rev. " + targetRevision.ToString(), EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Page rollback requested for " + txtCurrentPage.Value + " to rev. " + targetRevision.ToString(), EntryType.General, Log.SystemUsername, currentWiki);
 
 			bool done = Pages.Rollback(currentWiki, page, targetRevision);
 
@@ -738,8 +709,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnDeleteBackups_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
-
 			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
@@ -749,7 +718,7 @@ namespace ScrewTurn.Wiki {
 			// This should never occur
 			if(!int.TryParse(lstBackup.SelectedValue, out targetRevision)) return;
 
-			Log.LogEntry("Page backup deletion requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Page backup deletion requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername, currentWiki);
 
 			bool done = false;
 			if(rdoAllBackups.Checked) {
@@ -772,13 +741,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnClearDiscussion_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
-
 			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			if(!authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
-			Log.LogEntry("Page discussion cleanup requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Page discussion cleanup requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername, currentWiki);
 
 			bool done = Pages.RemoveAllMessages(page);
 
@@ -795,14 +762,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnDeletePage_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
-
 			PageInfo page = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 			if(!authChecker.CheckActionForNamespace(Pages.FindNamespace(currentWiki, NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;
 
-			Log.LogEntry("Page deletion requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
+			Log.LogEntry("Page deletion requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername, currentWiki);
 
 			bool done = Pages.DeletePage(currentWiki, page);
 
@@ -839,7 +804,6 @@ namespace ScrewTurn.Wiki {
 			// Load valid namespaces, filtering the current one
 			lstBulkMigrateTargetNamespace.Items.Clear();
 
-			string currentWiki = DetectWiki();
 			bool canManageAllPages = false;
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
@@ -899,9 +863,7 @@ namespace ScrewTurn.Wiki {
 		private bool IsDefaultPage(PageInfo page) {
 			string localName, nspace;
 			NameTools.ExpandFullName(page.FullName, out nspace, out localName);
-
-			string currentWiki = DetectWiki();
-
+			
 			if(string.IsNullOrEmpty(nspace)) {
 				return localName.ToLowerInvariant() == Settings.GetDefaultPage(currentWiki).ToLowerInvariant();
 			}
@@ -915,7 +877,6 @@ namespace ScrewTurn.Wiki {
 			lblBulkMigrateResult.CssClass = "";
 			lblBulkMigrateResult.Text = "";
 
-			string currentWiki = DetectWiki();
 			List<PageInfo> selectedPages = new List<PageInfo>(20);
 			foreach(string pg in pageListBuilder.SelectedPages) {
 				PageInfo page = Pages.FindPage(currentWiki, pg);
@@ -932,7 +893,7 @@ namespace ScrewTurn.Wiki {
 			if(nspaceName == ".") nspaceName = null;
 			NamespaceInfo selectedNamespace = Pages.FindNamespace(currentWiki, nspaceName);
 
-			Log.LogEntry("Bulk migration requested", EntryType.General, SessionFacade.CurrentUsername);
+			Log.LogEntry("Bulk migration requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			bool allDone = true;
 			foreach(PageInfo pg in selectedPages) {

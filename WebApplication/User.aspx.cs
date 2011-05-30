@@ -105,7 +105,7 @@ namespace ScrewTurn.Wiki {
 
 			UserInfo loggedUser = SessionFacade.GetCurrentUser(currentWiki);
 
-			Log.LogEntry("Sending Email to " + currentUser.Username, EntryType.General, loggedUser.Username);
+			Log.LogEntry("Sending Email to " + currentUser.Username, EntryType.General, loggedUser.Username, currentWiki);
 			EmailTools.AsyncSendEmail(currentUser.Email,
 				"\"" + Users.GetDisplayName(loggedUser) + "\" <" + GlobalSettings.SenderEmail + ">",
 				txtSubject.Text,

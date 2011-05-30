@@ -292,7 +292,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// </summary>
 		/// <param name="message">The message.</param>
 		private void LogWarning(string message) {
-			_host.LogEntry(message, LogEntryType.Warning, null, this);
+			_host.LogEntry(message, LogEntryType.Warning, null, this, _wiki);
 		}
 
 	}

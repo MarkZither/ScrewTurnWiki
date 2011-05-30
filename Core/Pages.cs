@@ -105,11 +105,11 @@ namespace ScrewTurn.Wiki {
 
 				Host.Instance.OnNamespaceActivity(result, null, NamespaceActivity.NamespaceAdded);
 
-				Log.LogEntry("Namespace " + name + " created", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Namespace " + name + " created", EntryType.General, Log.SystemUsername, wiki);
 				return true;
 			}
 			else {
-				Log.LogEntry("Namespace creation failed for " + name, EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Namespace creation failed for " + name, EntryType.Error, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -139,11 +139,11 @@ namespace ScrewTurn.Wiki {
 
 				Host.Instance.OnNamespaceActivity(realNspace, null, NamespaceActivity.NamespaceRemoved);
 
-				Log.LogEntry("Namespace " + realNspace.Name + " removed", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Namespace " + realNspace.Name + " removed", EntryType.General, Log.SystemUsername, wiki);
 				return true;
 			}
 			else {
-				Log.LogEntry("Namespace deletion failed for " + realNspace.Name, EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Namespace deletion failed for " + realNspace.Name, EntryType.General, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -197,11 +197,11 @@ namespace ScrewTurn.Wiki {
 
 				Host.Instance.OnNamespaceActivity(newNspace, oldName, NamespaceActivity.NamespaceRenamed);
 
-				Log.LogEntry("Namespace " + nspace.Name + " renamed to " + newName, EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Namespace " + nspace.Name + " renamed to " + newName, EntryType.General, Log.SystemUsername, wiki);
 				return true;
 			}
 			else {
-				Log.LogEntry("Namespace rename failed for " + nspace.Name, EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Namespace rename failed for " + nspace.Name, EntryType.General, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -313,11 +313,11 @@ namespace ScrewTurn.Wiki {
 			if(result != null) {
 				Host.Instance.OnNamespaceActivity(result, null, NamespaceActivity.NamespaceModified);
 
-				Log.LogEntry("Default Page set for " + nspace.Name + " (" + page.FullName + ")", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Default Page set for " + nspace.Name + " (" + page.FullName + ")", EntryType.General, Log.SystemUsername, wiki);
 				return true;
 			}
 			else {
-				Log.LogEntry("Default Page setting failed for " + nspace.Name + " (" + page.FullName + ")", EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Default Page setting failed for " + nspace.Name + " (" + page.FullName + ")", EntryType.Error, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -422,11 +422,11 @@ namespace ScrewTurn.Wiki {
 
 			bool done = page.Provider.DeleteBackups(page, firstToDelete);
 			if(done) {
-				Log.LogEntry("Backups (0-" + firstToDelete.ToString() + ") deleted for " + page.FullName, EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Backups (0-" + firstToDelete.ToString() + ") deleted for " + page.FullName, EntryType.General, Log.SystemUsername, page.Provider.CurrentWiki);
 				Host.Instance.OnPageActivity(page, null, SessionFacade.GetCurrentUsername(), PageActivity.PageBackupsDeleted);
 			}
 			else {
-				Log.LogEntry("Backups (0-" + firstToDelete.ToString() + ") deletion failed for " + page.FullName, EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Backups (0-" + firstToDelete.ToString() + ") deletion failed for " + page.FullName, EntryType.Error, Log.SystemUsername, page.Provider.CurrentWiki);
 			}
 			return done;
 		}
@@ -457,13 +457,13 @@ namespace ScrewTurn.Wiki {
 
 				Settings.GetProvider(wiki).StoreOutgoingLinks(page.FullName, outgoingLinks);
 
-				Log.LogEntry("Rollback executed for " + page.FullName + " at revision " + version.ToString(), EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Rollback executed for " + page.FullName + " at revision " + version.ToString(), EntryType.General, Log.SystemUsername, wiki);
 				RecentChanges.AddChange(wiki, page.FullName, pageContent.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRolledBack, "");
 				Host.Instance.OnPageActivity(page, null, SessionFacade.GetCurrentUsername(), PageActivity.PageRolledBack);
 				return true;
 			}
 			else {
-				Log.LogEntry("Rollback failed for " + page.FullName + " at revision " + version.ToString(), EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Rollback failed for " + page.FullName + " at revision " + version.ToString(), EntryType.Error, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -526,12 +526,12 @@ namespace ScrewTurn.Wiki {
 				authWriter.ClearEntriesForPage(fullName);
 
 				Content.InvalidateAllPages();
-				Log.LogEntry("Page " + fullName + " created", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Page " + fullName + " created", EntryType.General, Log.SystemUsername, wiki);
 				Host.Instance.OnPageActivity(newPage, null, SessionFacade.GetCurrentUsername(), PageActivity.PageCreated);
 				return true;
 			}
 			else {
-				Log.LogEntry("Page creation failed for " + fullName, EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Page creation failed for " + fullName, EntryType.Error, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -567,13 +567,13 @@ namespace ScrewTurn.Wiki {
 				// Remove outgoing links
 				Settings.GetProvider(wiki).DeleteOutgoingLinks(page.FullName);
 
-				Log.LogEntry("Page " + page.FullName + " deleted", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Page " + page.FullName + " deleted", EntryType.General, Log.SystemUsername, wiki);
 				RecentChanges.AddChange(wiki, page.FullName, title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageDeleted, "");
 				Host.Instance.OnPageActivity(page, null, SessionFacade.GetCurrentUsername(), PageActivity.PageDeleted);
 				return true;
 			}
 			else {
-				Log.LogEntry("Page deletion failed for " + page.FullName, EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Page deletion failed for " + page.FullName, EntryType.Error, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -614,13 +614,13 @@ namespace ScrewTurn.Wiki {
 
 				// Page redirect is implemented directly in AdminPages.aspx.cs
 
-				Log.LogEntry("Page " + oldName + " renamed to " + name, EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Page " + oldName + " renamed to " + name, EntryType.General, Log.SystemUsername, wiki);
 				RecentChanges.AddChange(wiki, page.FullName, originalContent.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRenamed, "");
 				Host.Instance.OnPageActivity(page, oldName, SessionFacade.GetCurrentUsername(), PageActivity.PageRenamed);
 				return true;
 			}
 			else {
-				Log.LogEntry("Page rename failed for " + page.FullName + " (" + name + ")", EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Page rename failed for " + page.FullName + " (" + name + ")", EntryType.Error, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -679,7 +679,7 @@ namespace ScrewTurn.Wiki {
 			bool done = page.Provider.ModifyPage(page, title, username, dateTime, comment, content, keywords, description, saveMode);
 
 			if(done) {
-				Log.LogEntry("Page Content updated for " + page.FullName, EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Page Content updated for " + page.FullName, EntryType.General, Log.SystemUsername, wiki);
 
 				StorePageOutgoingLinks(wiki, page, content);
 
@@ -697,7 +697,7 @@ namespace ScrewTurn.Wiki {
 					DeleteOldBackupsIfNeeded(wiki, page);
 				}
 			}
-			else Log.LogEntry("Page Content update failed for " + page.FullName, EntryType.Error, Log.SystemUsername);
+			else Log.LogEntry("Page Content update failed for " + page.FullName, EntryType.Error, Log.SystemUsername, wiki);
 			return done;
 		}
 
@@ -726,7 +726,7 @@ namespace ScrewTurn.Wiki {
 
 			bool doneLinks = Settings.GetProvider(wiki).StoreOutgoingLinks(page.FullName, cleanLinkedPages.ToArray());
 			if(!doneLinks) {
-				Log.LogEntry("Could not store outgoing links for page " + page.FullName, EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Could not store outgoing links for page " + page.FullName, EntryType.Error, Log.SystemUsername, wiki);
 			}
 		}
 
@@ -1199,7 +1199,7 @@ namespace ScrewTurn.Wiki {
 
 			CategoryInfo newCat = provider.AddCategory(nspace, name);
 			if(newCat != null) {
-				Log.LogEntry("Category " + fullName + " created", EntryType.General, Log.SystemUsername);
+				Log.LogEntry("Category " + fullName + " created", EntryType.General, Log.SystemUsername, wiki);
 
 				// Because of transclusion and other page-linking features, it is necessary to invalidate all pages
 				Content.InvalidateAllPages();
@@ -1207,7 +1207,7 @@ namespace ScrewTurn.Wiki {
 				return true;
 			}
 			else {
-				Log.LogEntry("Category creation failed for " + fullName, EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Category creation failed for " + fullName, EntryType.Error, Log.SystemUsername, wiki);
 				return false;
 			}
 		}
@@ -1221,8 +1221,8 @@ namespace ScrewTurn.Wiki {
 			if(category.Provider.ReadOnly) return false;
 
 			bool done = category.Provider.RemoveCategory(category);
-			if(done) Log.LogEntry("Category " + category.FullName + " removed", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Category deletion failed for " + category.FullName, EntryType.Error, Log.SystemUsername);
+			if(done) Log.LogEntry("Category " + category.FullName + " removed", EntryType.General, Log.SystemUsername, category.Provider.CurrentWiki);
+			else Log.LogEntry("Category deletion failed for " + category.FullName, EntryType.Error, Log.SystemUsername, category.Provider.CurrentWiki);
 
 			// Because of transclusion and other page-linking features, it is necessary to invalidate all pages
 			Content.InvalidateAllPages();
@@ -1247,8 +1247,8 @@ namespace ScrewTurn.Wiki {
 			string oldName = category.FullName;
 
 			CategoryInfo newCat = category.Provider.RenameCategory(category, newName);
-			if(newCat != null) Log.LogEntry("Category " + oldName + " renamed to " + newFullName, EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Category rename failed for " + oldName + " (" + newFullName + ")", EntryType.Error, Log.SystemUsername);
+			if(newCat != null) Log.LogEntry("Category " + oldName + " renamed to " + newFullName, EntryType.General, Log.SystemUsername, wiki);
+			else Log.LogEntry("Category rename failed for " + oldName + " (" + newFullName + ")", EntryType.Error, Log.SystemUsername, wiki);
 
 			// Because of transclusion and other page-linking features, it is necessary to invalidate all pages
 			Content.InvalidateAllPages();
@@ -1354,8 +1354,8 @@ namespace ScrewTurn.Wiki {
 				names[i] = cats[i].FullName; // Saves one cycle
 			}
 			bool done = page.Provider.RebindPage(page, names);
-			if(done) Log.LogEntry("Page " + page.FullName + " rebound", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Page rebind failed for " + page.FullName, EntryType.Error, Log.SystemUsername);
+			if(done) Log.LogEntry("Page " + page.FullName + " rebound", EntryType.General, Log.SystemUsername, page.Provider.CurrentWiki);
+			else Log.LogEntry("Page rebind failed for " + page.FullName, EntryType.Error, Log.SystemUsername, page.Provider.CurrentWiki);
 
 			// Because of transclusion and other page-linking features, it is necessary to invalidate all pages
 			Content.InvalidateAllPages();
@@ -1377,8 +1377,8 @@ namespace ScrewTurn.Wiki {
 
 			CategoryInfo newCat = source.Provider.MergeCategories(source, destination);
 
-			if(newCat != null) Log.LogEntry("Category " + source.FullName + " merged into " + destination.FullName, EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Categories merging failed for " + source.FullName + " into " + destination.FullName, EntryType.Error, Log.SystemUsername);
+			if(newCat != null) Log.LogEntry("Category " + source.FullName + " merged into " + destination.FullName, EntryType.General, Log.SystemUsername, source.Provider.CurrentWiki);
+			else Log.LogEntry("Categories merging failed for " + source.FullName + " into " + destination.FullName, EntryType.Error, Log.SystemUsername, source.Provider.CurrentWiki);
 
 			// Because of transclusion and other page-linking features, it is necessary to invalidate all pages
 			Content.InvalidateAllPages();

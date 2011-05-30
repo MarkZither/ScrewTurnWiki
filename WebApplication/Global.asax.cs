@@ -102,7 +102,7 @@ namespace ScrewTurn.Wiki {
 			try {
 				ScrewTurn.Wiki.Log.LogEntry(Tools.GetCurrentUrlFixed() + "\n" +
 					ex.Source + " thrown " + ex.GetType().FullName + "\n" + ex.Message + "\n" + ex.StackTrace,
-					ScrewTurn.Wiki.PluginFramework.EntryType.Error, ScrewTurn.Wiki.Log.SystemUsername);
+					ScrewTurn.Wiki.PluginFramework.EntryType.Error, ScrewTurn.Wiki.Log.SystemUsername, null);
 			}
 			catch { }
 		}

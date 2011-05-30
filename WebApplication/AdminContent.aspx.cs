@@ -10,10 +10,12 @@ namespace ScrewTurn.Wiki {
 
 	public partial class AdminContent : BasePage {
 
+		string currentWiki;
+
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			string currentWiki = DetectWiki();
+			currentWiki = DetectWiki();
 
 			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) UrlTools.Redirect("AccessDenied.aspx");
 
@@ -56,7 +58,6 @@ namespace ScrewTurn.Wiki {
 		};
 
 		protected void btn_Click(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
 			Control senderControl = sender as Control;
 			txtCurrentButton.Value = senderControl.ID;
 
@@ -90,9 +91,9 @@ namespace ScrewTurn.Wiki {
 
 			if(Settings.IsMetaDataItemGlobal(item)) return;
 
-			string newValue = Settings.GetProvider(DetectWiki()).GetMetaDataItem(item, lstCopyFromNamespace.SelectedValue);
+			string newValue = Settings.GetProvider(currentWiki).GetMetaDataItem(item, lstCopyFromNamespace.SelectedValue);
 
-			editor.SetContent(newValue, Settings.GetUseVisualEditorAsDefault(DetectWiki()));
+			editor.SetContent(newValue, Settings.GetUseVisualEditorAsDefault(currentWiki));
 		}
 
 		protected void btnSave_Click(object sender, EventArgs e) {
@@ -105,9 +106,9 @@ namespace ScrewTurn.Wiki {
 			}
 
 			Log.LogEntry("Metadata file change requested for " + item.ToString() +
-				(tag != null ? ", ns: " + tag : "") + lstNamespace.SelectedValue, EntryType.General, SessionFacade.CurrentUsername);
+				(tag != null ? ", ns: " + tag : "") + lstNamespace.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
-			Settings.GetProvider(DetectWiki()).SetMetaDataItem(item, tag, editor.GetContent());
+			Settings.GetProvider(currentWiki).SetMetaDataItem(item, tag, editor.GetContent());
 
 			pnlEditor.Visible = false;
 			pnlList.Visible = true;

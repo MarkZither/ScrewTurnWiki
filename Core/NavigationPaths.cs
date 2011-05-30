@@ -92,8 +92,8 @@ namespace ScrewTurn.Wiki {
 			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
 
 			NavigationPath newPath = provider.AddNavigationPath(namespaceName, name, pages.ToArray());
-			if(newPath != null) Log.LogEntry("Navigation Path " + fullName + " added", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Creation failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername);
+			if(newPath != null) Log.LogEntry("Navigation Path " + fullName + " added", EntryType.General, Log.SystemUsername, wiki);
+			else Log.LogEntry("Creation failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername, wiki);
 			return newPath != null;
 		}
 
@@ -108,8 +108,8 @@ namespace ScrewTurn.Wiki {
 			if(path == null) return false;
 
 			bool done = path.Provider.RemoveNavigationPath(path);
-			if(done) Log.LogEntry("Navigation Path " + fullName + " removed", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Deletion failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername);
+			if(done) Log.LogEntry("Navigation Path " + fullName + " removed", EntryType.General, Log.SystemUsername, wiki);
+			else Log.LogEntry("Deletion failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername, wiki);
 			return done;
 		}
 
@@ -125,8 +125,8 @@ namespace ScrewTurn.Wiki {
 			if(path == null) return false;
 
 			NavigationPath newPath = path.Provider.ModifyNavigationPath(path, pages.ToArray());
-			if(newPath != null) Log.LogEntry("Navigation Path " + fullName + " modified", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Modification failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername);
+			if(newPath != null) Log.LogEntry("Navigation Path " + fullName + " modified", EntryType.General, Log.SystemUsername, wiki);
+			else Log.LogEntry("Modification failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername, wiki);
 			return newPath != null;
 		}
 

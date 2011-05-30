@@ -14,8 +14,10 @@ namespace ScrewTurn.Wiki {
 
 	public partial class AdminConfig : BasePage {
 
+		string currentWiki;
+
 		protected void Page_Load(object sender, EventArgs e) {
-			string currentWiki = DetectWiki();
+			currentWiki = DetectWiki();
 
 			AdminMaster.RedirectToLoginIfNeeded();
 
@@ -55,7 +57,7 @@ namespace ScrewTurn.Wiki {
 		private void PopulateMainPages(string current) {
 			current = current.ToLowerInvariant();
 
-			List<PageInfo> pages = Pages.GetPages(DetectWiki(), null);
+			List<PageInfo> pages = Pages.GetPages(currentWiki, null);
 			lstMainPage.Items.Clear();
 			foreach(PageInfo page in pages) {
 				lstMainPage.Items.Add(new ListItem(page.FullName, page.FullName));
@@ -179,7 +181,7 @@ namespace ScrewTurn.Wiki {
 			lstDefaultUsersGroup.Items.Clear();
 			lstDefaultAdministratorsGroup.Items.Clear();
 			lstDefaultAnonymousGroup.Items.Clear();
-			foreach(UserGroup group in Users.GetUserGroups(DetectWiki())) {
+			foreach(UserGroup group in Users.GetUserGroups(currentWiki)) {
 				string lowerName = group.Name.ToLowerInvariant();
 
 				lstDefaultUsersGroup.Items.Add(new ListItem(group.Name, group.Name));
@@ -278,7 +280,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="e">The <see cref="System.Web.UI.WebControls.ServerValidateEventArgs"/> instance containing the event data.</param>
 		protected void cvCheckOldPassword(object sender, ServerValidateEventArgs e) {
 			string pwd = Hash.Compute(txtBoxOldPassword.Text);
-			if(pwd == Settings.GetMasterPassword(DetectWiki()))
+			if(pwd == Settings.GetMasterPassword(currentWiki))
 				if((txtNewPassword.Text.Length != 0) && (txtNewPassword.Text != null)) 
 					e.IsValid = true;
 				else {
@@ -323,10 +325,8 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsValid) return;
 
-			Log.LogEntry("Wiki Configuration change requested", EntryType.General, SessionFacade.CurrentUsername);
-
-			string currentWiki = DetectWiki();
-
+			Log.LogEntry("Wiki Configuration change requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
+			
 			Settings.BeginBulkUpdate(currentWiki);
 
 			// Save general configuration

@@ -59,8 +59,8 @@ namespace ScrewTurn.Wiki {
 
 			ContentTemplate result = provider.AddContentTemplate(name, content);
 
-			if(result != null) Log.LogEntry("Content Template " + name + " created", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Creation failed for Content Template " + name, EntryType.Error, Log.SystemUsername);
+			if(result != null) Log.LogEntry("Content Template " + name + " created", EntryType.General, Log.SystemUsername, wiki);
+			else Log.LogEntry("Creation failed for Content Template " + name, EntryType.Error, Log.SystemUsername, wiki);
 
 			return result != null;
 		}
@@ -73,8 +73,8 @@ namespace ScrewTurn.Wiki {
 		public static bool RemoveTemplate(ContentTemplate template) {
 			bool done = template.Provider.RemoveContentTemplate(template.Name);
 
-			if(done) Log.LogEntry("Content Template " + template.Name + " deleted", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Deletion failed for Content Template " + template.Name, EntryType.Error, Log.SystemUsername);
+			if(done) Log.LogEntry("Content Template " + template.Name + " deleted", EntryType.General, Log.SystemUsername, template.Provider.CurrentWiki);
+			else Log.LogEntry("Deletion failed for Content Template " + template.Name, EntryType.Error, Log.SystemUsername, template.Provider.CurrentWiki);
 
 			return done;
 		}
@@ -88,8 +88,8 @@ namespace ScrewTurn.Wiki {
 		public static bool ModifyTemplate(ContentTemplate template, string content) {
 			ContentTemplate result = template.Provider.ModifyContentTemplate(template.Name, content);
 
-			if(result != null) Log.LogEntry("Content Template " + template.Name + " updated", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Update failed for Content Template " + template.Name, EntryType.Error, Log.SystemUsername);
+			if(result != null) Log.LogEntry("Content Template " + template.Name + " updated", EntryType.General, Log.SystemUsername, template.Provider.CurrentWiki);
+			else Log.LogEntry("Update failed for Content Template " + template.Name, EntryType.Error, Log.SystemUsername, template.Provider.CurrentWiki);
 
 			return result != null;
 		}
