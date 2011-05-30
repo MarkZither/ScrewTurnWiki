@@ -26,6 +26,8 @@ namespace ScrewTurn.Wiki.PluginFramework {
 
 			foreach(XmlNode provider in section) {
 				XmlAttributeCollection attributeCollection = provider.Attributes;
+				if(attributeCollection == null) continue;
+
 				string wikiName = attributeCollection["name"].Value;
 				string hostList = attributeCollection["host"].Value;
 				storageProviders.Add(new PluginFramework.Wiki(wikiName,	hostList.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList<string>()));
