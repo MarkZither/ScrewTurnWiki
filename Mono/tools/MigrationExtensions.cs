@@ -86,9 +86,9 @@ static class MigrationExtensions
 		if (ret [0] == '.')
 			ret = ret.Substring (1);
 		return ret.
-			Replace (".", "-").
-			Replace (":", "-").
-			Replace (" ", " ");
+			Replace (".", "_").
+			Replace (":", "_").
+			Replace (" ", "_");
 	}
 	
 	public static string SqlAndWikiEncode (this string text)
