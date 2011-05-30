@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Upload" Title="Untitled Page" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="Upload.aspx.cs" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.Master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Upload" Title="Untitled Page" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="Upload.aspx.cs" %>
 <%@ Register TagPrefix="st" TagName="FileManager" Src="~/FileManager.ascx" %>
 
 <asp:Content ID="CtnUpload" ContentPlaceHolderID="CphMasterSA" Runat="Server">

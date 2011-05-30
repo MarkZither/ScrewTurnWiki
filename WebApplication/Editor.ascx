@@ -277,7 +277,7 @@
         </div>
         
         <div id="WysiwygDiv">
-            <iframe id="iframe" name="iframe" onload="javascript:return iframe_onload();" src="IframeEditor.aspx" style="width: 100%; height: 400px;" frameborder="0"></iframe>
+            <iframe id="iframe" name="iframe" onload="javascript:return iframe_onload();" src="IFrameEditor.aspx" style="width: 100%; height: 400px;" frameborder="0"></iframe>
         </div>
         
         <div style="display: none;">
