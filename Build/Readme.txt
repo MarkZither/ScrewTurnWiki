@@ -1,10 +1,10 @@
 
-In order to build ScrewTurn Wiki, you need Microsoft Visual Studio 2008 (any edition, including Express) 
+In order to build ScrewTurn Wiki, you need Microsoft Visual Studio 2010 (any edition, including Express) 
 installed on the machine.
 
 ScrewTurnWiki.msbuild contains the build script, written for MSBuild 3.5.
 
-To build the application more easily, use the Build.bad batch file, which compiles the application
+To build the application more easily, use the Build.bat batch file, which compiles the application
 and the plugins.
 
 BuildAndTest.bat compiles the application and runs all the unit tests. SQL Server 2005/2008 is required
