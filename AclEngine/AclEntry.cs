@@ -33,6 +33,11 @@ namespace ScrewTurn.Wiki.AclEngine {
 		private Value value;
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="AclEntry"/> class.
+		/// </summary>
+		public AclEntry() { }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="T:AclEntry" /> class.
 		/// </summary>
 		/// <param name="resource">The controlled resource.</param>
@@ -60,6 +65,7 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// </summary>
 		public string Resource {
 			get { return resource; }
+			set { resource = value; }
 		}
 
 		/// <summary>
@@ -67,6 +73,7 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// </summary>
 		public string Action {
 			get { return action; }
+			set { action = value; }
 		}
 
 		/// <summary>
@@ -74,6 +81,7 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// </summary>
 		public string Subject {
 			get { return subject; }
+			set { subject = value; }
 		}
 
 		/// <summary>
@@ -81,6 +89,7 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// </summary>
 		public Value Value {
 			get { return value; }
+			set { this.value = value; }
 		}
 
 		/// <summary>

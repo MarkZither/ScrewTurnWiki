@@ -73,6 +73,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorageProviders", "Az
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorageProviders-Tests", "AzureStorageProviders-Tests\AzureStorageProviders-Tests.csproj", "{46426630-5731-4253-888A-CAAE1F4149F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupRestore", "BackupRestore\BackupRestore.csproj", "{06320590-F6FC-4F8B-B3A2-2B5991676BE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupRestore-Tests", "BackupRestore-Tests\BackupRestore-Tests.csproj", "{7A411BE3-8387-4E96-8332-3F0363FE059A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +183,14 @@ Global
 		{46426630-5731-4253-888A-CAAE1F4149F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46426630-5731-4253-888A-CAAE1F4149F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46426630-5731-4253-888A-CAAE1F4149F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06320590-F6FC-4F8B-B3A2-2B5991676BE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06320590-F6FC-4F8B-B3A2-2B5991676BE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06320590-F6FC-4F8B-B3A2-2B5991676BE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06320590-F6FC-4F8B-B3A2-2B5991676BE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A411BE3-8387-4E96-8332-3F0363FE059A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A411BE3-8387-4E96-8332-3F0363FE059A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A411BE3-8387-4E96-8332-3F0363FE059A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A411BE3-8387-4E96-8332-3F0363FE059A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

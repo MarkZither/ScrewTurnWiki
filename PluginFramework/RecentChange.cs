@@ -19,6 +19,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		private string descr = null;
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="RecentChange"/> class.
+		/// </summary>
+		public RecentChange() { }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="T:RecentChange" /> class.
 		/// </summary>
 		/// <param name="page">The page pame.</param>
@@ -43,6 +48,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public string Page {
 			get { return page; }
+			set { page = value; }
 		}
 
 		/// <summary>
@@ -50,6 +56,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public string Title {
 			get { return title; }
+			set { title = value; }
 		}
 
 		/// <summary>
@@ -57,6 +64,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public string MessageSubject {
 			get { return messageSubject; }
+			set { messageSubject = value; }
 		}
 
 		/// <summary>
@@ -64,6 +72,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public DateTime DateTime {
 			get { return dateTime; }
+			set { dateTime = value; }
 		}
 
 		/// <summary>
@@ -71,6 +80,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public string User {
 			get { return user; }
+			set { user = value; }
 		}
 
 		/// <summary>
@@ -78,6 +88,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public Change Change {
 			get { return change; }
+			set { change = value; }
 		}
 
 		/// <summary>
@@ -85,6 +96,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public string Description {
 			get { return descr; }
+			set { descr = value; }
 		}
 
 	}
