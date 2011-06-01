@@ -91,7 +91,7 @@
 	<Target Name="Test" DependsOnTargets="Compile">
 		<!-- Requires SQL Server 2005/2008 installed on the system, and it must grant the necessary rights to the current Windows user -->
 		
-		<Exec Command='..\References\Tools\NUnit\nunit-console.exe ".\Artifacts\Tests\ScrewTurn.Wiki.AclEngine.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Core.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.PluginPack.DownloadCounterPlugin.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.SqlCommon.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.SqlServer.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.SearchEngine.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll"  /xml=".\Artifacts\TestResult.xml" /labels' />
+		<Exec Command='..\References\Tools\NUnit\nunit-console.exe ".\Artifacts\Tests\ScrewTurn.Wiki.AclEngine.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Core.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.PluginPack.DownloadCounterPlugin.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.SqlCommon.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.SqlServer.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.SearchEngine.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.BackupRestore.Tests.dll" /xml=".\Artifacts\TestResult.xml" /labels' />
 	</Target>
 	
 	<Target Name="Package" DependsOnTargets="Compile">
