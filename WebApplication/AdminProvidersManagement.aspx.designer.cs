@@ -274,13 +274,22 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Label lblMigrateFilesResult;
         
         /// <summary>
-        /// lblCopySettings control.
+        /// lblExportImportSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblCopySettings;
+        protected global::System.Web.UI.WebControls.Literal lblExportImportSettings;
+        
+        /// <summary>
+        /// lblExportSettings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblExportSettings;
         
         /// <summary>
         /// lblSettingsSource control.
@@ -292,57 +301,66 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Label lblSettingsSource;
         
         /// <summary>
-        /// lstSettingsDestination control.
+        /// lstWiki control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList lstSettingsDestination;
+        protected global::System.Web.UI.WebControls.DropDownList lstWiki;
         
         /// <summary>
-        /// btnCopySettings control.
+        /// btnExportSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCopySettings;
+        protected global::System.Web.UI.WebControls.Button btnExportSettings;
         
         /// <summary>
-        /// lblCopySettingsResult control.
+        /// lblExportSettingsResult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCopySettingsResult;
+        protected global::System.Web.UI.WebControls.Label lblExportSettingsResult;
         
         /// <summary>
-        /// lblCopySettingsInfo control.
+        /// lblExportGlobalSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblCopySettingsInfo;
+        protected global::System.Web.UI.WebControls.Literal lblExportGlobalSettings;
         
         /// <summary>
-        /// lblCopySettingsDestinationConfig control.
+        /// lblGlobalSettingsSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblCopySettingsDestinationConfig;
+        protected global::System.Web.UI.WebControls.Label lblGlobalSettingsSource;
         
         /// <summary>
-        /// txtSettingsDestinationConfig control.
+        /// btnExportGlobalSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSettingsDestinationConfig;
+        protected global::System.Web.UI.WebControls.Button btnExportGlobalSettings;
+        
+        /// <summary>
+        /// lblExportGlobalSettingsResult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblExportGlobalSettingsResult;
     }
 }

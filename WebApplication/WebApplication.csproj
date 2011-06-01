@@ -2734,6 +2734,10 @@
       <Project>{F38D7FDA-08CA-4FE1-9E0D-F49FFFA12E79}</Project>
       <Name>AzureStorageProviders</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BackupRestore\BackupRestore.csproj">
+      <Project>{06320590-F6FC-4F8B-B3A2-2B5991676BE8}</Project>
+      <Name>BackupRestore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{C353A35C-86D0-4154-9500-4F88CAAB29C3}</Project>
       <Name>Core</Name>

@@ -78,35 +78,26 @@
 			OnSelectedIndexChanged="lstFilesSource_SelectedIndexChanged" AutoPostBack="True" 
 			meta:resourcekey="lstFilesSourceResource1" />
 		<img src="Images/ArrowRight.png" alt="->" />
-		<asp:DropDownList ID="lstFilesDestination" runat="server" meta:resourcekey="lstFilesDestinationResource1"  />
+		<asp:DropDownList ID="lstFilesDestination" runat="server" meta:resourcekey="lstFilesDestinationResource1" />
 		<asp:Button ID="btnMigrateFiles" runat="server" Text="Migrate" Enabled="False"
 			OnClick="btnMigrateFiles_Click" meta:resourcekey="btnMigrateFilesResource1" />
 		<asp:Label ID="lblMigrateFilesResult" runat="server" meta:resourcekey="lblMigrateFilesResultResource1" />
-		<br /><br />
+		
+		<br /><br /><br />
 	
-		<h4><asp:Literal ID="lblCopySettings" runat="server" Text="Copy Settings and related data" EnableViewState="False" meta:resourcekey="lblCopySettingsResource1" /></h4>
+		<h2 class="separator"><asp:Literal ID="lblExportImportSettings" runat="server" Text="Export/Import Settings" EnableViewState="False" meta:resourcekey="lblExportImportSettingsResource1" /></h2>
+		<h4><asp:Literal ID="lblExportSettings" runat="server" Text="Export Settings and related data" EnableViewState="False" meta:resourcekey="lblExportSettingsResource1" /></h4>
 		<asp:Label ID="lblSettingsSource" runat="server" meta:resourcekey="lblSettingsSourceResource1"  />
-		<img src="Images/ArrowRight.png" alt="->" />
-		<asp:DropDownList ID="lstSettingsDestination" runat="server"
-			OnSelectedIndexChanged="lstSettingsDestination_SelectedIndexChanged" meta:resourcekey="lstSettingsDestinationResource1" />
-		<asp:Button ID="btnCopySettings" runat="server" Text="Copy" Enabled="False"
-			OnClick="btnCopySettings_Click" meta:resourcekey="btnCopySettingsResource1" />
-		<asp:Label ID="lblCopySettingsResult" runat="server" meta:resourcekey="lblCopySettingsResultResource1" /><br />
-		<span class="small">
-			<asp:Literal ID="lblCopySettingsInfo" runat="server" EnableViewState="False"
-				Text="<b>Note</b>: in order to be detected, the destination Provider must be uploaded using the upload tool.<br />Log and recent changes will not be copied." 
-				meta:resourcekey="lblCopySettingsInfoResource1" />
-		</span>
+		<asp:DropDownList ID="lstWiki" runat="server"
+			OnSelectedIndexChanged="lstWiki_SelectedIndexChanged" AutoPostBack="true"
+			meta:resourcekey="lstWikiResource1" />
+		<asp:Button ID="btnExportSettings" runat="server" Text="Export" Enabled="false" OnClick="btnExportSettings_Click" meta:resourcekey="btnExportSettingsResource1" />
+		<asp:Label ID="lblExportSettingsResult" runat="server" meta:resourcekey="lblExportSettingsResultResource1" />
 		<br /><br />
-		<div id="CopySettingsConfigDiv">
-			<asp:Literal ID="lblCopySettingsDestinationConfig" runat="server" 
-				Text="Destination Settings Provider Configuration string (if needed)" 
-				EnableViewState="False" 
-				meta:resourcekey="lblCopySettingsDestinationConfigResource1" /><br />
-			<asp:TextBox ID="txtSettingsDestinationConfig" runat="server" 
-				TextMode="MultiLine" CssClass="config" 
-				meta:resourcekey="txtSettingsDestinationConfigResource1" />
-		</div>
+		<h4><asp:Literal ID="lblExportGlobalSettings" runat="server" Text="Export Global Settings and related data" EnableViewState="False" meta:resourcekey="lblExportGlobalSettingsResource1" /></h4>
+		<asp:Label ID="lblGlobalSettingsSource" runat="server" meta:resourcekey="lblGlobalSettingsSourceResource1"  />
+		<asp:Button ID="btnExportGlobalSettings" runat="server" Text="Export" OnClick="btnExportGlobalSettings_Click" meta:resourcekey="btnExportGlobalSettingsResource1" />
+		<asp:Label ID="lblExportGlobalSettingsResult" runat="server" meta:resourcekey="lblExportGlobalSettingsResultResource1" />
 	</div>
 	
 	<div class="clear"></div>

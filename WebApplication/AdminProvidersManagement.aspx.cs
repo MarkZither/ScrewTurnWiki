@@ -140,16 +140,12 @@ namespace ScrewTurn.Wiki {
 			}
 
 			lblSettingsSource.Text = Settings.GetProvider(currentWiki).Information.Name;
-			lstSettingsDestination.Items.Clear();
-			lstSettingsDestination.Items.Add(new ListItem("", ""));
-			if(Settings.GetProvider(currentWiki).GetType().FullName != typeof(SettingsStorageProvider).FullName) {
-				lstSettingsDestination.Items.Add(new ListItem(SettingsStorageProvider.ProviderName, typeof(SettingsStorageProvider).FullName));
+			lstWiki.Items.Clear();
+			lstWiki.Items.Add(new ListItem(Properties.Messages.SelectWiki, ""));
+			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
+				lstWiki.Items.Add(wiki.WikiName);
 			}
-			//foreach(ISettingsStorageProviderV30 prov in ProviderLoader..LoadAllSettingsStorageProviders(GlobalSettings.Provider)) {
-			//    if(prov.GetType().FullName != Settings.Provider.GetType().FullName) {
-			//        lstSettingsDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().FullName));
-			//    }
-			//}
+			lblGlobalSettingsSource.Text = GlobalSettings.Provider.Information.Name;
 		}
 
 		protected void lstPagesSource_SelectedIndexChanged(object sender, EventArgs e) {
@@ -186,10 +182,6 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 			btnMigrateFiles.Enabled = lstFilesDestination.Items.Count > 0;
-		}
-
-		protected void lstSettingsDestination_SelectedIndexChanged(object sender, EventArgs e) {
-			btnCopySettings.Enabled = lstSettingsDestination.SelectedValue != "";
 		}
 
 		protected void btnMigratePages_Click(object sender, EventArgs e) {
@@ -239,28 +231,18 @@ namespace ScrewTurn.Wiki {
 			lblMigrateFilesResult.Text = Properties.Messages.DataMigrated;
 		}
 
-		protected void btnCopySettings_Click(object sender, EventArgs e) {
-			ISettingsStorageProviderV30 to = null;
+		#endregion
 
-			//ISettingsStorageProviderV30[] allProviders = ProviderLoader.LoadAllSettingsStorageProviders(Settings.Provider);
-			//foreach(ISettingsStorageProviderV30 prov in allProviders) {
-			//    if(prov.GetType().ToString() == lstSettingsDestination.SelectedValue) {
-			//        to = prov;
-			//        break;
-			//    }
-			//}
+		#region DataExportImport
 
-			Log.LogEntry("Settings data copy requested to " + to.Information.Name, EntryType.General, SessionFacade.CurrentUsername, null);
+		protected void lstWiki_SelectedIndexChanged(object sender, EventArgs e) {
+			btnExportSettings.Enabled = lstWiki.SelectedIndex > 0;
+		}
 
-			try {
-				to.Init(Host.Instance, txtSettingsDestinationConfig.Text, currentWiki);
-			}
-			catch(InvalidConfigurationException ex) {
-				Log.LogEntry("Provider rejected configuration: " + ex.ToString(), EntryType.Error, Log.SystemUsername, null);
-				lblCopySettingsResult.CssClass = "resulterror";
-				lblCopySettingsResult.Text = Properties.Messages.ProviderRejectedConfiguration;
-				return;
-			}
+		protected void btnExportSettings_Click(object sender, EventArgs e) {
+			Log.LogEntry("Settings data export requested.", EntryType.General, SessionFacade.CurrentUsername, null);
+
+			ISettingsStorageProviderV30 settingsProvider = Settings.GetProvider(lstWiki.SelectedValue);
 
 			// Find namespaces
 			List<string> namespaces = new List<string>(5);
@@ -268,10 +250,29 @@ namespace ScrewTurn.Wiki {
 				namespaces.Add(ns.Name);
 			}
 
-			//DataMigrator.CopySettingsStorageProviderData(Settings.Provider, to, namespaces.ToArray(), Collectors.GetAllProviders());
+			byte[] backupFile = BackupRestore.BackupRestore.BackupSettingsStorageProvider(settingsProvider, namespaces.ToArray(), GlobalSettings.Provider.ListPluginAssemblies());
 
-			lblCopySettingsResult.CssClass = "resultok";
-			lblCopySettingsResult.Text = Properties.Messages.DataCopied;
+			Response.Clear();
+			Response.AddHeader("content-type", "application/json");
+			Response.AddHeader("content-disposition", "attachment;filename=\"SettingsBackup-" + lstWiki.SelectedValue + ".json\"");
+			Response.AddHeader("content-length", backupFile.Length.ToString());
+
+			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
+		}
+
+		protected void btnExportGlobalSettings_Click(object sender, EventArgs e) {
+			Log.LogEntry("Global Settings data export requested.", EntryType.General, SessionFacade.CurrentUsername, null);
+
+			IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider = GlobalSettings.Provider;
+
+			byte[] backupFile = BackupRestore.BackupRestore.BackupGlobalSettingsStorageProvider(globalSettingsStorageProvider);
+
+			Response.Clear();
+			Response.AddHeader("content-type", "application/zip");
+			Response.AddHeader("content-disposition", "attachment;filename=\"GlobalSettingsBackup.zip\"");
+			Response.AddHeader("content-length", backupFile.Length.ToString());
+
+			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
 		}
 
 		#endregion

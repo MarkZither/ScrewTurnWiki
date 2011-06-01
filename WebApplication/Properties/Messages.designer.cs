@@ -1474,11 +1474,11 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data copied, please change the active Settings Storage Provider in the web.config file.
+        ///   Looks up a localized string similar to Data exported succesfully..
         /// </summary>
-        public static string DataCopied {
+        public static string DataExported {
             get {
-                return ResourceManager.GetString("DataCopied", resourceCulture);
+                return ResourceManager.GetString("DataExported", resourceCulture);
             }
         }
         
@@ -3981,6 +3981,15 @@ namespace ScrewTurn.Wiki.Properties {
         public static string SelectTheme {
             get {
                 return ResourceManager.GetString("SelectTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a wiki.
+        /// </summary>
+        public static string SelectWiki {
+            get {
+                return ResourceManager.GetString("SelectWiki", resourceCulture);
             }
         }
         
