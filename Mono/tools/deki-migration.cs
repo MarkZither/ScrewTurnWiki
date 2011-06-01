@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 using MySql.Data.MySqlClient;
@@ -10,16 +11,24 @@ class DekiMigration
 {
 	const string DEFAULT_CONNECTION_STRING = "Server=localhost; Database=monoproject; User=monoproject; Password=monoproject; CharSet=utf8";
 	const string DEFAULT_OUTPUT_FILE = "mono-project-stw.sql";
-
+	const string DEFAULT_DEKI_FILES_DIRECTORY = "/tmp/public_html/files";
+	
 	static Dictionary <uint, string> users = new Dictionary <uint, string> ();
 	
 	public static string ConnectionString { get; private set; }
+	public static string DekiFilesDirectory { get; private set; }
 		
 	static void Main (string[] args)
 	{
 		int argslen = args.Length;
-		ConnectionString = argslen > 0 ? args [0] : DEFAULT_CONNECTION_STRING;
-		string output_file = argslen > 1 ? args [1] : DEFAULT_OUTPUT_FILE;
+		DekiFilesDirectory = argslen > 0 ? args [1] : DEFAULT_DEKI_FILES_DIRECTORY;
+		ConnectionString = argslen > 1 ? args [1] : DEFAULT_CONNECTION_STRING;
+		string output_file = argslen > 2 ? args [2] : DEFAULT_OUTPUT_FILE;
+
+		if (!Directory.Exists (DekiFilesDirectory)) {
+			Console.Error.WriteLine ("DekiWiki files directory '{0}' does not exist. You can pass the directory as the first parameter.", DekiFilesDirectory);
+			Environment.Exit (1);
+		}
 		
 		var conn = new MySqlConnection (ConnectionString);
 		conn.Open ();
@@ -142,6 +151,7 @@ class DekiMigration
 			int imported = 0;
 			int processed = 0;
 			int olderVersionIgnored = 0;
+			int images = 0;
 			bool isUpdate;
 			DateTime cachedTimeStamp;
 			while (reader.Read ()) {
@@ -154,9 +164,6 @@ class DekiMigration
 						ignoredPages.Add (String.Format ("Ignored settings page '{0}'", page.Title));
 						continue;
 					}
-					
-					// TODO: process images here (page.DekiNameSpace ==
-					// DekiNamespace.Image)
 					
 					page.ResolveCategories ();
 					if (pagesCache.TryGetValue (page.Title.SqlEncodeForName () + " (" + page.DekiNameSpace + ")", out cachedTimeStamp)) {
@@ -193,6 +200,32 @@ class DekiMigration
 					continue;
 				}
 				
+				if (page.DekiNameSpace == DekiNamespace.Image) {
+					if (images == 0)
+						sw.WriteLine ("INSERT INTO Directory (FullPath,Parent) VALUES ('/images/', '/');");
+					images++;
+					string imagePath = GetImagePath (page.Title);
+					if (imagePath == null) {
+						StepProgress ("F", processed == 1);
+						failedPages.Add (String.Format ("Image '{0}' could not be processed (MD5 hash generation failed).", page.Title));
+						continue;
+					}
+
+					if (!File.Exists (imagePath)) {
+						StepProgress ("F", processed == 1);
+						failedPages.Add (String.Format ("File '{0}' for image '{1}' does not exist.", imagePath, page.Title));
+						continue;
+					}
+
+					var fi = new FileInfo (imagePath);
+					sw.Write ("INSERT INTO File (Name,Directory,Size,Downloads,LastModified,Data) " +
+						  "VALUES ('{0}', '/images/', {1}, 0, {2}, '",
+						      page.Title.SqlEncodeForName (true), fi.Length, page.LastModified.ToMySqlDateTime ());
+					WriteFileData (imagePath, sw);
+					sw.WriteLine ("');");
+					continue;
+				}
+								
 				if (isUpdate) {
 					sw.WriteLine ("UPDATE Page SET Name='{0}', Namespace='', CreationDateTime='{1}' WHERE Name='{0}';",
 						      page.Title.SqlEncodeForName (), page.Created.ToMySqlDateTime ());
@@ -214,7 +247,7 @@ class DekiMigration
 			}
 			Console.Error.WriteLine ();
 			
-			StepInfo ("{0} pages imported, {1} ignored, {2} old versions ignored, {3} failed.", imported, count - imported, olderVersionIgnored, failedPages.Count);
+			StepInfo ("{0} pages imported, {1} images, {2} ignored, {3} old versions ignored, {4} failed.", imported, images, count - imported, olderVersionIgnored, failedPages.Count);
 			if (failedPages.Count > 0) {
 				StepInfo ("Failed pages:");
 				foreach (string s in failedPages)
@@ -243,6 +276,47 @@ class DekiMigration
 		sw.WriteLine ();
 	}
 
+	static string GetImagePath (string imageName)
+	{
+		if (String.IsNullOrEmpty (imageName))
+			return null;		
+
+		string[] files = Directory.GetFiles (DekiFilesDirectory, imageName, SearchOption.AllDirectories);
+		return files [0];
+	}
+
+	static void WriteFileData (string filePath, StreamWriter sw)
+	{
+		using (FileStream fs = File.OpenRead (filePath)) {
+			byte[] bytes = new byte [1024];
+			int bread;
+			
+			while ((bread = fs.Read (bytes, 0, bytes.Length)) > 0) {
+				byte b;
+				for (int i = 0; i < bread; i++) {
+					b = bytes [i];
+					if (b == '\0') {
+						sw.Write ("\\0");
+					} else if (b == '\\' || b == '\'' || b == '"') {
+						sw.Write ('\\');
+						sw.Flush ();
+						sw.BaseStream.WriteByte (b);
+					} else if (b == '\n') {
+						sw.Write ("\\n");
+					} else if (b == '\r') {
+						sw.Write ("\\r");
+					} else if (b == 0x1a) {
+						sw.Write ("\\Z");
+					} else {
+						sw.Flush ();
+						sw.BaseStream.WriteByte (b);
+					}
+					sw.Flush ();
+				}
+			}
+		}
+	}
+	
 	static string LookupUser (uint id)
 	{
 		string ret;

@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using MySql.Data.MySqlClient;
-
+	
 class WikiPage
 {
 	static readonly Regex CategoryLinkRegex = new Regex (@"(\[\[Category:.+?\]\])|(\[Category:.+?\])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -14,6 +14,7 @@ class WikiPage
 	static readonly Regex TableRegex = new Regex (@"\{\|(\ [^\n]*)?\n.+?\|\}", RegexOptions.Compiled | RegexOptions.Singleline);
 	static readonly Regex HRegex = new Regex (@"^={1,4}.+?={1,4}\n?", RegexOptions.Compiled | RegexOptions.Multiline);
 	static readonly Regex MagicWordRegex = new Regex (@"\{\{.+?\}\}", RegexOptions.Compiled | RegexOptions.Singleline);
+	static readonly Regex ImageRegex = new Regex (@"\[\[Image:.+?\]\]", RegexOptions.Compiled);
 
 	static readonly SortedList <string, string> codeHighlightBlocks = new SortedList <string, string> () {
 		{"<csharp>", "\n@@ csharp\n"},
@@ -138,11 +139,25 @@ class WikiPage
 		
 		foreach (var kvp in otherSimpleReplacements)
 			sb.Replace (kvp.Key, kvp.Value);
-		
-		Match match = LinkRegex.Match (sb.ToString ());
+
+		Match match = ImageRegex.Match (sb.ToString ());
 		string value, tmp;
 		string[] fields;
 		int newStart = 0;
+		while (match.Success) {
+			Console.WriteLine ("image: {0}", match.Value);
+			value = match.Value.TrimStart ('[').TrimEnd (']').Replace ("Image:", String.Empty);
+			string[] parts = value.Split ('|');
+			tmp = "[image||{UP}/images/" + parts [0] + "]";
+			Console.WriteLine ("\tconverted: {0}", tmp);
+			sb.Remove (match.Index, match.Length);
+			sb.Insert (match.Index, tmp);
+			newStart = match.Index + tmp.Length;
+			match = ImageRegex.Match (sb.ToString (), newStart);
+		}
+		
+		match = LinkRegex.Match (sb.ToString ());
+		newStart = 0;
 		while (match.Success) {
 			value = match.Value;
 			if (value.Equals ("[]", StringComparison.Ordinal) || value.Equals ("[[]]", StringComparison.Ordinal) || value.Equals ("[[]", StringComparison.Ordinal)) {

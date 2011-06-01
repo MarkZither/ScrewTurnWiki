@@ -78,15 +78,17 @@ static class MigrationExtensions
 			Replace ("\t", "\\t");
 	}
 
-	public static string SqlEncodeForName (this string text)
+	public static string SqlEncodeForName (this string text, bool noDot = false)
 	{
 		if (String.IsNullOrEmpty (text))
 			return String.Empty;
 		string ret = text.SqlEncode ();
 		if (ret [0] == '.')
 			ret = ret.Substring (1);
+		if (!noDot)
+			ret = ret.Replace (".", "_");
+		
 		return ret.
-			Replace (".", "_").
 			Replace (":", "_").
 			Replace (" ", "_");
 	}
