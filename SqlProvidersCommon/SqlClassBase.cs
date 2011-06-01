@@ -98,7 +98,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			int read = 0;
 			int totalRead = 0;
 			do {
-				read = (int)reader.GetBytes(columnOrdinal, totalRead, buffer, 0, buffer.Length);
+				// MySQL Connector is dumbly throwing an exception when fieldOffset (totalBytes here)
+				// exceeds the data length... It throws the same exception also when buffer offset (0 here)
+				// is larger than the buffer length. This is not our case, so we can catch IndexOutOfRangeException
+				// and use that as the EOT marker.
+				try {
+					read = (int)reader.GetBytes(columnOrdinal, totalRead, buffer, 0, buffer.Length);
+				} catch (IndexOutOfRangeException) {
+					read = 0;
+				}
 
 				if(read > 0) {
 					stream.Write(buffer, 0, read);
