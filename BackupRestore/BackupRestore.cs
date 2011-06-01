@@ -107,12 +107,12 @@ namespace ScrewTurn.Wiki.BackupRestore {
 
 			// Plugins Status
 			foreach(var pair in settingsBackup.PluginsStatus) {
-				settingsStorageProvider.SetPluginStatus(pair.Key, (bool)pair.Value);
+				settingsStorageProvider.SetPluginStatus(pair.Key, pair.Value);
 			}
 
 			// Plugins Configuration
 			foreach(var pair in settingsBackup.PluginsConfiguratio) {
-				settingsStorageProvider.SetPluginConfiguration(pair.Key, (string)pair.Value);
+				settingsStorageProvider.SetPluginConfiguration(pair.Key, pair.Value);
 			}
 
 			// MetaData
@@ -211,13 +211,13 @@ namespace ScrewTurn.Wiki.BackupRestore {
 	}
 
 	internal class SettingsBackup {
-		public Dictionary<string, string> Settings;
-		public Dictionary<string, bool> PluginsStatus;
-		public Dictionary<string, string> PluginsConfiguratio;
-		public List<MetaData> Metadata;
-		public List<RecentChange> RecentChanges;
-		public Dictionary<string, string[]> OutgoingLinks;
-		public AclEntry[] AclEntries;
+		public Dictionary<string, string> Settings { get; set; }
+		public Dictionary<string, bool> PluginsStatus { get; set; }
+		public Dictionary<string, string> PluginsConfiguratio { get; set; }
+		public List<MetaData> Metadata { get; set; }
+		public List<RecentChange> RecentChanges { get; set; }
+		public Dictionary<string, string[]> OutgoingLinks { get; set; }
+		public AclEntry[] AclEntries { get; set; }
 	}
 
 	internal class MetaData {

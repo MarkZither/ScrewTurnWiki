@@ -35,8 +35,8 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			sourceDummySettingsStorageProvider.SetMetaDataItem(MetaDataItem.PageChangeMessage, null, "Page Change Message");
 			sourceDummySettingsStorageProvider.SetMetaDataItem(MetaDataItem.DiscussionChangeMessage, null, "Discussion Change Message");
 
-			sourceDummySettingsStorageProvider.SetMetaDataItem(MetaDataItem.EditNotice, "ns1", "Edit Notice for ns1");
-			sourceDummySettingsStorageProvider.SetMetaDataItem(MetaDataItem.Footer, "ns1", "Footer\r\nfor ns1");
+			sourceDummySettingsStorageProvider.SetMetaDataItem(MetaDataItem.EditNotice, "ns1", "Edit Notice\r\nfor ns1");
+			sourceDummySettingsStorageProvider.SetMetaDataItem(MetaDataItem.Footer, "ns1", "Footer for ns1");
 			sourceDummySettingsStorageProvider.SetMetaDataItem(MetaDataItem.Header, "ns1", "Header for ns1");
 			sourceDummySettingsStorageProvider.SetMetaDataItem(MetaDataItem.HtmlHead, "ns1", "Html Head for ns1");
 			sourceDummySettingsStorageProvider.SetMetaDataItem(MetaDataItem.PageFooter, "ns1", "Page Footer for ns1");
