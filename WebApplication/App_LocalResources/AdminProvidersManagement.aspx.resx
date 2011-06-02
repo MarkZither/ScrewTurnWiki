@@ -285,4 +285,40 @@
   <data name="lstWikiResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
+  <data name="btnImportSettingsResource1.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="btnImportSettingsResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblImportSettingsResource1.Text" xml:space="preserve">
+    <value>Import Settings</value>
+  </data>
+  <data name="lblImportSettingsResultResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblImportSettingsResultResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lstDestinationWikiResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="upSettingsResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnImportGlobalSettingsResource1.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="btnImportGlobalSettingsResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblImportGlobalSettingsResource1.Text" xml:space="preserve">
+    <value>Import Global Settings</value>
+  </data>
+  <data name="lblImportGlobalSettingsResultResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblImportGlobalSettingsResultResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
 </root>

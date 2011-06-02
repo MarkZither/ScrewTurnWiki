@@ -1756,4 +1756,7 @@
   <data name="SelectWiki" xml:space="preserve">
     <value>Select a wiki</value>
   </data>
+  <data name="ImportedSettings" xml:space="preserve">
+    <value>Settings imported succesfully</value>
+  </data>
 </root>

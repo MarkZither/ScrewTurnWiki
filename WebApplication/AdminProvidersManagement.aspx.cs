@@ -142,8 +142,11 @@ namespace ScrewTurn.Wiki {
 			lblSettingsSource.Text = Settings.GetProvider(currentWiki).Information.Name;
 			lstWiki.Items.Clear();
 			lstWiki.Items.Add(new ListItem(Properties.Messages.SelectWiki, ""));
+			lstDestinationWiki.Items.Clear();
+			lstDestinationWiki.Items.Add(new ListItem(Properties.Messages.SelectWiki, ""));
 			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
 				lstWiki.Items.Add(wiki.WikiName);
+				lstDestinationWiki.Items.Add(wiki.WikiName);
 			}
 			lblGlobalSettingsSource.Text = GlobalSettings.Provider.Information.Name;
 		}
@@ -273,6 +276,66 @@ namespace ScrewTurn.Wiki {
 			Response.AddHeader("content-length", backupFile.Length.ToString());
 
 			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
+		}
+
+		protected void lstDestinationWiki_SelectedIndexChanged(object sender, EventArgs e) {
+			btnImportSettings.Enabled = lstDestinationWiki.SelectedIndex > 0;
+		}
+
+		protected void btnImportSettings_Click(object sender, EventArgs e) {
+			string file = upSettings.FileName;
+
+			string ext = System.IO.Path.GetExtension(file);
+			if(ext != null) ext = ext.ToLowerInvariant();
+			if(ext != ".json") {
+				lblImportSettingsResult.CssClass = "resulterror";
+				lblImportSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
+				return;
+			}
+
+			string selectedWiki = lstDestinationWiki.SelectedValue;
+
+			Log.LogEntry("Import Settings requested for wiki: " + selectedWiki, EntryType.General, SessionFacade.CurrentUsername, null);
+			ISettingsStorageProviderV30 settingsStorageProvider = Settings.GetProvider(selectedWiki);
+			bool result = BackupRestore.BackupRestore.RestoreSettingsStorageProvider(upSettings.FileBytes, settingsStorageProvider);
+
+			if(result) {
+				lblImportSettingsResult.CssClass = "resultok";
+				lblImportSettingsResult.Text = Properties.Messages.ImportedSettings;
+				upSettings.Attributes.Add("value", "");
+				Log.LogEntry("Import Settings for wiki " + selectedWiki + " completed succesfully.", EntryType.General, SessionFacade.CurrentUsername, null);
+			}
+			else {
+				lblImportSettingsResult.CssClass = "resulterror";
+				lblImportSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
+			}
+		}
+
+		protected void btnImportGlobalSettings_Click(object sender, EventArgs e) {
+			string file = upGlobalSettings.FileName;
+
+			string ext = System.IO.Path.GetExtension(file);
+			if(ext != null) ext = ext.ToLowerInvariant();
+			if(ext != ".zip") {
+				lblImportGlobalSettingsResult.CssClass = "resulterror";
+				lblImportGlobalSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
+				return;
+			}
+
+			Log.LogEntry("Import Global Settings requested.", EntryType.General, SessionFacade.CurrentUsername, null);
+			IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider = GlobalSettings.Provider;
+			bool result = BackupRestore.BackupRestore.RestoreGlobalSettingsStorageProvider(upGlobalSettings.FileBytes, globalSettingsStorageProvider);
+
+			if(result) {
+				lblImportGlobalSettingsResult.CssClass = "resultok";
+				lblImportGlobalSettingsResult.Text = Properties.Messages.ImportedSettings;
+				upSettings.Attributes.Add("value", "");
+				Log.LogEntry("Import Global Settings completed succesfully.", EntryType.General, SessionFacade.CurrentUsername, null);
+			}
+			else {
+				lblImportGlobalSettingsResult.CssClass = "resulterror";
+				lblImportGlobalSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
+			}
 		}
 
 		#endregion

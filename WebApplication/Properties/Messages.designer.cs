@@ -2302,6 +2302,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Settings imported succesfully.
+        /// </summary>
+        public static string ImportedSettings {
+            get {
+                return ResourceManager.GetString("ImportedSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inactive.
         /// </summary>
         public static string InactiveUsers {

@@ -93,11 +93,28 @@
 			meta:resourcekey="lstWikiResource1" />
 		<asp:Button ID="btnExportSettings" runat="server" Text="Export" Enabled="false" OnClick="btnExportSettings_Click" meta:resourcekey="btnExportSettingsResource1" />
 		<asp:Label ID="lblExportSettingsResult" runat="server" meta:resourcekey="lblExportSettingsResultResource1" />
+		
 		<br /><br />
 		<h4><asp:Literal ID="lblExportGlobalSettings" runat="server" Text="Export Global Settings and related data" EnableViewState="False" meta:resourcekey="lblExportGlobalSettingsResource1" /></h4>
 		<asp:Label ID="lblGlobalSettingsSource" runat="server" meta:resourcekey="lblGlobalSettingsSourceResource1"  />
 		<asp:Button ID="btnExportGlobalSettings" runat="server" Text="Export" OnClick="btnExportGlobalSettings_Click" meta:resourcekey="btnExportGlobalSettingsResource1" />
 		<asp:Label ID="lblExportGlobalSettingsResult" runat="server" meta:resourcekey="lblExportGlobalSettingsResultResource1" />
+
+		<br /><br />
+		<h4><asp:Literal ID="lblImportSettings" runat="server" Text="Import Settings" EnableViewState="False" meta:resourcekey="lblImportSettingsResource1" /></h4>
+		<asp:DropDownList ID="lstDestinationWiki" runat="server" meta:resourcekey="lstDestinationWikiResource1"
+			OnSelectedIndexChanged="lstDestinationWiki_SelectedIndexChanged" AutoPostBack="true" Enabled="false"/>
+		<asp:FileUpload ID="upSettings" runat="server" meta:resourcekey="upSettingsResource1" />
+		<asp:Button ID="btnImportSettings" runat="server" Text="Import" OnClick="btnImportSettings_Click" meta:resourcekey="btnImportSettingsResource1" />
+		<br />
+		<asp:Label ID="lblImportSettingsResult" runat="server" meta:resourcekey="lblImportSettingsResultResource1" />
+
+		<br /><br />
+		<h4><asp:Literal ID="lblImportGlobalSettings" runat="server" Text="Import Global Settings" EnableViewState="False" meta:resourcekey="lblImportGlobalSettingsResource1" /></h4>
+		<asp:FileUpload ID="upGlobalSettings" runat="server" meta:resourcekey="upGlobalSettingsResource1" />
+		<asp:Button ID="btnImportGlobalSettings" runat="server" Text="Import" OnClick="btnImportGlobalSettings_Click" meta:resourcekey="btnImportGlobalSettingsResource1" />
+		<br />
+		<asp:Label ID="lblImportGlobalSettingsResult" runat="server" meta:resourcekey="lblImportGlobalSettingsResultResource1" />
 	</div>
 	
 	<div class="clear"></div>
