@@ -260,16 +260,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			else return "";
 		}
 
-		private Dictionary<string, string> _metadataCache;
+		private Dictionary<string, MetadataEntity> _metadataCache;
 
 		// Cache of settings as dictionary metadataKey -> content
-		private Dictionary<string, string> _metadata {
+		private Dictionary<string, MetadataEntity> _metadata {
 			get {
 				if(_metadataCache == null) {
-					_metadataCache = new Dictionary<string, string>();
+					_metadataCache = new Dictionary<string, MetadataEntity>();
 					IList<MetadataEntity> metadataEntities = GetMetadataEntities(_wiki);
 					foreach(MetadataEntity metadataEntity in metadataEntities) {
-						_metadataCache.Add(metadataEntity.RowKey, metadataEntity.Content + "");
+						_metadataCache.Add(metadataEntity.RowKey, metadataEntity);
 					}
 				}
 				return _metadataCache;
@@ -291,9 +291,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <returns>The content.</returns>
 		public string GetMetaDataItem(MetaDataItem item, string tag) {
 			try {
-				string metadataContent = "";
-				_metadata.TryGetValue(item + "|" + tag, out metadataContent);
-				return metadataContent == null ? "" : metadataContent;
+				MetadataEntity metadataEntity = null;
+				_metadata.TryGetValue(item + "|" + tag, out metadataEntity);
+				return metadataEntity == null ? "" : metadataEntity.Content + "";
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -309,12 +309,20 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <returns><c>true</c> if the content is set, <c>false</c> otherwise.</returns>
 		public bool SetMetaDataItem(MetaDataItem item, string tag, string content) {
 			try {
-				MetadataEntity metadataEntity = new MetadataEntity() {
-					PartitionKey = _wiki,
-					RowKey = item + "|" + tag,
-					Content = content
-				};
-				_context.AddObject(MetadataTable, metadataEntity);
+				MetadataEntity metadataEntity = null;
+				_metadata.TryGetValue(item + "|" + tag, out metadataEntity);
+				if(metadataEntity == null) {
+					metadataEntity = new MetadataEntity() {
+						PartitionKey = _wiki,
+						RowKey = item + "|" + tag,
+						Content = content
+					};
+					_context.AddObject(MetadataTable, metadataEntity);
+				}
+				else {
+					metadataEntity.Content = content;
+					_context.UpdateObject(metadataEntity);
+				}
 				_context.SaveChangesStandard();
 
 				// Invalidate metadataCache
