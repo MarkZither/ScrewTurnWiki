@@ -37,6 +37,8 @@ class DekiMigration
 		cmd.ExecuteNonQuery ();
 		
 		using (var sw = new StreamWriter (output_file, false, Encoding.UTF8)) {
+			sw.WriteLine ("/*!40101 SET NAMES utf8 */;");
+			sw.WriteLine ("SET character_set_client=utf8; SET character_set_database=utf8; SET character_set_server=utf8; SET character_set_results=utf8;");
 			Categories (conn, sw);
 			Users (conn, sw);
 			Pages (conn, sw);

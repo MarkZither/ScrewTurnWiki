@@ -114,7 +114,7 @@ class WikiPage
 			}
 		}
 	}
-
+	
 	string FixupContent (string content, Dictionary <string, bool> templates)
 	{
 		if (String.IsNullOrEmpty (content))
@@ -144,12 +144,19 @@ class WikiPage
 		string value, tmp;
 		string[] fields;
 		int newStart = 0;
+		WikiImage image;
 		while (match.Success) {
 			Console.WriteLine ("image: {0}", match.Value);
 			value = match.Value.TrimStart ('[').TrimEnd (']').Replace ("Image:", String.Empty);
-			string[] parts = value.Split ('|');
-			tmp = "[image||{UP}/images/" + parts [0] + "]";
-			Console.WriteLine ("\tconverted: {0}", tmp);
+			image = new WikiImage (value);
+			if (!image.Valid) {
+				Console.WriteLine ("\tinvalid");
+				continue;
+			}
+			Console.WriteLine ("\tparsed: Name=={0}; Type=={1}; Border=={2}; Location=={3}; Alignment=={4}; Size=={5}; Caption=={6}; Link=={7}",
+					   image.Name, image.Type, image.Border, image.Location, image.Alignment, image.Size, image.Caption, image.Link);
+			Console.WriteLine ("\tconverted: {0}", image);
+			tmp = image.ToString ();
 			sb.Remove (match.Index, match.Length);
 			sb.Insert (match.Index, tmp);
 			newStart = match.Index + tmp.Length;
