@@ -31,9 +31,6 @@
 			<asp:Literal ID="lblAdminTitle" runat="server" Text="Administration" meta:resourcekey="lblAdminTitleResource1" /> - 
 			<a href="Default.aspx"><asp:Literal ID="lblHomeLink" runat="server" Text="Main Page" meta:resourcekey="lblHomeLinkResource1" /> &raquo;</a>
 		</h1>
-		<asp:Label ID="lblBrowserSupport" runat="server" Visible="False" CssClass="resulterror" 
-			Text="Your Browser might present problems with this Page (Internet Explorer 7+ and Firefox 3+ are suggested)." 
-			meta:resourcekey="lblBrowserSupportResource1" />
 		
 		<div class="clear"></div>
 		
