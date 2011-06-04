@@ -450,7 +450,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		public ComponentInformation Information {
-			get { return new ComponentInformation("AzureTableStorage Settings Provider", "Threeplicate Srl", "0.1", "", ""); }
+			get { return new ComponentInformation("AzureTableStorage Global Settings Provider", "Threeplicate Srl", "0.1", "", ""); }
 		}
 
 		public string ConfigHelpHtml {
