@@ -48,7 +48,6 @@ namespace ScrewTurn.Wiki {
 			{ "adminnamespaces", "lnkSelectNamespaces" },
 			{ "adminpages", "lnkSelectPages" },
 			{ "admincontent", "lnkSelectContent" },
-			{ "adminlog", "lnkSelectLog" },
 			{ "adminconfig", "lnkSelectConfig" },
 			{ "adminsnippets", "lnkSelectSnippets" },
 			{ "admincategories", "lnkSelectCategories" },
@@ -58,7 +57,8 @@ namespace ScrewTurn.Wiki {
 			{ "admintheme", "lnkSelectTheme" },
 			{ "adminglobalhome", "lnkSelectAdminGlobalHome" },
 			{ "adminglobalconfig", "lnkSelectGlobalConfig" },
-			{ "adminprovidersmanagement", "lnkSelectProvidersManagement" }
+			{ "adminprovidersmanagement", "lnkSelectProvidersManagement" },
+			{ "adminlog", "lnkSelectLog" },
 		};
 
 		/// <summary>
@@ -74,7 +74,6 @@ namespace ScrewTurn.Wiki {
 			lnkSelectNamespaces.CssClass = "tab";
 			lnkSelectPages.CssClass = "tab";
 			lnkSelectContent.CssClass = "tab";
-			lnkSelectLog.CssClass = "tab";
 			lnkSelectConfig.CssClass = "tab";
 			lnkSelectSnippets.CssClass = "tab";
 			lnkSelectCategories.CssClass = "tab";
@@ -85,9 +84,15 @@ namespace ScrewTurn.Wiki {
 			lnkSelectAdminGlobalHome.CssClass = "tab red";
 			lnkSelectGlobalConfig.CssClass = "tab red";
 			lnkSelectProvidersManagement.CssClass = "tab red";
+			lnkSelectLog.CssClass = "tab red";
 
 			hyperLink.CssClass = "tabselected";
-			if(hyperLink.ID == "lnkSelectAdminGlobalHome" || hyperLink.ID == "lnkSelectGlobalConfig" || hyperLink.ID == "lnkSelectProvidersManagement") hyperLink.CssClass += " red selected";
+			if(hyperLink.ID == "lnkSelectAdminGlobalHome" ||
+			   hyperLink.ID == "lnkSelectGlobalConfig" ||
+			   hyperLink.ID == "lnkSelectProvidersManagement" ||
+			   hyperLink.ID == "lnkSelectLog") {
+						hyperLink.CssClass += " red selected";
+			}
 		}
 
 		/// <summary>

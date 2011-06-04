@@ -157,15 +157,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.HyperLink lnkSelectContent;
         
         /// <summary>
-        /// lnkSelectLog control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectLog;
-        
-        /// <summary>
         /// lnkSelectPlugins control.
         /// </summary>
         /// <remarks>
@@ -218,6 +209,15 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkSelectProvidersManagement;
+        
+        /// <summary>
+        /// lnkSelectLog control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkSelectLog;
         
         /// <summary>
         /// cphAdmin control.

@@ -56,8 +56,6 @@
 				CssClass="tab" NavigateUrl="~/AdminNavPaths.aspx" meta:resourcekey="lnkSelectNavPathsResource1" />
 			<asp:HyperLink ID="lnkSelectContent" runat="server" Text="Content Editing" 
 				CssClass="tab" NavigateUrl="~/AdminContent.aspx" meta:resourcekey="lnkSelectContentResource1" />
-			<asp:HyperLink ID="lnkSelectLog" runat="server" Text="System Log" 
-				CssClass="tab" NavigateUrl="~/AdminLog.aspx" meta:resourcekey="lnkSelectLogResource1" />
 			<asp:HyperLink ID="lnkSelectPlugins" runat="server" Text="Plugins" 
 				CssClass="tab" NavigateUrl="~/AdminPlugins.aspx" meta:resourcekey="lnkSelectPluginsResource1" />
 			<asp:HyperLink ID="lnkSelectConfig" runat="server" Text="Configuration" 
@@ -70,6 +68,8 @@
 				CssClass="tab red" NavigateUrl="~/AdminGlobalConfig.aspx" meta:resourcekey="lnkSelectGlobalConfigResource1" />
 			<asp:HyperLink ID="lnkSelectProvidersManagement" runat="server" Text="Providers Management"
 				CssClass="tab red" NavigateUrl="~/AdminProvidersManagement.aspx" meta:resourcekey="lnkSelectProvidersManagementResource1" />
+			<asp:HyperLink ID="lnkSelectLog" runat="server" Text="System Log" 
+				CssClass="tab" NavigateUrl="~/AdminLog.aspx" meta:resourcekey="lnkSelectLogResource1" />
 		</div>
 	
 		<div id="ContentDiv">
