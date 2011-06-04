@@ -8,25 +8,42 @@ using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki {
 	public partial class CreateMasterPassword : BasePage {
-		protected void Page_Load(object sender, EventArgs e) {
 
+		private string currentWiki = null;
+		private string oldPassword = null;
+
+		protected void Page_Load(object sender, EventArgs e) {
+			currentWiki = DetectWiki();
+	
+			oldPassword = Settings.GetMasterPassword(currentWiki);
+
+			if(!Page.IsPostBack && oldPassword != null) {
+				trOldPassword.Visible = true;
+				lblDescriptionPwd.Visible = false;
+			}
 		}
 		protected void btnSave_Click(object sender, EventArgs e) {
-
 			Page.Validate();
-
 			if(!Page.IsValid) return;
-			string currentWiki = DetectWiki();
 
+			if(oldPassword != null && oldPassword != Hash.Compute(txtOldPassword.Text)) {
+				// Old password is invalid
+				lblResult.Visible = true;
+				lblResult.CssClass = "resulterror";
+				lblResult.Text = Properties.Messages.WrongPassword;
+				return;
+			}
 			Settings.BeginBulkUpdate(currentWiki);
 			Settings.SetMasterPassword(currentWiki, Hash.Compute(txtReNewPwd.Text));
 			Settings.EndBulkUpdate(currentWiki);
 			newAdminPassForm.Visible = false;
 			newAdminPassOk.Visible = true;
+			lblResult.Visible = true;
 			lblResult.CssClass = "resultok";
 			lblResult.Text = Properties.Messages.ConfigSaved;
 			lnkMainRedirect.Visible = true;
-			lnkMainRedirect.NavigateUrl = "/";
+			lnkMainRedirect.NavigateUrl = "~/";
+			trOldPassword.Visible = false;
 			lblDescriptionPwd.Visible = false;
 			lblNewPwd.Visible = false;
 			txtNewPwd.Visible = false;

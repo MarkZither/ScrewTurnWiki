@@ -11,6 +11,18 @@
 		</asp:Literal>
 		<br /><br />
 		<table id="tbAdminPass" runat="server">
+			<tr id="trOldPassword" runat="server" visible="false">
+				<td>
+					<p style="text-align: right;"><asp:Literal ID="lblOldPassword" runat="server" 
+					Text="Old Password" EnableViewState="False" meta:resourcekey="lblOldPasswordResource1" /></p>
+				</td>
+				<td>
+					<asp:TextBox ID="txtOldPassword" TextMode="Password" runat="server" meta:resourcekey="txtOldPasswordResource1"
+					 ToolTip="Type here the old master password" />
+					<asp:RequiredFieldValidator id="rfvOldPasswordRequired"  ControlToValidate="txtOldPassword"
+						Text="The old password is required" runat="server" meta:resourcekey="rfvOldPasswordRequiredResource1" />
+				</td>
+			</tr>
 			<tr>
 				<td>
 					<p style="text-align: right;"><asp:Literal ID="lblNewPwd" runat="server" 
@@ -19,40 +31,36 @@
 				<td>
 					<asp:TextBox ID="txtNewPwd" TextMode="Password" runat="server" meta:resourcekey="txtNewPwdResource1"
 					 ToolTip="Type here the master password" />
-					<asp:RequiredFieldValidator id="RequiredFieldValidator2"  ControlToValidate="txtNewPwd" Text="The password is required" runat="server" />
+					<asp:RequiredFieldValidator id="rfvNewPasswordRequired"  ControlToValidate="txtNewPwd"
+						Text="The password is required" runat="server" meta:resourcekey="rfvNewPasswordRequiredResource1" />
 				</td>
 			</tr> 
 			<tr>
 				<td>
 					<p style="text-align: right;"><asp:Literal ID="lblReNewPwd" runat="server" Text="New Password (Repeat)" EnableViewState="False" 
-					meta:resourcekey="lblReNewPwdResource1" /><br /></p>
+						meta:resourcekey="lblReNewPwdResource1" /></p>
 				</td>
 				<td>
 					<asp:TextBox ID="txtReNewPwd" TextMode="Password" runat="server" meta:resourcekey="txtReNewPasswordResource1" 
-					 ToolTip="Repeat the master password" />
+						ToolTip="Repeat the master password" />
 					<asp:RequiredFieldValidator id="cvCheckPwd"  ControlToValidate="txtReNewPwd" Text="The password is required" runat="server" />
 				</td>
 			</tr>
 			<tr>
-				<td></td>
-				<td>
+				<td colspan="2" align="center">
 					<asp:CompareValidator id="cvComparePwd" runat="server" ErrorMessage="Passwords are not equal" ControlToValidate="txtReNewPwd"
 					 ControlToCompare="txtNewPwd" meta:resourcekey="cvComparePwdResource1">	</asp:CompareValidator>
 				</td>
 			</tr>
 			<tr>
-				<td style="height: 24px">&nbsp;</td>
-				<td style="height: 24px">
+				<td colspan="2" align="center">
 					<asp:Button ID="BtnSave" runat="server" Text="Save Password" OnClick="btnSave_Click" meta:resourcekey="BtnSaveResource1"/>
 				</td>
 			</tr>
 		</table>
 	</div>
+	<asp:Label ID="lblResult" runat="server" CssClass="resultok" Text="" meta:resourcekey="lblNewAdminPassResultResource1" Visible="false" />
 	<div id="newAdminPassOk" runat="server" Visible="false">
-	<br />
-		<asp:Label ID="lblResult" runat="server" CssClass="resultok" Text="" meta:resourcekey="lblNewAdminPassResultResource1" />
-		<br /><br />
 		<asp:HyperLink ID="lnkMainRedirect" runat="server" Text="Go To Main Page" meta:resourcekey="lnkMainRedirectResource1"></asp:HyperLink>
-		<br />
 	</div>
 </asp:Content>
