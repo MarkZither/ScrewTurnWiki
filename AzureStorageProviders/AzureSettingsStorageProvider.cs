@@ -20,8 +20,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		private TableServiceContext _context;
 
-		private bool isFirstWikiStart;
-
 		private IAclManager _aclManager;
 
 		private Dictionary<string, string> _settingsDictionary;
@@ -638,7 +636,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		/// <returns><c>true</c> if the wiki was started for the first time, <c>false</c> otherwise.</returns>
 		public bool IsFirstApplicationStart() {
-			return isFirstWikiStart;
+			return _settings.Count == 0;
 		}
 		
 		/// <summary>

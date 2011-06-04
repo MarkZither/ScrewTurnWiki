@@ -99,7 +99,7 @@ namespace ScrewTurn.Wiki {
 
 			foreach(Wiki.PluginFramework.Wiki wiki in Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis()) {
 				ISettingsStorageProviderV30 ssp = Collectors.CollectorsBox.GetSettingsProvider(wiki.WikiName);
-				//if(ssp.IsFirstApplicationStart()) {
+				if(ssp.IsFirstApplicationStart()) {
 					if(ssp.GetMetaDataItem(MetaDataItem.AccountActivationMessage, null) == "")
 						ssp.SetMetaDataItem(MetaDataItem.AccountActivationMessage, null, Defaults.AccountActivationMessageContent);
 					if(ssp.GetMetaDataItem(MetaDataItem.EditNotice, null) == "")
@@ -119,7 +119,7 @@ namespace ScrewTurn.Wiki {
 					if(ssp.GetMetaDataItem(MetaDataItem.ApproveDraftMessage, null) == "") {
 						ssp.SetMetaDataItem(MetaDataItem.ApproveDraftMessage, null, Defaults.ApproveDraftMessage);
 					}
-				//}
+				}
 
 				bool groupsCreated = VerifyAndCreateDefaultGroups(wiki.WikiName);
 
