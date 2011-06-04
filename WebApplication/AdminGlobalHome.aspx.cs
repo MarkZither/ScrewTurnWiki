@@ -23,57 +23,8 @@ namespace ScrewTurn.Wiki {
 			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) UrlTools.Redirect("AccessDenied.aspx");
 
 			PrintSystemStatus();
-
-			if(!Page.IsPostBack) {
-				string anon = Settings.GetAnonymousGroup(currentWiki);
-				foreach(UserGroup group in Users.GetUserGroups(currentWiki)) {
-					if(group.Name != anon) {
-						ListItem item = new ListItem(group.Name, group.Name);
-						item.Selected = true;
-						lstGroups.Items.Add(item);
-					}
-				}
-			}
 		}
 
-		protected void cvGroups_ServerValidate(object sender, ServerValidateEventArgs e) {
-			e.IsValid = false;
-			foreach(ListItem item in lstGroups.Items) {
-				if(item.Selected) {
-					e.IsValid = true;
-					break;
-				}
-			}
-		}
-
-		protected void btnSendBulkEmail_Click(object sender, EventArgs e) {
-			lblEmailResult.CssClass = "";
-			lblEmailResult.Text = "";
-
-			Page.Validate("email");
-			if(!Page.IsValid) return;
-
-			string currentWiki = DetectWiki();
-			List<string> emails = new List<string>();
-			foreach(ListItem item in lstGroups.Items) {
-				if(item.Selected) {
-					UserGroup group = Users.FindUserGroup(currentWiki, item.Value);
-					if(group != null) {
-						foreach(string user in group.Users) {
-							UserInfo u = Users.FindUser(currentWiki, user);
-							if(u != null) emails.Add(u.Email);
-						}
-					}
-				}
-			}
-
-			EmailTools.AsyncSendMassEmail(emails.ToArray(), GlobalSettings.SenderEmail,
-				txtSubject.Text, txtBody.Text, false);
-
-			lblEmailResult.CssClass = "resultok";
-			lblEmailResult.Text = Properties.Messages.MassEmailSent;
-		}
-		
 		/// <summary>
 		/// Rebuilds the page links for the specified pages.
 		/// </summary>

@@ -144,28 +144,4 @@
   <data name="lnkPagesResource1.ToolTip" xml:space="preserve">
     <value>Go to the Pages administration tab</value>
   </data>
-  <data name="btnSendBulkEmailResource1.Text" xml:space="preserve">
-    <value>Send Bulk Email</value>
-  </data>
-  <data name="btnSendBulkEmailResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cvGroupsResource1.ErrorMessage" xml:space="preserve">
-    <value>You must select at least one group</value>
-  </data>
-  <data name="lblBulkEmailInfoResource1.Text" xml:space="preserve">
-    <value>You can send an email message to all users of one or more groups.</value>
-  </data>
-  <data name="lblBulkEmailResource1.Text" xml:space="preserve">
-    <value>Mass Email</value>
-  </data>
-  <data name="lblSubjectResource1.Text" xml:space="preserve">
-    <value>Subject</value>
-  </data>
-  <data name="rfvBodyResource1.ErrorMessage" xml:space="preserve">
-    <value>Body is required</value>
-  </data>
-  <data name="rfvSubjectResource1.ErrorMessage" xml:space="preserve">
-    <value>Subject is required</value>
-  </data>
 </root>
