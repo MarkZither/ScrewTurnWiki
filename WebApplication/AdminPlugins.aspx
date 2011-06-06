@@ -98,33 +98,6 @@
 				</div>
 			</asp:Panel>
 		
-			<div id="ProvidersUpdateDiv">
-		
-				<script type="text/javascript">
-				<!--
-					function __ShowUpdateProgress() {
-						if (RequestConfirm()) {
-							document.getElementById("ProvidersUpdateProgress").style["display"] = "";
-							return true;
-						}
-						else return false;
-					}
-
-					function __HideUpdateProgress() {
-						document.getElementById("ProvidersUpdateProgress").style["display"] = "none";
-					}
-				// -->
-				</script>
-			
-				<asp:Button ID="btnAutoUpdateProviders" runat="server" Text="Auto-update Providers" ToolTip="Automatically update all installed providers, of all types"
-					OnClick="btnAutoUpdateProviders_Click" meta:resourcekey="btnAutoUpdateProvidersResource1" />
-				<span id="ProvidersUpdateProgress" style="display: none;">
-					<img src="Images/Wait.gif" alt="..." />
-				</span>
-				<asp:Label ID="lblAutoUpdateResult" runat="server" />
-			
-			</div>
-		
 		</asp:Panel>
 	
 		<asp:HiddenField ID="txtCurrentProvider" runat="server" />

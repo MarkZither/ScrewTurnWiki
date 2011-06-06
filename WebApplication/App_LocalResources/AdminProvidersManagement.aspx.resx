@@ -321,4 +321,13 @@
   <data name="lblImportGlobalSettingsResultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
+  <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">
+    <value>Auto-update Providers</value>
+  </data>
+  <data name="btnAutoUpdateProvidersResource1.ToolTip" xml:space="preserve">
+    <value>Automatically update all installed providers, of all types</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
 </root>

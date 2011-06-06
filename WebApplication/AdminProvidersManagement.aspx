@@ -7,6 +7,79 @@
 	<div class="leftaligned">
 		<h2 class="sectiontitle"><asp:Literal ID="lblProvidersManagementTitle" runat="server" Text="Providers Management" EnableViewState="False" meta:resourcekey="lblProvidersManagementTitleResource1" /></h2>
 	
+		<asp:Literal ID="lblDisplay" runat="server" Text="Display" EnableViewState="False" meta:resourcekey="lblDisplayResource1" />:
+		<asp:RadioButton ID="rdoSettings" runat="server" Text="Settings Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoSettingsResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoPages" runat="server" Text="Pages Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoPagesResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoFiles" runat="server" Text="Files Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFilesResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoUsers" runat="server" Text="Users Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoUsersResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" AutoPostBack="true" />
+		<br />
+		
+		<div id="ProvidersListContainerDiv">
+			<asp:Repeater ID="rptProviders" runat="server"
+				OnDataBinding="rptProviders_DataBinding" OnItemCommand="rptProviders_ItemCommand">
+				<HeaderTemplate>
+					<table cellpadding="0" cellspacing="0" class="generic">
+						<thead>
+						<tr class="tableheader">
+							<th><asp:Literal ID="lblName" runat="server" EnableViewState="False" meta:resourcekey="lblNameResource1" Text="Name" /></th>
+							<th><asp:Literal ID="lblVersion" runat="server" EnableViewState="False" meta:resourcekey="lblVersionResource1" Text="Ver." /></th>
+							<th><asp:Literal ID="lblAuthor" runat="server" EnableViewState="False" meta:resourcekey="lblAuthorResource1" Text="Author" /></th>
+							<th><asp:Literal ID="lblUpdateStatus" runat="server" EnableViewState="false" meta:resourcekey="lblUpdateStatusResource1" Text="Update Status" /></th>
+						</tr>
+						</thead>
+						<tbody>
+				</HeaderTemplate>
+				<ItemTemplate>
+					<tr class='tablerow<%# Eval("AdditionalClass") %>'>
+						<td><%# Eval("Name") %></td>
+						<td><%# Eval("Version") %></td>
+						<td><a href='<%# Eval("AuthorUrl") %>' target="_blank"><%# Eval("Author") %></a></td>
+						<td><%# Eval("UpdateStatus") %></td>
+					</tr>
+				</ItemTemplate>
+				<AlternatingItemTemplate>
+					<tr class='tablerowalternate<%# Eval("AdditionalClass") %>'>
+						<td><%# Eval("Name") %></td>
+						<td><%# Eval("Version") %></td>
+						<td><a href='<%# Eval("AuthorUrl") %>' target="_blank"><%# Eval("Author") %></a></td>
+						<td><%# Eval("UpdateStatus") %></td>
+					</tr>
+				</AlternatingItemTemplate>
+				<FooterTemplate>
+					</tbody>
+					</table>
+				</FooterTemplate>
+			</asp:Repeater>
+		</div>
+
+		<div id="ProvidersUpdateDiv">
+		
+			<script type="text/javascript">
+			<!--
+				function __ShowUpdateProgress() {
+					if(RequestConfirm()) {
+						document.getElementById("ProvidersUpdateProgress").style["display"] = "";
+						return true;
+					}
+					else return false;
+				}
+
+				function __HideUpdateProgress() {
+					document.getElementById("ProvidersUpdateProgress").style["display"] = "none";
+				}
+			// -->
+			</script>
+			
+			<asp:Button ID="btnAutoUpdateProviders" runat="server" Text="Auto-update Providers" ToolTip="Automatically update all installed providers, of all types"
+				OnClick="btnAutoUpdateProviders_Click" meta:resourcekey="btnAutoUpdateProvidersResource1" />
+			<span id="ProvidersUpdateProgress" style="display: none;">
+				<img src="Images/Wait.gif" alt="..." />
+			</span>
+			<asp:Label ID="lblAutoUpdateResult" runat="server" />
+			
+		</div>
+
 		<h2 class="separator"><asp:Literal ID="lblUploadProviders" runat="server" Text="Providers DLLs Management" EnableViewState="False" meta:resourcekey="lblUploadProvidersResource1" /></h2>
 		<div id="DllUploadContainerDiv">
 			<h4><asp:Literal ID="lblUploadNewDll" runat="server" Text="Upload new DLL" EnableViewState="False" meta:resourcekey="lblUploadNewDllResource1" /></h4>

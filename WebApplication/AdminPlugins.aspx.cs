@@ -38,7 +38,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void ResetEditor() {
 			pnlProviderDetails.Visible = false;
-			btnAutoUpdateProviders.Visible = true;
 			txtCurrentProvider.Value = "";
 			lblResult.CssClass = "";
 			lblResult.Text = "";
@@ -135,7 +134,6 @@ namespace ScrewTurn.Wiki {
 				}
 
 				btnEnable.Visible = !enabled;
-				btnAutoUpdateProviders.Visible = false;
 				btnDisable.Visible = enabled;
 				btnDisable.Enabled = canDisable;
 				lblCannotDisable.Visible = !canDisable;
@@ -223,28 +221,6 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnCancel_Click(object sender, EventArgs e) {
 			ResetEditor();
-			rptProviders.DataBind();
-		}
-
-		protected void btnAutoUpdateProviders_Click(object sender, EventArgs e) {
-			lblAutoUpdateResult.CssClass = "";
-			lblAutoUpdateResult.Text = "";
-
-			Log.LogEntry("Providers auto-update requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
-
-			ProviderUpdater updater = new ProviderUpdater(GlobalSettings.Provider,
-				Collectors.FileNames,
-				Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki),
-				Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki),
-				Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki),
-				Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki));
-
-			int count = updater.UpdateAll();
-
-			lblAutoUpdateResult.CssClass = "resultok";
-			if(count > 0) lblAutoUpdateResult.Text = Properties.Messages.ProvidersUpdated;
-			else lblAutoUpdateResult.Text = Properties.Messages.NoProvidersToUpdate;
-
 			rptProviders.DataBind();
 		}
 

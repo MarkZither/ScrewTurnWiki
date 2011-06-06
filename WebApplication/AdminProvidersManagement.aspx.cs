@@ -39,6 +39,94 @@ namespace ScrewTurn.Wiki {
 
 		#region DLLs
 
+		protected void rdo_CheckedChanged(object sender, EventArgs e) {
+			ResetEditor();
+			rptProviders.DataBind();
+		}
+
+		/// <summary>
+		/// Resets the editor.
+		/// </summary>
+		private void ResetEditor() {
+			btnAutoUpdateProviders.Visible = true;
+		}
+
+		protected void rptProviders_DataBinding(object sender, EventArgs e) {
+			List<IProviderV30> providers = new List<IProviderV30>(5);
+
+			int enabledCount = 0;
+
+			if(rdoFormatter.Checked) {
+				IFormatterProviderV30[] formatterProviders = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
+				enabledCount = formatterProviders.Length;
+				providers.AddRange(formatterProviders);
+			}
+
+			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
+
+			for(int i = 0; i < providers.Count; i++) {
+				IProviderV30 prov = providers[i];
+				result.Add(new ProviderRow(prov.Information,
+					prov.GetType().FullName,
+					GetUpdateStatus(prov.Information),
+					i > enabledCount - 1,
+					false));
+			}
+
+			rptProviders.DataSource = result;
+		}
+
+		/// <summary>
+		/// Gets the update status of a provider.
+		/// </summary>
+		/// <param name="info">The component information.</param>
+		/// <returns>The update status.</returns>
+		private string GetUpdateStatus(ComponentInformation info) {
+			if(!GlobalSettings.DisableAutomaticVersionCheck) {
+				if(string.IsNullOrEmpty(info.UpdateUrl)) return "n/a";
+				else {
+					string newVersion = null;
+					string newAssemblyUrl = null;
+					UpdateStatus status = Tools.GetUpdateStatus(info.UpdateUrl, info.Version, out newVersion, out newAssemblyUrl);
+
+					if(status == UpdateStatus.Error) {
+						return "<span class=\"resulterror\">" + Properties.Messages.Error + "</span>";
+					}
+					else if(status == UpdateStatus.NewVersionFound) {
+						return "<span class=\"resulterror\">" + Properties.Messages.NewVersion + " <b>" + newVersion + "</b>" +
+							(string.IsNullOrEmpty(newAssemblyUrl) ? "" : " (" + Properties.Messages.AutoUpdateAvailable + ")") + "</span>";
+					}
+					else if(status == UpdateStatus.UpToDate) {
+						return "<span class=\"resultok\">" + Properties.Messages.UpToDate + "</span>";
+					}
+					else throw new NotSupportedException();
+				}
+			}
+			else return "n/a";
+		}
+
+		protected void btnAutoUpdateProviders_Click(object sender, EventArgs e) {
+			lblAutoUpdateResult.CssClass = "";
+			lblAutoUpdateResult.Text = "";
+
+			Log.LogEntry("Providers auto-update requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
+
+			ProviderUpdater updater = new ProviderUpdater(GlobalSettings.Provider,
+				Collectors.FileNames,
+				Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki),
+				Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki),
+				Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki),
+				Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki));
+
+			int count = updater.UpdateAll();
+
+			lblAutoUpdateResult.CssClass = "resultok";
+			if(count > 0) lblAutoUpdateResult.Text = Properties.Messages.ProvidersUpdated;
+			else lblAutoUpdateResult.Text = Properties.Messages.NoProvidersToUpdate;
+
+			rptProviders.DataBind();
+		}
+
 		/// <summary>
 		/// Loads all the providers' DLLs.
 		/// </summary>

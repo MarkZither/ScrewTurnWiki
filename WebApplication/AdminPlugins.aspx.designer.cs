@@ -184,24 +184,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Label lblProviderConfigHelp;
         
         /// <summary>
-        /// btnAutoUpdateProviders control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAutoUpdateProviders;
-        
-        /// <summary>
-        /// lblAutoUpdateResult control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAutoUpdateResult;
-        
-        /// <summary>
         /// txtCurrentProvider control.
         /// </summary>
         /// <remarks>
