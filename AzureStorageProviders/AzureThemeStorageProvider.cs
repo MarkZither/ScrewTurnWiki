@@ -39,6 +39,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				List<string> files = new List<string>();
 				foreach(IListBlobItem blobItem in blobItems) {
 					string blobName = blobItem.Uri.AbsoluteUri;
+					if(!flatBlob) {
+						blobName = blobName.Substring(blobName.IndexOf(blobItem.Container.Name) + blobItem.Container.Name.Length).Trim('/');
+					}
 					files.Add(blobName);
 				}
 				return files;
