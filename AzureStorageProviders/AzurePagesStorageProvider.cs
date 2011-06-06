@@ -26,11 +26,44 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		#region IPagesStorageProviderV30 Members
 
+		#region Namespaces
+
+		private Dictionary<string, NamespacesEntity> _namespaces;
+
+		private List<NamespacesEntity> GetNamespacesEntities(string wiki) {
+			if(_namespaces == null) {
+				var query = (from e in _context.CreateQuery<NamespacesEntity>(NamespacesTable).AsTableServiceQuery()
+							 where e.PartitionKey.Equals(wiki)
+							 select e).AsTableServiceQuery();
+				var entities = QueryHelper<NamespacesEntity>.All(query);
+
+				_namespaces = new Dictionary<string, NamespacesEntity>();
+				foreach(var entity in entities) {
+					_namespaces[entity.RowKey] = entity;
+				}
+			}
+			List<NamespacesEntity> namespacesEntitiesList = new List<NamespacesEntity>(_namespaces.Count);
+			foreach(var pair in _namespaces) {
+				namespacesEntitiesList.Add(pair.Value);
+			}
+
+			return namespacesEntitiesList;
+		}
+
 		private NamespacesEntity GetNamespacesEntity(string wiki, string namespaceName) {
-			var query = (from e in _context.CreateQuery<NamespacesEntity>(NamespacesTable).AsTableServiceQuery()
-						 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(namespaceName)
-						 select e).AsTableServiceQuery();
-			return QueryHelper<NamespacesEntity>.FirstOrDefault(query);
+			if(_namespaces == null) _namespaces = new Dictionary<string,NamespacesEntity>();
+			
+			if(!_namespaces.ContainsKey(namespaceName)) {	
+				var query = (from e in _context.CreateQuery<NamespacesEntity>(NamespacesTable).AsTableServiceQuery()
+							 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(namespaceName)
+							 select e).AsTableServiceQuery();
+				var entity = QueryHelper<NamespacesEntity>.FirstOrDefault(query);
+				if(entity == null) return null;
+
+				_namespaces[namespaceName] = entity;
+			}
+
+			return _namespaces[namespaceName];
 		}
 
 		/// <summary>
@@ -60,10 +93,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <returns>The sub-namespaces, sorted by name.</returns>
 		public NamespaceInfo[] GetNamespaces() {
 			try {
-				var query = (from e in _context.CreateQuery<NamespacesEntity>(NamespacesTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki)
-							 select e).AsTableServiceQuery();
-				var entities = QueryHelper<NamespacesEntity>.All(query);
+				var entities = GetNamespacesEntities(_wiki);
 				if(entities == null) return null;
 
 				List<NamespaceInfo> namespaces = new List<NamespaceInfo>(entities.Count);
@@ -99,6 +129,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				};
 				_context.AddObject(NamespacesTable, namespacesEntity);
 				_context.SaveChangesStandard();
+
+				// Invalidate local cache.
+				_namespaces = null;
+
 				return new NamespaceInfo(name, this, null);
 			}
 			catch(Exception ex) {
@@ -218,6 +252,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.DeleteObject(oldNamespaceEntity);
 				_context.SaveChangesStandard();
 
+				// Invalidate local cache.
+				_namespaces = null;
+
 				return new NamespaceInfo(newName, this, GetPage(newNamespaceEntity.DefaultPageFullName));
 			}
 			catch(Exception ex) {
@@ -247,6 +284,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.UpdateObject(entity);
 				_context.SaveChangesStandard();
 
+				// Invalidate local cache.
+				_namespaces = null;
+
 				nspace.DefaultPage = page;
 				return nspace;
 			}
@@ -275,6 +315,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				_context.DeleteObject(nspaceEntity);
 				_context.SaveChangesStandard();
+
+				// Invalidate local cache.
+				_namespaces = null;
+
 				return true;
 			}
 			catch(Exception ex) {
@@ -382,6 +426,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				throw ex;
 			}
 		}
+
+		#endregion
 
 		private CategoriesEntity GetCategoriesEntity(string wiki, string categoryFullName) {
 			var query = (from e in _context.CreateQuery<CategoriesEntity>(CategoriesTable).AsTableServiceQuery()
