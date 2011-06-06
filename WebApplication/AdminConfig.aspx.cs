@@ -121,6 +121,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="currentWiki">The wiki.</param>
 		private void LoadContentConfig(string currentWiki) {
+			string[] theme = Settings.GetTheme(currentWiki, null).Split(new char[] { '|' });
+			ThemeRootSelector.SelectedProvider = theme[0];
+			ThemeRootSelector.SelectedThemes = theme[1];
 			PopulateMainPages(Settings.GetDefaultPage(currentWiki));
 			txtDateTimeFormat.Text = Settings.GetDateTimeFormat(currentWiki);
 			PopulateDateTimeFormats();

@@ -12,6 +12,7 @@ namespace ScrewTurn.Wiki {
 
 		private const string RootName = "&lt;root&gt;";
 		private const string RootNameUnescaped = "-- root --";
+
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
@@ -59,8 +60,6 @@ namespace ScrewTurn.Wiki {
 			if(e.CommandName == "Select") {
 				// rptNamespaces.DataBind(); Not needed because the list is hidden on select
 
-				string theme = Settings.GetTheme(currentWiki, nspace != null ? nspace.Name : null);
-
 				txtName.Enabled = false;
 				txtName.Text = nspace != null ? nspace.Name : RootNameUnescaped;
 				txtNewName.Text = "";
@@ -81,6 +80,11 @@ namespace ScrewTurn.Wiki {
 
 				lblResult.Text = "";
 				lblResult.CssClass = "";
+
+				string[] theme = Settings.GetTheme(currentWiki, nspace != null ? nspace.Name : null).Split(new char[] { '|' });
+
+				providerThSelector.SelectedProvider = theme[0];
+				providerThSelector.SelectedThemes = theme[1];
 			}
 			else if(e.CommandName == "Perms") {
 				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) return;

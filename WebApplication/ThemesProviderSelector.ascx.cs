@@ -35,20 +35,18 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public void Reload() {
 			IProviderV40[] allProviders = null;
-			string defaultProvider = null;
 
 			allProviders = Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki);
 			lstThemesProviders.Items.Clear();
 
-			int count = 0;
 			lstThemesProviders.Items.Add(new ListItem("standard", "standard"));
 			foreach(IProviderV40 prov in allProviders) {
-					string typeName = prov.GetType().FullName;
-					lstThemesProviders.Items.Add(new ListItem(prov.Information.Name, typeName));
-					if(typeName == defaultProvider) lstThemesProviders.Items[count].Selected = true;
-					count++;
-				}
+				string typeName = prov.GetType().FullName;
+				ListItem item = new ListItem(prov.Information.Name, typeName);
+				if(typeName == Settings.GetTheme(currentWiki, null).Split(new char[] { '|' })[0]) item.Selected = true;
+				lstThemesProviders.Items.Add(item);
 			}
+		}
 
 		/// <summary>
 		/// Gets or sets the selected provider.
@@ -102,11 +100,13 @@ namespace ScrewTurn.Wiki {
 			set { lstThemesProviders.Enabled = value; }
 		}
 
-		private void FillThemes(string provider) { 
+		private void FillThemes(string provider) {
 			lstThemes.Items.Clear();
 			lstThemes.Items.Add(new ListItem(Properties.Messages.SelectTheme, ""));
 			foreach(string th in Themes.ListThemes(currentWiki, provider)) {
-				lstThemes.Items.Add(new ListItem(th, th));
+				ListItem item = new ListItem(th, th);
+				if(th == Settings.GetTheme(currentWiki, null).Split(new char[] { '|' })[1]) item.Selected = true;
+				lstThemes.Items.Add(item);
 			}
 		}
 
