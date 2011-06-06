@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 		[Test]
 		public void Init() {
 			IUsersStorageProviderV40 prov = GetProvider();
-			prov.Init(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "wiki1");
+			prov.Init(MockHost(), "DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "wiki1");
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}
