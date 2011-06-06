@@ -1,6 +1,5 @@
 
-ScrewTurn Wiki is written in Microsoft Visual Studio 2008 Professional. The project is structured 
-as a Visual Studio solution (ScrewTurnWiki.sln).
+The project is structured as a Visual Studio 2010 solution (ScrewTurnWiki.sln).
 
 In order to compile the application you can either build the solution in Visual Studio, or 
 follow the instructions included in the Build directory.

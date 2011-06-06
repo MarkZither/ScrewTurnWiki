@@ -108,7 +108,7 @@ namespace ScrewTurn.Wiki {
 			lnkSelectGlobalConfig.Visible = CanManageConfiguration(currentUser, currentGroups);
 
 			// Content (can manage config)
-			lnkSelectContent.Visible = CanManageConfiguration(currentUser, currentGroups);
+			lnkSelectContent.Visible = CanManageMetaFiles(currentUser, currentGroups);
 
 			// Groups (can manage groups)
 			lnkSelectGroups.Visible = CanManageGroups(currentUser, currentGroups);
@@ -148,6 +148,18 @@ namespace ScrewTurn.Wiki {
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			bool canManageConfiguration = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageConfiguration, username, groups);
 			return canManageConfiguration;
+		}
+
+		/// <summary>
+		/// Determines whether a user can manage the Meta-Files (Content).
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <param name="groups">The groups.</param>
+		/// <returns><c>true</c> if the user can manage the Meta-Files (Content), <c>false</c> otherwise.</returns>
+		public static bool CanManageMetaFiles(string username, string[] groups) {
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
+			bool canManageMetaFiles = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageMetaFiles, username, groups);
+			return canManageMetaFiles;
 		}
 
 		/// <summary>

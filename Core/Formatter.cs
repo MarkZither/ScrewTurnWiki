@@ -959,7 +959,7 @@ namespace ScrewTurn.Wiki {
 			buffer.Append(@""" title=""");
 			buffer.Append(SectionLinkTextPlaceHolder);
 			if(Settings.GetEnableSectionAnchors(wiki)) buffer.Append(@""">&#0182;</a>");
-			else buffer.Append(@"""></a>");
+			else buffer.Append(@""" style=""visibility: hidden;"">&nbsp;</a>");
 		}
 
 		/// <summary>
