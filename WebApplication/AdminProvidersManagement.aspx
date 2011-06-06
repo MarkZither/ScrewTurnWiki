@@ -8,16 +8,12 @@
 		<h2 class="sectiontitle"><asp:Literal ID="lblProvidersManagementTitle" runat="server" Text="Providers Management" EnableViewState="False" meta:resourcekey="lblProvidersManagementTitleResource1" /></h2>
 	
 		<asp:Literal ID="lblDisplay" runat="server" Text="Display" EnableViewState="False" meta:resourcekey="lblDisplayResource1" />:
-		<asp:RadioButton ID="rdoSettings" runat="server" Text="Settings Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoSettingsResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoPages" runat="server" Text="Pages Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoPagesResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoFiles" runat="server" Text="Files Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFilesResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoUsers" runat="server" Text="Users Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoUsersResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoStorageProviders" runat="server" Text="Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoStorageProvidersResource1" AutoPostBack="true" />
+		<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" AutoPostBack="true" />
 		<br />
 		
 		<div id="ProvidersListContainerDiv">
-			<asp:Repeater ID="rptProviders" runat="server"
-				OnDataBinding="rptProviders_DataBinding" OnItemCommand="rptProviders_ItemCommand">
+			<asp:Repeater ID="rptProviders" runat="server" OnDataBinding="rptProviders_DataBinding" >
 				<HeaderTemplate>
 					<table cellpadding="0" cellspacing="0" class="generic">
 						<thead>
@@ -79,6 +75,7 @@
 			<asp:Label ID="lblAutoUpdateResult" runat="server" />
 			
 		</div>
+		<br /><br />
 
 		<h2 class="separator"><asp:Literal ID="lblUploadProviders" runat="server" Text="Providers DLLs Management" EnableViewState="False" meta:resourcekey="lblUploadProvidersResource1" /></h2>
 		<div id="DllUploadContainerDiv">

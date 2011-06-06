@@ -27,6 +27,9 @@ namespace ScrewTurn.Wiki {
 				LoadDlls();
 
 				LoadSourceProviders();
+
+				// Load providers and related data
+				rptProviders.DataBind();
 			}
 		}
 		
@@ -61,6 +64,18 @@ namespace ScrewTurn.Wiki {
 				enabledCount = formatterProviders.Length;
 				providers.AddRange(formatterProviders);
 			}
+			else {
+				IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider = Collectors.CollectorsBox.GlobalSettingsProvider;
+				providers.Add(globalSettingsStorageProvider);
+				ISettingsStorageProviderV30 settingsStorageProviders = Collectors.CollectorsBox.GetSettingsProvider(currentWiki);
+				providers.Add(settingsStorageProviders);
+				IPagesStorageProviderV30[] pagesStorageProviders = Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki);
+				providers.AddRange(pagesStorageProviders);
+				IFilesStorageProviderV30[] filesStorageProviders = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki);
+				providers.AddRange(filesStorageProviders);
+				IUsersStorageProviderV30[] usersStorageProviders = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki);
+				providers.AddRange(usersStorageProviders);
+			}
 
 			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
 
@@ -69,7 +84,7 @@ namespace ScrewTurn.Wiki {
 				result.Add(new ProviderRow(prov.Information,
 					prov.GetType().FullName,
 					GetUpdateStatus(prov.Information),
-					i > enabledCount - 1,
+					false,
 					false));
 			}
 

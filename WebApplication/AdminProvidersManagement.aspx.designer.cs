@@ -31,40 +31,13 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblDisplay;
         
         /// <summary>
-        /// rdoSettings control.
+        /// rdoStorageProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoSettings;
-        
-        /// <summary>
-        /// rdoPages control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoPages;
-        
-        /// <summary>
-        /// rdoFiles control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoFiles;
-        
-        /// <summary>
-        /// rdoUsers control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoUsers;
+        protected global::System.Web.UI.WebControls.RadioButton rdoStorageProviders;
         
         /// <summary>
         /// rdoFormatter control.
