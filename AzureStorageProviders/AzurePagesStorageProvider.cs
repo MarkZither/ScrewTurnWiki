@@ -2688,12 +2688,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
+			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
+
 			_host = host;
 			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki.ToLowerInvariant();
-			string[] connectionStrings = config.Split(new char[] { '|' });
-			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
-
-			_context = TableStorage.GetContext(connectionStrings[0], connectionStrings[1]);
+			
+			_context = TableStorage.GetContext(config);
 
 			index = new AzureIndex(new IndexConnector(GetWordFetcher, GetSize, GetCount, ClearIndex, DeleteDataForDocument, SaveDataForDocument, TryFindWord));
 		}
@@ -2709,18 +2709,17 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			string[] connectionStrings = config.Split(new char[] { '|' });
-			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
+			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
 
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], NamespacesTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], CategoriesTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], PagesInfoTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], PagesContentsTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], MessagesTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], NavigationPathsTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], SnippetsTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], ContentTemplatesTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], IndexWordMappingTable);
+			TableStorage.CreateTable(config, NamespacesTable);
+			TableStorage.CreateTable(config, CategoriesTable);
+			TableStorage.CreateTable(config, PagesInfoTable);
+			TableStorage.CreateTable(config, PagesContentsTable);
+			TableStorage.CreateTable(config, MessagesTable);
+			TableStorage.CreateTable(config, NavigationPathsTable);
+			TableStorage.CreateTable(config, SnippetsTable);
+			TableStorage.CreateTable(config, ContentTemplatesTable);
+			TableStorage.CreateTable(config, IndexWordMappingTable);
 		}
 
 		/// <summary>

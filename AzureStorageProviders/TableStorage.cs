@@ -17,32 +17,31 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Get the storage account.
 		/// </summary>
-		/// <param name="accountName">The name of the account.</param>
-		/// <param name="key">The key for the given account.</param>
-		public static CloudStorageAccount StorageAccount(string accountName, string key) {
-			return new CloudStorageAccount(new StorageCredentialsAccountAndKey(accountName, key), false);
+		/// <param name="connectionString">The connection string.</param>
+		public static CloudStorageAccount StorageAccount(string connectionString) {
+			return CloudStorageAccount.Parse(connectionString);
 		}
 
-		private static CloudTableClient TableClient(string accountName, string key) {
-			return StorageAccount(accountName, key).CreateCloudTableClient();
+		private static CloudTableClient TableClient(string connectionString) {
+			return StorageAccount(connectionString).CreateCloudTableClient();
 		}
 
 		/// <summary>
 		/// Creates a table if it does not exist.
 		/// </summary>
-		/// <param name="accountName">Name of the account.</param>
-		/// <param name="key">The key.</param>
+		/// <param name="connectionString">The connection string.</param>
 		/// <param name="tableName">The name of the table.</param>
-		public static void CreateTable(string accountName, string key, string tableName) {
-			TableClient(accountName, key).CreateTableIfNotExist(tableName);
+		public static void CreateTable(string connectionString, string tableName) {
+			TableClient(connectionString).CreateTableIfNotExist(tableName);
 		}
 
 		/// <summary>
 		/// Removes all data from a table.
 		/// </summary>
+		/// <param name="connectionString">The connection string.</param>
 		/// <param name="tableName">The table name.</param>
-		public static void TruncateTable(string accountName, string key, string tableName) {
-			var client = TableClient(accountName, key);
+		public static void TruncateTable(string connectionString, string tableName) {
+			var client = TableClient(connectionString);
 			if(!client.DoesTableExist(tableName)) return;
 
 			var context = client.GetDataServiceContext();
@@ -62,8 +61,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Gets the context.
 		/// </summary>
-		public static TableServiceContext GetContext(string accountName, string key) {
-			TableServiceContext context = TableClient(accountName, key).GetDataServiceContext();
+		/// <param name="connectionString">The connection string.</param>
+		public static TableServiceContext GetContext(string connectionString) {
+			TableServiceContext context = TableClient(connectionString).GetDataServiceContext();
 			context.RetryPolicy = GetDefaultRetryPolicy();
 			return context;
 		}
@@ -82,10 +82,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// Deletes all blobs in all containers.
 		/// Used only in tests tear-down method
 		/// </summary>
-		/// <param name="accountName">Name of the account.</param>
-		/// <param name="key">The key.</param>
-		public static void DeleteAllBlobs(string accountName, string key) {
-			CloudBlobClient _client = TableStorage.StorageAccount(accountName, key).CreateCloudBlobClient();
+		/// <param name="connectionString">The connection string.</param>
+		public static void DeleteAllBlobs(string connectionString) {
+			CloudBlobClient _client = TableStorage.StorageAccount(connectionString).CreateCloudBlobClient();
 			_client.RetryPolicy = GetDefaultRetryPolicy();
 
 			foreach(CloudBlobContainer containerRef in _client.ListContainers()) {

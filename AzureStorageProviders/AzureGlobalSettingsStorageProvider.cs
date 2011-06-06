@@ -415,15 +415,14 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
+			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
+
 			_host = host;
 			_wiki = wiki;
 
-			string[] connectionStrings = config.Split(new char[] { '|' });
-			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
+			_context = TableStorage.GetContext(config);
 
-			_context = TableStorage.GetContext(connectionStrings[0], connectionStrings[1]);
-
-			_client = TableStorage.StorageAccount(connectionStrings[0], connectionStrings[1]).CreateCloudBlobClient();
+			_client = TableStorage.StorageAccount(config).CreateCloudBlobClient();
 		}
 
 		/// <summary>
@@ -437,13 +436,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			string[] connectionStrings = config.Split(new char[] { '|' });
-			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
+			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
 
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], GlobalSettingsTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], LogsTable);
+			TableStorage.CreateTable(config, GlobalSettingsTable);
+			TableStorage.CreateTable(config, LogsTable);
 
-			_client = TableStorage.StorageAccount(connectionStrings[0], connectionStrings[1]).CreateCloudBlobClient();
+			_client = TableStorage.StorageAccount(config).CreateCloudBlobClient();
 
 			CloudBlobContainer containerRef = _client.GetContainerReference(AssembliesContainer);
 			containerRef.CreateIfNotExist();

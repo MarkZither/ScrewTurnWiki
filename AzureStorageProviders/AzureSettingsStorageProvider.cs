@@ -688,12 +688,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
+			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
+
 			_host = host;
 			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki.ToLowerInvariant();
-			string[] connectionStrings = config.Split(new char[] { '|' });
-			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
-
-			_context = TableStorage.GetContext(connectionStrings[0], connectionStrings[1]);
+			
+			_context = TableStorage.GetContext(config);
 
 			_aclManager = new AzureTableStorageAclManager(StoreEntry, DeleteEntries, RenameAclResource, RetrieveAllAclEntries, RetrieveAclEntriesForResource, RetrieveAclEntriesForSubject);
 
@@ -713,15 +713,14 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			string[] connectionStrings = config.Split(new char[] { '|' });
-			if(connectionStrings == null || connectionStrings.Length != 2) throw new InvalidConfigurationException("The given connections string is invalid.");
+			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
 
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], SettingsTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], MetadataTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], RecentChangesTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], OutgoingLinksTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], AclEntriesTable);
-			TableStorage.CreateTable(connectionStrings[0], connectionStrings[1], PluginsTable);
+			TableStorage.CreateTable(config, SettingsTable);
+			TableStorage.CreateTable(config, MetadataTable);
+			TableStorage.CreateTable(config, RecentChangesTable);
+			TableStorage.CreateTable(config, OutgoingLinksTable);
+			TableStorage.CreateTable(config, AclEntriesTable);
+			TableStorage.CreateTable(config, PluginsTable);
 		}
 
 		/// <summary>
