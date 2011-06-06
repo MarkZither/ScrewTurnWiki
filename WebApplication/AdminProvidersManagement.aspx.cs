@@ -128,6 +128,7 @@ namespace ScrewTurn.Wiki {
 
 			ProviderUpdater updater = new ProviderUpdater(GlobalSettings.Provider,
 				Collectors.FileNames,
+				new IProviderV30[] { Collectors.CollectorsBox.GetSettingsProvider(currentWiki)},
 				Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki),
 				Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki),
 				Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki),

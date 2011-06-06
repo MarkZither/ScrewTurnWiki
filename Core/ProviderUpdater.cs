@@ -23,19 +23,19 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:ProviderUpdater" /> class.
 		/// </summary>
-		/// <param name="settingsProvider">The settings storage provider.</param>
+		/// <param name="globalSettingsProvider">The settings storage provider.</param>
 		/// <param name="fileNamesForProviders">A provider->file dictionary.</param>
 		/// <param name="providers">The providers to update.</param>
-		public ProviderUpdater(IGlobalSettingsStorageProviderV30 settingsProvider,
+		public ProviderUpdater(IGlobalSettingsStorageProviderV30 globalSettingsProvider,
 			Dictionary<string, string> fileNamesForProviders,
 			params IProviderV30[][] providers) {
 
-			if(settingsProvider == null) throw new ArgumentNullException("settingsProvider");
+			if(globalSettingsProvider == null) throw new ArgumentNullException("settingsProvider");
 			if(fileNamesForProviders == null) throw new ArgumentNullException("fileNamesForProviders");
 			if(providers == null) throw new ArgumentNullException("providers");
 			if(providers.Length == 0) throw new ArgumentException("Providers cannot be empty", "providers");
 
-			this.globalSettingsProvider = settingsProvider;
+			this.globalSettingsProvider = globalSettingsProvider;
 			this.fileNamesForProviders = fileNamesForProviders;
 
 			this.providers = new List<IProviderV30>(20);
