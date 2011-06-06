@@ -16,11 +16,11 @@ namespace ScrewTurn.Wiki {
 	public static class ProviderLoader {
 
 		// These must be const because they are used in switch constructs
-		internal const string UsersProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IUsersStorageProviderV30";
-		internal const string PagesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IPagesStorageProviderV30";
-		internal const string FilesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IFilesStorageProviderV30";
-		internal const string ThemesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IThemeStorageProviderV30";
-		internal const string FormatterProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IFormatterProviderV30";
+		internal const string UsersProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IUsersStorageProviderV40";
+		internal const string PagesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IPagesStorageProviderV40";
+		internal const string FilesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IFilesStorageProviderV40";
+		internal const string ThemesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IThemeStorageProviderV40";
+		internal const string FormatterProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IFormatterProviderV40";
 
 		internal static string GlobalSettingsStorageProviderAssemblyName = "";
 
