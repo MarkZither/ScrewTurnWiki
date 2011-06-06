@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki {
 	
 			oldPassword = Settings.GetMasterPassword(currentWiki);
 
-			if(!Page.IsPostBack && oldPassword != null) {
+			if(!Page.IsPostBack && !string.IsNullOrEmpty(oldPassword)) {
 				trOldPassword.Visible = true;
 				lblDescriptionPwd.Visible = false;
 			}
@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki {
 			Page.Validate();
 			if(!Page.IsValid) return;
 
-			if(oldPassword != null && oldPassword != Hash.Compute(txtOldPassword.Text)) {
+			if(!string.IsNullOrEmpty(oldPassword) && oldPassword != Hash.Compute(txtOldPassword.Text)) {
 				// Old password is invalid
 				lblResult.Visible = true;
 				lblResult.CssClass = "resulterror";
