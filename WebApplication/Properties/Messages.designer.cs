@@ -313,6 +313,15 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage Global Configuration.
+        /// </summary>
+        public static string Action_Man_Global_Conf {
+            get {
+                return ResourceManager.GetString("Action_Man_Global_Conf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage User Groups.
         /// </summary>
         public static string Action_Man_Grp {

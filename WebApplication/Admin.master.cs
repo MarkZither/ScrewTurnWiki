@@ -104,9 +104,6 @@ namespace ScrewTurn.Wiki {
 			// Configuration (can manage config)
 			lnkSelectConfig.Visible = CanManageConfiguration(currentUser, currentGroups);
 
-			// Global Configuration (can manage global config)
-			lnkSelectGlobalConfig.Visible = CanManageConfiguration(currentUser, currentGroups);
-
 			// Content (can manage config)
 			lnkSelectContent.Visible = CanManageMetaFiles(currentUser, currentGroups);
 
@@ -115,9 +112,6 @@ namespace ScrewTurn.Wiki {
 
 			// Home (can manage config)
 			lnkSelectAdminHome.Visible = CanManageConfiguration(currentUser, currentGroups);
-
-			// Log (can manage config)
-			lnkSelectLog.Visible = CanManageConfiguration(currentUser, currentGroups);
 
 			// Namespaces (can manage namespaces)
 			lnkSelectNamespaces.Visible = CanManageNamespaces(currentUser, currentGroups);
@@ -136,6 +130,18 @@ namespace ScrewTurn.Wiki {
 
 			// Accounts (can manage user accounts)
 			lnkSelectAccounts.Visible = CanManageUsers(currentUser, currentGroups);
+
+			// Log (can manage config)
+			lnkSelectLog.Visible = CanManageConfiguration(currentUser, currentGroups);
+
+			// Global Home (can manage global config)
+			lnkSelectAdminGlobalHome.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
+
+			// Global Configuration (can manage global config)
+			lnkSelectGlobalConfig.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
+
+			// Providers Management (can manage global config)
+			lnkSelectProvidersManagement.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
 		}
 
 		/// <summary>
@@ -147,6 +153,18 @@ namespace ScrewTurn.Wiki {
 		public static bool CanManageConfiguration(string username, string[] groups) {
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
 			bool canManageConfiguration = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageConfiguration, username, groups);
+			return canManageConfiguration;
+		}
+
+		/// <summary>
+		/// Determines whether a user can manage the global configuration.
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <param name="groups">The groups.</param>
+		/// <returns><c>true</c> if the user can manage the global configuration, <c>false</c> otherwise.</returns>
+		public static bool CanManageGlobalConfiguration(string username, string[] groups) {
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(Tools.DetectCurrentWiki()));
+			bool canManageConfiguration = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManageGlobalConfiguration, username, groups);
 			return canManageConfiguration;
 		}
 

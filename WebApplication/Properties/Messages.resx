@@ -1759,4 +1759,7 @@
   <data name="ImportedSettings" xml:space="preserve">
     <value>Settings imported succesfully</value>
   </data>
+  <data name="Action_Man_Global_Conf" xml:space="preserve">
+    <value>Manage Global Configuration</value>
+  </data>
 </root>

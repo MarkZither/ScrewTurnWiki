@@ -74,6 +74,10 @@ namespace ScrewTurn.Wiki {
 			/// Manage permissions.
 			/// </summary>
 			public const string ManagePermissions = "Man_Perms";
+			/// <summary>
+			/// Manage global configuration.
+			/// </summary>
+			public const string ManageGlobalConfiguration = "Man_Global_Conf";
 
 			/// <summary>
 			/// Gets an array containing all actions.
@@ -90,7 +94,8 @@ namespace ScrewTurn.Wiki {
 				ManageSnippetsAndTemplates,
 				ManageNavigationPaths,
 				ManageMetaFiles,
-				ManagePermissions
+				ManagePermissions,
+				ManageGlobalConfiguration
 			};
 
 			/// <summary>
