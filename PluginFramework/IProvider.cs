@@ -9,7 +9,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// The base interface that all the Providers must implement. All the Provider Type-specific interfaces inherit from this one or from a one, either directly or from a derived interface.
 	/// </summary>
 	/// <remarks>This interface should not be implemented directly by a class.</remarks>
-	public interface IProviderV30 : IDisposable {
+	public interface IProviderV40 : IDisposable {
 
 		/// <summary>
 		/// Gets the wiki that has been used to initialize the current instance of the provider.
@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		void Init(IHostV30 host, string config, string wiki);
+		void Init(IHostV40 host, string config, string wiki);
 
 		/// <summary>
 		/// Sets up the Storage Provider.
@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		void SetUp(IHostV30 host, string config);
+		void SetUp(IHostV40 host, string config);
 
 		/// <summary>
 		/// Gets the Information about the Provider.

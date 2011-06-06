@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki {
 			List<ContentTemplate> result = new List<ContentTemplate>(20);
 
 			// Retrieve templates from all providers
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				result.AddRange(prov.GetContentTemplates());
 			}
 
@@ -52,7 +52,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="content">The content of the template.</param>
 		/// <param name="provider">The target provider (<c>null</c> for the default provider).</param>
 		/// <returns><c>true</c> if the template is added, <c>false</c> otherwise.</returns>
-		public static bool AddTemplate(string wiki, string name, string content, IPagesStorageProviderV30 provider) {
+		public static bool AddTemplate(string wiki, string name, string content, IPagesStorageProviderV40 provider) {
 			if(Find(wiki, name) != null) return false;
 
 			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);

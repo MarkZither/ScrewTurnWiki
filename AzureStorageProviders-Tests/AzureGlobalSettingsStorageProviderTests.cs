@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 	public class GlobalSettingsStorageProviderTests : GlobalSettingsStorageProviderTestScaffolding {
 
-		public override IGlobalSettingsStorageProviderV30 GetProvider() {
+		public override IGlobalSettingsStorageProviderV40 GetProvider() {
 			AzureGlobalSettingsStorageProvider prov = new AzureGlobalSettingsStorageProvider();
 			prov.SetUp(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==");
 			prov.Init(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "");

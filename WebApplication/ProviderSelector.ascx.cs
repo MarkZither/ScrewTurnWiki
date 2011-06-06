@@ -38,7 +38,7 @@ namespace ScrewTurn.Wiki {
 		/// Reloads the providers list.
 		/// </summary>
 		public void Reload() {
-			IProviderV30[] allProviders = null;
+			IProviderV40[] allProviders = null;
 			string defaultProvider = null;
 			switch(providerType) {
 				case ProviderType.Users:
@@ -64,7 +64,7 @@ namespace ScrewTurn.Wiki {
 
 			int count = 0;
 			if(providerType == ProviderType.Themes) lstProviders.Items.Add(new ListItem("standard", "standard"));
-			foreach(IProviderV30 prov in allProviders) {
+			foreach(IProviderV40 prov in allProviders) {
 				if(IsProviderIncludedInList(prov)) {
 					string typeName = prov.GetType().FullName;
 					lstProviders.Items.Add(new ListItem(prov.Information.Name, typeName));
@@ -79,9 +79,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <returns><c>true</c> if the provider is included, <c>false</c> otherwise.</returns>
-		private bool IsProviderIncludedInList(IProviderV30 provider) {
-			IStorageProviderV30 storageProvider = provider as IStorageProviderV30;
-			IUsersStorageProviderV30 usersProvider = provider as IUsersStorageProviderV30;
+		private bool IsProviderIncludedInList(IProviderV40 provider) {
+			IStorageProviderV40 storageProvider = provider as IStorageProviderV40;
+			IUsersStorageProviderV40 usersProvider = provider as IUsersStorageProviderV40;
 
 			switch(providerType) {
 				case ProviderType.Users:
@@ -102,7 +102,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <returns><c>true</c> if the provider is included, <c>false</c> otherwise.</returns>
-		private bool IsUsersProviderIncludedInList(IUsersStorageProviderV30 provider) {
+		private bool IsUsersProviderIncludedInList(IUsersStorageProviderV40 provider) {
 			switch(usersProviderIntendedUse) {
 				case UsersProviderIntendedUse.AccountsManagement:
 					return !provider.UserAccountsReadOnly || (provider.UserAccountsReadOnly && !excludeReadOnly);

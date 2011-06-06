@@ -24,7 +24,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="knownNamespaces">The currently known page namespaces.</param>
 		/// <param name="knownPlugins">The currently known plugins.</param>		
 		/// <returns>The backup file.</returns>
-		public static byte[] BackupSettingsStorageProvider(ISettingsStorageProviderV30 settingsStorageProvider, string[] knownNamespaces, string[] knownPlugins) {
+		public static byte[] BackupSettingsStorageProvider(ISettingsStorageProviderV40 settingsStorageProvider, string[] knownNamespaces, string[] knownPlugins) {
 			SettingsBackup settingsBackup = new SettingsBackup();
 
 			// Settings
@@ -90,7 +90,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="backupFile">The backup file.</param>
 		/// <param name="settingsStorageProvider">The settings storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
-		public static bool RestoreSettingsStorageProvider(byte[] backupFile, ISettingsStorageProviderV30 settingsStorageProvider) {
+		public static bool RestoreSettingsStorageProvider(byte[] backupFile, ISettingsStorageProviderV40 settingsStorageProvider) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 			
@@ -143,7 +143,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// </summary>
 		/// <param name="globalSettingsStorageProvider">The global settings storage provider.</param>
 		/// <returns>The backup file.</returns>
-		public static byte[] BackupGlobalSettingsStorageProvider(IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider) {
+		public static byte[] BackupGlobalSettingsStorageProvider(IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
 			GlobalSettingsBackup globalSettingsBackup = new GlobalSettingsBackup();
 
 			// Settings
@@ -171,7 +171,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			return buffer;
 		}
 
-		public static bool RestoreGlobalSettingsStorageProvider(byte[] backupFile, IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider) {
+		public static bool RestoreGlobalSettingsStorageProvider(byte[] backupFile, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
 			using(ZipFile globalSettingsBackupZipFile = ZipFile.Read(backupFile)) {
 				foreach(ZipEntry zipEntry in globalSettingsBackupZipFile) {
 					if(zipEntry.FileName == "GlobalSettings.dat") {
@@ -197,7 +197,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			return true;
 		}
 
-		private static void DeserializeGlobalSettingsBackup(string json, IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider) {
+		private static void DeserializeGlobalSettingsBackup(string json, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
 			JavaScriptSerializer serializer = new JavaScriptSerializer();
 			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
 

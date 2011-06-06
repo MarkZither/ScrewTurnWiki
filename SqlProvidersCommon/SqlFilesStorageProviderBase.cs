@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 	/// <summary>
 	/// Implements a base class for a SQL files storage provider.
 	/// </summary>
-	public abstract class SqlFilesStorageProviderBase : SqlStorageProviderBase, IFilesStorageProviderV30 {
+	public abstract class SqlFilesStorageProviderBase : SqlStorageProviderBase, IFilesStorageProviderV40 {
 
 		private const int MaxFileSize = 52428800; // 50 MB
 

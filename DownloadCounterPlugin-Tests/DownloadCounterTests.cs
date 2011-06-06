@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 		public void Format() {
 			MockRepository mocks = new MockRepository();
 
-			IFilesStorageProviderV30 prov = mocks.StrictMock<IFilesStorageProviderV30>();
+			IFilesStorageProviderV40 prov = mocks.StrictMock<IFilesStorageProviderV40>();
 
 			string content = string.Format(
 @"This is a test page.
@@ -38,13 +38,13 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 			// attn.zip was downloaded 56 times
 			// Expected output: 138-2-16-68
 
-			IHostV30 host = mocks.StrictMock<IHostV30>();
+			IHostV40 host = mocks.StrictMock<IHostV40>();
 			host.LogEntry(null, LogEntryType.Warning, null, null, "wiki1");
 			LastCall.On(host).IgnoreArguments().Repeat.Any();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider)).Return(
 				prov.GetType().FullName).Repeat.Times(4);
 			Expect.Call(host.GetFilesStorageProviders(null)).Return(
-				new IFilesStorageProviderV30[] { prov }).Repeat.Times(8);
+				new IFilesStorageProviderV40[] { prov }).Repeat.Times(8);
 
 			StFileInfo[] myFiles = new StFileInfo[] {
 				new StFileInfo(1000, DateTime.Now, 13, "/my/File.zip", prov),

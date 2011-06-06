@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 	/// <summary>
 	/// Implements a base class for a SQL pages storage provider.
 	/// </summary>
-	public abstract class SqlPagesStorageProviderBase : SqlStorageProviderBase, IPagesStorageProviderV30 {
+	public abstract class SqlPagesStorageProviderBase : SqlStorageProviderBase, IPagesStorageProviderV40 {
 
 		private const int MaxStatementsInBatch = 20;
 
@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <param name="wiki">The wiki.</param>
 		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
-		public new void Init(IHostV30 host, string config, string wiki) {
+		public new void Init(IHostV40 host, string config, string wiki) {
 			base.Init(host, config, wiki);
 
 			_wiki = wiki;

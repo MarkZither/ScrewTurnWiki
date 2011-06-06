@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 	public class GlobalSettingsStorageProviderTests : GlobalSettingsStorageProviderTestScaffolding {
 
-		public override IGlobalSettingsStorageProviderV30 GetProvider() {
+		public override IGlobalSettingsStorageProviderV40 GetProvider() {
 			GlobalSettingsStorageProvider prov = new GlobalSettingsStorageProvider();
 			prov.SetUp(MockHost(), "");
 			return prov;
@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void Init() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), "", null);
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");

@@ -12,7 +12,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 	[TestFixture]
 	public class AzurePagesStorageProviderTests : PagesStorageProviderTestScaffolding {
 
-		public override IPagesStorageProviderV30 GetProvider() {
+		public override IPagesStorageProviderV40 GetProvider() {
 			AzurePagesStorageProvider prov = new AzurePagesStorageProvider();
 			prov.SetUp(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==");
 			prov.Init(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "");
@@ -36,7 +36,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 		[Test]
 		public void Init() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}

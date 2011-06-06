@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The Provider that handles the Page.
 		/// </summary>
-		protected IPagesStorageProviderV30 provider;
+		protected IPagesStorageProviderV40 provider;
 		/// <summary>
 		/// The Page creation Date/Time.
 		/// </summary>
@@ -34,7 +34,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="fullName">The Full Name of the Page.</param>
 		/// <param name="provider">The Pages Storage Provider that manages this Page.</param>
 		/// <param name="creationDateTime">The Page creation Date/Time.</param>
-		public PageInfo(string fullName, IPagesStorageProviderV30 provider, DateTime creationDateTime) {
+		public PageInfo(string fullName, IPagesStorageProviderV40 provider, DateTime creationDateTime) {
 			NameTools.ExpandFullName(fullName, out nspace, out name);
 			this.provider = provider;
 			this.creationDateTime = creationDateTime;
@@ -51,7 +51,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets or sets the Pages Storage Provider.
 		/// </summary>
-		public IPagesStorageProviderV30 Provider {
+		public IPagesStorageProviderV40 Provider {
 			get { return provider; }
 			set { provider = value; }
 		}

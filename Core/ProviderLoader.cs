@@ -31,9 +31,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <exception cref="T:ProviderConstraintException">Thrown when a constraint is not fulfilled.</exception>
 		private static void VerifyConstraints<T>(T provider) {
-			if(typeof(T) == typeof(IUsersStorageProviderV30)) {
+			if(typeof(T) == typeof(IUsersStorageProviderV40)) {
 				// If the provider allows to write user accounts data, then group membership must be writeable too
-				IUsersStorageProviderV30 actualInstance = (IUsersStorageProviderV30)provider;
+				IUsersStorageProviderV40 actualInstance = (IUsersStorageProviderV40)provider;
 				if(!actualInstance.UserAccountsReadOnly && actualInstance.GroupMembershipReadOnly) {
 					throw new ProviderConstraintException("If UserAccountsReadOnly is false, then also GroupMembershipReadOnly must be false");
 				}
@@ -47,7 +47,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="asm">The assembly that contains the type.</param>
 		/// <param name="type">The type to create an instance of.</param>
 		/// <returns>The instance, or <c>null</c>.</returns>
-		public static T CreateInstance<T>(Assembly asm, Type type) where T : class, IProviderV30 {
+		public static T CreateInstance<T>(Assembly asm, Type type) where T : class, IProviderV40 {
 			T instance;
 			try {
 				instance = asm.CreateInstance(type.ToString()) as T;
@@ -65,7 +65,7 @@ namespace ScrewTurn.Wiki {
 		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
 		/// <param name="provider">The provider to setup.</param>
 		/// <param name="configuration">The configuration string.</param>
-		public static void SetUp<T>(Type provider, string configuration) where T : class, IProviderV30 {
+		public static void SetUp<T>(Type provider, string configuration) where T : class, IProviderV40 {
 			try {
 				T providerInstance = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(provider), provider);
 				providerInstance.SetUp(Host.Instance, configuration);
@@ -95,9 +95,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="instance">The provider instance to initialize.</param>
 		/// <param name="configuration">The configuration string.</param>
 		/// <param name="wiki">The wiki that needs the provider.</param>
-		public static void Initialize<T>(T instance, string configuration, string wiki) where T : class, IProviderV30 {
+		public static void Initialize<T>(T instance, string configuration, string wiki) where T : class, IProviderV40 {
 			bool enabled = true;
-			if(typeof(T) == typeof(IFormatterProviderV30)) {
+			if(typeof(T) == typeof(IFormatterProviderV40)) {
 				enabled = !IsPluginDisabled(wiki, instance.GetType().FullName);
 			}
 			if(enabled) instance.Init(Host.Instance, configuration, wiki);
@@ -111,7 +111,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The Configuration, if available, otherwise an empty string.</returns>
 		public static string LoadProviderConfiguration(string typeName, Type interfaceType, string wiki) {
-			if(interfaceType.FullName == typeof(IFormatterProviderV30).FullName) {
+			if(interfaceType.FullName == typeof(IFormatterProviderV40).FullName) {
 				return LoadPluginConfiguration(wiki, typeName);
 			}
 			else {
@@ -229,7 +229,7 @@ namespace ScrewTurn.Wiki {
 
 				interfaces = types[i].GetInterfaces();
 				foreach(Type iface in interfaces) {
-					if(iface == typeof(IFormatterProviderV30)) {
+					if(iface == typeof(IFormatterProviderV40)) {
 						frs.Add(types[i]);
 						Collectors.FileNames[types[i].FullName] = assembly;
 					}
@@ -262,12 +262,12 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The fully qualified name (such as "Namespace.ProviderClass, MyAssembly"), or <c>null</c>/<b>String.Empty</b>/"<b>default</b>" for the default provider.</param>
 		/// <returns>The global settings storage provider.</returns>
-		public static IGlobalSettingsStorageProviderV30 LoadGlobalSettingsStorageProvider(string name) {
+		public static IGlobalSettingsStorageProviderV40 LoadGlobalSettingsStorageProvider(string name) {
 			if(name == null || name.Length == 0 || string.Compare(name, "default", true, CultureInfo.InvariantCulture) == 0) {
 				return new GlobalSettingsStorageProvider();
 			}
 
-			IGlobalSettingsStorageProviderV30 result = null;
+			IGlobalSettingsStorageProviderV40 result = null;
 
 			Exception inner = null;
 
@@ -310,7 +310,7 @@ namespace ScrewTurn.Wiki {
 							}
 						}
 
-						result = t.GetConstructor(new Type[0]).Invoke(new object[0]) as IGlobalSettingsStorageProviderV30;
+						result = t.GetConstructor(new Type[0]).Invoke(new object[0]) as IGlobalSettingsStorageProviderV40;
 					}
 					catch(Exception ex) {
 						inner = ex;
@@ -328,7 +328,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <typeparam name="T">The provider interface type</typeparam>
 		/// <param name="storageProviders">A list of StorageProvider.</param>
-		public static void LoadStorageProviders<T>(List<StorageProvider> storageProviders) where T : class, IProviderV30 {
+		public static void LoadStorageProviders<T>(List<StorageProvider> storageProviders) where T : class, IProviderV40 {
 			foreach(StorageProvider storageProvider in storageProviders) {
 				try {
 					// assemblyName should be an absolute path or a relative path in bin or public\Plugins
@@ -423,7 +423,7 @@ namespace ScrewTurn.Wiki {
 
 			SavePluginConfiguration(wiki, typeName, configuration);
 			try {
-				IFormatterProviderV30 provider = Collectors.CollectorsBox.FormatterProviderCollector.GetProvider(typeName, wiki);
+				IFormatterProviderV40 provider = Collectors.CollectorsBox.FormatterProviderCollector.GetProvider(typeName, wiki);
 				SavePluginStatus(wiki, typeName, true);
 			}
 			catch(InvalidConfigurationException icex) {

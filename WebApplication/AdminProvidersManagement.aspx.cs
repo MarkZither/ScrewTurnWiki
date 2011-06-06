@@ -55,32 +55,32 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptProviders_DataBinding(object sender, EventArgs e) {
-			List<IProviderV30> providers = new List<IProviderV30>(5);
+			List<IProviderV40> providers = new List<IProviderV40>(5);
 
 			int enabledCount = 0;
 
 			if(rdoFormatter.Checked) {
-				IFormatterProviderV30[] formatterProviders = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
+				IFormatterProviderV40[] formatterProviders = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
 				enabledCount = formatterProviders.Length;
 				providers.AddRange(formatterProviders);
 			}
 			else {
-				IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider = Collectors.CollectorsBox.GlobalSettingsProvider;
+				IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = Collectors.CollectorsBox.GlobalSettingsProvider;
 				providers.Add(globalSettingsStorageProvider);
-				ISettingsStorageProviderV30 settingsStorageProviders = Collectors.CollectorsBox.GetSettingsProvider(currentWiki);
+				ISettingsStorageProviderV40 settingsStorageProviders = Collectors.CollectorsBox.GetSettingsProvider(currentWiki);
 				providers.Add(settingsStorageProviders);
-				IPagesStorageProviderV30[] pagesStorageProviders = Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki);
+				IPagesStorageProviderV40[] pagesStorageProviders = Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki);
 				providers.AddRange(pagesStorageProviders);
-				IFilesStorageProviderV30[] filesStorageProviders = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki);
+				IFilesStorageProviderV40[] filesStorageProviders = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki);
 				providers.AddRange(filesStorageProviders);
-				IUsersStorageProviderV30[] usersStorageProviders = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki);
+				IUsersStorageProviderV40[] usersStorageProviders = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki);
 				providers.AddRange(usersStorageProviders);
 			}
 
 			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
 
 			for(int i = 0; i < providers.Count; i++) {
-				IProviderV30 prov = providers[i];
+				IProviderV40 prov = providers[i];
 				result.Add(new ProviderRow(prov.Information,
 					prov.GetType().FullName,
 					GetUpdateStatus(prov.Information),
@@ -128,7 +128,7 @@ namespace ScrewTurn.Wiki {
 
 			ProviderUpdater updater = new ProviderUpdater(GlobalSettings.Provider,
 				Collectors.FileNames,
-				new IProviderV30[] { Collectors.CollectorsBox.GetSettingsProvider(currentWiki)},
+				new IProviderV40[] { Collectors.CollectorsBox.GetSettingsProvider(currentWiki)},
 				Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki),
 				Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki),
 				Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki),
@@ -221,7 +221,7 @@ namespace ScrewTurn.Wiki {
 		private void LoadSourceProviders() {
 			lstPagesSource.Items.Clear();
 			lstPagesSource.Items.Add(new ListItem("", ""));
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
+			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
 				if(!prov.ReadOnly) {
 					lstPagesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 				}
@@ -229,7 +229,7 @@ namespace ScrewTurn.Wiki {
 
 			lstUsersSource.Items.Clear();
 			lstUsersSource.Items.Add(new ListItem("", ""));
-			foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki)) {
+			foreach(IUsersStorageProviderV40 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki)) {
 				if(IsUsersProviderFullWriteEnabled(prov)) {
 					lstUsersSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 				}
@@ -237,7 +237,7 @@ namespace ScrewTurn.Wiki {
 
 			lstFilesSource.Items.Clear();
 			lstFilesSource.Items.Add(new ListItem("", ""));
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
+			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 				if(!prov.ReadOnly) {
 					lstFilesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 				}
@@ -258,7 +258,7 @@ namespace ScrewTurn.Wiki {
 		protected void lstPagesSource_SelectedIndexChanged(object sender, EventArgs e) {
 			lstPagesDestination.Items.Clear();
 			if(lstPagesSource.SelectedValue != "") {
-				foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
+				foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
 					if(!prov.ReadOnly && lstPagesSource.SelectedValue != prov.GetType().ToString()) {
 						lstPagesDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 					}
@@ -270,7 +270,7 @@ namespace ScrewTurn.Wiki {
 		protected void lstUsersSource_SelectedIndexChanged(object sender, EventArgs e) {
 			lstUsersDestination.Items.Clear();
 			if(lstUsersSource.SelectedValue != "") {
-				foreach(IUsersStorageProviderV30 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki)) {
+				foreach(IUsersStorageProviderV40 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki)) {
 					if(IsUsersProviderFullWriteEnabled(prov) && lstUsersSource.SelectedValue != prov.GetType().ToString()) {
 						lstUsersDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 					}
@@ -282,7 +282,7 @@ namespace ScrewTurn.Wiki {
 		protected void lstFilesSource_SelectedIndexChanged(object sender, EventArgs e) {
 			lstFilesDestination.Items.Clear();
 			if(lstFilesSource.SelectedValue != "") {
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 					if(!prov.ReadOnly && lstFilesSource.SelectedValue != prov.GetType().ToString()) {
 						lstFilesDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
 					}
@@ -295,8 +295,8 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Pages data migration requested from " + lstPagesSource.SelectedValue + " to " + lstPagesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, null);
 
 			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
-				IPagesStorageProviderV30 from = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue, wiki.WikiName);
-				IPagesStorageProviderV30 to = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue, wiki.WikiName);
+				IPagesStorageProviderV40 from = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue, wiki.WikiName);
+				IPagesStorageProviderV40 to = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue, wiki.WikiName);
 
 				Log.LogEntry("Pages data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername, null);	
 
@@ -310,8 +310,8 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Users data migration requested from " + lstUsersSource.SelectedValue + " to " + lstUsersDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, null);
 
 			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
-				IUsersStorageProviderV30 from = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue, wiki.WikiName);
-				IUsersStorageProviderV30 to = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue, wiki.WikiName);
+				IUsersStorageProviderV40 from = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue, wiki.WikiName);
+				IUsersStorageProviderV40 to = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue, wiki.WikiName);
 
 				Log.LogEntry("Users data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername, null);
 
@@ -326,8 +326,8 @@ namespace ScrewTurn.Wiki {
 			Log.LogEntry("Files data migration requested from " + lstFilesSource.SelectedValue + " to " + lstFilesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, null);
 
 			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
-				IFilesStorageProviderV30 from = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue, wiki.WikiName);
-				IFilesStorageProviderV30 to = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue, wiki.WikiName);
+				IFilesStorageProviderV40 from = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue, wiki.WikiName);
+				IFilesStorageProviderV40 to = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue, wiki.WikiName);
 
 				Log.LogEntry("Files data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername, null);
 
@@ -349,7 +349,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnExportSettings_Click(object sender, EventArgs e) {
 			Log.LogEntry("Settings data export requested.", EntryType.General, SessionFacade.CurrentUsername, null);
 
-			ISettingsStorageProviderV30 settingsProvider = Settings.GetProvider(lstWiki.SelectedValue);
+			ISettingsStorageProviderV40 settingsProvider = Settings.GetProvider(lstWiki.SelectedValue);
 
 			// Find namespaces
 			List<string> namespaces = new List<string>(5);
@@ -370,7 +370,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnExportGlobalSettings_Click(object sender, EventArgs e) {
 			Log.LogEntry("Global Settings data export requested.", EntryType.General, SessionFacade.CurrentUsername, null);
 
-			IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider = GlobalSettings.Provider;
+			IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = GlobalSettings.Provider;
 
 			byte[] backupFile = BackupRestore.BackupRestore.BackupGlobalSettingsStorageProvider(globalSettingsStorageProvider);
 
@@ -400,7 +400,7 @@ namespace ScrewTurn.Wiki {
 			string selectedWiki = lstDestinationWiki.SelectedValue;
 
 			Log.LogEntry("Import Settings requested for wiki: " + selectedWiki, EntryType.General, SessionFacade.CurrentUsername, null);
-			ISettingsStorageProviderV30 settingsStorageProvider = Settings.GetProvider(selectedWiki);
+			ISettingsStorageProviderV40 settingsStorageProvider = Settings.GetProvider(selectedWiki);
 			bool result = BackupRestore.BackupRestore.RestoreSettingsStorageProvider(upSettings.FileBytes, settingsStorageProvider);
 
 			if(result) {
@@ -427,7 +427,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			Log.LogEntry("Import Global Settings requested.", EntryType.General, SessionFacade.CurrentUsername, null);
-			IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider = GlobalSettings.Provider;
+			IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = GlobalSettings.Provider;
 			bool result = BackupRestore.BackupRestore.RestoreGlobalSettingsStorageProvider(upGlobalSettings.FileBytes, globalSettingsStorageProvider);
 
 			if(result) {
@@ -449,7 +449,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <returns><c>true</c> if the provider fully supports writing all managed data, <c>false</c> otherwise.</returns>
-		private static bool IsUsersProviderFullWriteEnabled(IUsersStorageProviderV30 provider) {
+		private static bool IsUsersProviderFullWriteEnabled(IUsersStorageProviderV40 provider) {
 			return
 				!provider.UserAccountsReadOnly &&
 				!provider.UserGroupsReadOnly &&

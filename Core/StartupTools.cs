@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="settingsProviderAsmName">The file name of the assembly that contains the current Settings Storage Provider.</param>
-		private static void UpdateDllsIntoSettingsProvider(IGlobalSettingsStorageProviderV30 provider, string settingsProviderAsmName) {
+		private static void UpdateDllsIntoSettingsProvider(IGlobalSettingsStorageProviderV40 provider, string settingsProviderAsmName) {
 			// Look into public\Plugins (hardcoded)
 			string fullPath = Path.Combine(GlobalSettings.PublicDirectory, "Plugins");
 
@@ -78,7 +78,7 @@ namespace ScrewTurn.Wiki {
 			Collectors.FileNames = new Dictionary<string, string>(10);
 
 			// Load Global Config
-			IGlobalSettingsStorageProviderV30 globalSettingsStorageProvider = ProviderLoader.LoadGlobalSettingsStorageProvider(WebConfigurationManager.AppSettings["GlobalSettingsStorageProvider"]);
+			IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = ProviderLoader.LoadGlobalSettingsStorageProvider(WebConfigurationManager.AppSettings["GlobalSettingsStorageProvider"]);
 			Collectors.AddGlobalSettingsStorageProvider(globalSettingsStorageProvider.GetType(), Assembly.GetAssembly(globalSettingsStorageProvider.GetType()));
 			globalSettingsStorageProvider.SetUp(Host.Instance, GetGlobalSettingsStorageProviderConfiguration());
 			globalSettingsStorageProvider.Dispose();
@@ -89,16 +89,16 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Add StorageProviders, from WebConfig, to Collectors and Setup them
-			ProviderLoader.LoadStorageProviders<ISettingsStorageProviderV30>(new List<StorageProvider>() { ((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/settingsProvider"))[0] });
-			ProviderLoader.LoadStorageProviders<IFilesStorageProviderV30>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/filesProviders"));
-			ProviderLoader.LoadStorageProviders<IThemeStorageProviderV30>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/themesProviders"));
-			ProviderLoader.LoadStorageProviders<IUsersStorageProviderV30>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/usersProviders"));
-			ProviderLoader.LoadStorageProviders<IPagesStorageProviderV30>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/pagesProviders"));
+			ProviderLoader.LoadStorageProviders<ISettingsStorageProviderV40>(new List<StorageProvider>() { ((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/settingsProvider"))[0] });
+			ProviderLoader.LoadStorageProviders<IFilesStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/filesProviders"));
+			ProviderLoader.LoadStorageProviders<IThemeStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/themesProviders"));
+			ProviderLoader.LoadStorageProviders<IUsersStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/usersProviders"));
+			ProviderLoader.LoadStorageProviders<IPagesStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/pagesProviders"));
 
 			ProviderLoader.LoadAllFormatterProviders();
 
 			foreach(Wiki.PluginFramework.Wiki wiki in Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis()) {
-				ISettingsStorageProviderV30 ssp = Collectors.CollectorsBox.GetSettingsProvider(wiki.WikiName);
+				ISettingsStorageProviderV40 ssp = Collectors.CollectorsBox.GetSettingsProvider(wiki.WikiName);
 				if(ssp.IsFirstApplicationStart()) {
 					if(ssp.GetMetaDataItem(MetaDataItem.AccountActivationMessage, null) == "")
 						ssp.SetMetaDataItem(MetaDataItem.AccountActivationMessage, null, Defaults.AccountActivationMessageContent);
@@ -300,7 +300,7 @@ namespace ScrewTurn.Wiki {
 				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ReadDiscussion, anonymous);
 				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, anonymous);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DownloadFiles, anonymous);
 				}
 			}
@@ -321,20 +321,20 @@ namespace ScrewTurn.Wiki {
 
 			if(Settings.GetUsersCanViewFiles(wiki)) {
 				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DownloadAttachments, group);
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DownloadFiles, group);
 				}
 			}
 			if(Settings.GetUsersCanUploadFiles(wiki)) {
 				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.UploadAttachments, group);
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.UploadFiles, group);
 					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.CreateDirectories, group);
 				}
 			}
 			if(Settings.GetUsersCanDeleteFiles(wiki)) {
 				done &= authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.DeleteAttachments, group);
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DeleteFiles, group);
 					done &= authWriter.SetPermissionForDirectory(AuthStatus.Grant, prov, "/", Actions.ForDirectories.DeleteDirectories, group);
 				}

@@ -34,7 +34,7 @@ namespace ScrewTurn.Wiki {
 		/// Reloads this instance.
 		/// </summary>
 		public void Reload() {
-			IProviderV30[] allProviders = null;
+			IProviderV40[] allProviders = null;
 			string defaultProvider = null;
 
 			allProviders = Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki);
@@ -42,7 +42,7 @@ namespace ScrewTurn.Wiki {
 
 			int count = 0;
 			lstThemesProviders.Items.Add(new ListItem("standard", "standard"));
-			foreach(IProviderV30 prov in allProviders) {
+			foreach(IProviderV40 prov in allProviders) {
 					string typeName = prov.GetType().FullName;
 					lstThemesProviders.Items.Add(new ListItem(prov.Information.Name, typeName));
 					if(typeName == defaultProvider) lstThemesProviders.Items[count].Selected = true;

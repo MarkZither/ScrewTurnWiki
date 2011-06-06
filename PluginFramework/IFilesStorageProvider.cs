@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// All directory paths are specified in a UNIX-like fashion, for example "/my/directory/myfile.jpg". 
 	/// All paths must start with '/'. All Directory paths must end with '/'.
 	/// All paths are case-insensitive.</remarks>
-	public interface IFilesStorageProviderV30 : IStorageProviderV30 {
+	public interface IFilesStorageProviderV40 : IStorageProviderV40 {
 
 		/// <summary>
 		/// Lists the Files in the specified Directory.

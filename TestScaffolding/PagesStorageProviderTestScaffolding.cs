@@ -18,10 +18,10 @@ namespace ScrewTurn.Wiki.Tests {
 
 		private delegate string ToStringDelegate(string wiki, PageInfo p, string input);
 
-		protected IHostV30 MockHost() {
+		protected IHostV40 MockHost() {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
-			IHostV30 host = mocks.DynamicMock<IHostV30>();
+			IHostV40 host = mocks.DynamicMock<IHostV40>();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
 			Expect.Call(host.PrepareContentForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, PageInfo p, string input) { return input; }).Repeat.Any();
 			Expect.Call(host.PrepareTitleForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, PageInfo p, string input) { return input; }).Repeat.Any();
@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki.Tests {
 			return host;
 		}
 
-		public abstract IPagesStorageProviderV30 GetProvider();
+		public abstract IPagesStorageProviderV40 GetProvider();
 
 		[TearDown]
 		public void TearDown() {
@@ -44,14 +44,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.Init(null, "", null);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), null, null);
 		}
 
@@ -64,7 +64,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddNamespace_GetNamespaces() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.GetNamespaces().Length, "Wrong initial namespace count");
 
@@ -88,7 +88,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddNamespace_GetNamespaces_WithDefaultPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.GetNamespaces().Length, "Wrong initial namespace count");
 
@@ -115,7 +115,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddNamespace_GetNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsNull(prov.GetNamespace("Sub1"), "GetNamespace should return null");
 
@@ -134,7 +134,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetNamespace_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.GetNamespace(n);
 		}
@@ -142,13 +142,13 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddNamespace_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.AddNamespace(n);
 		}
 
 		[Test]
 		public void RenameNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo sub = prov.AddNamespace("Sub");
 			prov.AddNamespace("Sub2");
@@ -187,14 +187,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RenameNamespace_NullNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.RenameNamespace(null, "NewName");
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RenameNamespace_InvalidNewName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Sub");
 
@@ -203,7 +203,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RenameNamespace_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -240,7 +240,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void SetNamespaceDefaultPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -265,7 +265,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetNamespaceDefaultPage_NullNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -274,7 +274,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsFalse(prov.RemoveNamespace(new NamespaceInfo("Inexistent", prov, null)), "RemoveNamespace should return alse");
 
@@ -292,13 +292,13 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveNamespace_NullNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.RemoveNamespace(null);
 		}
 
 		[Test]
 		public void RemoveNamespace_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -320,7 +320,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_Root2Sub_NoCategories() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 			CategoryInfo cat1 = prov.AddCategory(null, "Category1");
@@ -356,7 +356,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_Root2Sub_WithCategories() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 			CategoryInfo cat1 = prov.AddCategory(null, "Category1");
@@ -404,7 +404,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_Sub2Root_NoCategories() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 			CategoryInfo cat1 = prov.AddCategory(null, "Category1");
@@ -440,7 +440,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_Sub2Root_WithCategories() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 			CategoryInfo cat1 = prov.AddCategory(null, "Category1");
@@ -488,7 +488,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_Sub2Sub_NoCategories() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns1 = prov.AddNamespace("Namespace1");
 			NamespaceInfo ns2 = prov.AddNamespace("Namespace2");
@@ -525,7 +525,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_Sub2Sub_WithCategories() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns1 = prov.AddNamespace("Namespace1");
 			NamespaceInfo ns2 = prov.AddNamespace("Namespace2");
@@ -574,7 +574,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_SameNamespace_Root2Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -583,7 +583,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_SameNamespace_Sub2Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -595,14 +595,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void MovePage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.MovePage(null, prov.AddNamespace("ns"), false);
 		}
 
 		[Test]
 		public void MovePage_InexistentPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -615,7 +615,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_InexistentNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 			PageInfo page = prov.AddPage(ns.Name, "Page", DateTime.Now);
@@ -625,7 +625,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_ExistentPage_Root2Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -637,7 +637,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_ExistentPage_Sub2Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -649,7 +649,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_DefaultPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -662,7 +662,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_Root2Sub_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -693,7 +693,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_Sub2Root_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -724,7 +724,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MovePage_Sub2Sub_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns1 = prov.AddNamespace("NS1");
 			NamespaceInfo ns2 = prov.AddNamespace("NS2");
@@ -765,7 +765,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddCategory_GetCategories_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.GetCategories(null).Length, "Wrong initial category count");
 
@@ -786,7 +786,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddCategory_GetCategories_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -809,7 +809,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetCategoriesForPage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo c1 = prov.AddCategory(null, "Category1");
 			CategoryInfo c2 = prov.AddCategory(null, "Category2");
@@ -835,7 +835,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetCategoriesForPage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -864,14 +864,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetCategoriesForPage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.GetCategoriesForPage(null);
 		}
 
 		[Test]
 		public void GetUncategorizedPages_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo c1 = prov.AddCategory(null, "Category1");
 			CategoryInfo c2 = prov.AddCategory(null, "Category2");
@@ -892,7 +892,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetUncategorizedPages_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -915,7 +915,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddCategory_GetCategory_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsNull(prov.GetCategory("Category1"), "GetCategory should return null");
 
@@ -933,7 +933,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddCategory_GetCategory_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddNamespace("NS");
 
@@ -954,20 +954,20 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetCategory_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.GetCategory(n);
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddCategory_InvalidCategory(string c) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.AddCategory(null, c);
 		}
 
 		[Test]
 		public void RenameCategory_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo c1 = prov.AddCategory(null, "Category1");
 			CategoryInfo c2 = prov.AddCategory(null, "Category2");
@@ -992,7 +992,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RenameCategory_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -1020,7 +1020,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RenameCategory_NullCategory() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RenameCategory(null, "Name");
 		}
@@ -1028,14 +1028,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RenameCategory_InvalidNewName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			CategoryInfo c1 = prov.AddCategory(null, "Category1");
 			prov.RenameCategory(c1, n);
 		}
 
 		[Test]
 		public void RemoveCategory_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo c1 = prov.AddCategory(null, "Category1");
 			CategoryInfo c2 = prov.AddCategory(null, "Category2");
@@ -1051,7 +1051,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveCategory_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -1070,14 +1070,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveCategory_NullCategory() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RemoveCategory(null);
 		}
 
 		[Test]
 		public void MergeCategories_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
 			CategoryInfo cat2 = prov.AddCategory(null, "Cat2");
@@ -1113,7 +1113,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MergeCategories_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -1151,7 +1151,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void MergeCategories_DifferentNamespaces() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns1 = prov.AddNamespace("Namespace1");
 			NamespaceInfo ns2 = prov.AddNamespace("Namespace2");
@@ -1171,7 +1171,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void MergeCategories_NullSource() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
 
@@ -1181,7 +1181,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void MergeCategories_NullDestination() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
 
@@ -1190,7 +1190,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(page, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
@@ -1201,7 +1201,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void PerformSearch_NullParameters() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.PerformSearch(null);
 		}
@@ -1214,7 +1214,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddPage_GetPages_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.GetPages(null).Length, "Wrong initial page count");
 
@@ -1236,7 +1236,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddPage_GetPages_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -1260,7 +1260,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddPage_GetPage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsNull(prov.GetPage("Page1"), "GetPage should return null");
 
@@ -1278,7 +1278,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddPage_GetPage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddNamespace("NS");
 
@@ -1298,7 +1298,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddPage_GetPage_SubSpaced() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddNamespace("Spaced Namespace");
 
@@ -1320,7 +1320,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetPage_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.GetPage(n);
 		}
@@ -1328,7 +1328,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddPage_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddPage(null, n, DateTime.Now);
 		}
@@ -1362,7 +1362,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_GetContent_GetBackups_GetBackupContent_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -1396,7 +1396,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_GetContent_GetBackups_GetBackupContent_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -1432,7 +1432,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			// Added to check that pages inserted in reverse alphabetical order work with the search engine
 			PageInfo p0 = prov.AddPage(null, "PagZ", DateTime.Now);
@@ -1469,14 +1469,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyPage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.ModifyPage(null, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void ModifyPage_InvalidTitle(string t) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, t, "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
 		}
@@ -1484,7 +1484,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void ModifyPage_InvalidUsername(string u) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", u, DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
 		}
@@ -1492,14 +1492,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyPage_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "", null, null, null, SaveMode.Backup);
 		}
 
 		[Test]
 		public void ModifyPage_OddCombinationsOfKeywordsAndDescription() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -1544,7 +1544,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_Draft_GetDraft_DeleteDraft() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
@@ -1562,7 +1562,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_Draft_RemovePage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
@@ -1576,7 +1576,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_Draft_RenamePage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
@@ -1592,7 +1592,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_Draft_RenamePage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 			prov.AddNamespace("NS");
@@ -1609,7 +1609,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_Draft_RenameNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 			NamespaceInfo ns = prov.AddNamespace("NS");
@@ -1629,7 +1629,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_Draft_RemoveNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 			NamespaceInfo ns = prov.AddNamespace("NS");
@@ -1644,7 +1644,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_Draft_MovePage_Root2Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 			PageInfo page = prov.AddPage(null, "Page", dt);
@@ -1663,7 +1663,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_Draft_MovePage_Sub2Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 			NamespaceInfo ns = prov.AddNamespace("NS");
@@ -1681,7 +1681,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyPage_Draft_MovePage_Sub2Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 			NamespaceInfo ns = prov.AddNamespace("NS");
@@ -1701,14 +1701,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetDraft_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.GetDraft(null);
 		}
 
 		[Test]
 		public void GetDraft_Inexistent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsNull(prov.GetDraft(new PageInfo("Page", null, DateTime.Now)), "GetDraft should return null");
 
@@ -1725,14 +1725,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void DeleteDraft_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.DeleteDraft(null);
 		}
 
 		[Test]
 		public void DeleteDraft_Inexistent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsFalse(prov.DeleteDraft(new PageInfo("Page", null, DateTime.Now)), "DeleteDraft should return false");
 
@@ -1753,26 +1753,26 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetBackups_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.GetBackups(null);
 		}
 
 		[Test]
 		public void GetBackups_InexistentPage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			Assert.IsNull(prov.GetBackups(new PageInfo("PPP", prov, DateTime.Now)), "GetBackups should return null");
 		}
 
 		[Test]
 		public void GetBackups_InexistentPage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 			Assert.IsNull(prov.GetBackups(new PageInfo(NameTools.GetFullName(ns.Name, "PPP"), prov, DateTime.Now)), "GetBackups should return null");
 		}
 
 		[Test]
 		public void SetBackupContent_GetBackupContent_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -1793,7 +1793,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void SetBackupContent_GetBackupContent_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 
@@ -1817,19 +1817,19 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetBackupContent_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.GetBackupContent(null, 0);
 		}
 
 		[Test]
 		public void GetBackupContent_InexistentPage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			Assert.IsNull(prov.GetBackupContent(new PageInfo("P", prov, DateTime.Now), 0), "GetBackupContent should return null");
 		}
 
 		[Test]
 		public void GetBackupContent_InexistentPage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			NamespaceInfo ns = prov.AddNamespace("Namespace");
 			Assert.IsNull(prov.GetBackupContent(new PageInfo(NameTools.GetFullName(ns.Name, "P"), prov, DateTime.Now), 0),
 				"GetBackupContent should return null");
@@ -1837,7 +1837,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetBackupContent_InexistentRevision_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -1848,7 +1848,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetBackupContent_InexistentRevision_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -1862,7 +1862,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void GetBackupContent_InvalidRevision() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -1874,14 +1874,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetBackupContent_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.SetBackupContent(null, 0);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void SetBackupContent_InvalidRevision() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -1892,7 +1892,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void SetBackupContent_InexistentRevision_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -1914,7 +1914,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void SetBackupContent_InexistentRevision_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -1938,7 +1938,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RenamePage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.AddPage(null, "Page2", DateTime.Now);
@@ -1987,7 +1987,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RenamePage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2036,7 +2036,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RenamePage_DefaultPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2049,7 +2049,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RenamePage_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.AddMessage(p, "NUnit", "Message1", DateTime.Now, "Body1", -1);
@@ -2091,14 +2091,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RenamePage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.RenamePage(null, "New Name");
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RenamePage_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -2108,7 +2108,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RollbackPage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", new string[] { "kold", "k2old" }, "DescrOld", SaveMode.Normal);
@@ -2132,7 +2132,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RollbackPage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2160,7 +2160,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RollbackPage_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2185,7 +2185,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RollbackPage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RollbackPage(null, 0);
 		}
@@ -2193,7 +2193,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void RollbackPage_InvalidRevision() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -2204,7 +2204,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void DeleteBackups_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -2230,7 +2230,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void DeleteBackups_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2260,7 +2260,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void DeleteBackups_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.DeleteBackups(null, -1);
 		}
@@ -2268,7 +2268,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void DeleteBackups_InvalidRevision() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -2280,7 +2280,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemovePage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
@@ -2297,7 +2297,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemovePage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2316,7 +2316,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemovePage_DefaultPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2329,7 +2329,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemovePage_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2352,14 +2352,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemovePage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RemovePage(null);
 		}
 
 		[Test]
 		public void RebindPage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
 			CategoryInfo cat2 = prov.AddCategory(null, "Cat2");
@@ -2384,7 +2384,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RebindPage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2411,7 +2411,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RebindPage_SameNames() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2440,7 +2440,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RebindPage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RebindPage(null, new string[0]);
 		}
@@ -2448,7 +2448,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RebindPage_NullCategories() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2458,7 +2458,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RebindPage_InvalidCategoryElement(string e) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
 			CategoryInfo cat2 = prov.AddCategory(null, "Cat2");
@@ -2470,7 +2470,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RebindPage_InexistentCategoryElement_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
 			CategoryInfo cat2 = prov.AddCategory(null, "Cat2");
@@ -2482,7 +2482,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RebindPage_InexistentCategoryElement_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2496,7 +2496,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void BulkStoreMessages_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsFalse(prov.BulkStoreMessages(new PageInfo("Inexistent", prov, DateTime.Now), new Message[0]), "BulkStoreMessages should return false");
 
@@ -2542,7 +2542,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void BulkStoreMessages_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2591,7 +2591,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void BulkStoreMessages_DuplicateID() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2608,20 +2608,20 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void BulkStoreMessages_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.BulkStoreMessages(null, new Message[0]);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void BulkStoreMessages_NullMessages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.BulkStoreMessages(new PageInfo("Page", prov, DateTime.Now), null);
 		}
 
 		[Test]
 		public void BulkStoreMessages_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2645,7 +2645,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddMessage_GetMessages_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2684,7 +2684,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddMessage_GetMessages_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2730,7 +2730,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetMessages_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.GetMessages(null);
 		}
@@ -2738,7 +2738,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetMessageCount_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.GetMessageCount(null);
 		}
@@ -2746,7 +2746,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void AddMessage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddMessage(null, "NUnit", "Subject", DateTime.Now, "Body", -1);
 		}
@@ -2754,7 +2754,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddMessage_InvalidUsername(string u) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2764,7 +2764,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddMessage_InvalidSubject(string s) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2774,7 +2774,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void AddMessage_NullBody() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2784,7 +2784,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void AddMessage_InvalidParent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2793,7 +2793,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddMessage_InexistentParent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2802,7 +2802,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddMessage_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2825,7 +2825,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveMessage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2859,7 +2859,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveMessage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -2895,7 +2895,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveMessage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RemoveMessage(null, 1, true);
 		}
@@ -2903,7 +2903,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void RemoveMessage_InvalidId() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2912,7 +2912,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveMessage_KeepReplies_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 			prov.AddMessage(page, "NUnit", "Test", DateTime.Now, "Blah", -1);
@@ -2936,7 +2936,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveMessage_RemoveReplies_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 			prov.AddMessage(page, "NUnit", "Test", DateTime.Now, "Blah", -1);
@@ -2950,7 +2950,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyMessage_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -2983,7 +2983,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyMessage_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -3019,7 +3019,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyMessage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsFalse(prov.ModifyMessage(null, 1, "NUnit", "Subject", DateTime.Now, "Body"), "ModifyMessage should return false");
 		}
@@ -3027,7 +3027,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void ModifyMessage_InvalidId() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -3037,7 +3037,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void ModifyMessage_InvalidUsername(string u) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 			prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
@@ -3048,7 +3048,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void ModifyMessage_InvalidSubject(string s) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 			prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
@@ -3059,7 +3059,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyMessage_NullBody() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 			prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
@@ -3069,7 +3069,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyMessage_PerformSearch() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
@@ -3085,7 +3085,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddNavigationPath_GetNavigationPaths_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
@@ -3120,7 +3120,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddNavigationPath_GetNavigationPaths_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -3158,7 +3158,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddNavigationPath_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
@@ -3169,7 +3169,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void AddNavigationPath_NullPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddNavigationPath(null, "Path", null);
 		}
@@ -3177,7 +3177,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void AddNavigationPath_EmptyPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddNavigationPath(null, "Path", new PageInfo[0]);
 		}
@@ -3185,7 +3185,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void AddNavigationPath_NullPageElement() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 
@@ -3195,7 +3195,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void AddNavigationPath_InexistentPageElement() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 
@@ -3204,7 +3204,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyNavigationPath_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
@@ -3230,7 +3230,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ModifyNavigationPath_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -3259,7 +3259,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyNavigationPath_NullPath() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
@@ -3270,7 +3270,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyNavigationPath_NullPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
@@ -3283,7 +3283,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void ModifyNavigationPath_EmptyPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
@@ -3296,7 +3296,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyNavigationPath_NullPageElement() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
@@ -3309,7 +3309,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void ModifyNavigationPath_InexistentPageElement() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
@@ -3322,7 +3322,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveNavigationPath_Root() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
@@ -3343,7 +3343,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveNavigationPath_Sub() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			NamespaceInfo ns = prov.AddNamespace("NS");
 
@@ -3367,14 +3367,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveNavigationPath_NullPath() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RemoveNavigationPath(null);
 		}
 
 		[Test]
 		public void AddSnippet_GetSnippets() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.GetSnippets().Length, "Wrong snippet count");
 
@@ -3401,7 +3401,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddSnippet_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddSnippet(n, "Content");
 		}
@@ -3409,14 +3409,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void AddSnippet_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddSnippet("Snippet", null);
 		}
 
 		[Test]
 		public void ModifySnippet() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsNull(prov.ModifySnippet("Inexistent", "Content"), "ModifySnippet should return null");
 
@@ -3442,7 +3442,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void ModifySnippet_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.ModifySnippet(n, "Content");
 		}
@@ -3450,7 +3450,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifySnippet_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddSnippet("Snippet", "Blah");
 
@@ -3459,7 +3459,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveSnippet() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsFalse(prov.RemoveSnippet("Inexistent"), "RemoveSnippet should return false");
 
@@ -3478,14 +3478,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RemoveSnippet_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RemoveSnippet(n);
 		}
 
 		[Test]
 		public void AddContentTemplate_GetContentTemplates() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			ContentTemplate temp1 = prov.AddContentTemplate("T1", "Template1");
 			Assert.AreEqual("T1", temp1.Name, "Wrong name");
@@ -3511,7 +3511,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddContentTemplate_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddContentTemplate(n, "Content");
 		}
@@ -3519,14 +3519,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void AddContentTemplate_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.AddContentTemplate("T", null);
 		}
 
 		[Test]
 		public void ModifyContentTemplate() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsNull(prov.ModifyContentTemplate("T", "Content"), "ModifyContentTemplate should return null");
 
@@ -3551,7 +3551,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void ModifyContentTemplate_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.ModifyContentTemplate(n, "Content");
 		}
@@ -3559,14 +3559,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyContentTemplate_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.ModifyContentTemplate("T", null);
 		}
 
 		[Test]
 		public void RemoveContentTemplate() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsFalse(prov.RemoveContentTemplate("T"), "RemoveContentTemplate should return false");
 
@@ -3585,14 +3585,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RemoveContentTemplate_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RemoveContentTemplate(n);
 		}
 
 		[Test]
 		public void RebuildIndex_ManyPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 
 			for(int i = 0; i < PagesContent.Length; i++) {
 				PageInfo page = prov.AddPage(null, "The Longest Page Name Ever Seen In The Whole Universe (Maybe) - " + i.ToString(), DateTime.Now);
@@ -3610,7 +3610,7 @@ namespace ScrewTurn.Wiki.Tests {
 			DoChecksFor_RebuildIndex_ManyPages(prov);
 		}
 
-		private void DoChecksFor_RebuildIndex_ManyPages(IPagesStorageProviderV30 prov) {
+		private void DoChecksFor_RebuildIndex_ManyPages(IPagesStorageProviderV40 prov) {
 			int docCount, wordCount, matchCount;
 			long size;
 			prov.GetIndexStats(out docCount, out wordCount, out matchCount, out size);

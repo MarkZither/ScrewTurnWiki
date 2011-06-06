@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 	/// <summary>
 	/// Implements a Users Storage Provider for Active Directory.
 	/// </summary>
-	public class ActiveDirectoryProvider : IUsersStorageProviderV30 {
+	public class ActiveDirectoryProvider : IUsersStorageProviderV40 {
 		private const string HELP_HELP =
 			"<b>Configuration Settings:</b><br/>" +
 			"Map one or more domain groups to wiki groups (Users, Administrators, etc.):" +
@@ -51,9 +51,9 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 			"</ul>" +
 			"Comments start with a semicolon \";\".";
 
-		private IHostV30 m_Host;
+		private IHostV40 m_Host;
 		private string m_wiki;
-		private IUsersStorageProviderV30 m_StorageProvider;
+		private IUsersStorageProviderV40 m_StorageProvider;
 		private Random m_Random;
 		private Config m_Config;
 
@@ -717,7 +717,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			m_Host = host;
 			m_wiki = wiki;
 			m_Random = new Random();
@@ -732,7 +732,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void SetUp(IHostV30 host, string config) { }
+		public void SetUp(IHostV40 host, string config) { }
 
 		/// <summary>
 		/// Returns the storage provider.
@@ -740,7 +740,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		/// This avoids a dependency on the storage provider being loaded first, which is not guaranteed
 		/// </summary>
 		/// <value>The storage provider.</value>
-		private IUsersStorageProviderV30 StorageProvider {
+		private IUsersStorageProviderV40 StorageProvider {
 			get {
 				if(m_StorageProvider == null) {
 					lock(m_Host) {

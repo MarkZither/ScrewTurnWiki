@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements a Local Files Storage Provider.
 	/// </summary>
-	public class FilesStorageProvider : ProviderBase, IFilesStorageProviderV30 {
+	public class FilesStorageProvider : ProviderBase, IFilesStorageProviderV40 {
 
 		private readonly ComponentInformation info = new ComponentInformation("Local Files Provider",
 			"Threeplicate Srl", GlobalSettings.WikiVersion, "http://www.screwturn.eu", null);
@@ -27,7 +27,7 @@ namespace ScrewTurn.Wiki {
 		// 16 KB seems to be the best break-even between performance and memory usage
 		private const int BufferSize = 16384;
 
-		private IHostV30 host;
+		private IHostV40 host;
 		private string wiki;
 
 		private string GetFullPath(string finalChunk) {
@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
@@ -83,7 +83,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void SetUp(IHostV30 host, string config) {
+		public void SetUp(IHostV40 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 

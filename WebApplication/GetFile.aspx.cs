@@ -41,7 +41,7 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			IFilesStorageProviderV30 provider;
+			IFilesStorageProviderV40 provider;
 
 			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(Request["Provider"], currentWiki);
 			else {

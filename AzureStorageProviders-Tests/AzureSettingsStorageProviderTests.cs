@@ -12,7 +12,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 	[TestFixture]
 	public class AzureSettingsStorageProviderTests : SettingsStorageProviderTestScaffolding {
 
-		public override ISettingsStorageProviderV30 GetProvider() {
+		public override ISettingsStorageProviderV40 GetProvider() {
 			AzureSettingsStorageProvider settingsProvider = new AzureSettingsStorageProvider();
 			settingsProvider.SetUp(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==");
 			settingsProvider.Init(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "");
@@ -34,7 +34,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 		[Test]
 		public void Init() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "");
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
@@ -44,7 +44,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 		[TestCase("blah", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase("unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==|123", ExpectedException = typeof(InvalidConfigurationException))]
 		public void Init_InvalidConnString(string c) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), c, null);
 		}
 	}

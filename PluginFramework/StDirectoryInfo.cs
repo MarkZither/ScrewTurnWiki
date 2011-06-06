@@ -13,14 +13,14 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	public class StDirectoryInfo {
 
 		private string fullPath;
-		private IFilesStorageProviderV30 provider;
+		private IFilesStorageProviderV40 provider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:StDirectoryInfo" /> class.
 		/// </summary>
 		/// <param name="fullPath">The full path of the directory, for example <b>/dir/sub/</b> or <b>/</b>.</param>
 		/// <param name="provider">The provider that handles the directory.</param>
-		public StDirectoryInfo(string fullPath, IFilesStorageProviderV30 provider) {
+		public StDirectoryInfo(string fullPath, IFilesStorageProviderV40 provider) {
 			this.fullPath = fullPath;
 			this.provider = provider;
 		}
@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets the provider that handles the directory.
 		/// </summary>
-		public IFilesStorageProviderV30 Provider {
+		public IFilesStorageProviderV40 Provider {
 			get { return provider; }
 		}
 

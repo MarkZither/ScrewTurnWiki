@@ -25,14 +25,14 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The Provider that handles the Navigation Path.
 		/// </summary>
-		protected IPagesStorageProviderV30 provider;
+		protected IPagesStorageProviderV40 provider;
 
 		/// <summary>
 		/// Initializes a new instance of the <b>NavigationPath</b> class.
 		/// </summary>
 		/// <param name="fullName">The Full Name of the Navigation Path.</param>
 		/// <param name="provider">The Provider</param>
-		public NavigationPath(string fullName, IPagesStorageProviderV30 provider) {
+		public NavigationPath(string fullName, IPagesStorageProviderV40 provider) {
 			NameTools.ExpandFullName(fullName, out nspace, out name);
 			this.provider = provider;
 			pages = new string[0];
@@ -57,7 +57,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets the Provider.
 		/// </summary>
-		public IPagesStorageProviderV30 Provider {
+		public IPagesStorageProviderV40 Provider {
 			get { return provider; }
 		}
 

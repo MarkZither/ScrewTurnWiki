@@ -82,7 +82,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="prov">The provider.</param>
 		/// <param name="name">The directory name.</param>
 		/// <returns>The full name (<b>not</b> prepended with <see cref="Actions.ForDirectories.ResourceMasterPrefix" />.</returns>
-		public static string GetDirectoryName(IFilesStorageProviderV30 prov, string name) {
+		public static string GetDirectoryName(IFilesStorageProviderV40 prov, string name) {
 			if(prov == null) throw new ArgumentNullException("prov");
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");

@@ -34,10 +34,10 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.VerifyAll();
 		}
 
-		protected IHostV30 MockHost() {
+		protected IHostV40 MockHost() {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
-			IHostV30 host = mocks.DynamicMock<IHostV30>();
+			IHostV40 host = mocks.DynamicMock<IHostV40>();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.Any();
 
 			mocks.Replay(host);
@@ -45,8 +45,8 @@ namespace ScrewTurn.Wiki.Tests {
 			return host;
 		}
 
-		private ISettingsStorageProviderV30 MockProvider(List<AclEntry> entries) {
-			ISettingsStorageProviderV30 provider = mocks.DynamicMock<ISettingsStorageProviderV30>();
+		private ISettingsStorageProviderV40 MockProvider(List<AclEntry> entries) {
+			ISettingsStorageProviderV40 provider = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			provider.Init(MockHost(), "", null);
 			LastCall.On(provider).Repeat.Any();
 
@@ -62,12 +62,12 @@ namespace ScrewTurn.Wiki.Tests {
 			return provider;
 		}
 
-		private ISettingsStorageProviderV30 MockProvider() {
+		private ISettingsStorageProviderV40 MockProvider() {
 			return MockProvider(new List<AclEntry>());
 		}
 
-		private IFilesStorageProviderV30 MockFilesProvider() {
-			IFilesStorageProviderV30 prov = mocks.DynamicMock<IFilesStorageProviderV30>();
+		private IFilesStorageProviderV40 MockFilesProvider() {
+			IFilesStorageProviderV40 prov = mocks.DynamicMock<IFilesStorageProviderV40>();
 			mocks.Replay(prov);
 			return prov;
 		}
@@ -75,7 +75,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForGlobals_Group_Grant() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -97,7 +97,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForGlobals_Group_Deny() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -119,7 +119,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForGlobals_Group_Delete() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -157,7 +157,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForGlobals_User_Grant() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -180,7 +180,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForGlobals_User_Deny() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -203,7 +203,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForGlobals_User_Delete() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -228,7 +228,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForGlobals_User_InvalidAction(string a) {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForGlobals(AuthStatus.Grant, a,
@@ -238,7 +238,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForGlobals_User_NullUser() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForGlobals(AuthStatus.Grant, Actions.ForGlobals.ManageAccounts, null as UserInfo);
@@ -247,7 +247,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForNamespace_Group_Grant() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -270,7 +270,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForNamespace_Group_Deny() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -293,7 +293,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForNamespace_Group_Delete() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -318,7 +318,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForNamespace_Group_InvalidAction(string a) {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, a, new UserGroup("Group", "Descr", null));
@@ -327,7 +327,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForNamespace_Group_NullGroup() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, null as UserGroup);
@@ -336,7 +336,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForNamespace_User_Grant() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -359,7 +359,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForNamespace_User_Deny() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -382,7 +382,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForNamespace_User_Delete() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -407,7 +407,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForNamespace_User_InvalidAction(string a) {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, a,
@@ -417,7 +417,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForNamespace_User_NullUser() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, null as UserInfo);
@@ -426,8 +426,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForDirectory_Group_Grant() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -450,8 +450,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForDirectory_Group_Deny() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -474,8 +474,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForDirectory_Group_Delete() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -497,7 +497,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForDirectory_Group_NullProvider() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForDirectory(AuthStatus.Grant, null, "/", Actions.ForDirectories.DeleteFiles, new UserGroup("Group", "Group", null));
@@ -506,8 +506,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetPermissionForDirectory_Group_InvalidDirectory(string d) {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, d, Actions.ForDirectories.DownloadFiles, new UserGroup("Group", "Group", null));
@@ -518,8 +518,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForDirectory_Group_InvalidAction(string a) {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", a, new UserGroup("Group", "Group", null));
@@ -528,8 +528,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForDirectory_Group_NullGroup() {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", Actions.ForDirectories.DownloadFiles, null as UserGroup);
@@ -538,8 +538,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForDirectory_User_Grant() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -563,8 +563,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForDirectory_User_Deny() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -588,8 +588,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForDirectory_User_Delete() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -612,7 +612,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForDirectory_User_NullProvider() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForDirectory(AuthStatus.Grant, null, "/", Actions.ForDirectories.DeleteFiles,
@@ -622,8 +622,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetPermissionForDirectory_User_InvalidDirectory(string d) {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, d, Actions.ForDirectories.DownloadFiles,
@@ -635,8 +635,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForDirectory_User_InvalidAction(string a) {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", a,
@@ -646,8 +646,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForDirectory_User_NullUser() {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", Actions.ForDirectories.DownloadFiles, null as UserInfo);
@@ -656,7 +656,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForPage_Group_Grant() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -678,7 +678,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForPage_Group_Deny() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -700,7 +700,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForPage_Group_Delete() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -722,7 +722,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForPage_Group_NullPage() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForPage(AuthStatus.Grant, null, Actions.ForPages.ModifyPage, new UserGroup("Group", "Group", null));
@@ -733,7 +733,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForPage_Group_InvalidAction(string a) {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
@@ -743,7 +743,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForPage_Group_NullGroup() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
@@ -753,7 +753,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForPage_User_Grant() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -776,7 +776,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForPage_User_Deny() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -799,7 +799,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void SetPermissionForPage_User_Delete() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -822,7 +822,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForPage_User_NullPage() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForPage(AuthStatus.Grant, null, Actions.ForPages.ModifyPage,
@@ -834,7 +834,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForPage_User_InvalidAction(string a) {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
@@ -844,7 +844,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPermissionForPage_User_NullUser() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
@@ -854,7 +854,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForGlobals_Group() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -890,7 +890,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForGlobals_User() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -926,7 +926,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForNamespace_Group_Root() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -956,7 +956,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForNamespace_Group_Sub() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -993,7 +993,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForNamespace_User_Root() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1024,7 +1024,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForNamespace_User_Sub() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1062,7 +1062,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForPage_Group() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1107,7 +1107,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForPage_User() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1152,8 +1152,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForDirectory_Root_Group() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filedProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filedProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1183,8 +1183,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForDirectory_Sub_Group() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filedProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filedProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1215,7 +1215,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveEntriesForDirectory_Group_NullGroup() {
 			AuthWriter authWriter = new AuthWriter(MockProvider());
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			IFilesStorageProviderV40 fProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			mocks.Replay(fProv);
 			authWriter.RemoveEntriesForDirectory(null as UserGroup, fProv, "/");
 		}
@@ -1232,7 +1232,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void RemoveEntriesForDirectory_Group_InvalidDirectory(string d) {
 			AuthWriter authWriter = new AuthWriter(MockProvider());
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			IFilesStorageProviderV40 fProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			mocks.Replay(fProv);
 			authWriter.RemoveEntriesForDirectory(new UserGroup("Group", "Group", null), fProv, d);
 		}
@@ -1240,8 +1240,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForDirectory_Root_User() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1271,8 +1271,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void RemoveEntriesForDirectory_Sub_User() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1304,7 +1304,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void RemoveEntriesForDirectory_User_NullUser() {
 			AuthWriter authWriter = new AuthWriter(MockProvider());
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			IFilesStorageProviderV40 fProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			mocks.Replay(fProv);
 			authWriter.RemoveEntriesForDirectory(null as UserInfo, fProv, "/");
 		}
@@ -1321,7 +1321,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void RemoveEntriesForDirectory_User_InvalidDirectory(string d) {
 			AuthWriter authWriter = new AuthWriter(MockProvider());
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			IFilesStorageProviderV40 fProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			mocks.Replay(fProv);
 			authWriter.RemoveEntriesForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
 		}
@@ -1329,8 +1329,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void ClearEntriesForDirectory() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = mocks.DynamicMock<IFilesStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1366,7 +1366,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void ClearEntriesForNamespace() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1410,7 +1410,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void ClearEntriesForPage() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1437,8 +1437,8 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void ProcessDirectoryRenaming() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1481,7 +1481,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void ProcessNamespaceRenaming() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();
@@ -1532,7 +1532,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void ProcessPageRenaming() {
 			MockRepository mocks = new MockRepository();
-			ISettingsStorageProviderV30 prov = mocks.DynamicMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 prov = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.DynamicMock<IAclManager>();
 
 			Expect.Call(prov.AclManager).Return(aclManager).Repeat.Any();

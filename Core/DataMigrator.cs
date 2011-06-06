@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="source">The source Provider.</param>
 		/// <param name="destination">The destination Provider.</param>
-		public static void MigratePagesStorageProviderData(IPagesStorageProviderV30 source, IPagesStorageProviderV30 destination) {
+		public static void MigratePagesStorageProviderData(IPagesStorageProviderV40 source, IPagesStorageProviderV40 destination) {
 			// Move Snippets
 			Snippet[] snippets = source.GetSnippets();
 			for(int i = 0; i < snippets.Length; i++) {
@@ -144,7 +144,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="source">The source Provider.</param>
 		/// <param name="destination">The destination Provider.</param>
 		/// <param name="sendEmailNotification">A value indicating whether or not to send a notification email message to the moved users.</param>
-		public static void MigrateUsersStorageProviderData(string wiki, IUsersStorageProviderV30 source, IUsersStorageProviderV30 destination, bool sendEmailNotification) {
+		public static void MigrateUsersStorageProviderData(string wiki, IUsersStorageProviderV40 source, IUsersStorageProviderV40 destination, bool sendEmailNotification) {
 			// User groups
 			UserGroup[] groups = source.GetUserGroups();
 			foreach(UserGroup group in groups) {
@@ -192,7 +192,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="source">The source Provider.</param>
 		/// <param name="destination">The destination Provider.</param>
 		/// <param name="settingsProvider">The settings storage provider that handles permissions.</param>
-		public static void MigrateFilesStorageProviderData(IFilesStorageProviderV30 source, IFilesStorageProviderV30 destination, ISettingsStorageProviderV30 settingsProvider) {
+		public static void MigrateFilesStorageProviderData(IFilesStorageProviderV40 source, IFilesStorageProviderV40 destination, ISettingsStorageProviderV40 settingsProvider) {
 			// Directories
 			MigrateDirectories(source, destination, "/", settingsProvider);
 
@@ -220,7 +220,7 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		private static void MigrateDirectories(IFilesStorageProviderV30 source, IFilesStorageProviderV30 destination, string current, ISettingsStorageProviderV30 settingsProvider) {
+		private static void MigrateDirectories(IFilesStorageProviderV40 source, IFilesStorageProviderV40 destination, string current, ISettingsStorageProviderV40 settingsProvider) {
 			// Copy files
 			string[] files = source.ListFiles(current);
 			foreach(string file in files) {
@@ -265,7 +265,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="destination">The destination Provider.</param>
 		/// <param name="knownNamespaces">The currently known page namespaces.</param>
 		/// <param name="knownPlugins">The currently known plugins.</param>
-		public static void CopySettingsStorageProviderData(ISettingsStorageProviderV30 source, ISettingsStorageProviderV30 destination,
+		public static void CopySettingsStorageProviderData(ISettingsStorageProviderV40 source, ISettingsStorageProviderV40 destination,
 			string[] knownNamespaces, string[] knownPlugins) {
 
 			// Settings
@@ -337,7 +337,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="destination">The destination Provider.</param>
 		/// <param name="knownNamespaces">The currently known page namespaces.</param>
 		/// <param name="knownPlugins">The currently known plugins.</param>
-		public static void CopyGlobalSettingsStorageProviderData(IGlobalSettingsStorageProviderV30 source, IGlobalSettingsStorageProviderV30 destination,
+		public static void CopyGlobalSettingsStorageProviderData(IGlobalSettingsStorageProviderV40 source, IGlobalSettingsStorageProviderV40 destination,
 			string[] knownNamespaces, string[] knownPlugins) {
 
 			// Settings

@@ -162,7 +162,7 @@ namespace ScrewTurn.Wiki {
 					break;
 				case AclResources.Directories:
 					string directory = CurrentResourceName;
-					IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider, currentWiki);
+					IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider, currentWiki);
 					if(type == SubjectType.Group) {
 						grants = authReader.RetrieveGrantsForDirectory(
 							Users.FindUserGroup(currentWiki, subject),
@@ -259,7 +259,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The directory.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		private bool RemoveAllAclEntriesForDirectory(string subject, IFilesStorageProviderV30 provider, string directory) {
+		private bool RemoveAllAclEntriesForDirectory(string subject, IFilesStorageProviderV40 provider, string directory) {
 			bool isGroup = lstSubjects.SelectedValue.StartsWith("G.");
 			subject = subject.Substring(2);
 
@@ -386,7 +386,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="grants">The granted actions.</param>
 		/// <param name="denials">The denies actions.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		private bool AddAclEntriesForDirectory(string subject, IFilesStorageProviderV30 provider, string directory, string[] grants, string[] denials) {
+		private bool AddAclEntriesForDirectory(string subject, IFilesStorageProviderV40 provider, string directory, string[] grants, string[] denials) {
 			bool isGroup = subject.StartsWith("G.");
 			subject = subject.Substring(2);
 
@@ -451,7 +451,7 @@ namespace ScrewTurn.Wiki {
 					break;
 				case AclResources.Directories:
 					// Remove old values, add new ones
-					IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider, currentWiki);
+					IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider, currentWiki);
 					done = RemoveAllAclEntriesForDirectory(subject, prov, CurrentResourceName);
 					if(done) {
 						done = AddAclEntriesForDirectory(subject, prov, CurrentResourceName,
@@ -586,7 +586,7 @@ namespace ScrewTurn.Wiki {
 					}
 					break;
 				case AclResources.Directories:
-					IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider, currentWiki);
+					IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider, currentWiki);
 					if(isGroup) {
 						done = authWriter.SetPermissionForDirectory(AuthStatus.Deny,
 							prov, CurrentResourceName, Actions.FullControl,

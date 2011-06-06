@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements a Users Storage Provider.
 	/// </summary>
-	public class UsersStorageProvider : ProviderBase, IUsersStorageProviderV30 {
+	public class UsersStorageProvider : ProviderBase, IUsersStorageProviderV40 {
 
 		private const string UsersFile = "Users.cs";
 		private const string UsersDataFile = "UsersData.cs";
@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki {
 		private readonly ComponentInformation info = new ComponentInformation("Local Users Provider",
 			"Threeplicate Srl", GlobalSettings.WikiVersion, "http://www.screwturn.eu", null);
 
-		private IHostV30 host;
+		private IHostV40 host;
 		private string wiki;
 
 		private UserGroup[] groupsCache = null;
@@ -44,7 +44,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
@@ -156,7 +156,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
-		public void SetUp(IHostV30 host, string config) {
+		public void SetUp(IHostV40 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 

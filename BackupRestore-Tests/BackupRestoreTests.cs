@@ -137,7 +137,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 
 	}
 
-	internal class DummySettingsStorageProvider : ISettingsStorageProviderV30 {
+	internal class DummySettingsStorageProvider : ISettingsStorageProviderV40 {
 
 		private	Dictionary<string, string> settings = new Dictionary<string, string>();
 		private Dictionary<string, bool> pluginsStatus = new Dictionary<string, bool>();
@@ -268,11 +268,11 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			get { throw new NotImplementedException(); }
 		}
 
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			throw new NotImplementedException();
 		}
 
-		public void SetUp(IHostV30 host, string config) {
+		public void SetUp(IHostV40 host, string config) {
 			throw new NotImplementedException();
 		}
 
@@ -347,7 +347,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		#endregion
 	}
 
-	internal class DummyGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV30 {
+	internal class DummyGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV40 {
 
 		Dictionary<string, string> settings = new Dictionary<string, string>();
 		Dictionary<string, byte[]> pluginsAssemblies = new Dictionary<string, byte[]>();
@@ -416,11 +416,11 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			get { throw new NotImplementedException(); }
 		}
 
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			throw new NotImplementedException();
 		}
 
-		public void SetUp(IHostV30 host, string config) {
+		public void SetUp(IHostV40 host, string config) {
 			throw new NotImplementedException();
 		}
 

@@ -21,7 +21,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The provider handling the template.
 		/// </summary>
-		protected IPagesStorageProviderV30 provider;
+		protected IPagesStorageProviderV40 provider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:ContentTemplate" /> class.
@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="name">The name of the template.</param>
 		/// <param name="content">The content of the template.</param>
 		/// <param name="provider">The provider handling the template.</param>
-		public ContentTemplate(string name, string content, IPagesStorageProviderV30 provider) {
+		public ContentTemplate(string name, string content, IPagesStorageProviderV40 provider) {
 			this.name = name;
 			this.content = content;
 			this.provider = provider;
@@ -52,7 +52,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets the provider handling the template.
 		/// </summary>
-		public IPagesStorageProviderV30 Provider {
+		public IPagesStorageProviderV40 Provider {
 			get { return provider; }
 		}
 

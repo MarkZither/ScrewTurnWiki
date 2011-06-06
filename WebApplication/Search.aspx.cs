@@ -209,7 +209,7 @@ namespace ScrewTurn.Wiki {
 				}
 				else if(res.Document.TypeTag == FileDocument.StandardTypeTag) {
 					string[] fields = ((FileDocument)res.Document).Name.Split('|');
-					IFilesStorageProviderV30 provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(fields[0], currentWiki);
+					IFilesStorageProviderV40 provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(fields[0], currentWiki);
 					string directory = Tools.GetDirectoryName(fields[1]);
 
 					// Verify permissions

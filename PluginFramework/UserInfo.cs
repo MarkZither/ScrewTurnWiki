@@ -38,7 +38,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The Provider that handles the User.
 		/// </summary>
-		protected IUsersStorageProviderV30 provider;
+		protected IUsersStorageProviderV40 provider;
 
 		/// <summary>
 		/// Initializes a new instance of the <b>UserInfo</b> class.
@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="active">Specifies whether the Account is active or not.</param>
 		/// <param name="dateTime">The creation DateTime.</param>
 		/// <param name="provider">The Users Storage Provider that manages the User.</param>
-		public UserInfo(string username, string displayName, string email, bool active, DateTime dateTime, IUsersStorageProviderV30 provider) {
+		public UserInfo(string username, string displayName, string email, bool active, DateTime dateTime, IUsersStorageProviderV40 provider) {
 			this.username = username;
 			this.displayName = displayName;
 			this.email = email;
@@ -108,7 +108,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets or sets the Users Storage Provider.
 		/// </summary>
-		public IUsersStorageProviderV30 Provider {
+		public IUsersStorageProviderV40 Provider {
 			get { return provider; }
 			set { provider = value; }
 		}

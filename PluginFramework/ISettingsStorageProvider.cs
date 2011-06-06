@@ -12,7 +12,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// <remarks>A class that implements this interface <b>should</b> have some kind of data caching.
 	/// The Provider <b>should not</b> use the method <see cref="M:IHost.GetSettingValue" /> during the execution of 
 	/// the <see cref="M:ISettingsStorageProvider.Init" /> method, nor access the wiki log.</remarks>
-	public interface ISettingsStorageProviderV30 : IProviderV30 {
+	public interface ISettingsStorageProviderV40 : IProviderV40 {
 
 		/// <summary>
 		/// Retrieves the value of a Setting.

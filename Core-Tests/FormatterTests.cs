@@ -57,9 +57,9 @@ second line";
 			Collectors.AddGlobalSettingsStorageProvider(typeof(DummyGlobalSettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyGlobalSettingsStorageProvider)));
 
 			//ISettingsStorageProviderV30 settingsProvider = new DummySettingsStorageProvider();
-			Collectors.AddProvider(typeof(DummySettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummySettingsStorageProvider)), "", typeof(ISettingsStorageProviderV30));
+			Collectors.AddProvider(typeof(DummySettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummySettingsStorageProvider)), "", typeof(ISettingsStorageProviderV40));
 			
-			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), "", typeof(IPagesStorageProviderV30));
+			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), "", typeof(IPagesStorageProviderV40));
 			
 			Host.Instance = new Host();
 		}
@@ -69,7 +69,7 @@ second line";
 			mocks.VerifyAll();
 		}
 
-		private class DummyGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV30 {
+		private class DummyGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV40 {
 
 			#region IGlobalSettingsStorageProviderV30 Members
 
@@ -156,11 +156,11 @@ second line";
 				get { throw new NotImplementedException(); }
 			}
 
-			public void Init(IHostV30 host, string config, string wiki) {
+			public void Init(IHostV40 host, string config, string wiki) {
 				// Nothing to-do
 			}
 
-			public void SetUp(IHostV30 host, string config) {
+			public void SetUp(IHostV40 host, string config) {
 				// Nothing to-do
 			}
 
@@ -183,7 +183,7 @@ second line";
 			#endregion
 		}
 
-		private class DummySettingsStorageProvider : ISettingsStorageProviderV30 {
+		private class DummySettingsStorageProvider : ISettingsStorageProviderV40 {
 
 			#region ISettingsStorageProviderV30 Members
 
@@ -284,11 +284,11 @@ second line";
 				get { throw new NotImplementedException(); }
 			}
 
-			public void Init(IHostV30 host, string config, string wiki) {
+			public void Init(IHostV40 host, string config, string wiki) {
 				//Nothing TODO
 			}
 
-			public void SetUp(IHostV30 host, string config) {
+			public void SetUp(IHostV40 host, string config) {
 				//Nothing TODO
 			}
 
@@ -377,7 +377,7 @@ second line";
 		}
 	}
 
-	public class DummyPagesStorageProvider : IPagesStorageProviderV30 {
+	public class DummyPagesStorageProvider : IPagesStorageProviderV40 {
 
 		public NamespaceInfo GetNamespace(string name) {
 			throw new NotImplementedException();
@@ -601,9 +601,9 @@ second line";
 			get { throw new NotImplementedException(); }
 		}
 
-		public void Init(IHostV30 host, string config, string wiki) { }
+		public void Init(IHostV40 host, string config, string wiki) { }
 
-		public void SetUp(IHostV30 host, string config) { }
+		public void SetUp(IHostV40 host, string config) { }
 
 		void IDisposable.Dispose() { }
 

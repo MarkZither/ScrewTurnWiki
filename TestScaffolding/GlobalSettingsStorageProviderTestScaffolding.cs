@@ -19,11 +19,11 @@ namespace ScrewTurn.Wiki.Tests {
 		private const int MaxLogSize = 8;
 		private const int MaxRecentChanges = 20;
 
-		protected IHostV30 MockHost() {
+		protected IHostV40 MockHost() {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 			//Console.WriteLine("Temp dir: " + testDir);
 
-			IHostV30 host = mocks.DynamicMock<IHostV30>();
+			IHostV40 host = mocks.DynamicMock<IHostV40>();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
 
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.LoggingLevel)).Return("3").Repeat.Any();
@@ -45,26 +45,26 @@ namespace ScrewTurn.Wiki.Tests {
 			}
 		}
 
-		public abstract IGlobalSettingsStorageProviderV30 GetProvider();
+		public abstract IGlobalSettingsStorageProviderV40 GetProvider();
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(null, "", null);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), null, null);
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetSetting_InvalidName(string n) {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 
 			prov.SetSetting(n, "blah");
 		}
@@ -72,7 +72,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetSetting_InvalidName(string n) {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 
 			prov.GetSetting(n);
 		}
@@ -85,7 +85,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("with<angbrack", "with<angbrack")]
 		[TestCase("with>angbrack", "with>angbrack")]
 		public void SetSetting_GetSetting(string c, string r) {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -95,7 +95,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void SetSetting_GetAllSettings() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -117,7 +117,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("Message\nblah", EntryType.Error, "User\nggg", "wiki1")]
 		[TestCase("Message|ppp", EntryType.Warning, "User|ghghgh", "wiki1")]
 		public void LogEntry_GetLogEntries(string m, EntryType t, string u, string w) {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -134,7 +134,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, "wiki1", ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", "wiki1", ExpectedException = typeof(ArgumentException))]
 		public void LogEntry_InvalidMessage(string m, string w) {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -146,7 +146,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, "wiki1", ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", "wiki1", ExpectedException = typeof(ArgumentException))]
 		public void LogEntry_InvalidUser(string u, string w) {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -155,7 +155,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ClearLog() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -175,7 +175,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CutLog_LogSize() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -192,7 +192,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StorePluginAssembly_RetrievePluginAssembly_ListPluginAssemblies() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			byte[] stuff = new byte[50];
@@ -222,7 +222,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void DeletePluginAssembly() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			Assert.IsFalse(prov.DeletePluginAssembly("Assembly.dll"), "DeletePluginAssembly should return false");
@@ -244,7 +244,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void DeletePluginAssembly_InvalidName(string n) {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			prov.DeletePluginAssembly(n);
@@ -253,7 +253,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void StorePluginAssembly_InvalidFilename(string fn) {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			prov.StorePluginAssembly(fn, new byte[10]);
@@ -262,7 +262,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void StorePluginAssembly_NullAssembly() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			prov.StorePluginAssembly("Test.dll", null);
@@ -271,7 +271,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void StorePluginAssembly_EmptyAssembly() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			prov.StorePluginAssembly("Test.dll", new byte[0]);
@@ -280,7 +280,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RetrievePluginAssembly_InvalidFilename(string fn) {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			prov.RetrievePluginAssembly(fn);
@@ -288,7 +288,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RetrievePluginAssembly_InexistentFilename() {
-			IGlobalSettingsStorageProviderV30 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			Assert.IsNull(prov.RetrievePluginAssembly("Inexistent.dll"), "RetrievePluginAssembly should return null");

@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The Pages Storage Provider that manages this Page.</param>
 		/// <param name="creationDateTime">The creation Date/Time.</param>
 		/// <param name="file">The relative path of the file used for data storage.</param>
-		public LocalPageInfo(string fullName, IPagesStorageProviderV30 provider, DateTime creationDateTime, string file)
+		public LocalPageInfo(string fullName, IPagesStorageProviderV40 provider, DateTime creationDateTime, string file)
 			: base(fullName, provider, creationDateTime) {
 
 			this.file = file;

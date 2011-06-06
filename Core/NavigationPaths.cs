@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki {
 			List<NavigationPath> allPaths = new List<NavigationPath>(30);
 
 			// Retrieve paths from every Pages provider
-			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				allPaths.AddRange(provider.GetNavigationPaths(null));
 				foreach(NamespaceInfo nspace in provider.GetNamespaces()) {
 					allPaths.AddRange(provider.GetNavigationPaths(nspace));
@@ -42,7 +42,7 @@ namespace ScrewTurn.Wiki {
 			List<NavigationPath> allPaths = new List<NavigationPath>(30);
 
 			// Retrieve paths from every Pages provider
-			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				allPaths.AddRange(provider.GetNavigationPaths(nspace));
 			}
 
@@ -83,7 +83,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="pages">The Pages.</param>
 		/// <param name="provider">The Provider to use for the new Navigation Path, or <c>null</c> for the default provider.</param>
 		/// <returns>True if the Path is added successfully.</returns>
-		public static bool AddNavigationPath(string wiki, NamespaceInfo nspace, string name, List<PageInfo> pages, IPagesStorageProviderV30 provider) {
+		public static bool AddNavigationPath(string wiki, NamespaceInfo nspace, string name, List<PageInfo> pages, IPagesStorageProviderV40 provider) {
 			string namespaceName = nspace != null ? nspace.Name : null;
 			string fullName = NameTools.GetFullName(namespaceName, name);
 

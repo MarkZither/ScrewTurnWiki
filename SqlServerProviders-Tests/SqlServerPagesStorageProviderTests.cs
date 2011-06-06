@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		private const string ConnString = "Data Source=(local)\\SQLExpress;Integrated Security=SSPI;";
 		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
 
-		public override IPagesStorageProviderV30 GetProvider() {
+		public override IPagesStorageProviderV40 GetProvider() {
 			SqlServerPagesStorageProvider prov = new SqlServerPagesStorageProvider();
 			prov.SetUp(MockHost(), ConnString + InitialCatalog);
 			prov.Init(MockHost(), ConnString + InitialCatalog, null);
@@ -93,7 +93,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		[Test]
 		public void Init() {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), ConnString + InitialCatalog, null);
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
@@ -103,7 +103,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		[TestCase("blah", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;", ExpectedException = typeof(InvalidConfigurationException))]
 		public void Init_InvalidConnString(string c) {
-			IPagesStorageProviderV30 prov = GetProvider();
+			IPagesStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), c, null);
 		}
 
@@ -227,7 +227,7 @@ insert into [NavigationPathBinding] ([NavigationPath], [Page], [Number]) values 
 			if(!done) throw new Exception("Could not generate v2 test database");
 
 			MockRepository mocks = new MockRepository();
-			IHostV30 host = mocks.DynamicMock<IHostV30>();
+			IHostV40 host = mocks.DynamicMock<IHostV40>();
 			Expect.Call(host.UpgradePageStatusToAcl(null, null, 'L')).IgnoreArguments().Repeat.Twice().Return(true);
 
 			mocks.Replay(host);

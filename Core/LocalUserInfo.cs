@@ -24,7 +24,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The Users Storage Provider that manages the User.</param>
 		/// <param name="passwordHash">The Password Hash.</param>
 		public LocalUserInfo(string username, string displayName, string email, bool active, DateTime dateTime,
-			IUsersStorageProviderV30 provider, string passwordHash)
+			IUsersStorageProviderV40 provider, string passwordHash)
 			: base(username, displayName, email, active, dateTime, provider) {
 			this.passwordHash = passwordHash;
 		}

@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			// Test whether the default Users Provider is read-only
-			IUsersStorageProviderV30 p = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, currentWiki);
+			IUsersStorageProviderV40 p = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, currentWiki);
 			if(p.UserAccountsReadOnly) {
 				Log.LogEntry("Default Users Provider (" + p.Information.Name + ") is read-only, aborting Account Creation", EntryType.Warning, Log.SystemUsername, currentWiki);
 				UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Error.aspx"));

@@ -12,9 +12,9 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 	/// <summary>
 	/// Plugin with the sole purpose of removing PluginPack.dll in favor of separate DLLs.
 	/// </summary>
-	public class Updater : IFormatterProviderV30 {
+	public class Updater : IFormatterProviderV40 {
 
-		private static IHostV30 _host;
+		private static IHostV40 _host;
 		private static string _config;
 		private string _wiki;
 
@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
@@ -57,7 +57,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
-		public void SetUp(IHostV30 host, string config) {
+		public void SetUp(IHostV40 host, string config) {
 
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");

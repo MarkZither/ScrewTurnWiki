@@ -38,8 +38,8 @@ namespace ScrewTurn.Wiki {
 			if(!Page.IsPostBack) {
 
 				// Load FilesStorageProviders
-				IFilesStorageProviderV30[] provs = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki);
-				foreach(IFilesStorageProviderV30 p in provs) {
+				IFilesStorageProviderV40[] provs = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki);
+				foreach(IFilesStorageProviderV40 p in provs) {
 					lstProviderFiles.Items.Add(new ListItem(p.Information.Name, p.GetType().FullName));
 					// Select the default files provider
 					if (p.GetType().FullName == GlobalSettings.DefaultFilesProvider)
@@ -190,11 +190,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected List<TreeElement> ctFiles_Populate(object sender, PopulateEventArgs e) {
-			IFilesStorageProviderV30 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(currentWiki, lstProviderFiles.SelectedValue);
+			IFilesStorageProviderV40 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(currentWiki, lstProviderFiles.SelectedValue);
 			return BuildFilesSubTree(p, "/");
 		}
 
-		private List<TreeElement> BuildFilesSubTree(IFilesStorageProviderV30 provider, string path) {
+		private List<TreeElement> BuildFilesSubTree(IFilesStorageProviderV40 provider, string path) {
 			string[] dirs = new string[0];
 			string[] files = new string[0];
 
@@ -244,11 +244,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected List<TreeElement> cibImages_Populate(object sender, PopulateEventArgs e) {
-			IFilesStorageProviderV30 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviderImages.SelectedValue, currentWiki);
+			IFilesStorageProviderV40 p = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstProviderImages.SelectedValue, currentWiki);
 			return BuildImagesSubTree(p, "/");
 		}
 
-		private List<TreeElement> BuildImagesSubTree(IFilesStorageProviderV30 provider, string path) {
+		private List<TreeElement> BuildImagesSubTree(IFilesStorageProviderV40 provider, string path) {
 			string[] dirs = new string[0];
 			string[] files = new string[0];
 

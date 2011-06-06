@@ -9,7 +9,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// <summary>
 	/// The interface that must be implemented by a Storage Provider containing Global application configuration settings.
 	/// </summary>
-	public interface IGlobalSettingsStorageProviderV30 : IProviderV30 {
+	public interface IGlobalSettingsStorageProviderV40 : IProviderV40 {
 
 		/// <summary>
 		/// Retrieves the value of a Setting.

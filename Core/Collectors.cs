@@ -80,27 +80,27 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The Users Provider Collector instance.
 		/// </summary>
-		private static ProviderCollector<IUsersStorageProviderV30> _usersProviderCollector;
+		private static ProviderCollector<IUsersStorageProviderV40> _usersProviderCollector;
 
 		/// <summary>
 		/// The Theme Provider Collector istance.
 		/// </summary>
-		private static ProviderCollector<IThemeStorageProviderV30> _themeProviderCollector;
+		private static ProviderCollector<IThemeStorageProviderV40> _themeProviderCollector;
 
 		/// <summary>
 		/// The Pages Provider Collector instance.
 		/// </summary>
-		private static ProviderCollector<IPagesStorageProviderV30> _pagesProviderCollector;
+		private static ProviderCollector<IPagesStorageProviderV40> _pagesProviderCollector;
 
 		/// <summary>
 		/// The Files Provider Collector instance.
 		/// </summary>
-		private static ProviderCollector<IFilesStorageProviderV30> _filesProviderCollector;
+		private static ProviderCollector<IFilesStorageProviderV40> _filesProviderCollector;
 
 		/// <summary>
 		/// The Formatter Provider Collector instance.
 		/// </summary>
-		private static ProviderCollector<IFormatterProviderV30> _formatterProviderCollector;
+		private static ProviderCollector<IFormatterProviderV40> _formatterProviderCollector;
 
 
 		/// <summary>
@@ -108,11 +108,11 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static void InitCollectors() {
 			StorageProvidersConfigurations = new Dictionary<string, string>();
-			_usersProviderCollector = new ProviderCollector<IUsersStorageProviderV30>();
-			_pagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
-			_filesProviderCollector = new ProviderCollector<IFilesStorageProviderV30>();
-			_themeProviderCollector = new ProviderCollector<IThemeStorageProviderV30>();
-			_formatterProviderCollector = new ProviderCollector<IFormatterProviderV30>();
+			_usersProviderCollector = new ProviderCollector<IUsersStorageProviderV40>();
+			_pagesProviderCollector = new ProviderCollector<IPagesStorageProviderV40>();
+			_filesProviderCollector = new ProviderCollector<IFilesStorageProviderV40>();
+			_themeProviderCollector = new ProviderCollector<IThemeStorageProviderV40>();
+			_formatterProviderCollector = new ProviderCollector<IFormatterProviderV40>();
 		}
 		
 		/// <summary>
@@ -133,24 +133,24 @@ namespace ScrewTurn.Wiki {
 		/// <param name="providerInterface">The provider interface.</param>
 		public static void AddProvider(Type provider, System.Reflection.Assembly assembly, string configuration, Type providerInterface) {
 			collectorsBox = null;
-			if(providerInterface.FullName == typeof(ISettingsStorageProviderV30).FullName) {
+			if(providerInterface.FullName == typeof(ISettingsStorageProviderV40).FullName) {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_settingsProvider = provider;
 				_settingsProviderAssembly = assembly;
 			}
-			else if(providerInterface.FullName == typeof(IPagesStorageProviderV30).FullName) {
+			else if(providerInterface.FullName == typeof(IPagesStorageProviderV40).FullName) {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_pagesProviderCollector.AddProvider(provider, assembly);
 			}
-			else if(providerInterface.FullName == typeof(IThemeStorageProviderV30).FullName) {
+			else if(providerInterface.FullName == typeof(IThemeStorageProviderV40).FullName) {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_themeProviderCollector.AddProvider(provider, assembly);
 			}
-			else if(providerInterface.FullName == typeof(IUsersStorageProviderV30).FullName) {
+			else if(providerInterface.FullName == typeof(IUsersStorageProviderV40).FullName) {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_usersProviderCollector.AddProvider(provider, assembly);
 			}
-			else if(providerInterface.FullName == typeof(IFilesStorageProviderV30).FullName) {
+			else if(providerInterface.FullName == typeof(IFilesStorageProviderV40).FullName) {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_filesProviderCollector.AddProvider(provider, assembly);
 			}
@@ -199,10 +199,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled">A value indicating whether the provider is enabled.</param>
 		/// <param name="canDisable">A value indicating whether the provider can be disabled.</param>
 		/// <returns>The provider, or <c>null</c>.</returns>
-		public static IProviderV30 FindProvider(string wiki, string typeName, out bool enabled, out bool canDisable) {
+		public static IProviderV40 FindProvider(string wiki, string typeName, out bool enabled, out bool canDisable) {
 			enabled = false;
 			canDisable = true;
-			IProviderV30 prov = null;
+			IProviderV40 prov = null;
 
 			prov = CollectorsBox.FormatterProviderCollector.GetProvider(typeName, wiki);
 			if(prov != null) {

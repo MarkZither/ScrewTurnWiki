@@ -18,8 +18,8 @@ namespace ScrewTurn.Wiki.Tests {
 		public void MigratePagesStorageProviderData() {
 			MockRepository mocks = new MockRepository();
 
-			IPagesStorageProviderV30 source = mocks.StrictMock<IPagesStorageProviderV30>();
-			IPagesStorageProviderV30 destination = mocks.StrictMock<IPagesStorageProviderV30>();
+			IPagesStorageProviderV40 source = mocks.StrictMock<IPagesStorageProviderV40>();
+			IPagesStorageProviderV40 destination = mocks.StrictMock<IPagesStorageProviderV40>();
 
 			// Setup SOURCE -------------------------
 
@@ -207,8 +207,8 @@ namespace ScrewTurn.Wiki.Tests {
 		public void MigrateUsersStorageProviderData() {
 			MockRepository mocks = new MockRepository();
 
-			IUsersStorageProviderV30 source = mocks.StrictMock<IUsersStorageProviderV30>();
-			IUsersStorageProviderV30 destination = mocks.StrictMock<IUsersStorageProviderV30>();
+			IUsersStorageProviderV40 source = mocks.StrictMock<IUsersStorageProviderV40>();
+			IUsersStorageProviderV40 destination = mocks.StrictMock<IUsersStorageProviderV40>();
 
 			// Setup SOURCE --------------------
 
@@ -292,9 +292,9 @@ namespace ScrewTurn.Wiki.Tests {
 		public void MigrateFilesStorageProviderData() {
 			MockRepository mocks = new MockRepository();
 
-			IFilesStorageProviderV30 source = mocks.StrictMock<IFilesStorageProviderV30>();
-			IFilesStorageProviderV30 destination = mocks.StrictMock<IFilesStorageProviderV30>();
-			ISettingsStorageProviderV30 settingsProvider = mocks.StrictMock<ISettingsStorageProviderV30>();
+			IFilesStorageProviderV40 source = mocks.StrictMock<IFilesStorageProviderV40>();
+			IFilesStorageProviderV40 destination = mocks.StrictMock<IFilesStorageProviderV40>();
+			ISettingsStorageProviderV40 settingsProvider = mocks.StrictMock<ISettingsStorageProviderV40>();
 			IAclManager aclManager = mocks.StrictMock<IAclManager>();
 			Expect.Call(settingsProvider.AclManager).Return(aclManager).Repeat.Any();
 
@@ -505,8 +505,8 @@ namespace ScrewTurn.Wiki.Tests {
 		public void CopySettingsStorageProviderData() {
 			MockRepository mocks = new MockRepository();
 
-			ISettingsStorageProviderV30 source = mocks.StrictMock<ISettingsStorageProviderV30>();
-			ISettingsStorageProviderV30 destination = mocks.StrictMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 source = mocks.StrictMock<ISettingsStorageProviderV40>();
+			ISettingsStorageProviderV40 destination = mocks.StrictMock<ISettingsStorageProviderV40>();
 			IAclManager sourceAclManager = mocks.StrictMock<IAclManager>();
 			IAclManager destinationAclManager = mocks.StrictMock<IAclManager>();
 
@@ -635,8 +635,8 @@ namespace ScrewTurn.Wiki.Tests {
 		public void CopyGlobalSettingsStorageProviderData() {
 			MockRepository mocks = new MockRepository();
 
-			IGlobalSettingsStorageProviderV30 source = mocks.StrictMock<IGlobalSettingsStorageProviderV30>();
-			IGlobalSettingsStorageProviderV30 destination = mocks.StrictMock<IGlobalSettingsStorageProviderV30>();
+			IGlobalSettingsStorageProviderV40 source = mocks.StrictMock<IGlobalSettingsStorageProviderV40>();
+			IGlobalSettingsStorageProviderV40 destination = mocks.StrictMock<IGlobalSettingsStorageProviderV40>();
 			IAclManager sourceAclManager = mocks.StrictMock<IAclManager>();
 			IAclManager destinationAclManager = mocks.StrictMock<IAclManager>();
 

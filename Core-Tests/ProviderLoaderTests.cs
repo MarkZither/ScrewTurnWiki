@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("ScrewTurn.Wiki.Tests.TestGlobalSettingsStorageProvider, ScrewTurn.Wiki.Core.Tests.dll", typeof(TestGlobalSettingsStorageProvider))]
 		[TestCase("glglglglglglg, gfgfgfgfggf.dll", typeof(string), ExpectedException = typeof(ArgumentException))]
 		public void Static_LoadSettingsStorageProvider(string p, Type type) {
-			IGlobalSettingsStorageProviderV30 prov = ProviderLoader.LoadGlobalSettingsStorageProvider(p);
+			IGlobalSettingsStorageProviderV40 prov = ProviderLoader.LoadGlobalSettingsStorageProvider(p);
 			Assert.IsNotNull(prov, "Provider should not be null");
 			// type == prov.GetType() seems to fail due to reflection
 			Assert.AreEqual(type.ToString(), prov.GetType().FullName, "Wrong return type");

@@ -19,11 +19,11 @@ namespace ScrewTurn.Wiki.Tests {
 		private const int MaxLogSize = 8;
 		private const int MaxRecentChanges = 20;
 
-		protected IHostV30 MockHost() {
+		protected IHostV40 MockHost() {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 			//Console.WriteLine("Temp dir: " + testDir);
 
-			IHostV30 host = mocks.DynamicMock<IHostV30>();
+			IHostV40 host = mocks.DynamicMock<IHostV40>();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
 
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.LoggingLevel)).Return("3").Repeat.Any();
@@ -45,26 +45,26 @@ namespace ScrewTurn.Wiki.Tests {
 			}
 		}
 
-		public abstract ISettingsStorageProviderV30 GetProvider();
+		public abstract ISettingsStorageProviderV40 GetProvider();
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(null, "", "");
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), null, "");
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetSetting_InvalidName(string n) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.SetSetting(n, "blah");
 		}
@@ -72,7 +72,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetSetting_InvalidName(string n) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.GetSetting(n);
 		}
@@ -85,7 +85,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("with<angbrack", "with<angbrack")]
 		[TestCase("with>angbrack", "with>angbrack")]
 		public void SetSetting_GetSetting(string c, string r) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -95,7 +95,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void SetSetting_GetAllSettings() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -126,7 +126,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(MetaDataItem.ApproveDraftMessage, "Approve draft mod")]
 		[TestCase(MetaDataItem.RegisterNotice, "RN mod")]
 		public void SetMetaDataItem_GetMetaDataItem(MetaDataItem item, string newContent) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			Assert.IsTrue(prov.SetMetaDataItem(item, null, newContent), "SetMetaDataItem should return true");
 			Assert.AreEqual(newContent, prov.GetMetaDataItem(item, null), "Wrong content");
@@ -137,7 +137,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void SetMetaDataItem_NullContent() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			Assert.IsTrue(prov.SetMetaDataItem(MetaDataItem.Header, null, null), "SetMetaDataItem should return true");
 			Assert.AreEqual("", prov.GetMetaDataItem(MetaDataItem.Header, null), "Wrong content");
@@ -148,7 +148,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetMetaDataItem_Inexistent() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual("", prov.GetMetaDataItem(MetaDataItem.AccountActivationMessage, null), "GetMetaDataItem should return an empty string");
 			Assert.AreEqual("", prov.GetMetaDataItem(MetaDataItem.AccountActivationMessage, "BLAH"), "GetMetaDataItem should return an empty string");
@@ -156,7 +156,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddRecentChange_GetRecentChanges() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -244,7 +244,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddRecentChange_InvalidPage(string p) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -254,7 +254,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddRecentChange_InvalidTitle(string t) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -264,7 +264,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddRecentChange_InvalidUser(string u) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -273,7 +273,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddRecentChange_NullMessageSubject_NullDescription() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -293,7 +293,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddRecentChange_CutRecentChanges() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			//Collectors.SettingsProvider = prov;
 
@@ -308,7 +308,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AclManager_StoreEntry_RetrieveAllEntries_DeleteEntry() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			Assert.IsTrue(prov.AclManager.StoreEntry("Res", "Action", "U.User", Value.Grant), "StoreEntry should return true");
@@ -354,7 +354,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreOutgoingLinks_GetOutgoingLinks() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.GetOutgoingLinks("Page").Length, "Wrong initial link count");
 
@@ -372,7 +372,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreOutgoingLinks_GetOutgoingLinks_Overwrite() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.GetOutgoingLinks("Page").Length, "Wrong initial link count");
 
@@ -391,7 +391,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreOutgoingLinks_GetOutgoingLinks_EmptyLinks() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			Assert.IsTrue(prov.StoreOutgoingLinks("Page", new string[0]), "StoreOutgoingLinks should return true even if outgoingLinks is empty");
 			Assert.AreEqual(0, prov.GetOutgoingLinks("Page").Length, "Wrong link count");
@@ -400,7 +400,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void StoreOutgoingLinks_InvalidPage(string p) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.StoreOutgoingLinks(p, new string[] { "P1", "P2" });
 		}
@@ -408,7 +408,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void StoreOutgoingLinks_NullLinks() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.StoreOutgoingLinks("Page", null);
 		}
@@ -416,7 +416,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void StoreOutgoingLinks_InvalidLinksEntry(string e) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.StoreOutgoingLinks("Page", new string[] { "P1", e, "P3" });
 		}
@@ -424,14 +424,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetOutgoingLinks_InvalidPage(string p) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.GetOutgoingLinks(p);
 		}
 
 		[Test]
 		public void GetAllOutgoingLinks() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.StoreOutgoingLinks("Page1", new string[] { "Page2", "Page3" });
 			prov.StoreOutgoingLinks("Page2", new string[] { "Page4", "Page5", "Page6" });
@@ -460,7 +460,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void DeleteOutgoingLinks() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.StoreOutgoingLinks("Page1", new string[] { "Page2", "Page3", "Page100" });
 			prov.StoreOutgoingLinks("Page2", new string[] { "Page4", "Page5", "Page6" });
@@ -492,14 +492,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void DeleteOutgoingLinks_InvalidPage(string p) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.DeleteOutgoingLinks(p);
 		}
 
 		[Test]
 		public void UpdateOutgoingLinksForRename() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.StoreOutgoingLinks("Page1", new string[] { "Page2", "OldPage" });
 			prov.StoreOutgoingLinks("Page2", new string[] { "Page4", "Page5", "Page6" });
@@ -533,7 +533,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void UpdateOutgoingLinksForRename_InvalidOldName(string n) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.UpdateOutgoingLinksForRename(n, "NewName");
 		}
@@ -541,7 +541,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void UpdateOutgoingLinksForRename_InvalidNewName(string n) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 
 			prov.UpdateOutgoingLinksForRename("OldName", n);
 		}
@@ -549,7 +549,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void SetPluginStatus_RetrievePluginStatus() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			Assert.IsTrue(prov.GetPluginStatus("My.Test.Plugin"), "GetPluginStatus should return true");
@@ -566,7 +566,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetPluginStatus_InvalidTypeName(string tn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			prov.SetPluginStatus(tn, false);
@@ -575,7 +575,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetPluginStatus_InvalidTypeName(string tn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			prov.GetPluginStatus(tn);
@@ -583,7 +583,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void SetPluginConfiguration_GetPluginConfiguration() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			Assert.IsEmpty(prov.GetPluginConfiguration("My.Test.Plugin"), "GetPluginConfiguration should return an empty string");
@@ -608,7 +608,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetPluginConfiguration_InvalidTypeName(string tn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			prov.SetPluginConfiguration(tn, "config");
@@ -617,7 +617,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetPluginConfiguration_InvalidTypeName(string tn) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			//Collectors.SettingsProvider = prov;
 
 			prov.GetPluginConfiguration(tn);

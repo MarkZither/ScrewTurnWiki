@@ -15,13 +15,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the settings storage provider.
 		/// </summary>
-		private ISettingsStorageProviderV30 _settingsProvider;
+		private ISettingsStorageProviderV40 _settingsProvider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AuthReader"/> class.
 		/// </summary>
 		/// <param name="settingsProvider">The settings provider.</param>
-		public AuthReader(ISettingsStorageProviderV30 settingsProvider) {
+		public AuthReader(ISettingsStorageProviderV40 settingsProvider) {
 			_settingsProvider = settingsProvider;
 		}
 
@@ -353,7 +353,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The directory.</param>
 		/// <returns>The subjects.</returns>
-		public SubjectInfo[] RetrieveSubjectsForDirectory(IFilesStorageProviderV30 provider, string directory) {
+		public SubjectInfo[] RetrieveSubjectsForDirectory(IFilesStorageProviderV40 provider, string directory) {
 			if(provider == null) throw new ArgumentNullException("provider");
 			if(directory == null) throw new ArgumentNullException("directory");
 			if(directory.Length == 0) throw new ArgumentException("Directory cannot be empty", "directory");
@@ -383,7 +383,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The directory.</param>
 		/// <returns>The granted actions.</returns>
-		public string[] RetrieveGrantsForDirectory(UserGroup group, IFilesStorageProviderV30 provider, string directory) {
+		public string[] RetrieveGrantsForDirectory(UserGroup group, IFilesStorageProviderV40 provider, string directory) {
 			if(group == null) throw new ArgumentNullException("group");
 
 			return RetrieveGrantsForDirectory(AuthTools.PrepareGroup(group.Name), provider, directory);
@@ -396,7 +396,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The directory.</param>
 		/// <returns>The granted actions.</returns>
-		public string[] RetrieveGrantsForDirectory(UserInfo user, IFilesStorageProviderV30 provider, string directory) {
+		public string[] RetrieveGrantsForDirectory(UserInfo user, IFilesStorageProviderV40 provider, string directory) {
 			if(user == null) throw new ArgumentNullException("user");
 
 			return RetrieveGrantsForDirectory(AuthTools.PrepareUsername(user.Username), provider, directory);
@@ -409,7 +409,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The directory.</param>
 		/// <returns>The granted actions.</returns>
-		private string[] RetrieveGrantsForDirectory(string subject, IFilesStorageProviderV30 provider, string directory) {
+		private string[] RetrieveGrantsForDirectory(string subject, IFilesStorageProviderV40 provider, string directory) {
 			if(provider == null) throw new ArgumentNullException("provider");
 			if(directory == null) throw new ArgumentNullException("directory");
 			if(directory.Length == 0) throw new ArgumentException("Directory cannot be empty", "directory");
@@ -436,7 +436,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The directory.</param>
 		/// <returns>The denied actions.</returns>
-		public string[] RetrieveDenialsForDirectory(UserGroup group, IFilesStorageProviderV30 provider, string directory) {
+		public string[] RetrieveDenialsForDirectory(UserGroup group, IFilesStorageProviderV40 provider, string directory) {
 			if(group == null) throw new ArgumentNullException("group");
 
 			return RetrieveDenialsForDirectory(AuthTools.PrepareGroup(group.Name), provider, directory);
@@ -449,7 +449,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The directory.</param>
 		/// <returns>The denied actions.</returns>
-		public string[] RetrieveDenialsForDirectory(UserInfo user, IFilesStorageProviderV30 provider, string directory) {
+		public string[] RetrieveDenialsForDirectory(UserInfo user, IFilesStorageProviderV40 provider, string directory) {
 			if(user == null) throw new ArgumentNullException("user");
 
 			return RetrieveDenialsForDirectory(AuthTools.PrepareUsername(user.Username), provider, directory);
@@ -462,7 +462,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The directory.</param>
 		/// <returns>The denied actions.</returns>
-		private string[] RetrieveDenialsForDirectory(string subject, IFilesStorageProviderV30 provider, string directory) {
+		private string[] RetrieveDenialsForDirectory(string subject, IFilesStorageProviderV40 provider, string directory) {
 			if(provider == null) throw new ArgumentNullException("provider");
 			if(directory == null) throw new ArgumentNullException("directory");
 			if(directory.Length == 0) throw new ArgumentException("Directory cannot be empty", "directory");

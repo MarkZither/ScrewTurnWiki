@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements the <b>IHost</b> interface.
 	/// </summary>
-	public class Host : IHostV30 {
+	public class Host : IHostV40 {
 
 		private static Host instance;
 
@@ -513,7 +513,7 @@ namespace ScrewTurn.Wiki {
 			List<StDirectoryInfo> result = new List<StDirectoryInfo>(20);
 
 			if(directory == null) {
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					string[] dirs = prov.ListDirectories(null);
 
 					foreach(string dir in dirs) {
@@ -542,7 +542,7 @@ namespace ScrewTurn.Wiki {
 			List<StFileInfo> result = new List<StFileInfo>(20);
 
 			if(directory == null) {
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					string[] files = prov.ListFiles(null);
 
 					foreach(string file in files) {
@@ -574,7 +574,7 @@ namespace ScrewTurn.Wiki {
 			if(page == null) throw new ArgumentNullException("page");
 
 			List<StFileInfo> result = new List<StFileInfo>(10);
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				string[] attachments = prov.ListPageAttachments(page);
 
 				foreach(string attn in attachments) {
@@ -645,11 +645,11 @@ namespace ScrewTurn.Wiki {
 			}
 			string name = "?";
 			if(user == null) {
-				if(caller is IUsersStorageProviderV30) name = ((IUsersStorageProviderV30)caller).Information.Name;
-				else if(caller is IPagesStorageProviderV30) name = ((IPagesStorageProviderV30)caller).Information.Name;
-				else if(caller is IFormatterProviderV30) name = ((IFormatterProviderV30)caller).Information.Name;
-				else if(caller is ISettingsStorageProviderV30) name = ((ISettingsStorageProviderV30)caller).Information.Name;
-				else if(caller is IFilesStorageProviderV30) name = ((IFilesStorageProviderV30)caller).Information.Name;
+				if(caller is IUsersStorageProviderV40) name = ((IUsersStorageProviderV40)caller).Information.Name;
+				else if(caller is IPagesStorageProviderV40) name = ((IPagesStorageProviderV40)caller).Information.Name;
+				else if(caller is IFormatterProviderV40) name = ((IFormatterProviderV40)caller).Information.Name;
+				else if(caller is ISettingsStorageProviderV40) name = ((ISettingsStorageProviderV40)caller).Information.Name;
+				else if(caller is IFilesStorageProviderV40) name = ((IFilesStorageProviderV40)caller).Information.Name;
 				name += "+" + Log.SystemUsername;
 			}
 			else name = user;
@@ -734,9 +734,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		public IPagesStorageProviderV30[] GetPagesStorageProviders(string wiki) {
-			List<IPagesStorageProviderV30> pagesStorageProviders = new List<IPagesStorageProviderV30>();
-			foreach(IPagesStorageProviderV30 pagesStorageProvider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+		public IPagesStorageProviderV40[] GetPagesStorageProviders(string wiki) {
+			List<IPagesStorageProviderV40> pagesStorageProviders = new List<IPagesStorageProviderV40>();
+			foreach(IPagesStorageProviderV40 pagesStorageProvider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				pagesStorageProviders.Add(pagesStorageProvider);
 			}
 			return pagesStorageProviders.ToArray();
@@ -747,9 +747,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		public IUsersStorageProviderV30[] GetUsersStorageProviders(string wiki) {
-			List<IUsersStorageProviderV30> usersStorageProviders = new List<IUsersStorageProviderV30>();
-			foreach(IUsersStorageProviderV30 userStorageProvider in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki)) {
+		public IUsersStorageProviderV40[] GetUsersStorageProviders(string wiki) {
+			List<IUsersStorageProviderV40> usersStorageProviders = new List<IUsersStorageProviderV40>();
+			foreach(IUsersStorageProviderV40 userStorageProvider in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki)) {
 				usersStorageProviders.Add(userStorageProvider);
 			}
 			return usersStorageProviders.ToArray();
@@ -760,9 +760,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		public IFilesStorageProviderV30[] GetFilesStorageProviders(string wiki) {
-			List<IFilesStorageProviderV30> filesStorageProviders = new List<IFilesStorageProviderV30>();
-			foreach(IFilesStorageProviderV30 filesStorageProvider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+		public IFilesStorageProviderV40[] GetFilesStorageProviders(string wiki) {
+			List<IFilesStorageProviderV40> filesStorageProviders = new List<IFilesStorageProviderV40>();
+			foreach(IFilesStorageProviderV40 filesStorageProvider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				filesStorageProviders.Add(filesStorageProvider);
 			}
 			return filesStorageProviders.ToArray();
@@ -773,9 +773,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		public IThemeStorageProviderV30[] GetThemeProviders(string wiki) {
-			List<IThemeStorageProviderV30> themesStorageProviders = new List<IThemeStorageProviderV30>();
-			foreach(IThemeStorageProviderV30 themesStorageProvider in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(wiki)) {
+		public IThemeStorageProviderV40[] GetThemeProviders(string wiki) {
+			List<IThemeStorageProviderV40> themesStorageProviders = new List<IThemeStorageProviderV40>();
+			foreach(IThemeStorageProviderV40 themesStorageProvider in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(wiki)) {
 				themesStorageProviders.Add(themesStorageProvider);
 			}
 			return themesStorageProviders.ToArray();
@@ -787,9 +787,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		public IFormatterProviderV30[] GetFormatterProviders(string wiki, bool enabled) {
-			List<IFormatterProviderV30> formatterProviders = new List<IFormatterProviderV30>();
-			foreach(IFormatterProviderV30 formatterProvider in Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(wiki)) {
+		public IFormatterProviderV40[] GetFormatterProviders(string wiki, bool enabled) {
+			List<IFormatterProviderV40> formatterProviders = new List<IFormatterProviderV40>();
+			foreach(IFormatterProviderV40 formatterProvider in Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(wiki)) {
 				if(enabled == Settings.GetProvider(wiki).GetPluginStatus(formatterProvider.GetType().FullName)) {
 					formatterProviders.Add(formatterProvider);
 				}
@@ -802,7 +802,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The global settings storage provider.</returns>
-		public ISettingsStorageProviderV30 GetSettingsStorageProvider(string wiki) {
+		public ISettingsStorageProviderV40 GetSettingsStorageProvider(string wiki) {
 			return Collectors.CollectorsBox.GetSettingsProvider(wiki);
 		}
 
@@ -810,7 +810,7 @@ namespace ScrewTurn.Wiki {
 		/// Gets the current global settings storage provider.
 		/// </summary>
 		/// <returns>The global settings storage provider.</returns>
-		public IGlobalSettingsStorageProviderV30 GetGlobalSettingsStorageProvider() {
+		public IGlobalSettingsStorageProviderV40 GetGlobalSettingsStorageProvider() {
 			return Collectors.CollectorsBox.GlobalSettingsProvider;
 		}
 
@@ -851,7 +851,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="configuration">The configuration to set.</param>
 		/// <returns><c>true</c> if the configuration is set, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>provider</b> is <c>null</c>.</exception>
-		public bool SetPluginConfiguration(string wiki, IProviderV30 provider, string configuration) {
+		public bool SetPluginConfiguration(string wiki, IProviderV40 provider, string configuration) {
 			if(provider == null) throw new ArgumentNullException("provider");
 
 			if(configuration == null) configuration = "";
@@ -1004,7 +1004,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="activity">The activity.</param>
 		public void OnFileActivity(string wiki, string provider, string file, string oldFileName, FileActivity activity) {
 			if(FileActivity != null) {
-				IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
+				IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
 
 				FileActivity(this, new FileActivityEventArgs(
 					new StFileInfo(prov.GetFileDetails(file), file, prov), oldFileName, null, null, null, activity));
@@ -1022,7 +1022,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="activity">The activity.</param>
 		public void OnAttachmentActivity(string wiki, string provider, string attachment, string page, string oldAttachmentName, FileActivity activity) {
 			if(FileActivity != null) {
-				IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
+				IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
 				PageInfo pageInfo = Pages.FindPage(wiki, page);
 
 				FileActivity(this, new FileActivityEventArgs(
@@ -1040,7 +1040,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="activity">The activity.</param>
 		public void OnDirectoryActivity(string wiki, string provider, string directory, string oldDirectoryName, FileActivity activity) {
 			if(FileActivity != null) {
-				IFilesStorageProviderV30 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
+				IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
 
 				FileActivity(this, new FileActivityEventArgs(
 					null, null, new StDirectoryInfo(directory, prov), oldDirectoryName, null, activity));

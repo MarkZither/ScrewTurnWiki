@@ -12,7 +12,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 	[TestFixture]
 	public class AzureFilesStorageProviderTests : FilesStorageProviderTestScaffolding {
 
-		public override IFilesStorageProviderV30 GetProvider() {
+		public override IFilesStorageProviderV40 GetProvider() {
 			AzureFilesStorageProvider prov = new AzureFilesStorageProvider();
 			prov.SetUp(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==");
 			prov.Init(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "");
@@ -31,7 +31,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 		[Test]
 		public void Init() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), "unittestonazurestorage|YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "wiki1");
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");

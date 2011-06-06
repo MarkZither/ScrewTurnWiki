@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// <summary>
 	/// It is the interface that the ScrewTurn Wiki's Host object implements.
 	/// </summary>
-	public interface IHostV30 {
+	public interface IHostV40 {
 
 		/// <summary>
 		/// Gets the global setting value.
@@ -359,21 +359,21 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		IPagesStorageProviderV30[] GetPagesStorageProviders(string wiki);
+		IPagesStorageProviderV40[] GetPagesStorageProviders(string wiki);
 
 		/// <summary>
 		/// Gets the users storage providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		IUsersStorageProviderV30[] GetUsersStorageProviders(string wiki);
+		IUsersStorageProviderV40[] GetUsersStorageProviders(string wiki);
 
 		/// <summary>
 		/// Gets the files storage providers, either enabled or disabled.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		IFilesStorageProviderV30[] GetFilesStorageProviders(string wiki);
+		IFilesStorageProviderV40[] GetFilesStorageProviders(string wiki);
 
 		/// <summary>
 		/// Gets the formatter providers, either enabled or disabled.
@@ -381,20 +381,20 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		IFormatterProviderV30[] GetFormatterProviders(string wiki, bool enabled);
+		IFormatterProviderV40[] GetFormatterProviders(string wiki, bool enabled);
 
 		/// <summary>
 		/// Gets the current settings storage provider initialized for the given wiki.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The global settings storage provider.</returns>
-		ISettingsStorageProviderV30 GetSettingsStorageProvider(string wiki);
+		ISettingsStorageProviderV40 GetSettingsStorageProvider(string wiki);
 
 		/// <summary>
 		/// Gets the current global settings storage provider.
 		/// </summary>
 		/// <returns>The global settings storage provider.</returns>
-		IGlobalSettingsStorageProviderV30 GetGlobalSettingsStorageProvider();
+		IGlobalSettingsStorageProviderV40 GetGlobalSettingsStorageProvider();
 
 		/// <summary>
 		/// Gets the configuration of a storage provider.
@@ -423,7 +423,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="configuration">The configuration to set.</param>
 		/// <returns><c>true</c> if the configuration is set, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <c>null</c>.</exception>
-		bool SetPluginConfiguration(string wiki, IProviderV30 provider, string configuration);
+		bool SetPluginConfiguration(string wiki, IProviderV40 provider, string configuration);
 
 		/// <summary>
 		/// Upgrades the old Page Status to use the new ACL facilities.

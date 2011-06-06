@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// It is the interface that must be implemented in order to create a custom Pages Storage Provider for ScrewTurn Wiki.
 	/// </summary>
 	/// <remarks>A class that implements this interface <b>should not</b> have any kind of data caching.</remarks>
-	public interface IPagesStorageProviderV30 : IStorageProviderV30 {
+	public interface IPagesStorageProviderV40 : IStorageProviderV40 {
 
 		/// <summary>
 		/// Gets a namespace.

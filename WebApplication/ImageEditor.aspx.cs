@@ -23,7 +23,7 @@ namespace ScrewTurn.Wiki {
 		private MemoryStream resultMemStream = null;
 		private string file = "";
 		private string page = "";
-		private IFilesStorageProviderV30 provider = null;
+		private IFilesStorageProviderV40 provider = null;
 		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {

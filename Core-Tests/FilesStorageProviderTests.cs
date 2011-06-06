@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 	public class FilesStorageProviderTests : FilesStorageProviderTestScaffolding {
 
-		public override IFilesStorageProviderV30 GetProvider() {
+		public override IFilesStorageProviderV40 GetProvider() {
 			FilesStorageProvider prov = new FilesStorageProvider();
 			prov.SetUp(MockHost(), "");
 			prov.Init(MockHost(), "", null);
@@ -21,7 +21,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void Init() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), "", null);
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");

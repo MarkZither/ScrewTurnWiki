@@ -16,8 +16,8 @@ namespace ScrewTurn.Wiki {
 
 		private List<string> visitedUrls;
 
-		private IGlobalSettingsStorageProviderV30 globalSettingsProvider;
-		private List<IProviderV30> providers;
+		private IGlobalSettingsStorageProviderV40 globalSettingsProvider;
+		private List<IProviderV40> providers;
 		private Dictionary<string, string> fileNamesForProviders;
 
 		/// <summary>
@@ -26,9 +26,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="globalSettingsProvider">The settings storage provider.</param>
 		/// <param name="fileNamesForProviders">A provider->file dictionary.</param>
 		/// <param name="providers">The providers to update.</param>
-		public ProviderUpdater(IGlobalSettingsStorageProviderV30 globalSettingsProvider,
+		public ProviderUpdater(IGlobalSettingsStorageProviderV40 globalSettingsProvider,
 			Dictionary<string, string> fileNamesForProviders,
-			params IProviderV30[][] providers) {
+			params IProviderV40[][] providers) {
 
 			if(globalSettingsProvider == null) throw new ArgumentNullException("settingsProvider");
 			if(fileNamesForProviders == null) throw new ArgumentNullException("fileNamesForProviders");
@@ -38,8 +38,8 @@ namespace ScrewTurn.Wiki {
 			this.globalSettingsProvider = globalSettingsProvider;
 			this.fileNamesForProviders = fileNamesForProviders;
 
-			this.providers = new List<IProviderV30>(20);
-			foreach(IProviderV30[] group in providers) {
+			this.providers = new List<IProviderV40>(20);
+			foreach(IProviderV40[] group in providers) {
 				this.providers.AddRange(group);
 			}
 
@@ -55,7 +55,7 @@ namespace ScrewTurn.Wiki {
 
 			int updatedDlls = 0;
 
-			foreach(IProviderV30 prov in providers) {
+			foreach(IProviderV40 prov in providers) {
 				if(string.IsNullOrEmpty(prov.Information.UpdateUrl)) continue;
 
 				string newVersion;
@@ -99,7 +99,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="url">The URL of the new DLL.</param>
 		/// <param name="filename">The file name of the DLL.</param>
-		private bool DownloadAndUpdateDll(IProviderV30 provider, string url, string filename) {
+		private bool DownloadAndUpdateDll(IProviderV40 provider, string url, string filename) {
 			try {
 				HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
 				HttpWebResponse response = (HttpWebResponse)request.GetResponse();

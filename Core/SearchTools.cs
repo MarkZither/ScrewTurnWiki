@@ -67,7 +67,7 @@ namespace ScrewTurn.Wiki {
 			// First, search regular page content...
 			List<SearchResultCollection> allCollections = new List<SearchResultCollection>(3);
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				SearchResultCollection currentResults = prov.PerformSearch(new SearchParameters(query, options));
 
 				if(!fullText) {
@@ -117,7 +117,7 @@ namespace ScrewTurn.Wiki {
 				};
 				temporaryIndex.SetBuildDocumentDelegate(DetectFileOrAttachment);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					TraverseDirectories(temporaryIndex, prov, null);
 
 					string[] pagesWithAttachments = prov.GetPagesWithAttachments();
@@ -171,7 +171,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="index">The output index.</param>
 		/// <param name="provider">The provider.</param>
 		/// <param name="currentDir">The current directory.</param>
-		private static void TraverseDirectories(InMemoryIndexBase index, IFilesStorageProviderV30 provider, string currentDir) {
+		private static void TraverseDirectories(InMemoryIndexBase index, IFilesStorageProviderV40 provider, string currentDir) {
 			// Store files in the index
 			foreach(string file in provider.ListFiles(currentDir)) {
 				FileDetails details = provider.GetFileDetails(file);

@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 	/// <summary>
 	/// Implements a footnotes plugin.
 	/// </summary>
-	public class Footnotes : IFormatterProviderV30 {
+	public class Footnotes : IFormatterProviderV40 {
 
 		// Kindly contributed by Jens Felsner
 
@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		private static readonly Regex RefRegex = new Regex("<[ ]*ref[ ]*>.*?<[ ]*/[ ]*ref[ ]*>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex RefRemovalRegex = new Regex("(<[ ]*ref[ ]*>|<[ ]*/[ ]*ref[ ]*>)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-		private IHostV30 host = null;
+		private IHostV40 host = null;
 		private string config = "";
 		private string wiki;
 
@@ -39,7 +39,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			this.host = host;
 			this.config = config != null ? config : "";
 			this.wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
@@ -52,7 +52,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void SetUp(IHostV30 host, string config) { }
+		public void SetUp(IHostV40 host, string config) { }
 
 		// Replaces the first occurence of 'find' in 'input' with 'replace'
 		private static string ReplaceFirst(string input, string find, string replace) {

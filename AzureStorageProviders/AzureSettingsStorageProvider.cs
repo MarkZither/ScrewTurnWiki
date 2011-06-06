@@ -13,9 +13,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 	/// <summary>
 	/// Implements a Azure Table Storage settings storage provider.
 	/// </summary>
-	public class AzureSettingsStorageProvider : ISettingsStorageProviderV30 {
+	public class AzureSettingsStorageProvider : ISettingsStorageProviderV40 {
 
-		private IHostV30 _host;
+		private IHostV40 _host;
 		private string _wiki;
 
 		private TableServiceContext _context;
@@ -684,7 +684,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
@@ -709,7 +709,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void SetUp(IHostV30 host, string config) {
+		public void SetUp(IHostV40 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 

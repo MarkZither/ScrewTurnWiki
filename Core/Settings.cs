@@ -23,7 +23,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the settings storage provider.
 		/// </summary>
-		public static ISettingsStorageProviderV30 GetProvider(string wiki) {
+		public static ISettingsStorageProviderV40 GetProvider(string wiki) {
 			return Collectors.CollectorsBox.GetSettingsProvider(wiki);
 		}
 

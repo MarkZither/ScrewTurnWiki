@@ -18,7 +18,7 @@ namespace ScrewTurn.Wiki {
 
 	public partial class FileManager : System.Web.UI.UserControl {
 
-		private IFilesStorageProviderV30 provider = null;
+		private IFilesStorageProviderV40 provider = null;
 		private string currentWiki = null;
 
 		bool canList = false;
@@ -99,7 +99,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void LoadProviders() {
 			lstProviders.Items.Clear();
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
+			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 				ListItem item = new ListItem(prov.Information.Name, prov.GetType().FullName);
 				if(item.Value == GlobalSettings.DefaultFilesProvider) {
 					item.Selected = true;
@@ -297,7 +297,7 @@ namespace ScrewTurn.Wiki {
 
 			LoadProviders();
 
-			IFilesStorageProviderV30 realProvider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, currentWiki);
+			IFilesStorageProviderV40 realProvider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, currentWiki);
 			if(realProvider == null) return;
 			this.provider = realProvider;
 

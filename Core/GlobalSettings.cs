@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the global settings storage provider.
 		/// </summary>
-		public static IGlobalSettingsStorageProviderV30 Provider {
+		public static IGlobalSettingsStorageProviderV40 Provider {
 			get { return Collectors.CollectorsBox.GlobalSettingsProvider; }
 		}
 

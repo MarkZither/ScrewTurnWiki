@@ -21,7 +21,7 @@ namespace ScrewTurn.Wiki {
 			List<Snippet> allSnippets = new List<Snippet>(50);
 
 			// Retrieve all snippets from Pages Provider
-			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				allSnippets.AddRange(provider.GetSnippets());
 			}
 
@@ -53,7 +53,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="content">The content of the Snippet.</param>
 		/// <param name="provider">The Provider to use to store the Snippet (<c>null</c> for the default provider).</param>
 		/// <returns>True if the Snippets has been addedd successfully.</returns>
-		public static bool AddSnippet(string wiki, string name, string content, IPagesStorageProviderV30 provider) {
+		public static bool AddSnippet(string wiki, string name, string content, IPagesStorageProviderV40 provider) {
 			if(Find(wiki, name) != null) return false;
 
 			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);

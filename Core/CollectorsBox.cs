@@ -27,17 +27,17 @@ namespace ScrewTurn.Wiki {
 			System.Reflection.Assembly globalSettingsProviderAssembly,
 			Type settingsProvider,
 			System.Reflection.Assembly settingsProviderAssembly,
-			ProviderCollector<IUsersStorageProviderV30> usersProviderCollector,
-			ProviderCollector<IThemeStorageProviderV30> themeProviderCollector,
-			ProviderCollector<IPagesStorageProviderV30> pagesProviderCollector,
-			ProviderCollector<IFilesStorageProviderV30> filesProviderCollector,
-			ProviderCollector<IFormatterProviderV30> formatterProviderCollector) {
+			ProviderCollector<IUsersStorageProviderV40> usersProviderCollector,
+			ProviderCollector<IThemeStorageProviderV40> themeProviderCollector,
+			ProviderCollector<IPagesStorageProviderV40> pagesProviderCollector,
+			ProviderCollector<IFilesStorageProviderV40> filesProviderCollector,
+			ProviderCollector<IFormatterProviderV40> formatterProviderCollector) {
 
 			_globalSettingsProviderType = globalSettingsProvider;
 			_globalSettingsProviderAssembly = globalSettingsProviderAssembly;
 			_settingsProviderType = settingsProvider;
 			_settingsProviderAssembly = settingsProviderAssembly;
-			_settingsProvider = new Dictionary<string, ISettingsStorageProviderV30>();
+			_settingsProvider = new Dictionary<string, ISettingsStorageProviderV40>();
 			_usersProviderCollector = usersProviderCollector;
 			_themeProviderCollector = themeProviderCollector;
 			_pagesProviderCollector = pagesProviderCollector;
@@ -47,26 +47,26 @@ namespace ScrewTurn.Wiki {
 
 		private Type _globalSettingsProviderType;
 		private System.Reflection.Assembly _globalSettingsProviderAssembly;
-		private IGlobalSettingsStorageProviderV30 _globalSettingsProvider;
+		private IGlobalSettingsStorageProviderV40 _globalSettingsProvider;
 
 		private Type _settingsProviderType;
 		private System.Reflection.Assembly _settingsProviderAssembly;
-		private Dictionary<string, ISettingsStorageProviderV30> _settingsProvider;
+		private Dictionary<string, ISettingsStorageProviderV40> _settingsProvider;
 
-		private ProviderCollector<IUsersStorageProviderV30> _usersProviderCollector;
-		private ProviderCollector<IThemeStorageProviderV30> _themeProviderCollector;
-		private ProviderCollector<IPagesStorageProviderV30> _pagesProviderCollector;
-		private ProviderCollector<IFilesStorageProviderV30> _filesProviderCollector;
-		private ProviderCollector<IFormatterProviderV30> _formatterProviderCollector;
+		private ProviderCollector<IUsersStorageProviderV40> _usersProviderCollector;
+		private ProviderCollector<IThemeStorageProviderV40> _themeProviderCollector;
+		private ProviderCollector<IPagesStorageProviderV40> _pagesProviderCollector;
+		private ProviderCollector<IFilesStorageProviderV40> _filesProviderCollector;
+		private ProviderCollector<IFormatterProviderV40> _formatterProviderCollector;
 
 		/// <summary>
 		/// The global settings storage provider.
 		/// </summary>
 		/// <returns>The globalSettingsProvider.</returns>
-		public IGlobalSettingsStorageProviderV30 GlobalSettingsProvider {
+		public IGlobalSettingsStorageProviderV40 GlobalSettingsProvider {
 			get {
 				if(_globalSettingsProvider == null) {
-					_globalSettingsProvider = ProviderLoader.CreateInstance<IGlobalSettingsStorageProviderV30>(_globalSettingsProviderAssembly, _globalSettingsProviderType);
+					_globalSettingsProvider = ProviderLoader.CreateInstance<IGlobalSettingsStorageProviderV40>(_globalSettingsProviderAssembly, _globalSettingsProviderType);
 					_globalSettingsProvider.Init(Host.Instance, StartupTools.GetGlobalSettingsStorageProviderConfiguration(), null);
 				}
 				return _globalSettingsProvider;
@@ -78,10 +78,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The settingsProvider initialized for the given wiki.</returns>
-		public ISettingsStorageProviderV30 GetSettingsProvider(string wiki) {
+		public ISettingsStorageProviderV40 GetSettingsProvider(string wiki) {
 			string wikiKey = wiki != null ? wiki : "-";
 			if(!_settingsProvider.ContainsKey(wikiKey)) {
-				_settingsProvider[wikiKey] = ProviderLoader.CreateInstance<ISettingsStorageProviderV30>(_settingsProviderAssembly, _settingsProviderType);
+				_settingsProvider[wikiKey] = ProviderLoader.CreateInstance<ISettingsStorageProviderV40>(_settingsProviderAssembly, _settingsProviderType);
 				_settingsProvider[wikiKey].Init(Host.Instance, ProviderLoader.LoadStorageProviderConfiguration(_settingsProviderType.FullName), wiki);
 			}
 			return _settingsProvider[wikiKey];
@@ -90,7 +90,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The Users Provider Collector instance.
 		/// </summary>
-		public ProviderCollector<IUsersStorageProviderV30> UsersProviderCollector {
+		public ProviderCollector<IUsersStorageProviderV40> UsersProviderCollector {
 			get {
 				return _usersProviderCollector;
 			}
@@ -99,7 +99,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The Theme Provider Collector istance.
 		/// </summary>
-		public ProviderCollector<IThemeStorageProviderV30> ThemeProviderCollector {
+		public ProviderCollector<IThemeStorageProviderV40> ThemeProviderCollector {
 			get {
 				return _themeProviderCollector;
 			}
@@ -108,7 +108,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The Pages Provider Collector instance.
 		/// </summary>
-		public ProviderCollector<IPagesStorageProviderV30> PagesProviderCollector {
+		public ProviderCollector<IPagesStorageProviderV40> PagesProviderCollector {
 			get {
 				return _pagesProviderCollector;
 			}
@@ -117,7 +117,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The Files Provider Collector instance.
 		/// </summary>
-		public ProviderCollector<IFilesStorageProviderV30> FilesProviderCollector {
+		public ProviderCollector<IFilesStorageProviderV40> FilesProviderCollector {
 			get {
 				return _filesProviderCollector;
 			}
@@ -126,7 +126,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The Formatter Provider Collector instance.
 		/// </summary>
-		public ProviderCollector<IFormatterProviderV30> FormatterProviderCollector {
+		public ProviderCollector<IFormatterProviderV40> FormatterProviderCollector {
 			get {
 				return _formatterProviderCollector;
 			}

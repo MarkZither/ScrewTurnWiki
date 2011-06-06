@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki.Tests {
 	/// <summary>
 	/// Implements a dummy Settings Storage Provider to use for testing.
 	/// </summary>
-	public class TestGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV30 {
+	public class TestGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV40 {
 
 		public string GetSetting(string name) {
 			throw new NotImplementedException();
@@ -84,11 +84,11 @@ namespace ScrewTurn.Wiki.Tests {
 			get { throw new NotImplementedException(); }
 		}
 
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			throw new NotImplementedException();
 		}
 
-		public void SetUp(IHostV30 host, string config) {
+		public void SetUp(IHostV40 host, string config) {
 			throw new NotImplementedException();
 		}
 

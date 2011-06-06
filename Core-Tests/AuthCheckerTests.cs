@@ -34,10 +34,10 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.VerifyAll();
 		}
 
-		protected IHostV30 MockHost() {
+		protected IHostV40 MockHost() {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
-			IHostV30 host = mocks.DynamicMock<IHostV30>();
+			IHostV40 host = mocks.DynamicMock<IHostV40>();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.Any();
 
 			mocks.Replay(host);
@@ -45,8 +45,8 @@ namespace ScrewTurn.Wiki.Tests {
 			return host;
 		}
 
-		private ISettingsStorageProviderV30 MockProvider(List<AclEntry> entries) {
-			ISettingsStorageProviderV30 provider = mocks.DynamicMock<ISettingsStorageProviderV30>();
+		private ISettingsStorageProviderV40 MockProvider(List<AclEntry> entries) {
+			ISettingsStorageProviderV40 provider = mocks.DynamicMock<ISettingsStorageProviderV40>();
 			provider.Init(MockHost(), "", null);
 			LastCall.On(provider).Repeat.Any();
 
@@ -62,7 +62,7 @@ namespace ScrewTurn.Wiki.Tests {
 			return provider;
 		}
 
-		private ISettingsStorageProviderV30 MockProvider() {
+		private ISettingsStorageProviderV40 MockProvider() {
 			return MockProvider(new List<AclEntry>());
 		}
 
@@ -1140,8 +1140,8 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[0]), "Permission should be denied");
 		}
 
-		private IFilesStorageProviderV30 MockFilesProvider() {
-			IFilesStorageProviderV30 prov = mocks.DynamicMock<IFilesStorageProviderV30>();
+		private IFilesStorageProviderV40 MockFilesProvider() {
+			IFilesStorageProviderV40 prov = mocks.DynamicMock<IFilesStorageProviderV40>();
 			mocks.Replay(prov);
 			return prov;
 		}
@@ -1192,7 +1192,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void CheckActionForDirectory_GrantUserExplicit() {
 
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1219,7 +1219,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_DenyUserExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1246,7 +1246,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantUserFullControl() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1273,7 +1273,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_DenyUserFullControl() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1300,7 +1300,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantGroupExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1328,7 +1328,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void CheckActionForDirectory_DenyGroupExplicit() {
 
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1356,7 +1356,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void CheckActionForDirectory_GrantGroupFullControl() {
 
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1384,7 +1384,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		public void CheckActionForDirectory_DenyGroupFullControl() {
 
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1417,7 +1417,7 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix,
 				Actions.ForGlobals.ManageFiles, "U.User100", Value.Deny));
 
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
@@ -1433,7 +1433,7 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix,
 				Actions.ForGlobals.ManageFiles, "G.Group100", Value.Deny));
 
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
@@ -1443,7 +1443,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantUserLocalEscalator() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1461,7 +1461,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantGroupLocalEscalator() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1479,7 +1479,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantUserGlobalFullControl() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix,
@@ -1495,7 +1495,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantGroupGlobalFullControl() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix,
@@ -1511,7 +1511,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantUserDirectoryEscalator() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1529,7 +1529,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantGroupDirectoryEscalator() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1547,7 +1547,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantUserGlobalEscalator_DenyUserExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix,
@@ -1564,7 +1564,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantGroupGlobalEscalator_DenyUserExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix,
@@ -1581,7 +1581,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantUserLocalEscalator_DenyUserExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1599,7 +1599,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantGroupLocalEscalator_DenyUserExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1617,7 +1617,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantUserGlobalFullControl_DenyUserExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix,
@@ -1634,7 +1634,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantGroupGlobalFullControl_DenyUserExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix,
@@ -1651,7 +1651,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantUserDirectoryEscalator_DenyUserExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1669,7 +1669,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantGroupDirectoryEscalator_DenyUserExplicit() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1687,7 +1687,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_RandomTestForRootDirectory() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +
@@ -1706,7 +1706,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CheckActionForDirectory_GrantUserDirectoryEscalator_RecursiveName() {
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+			IFilesStorageProviderV40 filesProv = MockFilesProvider();
 
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForDirectories.ResourceMasterPrefix +

@@ -13,9 +13,9 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 	/// <summary>
 	/// Implements a formatter provider that counts download of files and attachments.
 	/// </summary>
-	public class RssFeedDisplay : IFormatterProviderV30 {
+	public class RssFeedDisplay : IFormatterProviderV40 {
 
-		private IHostV30 _host;
+		private IHostV40 _host;
 		private string _config;
 		private string _wiki;
 		private bool _enableLogging = true;
@@ -281,7 +281,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <param name="wiki">The wiki.</param>
 		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			this._host = host;
 			this._config = config != null ? config : "";
 			this._wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
@@ -305,7 +305,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="host">The Host of the Component.</param>
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
-		public void SetUp(IHostV30 host, string config) { }
+		public void SetUp(IHostV40 host, string config) { }
 
 		void IDisposable.Dispose() {
 			// Nothing to do

@@ -8,7 +8,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// <summary>
 	/// It is the interface that must be implemented in order to create a custom Formatter Provider for ScrewTurn Wiki.
 	/// </summary>
-	public interface IFormatterProviderV30 : IProviderV30 {
+	public interface IFormatterProviderV40 : IProviderV40 {
 
 		/// <summary>
 		/// Specifies whether or not to execute Phase 1.

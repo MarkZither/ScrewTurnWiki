@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The Provider that handles the Category.
 		/// </summary>
-		protected IPagesStorageProviderV30 provider;
+		protected IPagesStorageProviderV40 provider;
 		/// <summary>
 		/// The Pages of the Category.
 		/// </summary>
@@ -33,7 +33,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		/// <param name="fullName">The Full Name of the Category.</param>
 		/// <param name="provider">The Storage that manages the category.</param>
-		public CategoryInfo(string fullName, IPagesStorageProviderV30 provider) {
+		public CategoryInfo(string fullName, IPagesStorageProviderV40 provider) {
 			NameTools.ExpandFullName(fullName, out nspace, out name);
 			this.provider = provider;
 		}
@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets or sets the Provider that manages the Category.
 		/// </summary>
-		public IPagesStorageProviderV30 Provider {
+		public IPagesStorageProviderV40 Provider {
 			get { return provider; }
 			set { provider = value; }
 		}

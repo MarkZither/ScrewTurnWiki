@@ -44,12 +44,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptProviders_DataBinding(object sender, EventArgs e) {
-			List<IProviderV30> providers = new List<IProviderV30>(5);
+			List<IProviderV40> providers = new List<IProviderV40>(5);
 
 			int enabledCount = 0;
 
 			if(rdoFormatter.Checked) {
-				IFormatterProviderV30[] formatterProviders = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
+				IFormatterProviderV40[] formatterProviders = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
 				enabledCount = formatterProviders.Length;
 				providers.AddRange(formatterProviders);
 			}
@@ -57,7 +57,7 @@ namespace ScrewTurn.Wiki {
 			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
 
 			for(int i = 0; i < providers.Count; i++) {
-				IProviderV30 prov = providers[i];
+				IProviderV40 prov = providers[i];
 				result.Add(new ProviderRow(prov.Information,
 					prov.GetType().FullName,
 					GetUpdateStatus(prov.Information),
@@ -103,7 +103,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The provider.</returns>
 		/// <param name="enabled">A value indicating whether the returned provider is enabled.</param>
 		/// <param name="canDisable">A value indicating whether the returned provider can be disabled.</param>
-		private IProviderV30 GetCurrentProvider(out bool enabled, out bool canDisable) {
+		private IProviderV40 GetCurrentProvider(out bool enabled, out bool canDisable) {
 			enabled = true;
 			canDisable = false;
 
@@ -116,7 +116,7 @@ namespace ScrewTurn.Wiki {
 			if(e.CommandName == "Select") {
 				bool enabled;
 				bool canDisable;
-				IProviderV30 provider = GetCurrentProvider(out enabled, out canDisable);
+				IProviderV40 provider = GetCurrentProvider(out enabled, out canDisable);
 
 				// Cannot disable the provider that handles the default page of the root namespace
 				if(Pages.FindPage(currentWiki, Settings.GetDefaultPage(currentWiki)).Provider == provider) canDisable = false;
@@ -152,7 +152,7 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnSave_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
-			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
+			IProviderV40 prov = GetCurrentProvider(out enabled, out canDisable);
 			Log.LogEntry("Configuration change requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			string error;
@@ -174,7 +174,7 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnDisable_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
-			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
+			IProviderV40 prov = GetCurrentProvider(out enabled, out canDisable);
 			Log.LogEntry("Deactivation requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, false);
@@ -190,7 +190,7 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnEnable_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
-			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
+			IProviderV40 prov = GetCurrentProvider(out enabled, out canDisable);
 			Log.LogEntry("Activation requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 			
 			ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, true);
@@ -206,7 +206,7 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnUnload_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
-			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
+			IProviderV40 prov = GetCurrentProvider(out enabled, out canDisable);
 			Log.LogEntry("Unloading requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			ProviderLoader.UnloadPlugin(txtCurrentProvider.Value);

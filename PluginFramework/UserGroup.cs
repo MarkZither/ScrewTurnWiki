@@ -25,7 +25,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The provider that handles the user group.
 		/// </summary>
-		protected IUsersStorageProviderV30 provider;
+		protected IUsersStorageProviderV40 provider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:UserGroup" /> class.
@@ -33,7 +33,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="name">The name of the group.</param>
 		/// <param name="description">The description of the group.</param>
 		/// <param name="provider">The Users Storage Provider that handles the user group.</param>
-		public UserGroup(string name, string description, IUsersStorageProviderV30 provider) {
+		public UserGroup(string name, string description, IUsersStorageProviderV40 provider) {
 			this.name = name;
 			this.description = description;
 			this.provider = provider;
@@ -66,7 +66,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets or sets the provider that handles the user group.
 		/// </summary>
-		public IUsersStorageProviderV30 Provider {
+		public IUsersStorageProviderV40 Provider {
 			get { return provider; }
 			set { provider = value; }
 		}

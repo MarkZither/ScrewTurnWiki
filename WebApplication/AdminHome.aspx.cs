@@ -93,7 +93,7 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_DataBinding(object sender, EventArgs e) {
 			List<IndexRow> result = new List<IndexRow>(5);
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
+			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
 				result.Add(new IndexRow(prov));
 			}
 
@@ -103,7 +103,7 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_ItemCommand(object sender, CommandEventArgs e) {
 			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
 
-			IPagesStorageProviderV30 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
+			IPagesStorageProviderV40 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
 			provider.RebuildIndex();
 
 			Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername, currentWiki);
@@ -227,7 +227,7 @@ namespace ScrewTurn.Wiki {
 		/// Initializes a new instance of the <see cref="T:IndexRow" /> class.
 		/// </summary>
 		/// <param name="provider">The original provider.</param>
-		public IndexRow(IPagesStorageProviderV30 provider) {
+		public IndexRow(IPagesStorageProviderV40 provider) {
 			this.provider = provider.Information.Name;
 			providerType = provider.GetType().FullName;
 

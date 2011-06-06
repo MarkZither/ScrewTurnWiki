@@ -225,7 +225,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The number of attachments.</returns>
 		private int GetAttachmentCount() {
 			int count = 0;
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
+			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 				count += prov.ListPageAttachments(currentPage).Length;
 			}
 			return count;

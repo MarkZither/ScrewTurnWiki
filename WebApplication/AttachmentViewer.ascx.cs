@@ -45,7 +45,7 @@ namespace ScrewTurn.Wiki {
 
 			string currentWiki = Tools.DetectCurrentWiki();
 
-			foreach(IFilesStorageProviderV30 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
+			foreach(IFilesStorageProviderV40 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 				string[] attachments = provider.ListPageAttachments(pageInfo);
 				foreach(string s in attachments) {
 					DataRow row = table.NewRow();

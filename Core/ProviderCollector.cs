@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki {
 	/// Implements a generic Provider Collector.
 	/// </summary>
 	/// <typeparam name="T">The type of the Collector.</typeparam>
-	public class ProviderCollector<T> where T : class, IProviderV30 {
+	public class ProviderCollector<T> where T : class, IProviderV40 {
 
 		// TypeName -> Assembly
 		private Dictionary<Type, Assembly> assembliesDictionary;

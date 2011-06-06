@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 	/// <summary>
 	/// Implements a base class for a SQL users storage provider.
 	/// </summary>
-	public abstract class SqlUsersStorageProviderBase : SqlStorageProviderBase, IUsersStorageProviderV30 {
+	public abstract class SqlUsersStorageProviderBase : SqlStorageProviderBase, IUsersStorageProviderV40 {
 
 		#region IUsersStorageProvider Members
 

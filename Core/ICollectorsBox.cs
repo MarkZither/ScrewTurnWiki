@@ -13,39 +13,39 @@ namespace ScrewTurn.Wiki {
 		/// The global settings storage provider.
 		/// </summary>
 		/// <returns>The globalSettingsProvider.</returns>
-		IGlobalSettingsStorageProviderV30 GlobalSettingsProvider { get; }
+		IGlobalSettingsStorageProviderV40 GlobalSettingsProvider { get; }
 
 		/// <summary>
 		/// Gets the settings provider.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The settingsProvider initialized for the given wiki.</returns>
-		ISettingsStorageProviderV30 GetSettingsProvider(string wiki);
+		ISettingsStorageProviderV40 GetSettingsProvider(string wiki);
 
 		/// <summary>
 		/// Gets the files provider collector.
 		/// </summary>
-		ProviderCollector<IFilesStorageProviderV30> FilesProviderCollector { get; }
+		ProviderCollector<IFilesStorageProviderV40> FilesProviderCollector { get; }
 
 		/// <summary>
 		/// Gets the formatter provider collector.
 		/// </summary>
-		ProviderCollector<IFormatterProviderV30> FormatterProviderCollector { get; }
+		ProviderCollector<IFormatterProviderV40> FormatterProviderCollector { get; }
 
 		/// <summary>
 		/// Gets the pages provider collector.
 		/// </summary>
-		ProviderCollector<IPagesStorageProviderV30> PagesProviderCollector { get; }
+		ProviderCollector<IPagesStorageProviderV40> PagesProviderCollector { get; }
 
 		/// <summary>
 		/// Gets the theme provider collector.
 		/// </summary>
-		ProviderCollector<IThemeStorageProviderV30> ThemeProviderCollector { get; }
+		ProviderCollector<IThemeStorageProviderV40> ThemeProviderCollector { get; }
 
 		/// <summary>
 		/// Gets the users provider collector.
 		/// </summary>
-		ProviderCollector<IUsersStorageProviderV30> UsersProviderCollector { get; }
+		ProviderCollector<IUsersStorageProviderV40> UsersProviderCollector { get; }
 
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources

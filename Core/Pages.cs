@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki {
 			List<NamespaceInfo> result = new List<NamespaceInfo>(10);
 
 			int count = 0;
-			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				count++;
 				result.AddRange(provider.GetNamespaces());
 			}
@@ -47,11 +47,11 @@ namespace ScrewTurn.Wiki {
 		public static NamespaceInfo FindNamespace(string wiki, string name) {
 			if(string.IsNullOrEmpty(name)) return null;
 
-			IPagesStorageProviderV30 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
+			IPagesStorageProviderV40 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
 			NamespaceInfo nspace = defProv.GetNamespace(name);
 			if(nspace != null) return nspace;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				if(prov != defProv) {
 					nspace = prov.GetNamespace(name);
 					if(nspace != null) return nspace;
@@ -67,7 +67,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The name of the namespace to find.</param>
 		/// <param name="provider">The provider to look into.</param>
 		/// <returns>The namespace, or <c>null</c> if the namespace is not found.</returns>
-		public static NamespaceInfo FindNamespace(string name, IPagesStorageProviderV30 provider) {
+		public static NamespaceInfo FindNamespace(string name, IPagesStorageProviderV40 provider) {
 			if(string.IsNullOrEmpty(name)) return null;
 
 			return provider.GetNamespace(name);
@@ -90,7 +90,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The name of the namespace to add.</param>
 		/// <param name="provider">The provider to create the namespace into.</param>
 		/// <returns><c>true</c> if the namespace is created, <c>false</c> otherwise.</returns>
-		public static bool CreateNamespace(string wiki, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreateNamespace(string wiki, string name, IPagesStorageProviderV40 provider) {
 			if(provider.ReadOnly) return false;
 
 			if(FindNamespace(wiki, name) != null) return false;
@@ -154,7 +154,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="pages">The pages in the namespace.</param>
 		private static void DeleteAllAttachments(string wiki, List<PageInfo> pages) {
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				foreach(PageInfo page in pages) {
 					string[] attachments = prov.ListPageAttachments(page);
 					foreach(string attachment in attachments) {
@@ -214,7 +214,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The name of the renamed namespace.</param>
 		/// <param name="newName">The new name of the namespace.</param>
 		private static void NotifyFilesProvidersForNamespaceRename(string wiki, List<string> pages, string nspace, string newName) {
-			foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				foreach(string page in pages) {
 					PageInfo pageToNotify = new PageInfo(NameTools.GetFullName(nspace, page), null, DateTime.Now);
 					PageInfo newPage = new PageInfo(NameTools.GetFullName(newName, page), null, DateTime.Now);
@@ -335,11 +335,11 @@ namespace ScrewTurn.Wiki {
 		public static PageInfo FindPage(string wiki, string fullName) {
 			if(string.IsNullOrEmpty(fullName)) return null;
 
-			IPagesStorageProviderV30 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
+			IPagesStorageProviderV40 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
 			PageInfo page = defProv.GetPage(fullName);
 			if(page != null) return page;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				if(prov != defProv) {
 					page = prov.GetPage(fullName);
 					if(page != null) return page;
@@ -355,7 +355,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="fullName">The full name of the page to find (case <b>unsensitive</b>).</param>
 		/// <param name="provider">The Provider.</param>
 		/// <returns>The correct <see cref="T:PageInfo" /> object, if any, <c>null</c> otherwise.</returns>
-		public static PageInfo FindPage(string fullName, IPagesStorageProviderV30 provider) {
+		public static PageInfo FindPage(string fullName, IPagesStorageProviderV40 provider) {
 			if(string.IsNullOrEmpty(fullName)) return null;
 
 			return provider.GetPage(fullName);
@@ -499,7 +499,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The Page name.</param>
 		/// <param name="provider">The destination provider.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(string wiki, NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreatePage(string wiki, NamespaceInfo nspace, string name, IPagesStorageProviderV40 provider) {
 			string namespaceName = nspace != null ? nspace.Name : null;
 			return CreatePage(wiki, namespaceName, name, provider);
 		}
@@ -512,7 +512,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The Page name.</param>
 		/// <param name="provider">The destination provider.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(string wiki, string nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreatePage(string wiki, string nspace, string name, IPagesStorageProviderV40 provider) {
 			if(provider.ReadOnly) return false;
 
 			string fullName = NameTools.GetFullName(nspace, name);
@@ -552,7 +552,7 @@ namespace ScrewTurn.Wiki {
 				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 				authWriter.ClearEntriesForPage(page.FullName);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					foreach(string attn in prov.ListPageAttachments(page)) {
 						prov.DeletePageAttachment(page, attn);
 					}
@@ -602,7 +602,7 @@ namespace ScrewTurn.Wiki {
 				authWriter.ClearEntriesForPage(newFullName);
 				authWriter.ProcessPageRenaming(oldName, newFullName);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), pg);
 				}
 
@@ -643,7 +643,7 @@ namespace ScrewTurn.Wiki {
 				PageContent content = Content.GetPageContent(result);
 				StorePageOutgoingLinks(wiki, result, content.Content);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), result);
 				}
 			}
@@ -945,7 +945,7 @@ namespace ScrewTurn.Wiki {
 
 			// Retrieve all pages from Pages Providers
 			int count = 0;
-			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				count++;
 				allPages.AddRange(provider.GetPages(nspace));
 			}
@@ -964,7 +964,7 @@ namespace ScrewTurn.Wiki {
 		public static int GetGlobalPageCount(string wiki) {
 			int count = 0;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				count += prov.GetPages(null).Length;
 				foreach(NamespaceInfo nspace in prov.GetNamespaces()) {
 					count += prov.GetPages(nspace).Length;
@@ -1130,11 +1130,11 @@ namespace ScrewTurn.Wiki {
 		public static CategoryInfo FindCategory(string wiki, string fullName) {
 			if(string.IsNullOrEmpty(fullName)) return null;
 
-			IPagesStorageProviderV30 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
+			IPagesStorageProviderV40 defProv = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
 			CategoryInfo category = defProv.GetCategory(fullName);
 			if(category != null) return category;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				if(prov != defProv) {
 					category = prov.GetCategory(fullName);
 					if(category != null) return category;
@@ -1175,7 +1175,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The Name of the Category.</param>
 		/// <param name="provider">The Provider.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(string wiki, NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreateCategory(string wiki, NamespaceInfo nspace, string name, IPagesStorageProviderV40 provider) {
 			string namespaceName = nspace != null ? nspace.Name : null;
 			return CreateCategory(wiki, namespaceName, name, provider);
 		}
@@ -1188,7 +1188,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The Name of the Category.</param>
 		/// <param name="provider">The Provider.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(string wiki, string nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreateCategory(string wiki, string nspace, string name, IPagesStorageProviderV40 provider) {
 			if(provider == null) provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, wiki);
 
 			if(provider.ReadOnly) return false;
@@ -1280,7 +1280,7 @@ namespace ScrewTurn.Wiki {
 				List<PageInfo> pages = new List<PageInfo>(1000);
 
 				int count = 0;
-				foreach(IPagesStorageProviderV30 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+				foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 					count++;
 					pages.AddRange(prov.GetUncategorizedPages(null));
 				}
@@ -1397,7 +1397,7 @@ namespace ScrewTurn.Wiki {
 
 			// Retrieve all the categories from Pages Provider
 			int count = 0;
-			foreach(IPagesStorageProviderV30 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
+			foreach(IPagesStorageProviderV40 provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				count++;
 				allCategories.AddRange(provider.GetCategories(nspace));
 			}

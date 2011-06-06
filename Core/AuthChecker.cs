@@ -15,13 +15,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the settings storage provider.
 		/// </summary>
-		private ISettingsStorageProviderV30 _settingsProvider;
+		private ISettingsStorageProviderV40 _settingsProvider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AuthChecker"/> class.
 		/// </summary>
 		/// <param name="settingsProvider">The settings provider.</param>
-		public AuthChecker(ISettingsStorageProviderV30 settingsProvider) {
+		public AuthChecker(ISettingsStorageProviderV40 settingsProvider) {
 			_settingsProvider = settingsProvider;
 		}
 
@@ -177,7 +177,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="currentUser">The current user.</param>
 		/// <param name="groups">The groups the user is member of.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
-		public bool CheckActionForDirectory(IFilesStorageProviderV30 provider, string directory, string action, string currentUser, string[] groups) {
+		public bool CheckActionForDirectory(IFilesStorageProviderV40 provider, string directory, string action, string currentUser, string[] groups) {
 			if(provider == null) throw new ArgumentNullException("provider");
 
 			if(directory == null) throw new ArgumentNullException("directory");

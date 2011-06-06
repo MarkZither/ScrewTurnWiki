@@ -25,10 +25,10 @@ namespace ScrewTurn.Wiki.Tests {
 			}
 		}
 
-		protected IHostV30 MockHost() {
+		protected IHostV40 MockHost() {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
-			IHostV30 host = mocks.DynamicMock<IHostV30>();
+			IHostV40 host = mocks.DynamicMock<IHostV40>();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
 
 			mocks.Replay(host);
@@ -36,27 +36,27 @@ namespace ScrewTurn.Wiki.Tests {
 			return host;
 		}
 
-		protected IPagesStorageProviderV30 MockPagesProvider() {
-			IPagesStorageProviderV30 prov = mocks.DynamicMock<IPagesStorageProviderV30>();
+		protected IPagesStorageProviderV40 MockPagesProvider() {
+			IPagesStorageProviderV40 prov = mocks.DynamicMock<IPagesStorageProviderV40>();
 
 			mocks.Replay(prov);
 
 			return prov;
 		}
 
-		public abstract IFilesStorageProviderV30 GetProvider();
+		public abstract IFilesStorageProviderV40 GetProvider();
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 			prov.Init(null, "", null);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), null, null);
 		}
 
@@ -70,7 +70,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreFile_ListFiles() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.ListFiles("/").Length, "Wrong file count");
 
@@ -89,7 +89,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreFile_SubDir() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory("/", "Test");
 
@@ -111,7 +111,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void StoreFile_InvalidFullName(string fn) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
 				prov.StoreFile(fn, s, false);
@@ -121,7 +121,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void StoreFile_NullStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.StoreFile("/Blah.txt", null, false);
 		}
@@ -129,7 +129,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void StoreFile_ClosedStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			Stream s = FillStream("Blah");
 			s.Close();
@@ -139,7 +139,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreFile_Overwrite_RetrieveFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
 				Assert.IsTrue(prov.StoreFile("/File.txt", s, false), "StoreFile should return true");
@@ -168,7 +168,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ListFiles_NullOrEmptyDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
 				Assert.IsTrue(prov.StoreFile("/File.txt", s, false), "StoreFile should return true");
@@ -186,14 +186,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void ListFiles_InexistentDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 			prov.ListFiles("/dir/that/does/not/exist");
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RetrieveFile_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(MemoryStream s = new MemoryStream()) {
 				prov.RetrieveFile(f, s, false);
@@ -203,7 +203,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RetrieveFile_InexistentFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(MemoryStream s = new MemoryStream()) {
 				prov.RetrieveFile("/Inexistent.txt", s, false);
@@ -213,7 +213,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrieveFile_NullStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
 				prov.StoreFile("/File.txt", s, false);
@@ -225,7 +225,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RetrieveFile_ClosedStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
 				prov.StoreFile("/File.txt", s, false);
@@ -238,7 +238,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetFileDetails_SetFileRetrievalCount() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			DateTime now = DateTime.Now;
 			using(Stream s = FillStream("Content")) {
@@ -304,7 +304,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetFileDetails_RenameFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			DateTime now = DateTime.Now;
 			using(Stream s = FillStream("Content")) {
@@ -328,7 +328,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetFileDetails_RenameDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			DateTime now = DateTime.Now;
 			prov.CreateDirectory("/", "Dir");
@@ -380,7 +380,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetFileDetails_DeleteDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			DateTime now = DateTime.Now;
 			prov.CreateDirectory("/", "Dir");
@@ -420,14 +420,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetFileDetails_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.GetFileDetails(f);
 		}
 
 		[Test]
 		public void GetFileDetails_InexistentFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsNull(prov.GetFileDetails("/Inexistent.txt"), "GetFileDetails should return null");
 		}
@@ -435,7 +435,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetFileRetrievalCount_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.SetFileRetrievalCount(f, 10);
 		}
@@ -443,14 +443,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void SetFileRetrievalCount_NegativeCount() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.SetFileRetrievalCount("/File.txt", -1);
 		}
 
 		[Test]
 		public void DeleteFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory("/", "Sub");
 
@@ -468,7 +468,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void DeleteFile_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.DeleteFile(f);
 		}
@@ -476,14 +476,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void DeleteFile_InexistentFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.DeleteFile("/File.txt");
 		}
 
 		[Test]
 		public void RenameFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory("/", "Sub");
 
@@ -507,7 +507,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RenameFile_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.RenameFile(f, "/Blah.txt");
 		}
@@ -515,7 +515,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RenameFile_InexistentFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.RenameFile("/Blah.txt", "/Blah2.txt");
 		}
@@ -523,7 +523,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RenameFile_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
 				prov.StoreFile("/File.txt", s, false);
@@ -535,7 +535,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RenameFile_ExistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
 				prov.StoreFile("/File.txt", s, false);
@@ -547,7 +547,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CreateDirectory_ListDirectories() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsTrue(prov.CreateDirectory("/", "Dir1"), "CreateDirectory should return true");
 			Assert.IsTrue(prov.CreateDirectory("/", "Dir2"), "CreateDirectory should return true");
@@ -566,7 +566,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void CreateDirectory_NullDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory(null, "Dir");
 		}
@@ -574,7 +574,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void CreateDirectory_InexistentDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory("/Inexistent/Dir/", "Sub");
 		}
@@ -582,7 +582,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void CreateDirectory_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory("/", n);
 		}
@@ -590,7 +590,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void CreateDirectory_ExistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsTrue(prov.CreateDirectory("/", "Dir"), "CreateDirectory should return true");
 			prov.CreateDirectory("/", "Dir");
@@ -598,7 +598,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void ListDirectories_NullOrEmptyDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			string[] dirs = prov.ListDirectories(null);
 			Assert.AreEqual(0, dirs.Length, "Wrong dir count");
@@ -617,14 +617,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void ListDirectories_InexistentDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.ListDirectories("/Inexistent/");
 		}
 
 		[Test]
 		public void DeleteDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory("/", "Dir");
 			prov.CreateDirectory("/", "Dir2");
@@ -647,7 +647,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		[TestCase("/", ExpectedException = typeof(ArgumentException))]
 		public void DeleteDirectory_InvalidDirectory(string d) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.DeleteDirectory(d);
 		}
@@ -655,14 +655,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void DeleteDirectory_InexistentDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.DeleteDirectory("/Inexistent/");
 		}
 
 		[Test]
 		public void RenameDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory("/", "Dir");
 			using(Stream s = FillStream("Blah")) {
@@ -707,7 +707,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		[TestCase("/", ExpectedException = typeof(ArgumentException))]
 		public void RenameDirectory_InvalidDirectory(string d) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.RenameDirectory(d, "/Dir/");
 		}
@@ -715,7 +715,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RenameDirectory_InexistentDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.RenameDirectory("/Inexistent/", "/Inexistent2/");
 		}
@@ -724,7 +724,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		[TestCase("/", ExpectedException = typeof(ArgumentException))]
 		public void RenameDirectory_InvalidNewDir(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory("/", "Dir");
 
@@ -734,7 +734,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RenameDirectory_ExistentNewDir() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.CreateDirectory("/", "Dir");
 			prov.CreateDirectory("/", "Dir2");
@@ -744,7 +744,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StorePageAttachment_ListPageAttachments_GetPagesWithAttachments() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi1 = new PageInfo("MainPage", null, DateTime.Now);
 			PageInfo pi2 = new PageInfo("Page2", null, DateTime.Now);
@@ -775,14 +775,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ListPageAttachments_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.ListPageAttachments(null);
 		}
 
 		[Test]
 		public void ListPageAttachments_InexistentPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.ListPageAttachments(new PageInfo("Page", MockPagesProvider(), DateTime.Now)).Length, "Wrong attachment count");
 		}
@@ -790,7 +790,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void StorePageAttachment_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
 				prov.StorePageAttachment(null, "File.txt", s, false);
@@ -800,7 +800,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void StorePageAttachment_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -811,7 +811,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StorePageAttachment_ExistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -823,7 +823,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StorePageAttachment_Overwrite_RetrievePageAttachment() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -845,7 +845,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void StorePageAttachment_NullStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -855,7 +855,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void StorePageAttachment_ClosedStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -867,7 +867,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrievePageAttachment_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -883,7 +883,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RetrievePageAttachment_InexistentPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -901,7 +901,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RetrievePageAttachment_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -913,7 +913,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RetrievePageAttachment_InexistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -925,7 +925,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrievePageAttachment_NullStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -939,7 +939,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RetrievePageAttachment_ClosedStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -954,7 +954,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetPageAttachmentDetails_SetPageAttachmentRetrievalCount() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page1 = new PageInfo("Page1", null, DateTime.Now);
 			PageInfo page2 = new PageInfo("Page2", null, DateTime.Now);
@@ -1054,7 +1054,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetPageAttachmentDetails_NotifyPageRenaming() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = new PageInfo("Page", null, DateTime.Now);
 			PageInfo page2 = new PageInfo("Page2", null, DateTime.Now);
@@ -1094,7 +1094,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetPageAttachmentDetails_RenamePageAttachment() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = new PageInfo("Page", null, DateTime.Now);
 
@@ -1121,7 +1121,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetPageAttachmentDetails_InexistentAttachment() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			Assert.IsNull(prov.GetPageAttachmentDetails(new PageInfo("Inexistent", null, DateTime.Now), "File.txt"), "GetPageAttachmentDetails should retur null");
 		}
@@ -1129,7 +1129,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetPageAttachmentDetails_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.GetPageAttachmentDetails(null, "File.txt");
 		}
@@ -1137,7 +1137,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetPageAttachmentDetails_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.GetPageAttachmentDetails(new PageInfo("Page", null, DateTime.Now), n);
 		}
@@ -1145,7 +1145,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPageAttachmentRetrievalCount_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.SetPageAttachmentRetrievalCount(null, "File.txt", 10);
 		}
@@ -1153,7 +1153,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void SetPageAttachmentRetrievalCount_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.SetPageAttachmentRetrievalCount(new PageInfo("Page", null, DateTime.Now), f, 10);
 		}
@@ -1161,14 +1161,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void SetPageAttachmentRetrievalCount_NegativeCount() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.SetPageAttachmentRetrievalCount(new PageInfo("Page", null, DateTime.Now), "File.txt", -1);
 		}
 
 		[Test]
 		public void DeletePageAttachment() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1185,7 +1185,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void DeletePageAttachment_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.DeletePageAttachment(null, "File.txt");
 		}
@@ -1193,7 +1193,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void DeletePageAttachment_InexistentPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1203,7 +1203,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void DeletePageAttachment_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1213,7 +1213,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void DeletePageAttachment_InexistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1226,7 +1226,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RenamePageAttachment() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1244,7 +1244,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RenamePageAttachment_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			prov.RenamePageAttachment(null, "File.txt", "File2.txt");
 		}
@@ -1252,7 +1252,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RenamePageAttachment_InexistentPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1262,7 +1262,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RenamePageAttachment_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1272,7 +1272,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RenamePageAttachment_InexistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1286,7 +1286,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RenamePageAttachment_InvalidNewName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1296,7 +1296,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void RenamePageAttachment_ExistentNewName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
@@ -1310,7 +1310,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void NotifyPageRenaming() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
 			PageInfo p2 = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
@@ -1333,7 +1333,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void NotifyPageRenaming_NullOldPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p2 = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
 
@@ -1342,7 +1342,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void NotifyPageRenaming_InexistentOldPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
 			PageInfo p2 = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
@@ -1355,7 +1355,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void NotifyPageRenaming_NullNewPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
 
@@ -1365,7 +1365,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void NotifyPageRenaming_ExistentNewPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
 			PageInfo p2 = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
@@ -1380,7 +1380,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CompleteTestsForCaseInsensitivity_Files() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
 				Assert.IsTrue(prov.StoreFile("/File.TXT", s, false), "StoreFile should return true");
@@ -1407,7 +1407,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void CompleteTestsForCaseInsensitivity_Attachments() {
-			IFilesStorageProviderV30 prov = GetProvider();
+			IFilesStorageProviderV40 prov = GetProvider();
 
 			PageInfo page = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 

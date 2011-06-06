@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The provider of the namespace.
 		/// </summary>
-		protected IPagesStorageProviderV30 provider;
+		protected IPagesStorageProviderV40 provider;
 		/// <summary>
 		/// The default page of the namespace (can be <c>null</c>).
 		/// </summary>
@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="name">The namespace name.</param>
 		/// <param name="provider">The provider.</param>
 		/// <param name="defaultPage">The default page, or <c>null</c>.</param>
-		public NamespaceInfo(string name, IPagesStorageProviderV30 provider, PageInfo defaultPage) {
+		public NamespaceInfo(string name, IPagesStorageProviderV40 provider, PageInfo defaultPage) {
 			this.name = name;
 			this.provider = provider;
 			this.defaultPage = defaultPage;
@@ -46,7 +46,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets or sets the provider.
 		/// </summary>
-		public IPagesStorageProviderV30 Provider {
+		public IPagesStorageProviderV40 Provider {
 			get { return provider; }
 			set { provider = value; }
 		}

@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		private const string ConnString = "Data Source=(local)\\SQLExpress;Integrated Security=SSPI;";
 		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
 
-		public override IUsersStorageProviderV30 GetProvider() {
+		public override IUsersStorageProviderV40 GetProvider() {
 			SqlServerUsersStorageProvider prov = new SqlServerUsersStorageProvider();
 			prov.SetUp(MockHost(), ConnString + InitialCatalog);
 			prov.Init(MockHost(), ConnString + InitialCatalog, null);
@@ -91,7 +91,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		[Test]
 		public void Init() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), ConnString + InitialCatalog, null);
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
@@ -101,7 +101,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		[TestCase("blah", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;", ExpectedException = typeof(InvalidConfigurationException))]
 		public void Init_InvalidConnString(string c) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), c, null);
 		}
 
@@ -154,7 +154,7 @@ INSERT INTO [User] ([Username], [PasswordHash], [Email], [DateTime], [Active], [
 			if(!done) throw new Exception("Could not create v2 test database");
 
 			MockRepository mocks = new MockRepository();
-			IHostV30 host = mocks.DynamicMock<IHostV30>();
+			IHostV40 host = mocks.DynamicMock<IHostV40>();
 			Expect.Call(host.GetSettingValue(null, SettingName.AdministratorsGroup)).Return("Administrators").Repeat.Once();
 			Expect.Call(host.GetSettingValue(null, SettingName.UsersGroup)).Return("Users").Repeat.Once();
 
@@ -162,7 +162,7 @@ INSERT INTO [User] ([Username], [PasswordHash], [Email], [DateTime], [Active], [
 
 			mocks.Replay(host);
 
-			IUsersStorageProviderV30 prov = new SqlServerUsersStorageProvider();
+			IUsersStorageProviderV40 prov = new SqlServerUsersStorageProvider();
 			prov.SetUp(host, ConnString + InitialCatalog);
 			prov.Init(host, ConnString + InitialCatalog, null);
 

@@ -18,7 +18,7 @@ namespace ScrewTurn.Wiki {
 
 	public partial class AttachmentManager : System.Web.UI.UserControl {
 
-		private IFilesStorageProviderV30 provider;
+		private IFilesStorageProviderV40 provider;
 
 		private bool canDownload = false;
 		private bool canUpload = false;
@@ -52,7 +52,7 @@ namespace ScrewTurn.Wiki {
 				lblUploadFilesInfo.Text = lblUploadFilesInfo.Text.Replace("$2", sb.ToString());
 
 				// Load Providers
-				foreach(IFilesStorageProviderV30 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
+				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
 					ListItem item = new ListItem(prov.Information.Name, prov.GetType().FullName);
 					if(item.Value == GlobalSettings.DefaultFilesProvider) {
 						item.Selected = true;

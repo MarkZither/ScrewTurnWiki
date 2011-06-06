@@ -65,7 +65,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void PlainTest(string input, string output) {
 			mocks = new MockRepository();
 
-			ISettingsStorageProviderV30 settingsProvider = mocks.StrictMock<ISettingsStorageProviderV30>();
+			ISettingsStorageProviderV40 settingsProvider = mocks.StrictMock<ISettingsStorageProviderV40>();
 			ICollectorsBox collectorsBox = mocks.DynamicMock<ICollectorsBox>();
 
 			Collectors.CollectorsBox = collectorsBox;

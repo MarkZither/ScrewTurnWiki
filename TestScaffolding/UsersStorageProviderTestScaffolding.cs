@@ -15,10 +15,10 @@ namespace ScrewTurn.Wiki.Tests {
 		private MockRepository mocks = new MockRepository();
 		private string testDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
 
-		protected IHostV30 MockHost() {
+		protected IHostV40 MockHost() {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
-			IHostV30 host = mocks.DynamicMock<IHostV30>();
+			IHostV40 host = mocks.DynamicMock<IHostV40>();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
 
 			mocks.Replay(host);
@@ -34,25 +34,25 @@ namespace ScrewTurn.Wiki.Tests {
 			catch { }
 		}
 
-		public abstract IUsersStorageProviderV30 GetProvider();
+		public abstract IUsersStorageProviderV40 GetProvider();
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), null, null);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.Init(null, "", null);
 		}
 
 		[Test]
 		public void AddUser_GetUsers() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo u1 = new UserInfo("user", "User", "email@server.com", true, DateTime.Now.AddDays(-1), prov);
 			UserInfo u2 = new UserInfo("john", null, "john@john.com", false, DateTime.Now, prov);
@@ -88,7 +88,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddUser_InvalidUsername(string u) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.AddUser(u, null, "pass", "email@server.com", true, DateTime.Now);
 		}
@@ -96,7 +96,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddUser_InvalidPassword(string p) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.AddUser("user", null, p, "email@server.com", true, DateTime.Now);
 		}
@@ -104,14 +104,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddUser_InvalidEmail(string e) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.AddUser("user", null, "pass", e, true, DateTime.Now);
 		}
 
 		[Test]
 		public void TestAccount() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo u1 = prov.AddUser("user1", null, "password", "email1@server.com", true, DateTime.Now);
 			UserInfo u2 = prov.AddUser("user2", "User", "password", "email2@server.com", false, DateTime.Now);
@@ -127,7 +127,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void TestAccount_NullUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.TestAccount(null, "pass");
 		}
@@ -135,14 +135,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void TestAccount_NullPassword() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.TestAccount(new UserInfo("blah", null, "email30@server.com", true, DateTime.Now, prov), null);
 		}
 
 		[Test]
 		public void ModifyUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = new UserInfo("username", null, "email@server.com", false, DateTime.Now, prov);
 			prov.AddUser(user.Username, user.DisplayName, "password", user.Email, user.Active, user.DateTime);
@@ -176,7 +176,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyUser_NullUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.ModifyUser(null, "Display Name", null, "email@server.com", true);
 		}
@@ -184,7 +184,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void ModifyUser_InvalidNewEmail(string e) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = new UserInfo("username", null, "email@server.com", true, DateTime.Now, prov);
 			prov.AddUser(user.Username, user.DisplayName, "password", user.Email, user.Active, user.DateTime);
@@ -194,7 +194,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RemoveUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = prov.AddUser("user", null, "password", "email@server.com", false, DateTime.Now);
 
@@ -208,7 +208,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveUser_NullUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.RemoveUser(null);
 		}
 
@@ -226,7 +226,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void AddUserGroup_GetUserGroups() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserGroup group1 = prov.AddUserGroup("Group1", "Test1");
 			UserGroup expected1 = new UserGroup("Group1", "Test1", prov);
@@ -249,20 +249,20 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void AddUserGroup_InvalidName(string n) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.AddUserGroup(n, "Description");
 		}
 		
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void AddUserGroup_NullDescription() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.AddUserGroup("Group", null);
 		}
 
 		[Test]
 		public void ModifyUserGroup() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserGroup group1 = prov.AddUserGroup("Group1", "Description1");
 			UserGroup group2 = prov.AddUserGroup("Group2", "Description2");
@@ -289,20 +289,20 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyUserGroup_NullGroup() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.ModifyUserGroup(null, "Description");
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ModifyUserGroup_NullDescription() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.ModifyUserGroup(prov.AddUserGroup("Group", "Description"), null);
 		}
 
 		[Test]
 		public void RemoveUserGroup() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserGroup group1 = prov.AddUserGroup("Group1", "Description1");
 			UserGroup group2 = prov.AddUserGroup("Group2", "Description2");
@@ -320,13 +320,13 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveUserGroup_NullGroup() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.RemoveUserGroup(null);
 		}
 
 		[Test]
 		public void SetUserMembership() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			DateTime dt = DateTime.Now;
 
@@ -398,20 +398,20 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetUserMembership_NullUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.SetUserMembership(null, new string[0]);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetUserMembership_NullGroups() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			prov.SetUserMembership(prov.AddUser("user", "user", "pass", "user@server.com", true, DateTime.Now), null);
 		}
 
 		[Test]
 		public void TryManualLogin() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = prov.AddUser("user", null, "password", "email@server.com", true, DateTime.Now);
 			prov.AddUser("user2", null, "password", "email2@server.com", false, DateTime.Now);
@@ -435,7 +435,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void TryManualLogin_NullUsername() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.TryManualLogin(null, "password");
 		}
@@ -443,7 +443,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void TryManualLogin_NullPassword() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 			
 			prov.AddUser("user", null, "password", "email@server.com", true, DateTime.Now);
 			prov.TryManualLogin("user", null);
@@ -452,14 +452,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void TryAutoLogin_NullContext() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.TryAutoLogin(null);
 		}
 
 		[Test]
 		public void GetUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = prov.AddUser("user", null, "password", "email@server.com", true, DateTime.Now);
 
@@ -473,14 +473,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetUser_InvalidUsername(string u) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.GetUser(u);
 		}
 
 		[Test]
 		public void GetUserByEmail() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user1 = prov.AddUser("user1", null, "password", "email1@server.com", true, DateTime.Now);
 			UserInfo user2 = prov.AddUser("user2", null, "password", "email2@server.com", true, DateTime.Now);
@@ -495,7 +495,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetUserByEmail_InvalidEmail(string e) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.GetUserByEmail(e);
 		}
@@ -503,7 +503,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void NotifyCookieLogin_NullUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.NotifyCookieLogin(null);
 		}
@@ -511,14 +511,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void NotifyLogout_NullUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.NotifyLogout(null);
 		}
 
 		[Test]
 		public void StoreUserData_RetrieveUserData() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = new UserInfo("User", "User", "user@users.com", true, DateTime.Now, prov);
 
@@ -536,7 +536,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreUserData_RetrieveUserData_Overwrite() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = prov.AddUser("User", "User", "password", "user@users.com", true, DateTime.Now);
 
@@ -551,7 +551,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreUserData_RetrieveUserData_NullValue() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = prov.AddUser("User", "User", "password", "user@users.com", true, DateTime.Now);
 
@@ -567,7 +567,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreUserData_RetrieveUserData_EmptyValue() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = prov.AddUser("User", "User", "password", "user@users.com", true, DateTime.Now);
 
@@ -583,7 +583,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void StoreUserData_RetrieveUserData_RemoveUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = prov.AddUser("User", "User", "password", "user@users.com", true, DateTime.Now);
 			UserInfo user2 = prov.AddUser("User2", "User2", "password2", "user2@users.com", true, DateTime.Now);
@@ -601,7 +601,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void StoreUserData_NullUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.StoreUserData(null, "Key", "Value");
 		}
@@ -609,7 +609,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void StoreUserData_InvalidKey(string k) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = new UserInfo("User", "User", "user@users.com", true, DateTime.Now, prov);
 
@@ -619,7 +619,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrieveUserData_NullUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.RetrieveUserData(null, "Key");
 		}
@@ -627,7 +627,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void RetrieveUserData_InvalidKey(string k) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = prov.AddUser("User", "User", "password", "user@users.com", true, DateTime.Now);
 
@@ -636,7 +636,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void RetrieveUserData_InexistentKey() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user = prov.AddUser("User", "User", "password", "user@users.com", true, DateTime.Now);
 
@@ -645,7 +645,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		[Test]
 		public void GetUsersWithData() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			UserInfo user1 = prov.AddUser("user1", "User1", "password", "user1@users.com", true, DateTime.Now);
 			UserInfo user2 = prov.AddUser("user2", "User2", "password", "user2@users.com", true, DateTime.Now);
@@ -675,14 +675,14 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void GetUsersWithData_InvalidKey(string k) {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.GetUsersWithData(k);
 		}
 
 		[Test]
 		public void RetrieveAllUserData() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			Assert.AreEqual(0, prov.RetrieveAllUserData(new UserInfo("Inexistent", "Inex", "inex@users.com", true, DateTime.Now, prov)).Count, "Wrong data count");
 
@@ -704,7 +704,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrieveAllUserData_NullUser() {
-			IUsersStorageProviderV30 prov = GetProvider();
+			IUsersStorageProviderV40 prov = GetProvider();
 
 			prov.RetrieveAllUserData(null);
 		}

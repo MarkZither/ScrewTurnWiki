@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="host">The host object.</param>
 		/// <returns>The data directory.</returns>
-		protected string GetDataDirectory(IHostV30 host) {
+		protected string GetDataDirectory(IHostV40 host) {
 			return host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory);
 		}
 	}

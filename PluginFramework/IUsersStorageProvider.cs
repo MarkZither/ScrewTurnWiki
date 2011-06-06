@@ -10,7 +10,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// It is the interface that must be implemented in order to create a custom Users Storage Provider for ScrewTurn Wiki.
 	/// </summary>
 	/// <remarks>A class that implements this class <b>should not</b> have any kind of data caching.</remarks>
-	public interface IUsersStorageProviderV30 : IProviderV30 {
+	public interface IUsersStorageProviderV40 : IProviderV40 {
 
 		/// <summary>
 		/// Tests a Password for a User account.

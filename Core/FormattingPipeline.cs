@@ -17,8 +17,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The list.</returns>
-		private static IList<IFormatterProviderV30> GetSortedFormatters(string wiki) {
-			List<IFormatterProviderV30> providers = new List<IFormatterProviderV30>(Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(wiki));
+		private static IList<IFormatterProviderV40> GetSortedFormatters(string wiki) {
+			List<IFormatterProviderV40> providers = new List<IFormatterProviderV40>(Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(wiki));
 
 			// Sort by priority, then by name
 			providers.Sort((x, y) => {
@@ -60,10 +60,10 @@ namespace ScrewTurn.Wiki {
 			info = new ContextInformation(forIndexing, false, context, current, System.Threading.Thread.CurrentThread.CurrentCulture.Name, HttpContext.Current,
 				username, SessionFacade.GetCurrentGroupNames(wiki));
 
-			IList<IFormatterProviderV30> providers = GetSortedFormatters(wiki);
+			IList<IFormatterProviderV40> providers = GetSortedFormatters(wiki);
 
 			// Phase 1
-			foreach(IFormatterProviderV30 provider in providers) {
+			foreach(IFormatterProviderV40 provider in providers) {
 				if(provider.PerformPhase1) {
 					try {
 						raw = provider.Format(raw, info, FormattingPhase.Phase1);
@@ -79,7 +79,7 @@ namespace ScrewTurn.Wiki {
 			raw = Formatter.Format(wiki, raw, forIndexing, context, current, out linkedPages);
 
 			// Phase 2
-			foreach(IFormatterProviderV30 provider in providers) {
+			foreach(IFormatterProviderV40 provider in providers) {
 				if(provider.PerformPhase2) {
 					try {
 						raw = provider.Format(raw, info, FormattingPhase.Phase2);
@@ -112,7 +112,7 @@ namespace ScrewTurn.Wiki {
 				username, SessionFacade.GetCurrentGroupNames(wiki));
 
 			// Phase 3
-			foreach(IFormatterProviderV30 provider in GetSortedFormatters(wiki)) {
+			foreach(IFormatterProviderV40 provider in GetSortedFormatters(wiki)) {
 				if(provider.PerformPhase3) {
 					try {
 						raw = provider.Format(raw, info, FormattingPhase.Phase3);
@@ -142,7 +142,7 @@ namespace ScrewTurn.Wiki {
 			ContextInformation info = new ContextInformation(forIndexing, false, context, current, System.Threading.Thread.CurrentThread.CurrentCulture.Name,
 				HttpContext.Current, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(wiki));
 
-			foreach(IFormatterProviderV30 prov in GetSortedFormatters(wiki)) {
+			foreach(IFormatterProviderV40 prov in GetSortedFormatters(wiki)) {
 				temp = prov.PrepareTitle(temp, info);
 			}
 

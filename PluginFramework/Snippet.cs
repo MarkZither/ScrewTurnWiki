@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// The Provider that handles the Snippet.
 		/// </summary>
-		protected IPagesStorageProviderV30 provider;
+		protected IPagesStorageProviderV40 provider;
 
 		/// <summary>
 		/// Initializes a new instance of the <b>Snippet</b> class.
@@ -30,7 +30,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="name">The Name of the Snippet.</param>
 		/// <param name="content">The Content of the Snippet.</param>
 		/// <param name="provider">The Provider of the Snippet.</param>
-		public Snippet(string name, string content, IPagesStorageProviderV30 provider) {
+		public Snippet(string name, string content, IPagesStorageProviderV40 provider) {
 			this.name = name;
 			this.content = content;
 			this.provider = provider;
@@ -53,7 +53,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets the Provider of the Snippet.
 		/// </summary>
-		public IPagesStorageProviderV30 Provider {
+		public IPagesStorageProviderV40 Provider {
 			get { return provider; }
 		}
 

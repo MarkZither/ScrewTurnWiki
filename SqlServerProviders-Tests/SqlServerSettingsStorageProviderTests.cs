@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		private const string ConnString = "Data Source=(local)\\SQLExpress;Integrated Security=SSPI;";
 		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
 
-		public override ISettingsStorageProviderV30 GetProvider() {
+		public override ISettingsStorageProviderV40 GetProvider() {
 			SqlServerSettingsStorageProvider prov = new SqlServerSettingsStorageProvider();
 			prov.SetUp(MockHost(), ConnString + InitialCatalog);
 			prov.Init(MockHost(), ConnString + InitialCatalog, "wiki1");
@@ -87,7 +87,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		[Test]
 		public void Init() {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), ConnString + InitialCatalog, "-");
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
@@ -97,7 +97,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		[TestCase("blah", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;", ExpectedException = typeof(InvalidConfigurationException))]
 		public void Init_InvalidConnString(string c) {
-			ISettingsStorageProviderV30 prov = GetProvider();
+			ISettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), c, "wiki1");
 		}
 

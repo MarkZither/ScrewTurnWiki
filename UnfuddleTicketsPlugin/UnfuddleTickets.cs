@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 	/// <summary>
 	/// Implements a formatter that display tickets from Unfuddle.
 	/// </summary>
-	public class UnfuddleTickets : IFormatterProviderV30 {
+	public class UnfuddleTickets : IFormatterProviderV40 {
 
 		private const string ConfigHelpHtmlValue = "Config consists of three lines:<br/><i>&lt;Url&gt;</i> - The base url to the Unfuddle API (i.e. http://account_name.unfuddle.com/api/v1/projects/project_ID)<br/><i>&lt;Username&gt;</i> - The username to the unfuddle account to use for authentication<br/><i>&lt;Password&gt;</i> - The password to the unfuddle account to use for authentication<br/>";
 		private const string LoadErrorMessage = "Unable to load ticket report at this time.";
@@ -25,7 +25,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		private static readonly ComponentInformation Info = new ComponentInformation("Unfuddle Tickets Plugin", "Threeplicate Srl", "3.0.4.575", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/UnfuddleTickets2.txt");
 
 		private string _config;
-		private IHostV30 _host;
+		private IHostV40 _host;
 		private string _wiki;
 		private string _baseUrl;
 		private string _username;
@@ -47,7 +47,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <param name="wiki">The wiki.</param>
 		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
@@ -75,7 +75,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
-		public void SetUp(IHostV30 host, string config) {
+		public void SetUp(IHostV40 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 

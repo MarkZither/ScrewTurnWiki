@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 	/// <summary>
 	/// Implements a SQL Server-based users storage provider.
 	/// </summary>
-	public class SqlServerUsersStorageProvider : SqlUsersStorageProviderBase, IUsersStorageProviderV30 {
+	public class SqlServerUsersStorageProvider : SqlUsersStorageProviderBase, IUsersStorageProviderV40 {
 
 		private readonly ComponentInformation info = new ComponentInformation("SQL Server Users Storage Provider", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Users.txt");
 		

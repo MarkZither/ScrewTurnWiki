@@ -12,7 +12,7 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 	/// <summary>
 	/// A plugin for assigning a rating to pages.
 	/// </summary>
-	public class RatingManager : IFormatterProviderV30 {
+	public class RatingManager : IFormatterProviderV40 {
 
 		const string defaultDirectoryName = "/__RatingManagerPlugin/";
 		const string cssFileName = "RatingManagerPluginCss.css";
@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 		const string starImageFileName = "RatingManagerPluginStarImage.gif";
 		const string ratingFileName = "RatingManagerPluginRatingFile.dat";
 
-		private IHostV30 _host;
+		private IHostV40 _host;
 		private string _wiki;
 		private bool _enableLogging = true;
 		private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "3.0.3.555", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RatingManager2.txt");
@@ -201,7 +201,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		private float GetCurrentAverage(string fullPageName) {
 			float average = 0;
 			try {
-				IFilesStorageProviderV30 filesStorageProvider = GetDefaultFilesStorageProvider();
+				IFilesStorageProviderV40 filesStorageProvider = GetDefaultFilesStorageProvider();
 
 				MemoryStream stream = new MemoryStream();
 				string fileContent = "";
@@ -230,7 +230,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 
 
 		private void AddRating(string fullPageName, int rate) {
-			IFilesStorageProviderV30 filesStorageProvider = GetDefaultFilesStorageProvider();
+			IFilesStorageProviderV40 filesStorageProvider = GetDefaultFilesStorageProvider();
 
 			MemoryStream stream = new MemoryStream();
 
@@ -338,7 +338,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		/// <param name="wiki">The wiki.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void Init(IHostV30 host, string config, string wiki) {
+		public void Init(IHostV40 host, string config, string wiki) {
 			_host = host;
 			_wiki = wiki;
 
@@ -364,12 +364,12 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		}
 
 
-		private IFilesStorageProviderV30 GetDefaultFilesStorageProvider() {
+		private IFilesStorageProviderV40 GetDefaultFilesStorageProvider() {
 			string defaultFilesStorageProviderName = _host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider);
 			return _host.GetFilesStorageProviders(_wiki).First(p => p.GetType().FullName == defaultFilesStorageProviderName);
 		}
 
-		private bool DirectoryExists(IFilesStorageProviderV30 filesStorageProvider, string directoryName) {
+		private bool DirectoryExists(IFilesStorageProviderV40 filesStorageProvider, string directoryName) {
 			string[] directoryList = filesStorageProvider.ListDirectories("/");
 			foreach(string dir in directoryList) {
 				if(dir == directoryName) return true;
@@ -377,7 +377,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 			return false;
 		}
 
-		private bool FileExists(IFilesStorageProviderV30 filesStorageProvider, string directory, string fileName) {
+		private bool FileExists(IFilesStorageProviderV40 filesStorageProvider, string directory, string fileName) {
 			string[] filesList = filesStorageProvider.ListFiles(directory);
 			foreach(string file in filesList) {
 				if(file == directory + fileName) return true;
@@ -393,8 +393,8 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		/// <param name="config">The Configuration data, if any.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
-		public void SetUp(IHostV30 host, string config) {
-			IFilesStorageProviderV30 filesStorageProvider = GetDefaultFilesStorageProvider();
+		public void SetUp(IHostV40 host, string config) {
+			IFilesStorageProviderV40 filesStorageProvider = GetDefaultFilesStorageProvider();
 
 			if(!DirectoryExists(filesStorageProvider, defaultDirectoryName)) {
 				filesStorageProvider.CreateDirectory("/", defaultDirectoryName.Trim('/'));

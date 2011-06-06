@@ -340,7 +340,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="toSelect">The categories to select.</param>
 		private void PopulateCategories(CategoryInfo[] toSelect) {
-			IPagesStorageProviderV30 provider = FindAppropriateProvider();
+			IPagesStorageProviderV40 provider = FindAppropriateProvider();
 			List<CategoryInfo> cats = Pages.GetCategories(currentWiki, DetectNamespaceInfo());
 			lstCategories.Items.Clear();
 			foreach(CategoryInfo c in cats) {
@@ -487,8 +487,8 @@ namespace ScrewTurn.Wiki {
 		/// Finds the appropriate provider to use for operations.
 		/// </summary>
 		/// <returns>The provider.</returns>
-		private IPagesStorageProviderV30 FindAppropriateProvider() {
-			IPagesStorageProviderV30 provider = null;
+		private IPagesStorageProviderV40 FindAppropriateProvider() {
+			IPagesStorageProviderV40 provider = null;
 
 			if(currentPage != null) provider = currentPage.Provider;
 			else {
@@ -562,7 +562,7 @@ namespace ScrewTurn.Wiki {
 			if(SessionFacade.LoginKey == null) username = Request.UserHostAddress;
 			else username = SessionFacade.CurrentUsername;
 
-			IPagesStorageProviderV30 provider = FindAppropriateProvider();
+			IPagesStorageProviderV40 provider = FindAppropriateProvider();
 
 			// Create list of selected categories
 			List<CategoryInfo> categories = new List<CategoryInfo>();
