@@ -29,25 +29,21 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		#region Namespaces
 
 		private Dictionary<string, NamespacesEntity> _namespaces;
+		private List<NamespacesEntity> _namespacesList;
 
 		private List<NamespacesEntity> GetNamespacesEntities(string wiki) {
-			if(_namespaces == null) {
+			if(_namespacesList == null) {
 				var query = (from e in _context.CreateQuery<NamespacesEntity>(NamespacesTable).AsTableServiceQuery()
 							 where e.PartitionKey.Equals(wiki)
 							 select e).AsTableServiceQuery();
-				var entities = QueryHelper<NamespacesEntity>.All(query);
+				_namespacesList = QueryHelper<NamespacesEntity>.All(query).ToList<NamespacesEntity>();
 
 				_namespaces = new Dictionary<string, NamespacesEntity>();
-				foreach(var entity in entities) {
+				foreach(var entity in _namespacesList) {
 					_namespaces[entity.RowKey] = entity;
 				}
 			}
-			List<NamespacesEntity> namespacesEntitiesList = new List<NamespacesEntity>(_namespaces.Count);
-			foreach(var pair in _namespaces) {
-				namespacesEntitiesList.Add(pair.Value);
-			}
-
-			return namespacesEntitiesList;
+			return _namespacesList;
 		}
 
 		private NamespacesEntity GetNamespacesEntity(string wiki, string namespaceName) {
@@ -132,6 +128,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				// Invalidate local cache.
 				_namespaces = null;
+				_namespacesList = null;
 
 				return new NamespaceInfo(name, this, null);
 			}
@@ -254,6 +251,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				// Invalidate local cache.
 				_namespaces = null;
+				_namespacesList = null;
 
 				return new NamespaceInfo(newName, this, GetPage(newNamespaceEntity.DefaultPageFullName));
 			}
@@ -286,6 +284,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				// Invalidate local cache.
 				_namespaces = null;
+				_namespacesList = null;
 
 				nspace.DefaultPage = page;
 				return nspace;
@@ -318,6 +317,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				// Invalidate local cache.
 				_namespaces = null;
+				_namespacesList = null;
 
 				return true;
 			}
