@@ -283,7 +283,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="e">The <see cref="System.Web.UI.WebControls.ServerValidateEventArgs"/> instance containing the event data.</param>
 		protected void cvCheckOldPassword(object sender, ServerValidateEventArgs e) {
 			string pwd = Hash.Compute(txtBoxOldPassword.Text);
-			if(pwd == Settings.GetMasterPassword(currentWiki))
+			if(pwd == GlobalSettings.GetMasterPassword())
 				if((txtNewPassword.Text.Length != 0) && (txtNewPassword.Text != null)) 
 					e.IsValid = true;
 				else {
@@ -361,7 +361,7 @@ namespace ScrewTurn.Wiki {
 			if(txtBoxOldPassword.Text != "" && txtBoxOldPassword.Text != null && txtBoxOldPassword.Text.Length != 0) {
 				if (txtNewPassword.Text.Length != 0){
 						if	(Hash.Compute(txtNewPassword.Text) == Hash.Compute(txtReNewPassword.Text))	
-							Settings.SetMasterPassword(currentWiki, Hash.Compute(txtNewPassword.Text));
+							GlobalSettings.SetMasterPassword(Hash.Compute(txtNewPassword.Text));
 					}
 				}
 			// Save security configuration

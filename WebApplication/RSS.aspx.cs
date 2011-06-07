@@ -56,7 +56,7 @@ namespace ScrewTurn.Wiki {
 					}
 					else {
 						// Check for built-in admin account
-						if(Request["Username"].Equals("admin") && Request["Password"].Equals(Settings.GetMasterPassword(currentWiki))) {
+						if(Request["Username"].Equals("admin") && Request["Password"].Equals(GlobalSettings.GetMasterPassword())) {
 							currentUsername = "admin";
 							currentGroups = new string[] { Settings.GetAdministratorsGroup(currentWiki) };
 						}

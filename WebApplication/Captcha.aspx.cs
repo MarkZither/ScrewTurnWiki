@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki {
 			Response.Clear();
 			Response.ContentType = "image/jpeg";
 
-			string s = SessionFacade.GetCaptcha(Tools.DetectCurrentWiki());
+			string s = SessionFacade.GetCaptcha();
 
 			Font f = new Font("Times New Roman", 30, FontStyle.Italic | FontStyle.Bold, GraphicsUnit.Pixel);
 			StringFormat format = new StringFormat();

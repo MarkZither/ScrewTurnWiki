@@ -65,7 +65,7 @@ namespace ScrewTurn.Wiki {
 
 			if(Request["Activate"] != null && Request["Username"] != null && !Page.IsPostBack) {
 				UserInfo user = Users.FindUser(currentWiki, Request["Username"]);
-				if(user!= null && Tools.ComputeSecurityHash(currentWiki, user.Username, user.Email, user.DateTime).Equals(Request["Activate"])) {
+				if(user!= null && Tools.ComputeSecurityHash(user.Username, user.Email, user.DateTime).Equals(Request["Activate"])) {
 					Log.LogEntry("Account activation requested for " + user.Username, EntryType.General, Log.SystemUsername, currentWiki);
 					if(user.Active) {
 						lblResult.CssClass = "resultok";
@@ -98,7 +98,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The user, or <c>null</c>.</returns>
 		private UserInfo LoadUserForPasswordReset() {
 			UserInfo user = Users.FindUser(currentWiki, Request["Username"]);
-			if(user != null && Request["ResetCode"] == Tools.ComputeSecurityHash(currentWiki, user.Username, user.Email, user.DateTime)) {
+			if(user != null && Request["ResetCode"] == Tools.ComputeSecurityHash(user.Username, user.Email, user.DateTime)) {
 				return user;
 			}
 			else return null;
@@ -118,7 +118,7 @@ namespace ScrewTurn.Wiki {
 		protected void btnLogin_Click(object sender, EventArgs e) {
 			UserInfo user = Users.TryLogin(currentWiki, txtUsername.Text, txtPassword.Text);
 			if(user != null) {
-				string loginKey = Users.ComputeLoginKey(currentWiki, user.Username, user.Email, user.DateTime);
+				string loginKey = Users.ComputeLoginKey(user.Username, user.Email, user.DateTime);
 				if(chkRemember.Checked) {
 					LoginTools.SetLoginCookie(user.Username, loginKey,
 						DateTime.Now.AddYears(1));

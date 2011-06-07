@@ -39,7 +39,7 @@ namespace ScrewTurn.Wiki {
 			if(HttpContext.Current != null) {
 				HttpCookie cookie = new HttpCookie(CookieName);
 				cookie.Values[UserNameKey] = user.Username;
-				cookie.Values[LoginKeyCookieName] = Users.ComputeLoginKey(wiki, user.Username, user.Email, user.DateTime);
+				cookie.Values[LoginKeyCookieName] = Users.ComputeLoginKey(user.Username, user.Email, user.DateTime);
 				cookie.Values[WikiKey] = wiki;
 
 				HttpContext.Current.Response.Cookies.Add(cookie);
@@ -81,7 +81,7 @@ namespace ScrewTurn.Wiki {
 			else if(un == AnonymousUsername) return Users.GetAnonymousAccount(wiki);
 			else {
 				UserInfo current = Users.FindUser(wiki, un);
-				if(current != null && Cookie[LoginKeyCookieName] == Users.ComputeLoginKey(wiki, current.Username, current.Email, current.DateTime)) {
+				if(current != null && Cookie[LoginKeyCookieName] == Users.ComputeLoginKey(current.Username, current.Email, current.DateTime)) {
 					return current;
 				}
 				else {
@@ -182,12 +182,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the captcha.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The captcha strings.</returns>
-		public static string GetCaptcha(string wiki) {
+		public static string GetCaptcha() {
 			if(Cookie != null) {
 				TripleDESCryptoServiceProvider provider = new TripleDESCryptoServiceProvider();
-				provider.Key = Settings.GetMasterPasswordBytes(wiki);
+				provider.Key = GlobalSettings.GetMasterPasswordBytes();
 				provider.IV = new byte[] { 2, 5, 23, 21, 3, 8, 5, 38 };
 				return DecryptBytes(provider, Convert.FromBase64String(Cookie[CaptchaKey]));
 			}
@@ -197,13 +196,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Sets the captcha.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="captcha">The captcha string.</param>
-		public static void SetCaptcha(string wiki, string captcha) {
+		public static void SetCaptcha(string captcha) {
 			HttpCookie cookie = Cookie;
 			if(cookie == null) cookie = new HttpCookie(CookieName);
 			TripleDESCryptoServiceProvider provider = new TripleDESCryptoServiceProvider();
-			provider.Key = Settings.GetMasterPasswordBytes(wiki);
+			provider.Key = GlobalSettings.GetMasterPasswordBytes();
 			provider.IV = new byte[] { 2, 5, 23, 21, 3, 8, 5, 38 };
 			cookie.Values[CaptchaKey] = EncryptString(provider, captcha);
 			HttpContext.Current.Response.Cookies.Add(cookie);

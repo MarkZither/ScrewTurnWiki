@@ -9,13 +9,10 @@ using ScrewTurn.Wiki.PluginFramework;
 namespace ScrewTurn.Wiki {
 	public partial class CreateMasterPassword : BasePage {
 
-		private string currentWiki = null;
 		private string oldPassword = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
-			currentWiki = DetectWiki();
-	
-			oldPassword = Settings.GetMasterPassword(currentWiki);
+			oldPassword = GlobalSettings.GetMasterPassword();
 
 			if(!Page.IsPostBack && !string.IsNullOrEmpty(oldPassword)) {
 				trOldPassword.Visible = true;
@@ -33,9 +30,7 @@ namespace ScrewTurn.Wiki {
 				lblResult.Text = Properties.Messages.WrongPassword;
 				return;
 			}
-			Settings.BeginBulkUpdate(currentWiki);
-			Settings.SetMasterPassword(currentWiki, Hash.Compute(txtReNewPwd.Text));
-			Settings.EndBulkUpdate(currentWiki);
+			GlobalSettings.SetMasterPassword(Hash.Compute(txtReNewPwd.Text));
 			newAdminPassForm.Visible = false;
 			newAdminPassOk.Visible = true;
 			lblResult.Visible = true;

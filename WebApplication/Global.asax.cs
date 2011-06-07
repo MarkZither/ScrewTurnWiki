@@ -58,7 +58,7 @@ namespace ScrewTurn.Wiki {
 						Application.Lock();
 						if(Application["MasterPasswordOk"] == null || !((List<string>)Application["MasterPasswordOk"]).Contains(currentWiki)) {
 							//Setup Master Password
-							if(!String.IsNullOrEmpty(Settings.GetMasterPassword(currentWiki))) {
+							if(!String.IsNullOrEmpty(GlobalSettings.GetMasterPassword())) {
 								if(Application["MasterPasswordOk"] == null) Application["MasterPasswordOk"] = new List<string>();
 								((List<string>)Application["MasterPasswordOk"]).Add(currentWiki);
 							}

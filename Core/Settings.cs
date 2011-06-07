@@ -3,7 +3,6 @@ using System;
 using System.Configuration;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Web;
 using System.Web.Security;
@@ -25,30 +24,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static ISettingsStorageProviderV40 GetProvider(string wiki) {
 			return Collectors.CollectorsBox.GetSettingsProvider(wiki);
-		}
-
-		/// <summary>
-		/// Gets the Master Password of the given wiki, used to encrypt the Users data.
-		/// </summary>
-		public static string GetMasterPassword(string wiki) {
-			return SettingsTools.GetString(GetProvider(wiki).GetSetting("MasterPassword"), "");
-		}
-
-		/// <summary>
-		/// Sets the master password for the given wiki, used to encrypt the Users data.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="newMasterPassword">The new master password.</param>
-		public static void SetMasterPassword(string wiki, string newMasterPassword) {
-			GetProvider(wiki).SetSetting("MasterPassword", newMasterPassword);
-		}
-
-		/// <summary>
-		/// Gets the bytes of the MasterPassword.
-		/// </summary>
-		public static byte[] GetMasterPasswordBytes(string wiki) {
-			MD5 md5 = MD5CryptoServiceProvider.Create();
-			return md5.ComputeHash(System.Text.UTF8Encoding.UTF8.GetBytes(GetMasterPassword(wiki)));
 		}
 
 		/// <summary>

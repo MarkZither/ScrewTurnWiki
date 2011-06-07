@@ -7,6 +7,7 @@ using System.IO;
 using System.Web.Configuration;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.Plugins.AzureStorage;
+using System.Security.Cryptography;
 
 namespace ScrewTurn.Wiki {
 
@@ -28,6 +29,29 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static IGlobalSettingsStorageProviderV40 Provider {
 			get { return Collectors.CollectorsBox.GlobalSettingsProvider; }
+		}
+
+		/// <summary>
+		/// Gets the Master Password of the given wiki, used to encrypt the Users data.
+		/// </summary>
+		public static string GetMasterPassword() {
+			return SettingsTools.GetString(Provider.GetSetting("MasterPassword"), "");
+		}
+
+		/// <summary>
+		/// Sets the master password for the given wiki, used to encrypt the Users data.
+		/// </summary>
+		/// <param name="newMasterPassword">The new master password.</param>
+		public static void SetMasterPassword(string newMasterPassword) {
+			Provider.SetSetting("MasterPassword", newMasterPassword);
+		}
+
+		/// <summary>
+		/// Gets the bytes of the MasterPassword.
+		/// </summary>
+		public static byte[] GetMasterPasswordBytes() {
+			MD5 md5 = MD5CryptoServiceProvider.Create();
+			return md5.ComputeHash(System.Text.UTF8Encoding.UTF8.GetBytes(GetMasterPassword()));
 		}
 
 		/// <summary>

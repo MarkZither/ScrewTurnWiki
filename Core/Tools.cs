@@ -235,13 +235,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Computes the Hash of a Username, mixing it with other data, in order to avoid illegal Account activations.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="email">The email.</param>
 		/// <param name="dateTime">The date/time.</param>
 		/// <returns>The secured Hash of the Username.</returns>
-		public static string ComputeSecurityHash(string wiki, string username, string email, DateTime dateTime) {
-			return Hash.ComputeSecurityHash(username, email, dateTime, Settings.GetMasterPassword(wiki));
+		public static string ComputeSecurityHash(string username, string email, DateTime dateTime) {
+			return Hash.ComputeSecurityHash(username, email, dateTime, GlobalSettings.GetMasterPassword());
 		}
 
 		/// <summary>

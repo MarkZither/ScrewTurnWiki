@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki {
 			if(string.IsNullOrEmpty(currentUsername)) UrlTools.Redirect("Default.aspx");
 
 			if(currentUsername == "admin") {
-				currentUser = Users.GetAdministratorAccount(currentWiki);
+				currentUser = Users.GetGlobalAdministratorAccount();
 			}
 			else currentUser = Users.FindUser(currentWiki, currentUsername);
 

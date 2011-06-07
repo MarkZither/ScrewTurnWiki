@@ -110,7 +110,7 @@ namespace ScrewTurn.Wiki {
 			if(Settings.GetAccountActivationMode(currentWiki) == AccountActivationMode.Email) {
 				string body = Settings.GetProvider(currentWiki).GetMetaDataItem(MetaDataItem.AccountActivationMessage, null);
 				body = body.Replace("##WIKITITLE##", Settings.GetWikiTitle(currentWiki)).Replace("##USERNAME##", newUser.Username).Replace("##EMAILADDRESS##", GlobalSettings.ContactEmail);
-				body = body.Replace("##ACTIVATIONLINK##", Settings.GetMainUrl(currentWiki) + "Login.aspx?Activate=" + Tools.ComputeSecurityHash(currentWiki, newUser.Username, newUser.Email, newUser.DateTime) + "&Username=" + Tools.UrlEncode(newUser.Username));
+				body = body.Replace("##ACTIVATIONLINK##", Settings.GetMainUrl(currentWiki) + "Login.aspx?Activate=" + Tools.ComputeSecurityHash(newUser.Username, newUser.Email, newUser.DateTime) + "&Username=" + Tools.UrlEncode(newUser.Username));
 				EmailTools.AsyncSendEmail(txtEmail1.Text, GlobalSettings.SenderEmail, "Account Activation - " + Settings.GetWikiTitle(currentWiki), body, false);
 			}
 

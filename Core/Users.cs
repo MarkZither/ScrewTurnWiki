@@ -19,15 +19,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the built-in administrator account for the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <returns>The built-in administrator account.
-		/// </returns>
-		public static UserInfo GetAdministratorAccount(string wiki) {
+		/// <returns>The built-in administrator account.</returns>
+		public static UserInfo GetGlobalAdministratorAccount() {
 			if(adminAccount == null) {
 				adminAccount = new UserInfo("admin", "Administrator", GlobalSettings.ContactEmail, true, DateTime.MinValue, null);
-				adminAccount.Groups = new[] { Settings.GetAdministratorsGroup(wiki) };
+				adminAccount.Groups = new[] { "GlobalAdministrators" };
 			}
-			
 			return adminAccount;
 		}
 
@@ -96,7 +93,7 @@ namespace ScrewTurn.Wiki {
 		public static UserInfo FindUser(string wiki, string username) {
 			if(string.IsNullOrEmpty(username)) return null;
 			
-			if(username == "admin") return GetAdministratorAccount(wiki);
+			if(username == "admin") return GetGlobalAdministratorAccount();
 
 			// Try default provider first
 			IUsersStorageProviderV40 defaultProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, wiki);
@@ -359,7 +356,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="email">The email.</param>
 		/// <param name="dateTime">The user registration date/time.</param>
 		public static void SendPasswordResetMessage(string wiki, string username, string email, DateTime dateTime) {
-			string mainLink = Settings.GetMainUrl(wiki) + "Login.aspx?ResetCode=" + Tools.ComputeSecurityHash(wiki, username, email, dateTime) + "&Username=" + Tools.UrlEncode(username);
+			string mainLink = Settings.GetMainUrl(wiki) + "Login.aspx?ResetCode=" + Tools.ComputeSecurityHash(username, email, dateTime) + "&Username=" + Tools.UrlEncode(username);
 			string body = Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.PasswordResetProcedureMessage, null).Replace("##USERNAME##",
 				username).Replace("##LINK##", mainLink).Replace("##WIKITITLE##",
 				Settings.GetWikiTitle(wiki)).Replace("##EMAILADDRESS##", GlobalSettings.ContactEmail);
@@ -636,8 +633,8 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The correct UserInfo, or <c>null</c>.</returns>
 		public static UserInfo TryLogin(string wiki, string username, string password) {
 			string _password = Hash.Compute(password);
-			if(username == "admin" && Settings.GetMasterPassword(wiki).Equals(_password)) {
-				return GetAdministratorAccount(wiki);
+			if(username == "admin" && GlobalSettings.GetMasterPassword().Equals(_password)) {
+				return GetGlobalAdministratorAccount();
 			}
 
 			// Try default provider first
@@ -671,15 +668,15 @@ namespace ScrewTurn.Wiki {
 		public static UserInfo TryCookieLogin(string wiki, string username, string loginKey) {
 			if(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(loginKey)) return null;
 
-			if(username == "admin" && loginKey == ComputeLoginKey(wiki, username, GlobalSettings.ContactEmail, DateTime.MinValue)) {
+			if(username == "admin" && loginKey == ComputeLoginKey(username, GlobalSettings.ContactEmail, DateTime.MinValue)) {
 				// Just return, no notification to providers because the "admin" account is fictitious
-				return GetAdministratorAccount(wiki);
+				return GetGlobalAdministratorAccount();
 			}
 
 			UserInfo user = FindUser(wiki, username);
 
 			if(user != null && user.Active) {
-				if(loginKey == ComputeLoginKey(wiki, user.Username, user.Email, user.DateTime)) {
+				if(loginKey == ComputeLoginKey(user.Username, user.Email, user.DateTime)) {
 					// Notify provider
 					user.Provider.NotifyCookieLogin(user);
 					return user;
@@ -706,16 +703,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Copmputes the login key for the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="email">The email.</param>
 		/// <param name="dateTime">The registration date/time.</param>
 		/// <returns>The login key.</returns>
-		public static string ComputeLoginKey(string wiki, string username, string email, DateTime dateTime) {
+		public static string ComputeLoginKey(string username, string email, DateTime dateTime) {
 			if(username == null) throw new ArgumentNullException("username");
 			if(email == null) throw new ArgumentNullException("email");
 
-			return Tools.ComputeSecurityHash(wiki, username, email, dateTime);
+			return Tools.ComputeSecurityHash(username, email, dateTime);
 		}
 
 		/// <summary>
