@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(DetectWiki()))) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageGlobalConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(DetectWiki()))) UrlTools.Redirect("AccessDenied.aspx");
 
 			if(!Page.IsPostBack) {
 				// Load log entries

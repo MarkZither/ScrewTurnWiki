@@ -132,7 +132,7 @@ namespace ScrewTurn.Wiki {
 			lnkSelectAccounts.Visible = CanManageUsers(currentUser, currentGroups);
 
 			// Log (can manage config)
-			lnkSelectLog.Visible = CanManageConfiguration(currentUser, currentGroups);
+			lnkSelectLog.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
 
 			// Global Home (can manage global config)
 			lnkSelectAdminGlobalHome.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
