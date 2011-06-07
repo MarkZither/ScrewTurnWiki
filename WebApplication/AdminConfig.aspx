@@ -334,46 +334,6 @@
 		</div>
 	</div>
 
-	<div id="ChangeMasterPasswordDiv">
-		<div class="featurecontainer">
-			<h3 class="separator">
-				<asp:Literal ID="lblChangeMasterPassword" runat="server" 
-					Text="Master Password" EnableViewState="False"
-					meta:resourcekey="lblChangeMasterPasswordResource1" />
-			</h3>
-		</div>	
-
-		<div class="featurecontainer">
-				<asp:Literal ID="lblOldPwd" runat="server" 
-					Text="Old Password" EnableViewState="False" 
-					meta:resourcekey="lblOldPwdResource1" /><br />
-				<asp:TextBox ID="txtBoxOldPassword" TextMode="Password" runat="server" 
-					meta:resourcekey="txtBoxOldPasswordResource1" />
-				<asp:CustomValidator Id="cvCompareOldPwd" runat="server" ControlToValidate="txtBoxOldPassword" 
-					OnServerValidate="cvCheckOldPassword">
-				</asp:CustomValidator>
-		</div>
-
-		<div class="featurecontainer">
-				<asp:Literal ID="lblNewPwd" runat="server" 
-					Text="New Password" EnableViewState="False" 
-					meta:resourcekey="lblNewPwdResource1" /><br />
-				<asp:TextBox ID="txtNewPassword" TextMode="Password" runat="server"
-					meta:resourcekey="txtNewPasswordResource1" />
-		</div>
-
-		<div class="featurecontainer">
-				<asp:Literal ID="lblReNewPwd" runat="server" 
-					Text="New Password (Repeat)" EnableViewState="False" 
-					meta:resourcekey="lblReNewPwdResource1" /><br />
-				<asp:TextBox ID="txtReNewPassword" TextMode="Password" runat="server" 
-					meta:resourcekey="txtReNewPasswordResource1" />
-				<asp:CompareValidator id="cvComparePwd" runat="server" ErrorMessage="Passwords are not equal"
-					ControlToValidate="txtReNewPassword" ControlToCompare="txtNewPassword" meta:resourcekey="cvComparePwdResource1">
-				</asp:CompareValidator>
-		</div>
-	</div>
-
 	<div id="ConfigSecurityDiv">
 		<div class="featurecontainer">
 			<h3 class="separator"><asp:Literal ID="lblSecurityConfig" runat="server" 

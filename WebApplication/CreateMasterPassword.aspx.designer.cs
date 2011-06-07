@@ -49,42 +49,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.HtmlControls.HtmlTable tbAdminPass;
         
         /// <summary>
-        /// trOldPassword control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trOldPassword;
-        
-        /// <summary>
-        /// lblOldPassword control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblOldPassword;
-        
-        /// <summary>
-        /// txtOldPassword control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtOldPassword;
-        
-        /// <summary>
-        /// rfvOldPasswordRequired control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvOldPasswordRequired;
-        
-        /// <summary>
         /// lblNewPwd control.
         /// </summary>
         /// <remarks>
@@ -157,15 +121,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Button BtnSave;
         
         /// <summary>
-        /// lblResult control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblResult;
-        
-        /// <summary>
         /// newAdminPassOk control.
         /// </summary>
         /// <remarks>
@@ -173,6 +128,15 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl newAdminPassOk;
+        
+        /// <summary>
+        /// lblResult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblResult;
         
         /// <summary>
         /// lnkMainRedirect control.

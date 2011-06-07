@@ -275,27 +275,6 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-
-		/// <summary>
-		/// Cvs the check old password.
-		/// </summary>
-		/// <param name="sender">The sender.</param>
-		/// <param name="e">The <see cref="System.Web.UI.WebControls.ServerValidateEventArgs"/> instance containing the event data.</param>
-		protected void cvCheckOldPassword(object sender, ServerValidateEventArgs e) {
-			string pwd = Hash.Compute(txtBoxOldPassword.Text);
-			if(pwd == GlobalSettings.GetMasterPassword())
-				if((txtNewPassword.Text.Length != 0) && (txtNewPassword.Text != null)) 
-					e.IsValid = true;
-				else {
-					e.IsValid = false;
-					((CustomValidator)sender).ErrorMessage = Properties.Messages.PasswordEmpty;
-				}
-			else {
-				e.IsValid = false;
-				((CustomValidator)sender).ErrorMessage = Properties.Messages.WrongPassword;
-			}
-		}
-	
 		private string[] GetAllowedFileExtensions() {
 			return txtExtensionsAllowed.Text.Replace(" ", "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 		}
@@ -358,12 +337,7 @@ namespace ScrewTurn.Wiki {
 			else Settings.SetKeptBackupNumber(currentWiki, int.Parse(txtKeptBackupNumber.Text));
 			Settings.SetDisplayGravatars(currentWiki, chkDisplayGravatars.Checked);
 			Settings.SetListSize(currentWiki, int.Parse(txtListSize.Text));
-			if(txtBoxOldPassword.Text != "" && txtBoxOldPassword.Text != null && txtBoxOldPassword.Text.Length != 0) {
-				if (txtNewPassword.Text.Length != 0){
-						if	(Hash.Compute(txtNewPassword.Text) == Hash.Compute(txtReNewPassword.Text))	
-							GlobalSettings.SetMasterPassword(Hash.Compute(txtNewPassword.Text));
-					}
-				}
+			
 			// Save security configuration
 			Settings.SetUsersCanRegister(currentWiki, chkAllowUsersToRegister.Checked);
 			AccountActivationMode mode = AccountActivationMode.Email;

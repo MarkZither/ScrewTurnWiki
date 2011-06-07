@@ -11,18 +11,6 @@
 		</asp:Literal>
 		<br /><br />
 		<table id="tbAdminPass" runat="server">
-			<tr id="trOldPassword" runat="server" visible="false">
-				<td>
-					<p style="text-align: right;"><asp:Literal ID="lblOldPassword" runat="server" 
-					Text="Old Password" EnableViewState="False" meta:resourcekey="lblOldPasswordResource1" /></p>
-				</td>
-				<td>
-					<asp:TextBox ID="txtOldPassword" TextMode="Password" runat="server" meta:resourcekey="txtOldPasswordResource1"
-					 ToolTip="Type here the old master password" />
-					<asp:RequiredFieldValidator id="rfvOldPasswordRequired"  ControlToValidate="txtOldPassword"
-						Text="The old password is required" runat="server" meta:resourcekey="rfvOldPasswordRequiredResource1" />
-				</td>
-			</tr>
 			<tr>
 				<td>
 					<p style="text-align: right;"><asp:Literal ID="lblNewPwd" runat="server" 
@@ -59,8 +47,9 @@
 			</tr>
 		</table>
 	</div>
-	<asp:Label ID="lblResult" runat="server" CssClass="resultok" Text="" meta:resourcekey="lblNewAdminPassResultResource1" Visible="false" />
 	<div id="newAdminPassOk" runat="server" Visible="false">
+		<asp:Label ID="lblResult" runat="server" CssClass="resultok" Text="" meta:resourcekey="lblNewAdminPassResultResource1" />
+		<br /><br />
 		<asp:HyperLink ID="lnkMainRedirect" runat="server" Text="Go To Main Page" meta:resourcekey="lnkMainRedirectResource1"></asp:HyperLink>
 	</div>
 </asp:Content>

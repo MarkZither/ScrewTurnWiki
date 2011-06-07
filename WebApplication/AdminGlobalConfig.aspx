@@ -204,6 +204,46 @@
 			</div>
 		</div>
 	
+		<div id="ChangeMasterPasswordDiv">
+			<div class="featurecontainer">
+				<h3 class="separator">
+					<asp:Literal ID="lblChangeMasterPassword" runat="server" 
+						Text="Master Password" EnableViewState="False"
+						meta:resourcekey="lblChangeMasterPasswordResource1" />
+				</h3>
+			</div>	
+
+			<div class="featurecontainer">
+				<asp:Literal ID="lblOldPwd" runat="server" 
+					Text="Old Password" EnableViewState="False" 
+					meta:resourcekey="lblOldPwdResource1" /><br />
+				<asp:TextBox ID="txtBoxOldPassword" TextMode="Password" runat="server" 
+					meta:resourcekey="txtBoxOldPasswordResource1" />
+				<asp:CustomValidator Id="cvCompareOldPwd" runat="server" ControlToValidate="txtBoxOldPassword" 
+					OnServerValidate="cvCheckOldPassword" meta:resourcekey="cvCheckOldPasswordResource1">
+				</asp:CustomValidator>
+			</div>
+
+			<div class="featurecontainer">
+				<asp:Literal ID="lblNewPwd" runat="server" 
+					Text="New Password" EnableViewState="False" 
+					meta:resourcekey="lblNewPwdResource1" /><br />
+				<asp:TextBox ID="txtNewPassword" TextMode="Password" runat="server"
+					meta:resourcekey="txtNewPasswordResource1" />
+			</div>
+
+			<div class="featurecontainer">
+				<asp:Literal ID="lblReNewPwd" runat="server" 
+					Text="New Password (Repeat)" EnableViewState="False" 
+					meta:resourcekey="lblReNewPwdResource1" /><br />
+				<asp:TextBox ID="txtReNewPassword" TextMode="Password" runat="server" 
+					meta:resourcekey="txtReNewPasswordResource1" />
+				<asp:CustomValidator ID="cvComparePwd" runat="server" ErrorMessage="Passwords must be equal"
+						CssClass="resulterror" ControlToValidate="txtReNewPassword" Display="Dynamic"
+						OnServerValidate="cvRePassword_ServerValidate" ValidateEmptyText="True" meta:resourcekey="cvComparePwdResource1" />
+			</div>
+		</div>
+
 		<div class="ButtonsDiv">
 			<asp:Button ID="btnSave" runat="server" Text="Save Configuration" 
 				OnClick="btnSave_Click" meta:resourcekey="btnSaveResource1" />
