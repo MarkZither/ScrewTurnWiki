@@ -133,8 +133,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <summary>
 		/// Creates or updates the database schema if necessary.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		protected override void CreateOrUpdateDatabaseIfNecessary(string wiki) {
+		protected override void CreateOrUpdateDatabaseIfNecessary() {
 			if(!SchemaExists()) {
 				CreateStandardSchema();
 				isFirstStart = true;
@@ -172,27 +171,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		public override string ConfigHelpHtml {
 			get { return "Connection string format:<br /><code>Data Source=<i>Database Address and Instance</i>;Initial Catalog=<i>Database name</i>;User ID=<i>login</i>;Password=<i>password</i>;</code>"; }
-		}
-
-		/// <summary>
-		/// Gets the default users storage provider, when no value is stored in the database.
-		/// </summary>
-		protected override string DefaultUsersStorageProvider {
-			get { return typeof(SqlServerUsersStorageProvider).FullName; }
-		}
-
-		/// <summary>
-		/// Gets the default pages storage provider, when no value is stored in the database.
-		/// </summary>
-		protected override string DefaultPagesStorageProvider {
-			get { return typeof(SqlServerPagesStorageProvider).FullName; }
-		}
-
-		/// <summary>
-		/// Gets the default files storage provider, when no value is stored in the database.
-		/// </summary>
-		protected override string DefaultFilesStorageProvider {
-			get { return typeof(SqlServerFilesStorageProvider).FullName; }
 		}
 
 	}

@@ -56,8 +56,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>
 		/// Creates or updates the database schema if necessary.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		protected abstract void CreateOrUpdateDatabaseIfNecessary(string wiki);
+		protected abstract void CreateOrUpdateDatabaseIfNecessary();
 
 		/// <summary>
 		/// Tries to load the configuration from a corresponding v2 provider.
@@ -93,23 +92,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			this.host = host;
 			this.wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 
-			if(config.Length == 0) {
-				// Try to load v2 provider configuration
-				config = TryLoadV2Configuration();
-			}
-			
-			if(config == null || config.Length == 0) {
-				// Try to load Settings Storage Provider configuration
-				config = TryLoadSettingsStorageProviderConfiguration();
-			}
-
-			if(config == null) config = "";
-
-			ValidateConnectionString(config);
-
 			connString = config;
-
-			CreateOrUpdateDatabaseIfNecessary(wiki);
 		}
 
 		/// <summary>
@@ -122,7 +105,24 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public void SetUp(IHostV40 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
-			
+
+			if(config.Length == 0) {
+				// Try to load v2 provider configuration
+				config = TryLoadV2Configuration();
+			}
+
+			if(config == null || config.Length == 0) {
+				// Try to load Settings Storage Provider configuration
+				config = TryLoadSettingsStorageProviderConfiguration();
+			}
+
+			if(config == null) config = "";
+
+			ValidateConnectionString(config);
+
+			connString = config;
+
+			CreateOrUpdateDatabaseIfNecessary();
 		}
 
 		/// <summary>

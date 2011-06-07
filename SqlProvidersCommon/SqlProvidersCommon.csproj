@@ -69,6 +69,7 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="SqlGlobalSettingsStorageProviderBase.cs" />
     <Compile Include="IIndexConnector.cs" />
     <Compile Include="SqlAclManager.cs" />
     <Compile Include="SqlClassBase.cs" />

@@ -9,11 +9,11 @@ using System.Data.SqlClient;
 namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
 	/// <summary>
-	/// Implements a SQL Server-based files storage provider.
+	/// Implements a SQL Server-based settings storage provider.
 	/// </summary>
-	public class SqlServerFilesStorageProvider : SqlFilesStorageProviderBase {
+	public class SqlServerGlobalSettingsStorageProvider : SqlGlobalSettingsStorageProviderBase {
 
-		private readonly ComponentInformation info = new ComponentInformation("SQL Server Files Storage Provider", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Files.txt");
+		private readonly ComponentInformation info = new ComponentInformation("SQL Server Global Settings Storage Provider", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Settings.txt");
 
 		private readonly SqlServerCommandBuilder commandBuilder = new SqlServerCommandBuilder();
 
@@ -69,7 +69,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
 			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Files'";
+			cmd.CommandText = "select [Version] from [Version] where [Component] = 'GlobalSettings'";
 
 			bool exists = false;
 
@@ -97,7 +97,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
 			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Files'";
+			cmd.CommandText = "select [Version] from [Version] where [Component] = 'GlobalSettings'";
 
 			bool exists = false;
 
@@ -123,7 +123,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		private void CreateStandardSchema() {
 			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = Properties.Resources.FilesDatabase;
+			cmd.CommandText = Properties.Resources.GlobalSettingsDatabase;
 
 			cmd.ExecuteNonQuery();
 
@@ -155,7 +155,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		/// <returns>The configuration, or an empty string.</returns>
 		protected override string TryLoadSettingsStorageProviderConfiguration() {
-			return host.GetProviderConfiguration(typeof(SqlServerSettingsStorageProvider).FullName);
+			return "";
 		}
 
 		/// <summary>
@@ -170,6 +170,27 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// </summary>
 		public override string ConfigHelpHtml {
 			get { return "Connection string format:<br /><code>Data Source=<i>Database Address and Instance</i>;Initial Catalog=<i>Database name</i>;User ID=<i>login</i>;Password=<i>password</i>;</code>"; }
+		}
+
+		/// <summary>
+		/// Gets the default users storage provider, when no value is stored in the database.
+		/// </summary>
+		protected override string DefaultUsersStorageProvider {
+			get { return typeof(SqlServerUsersStorageProvider).FullName; }
+		}
+
+		/// <summary>
+		/// Gets the default pages storage provider, when no value is stored in the database.
+		/// </summary>
+		protected override string DefaultPagesStorageProvider {
+			get { return typeof(SqlServerPagesStorageProvider).FullName; }
+		}
+
+		/// <summary>
+		/// Gets the default files storage provider, when no value is stored in the database.
+		/// </summary>
+		protected override string DefaultFilesStorageProvider {
+			get { return typeof(SqlServerFilesStorageProvider).FullName; }
 		}
 
 	}

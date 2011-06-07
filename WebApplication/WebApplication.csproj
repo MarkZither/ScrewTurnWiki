@@ -2752,6 +2752,10 @@
       <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
       <Name>SearchEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SqlServerProviders\SqlServerProviders.csproj">
+      <Project>{ECB488D9-C8E9-41E0-BE27-27F41F76F8A0}</Project>
+      <Name>SqlServerProviders</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="AclActionsSelector.ascx" />

@@ -87,6 +87,34 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
+        ///create table [Setting] (
+        ///	[Name] varchar(100) not null,
+        ///	[Value] nvarchar(4000) not null,
+        ///	constraint [PK_Setting] primary key clustered ([Name])
+        ///)
+        ///
+        ///create table [Log] (
+        ///	[Id] int not null identity,
+        ///	[DateTime] datetime not null,
+        ///	[EntryType] char not null,
+        ///	[User] nvarchar(100) not null,
+        ///	[Message] nvarchar(4000) not null,
+        ///	[Wiki] nvarchar(100) not null,
+        ///	constraint [PK_Log] primary key clustered ([Id])
+        ///)
+        ///
+        ///create table [MetaDataItem] (
+        ///	[Name] varchar(100) not null,
+        ///	[Tag] nvarchar(100) [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string GlobalSettingsDatabase {
+            get {
+                return ResourceManager.GetString("GlobalSettingsDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
         ///create table [Namespace] (
         ///	[Name] nvarchar(100) not null,
         ///	[DefaultPage] nvarchar(200),
@@ -153,13 +181,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         ///	[EntryType] char not null,
         ///	[User] nvarchar(100) not null,
         ///	[Message] nvarchar(4000) not null,
+        ///	[Wiki] nvarchar(100) not null,
         ///	constraint [PK_Log] primary key clustered ([Id])
         ///)
         ///
         ///create table [MetaDataItem] (
         ///	[Name] varchar(100) not null,
-        ///	[Tag] nvarchar(100) not null,
-        ///	[Data] nvarchar(4000 [rest of string was truncated]&quot;;.
+        ///	[Tag] nvarchar(100) [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SettingsDatabase {
             get {

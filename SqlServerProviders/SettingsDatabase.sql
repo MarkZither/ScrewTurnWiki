@@ -5,16 +5,6 @@ create table [Setting] (
 	constraint [PK_Setting] primary key clustered ([Name])
 )
 
-create table [Log] (
-	[Id] int not null identity,
-	[DateTime] datetime not null,
-	[EntryType] char not null,
-	[User] nvarchar(100) not null,
-	[Message] nvarchar(4000) not null,
-	[Wiki] nvarchar(100) not null,
-	constraint [PK_Log] primary key clustered ([Id])
-)
-
 create table [MetaDataItem] (
 	[Name] varchar(100) not null,
 	[Tag] nvarchar(100) not null,
@@ -32,12 +22,6 @@ create table [RecentChange] (
 	[Change] char not null,
 	[Description] nvarchar(4000),
 	constraint [PK_RecentChange] primary key clustered ([Id])
-)
-
-create table [PluginAssembly] (
-	[Name] varchar(100) not null,
-	[Assembly] varbinary(max) not null,
-	constraint [PK_PluginAssembly] primary key clustered ([Name])
 )
 
 create table [PluginStatus] (

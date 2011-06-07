@@ -133,12 +133,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <summary>
 		/// Creates or updates the database schema if necessary.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		protected override void CreateOrUpdateDatabaseIfNecessary(string wiki) {
+		protected override void CreateOrUpdateDatabaseIfNecessary() {
 			if(!SchemaExists()) {
 				// Verify if an upgrade from version 2.0 is possible
 				if(SchemaAllowsUpgradeFrom20()) {
-					UpgradeFrom20(wiki);
+					UpgradeFrom20();
 				}
 				else {
 					// If not, create the standard schema
@@ -167,8 +166,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// <summary>
 		/// Upgrades the database schema and data from version 2.0.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		private void UpgradeFrom20(string wiki) {
+		private void UpgradeFrom20() {
 			// 1. Load all user data in memory
 			// 2. Rename old tables so they won't get in the way but the can still be recovered (_v2)
 			// 3. Create new schema
