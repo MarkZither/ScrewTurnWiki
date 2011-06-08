@@ -153,7 +153,9 @@
     <None Include="SettingsDatabase.sql">
       <SubType>Designer</SubType>
     </None>
-    <None Include="UsersDatabase.sql" />
+    <None Include="UsersDatabase.sql">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

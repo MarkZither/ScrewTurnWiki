@@ -155,8 +155,8 @@ INSERT INTO [User] ([Username], [PasswordHash], [Email], [DateTime], [Active], [
 
 			MockRepository mocks = new MockRepository();
 			IHostV40 host = mocks.DynamicMock<IHostV40>();
-			Expect.Call(host.GetSettingValue(null, SettingName.AdministratorsGroup)).Return("Administrators").Repeat.Once();
-			Expect.Call(host.GetSettingValue(null, SettingName.UsersGroup)).Return("Users").Repeat.Once();
+			Expect.Call(host.GetSettingValue("root", SettingName.AdministratorsGroup)).Return("Administrators").Repeat.Once();
+			Expect.Call(host.GetSettingValue("root", SettingName.UsersGroup)).Return("Users").Repeat.Once();
 
 			Expect.Call(host.UpgradeSecurityFlagsToGroupsAcl(null, null, null)).IgnoreArguments().Repeat.Times(1).Return(true);
 

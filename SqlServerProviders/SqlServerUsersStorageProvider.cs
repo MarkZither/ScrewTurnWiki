@@ -7,14 +7,14 @@ using ScrewTurn.Wiki.PluginFramework;
 using System.Data.SqlClient;
 
 namespace ScrewTurn.Wiki.Plugins.SqlServer {
-	
+
 	/// <summary>
 	/// Implements a SQL Server-based users storage provider.
 	/// </summary>
 	public class SqlServerUsersStorageProvider : SqlUsersStorageProviderBase, IUsersStorageProviderV40 {
 
 		private readonly ComponentInformation info = new ComponentInformation("SQL Server Users Storage Provider", "Threeplicate Srl", "3.0.1.471", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/SQLServerProv/Users.txt");
-		
+
 		private readonly SqlServerCommandBuilder commandBuilder = new SqlServerCommandBuilder();
 
 		private const int CurrentSchemaVersion = 3000;
@@ -171,6 +171,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			// 2. Rename old tables so they won't get in the way but the can still be recovered (_v2)
 			// 3. Create new schema
 			// 4. Add new users and default groups (admins, users)
+			wiki = "root";
 
 			SqlCommand cmd = GetCommand(connString);
 			cmd.CommandText = "select * from [User]";
@@ -212,7 +213,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
 			for(int i = 0; i < newUsers.Count; i++) {
 				cmd = GetCommand(connString);
-				cmd.CommandText = "insert into [User] ([Username], [PasswordHash], [Email], [Active], [DateTime]) values (@Username, @PasswordHash, @Email, @Active, @DateTime)";
+				cmd.CommandText = "insert into [User] ([Wiki], [Username], [PasswordHash], [Email], [Active], [DateTime]) values (@Wiki, @Username, @PasswordHash, @Email, @Active, @DateTime)";
+				cmd.Parameters.Add(new SqlParameter("@Wiki", wiki));
 				cmd.Parameters.Add(new SqlParameter("@Username", newUsers[i].Username));
 				cmd.Parameters.Add(new SqlParameter("@PasswordHash", passwordHashes[i]));
 				cmd.Parameters.Add(new SqlParameter("@Email", newUsers[i].Email));

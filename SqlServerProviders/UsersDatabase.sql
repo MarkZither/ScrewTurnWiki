@@ -1,37 +1,41 @@
 
 create table [User] (
+	[Wiki] varchar(100) not null,
 	[Username] nvarchar(100) not null,
 	[PasswordHash] varchar(100) not null,
 	[DisplayName] nvarchar(150),
 	[Email] varchar(100) not null,
 	[Active] bit not null,
 	[DateTime] datetime not null,
-	constraint [PK_User] primary key clustered ([Username])
+	constraint [PK_User] primary key clustered ([Wiki], [Username])
 )
 
 create table [UserGroup] (
+	[Wiki] varchar(100) not null,
 	[Name] nvarchar(100) not null,
 	[Description] nvarchar(150),
-	constraint [PK_UserGroup] primary key clustered ([Name])
+	constraint [PK_UserGroup] primary key clustered ([Wiki], [Name])
 )
 
 create table [UserGroupMembership] (
-	[User] nvarchar(100) not null
-		constraint [FK_UserGroupMembership_User] references [User]([Username])
+	[Wiki] varchar(100) not null,
+	[User] nvarchar(100) not null,
+	[UserGroup] nvarchar(100) not null,
+	constraint [FK_UserGroupMembership_User] foreign key ([Wiki], [User]) references [User]([Wiki], [UserName])
 		on delete cascade on update cascade,
-	[UserGroup] nvarchar(100) not null
-		constraint [FK_UserGroupMembership_UserGroup] references [UserGroup]([Name])
+	constraint [FK_UserGroupMembership_UserGroup] foreign key ([Wiki], [UserGroup]) references [UserGroup]([Wiki], [Name])
 		on delete cascade on update cascade,
-	constraint [PK_UserGroupMembership] primary key clustered ([User], [UserGroup])
+	constraint [PK_UserGroupMembership] primary key clustered ([Wiki], [User], [UserGroup])
 )
 
 create table [UserData] (
-	[User] nvarchar(100) not null
-		constraint [FK_UserData_User] references [User]([Username])
-		on delete cascade on update cascade,
+	[Wiki] varchar(100) not null,
+	[User] nvarchar(100) not null,
 	[Key] nvarchar(100) not null,
 	[Data] nvarchar(4000) not null,
-	constraint [PK_UserData] primary key clustered ([User], [Key])
+	constraint [FK_UserData_User] foreign key ([Wiki], [User]) references [User]([Wiki], [UserName])
+		on delete cascade on update cascade,
+	constraint [PK_UserData] primary key clustered ([Wiki], [User], [Key])
 )
 
 if (select count(*) from sys.tables where [Name] = 'Version') = 0

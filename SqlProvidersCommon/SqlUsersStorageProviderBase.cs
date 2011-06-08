@@ -37,12 +37,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			QueryBuilder queryBuilder = QueryBuilder.NewQuery(builder);
 			string query = queryBuilder.SelectFrom(
-				"User", "UserGroupMembership", "Username", "User", Join.LeftJoin,
+				"User", "UserGroupMembership", new string[] { "Wiki", "Username" }, new string[] { "Wiki", "User" }, Join.LeftJoin,
 				new string[] { "Username", "DisplayName", "Email", "Active", "DateTime" },
 				new string[] { "UserGroup" });
+			query = queryBuilder.Where(query, "User", "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.OrderBy(query, new[] { "User_Username" }, new[] { Ordering.Asc });
 
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			DbDataReader reader = ExecuteReader(command);
 
@@ -118,10 +119,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 
 			string query = QueryBuilder.NewQuery(builder).InsertInto("User",
-				new string[] { "Username", "PasswordHash", "DisplayName", "Email", "Active", "DateTime" },
-				new string[] { "Username", "PasswordHash", "DisplayName", "Email", "Active", "DateTime" });
+				new string[] { "Wiki", "Username", "PasswordHash", "DisplayName", "Email", "Active", "DateTime" },
+				new string[] { "Wiki", "Username", "PasswordHash", "DisplayName", "Email", "Active", "DateTime" });
 
-			List<Parameter> parameters = new List<Parameter>(6);
+			List<Parameter> parameters = new List<Parameter>(7);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 			parameters.Add(new Parameter(ParameterType.String, "PasswordHash", Hash.Compute(password)));
 			if(string.IsNullOrEmpty(displayName)) parameters.Add(new Parameter(ParameterType.String, "DisplayName", DBNull.Value));
@@ -151,10 +153,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("UserGroupMembership", new string[] { "UserGroup" });
-			query = queryBuilder.Where(query, "User", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "User", WhereOperator.Equals, "Username");
 			queryBuilder.OrderBy(query, new[] { "UserGroup_Name" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -186,10 +190,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("UserGroupMembership", new string[] { "UserGroup" });
-			query = queryBuilder.Where(query, "User", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "User", WhereOperator.Equals, "Username");
 			queryBuilder.OrderBy(query, new[] { "UserGroup_Name" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
@@ -243,9 +249,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					new string[] { "PasswordHash", "DisplayName", "Email", "Active", },
 					new string[] { "PasswordHash", "DisplayName", "Email", "Active", });
 			}
-			query = queryBuilder.Where(query, "Username", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Username", WhereOperator.Equals, "Username");
 
-			List<Parameter> parameters = new List<Parameter>(5);
+			List<Parameter> parameters = new List<Parameter>(6);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			if(!string.IsNullOrEmpty(newPassword)) {
 				parameters.Add(new Parameter(ParameterType.String, "PasswordHash", Hash.Compute(newPassword)));
 			}
@@ -285,9 +293,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("User");
-			query = queryBuilder.Where(query, "Username", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Username", WhereOperator.Equals, "Username");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", user.Username));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -306,11 +316,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			QueryBuilder queryBuilder = QueryBuilder.NewQuery(builder);
 			string query = queryBuilder.SelectFrom(
-				"UserGroup", "UserGroupMembership", "Name", "UserGroup", Join.LeftJoin,
+				"UserGroup", "UserGroupMembership", new string[] { "Wiki", "Name" }, new string[] { "Wiki", "UserGroup" }, Join.LeftJoin,
 				new string[] { "Name", "Description" }, new string[] { "User" });
+			query = queryBuilder.Where(query, "UserGroup", "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.OrderBy(query, new[] { "UserGroup_Name", "UserGroupMembership_User" }, new[] { Ordering.Asc, Ordering.Asc });
 
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			DbDataReader reader = ExecuteReader(command);
 
@@ -373,9 +384,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 
 			string query = QueryBuilder.NewQuery(builder).InsertInto("UserGroup",
-				new string[] { "Name", "Description" }, new string[] { "Name", "Description" });
+				new string[] { "Wiki", "Name", "Description" }, new string[] { "Wiki", "Name", "Description" });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Description", description));
 
@@ -400,10 +412,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("UserGroupMembership", new string[] { "User" });
-			query = queryBuilder.Where(query, "UserGroup", WhereOperator.Equals, "UserGroup");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "UserGroup", WhereOperator.Equals, "UserGroup");
 			query = queryBuilder.OrderBy(query, new[] { "User" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "UserGroup", group));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -435,10 +449,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("UserGroupMembership", new string[] { "User" });
-			query = queryBuilder.Where(query, "UserGroup", WhereOperator.Equals, "UserGroup");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "UserGroup", WhereOperator.Equals, "UserGroup");
 			query = queryBuilder.OrderBy(query, new[] { "User" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "UserGroup", group));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
@@ -478,9 +494,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.Update("UserGroup",
 				new string[] { "Description" }, new string[] { "Description" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Description", description));
 			parameters.Add(new Parameter(ParameterType.String, "Name", group.Name));
 
@@ -514,9 +532,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("UserGroup");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", group.Name));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -537,9 +557,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectCountFrom("User");
-			query = queryBuilder.Where(query, "Username", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Username", WhereOperator.Equals, "Username");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -560,9 +582,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectCountFrom("User");
-			query = queryBuilder.Where(query, "Username", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Username", WhereOperator.Equals, "Username");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
@@ -582,9 +606,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("UserGroupMembership");
-			query = queryBuilder.Where(query, "User", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "User", WhereOperator.Equals, "Username");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -618,10 +644,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			RemoveUserGroupMembership(transaction, user.Username);
 
 			string query = QueryBuilder.NewQuery(builder).InsertInto("UserGroupMembership",
-				new string[] { "User", "UserGroup" }, new string[] { "User", "UserGroup" });
+				new string[] { "Wiki", "User", "UserGroup" }, new string[] { "Wiki", "User", "UserGroup" });
 
 			foreach(string group in groups) {
-				List<Parameter> parameters = new List<Parameter>(2);
+				List<Parameter> parameters = new List<Parameter>(3);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "User", user.Username));
 				parameters.Add(new Parameter(ParameterType.String, "UserGroup", group));
 
@@ -662,15 +689,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom(
-				"User", "UserGroupMembership", "Username", "User", Join.LeftJoin,
+				"User", "UserGroupMembership", new string[] { "Wiki", "Username" }, new string[] { "Wiki", "User" }, Join.LeftJoin,
 				new string[] { "Username", "PasswordHash", "DisplayName", "Email", "Active", "DateTime" },
 				new string[] { "UserGroup" });
-			query = queryBuilder.Where(query, "User", "Username", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "User", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "User", "Username", WhereOperator.Equals, "Username");
 			query = queryBuilder.AndWhere(query, "User", "PasswordHash", WhereOperator.Equals, "PasswordHash");
 
 			string providedPasswordHash = Hash.Compute(password);
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 			parameters.Add(new Parameter(ParameterType.String, "PasswordHash", providedPasswordHash));
 
@@ -702,7 +731,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						// Create user
 						result = new UserInfo(realUsername, displayName, email, active, dateTime, this);
 					}
-					
+
 					// Keep reading groups
 					if(!IsDBNull(reader, "UserGroupMembership_UserGroup")) {
 						groups.Add(reader["UserGroupMembership_UserGroup"] as string);
@@ -756,12 +785,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom(
-				"User", "UserGroupMembership", "Username", "User", Join.LeftJoin,
+				"User", "UserGroupMembership", new string[] { "Wiki", "Username" }, new string[] { "Wiki", "User" }, Join.LeftJoin,
 				new string[] { "Username", "DisplayName", "Email", "Active", "DateTime" },
 				new string[] { "UserGroup" });
-			query = queryBuilder.Where(query, "User", "Username", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "User", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "User", "Username", WhereOperator.Equals, "Username");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -823,13 +854,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom(
-				"User", "UserGroupMembership", "Username", "User", Join.LeftJoin,
+				"User", "UserGroupMembership", new string[] { "Wiki", "Username" }, new string[] { "Wiki", "User" }, Join.LeftJoin,
 				new string[] { "Username", "DisplayName", "Email", "Active", "DateTime" },
 				new string[] { "UserGroup" });
-			query = queryBuilder.Where(query, "User", "Email", WhereOperator.Equals, "Email");
+			query = queryBuilder.Where(query, "User", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "User", "Email", WhereOperator.Equals, "Email");
 
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Email", email));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -908,10 +941,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("UserData");
-			query = queryBuilder.Where(query, "User", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "User", WhereOperator.Equals, "Username");
 			query = queryBuilder.AndWhere(query, "Key", WhereOperator.Equals, "Key");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 			parameters.Add(new Parameter(ParameterType.String, "Key", key));
 
@@ -948,9 +983,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(done) {
 				if(value != null) {
 					string query = QueryBuilder.NewQuery(builder).InsertInto("UserData",
-						new string[] { "User", "Key", "Data" }, new string[] { "Username", "Key", "Data" });
+						new string[] { "Wiki", "User", "Key", "Data" }, new string[] { "Wiki", "Username", "Key", "Data" });
 
-					List<Parameter> parameters = new List<Parameter>(3);
+					List<Parameter> parameters = new List<Parameter>(4);
+					parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 					parameters.Add(new Parameter(ParameterType.String, "Username", user.Username));
 					parameters.Add(new Parameter(ParameterType.String, "Key", key));
 					parameters.Add(new Parameter(ParameterType.String, "Data", value));
@@ -991,10 +1027,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("UserData", new string[] { "Data" });
-			query = queryBuilder.Where(query, "User", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "User", WhereOperator.Equals, "Username");
 			query = queryBuilder.AndWhere(query, "Key", WhereOperator.Equals, "Key");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", user.Username));
 			parameters.Add(new Parameter(ParameterType.String, "Key", key));
 
@@ -1030,9 +1068,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			// Sorting order is not relevant
 			string query = queryBuilder.SelectFrom("UserData", new string[] { "Key", "Data" });
-			query = queryBuilder.Where(query, "User", WhereOperator.Equals, "Username");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "User", WhereOperator.Equals, "Username");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", user.Username));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -1070,10 +1110,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string query = queryBuilder.SelectFrom("User", "UserData", "Username", "User", Join.RightJoin,
 				new string[] { "Username", "DisplayName", "Email", "Active", "DateTime" }, new string[] { "Data" },
 				"UserGroupMembership", "User", Join.LeftJoin, new string[] { "UserGroup" });
-			query = queryBuilder.Where(query, "UserData", "Key", WhereOperator.Equals, "Key");
+			query = queryBuilder.Where(query, "User", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "UserData", "Key", WhereOperator.Equals, "Key");
 			query = queryBuilder.OrderBy(query, new[] { "User_Username" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Key", key));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
