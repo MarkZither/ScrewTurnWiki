@@ -68,7 +68,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// Tries to load the configuration of the corresponding settings storage provider.
 		/// </summary>
 		/// <returns>The configuration, or an empty string.</returns>
-		protected abstract string TryLoadSettingsStorageProviderConfiguration();
+		protected abstract string TryLoadGlobalSettingsStorageProviderConfiguration();
 
 		/// <summary>
 		/// Gets the wiki that has been used to initialize the current instance of the provider.
@@ -106,6 +106,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
+			this.host = host;
+
 			if(config.Length == 0) {
 				// Try to load v2 provider configuration
 				config = TryLoadV2Configuration();
@@ -113,7 +115,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			if(config == null || config.Length == 0) {
 				// Try to load Settings Storage Provider configuration
-				config = TryLoadSettingsStorageProviderConfiguration();
+				config = TryLoadGlobalSettingsStorageProviderConfiguration();
 			}
 
 			if(config == null) config = "";

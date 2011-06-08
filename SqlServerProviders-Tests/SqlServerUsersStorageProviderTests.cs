@@ -100,9 +100,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		[TestCase("", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase("blah", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;", ExpectedException = typeof(InvalidConfigurationException))]
-		public void Init_InvalidConnString(string c) {
-			IUsersStorageProviderV40 prov = GetProvider();
-			prov.Init(MockHost(), c, null);
+		public void SetUp_InvalidConnString(string c) {
+			SqlServerUsersStorageProvider prov = new SqlServerUsersStorageProvider();
+			prov.SetUp(MockHost(), c);
 		}
 
 		[Test]

@@ -151,11 +151,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		}
 
 		/// <summary>
-		/// Tries to load the configuration of the corresponding settings storage provider.
+		/// Tries to load the configuration of the corresponding global settings storage provider.
 		/// </summary>
 		/// <returns>The configuration, or an empty string.</returns>
-		protected override string TryLoadSettingsStorageProviderConfiguration() {
-			return host.GetProviderConfiguration(typeof(SqlServerSettingsStorageProvider).FullName);
+		protected override string TryLoadGlobalSettingsStorageProviderConfiguration() {
+			return host.GetProviderConfiguration(typeof(SqlServerGlobalSettingsStorageProvider).FullName);
 		}
 
 		/// <summary>

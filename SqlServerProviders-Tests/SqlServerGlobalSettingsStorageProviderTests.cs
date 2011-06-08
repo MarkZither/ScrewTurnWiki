@@ -11,14 +11,14 @@ using ScrewTurn.Wiki.PluginFramework;
 namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 	[TestFixture]
-	public class SqlServerSettingsStorageProviderTests : SettingsStorageProviderTestScaffolding {
+	public class SqlServerGlobalSettingsStorageProviderTests : GlobalSettingsStorageProviderTestScaffolding {
 
 		//private const string ConnString = "Data Source=(local)\\SQLExpress;User ID=sa;Password=password;";
 		private const string ConnString = "Data Source=(local)\\SQLExpress;Integrated Security=SSPI;";
 		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
 
-		public override ISettingsStorageProviderV40 GetProvider() {
-			SqlServerSettingsStorageProvider prov = new SqlServerSettingsStorageProvider();
+		public override IGlobalSettingsStorageProviderV40 GetProvider() {
+			SqlServerGlobalSettingsStorageProvider prov = new SqlServerGlobalSettingsStorageProvider();
 			prov.SetUp(MockHost(), ConnString + InitialCatalog);
 			prov.Init(MockHost(), ConnString + InitialCatalog, "wiki1");
 
@@ -47,7 +47,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 			cn.Open();
 
 			SqlCommand cmd = cn.CreateCommand();
-			cmd.CommandText = "use [ScrewTurnWikiTest]; delete from [AclEntry]; delete from [OutgoingLink]; delete from [PLuginStatus]; delete from [RecentChange]; delete from [MetaDataItem]; delete from [Setting];";
+			cmd.CommandText = "use [ScrewTurnWikiTest]; delete from [PluginAssembly]; delete from [Log]; delete from [GlobalSetting];";
 			try {
 				cmd.ExecuteNonQuery();
 			}
@@ -87,7 +87,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		[Test]
 		public void Init() {
-			ISettingsStorageProviderV40 prov = GetProvider();
+			IGlobalSettingsStorageProviderV40 prov = GetProvider();
 			prov.Init(MockHost(), ConnString + InitialCatalog, "-");
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
@@ -96,8 +96,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		[TestCase("", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase("blah", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;", ExpectedException = typeof(InvalidConfigurationException))]
-		public void SetUp_InvalidConnString(string c) {
-			SqlServerSettingsStorageProvider prov = new SqlServerSettingsStorageProvider();
+		public void Setup_InvalidConnString(string c) {
+			SqlServerGlobalSettingsStorageProvider prov = new SqlServerGlobalSettingsStorageProvider();
 			prov.SetUp(MockHost(), c);
 		}
 

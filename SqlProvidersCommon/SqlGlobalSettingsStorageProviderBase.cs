@@ -58,7 +58,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.SelectFrom("Setting");
+			string query = queryBuilder.SelectFrom("GlobalSetting");
 			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(1);
@@ -112,7 +112,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.DeleteFrom("Setting");
+			string query = queryBuilder.DeleteFrom("GlobalSetting");
 			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(1);
@@ -127,7 +127,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				return false; // Deletion command failed (0-1 are OK)
 			}
 
-			query = queryBuilder.InsertInto("Setting",
+			query = queryBuilder.InsertInto("GlobalSetting",
 				new string[] { "Name", "Value" }, new string[] { "Name", "Value" });
 			parameters = new List<Parameter>(2);
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
@@ -151,7 +151,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 
 			// Sorting order is not relevant
-			string query = QueryBuilder.NewQuery(builder).SelectFrom("Setting");
+			string query = QueryBuilder.NewQuery(builder).SelectFrom("GlobalSetting");
 
 			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
 
