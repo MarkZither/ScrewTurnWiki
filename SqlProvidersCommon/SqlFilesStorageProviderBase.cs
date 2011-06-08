@@ -44,9 +44,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectCountFrom("Directory");
-			query = queryBuilder.Where(query, "FullPath", WhereOperator.Equals, "FullPath");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "FullPath", WhereOperator.Equals, "FullPath");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "FullPath", directory));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
@@ -70,9 +72,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectCountFrom("Directory");
-			query = queryBuilder.Where(query, "FullPath", WhereOperator.Equals, "FullPath");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "FullPath", WhereOperator.Equals, "FullPath");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "FullPath", directory));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -108,10 +112,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectCountFrom("File");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", file));
 			parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 
@@ -136,10 +142,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectCountFrom("File");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", file));
 			parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 
@@ -170,10 +178,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("File", new string[] { "Name" });
-			query = queryBuilder.Where(query, "Directory", WhereOperator.Equals, "Directory");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
 			query = queryBuilder.OrderBy(query, new [] { "Name" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
@@ -213,10 +223,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Directory", new string[] { "FullPath" });
-			query = queryBuilder.Where(query, "Parent", WhereOperator.Equals, "Parent");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Parent", WhereOperator.Equals, "Parent");
 			query = queryBuilder.OrderBy(query, new[] { "FullPath" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Parent", directory));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
@@ -256,11 +268,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Directory", new string[] { "FullPath" });
-			query = queryBuilder.Where(query, "Parent", WhereOperator.Equals, "Parent");
-
-			List<Parameter> parameters = new List<Parameter>(1);
-			parameters.Add(new Parameter(ParameterType.String, "Parent", directory));
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Parent", WhereOperator.Equals, "Parent");
 			query = queryBuilder.OrderBy(query, new[] { "FullPath" }, new[] { Ordering.Asc });
+
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Parent", directory));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
@@ -351,10 +365,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			if(fileExists) {
 				query = queryBuilder.Update("File", new string[] { "Size", "LastModified", "Data" }, new string[] { "Size", "LastModified", "Data" });
-				query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+				query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+				query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 				query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
 
-				parameters = new List<Parameter>(5);
+				parameters = new List<Parameter>(6);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.Int64, "Size", (long)size));
 				parameters.Add(new Parameter(ParameterType.DateTime, "LastModified", DateTime.Now));
 				parameters.Add(new Parameter(ParameterType.ByteArray, "Data", fileData));
@@ -362,10 +378,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 			}
 			else {
-				query = queryBuilder.InsertInto("File", new string[] { "Name", "Directory", "Size", "Downloads", "LastModified", "Data" },
-					new string[] { "Name", "Directory", "Size", "Downloads", "LastModified", "Data" });
+				query = queryBuilder.InsertInto("File", new string[] { "Wiki", "Name", "Directory", "Size", "Downloads", "LastModified", "Data" },
+					new string[] { "Wiki", "Name", "Directory", "Size", "Downloads", "LastModified", "Data" });
 
-				parameters = new List<Parameter>(6);
+				parameters = new List<Parameter>(7);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Name", filename));
 				parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 				parameters.Add(new Parameter(ParameterType.Int64, "Size", (long)size));
@@ -415,10 +432,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("File", new string[] { "Size", "Data" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", filename));
 			parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 
@@ -449,10 +468,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(countHit) {
 				// Update download count
 				query = queryBuilder.UpdateIncrement("File", "Downloads", 1);
-				query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+				query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+				query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 				query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
 
-				parameters = new List<Parameter>(2);
+				parameters = new List<Parameter>(3);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Name", filename));
 				parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 
@@ -490,10 +511,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			SplitFileFullName(fullName, out directory, out filename);
 
 			string query = queryBuilder.Update("File", new string[] { "Downloads" }, new string[] { "Downloads" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", filename));
 			parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 			parameters.Add(new Parameter(ParameterType.Int32, "Downloads", count));
@@ -521,10 +544,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			SplitFileFullName(fullName, out directory, out filename);
 
 			string query = queryBuilder.SelectFrom("File", new string[] { "Size", "Downloads", "LastModified" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", filename));
 			parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 
@@ -573,10 +598,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			SplitFileFullName(fullName, out directory, out filename);
 
 			string query = queryBuilder.DeleteFrom("File");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", filename));
 			parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 
@@ -623,10 +650,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			SplitFileFullName(newFullName, out newDirectory, out newFilename);
 
 			string query = queryBuilder.Update("File", new string[] { "Name" }, new string[] { "NewName" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "OldName");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "OldName");
 			query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "OldDirectory");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewName", newFilename));
 			parameters.Add(new Parameter(ParameterType.String, "OldName", oldFilename));
 			parameters.Add(new Parameter(ParameterType.String, "OldDirectory", oldDirectory));
@@ -672,9 +701,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				throw new ArgumentException("Directory already exists", "name");
 			}
 
-			string query = QueryBuilder.NewQuery(builder).InsertInto("Directory", new string[] { "FullPath", "Parent" }, new string[] { "FullPath", "Parent" });
+			string query = QueryBuilder.NewQuery(builder).InsertInto("Directory", new string[] { "Wiki", "FullPath", "Parent" }, new string[] { "Wiki", "FullPath", "Parent" });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "FullPath", newDirectoryFullPath));
 			parameters.Add(new Parameter(ParameterType.String, "Parent", path));
 
@@ -705,9 +735,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Directory");
-			query = queryBuilder.Where(query, "FullPath", WhereOperator.Equals, "FullPath");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "FullPath", WhereOperator.Equals, "FullPath");
 
 			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));;
 			parameters.Add(new Parameter(ParameterType.String, "FullPath", fullPath));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -780,9 +812,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Directory", new string[] { "FullPath" }, new string[] { "NewDirectory1" });
-			query = queryBuilder.Where(query, "FullPath", WhereOperator.Equals, "OldDirectory1");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "FullPath", WhereOperator.Equals, "OldDirectory1");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewDirectory1", newFullPath));
 			parameters.Add(new Parameter(ParameterType.String, "OldDirectory1", oldFullPath));
 
@@ -853,10 +887,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Attachment", new string[] { "Page" });
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.GroupBy(query, new[] { "Page" });
 			query = queryBuilder.OrderBy(query, new[] { "Page" }, new[] { Ordering.Asc });
 
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			DbDataReader reader = ExecuteReader(command);
 
@@ -885,10 +920,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Attachment", new string[] { "Name" });
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -920,11 +957,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Attachment", new string[] { "Name" });
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
-
-			List<Parameter> parameters = new List<Parameter>(1);
-			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
+
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
 
@@ -974,10 +1013,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectCountFrom("Attachment");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Page", page.FullName));
 
@@ -1000,10 +1041,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectCountFrom("Attachment");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Page", page.FullName));
 
@@ -1061,10 +1104,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			if(attachmentExists) {
 				query = queryBuilder.Update("Attachment", new string[] { "Size", "LastModified", "Data" }, new string[] { "Size", "LastModified", "Data" });
-				query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+				query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+				query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 				query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
-				parameters = new List<Parameter>(5);
+				parameters = new List<Parameter>(6);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.Int64, "Size", (long)size));
 				parameters.Add(new Parameter(ParameterType.DateTime, "LastModified", DateTime.Now));
 				parameters.Add(new Parameter(ParameterType.ByteArray, "Data", attachmentData));
@@ -1072,10 +1117,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
 			}
 			else {
-				query = queryBuilder.InsertInto("Attachment", new string[] { "Name", "Page", "Size", "Downloads", "LastModified", "Data" },
-					new string[] { "Name", "Page", "Size", "Downloads", "LastModified", "Data" });
+				query = queryBuilder.InsertInto("Attachment", new string[] { "Wiki", "Name", "Page", "Size", "Downloads", "LastModified", "Data" },
+					new string[] { "Wiki", "Name", "Page", "Size", "Downloads", "LastModified", "Data" });
 
-				parameters = new List<Parameter>(6);
+				parameters = new List<Parameter>(7);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Name", name));
 				parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
 				parameters.Add(new Parameter(ParameterType.Int64, "Size", (long)size));
@@ -1124,10 +1170,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Attachment", new string[] { "Size", "Data" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
 
@@ -1158,10 +1206,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(countHit) {
 				// Update download count
 				query = queryBuilder.UpdateIncrement("Attachment", "Downloads", 1);
-				query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+				query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+				query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 				query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
-				parameters = new List<Parameter>(2);
+				parameters = new List<Parameter>(3);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Name", name));
 				parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
 
@@ -1198,10 +1248,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Attachment", new string[] { "Downloads" }, new string[] { "Downloads" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
 			parameters.Add(new Parameter(ParameterType.Int32, "Downloads", count));
@@ -1228,10 +1280,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Attachment", new string[] { "Size", "Downloads", "LastModified" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
 
@@ -1279,10 +1333,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Attachment");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
 
@@ -1328,10 +1384,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Attachment", new string[] { "Name" }, new string[] { "NewName" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "OldName");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "OldName");
 			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewName", newName));
 			parameters.Add(new Parameter(ParameterType.String, "OldName", oldName));
 			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
@@ -1368,9 +1426,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Attachment", new string[] { "Page" }, new string[] { "NewPage" });
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "OldPage");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "OldPage");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewPage", newPage.FullName));
 			parameters.Add(new Parameter(ParameterType.String, "OldPage", oldPage.FullName));
 
