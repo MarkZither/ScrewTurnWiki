@@ -209,15 +209,28 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 			CreateStandardSchema();
 
 			cmd = GetCommand(connString);
-			cmd.CommandText = "insert into [Snippet] select [Name], [Content] from [Snippet_v2]";
-			cmd.ExecuteNonQuery();
+			cmd.CommandText = "select * from [Snippet_v2]";
+			using(SqlDataReader reader = cmd.ExecuteReader()) {
+				SqlCommand insertCmd = GetCommand(connString);
+				insertCmd.CommandText = "insert into [Snippet] ([Wiki], [Name], [Content]) values ('root', @Name, @Content)";
+
+				while(reader.Read()) {
+					insertCmd.Parameters.Clear();
+					insertCmd.Parameters.Add(new SqlParameter("@Name", reader["Name"] as string));
+					insertCmd.Parameters.Add(new SqlParameter("@Content", (string)reader["Content"]));
+
+					insertCmd.ExecuteNonQuery();
+				}
+
+				insertCmd.Connection.Close();
+			}
 
 			Dictionary<string, char> pageStatus = new Dictionary<string, char>(500);
 
 			cmd.CommandText = "select * from [Page_v2]";
 			using(SqlDataReader reader = cmd.ExecuteReader()) {
 				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [Page] ([Name], [Namespace], [CreationDateTime]) values (@Name, '', @CreationDateTime)";
+				insertCmd.CommandText = "insert into [Page] ([Wiki], [Name], [Namespace], [CreationDateTime]) values ('root', @Name, '', @CreationDateTime)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
@@ -234,7 +247,7 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 			cmd.CommandText = "select * from [PageContent_v2]";
 			using(SqlDataReader reader = cmd.ExecuteReader()) {
 				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [PageContent] ([Page], [Namespace], [Revision], [Title], [User], [LastModified], [Comment], [Content], [Description]) values (@Page, '', @Revision, @Title, @User, @LastModified, @Comment, @Content, NULL)";
+				insertCmd.CommandText = "insert into [PageContent] ([Wiki], [Page], [Namespace], [Revision], [Title], [User], [LastModified], [Comment], [Content], [Description]) values ('root', @Page, '', @Revision, @Title, @User, @LastModified, @Comment, @Content, NULL)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
@@ -255,7 +268,7 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 			cmd.CommandText = "select * from [Message_v2]";
 			using(SqlDataReader reader = cmd.ExecuteReader()) {
 				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [Message] ([Page], [Namespace], [Id], [Parent], [Username], [Subject], [DateTime], [Body]) values (@Page, '', @Id, @Parent, @Username, @Subject, @DateTime, @Body)";
+				insertCmd.CommandText = "insert into [Message] ([Wiki], [Page], [Namespace], [Id], [Parent], [Username], [Subject], [DateTime], [Body]) values ('root', @Page, '', @Id, @Parent, @Username, @Subject, @DateTime, @Body)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
@@ -278,7 +291,7 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 			cmd.CommandText = "select * from [Category_v2]";
 			using(SqlDataReader reader = cmd.ExecuteReader()) {
 				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [Category] ([Name], [Namespace]) values (@Name, '')";
+				insertCmd.CommandText = "insert into [Category] ([Wiki], [Name], [Namespace]) values ('root', @Name, '')";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
@@ -293,7 +306,7 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 			cmd.CommandText = "select * from [CategoryBinding_v2]";
 			using(SqlDataReader reader = cmd.ExecuteReader()) {
 				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [CategoryBinding] ([Namespace], [Category], [Page]) values ('', @Category, @Page)";
+				insertCmd.CommandText = "insert into [CategoryBinding] ([Wiki], [Namespace], [Category], [Page]) values ('root', '', @Category, @Page)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();
@@ -309,7 +322,7 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 			cmd.CommandText = "select * from [NavigationPathBinding_v2]";
 			using(SqlDataReader reader = cmd.ExecuteReader()) {
 				SqlCommand insertCmd = GetCommand(connString);
-				insertCmd.CommandText = "insert into [NavigationPath] ([Name], [Namespace], [Page], [Number]) values (@Name, '', @Page, @Number)";
+				insertCmd.CommandText = "insert into [NavigationPath] ([Wiki], [Name], [Namespace], [Page], [Number]) values ('root', @Name, '', @Page, @Number)";
 
 				while(reader.Read()) {
 					insertCmd.Parameters.Clear();

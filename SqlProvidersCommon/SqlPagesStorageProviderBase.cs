@@ -19,7 +19,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private const int CurrentRevision = -1;
 		private const int DraftRevision = -100;
 
-		private string _wiki;
 		private IIndex index;
 
 		private bool alwaysGenerateDocument = false;
@@ -34,7 +33,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public new void Init(IHostV40 host, string config, string wiki) {
 			base.Init(host, config, wiki);
 
-			_wiki = wiki;
 			index = new SqlIndex(new IndexConnector(GetWordFetcher, GetSize, GetCount, ClearIndex, DeleteDataForDocument, SaveDataForDocument, TryFindWord));
 		}
 
@@ -209,21 +207,24 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			long size = 0;
 
 			string query = queryBuilder.SelectCountFrom("IndexDocument");
-			DbCommand command = builder.GetCommand(connection, query, new List<Parameter>());
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			DbCommand command = builder.GetCommand(connection, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 			int rows = ExecuteScalar<int>(command, -1, false);
 
 			if(rows == -1) return 0;
 			size += rows * 118;
 
 			query = queryBuilder.SelectCountFrom("IndexWord");
-			command = builder.GetCommand(connection, query, new List<Parameter>());
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			command = builder.GetCommand(connection, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 			rows = ExecuteScalar<int>(command, -1, false);
 
 			if(rows == -1) return 0;
 			size += rows * 24;
 
 			query = queryBuilder.SelectCountFrom("IndexWordMapping");
-			command = builder.GetCommand(connection, query, new List<Parameter>());
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			command = builder.GetCommand(connection, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 			rows = ExecuteScalar<int>(command, -1, false);
 
 			if(rows == -1) return 0;
@@ -254,8 +255,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			else throw new NotSupportedException("Unsupported element type");
 
 			string query = queryBuilder.SelectCountFrom(elemName);
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 
-			DbCommand command = builder.GetCommand(connection, query, new List<Parameter>());
+			DbCommand command = builder.GetCommand(connection, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 			count = ExecuteScalar<int>(command, -1, true);
 
 			return count;
@@ -274,14 +276,18 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("IndexDocument");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "DocName");
-			List<Parameter> parameters = new List<Parameter>(1);
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "DocName");
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "DocName", document.Name));
 
 			string subQuery = queryBuilder.SelectFrom("IndexWordMapping", new string[] { "Word" });
+			subQuery = queryBuilder.Where(subQuery, "Wiki", WhereOperator.Equals, "Wiki");
 			subQuery = queryBuilder.GroupBy(subQuery, new string[] { "Word" });
 			string query2 = queryBuilder.DeleteFrom("IndexWord");
 			query2 = queryBuilder.WhereNotInSubquery(query2, "IndexWord", "Id", subQuery);
+			query2 = queryBuilder.AndWhere(query2, "Wiki", WhereOperator.Equals, "Wiki");
 
 			query = queryBuilder.AppendForBatch(query, query2);
 
@@ -326,10 +332,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			// Insert the document
 			string query = queryBuilder.InsertInto("IndexDocument",
-				new string[] { "Id", "Name", "Title", "TypeTag", "DateTime" },
-				new string[] { "Id", "Name", "Title", "TypeTag", "DateTime" });
-			
-			List<Parameter> parameters = new List<Parameter>(5);
+				new string[] { "Wiki", "Id", "Name", "Title", "TypeTag", "DateTime" },
+				new string[] { "Wiki", "Id", "Name", "Title", "TypeTag", "DateTime" });
+
+			List<Parameter> parameters = new List<Parameter>(6);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.Int32, "Id", (int)freeDocumentId));
 			parameters.Add(new Parameter(ParameterType.String, "Name", document.Name));
 			parameters.Add(new Parameter(ParameterType.String, "Title", document.Title));
@@ -355,15 +362,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			// Try to blindly insert all words (assumed to be lowercase and clean from diacritics)
 
-			query = queryBuilder.InsertInto("IndexWord", new string[] { "Id", "Text" }, new string[] { "Id", "Text" });
+			query = queryBuilder.InsertInto("IndexWord", new string[] { "Wiki", "Id", "Text" }, new string[] { "Wiki", "Id", "Text" });
 
-			parameters = new List<Parameter>(2);
+			parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.Int32, "Id", 0));
 			parameters.Add(new Parameter(ParameterType.String, "Text", ""));
 
 			foreach(WordInfo word in allWords) {
-				parameters[0].Value = (int)freeWordId;
-				parameters[1].Value = word.Text;
+				parameters[1].Value = (int)freeWordId;
+				parameters[2].Value = word.Text;
 
 				command = builder.GetCommand(transaction, query, parameters);
 
@@ -378,13 +386,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			// Load IDs of all existing words
 			query = queryBuilder.SelectFrom("IndexWord", new string[] { "Id" });
-			query = queryBuilder.Where(query, "Text", WhereOperator.Equals, "Text");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Text", WhereOperator.Equals, "Text");
 
-			parameters = new List<Parameter>(1);
+			parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Text", ""));
 
 			foreach(WordInfo word in existingWords) {
-				parameters[0].Value = word.Text;
+				parameters[1].Value = word.Text;
 
 				command = builder.GetCommand(transaction, query, parameters);
 
@@ -402,10 +412,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			// Insert all mappings
 			query = queryBuilder.InsertInto("IndexWordMapping",
-				new string[] { "Word", "Document", "FirstCharIndex", "WordIndex", "Location" },
-				new string[] { "Word", "Document", "FirstCharIndex", "WordIndex", "Location" });
+				new string[] { "Wiki", "Word", "Document", "FirstCharIndex", "WordIndex", "Location" },
+				new string[] { "Wiki", "Word", "Document", "FirstCharIndex", "WordIndex", "Location" });
 
-			parameters = new List<Parameter>(5);
+			parameters = new List<Parameter>(6);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.Int32, "Word", 0));
 			parameters.Add(new Parameter(ParameterType.Int32, "Document", (int)freeDocumentId));
 			parameters.Add(new Parameter(ParameterType.Int16, "FirstCharIndex", 0));
@@ -413,11 +424,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			parameters.Add(new Parameter(ParameterType.Byte, "Location", 0));
 
 			foreach(WordInfo word in allWords) {
-				parameters[0].Value = (int)wordIds[word.Text];
-				parameters[1].Value = (int)freeDocumentId;
-				parameters[2].Value = (short)word.FirstCharIndex;
-				parameters[3].Value = (short)word.WordIndex;
-				parameters[4].Value = word.Location.Location;
+				parameters[1].Value = (int)wordIds[word.Text];
+				parameters[2].Value = (int)freeDocumentId;
+				parameters[3].Value = (short)word.FirstCharIndex;
+				parameters[4].Value = (short)word.WordIndex;
+				parameters[5].Value = word.Location.Location;
 
 				command = builder.GetCommand(transaction, query, parameters);
 
@@ -447,9 +458,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom(table, new string[] { "Id" });
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.OrderBy(query, new string[] { "Id" }, new Ordering[] { Ordering.Desc });
 
-			DbCommand command = builder.GetCommand(transaction, query, new List<Parameter>());
+			DbCommand command = builder.GetCommand(transaction, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			int id = ExecuteScalar<int>(command, -1, false);
 
@@ -474,9 +486,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("IndexWord", new string[] { "Id" });
-			query = queryBuilder.Where(query, "Text", WhereOperator.Equals, "Text");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Text", WhereOperator.Equals, "Text");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Text", text));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
@@ -490,9 +504,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			// Read all raw mappings
 			query = queryBuilder.SelectFrom("IndexWordMapping");
-			query = queryBuilder.Where(query, "Word", WhereOperator.Equals, "WordId");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Word", WhereOperator.Equals, "WordId");
 
-			parameters = new List<Parameter>(1);
+			parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.Int32, "WordId", wordId));
 
 			command = builder.GetCommand(connection, query, parameters);
@@ -515,9 +531,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			// Find all documents
 			query = queryBuilder.SelectFrom("IndexDocument");
-			query = queryBuilder.Where(query, "Id", WhereOperator.Equals, "DocId");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Id", WhereOperator.Equals, "DocId");
 
-			parameters = new List<Parameter>(1);
+			parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.Int32, "DocId", 0));
 
 			Dictionary<uint, IDocument> documents = new Dictionary<uint, IDocument>(64);
@@ -525,7 +543,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				uint docId = map.DocumentID;
 				if(documents.ContainsKey(docId)) continue;
 
-				parameters[0].Value = (int)docId;
+				parameters[1].Value = (int)docId;
 				command = builder.GetCommand(connection, query, parameters);
 
 				reader = ExecuteReader(command, false);
@@ -568,12 +586,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("IndexWordMapping");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.AppendForBatch(query, queryBuilder.DeleteFrom("IndexWord"));
 			query = queryBuilder.AppendForBatch(query, queryBuilder.DeleteFrom("IndexDocument"));
 
 			DbCommand command = null;
-			if(state == null) command = builder.GetCommand(connString, query, new List<Parameter>());
-			else command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>());
+			if(state == null) command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
+			else command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			ExecuteNonQuery(command, state == null);
 		}
@@ -600,23 +619,23 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				string documentName = PageDocument.GetDocumentName(content.PageInfo);
 
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(_wiki, content.PageInfo, content.Title),
+				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, content.PageInfo, content.Title),
 					PageDocument.StandardTypeTag, content.LastModified);
 
 				// Store the document
 				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
 				int count = index.StoreDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent),
-					content.Keywords, host.PrepareContentForIndexing(_wiki, content.PageInfo, content.Content), transaction);
+					content.Keywords, host.PrepareContentForIndexing(wiki, content.PageInfo, content.Content), transaction);
 
 				if(count == 0 && content.Content.Length > 0) {
 					host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
-						LogEntryType.Warning, null, this, _wiki);
+						LogEntryType.Warning, null, this, wiki);
 				}
 
 				return count;
 			}
 			catch(Exception ex) {
-				host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this, _wiki);
+				host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this, wiki);
 				return 0;
 			}
 		}
@@ -629,7 +648,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private void UnindexPage(PageContent content, DbTransaction transaction) {
 			string documentName = PageDocument.GetDocumentName(content.PageInfo);
 
-			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(_wiki, content.PageInfo, content.Title),
+			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, content.PageInfo, content.Title),
 				PageDocument.StandardTypeTag, content.LastModified);
 			index.RemoveDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent), transaction);
 		}
@@ -666,23 +685,23 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				string documentName = MessageDocument.GetDocumentName(page, id);
 
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(_wiki, null, subject),
+				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, null, subject),
 					MessageDocument.StandardTypeTag, dateTime);
 
 				// Store the document
 				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
 				int count = index.StoreDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null,
-					host.PrepareContentForIndexing(_wiki, null, body), transaction);
+					host.PrepareContentForIndexing(wiki, null, body), transaction);
 
 				if(count == 0 && body.Length > 0) {
 					host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
-						LogEntryType.Warning, null, this, _wiki);
+						LogEntryType.Warning, null, this, wiki);
 				}
 
 				return count;
 			}
 			catch(Exception ex) {
-				host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this, _wiki);
+				host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this, wiki);
 				return 0;
 			}
 		}
@@ -716,7 +735,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string documentName = MessageDocument.GetDocumentName(page, id);
 
-			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(_wiki, null, subject),
+			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, null, subject),
 				MessageDocument.StandardTypeTag, DateTime.Now);
 			index.RemoveDocument(new MessageDocument(page, id, ddoc, TokenizeContent), transaction);
 		}
@@ -736,12 +755,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			// select ... from Namespace left join Page on Namespace.DefaultPage = Page.Name where Namespace.Name = <name> and (Namespace.DefaultPage is null or Page.Namespace = <name>)
-			string query = queryBuilder.SelectFrom("Namespace", "Page", "DefaultPage", "Name", Join.LeftJoin, new string[] { "Name", "DefaultPage" }, new string[] { "CreationDateTime" });
-			query = queryBuilder.Where(query, "Namespace", "Name", WhereOperator.Equals, "Name1");
+			string query = queryBuilder.SelectFrom("Namespace", "Page", new string[] { "Wiki", "DefaultPage" }, new string[] { "Wiki", "Name" }, Join.LeftJoin, new string[] { "Name", "DefaultPage" }, new string[] { "CreationDateTime" });
+			query = queryBuilder.Where(query, "Namespace", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Namespace", "Name", WhereOperator.Equals, "Name1");
 			query = queryBuilder.AndWhere(query, "Namespace", "DefaultPage", WhereOperator.IsNull, null, true, false);
 			query = queryBuilder.OrWhere(query, "Page", "Namespace", WhereOperator.Equals, "Name2", false, true);
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name1", name));
 			parameters.Add(new Parameter(ParameterType.String, "Name2", name));
 
@@ -779,12 +800,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			// select ... from Namespace left join Page on Namespace.DefaultPage = Page.Name where Namespace.Name = <name> and (Namespace.DefaultPage is null or Page.Namespace = <name>)
-			string query = queryBuilder.SelectFrom("Namespace", "Page", "DefaultPage", "Name", Join.LeftJoin, new string[] { "Name", "DefaultPage" }, new string[] { "CreationDateTime" });
-			query = queryBuilder.Where(query, "Namespace", "Name", WhereOperator.Equals, "Name1");
+			string query = queryBuilder.SelectFrom("Namespace", "Page", new string[] { "Wiki", "DefaultPage" }, new string[] { "Wiki", "Name" }, Join.LeftJoin, new string[] { "Name", "DefaultPage" }, new string[] { "CreationDateTime" });
+			query = queryBuilder.Where(query, "Namespace", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Namespace", "Name", WhereOperator.Equals, "Name1");
 			query = queryBuilder.AndWhere(query, "Namespace", "DefaultPage", WhereOperator.IsNull, null, true, false);
 			query = queryBuilder.OrWhere(query, "Page", "Namespace", WhereOperator.Equals, "Name2", false, true);
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name1", name));
 			parameters.Add(new Parameter(ParameterType.String, "Name2", name));
 
@@ -840,13 +863,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			// select ... from Namespace left join Page on Namespace.DefaultPage = Page.Name where Namespace.Name <> '' and (Namespace.DefaultPage is null or Page.Namespace <> '')
-			string query = queryBuilder.SelectFrom("Namespace", "Page", "DefaultPage", "Name", Join.LeftJoin, new string[] { "Name", "DefaultPage" }, new string[] { "CreationDateTime" });
-			query = queryBuilder.Where(query, "Namespace", "Name", WhereOperator.NotEquals, "Empty1");
+			string query = queryBuilder.SelectFrom("Namespace", "Page", new string[] {"Wiki", "DefaultPage"}, new string[] {"Wiki", "Name"}, Join.LeftJoin, new string[] { "Name", "DefaultPage" }, new string[] { "CreationDateTime" });
+			query = queryBuilder.Where(query, "Namespace", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Namespace", "Name", WhereOperator.NotEquals, "Empty1");
 			query = queryBuilder.AndWhere(query, "Namespace", "DefaultPage", WhereOperator.IsNull, null, true, false);
 			query = queryBuilder.OrWhere(query, "Page", "Namespace", WhereOperator.NotEquals, "Empty2", false, true);
 			query = queryBuilder.OrderBy(query, new[] { "Namespace_Name" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Empty1", ""));
 			parameters.Add(new Parameter(ParameterType.String, "Empty2", ""));
 
@@ -890,9 +915,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.InsertInto("Namespace", new string[] { "Name" }, new string[] { "Name" });
+			string query = queryBuilder.InsertInto("Namespace", new string[] { "Wiki", "Name" }, new string[] { "Wiki", "Name" });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -941,9 +967,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Namespace", new string[] { "Name" }, new string[] { "NewName" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "OldName");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "OldName");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewName", newName));
 			parameters.Add(new Parameter(ParameterType.String, "OldName", nspace.Name));
 
@@ -1001,9 +1029,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Namespace", new string[] { "DefaultPage" }, new string[] { "DefaultPage" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			if(page == null) parameters.Add(new Parameter(ParameterType.String, "DefaultPage", DBNull.Value));
 			else parameters.Add(new Parameter(ParameterType.String, "DefaultPage", NameTools.GetLocalName(page.FullName)));
 			parameters.Add(new Parameter(ParameterType.String, "Name", nspace.Name));
@@ -1046,9 +1076,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Namespace");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", nspace.Name));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -1156,10 +1188,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Page", new string[] { "Namespace" }, new string[] { "Destination" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Source");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Destination", destinationName));
 			parameters.Add(new Parameter(ParameterType.String, "Name", pageName));
 			parameters.Add(new Parameter(ParameterType.String, "Source", sourceName));
@@ -1211,12 +1245,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Name", "Namespace" }, new string[] { "Category", "Namespace" }, Join.LeftJoin,
+			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Wiki", "Name", "Namespace" }, new string[] { "Wiki", "Category", "Namespace" }, Join.LeftJoin,
 				new string[] { "Name", "Namespace" }, new string[] { "Page" });
-			query = queryBuilder.Where(query, "Category", "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.Where(query, "Category", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Category", "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Category", "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 
@@ -1260,12 +1296,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Name", "Namespace" }, new string[] { "Category", "Namespace" }, Join.LeftJoin,
+			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Wiki", "Name", "Namespace" }, new string[] { "Wiki", "Category", "Namespace" }, Join.LeftJoin,
 				new string[] { "Name", "Namespace" }, new string[] { "Page" });
-			query = queryBuilder.Where(query, "Category", "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.Where(query, "Category", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Category", "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Category", "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 
@@ -1326,12 +1364,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Name", "Namespace" }, new string[] { "Category", "Namespace" }, Join.LeftJoin,
+			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Wiki", "Name", "Namespace" }, new string[] { "Wiki", "Category", "Namespace" }, Join.LeftJoin,
 				new string[] { "Name", "Namespace" }, new string[] { "Page" });
-			query = queryBuilder.Where(query, "Category", "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.Where(query, "Category", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Category", "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.OrderBy(query, new string[] { "Category_Name", "CategoryBinding_Page" }, new Ordering[] { Ordering.Asc, Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspaceName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -1384,12 +1424,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Name", "Namespace" }, new string[] { "Category", "Namespace" }, Join.LeftJoin,
+			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Wiki", "Name", "Namespace" }, new string[] { "Wiki", "Category", "Namespace" }, Join.LeftJoin,
 				new string[] { "Name", "Namespace" }, new string[] { "Page" });
-			query = queryBuilder.Where(query, "Category", "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.Where(query, "Category", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Category", "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.OrderBy(query, new string[] { "Category_Name", "CategoryBinding_Page" }, new Ordering[] { Ordering.Asc, Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspaceName));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
@@ -1461,13 +1503,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			NameTools.ExpandFullName(page.FullName, out nspace, out pageName);
 			if(nspace == null) nspace = "";
 
-			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Name", "Namespace" }, new string[] { "Category", "Namespace" }, Join.LeftJoin,
+			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Wiki", "Name", "Namespace" }, new string[] { "Wiki", "Category", "Namespace" }, Join.LeftJoin,
 				new string[] { "Name", "Namespace" }, new string[] { "Page" });
-			query = queryBuilder.Where(query, "CategoryBinding", "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.Where(query, "CategoryBinding", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "CategoryBinding", "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "CategoryBinding", "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.OrderBy(query, new[] { "Category_Name" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.String, "Page", pageName));
 
@@ -1526,9 +1570,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).InsertInto("Category", new string[] { "Name", "Namespace" }, new string[] { "Name", "Namespace" });
+			string query = QueryBuilder.NewQuery(builder).InsertInto("Category", new string[] { "Wiki", "Name", "Namespace" }, new string[] { "Wiki", "Name", "Namespace" });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -1565,10 +1610,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Category", new string[] { "Name" }, new string[] { "NewName" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "OldName");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "OldName");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewName", newName));
 			parameters.Add(new Parameter(ParameterType.String, "OldName", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
@@ -1604,10 +1651,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Category");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -1634,10 +1683,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Category");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -1729,10 +1780,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("CategoryBinding");
-			query = queryBuilder.Where(query, "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Category", WhereOperator.Equals, "Category");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.String, "Category", destinationName));
 
@@ -1751,7 +1804,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			}
 
 			string finalQuery = "";
-			parameters = new List<Parameter>(MaxStatementsInBatch * 3);
+			parameters = new List<Parameter>(MaxStatementsInBatch * 3 + 1);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			rows = 0;
 			int count = 1;
 			string countString;
@@ -1761,8 +1815,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				countString = count.ToString();
 
-				query = queryBuilder.InsertInto("CategoryBinding", new string[] { "Namespace", "Category", "Page" },
-					new string[] { "Namespace" + countString, "Category" + countString, "Page" + countString });
+				query = queryBuilder.InsertInto("CategoryBinding", new string[] { "Wiki", "Namespace", "Category", "Page" },
+					new string[] { "Wiki", "Namespace" + countString, "Category" + countString, "Page" + countString });
 				finalQuery = queryBuilder.AppendForBatch(finalQuery, query);
 
 				parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
@@ -1841,10 +1895,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Page");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -1882,10 +1938,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Page");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -1941,10 +1999,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Page");
-			query = queryBuilder.Where(query, "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspaceName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -1979,9 +2039,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Page");
-			query = queryBuilder.Where(query, "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspaceName));
 			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
@@ -2030,12 +2092,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.SelectFrom("Page", "CategoryBinding", "Name", "Page", Join.LeftJoin);
-			query = queryBuilder.Where(query, "CategoryBinding", "Category", WhereOperator.IsNull, null);
+			string query = queryBuilder.SelectFrom("Page", "CategoryBinding", new string[] { "Wiki", "Name" }, new string[] { "Wiki", "Page" }, Join.LeftJoin, new string[] { "Namespace", "Name", "CreationDateTime" }, new string[] { "Page" });
+			query = queryBuilder.Where(query, "Page", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "CategoryBinding", "Category", WhereOperator.IsNull, null);
 			query = queryBuilder.AndWhere(query, "Page", "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspaceName));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -2046,8 +2110,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				List<PageInfo> result = new List<PageInfo>(100);
 
 				while(reader.Read()) {
-					result.Add(new PageInfo(NameTools.GetFullName(reader["Namespace"] as string, reader["Name"] as string),
-						this, (DateTime)reader["CreationDateTime"]));
+					result.Add(new PageInfo(NameTools.GetFullName(reader["Page_Namespace"] as string, reader["Page_Name"] as string),
+						this, (DateTime)reader["Page_CreationDateTime"]));
 				}
 
 				CloseReader(command, reader);
@@ -2074,13 +2138,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
 			if(nspace == null) nspace = "";
 
-			string query = queryBuilder.SelectFrom("PageContent", "PageKeyword", new string[] { "Page", "Namespace", "Revision" }, new string[] { "Page", "Namespace", "Revision" }, Join.LeftJoin,
-				new string [] { "Title", "User", "LastModified", "Comment", "Content", "Description" }, new string[] { "Keyword" });
-			query = queryBuilder.Where(query, "PageContent", "Page", WhereOperator.Equals, "Page");
+			string query = queryBuilder.SelectFrom("PageContent", "PageKeyword", new string[] { "Wiki", "Page", "Namespace", "Revision" }, new string[] { "Wiki", "Page", "Namespace", "Revision" }, Join.LeftJoin,
+				new string[] { "Title", "User", "LastModified", "Comment", "Content", "Description" }, new string[] { "Keyword" });
+			query = queryBuilder.Where(query, "PageContent", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "PageContent", "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "PageContent", "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "PageContent", "Revision", WhereOperator.Equals, "Revision");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.Int16, "Revision", (short)revision));
@@ -2139,13 +2205,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
 			if(nspace == null) nspace = "";
 
-			string query = queryBuilder.SelectFrom("PageContent", "PageKeyword", new string[] { "Page", "Namespace", "Revision" }, new string[] { "Page", "Namespace", "Revision" }, Join.LeftJoin,
+			string query = queryBuilder.SelectFrom("PageContent", "PageKeyword", new string[] { "Wiki", "Page", "Namespace", "Revision" }, new string[] { "Wiki", "Page", "Namespace", "Revision" }, Join.LeftJoin,
 				new string[] { "Title", "User", "LastModified", "Comment", "Content", "Description" }, new string[] { "Keyword" });
-			query = queryBuilder.Where(query, "PageContent", "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "PageContent", "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "PageContent", "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "PageContent", "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "PageContent", "Revision", WhereOperator.Equals, "Revision");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.Int16, "Revision", (short)revision));
@@ -2260,12 +2328,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("PageContent", new string[] { "Revision" });
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Revision", WhereOperator.GreaterThanOrEqualTo, "Revision");
 			query = queryBuilder.OrderBy(query, new[] { "Revision" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.Int16, "Revision", FirstRevision));
@@ -2307,12 +2377,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("PageContent", new string[] { "Revision" });
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Revision", WhereOperator.GreaterThanOrEqualTo, "Revision");
 			query = queryBuilder.OrderBy(query, new[] { "Revision" }, new[] { Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.Int16, "Revision", FirstRevision));
@@ -2390,10 +2462,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.InsertInto("PageContent",
-				new string[] { "Page", "Namespace", "Revision", "Title", "User", "LastModified", "Comment", "Content", "Description" },
-				new string[] { "Page", "Namespace", "Revision", "Title", "User", "LastModified", "Comment", "Content", "Description" });
+				new string[] { "Wiki", "Page", "Namespace", "Revision", "Title", "User", "LastModified", "Comment", "Content", "Description" },
+				new string[] { "Wiki", "Page", "Namespace", "Revision", "Title", "User", "LastModified", "Comment", "Content", "Description" });
 
-			List<Parameter> parameters = new List<Parameter>(9);
+			List<Parameter> parameters = new List<Parameter>(10);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.Int16, "Revision", revision));
@@ -2413,15 +2486,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows != 1) return false;
 
 			if(content.Keywords.Length > 0) {
-				parameters = new List<Parameter>(content.Keywords.Length * 4);
+				parameters = new List<Parameter>(content.Keywords.Length * 4 + 1);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				string fullQuery = "";
 				int count = 0;
 				string countString;
 				foreach(string kw in content.Keywords) {
 					countString = count.ToString();
 
-					query = queryBuilder.InsertInto("PageKeyword", new string[] { "Page", "Namespace", "Revision", "Keyword" },
-						new string[] { "Page" + countString, "Namespace" + countString, "Revision" + countString, "Keyword" + countString });
+					query = queryBuilder.InsertInto("PageKeyword", new string[] { "Wiki", "Page", "Namespace", "Revision", "Keyword" },
+						new string[] { "Wiki", "Page" + countString, "Namespace" + countString, "Revision" + countString, "Keyword" + countString });
 					fullQuery = queryBuilder.AppendForBatch(fullQuery, query);
 
 					parameters.Add(new Parameter(ParameterType.String, "Page" + countString, name));
@@ -2457,11 +2531,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("PageContent");
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Revision", WhereOperator.Equals, "Revision");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.String, "Revision", revision));
@@ -2489,11 +2565,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("PageContent");
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Revision", WhereOperator.Equals, "Revision");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.String, "Revision", revision));
@@ -2552,10 +2630,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).InsertInto("Page", new string[] { "Name", "Namespace", "CreationDateTime" },
-				new string[] { "Name", "Namespace", "CreationDateTime" });
+			string query = QueryBuilder.NewQuery(builder).InsertInto("Page", new string[] { "Wiki", "Name", "Namespace", "CreationDateTime" },
+				new string[] { "Wiki", "Name", "Namespace", "CreationDateTime" });
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.DateTime, "CreationDateTime", creationDateTime));
@@ -2628,10 +2707,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Page", new string[] { "Name" }, new string[] { "NewName" });
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "OldName");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "OldName");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewName", newName));
 			parameters.Add(new Parameter(ParameterType.String, "OldName", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
@@ -2847,12 +2928,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("PageContent");
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			if(revision != -1) query = queryBuilder.AndWhere(query, "Revision", WhereOperator.LessThanOrEqualTo, "Revision");
 			query = queryBuilder.AndWhere(query, "Revision", WhereOperator.GreaterThanOrEqualTo, "FirstRevision");
 
-			List<Parameter> parameters = new List<Parameter>(4);
+			List<Parameter> parameters = new List<Parameter>(5);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			if(revision != -1) parameters.Add(new Parameter(ParameterType.Int16, "Revision", revision));
@@ -2871,11 +2954,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				int revisionDelta = revision + 1;
 
 				query = queryBuilder.UpdateIncrement("PageContent", "Revision", -revisionDelta);
-				query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+				query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+				query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 				query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 				query = queryBuilder.AndWhere(query, "Revision", WhereOperator.GreaterThanOrEqualTo, "FirstRevision");
 
-				parameters = new List<Parameter>(3);
+				parameters = new List<Parameter>(4);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Page", name));
 				parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 				parameters.Add(new Parameter(ParameterType.Int16, "FirstRevision", FirstRevision));
@@ -2930,10 +3015,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Page");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -2964,10 +3051,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("CategoryBinding");
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -2979,15 +3068,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			if(categories.Length > 0) {
 				string finalQuery = "";
-				parameters = new List<Parameter>(categories.Length * 3);
+				parameters = new List<Parameter>(categories.Length * 3 + 1);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				int count = 0;
 				string countString;
 
 				foreach(string cat in categories) {
 					countString = count.ToString();
 
-					query = queryBuilder.InsertInto("CategoryBinding", new string[] { "Namespace", "Category", "Page" },
-						new string[] { "Namespace" + countString, "Category" + countString, "Page" + countString });
+					query = queryBuilder.InsertInto("CategoryBinding", new string[] { "Wiki", "Namespace", "Category", "Page" },
+						new string[] { "Wiki", "Namespace" + countString, "Category" + countString, "Page" + countString });
 					finalQuery = queryBuilder.AppendForBatch(finalQuery, query);
 
 					parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
@@ -3023,10 +3113,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("CategoryBinding");
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -3038,15 +3130,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			if(categories.Length > 0) {
 				string finalQuery = "";
-				parameters = new List<Parameter>(categories.Length * 3);
+				parameters = new List<Parameter>(categories.Length * 3 + 1);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				int count = 0;
 				string countString;
 
 				foreach(string cat in categories) {
 					countString = count.ToString();
 
-					query = queryBuilder.InsertInto("CategoryBinding", new string[] { "Namespace", "Category", "Page" },
-						new string[] { "Namespace" + countString, "Category" + countString, "Page" + countString });
+					query = queryBuilder.InsertInto("CategoryBinding", new string[] { "Wiki", "Namespace", "Category", "Page" },
+						new string[] { "Wiki", "Namespace" + countString, "Category" + countString, "Page" + countString });
 					finalQuery = queryBuilder.AppendForBatch(finalQuery, query);
 
 					parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
@@ -3114,11 +3207,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Message", new string[] { "Id", "Parent", "Username", "Subject", "DateTime", "Body" });
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.OrderBy(query, new string[] { "DateTime", "Id" }, new Ordering[] { Ordering.Asc, Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -3190,11 +3285,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("Message", new string[] { "Id", "Parent", "Username", "Subject", "DateTime", "Body" });
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.OrderBy(query, new string[] { "DateTime", "Id" }, new Ordering[] { Ordering.Asc, Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -3288,10 +3385,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectCountFrom("Message");
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -3333,10 +3432,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Message");
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -3352,7 +3453,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string finalQuery = "";
 			int count = 1;
 			string countString;
-			parameters = new List<Parameter>(MaxStatementsInBatch * 8);
+			parameters = new List<Parameter>(MaxStatementsInBatch * 8 + 1);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 
 			int rowsDone = 0;
 
@@ -3364,8 +3466,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				countString = count.ToString();
 
-				query = queryBuilder.InsertInto("Message", new string[] { "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" },
-					new string[] { "Page" + countString, "Namespace" + countString, "Id" + countString, "Parent" + countString, "Username" + countString, "Subject" + countString, "DateTime" + countString, "Body" + countString });
+				query = queryBuilder.InsertInto("Message", new string[] { "Wiki", "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" },
+					new string[] { "Wiki", "Page" + countString, "Namespace" + countString, "Id" + countString, "Parent" + countString, "Username" + countString, "Subject" + countString, "DateTime" + countString, "Body" + countString });
 
 				parameters.Add(new Parameter(ParameterType.String, "Page" + countString, name));
 				parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
@@ -3479,11 +3581,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			short freeId = -1;
 
 			string query = queryBuilder.SelectFrom("Message", new string[] { "Id" });
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.OrderBy(query, new string[] { "Id" }, new Ordering[] { Ordering.Desc });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -3494,10 +3598,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(freeId == -1) freeId = 0;
 			else freeId++;
 
-			query = queryBuilder.InsertInto("Message", new string[] { "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" },
-				new string[] { "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" });
+			query = queryBuilder.InsertInto("Message", new string[] { "Wiki", "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" },
+				new string[] { "Wiki", "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" });
 
-			parameters = new List<Parameter>(8);
+			parameters = new List<Parameter>(9);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.Int16, "Id", freeId));
@@ -3602,11 +3707,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Message");
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Id", WhereOperator.Equals, "Id");
 
-			List<Parameter> parameters = new List<Parameter>(3);
+			List<Parameter> parameters = new List<Parameter>(4);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.Int16, "Id", (short)id));
@@ -3619,11 +3726,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				// Update replies' parent id
 
 				query = queryBuilder.Update("Message", new string[] { "Parent" }, new string[] { "NewParent" });
-				query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+				query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+				query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 				query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 				query = queryBuilder.AndWhere(query, "Parent", WhereOperator.Equals, "OldParent");
 
-				parameters = new List<Parameter>(4);
+				parameters = new List<Parameter>(5);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));;
 				if(parentId != -1) parameters.Add(new Parameter(ParameterType.Int16, "NewParent", parentId));
 				else parameters.Add(new Parameter(ParameterType.Int16, "NewParent", DBNull.Value));
 				parameters.Add(new Parameter(ParameterType.String, "Page", name));
@@ -3715,11 +3824,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Message", new string[] { "Username", "Subject", "DateTime", "Body" }, new string[] { "Username", "Subject", "DateTime", "Body" });
-			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.AndWhere(query, "Id", WhereOperator.Equals, "Id");
 
-			List<Parameter> parameters = new List<Parameter>(7);
+			List<Parameter> parameters = new List<Parameter>(8);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 			parameters.Add(new Parameter(ParameterType.String, "Subject", subject));
 			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", dateTime));
@@ -3755,10 +3866,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.SelectFrom("NavigationPath", new string[] { "Name", "Namespace", "Page" });
-			query = queryBuilder.Where(query, "Namespace", WhereOperator.Equals, "Namespace");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 			query = queryBuilder.OrderBy(query, new string[] { "Namespace", "Name", "Number" }, new Ordering[] { Ordering.Asc, Ordering.Asc, Ordering.Asc });
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspaceName));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -3815,15 +3928,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query, finalQuery = "";
-			List<Parameter> parameters = new List<Parameter>(3 * pages.Length);
+			List<Parameter> parameters = new List<Parameter>(3 * pages.Length + 1);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			int count = 0;
 			string countString;
 
 			foreach(PageInfo page in pages) {
 				countString = count.ToString();
 
-				query = queryBuilder.InsertInto("NavigationPath", new string[] { "Name", "Namespace", "Page", "Number" },
-					new string[] { "Name" + countString, "Namespace" + countString, "Page" + countString, "Number" + countString });
+				query = queryBuilder.InsertInto("NavigationPath", new string[] { "Wiki", "Name", "Namespace", "Page", "Number" },
+					new string[] { "Wiki", "Name" + countString, "Namespace" + countString, "Page" + countString, "Number" + countString });
 
 				parameters.Add(new Parameter(ParameterType.String, "Name" + countString, name));
 				parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
@@ -3952,10 +4066,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("NavigationPath");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -3981,10 +4097,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("NavigationPath");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 
@@ -4026,9 +4144,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			QueryBuilder queryBuilder = QueryBuilder.NewQuery(builder);
 			string query = queryBuilder.SelectFrom("Snippet");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			DbDataReader reader = ExecuteReader(command);
 
@@ -4056,9 +4175,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private Snippet AddSnippet(DbTransaction transaction, string name, string content) {
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).InsertInto("Snippet", new string[] { "Name", "Content" }, new string[] { "Name", "Content" });
+			string query = QueryBuilder.NewQuery(builder).InsertInto("Snippet", new string[] { "Wiki", "Name", "Content" }, new string[] { "Wiki", "Name", "Content" });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Content", content));
 
@@ -4082,9 +4202,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private Snippet AddSnippet(DbConnection connection, string name, string content) {
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).InsertInto("Snippet", new string[] { "Name", "Content" }, new string[] { "Name", "Content" });
+			string query = QueryBuilder.NewQuery(builder).InsertInto("Snippet", new string[] { "Wiki", "Name", "Content" }, new string[] { "Wiki", "Name", "Content" });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Content", content));
 
@@ -4162,9 +4283,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Snippet");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -4185,9 +4308,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("Snippet");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
@@ -4226,9 +4351,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			QueryBuilder queryBuilder = QueryBuilder.NewQuery(builder);
 			string query = queryBuilder.SelectFrom("ContentTemplate");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.OrderBy(query, new[] { "Name" }, new[] { Ordering.Asc });
 
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>());
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			DbDataReader reader = ExecuteReader(command);
 
@@ -4256,9 +4382,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private ContentTemplate AddContentTemplate(DbTransaction transaction, string name, string content) {
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).InsertInto("ContentTemplate", new string[] { "Name", "Content" }, new string[] { "Name", "Content" });
+			string query = QueryBuilder.NewQuery(builder).InsertInto("ContentTemplate", new string[] { "Wiki", "Name", "Content" }, new string[] { "Wiki", "Name", "Content" });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Content", content));
 
@@ -4282,9 +4409,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private ContentTemplate AddContentTemplate(DbConnection connection, string name, string content) {
 			ICommandBuilder builder = GetCommandBuilder();
 
-			string query = QueryBuilder.NewQuery(builder).InsertInto("ContentTemplate", new string[] { "Name", "Content" }, new string[] { "Name", "Content" });
+			string query = QueryBuilder.NewQuery(builder).InsertInto("ContentTemplate", new string[] { "Wiki", "Name", "Content" }, new string[] { "Wiki", "Name", "Content" });
 
-			List<Parameter> parameters = new List<Parameter>(2);
+			List<Parameter> parameters = new List<Parameter>(3);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Content", content));
 
@@ -4362,9 +4490,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("ContentTemplate");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -4385,9 +4515,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("ContentTemplate");
-			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
+			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
-			List<Parameter> parameters = new List<Parameter>(1);
+			List<Parameter> parameters = new List<Parameter>(2);
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);

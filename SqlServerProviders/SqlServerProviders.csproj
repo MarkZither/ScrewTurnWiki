@@ -148,7 +148,9 @@
     <None Include="FilesDatabase.sql">
       <SubType>Designer</SubType>
     </None>
-    <None Include="PagesDatabase_3000to3001.sql" />
+    <None Include="PagesDatabase_3000to3001.sql">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="PagesDatabase.sql">
       <SubType>Designer</SubType>
     </None>
