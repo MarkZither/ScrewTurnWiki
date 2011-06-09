@@ -136,7 +136,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		protected override void CreateOrUpdateDatabaseIfNecessary() {
 			if(!SchemaExists()) {
 				CreateStandardSchema();
-				isFirstStart = true;
 			}
 			if(SchemaNeedsUpdate()) {
 				// Run minor update batches...

@@ -649,6 +649,7 @@ namespace ScrewTurn.Wiki {
 				else if(caller is IPagesStorageProviderV40) name = ((IPagesStorageProviderV40)caller).Information.Name;
 				else if(caller is IFormatterProviderV40) name = ((IFormatterProviderV40)caller).Information.Name;
 				else if(caller is ISettingsStorageProviderV40) name = ((ISettingsStorageProviderV40)caller).Information.Name;
+				else if(caller is IGlobalSettingsStorageProviderV40) name = ((IGlobalSettingsStorageProviderV40)caller).Information.Name;
 				else if(caller is IFilesStorageProviderV40) name = ((IFilesStorageProviderV40)caller).Information.Name;
 				name += "+" + Log.SystemUsername;
 			}

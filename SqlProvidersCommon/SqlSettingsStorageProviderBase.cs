@@ -21,11 +21,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private string _wiki;
 
 		/// <summary>
-		/// Holds a value indicating whether the application was started for the first time.
-		/// </summary>
-		protected bool isFirstStart = false;
-
-		/// <summary>
 		/// Initializes the Storage Provider.
 		/// </summary>
 		/// <param name="host">The Host of the Component.</param>
@@ -920,7 +915,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// </summary>
 		/// <returns><c>true</c> if the application was started for the first time, <c>false</c> otherwise.</returns>
 		public bool IsFirstApplicationStart() {
-			return isFirstStart;
+			int res = GetAllSettings().Count;
+			return res <= 0;
 		}
 
 		#endregion

@@ -256,7 +256,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string query = queryBuilder.InsertInto("Log",
 				new string[] { "DateTime", "EntryType", "User", "Message", "Wiki" }, new string[] { "DateTime", "EntryType", "User", "Message", "Wiki" });
 
-			List<Parameter> parameters = new List<Parameter>(4);
+			List<Parameter> parameters = new List<Parameter>(5);
 			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", DateTime.Now));
 			parameters.Add(new Parameter(ParameterType.Char, "EntryType", EntryTypeToChar(entryType)));
 			parameters.Add(new Parameter(ParameterType.String, "User", Sanitize(user)));
@@ -266,13 +266,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			try {
 				DbCommand command = builder.GetCommand(connString, query, parameters);
 
-				ExecuteNonQuery(command, true);
+				int rows = ExecuteNonQuery(command, true, false);
 
 				// No transaction - accurate log sizing is not really a concern
 
-				int logSize = LogSize;
-				if(logSize > int.Parse(host.GetGlobalSettingValue(GlobalSettingName.MaxLogSize))) {
-					CutLog((int)(logSize * 0.75));
+				if(rows > -1) {
+					int logSize = LogSize;
+					if(logSize > int.Parse(host.GetGlobalSettingValue(GlobalSettingName.MaxLogSize))) {
+						CutLog((int)(logSize * 0.75));
+					}
 				}
 			}
 			catch { }
