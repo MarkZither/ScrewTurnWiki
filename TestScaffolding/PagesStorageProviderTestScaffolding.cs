@@ -22,11 +22,15 @@ namespace ScrewTurn.Wiki.Tests {
 			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
 
 			IHostV40 host = mocks.DynamicMock<IHostV40>();
+			IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = mocks.DynamicMock<IGlobalSettingsStorageProviderV40>();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
+			Expect.Call(host.GetGlobalSettingsStorageProvider()).Return(globalSettingsStorageProvider).Repeat.Any();
+			Expect.Call(globalSettingsStorageProvider.AllWikis()).Return(new List<PluginFramework.Wiki>() { new PluginFramework.Wiki("root", new List<string>() { "localhost" }) });
 			Expect.Call(host.PrepareContentForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, PageInfo p, string input) { return input; }).Repeat.Any();
 			Expect.Call(host.PrepareTitleForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, PageInfo p, string input) { return input; }).Repeat.Any();
 
 			mocks.Replay(host);
+			mocks.Replay(globalSettingsStorageProvider);
 
 			return host;
 		}

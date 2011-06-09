@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
 		private readonly SqlServerCommandBuilder commandBuilder = new SqlServerCommandBuilder();
 
-		private const int CurrentSchemaVersion = 3000;
+		private const int CurrentSchemaVersion = 4000;
 
 		/// <summary>
 		/// Gets a new command with an open connection.
@@ -140,22 +140,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			if(SchemaNeedsUpdate()) {
 				// Run minor update batches...
 			}
-		}
-
-		/// <summary>
-		/// Tries to load the configuration from a corresponding v2 provider.
-		/// </summary>
-		/// <returns>The configuration, or an empty string.</returns>
-		protected override string TryLoadV2Configuration() {
-			return "";
-		}
-
-		/// <summary>
-		/// Tries to load the configuration of the corresponding global settings storage provider.
-		/// </summary>
-		/// <returns>The configuration, or an empty string.</returns>
-		protected override string TryLoadGlobalSettingsStorageProviderConfiguration() {
-			return host.GetProviderConfiguration(typeof(SqlServerGlobalSettingsStorageProvider).FullName);
 		}
 
 		/// <summary>
