@@ -130,6 +130,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			cmd.Connection.Close();
 		}
 
+		private void InitNamespaceTable(string wikiName) {
+			SqlCommand cmd = GetCommand(connString);
+			cmd.CommandText = Properties.Resources.PagesInitNamespaceTableDatabase;
+			cmd.Parameters.Add(new SqlParameter("Wiki", wikiName));
+
+			cmd.ExecuteNonQuery();
+
+			cmd.Connection.Close();
+		}
+
 		/// <summary>
 		/// Creates or updates the database schema if necessary.
 		/// </summary>
@@ -148,6 +158,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 				// Run minor update batches...
 				Update3000to3001();
 				// Other update batches
+			}
+			foreach(PluginFramework.Wiki wiki in host.GetGlobalSettingsStorageProvider().AllWikis()) {
+				InitNamespaceTable(wiki.WikiName);
 			}
 		}
 

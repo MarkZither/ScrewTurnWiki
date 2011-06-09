@@ -109,19 +109,19 @@ create table [ContentTemplate] (
 create table [IndexDocument] (
 	[Wiki] varchar(100) not null,
 	[Id] int not null,
-	[Name] nvarchar(200) not null
-		constraint [UQ_IndexDocument] unique,
+	[Name] nvarchar(200) not null,
 	[Title] nvarchar(200) not null,
 	[TypeTag] varchar(10) not null,
 	[DateTime] datetime not null,
+	constraint [UQ_IndexDocument] unique ([Wiki], [Name]),
 	constraint [PK_IndexDocument] primary key clustered ([Wiki], [Id])
 )
 
 create table [IndexWord] (
 	[Wiki] varchar(100) not null,
 	[Id] int not null,
-	[Text] nvarchar(200) not null
-		constraint [UQ_IndexWord] unique,
+	[Text] nvarchar(200) not null,
+	constraint [UQ_IndexWord] unique ([Wiki], [Text]),
 	constraint [PK_IndexWord] primary key clustered ([Wiki], [Id])
 )
 
@@ -151,9 +151,4 @@ end
 if (select count([Version]) from [Version] where [Component] = 'Pages') = 0
 begin
 	insert into [Version] ([Component], [Version]) values ('Pages', 3001)
-end
-
-if (select count([Name]) from [Namespace] where [Name] = '') = 0
-begin
-	insert into [Namespace] ([Wiki], [Name], [DefaultPage]) values ('root', '', null)
 end

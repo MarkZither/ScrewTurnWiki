@@ -63,21 +63,21 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 
         ///create table [Directory] (
+        ///	[Wiki] varchar(100) not null,
         ///	[FullPath] nvarchar(250) not null,
         ///	[Parent] nvarchar(250),
-        ///	constraint [PK_Directory] primary key clustered ([FullPath])
+        ///	constraint [PK_Directory] primary key clustered ([Wiki], [FullPath])
         ///)
         ///
         ///create table [File] (
+        ///	[Wiki] varchar(100) not null,
         ///	[Name] nvarchar(200) not null,
-        ///	[Directory] nvarchar(250) not null
-        ///		constraint [FK_File_Directory] references [Directory]([FullPath])
-        ///		on delete cascade on update cascade,
+        ///	[Directory] nvarchar(250) not null,
         ///	[Size] bigint not null,
         ///	[Downloads] int not null,
         ///	[LastModified] datetime not null,
         ///	[Data] varbinary(max) not null,
-        ///	constraint [PK_File] pri [rest of string was truncated]&quot;;.
+        ///	constraint [FK_File_Directory] foreign key ([Wiki], [Directo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FilesDatabase {
             get {
@@ -87,10 +87,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///create table [Setting] (
+        ///create table [GlobalSetting] (
         ///	[Name] varchar(100) not null,
         ///	[Value] nvarchar(4000) not null,
-        ///	constraint [PK_Setting] primary key clustered ([Name])
+        ///	constraint [PK_GlobalSetting] primary key clustered ([Name])
         ///)
         ///
         ///create table [Log] (
@@ -99,13 +99,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         ///	[EntryType] char not null,
         ///	[User] nvarchar(100) not null,
         ///	[Message] nvarchar(4000) not null,
-        ///	[Wiki] nvarchar(100) not null,
+        ///	[Wiki] nvarchar(100),
         ///	constraint [PK_Log] primary key clustered ([Id])
         ///)
         ///
-        ///create table [MetaDataItem] (
+        ///create table [PluginAssembly] (
         ///	[Name] varchar(100) not null,
-        ///	[Tag] nvarchar(100) [rest of string was truncated]&quot;;.
+        ///	[Assembly] var [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GlobalSettingsDatabase {
             get {
@@ -116,22 +116,19 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 
         ///create table [Namespace] (
+        ///	[Wiki] varchar(100) not null,
         ///	[Name] nvarchar(100) not null,
         ///	[DefaultPage] nvarchar(200),
-        ///	constraint [PK_Namespace] primary key clustered ([Name])
+        ///	constraint [PK_Namespace] primary key clustered ([Wiki], [Name])
         ///)
         ///
         ///create table [Category](
+        ///	[Wiki] varchar(100) not null,
         ///	[Name] nvarchar(100) not null,
-        ///	[Namespace] nvarchar(100) not null
-        ///		constraint [FK_Category_Namespace] references [Namespace]([Name])
+        ///	[Namespace] nvarchar(100) not null,
+        ///	constraint [FK_Category_Namespace] foreign key ([Wiki], [Namespace]) references [Namespace]([Wiki], [Name])
         ///		on delete cascade on update cascade,
-        ///	constraint [PK_Category] primary key clustered ([Name], [Namespace])
-        ///)
-        ///
-        ///create table [Page] (
-        ///	[Name] nvarchar(200) not null,
-        ///	[Namespace] nvar [rest of string was truncated]&quot;;.
+        ///	constraint [PK_Category] primary k [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PagesDatabase {
             get {
@@ -146,20 +143,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         ///drop table [IndexDocument]
         ///
         ///create table [IndexDocument] (
+        ///	[Wiki] varchar(100) not null,
         ///	[Id] int not null,
         ///	[Name] nvarchar(200) not null
         ///		constraint [UQ_IndexDocument] unique,
         ///	[Title] nvarchar(200) not null,
         ///	[TypeTag] varchar(10) not null,
         ///	[DateTime] datetime not null,
-        ///	constraint [PK_IndexDocument] primary key clustered ([Id])
+        ///	constraint [PK_IndexDocument] primary key clustered ([Wiki], [Id])
         ///)
         ///
         ///create table [IndexWord] (
+        ///	[Wiki] varchar(100) not null,
         ///	[Id] int not null,
-        ///	[Text] nvarchar(200) not null
-        ///		constraint [UQ_IndexWord] unique,
-        ///	constraint [PK [rest of string was truncated]&quot;;.
+        ///	[Text] nvar [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PagesDatabase_3000to3001 {
             get {
@@ -169,25 +166,38 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
+        ///if (select count([Name]) from [Namespace] where [Name] = &apos;&apos; and [Wiki] = @wiki) = 0
+        ///begin
+        ///	insert into [Namespace] ([Wiki], [Name], [DefaultPage]) values (@wiki, &apos;&apos;, null)
+        ///end
+        ///.
+        /// </summary>
+        internal static string PagesInitNamespaceTableDatabase {
+            get {
+                return ResourceManager.GetString("PagesInitNamespaceTableDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
         ///create table [Setting] (
+        ///	[Wiki] varchar(100) not null,
         ///	[Name] varchar(100) not null,
         ///	[Value] nvarchar(4000) not null,
-        ///	constraint [PK_Setting] primary key clustered ([Name])
-        ///)
-        ///
-        ///create table [Log] (
-        ///	[Id] int not null identity,
-        ///	[DateTime] datetime not null,
-        ///	[EntryType] char not null,
-        ///	[User] nvarchar(100) not null,
-        ///	[Message] nvarchar(4000) not null,
-        ///	[Wiki] nvarchar(100) not null,
-        ///	constraint [PK_Log] primary key clustered ([Id])
+        ///	constraint [PK_Setting] primary key clustered ([Wiki], [Name])
         ///)
         ///
         ///create table [MetaDataItem] (
+        ///	[Wiki] varchar(100) not null,
         ///	[Name] varchar(100) not null,
-        ///	[Tag] nvarchar(100) [rest of string was truncated]&quot;;.
+        ///	[Tag] nvarchar(100) not null,
+        ///	[Data] nvarchar(4000) not null,
+        ///	constraint [PK_MetaDataItem] primary key clustered ([Wiki], [Name], [Tag])
+        ///)
+        ///
+        ///create table [RecentChange] (
+        ///	[Id] int not null identity,
+        ///	[Wiki] var [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SettingsDatabase {
             get {
@@ -198,24 +208,21 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 
         ///create table [User] (
+        ///	[Wiki] varchar(100) not null,
         ///	[Username] nvarchar(100) not null,
         ///	[PasswordHash] varchar(100) not null,
         ///	[DisplayName] nvarchar(150),
         ///	[Email] varchar(100) not null,
         ///	[Active] bit not null,
         ///	[DateTime] datetime not null,
-        ///	constraint [PK_User] primary key clustered ([Username])
+        ///	constraint [PK_User] primary key clustered ([Wiki], [Username])
         ///)
         ///
         ///create table [UserGroup] (
+        ///	[Wiki] varchar(100) not null,
         ///	[Name] nvarchar(100) not null,
         ///	[Description] nvarchar(150),
-        ///	constraint [PK_UserGroup] primary key clustered ([Name])
-        ///)
-        ///
-        ///create table [UserGroupMembership] (
-        ///	[User] nvarchar(100) not null
-        /// [rest of string was truncated]&quot;;.
+        ///	constraint [PK_UserGroup] primary key clustered ([Wiki], [Nam [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UsersDatabase {
             get {
