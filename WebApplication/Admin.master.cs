@@ -48,11 +48,11 @@ namespace ScrewTurn.Wiki {
 			{ "admincategories", "lnkSelectCategories" },
 			{ "adminhome", "lnkSelectAdminHome" },
 			{ "adminnavpaths", "lnkSelectNavPaths" },
-			{ "adminplugins", "lnkSelectPlugins" },
+			{ "adminplugins", "lnkSelectPluginsConfiguration" },
 			{ "admintheme", "lnkSelectTheme" },
 			{ "adminglobalhome", "lnkSelectAdminGlobalHome" },
 			{ "adminglobalconfig", "lnkSelectGlobalConfig" },
-			{ "adminprovidersmanagement", "lnkSelectProvidersManagement" },
+			{ "adminprovidersmanagement", "lnkSelectPluginsManagement" },
 			{ "adminlog", "lnkSelectLog" },
 		};
 
@@ -74,17 +74,17 @@ namespace ScrewTurn.Wiki {
 			lnkSelectCategories.CssClass = "tab";
 			lnkSelectAdminHome.CssClass = "tab";
 			lnkSelectNavPaths.CssClass = "tab";
-			lnkSelectPlugins.CssClass = "tab";
+			lnkSelectPluginsConfiguration.CssClass = "tab";
 			lnkSelectTheme.CssClass = "tab";
 			lnkSelectAdminGlobalHome.CssClass = "tab red";
 			lnkSelectGlobalConfig.CssClass = "tab red";
-			lnkSelectProvidersManagement.CssClass = "tab red";
+			lnkSelectPluginsManagement.CssClass = "tab red";
 			lnkSelectLog.CssClass = "tab red";
 
 			hyperLink.CssClass = "tabselected";
 			if(hyperLink.ID == "lnkSelectAdminGlobalHome" ||
 			   hyperLink.ID == "lnkSelectGlobalConfig" ||
-			   hyperLink.ID == "lnkSelectProvidersManagement" ||
+			   hyperLink.ID == "lnkSelectPluginsManagement" ||
 			   hyperLink.ID == "lnkSelectLog") {
 						hyperLink.CssClass += " red selected";
 			}
@@ -123,7 +123,7 @@ namespace ScrewTurn.Wiki {
 			// Always displayed because checking every page can take too much time
 
 			// Providers (can manage providers)
-			lnkSelectPlugins.Visible = CanManageProviders(currentUser, currentGroups);
+			lnkSelectPluginsConfiguration.Visible = CanManageProviders(currentUser, currentGroups);
 
 			// Snippets (can manage snippets)
 			lnkSelectSnippets.Visible = CanManageSnippetsAndTemplates(currentUser, currentGroups);
@@ -141,7 +141,7 @@ namespace ScrewTurn.Wiki {
 			lnkSelectGlobalConfig.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
 
 			// Providers Management (can manage global config)
-			lnkSelectProvidersManagement.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
+			lnkSelectPluginsManagement.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
 		}
 
 		/// <summary>

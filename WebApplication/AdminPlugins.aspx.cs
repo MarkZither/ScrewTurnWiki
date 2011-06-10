@@ -21,6 +21,8 @@ namespace ScrewTurn.Wiki {
 			if(!AdminMaster.CanManageProviders(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki))) UrlTools.Redirect("AccessDenied.aspx");
 
 			if(!Page.IsPostBack) {
+				lblResult.CssClass = "";
+				lblResult.Text = "";
 				// Load providers and related data
 				rptProviders.DataBind();
 			}
@@ -28,41 +30,25 @@ namespace ScrewTurn.Wiki {
 
 		#region Providers List
 
-		protected void rdo_CheckedChanged(object sender, EventArgs e) {
-			ResetEditor();
-			rptProviders.DataBind();
-		}
-
 		/// <summary>
 		/// Resets the editor.
 		/// </summary>
 		private void ResetEditor() {
 			pnlProviderDetails.Visible = false;
 			txtCurrentProvider.Value = "";
-			lblResult.CssClass = "";
-			lblResult.Text = "";
 		}
 
 		protected void rptProviders_DataBinding(object sender, EventArgs e) {
-			List<IProviderV40> providers = new List<IProviderV40>(5);
+			IFormatterProviderV40[] plugins = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
 
-			int enabledCount = 0;
+			List<ProviderRow> result = new List<ProviderRow>(plugins.Length);
 
-			if(rdoFormatter.Checked) {
-				IFormatterProviderV40[] formatterProviders = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
-				enabledCount = formatterProviders.Length;
-				providers.AddRange(formatterProviders);
-			}
-
-			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
-
-			for(int i = 0; i < providers.Count; i++) {
-				IProviderV40 prov = providers[i];
-				result.Add(new ProviderRow(prov.Information,
-					prov.GetType().FullName,
-					GetUpdateStatus(prov.Information),
-					i > enabledCount - 1,
-					txtCurrentProvider.Value == prov.GetType().FullName));
+			for(int i = 0; i < plugins.Length; i++) {
+				result.Add(new ProviderRow(plugins[i].Information,
+					plugins[i].GetType().FullName,
+					GetUpdateStatus(plugins[i].Information),
+					!Settings.GetProvider(currentWiki).GetPluginStatus(plugins[i].GetType().FullName),
+					txtCurrentProvider.Value == plugins[i].GetType().FullName));
 			}
 
 			rptProviders.DataSource = result;
@@ -103,11 +89,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The provider.</returns>
 		/// <param name="enabled">A value indicating whether the returned provider is enabled.</param>
 		/// <param name="canDisable">A value indicating whether the returned provider can be disabled.</param>
-		private IProviderV40 GetCurrentProvider(out bool enabled, out bool canDisable) {
+		private IProviderV40 GetCurrentProvider(out bool enabled) {
 			enabled = true;
-			canDisable = false;
 
-			return Collectors.FindProvider(currentWiki, txtCurrentProvider.Value, out enabled, out canDisable);
+			return Collectors.FindProvider(currentWiki, txtCurrentProvider.Value, out enabled);
 		}
 
 		protected void rptProviders_ItemCommand(object sender, CommandEventArgs e) {
@@ -115,11 +100,7 @@ namespace ScrewTurn.Wiki {
 
 			if(e.CommandName == "Select") {
 				bool enabled;
-				bool canDisable;
-				IProviderV40 provider = GetCurrentProvider(out enabled, out canDisable);
-
-				// Cannot disable the provider that handles the default page of the root namespace
-				if(Pages.FindPage(currentWiki, Settings.GetDefaultPage(currentWiki)).Provider == provider) canDisable = false;
+				IProviderV40 provider = GetCurrentProvider(out enabled);
 
 				pnlProviderDetails.Visible = true;
 				lblProviderName.Text = provider.Information.Name + " (" + provider.Information.Version + ")";
@@ -133,12 +114,45 @@ namespace ScrewTurn.Wiki {
 					lblProviderConfigHelp.Text = Properties.Messages.NoConfigurationRequired;
 				}
 
-				btnEnable.Visible = !enabled;
-				btnDisable.Visible = enabled;
-				btnDisable.Enabled = canDisable;
-				lblCannotDisable.Visible = !canDisable;
-				btnUnload.Enabled = !enabled;
+				lblResult.CssClass = "";
+				lblResult.Text = "";
+				rptProviders.DataBind();
+			}
+			else if(e.CommandName == "Disable") {
+				bool enabled;
+				IProviderV40 prov = GetCurrentProvider(out enabled);
+				Log.LogEntry("Deactivation requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
+				ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, false);
+
+				PerformPostProviderChangeActions();
+
+				lblResult.CssClass = "resultok";
+				lblResult.Text = Properties.Messages.ProviderDisabled;
+
+				ResetEditor();
+				rptProviders.DataBind();
+			}
+			else if(e.CommandName == "Enable") {
+				bool enabled;
+				IProviderV40 prov = GetCurrentProvider(out enabled);
+				Log.LogEntry("Activation requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
+
+				try {
+					ProviderLoader.SetUp<IFormatterProviderV40>(prov.GetType(), Settings.GetProvider(currentWiki).GetPluginConfiguration(prov.GetType().FullName));
+					ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, true);
+					lblResult.CssClass = "resultok";
+					lblResult.Text = Properties.Messages.ProviderEnabled;
+				}
+				catch(InvalidConfigurationException) {
+					ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, false);
+					lblResult.CssClass = "resulterror";
+					lblResult.Text = Properties.Messages.ProviderRejectedConfiguration;
+				}
+
+				PerformPostProviderChangeActions();
+
+				ResetEditor();
 				rptProviders.DataBind();
 			}
 		}
@@ -151,12 +165,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnSave_Click(object sender, EventArgs e) {
-			bool enabled, canDisable;
-			IProviderV40 prov = GetCurrentProvider(out enabled, out canDisable);
+			bool enabled;
+			IProviderV40 prov = GetCurrentProvider(out enabled);
 			Log.LogEntry("Configuration change requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
 			string error;
-			if(ProviderLoader.TryChangePluginConfiguration(txtCurrentProvider.Value, txtConfigurationString.Text, currentWiki, out error)) {
+			if(ProviderLoader.TryChangePluginConfiguration(prov, txtConfigurationString.Text, currentWiki, out error)) {
 				PerformPostProviderChangeActions();
 
 				lblResult.CssClass = "resultok";
@@ -171,54 +185,7 @@ namespace ScrewTurn.Wiki {
 					(string.IsNullOrEmpty(error) ? "" : (": " + error));
 			}
 		}
-
-		protected void btnDisable_Click(object sender, EventArgs e) {
-			bool enabled, canDisable;
-			IProviderV40 prov = GetCurrentProvider(out enabled, out canDisable);
-			Log.LogEntry("Deactivation requested for Provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
-
-			ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, false);
-
-			PerformPostProviderChangeActions();
-
-			lblResult.CssClass = "resultok";
-			lblResult.Text = Properties.Messages.ProviderDisabled;
-
-			ResetEditor();
-			rptProviders.DataBind();
-		}
-
-		protected void btnEnable_Click(object sender, EventArgs e) {
-			bool enabled, canDisable;
-			IProviderV40 prov = GetCurrentProvider(out enabled, out canDisable);
-			Log.LogEntry("Activation requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
-			
-			ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, true);
-
-			PerformPostProviderChangeActions();
-
-			lblResult.CssClass = "resultok";
-			lblResult.Text = Properties.Messages.ProviderEnabled;
-
-			ResetEditor();
-			rptProviders.DataBind();
-		}
-
-		protected void btnUnload_Click(object sender, EventArgs e) {
-			bool enabled, canDisable;
-			IProviderV40 prov = GetCurrentProvider(out enabled, out canDisable);
-			Log.LogEntry("Unloading requested for provider provider " + prov.Information.Name, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
-
-			ProviderLoader.UnloadPlugin(txtCurrentProvider.Value);
-			PerformPostProviderChangeActions();
-
-			lblResult.CssClass = "resultok";
-			lblResult.Text = Properties.Messages.ProviderUnloaded;
-
-			ResetEditor();
-			rptProviders.DataBind();
-		}
-
+		
 		protected void btnCancel_Click(object sender, EventArgs e) {
 			ResetEditor();
 			rptProviders.DataBind();
@@ -234,6 +201,7 @@ namespace ScrewTurn.Wiki {
 	public class ProviderRow {
 
 		private string name, typeName, version, author, authorUrl, updateStatus, additionalClass;
+		private bool disabled;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:ProviderRow" /> class.
@@ -251,6 +219,7 @@ namespace ScrewTurn.Wiki {
 			this.updateStatus = updateStatus;
 			additionalClass = disabled ? " disabled" : "";
 			additionalClass += selected ? " selected" : "";
+			this.disabled = disabled;
 		}
 
 		/// <summary>
@@ -302,6 +271,19 @@ namespace ScrewTurn.Wiki {
 			get { return additionalClass; }
 		}
 
+		/// <summary>
+		/// <c>true</c> if the plugin is enabled, <c>false</c> otherwise.
+		/// </summary>
+		public bool Enabled {
+			get { return !disabled; }
+		}
+
+		/// <summary>
+		/// <c>true</c> if the plugin is disabled, <c>false</c> otherwise.
+		/// </summary>
+		public bool Disabled {
+			get { return disabled; }
+		}
 	}
 
 }

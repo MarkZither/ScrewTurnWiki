@@ -5,11 +5,9 @@
 
 <asp:Content ID="ctnConfig" ContentPlaceHolderID="cphAdmin" runat="server">
 	<div class="leftaligned">
-		<h2 class="sectiontitle"><asp:Literal ID="lblProvidersManagementTitle" runat="server" Text="Providers Management" EnableViewState="False" meta:resourcekey="lblProvidersManagementTitleResource1" /></h2>
+		<h2 class="sectiontitle"><asp:Literal ID="lblPluginsManagementTitle" runat="server" Text="Providers Management" EnableViewState="False" meta:resourcekey="lblPluginsManagementTitleResource1" /></h2>
 	
-		<asp:Literal ID="lblDisplay" runat="server" Text="Display" EnableViewState="False" meta:resourcekey="lblDisplayResource1" />:
-		<asp:RadioButton ID="rdoStorageProviders" runat="server" Text="Storage Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoStorageProvidersResource1" AutoPostBack="true" />
-		<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" AutoPostBack="true" />
+		<asp:Literal ID="lblPlugins" runat="server" Text="Plugins (Formatter Providers)" EnableViewState="False" meta:resourcekey="lblPluginsResource1" />:
 		<br />
 		
 		<div id="ProvidersListContainerDiv">
@@ -68,7 +66,7 @@
 			</script>
 			
 			<asp:Button ID="btnAutoUpdateProviders" runat="server" Text="Auto-update Providers" ToolTip="Automatically update all installed providers, of all types"
-				OnClick="btnAutoUpdateProviders_Click" meta:resourcekey="btnAutoUpdateProvidersResource1" />
+				OnClick="btnAutoUpdateProviders_Click" meta:resourcekey="btnAutoUpdateProvidersResource1" Visible="false" Enabled="true" />
 			<span id="ProvidersUpdateProgress" style="display: none;">
 				<img src="Images/Wait.gif" alt="..." />
 			</span>

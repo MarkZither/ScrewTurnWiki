@@ -79,8 +79,9 @@ namespace ScrewTurn.Wiki {
 				providerInstance.Dispose();
 			}
 			catch(InvalidConfigurationException) {
-				// Disable Provider
 				Log.LogEntry("Unable to load provider " + provider.FullName + " (configuration rejected).", EntryType.Error, Log.SystemUsername, null);
+				// Throw InvalidConfigurationException in order to disable plugin
+				throw;
 			}
 			catch {
 				Log.LogEntry("Unable to load provider " + provider.FullName + " (unknown error).", EntryType.Error, Log.SystemUsername, null);
@@ -180,11 +181,16 @@ namespace ScrewTurn.Wiki {
 
 			// Setup and add to the Collectors
 			for(int i = 0; i < forms.Length; i++) {
-				//string formatterProviderConfiguration = LoadPluginConfiguration(forms[i].FullName, typeof(IFormatterProviderV30));
-				//SetUp<IFormatterProviderV30>(forms[i], formatterProviderConfiguration);
 				Collectors.AddPlugin(forms[i], Assembly.GetAssembly(forms[i]));
-				//GlobalSettings.Provider.SetPluginConfiguration(forms[i].FullName, formatterProviderConfiguration);
-				//GlobalSettings.Provider.SetPluginStatus(forms[i].FullName, false);
+				foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
+					try {
+						SetUp<IFormatterProviderV40>(forms[i], Settings.GetProvider(wiki.WikiName).GetPluginConfiguration(forms[i].FullName));
+						SavePluginStatus(wiki.WikiName, forms[i].FullName, true);
+					}
+					catch(InvalidConfigurationException) {
+						SavePluginStatus(wiki.WikiName, forms[i].FullName, false);
+					}
+				}
 				count++;
 			}
 
@@ -402,33 +408,38 @@ namespace ScrewTurn.Wiki {
 
 			// Add to the Collectors and Setup
 			for(int i = 0; i < forms.Count; i++) {
-				//string formatterProviderConfiguration = LoadProviderConfiguration(forms[i].FullName, typeof(IFormatterProviderV30));
 				Collectors.AddPlugin(forms[i], Assembly.GetAssembly(forms[i]));
-				//SetUp<IFormatterProviderV30>(forms[i], formatterProviderConfiguration);
-				//GlobalSettings.Provider.SetPluginConfiguration(forms[i].FullName, formatterProviderConfiguration);
-				//GlobalSettings.Provider.SetPluginStatus(forms[i].FullName, false);
+				foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
+					try {
+						SetUp<IFormatterProviderV40>(forms[i], Settings.GetProvider(wiki.WikiName).GetPluginConfiguration(forms[i].FullName));
+						SavePluginStatus(wiki.WikiName, forms[i].FullName, true);
+					}
+					catch(InvalidConfigurationException) {
+						SavePluginStatus(wiki.WikiName, forms[i].FullName, false);
+					}
+				}
 			}
 		}
 
 		/// <summary>
 		/// Tries to change a provider's configuration.
 		/// </summary>
-		/// <param name="typeName">The provider.</param>
+		/// <param name="plugin">The plugin.</param>
 		/// <param name="configuration">The new configuration.</param>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="error">The error message, if any.</param>
 		/// <returns><c>true</c> if the configuration is saved, <c>false</c> if the provider rejected it.</returns>
-		public static bool TryChangePluginConfiguration(string typeName, string configuration, string wiki, out string error) {
+		public static bool TryChangePluginConfiguration(IProviderV40 plugin, string configuration, string wiki, out string error) {
 			error = null;
 
-			SavePluginConfiguration(wiki, typeName, configuration);
+			SavePluginConfiguration(wiki, plugin.GetType().FullName, configuration);
 			try {
-				IFormatterProviderV40 provider = Collectors.CollectorsBox.FormatterProviderCollector.GetProvider(typeName, wiki);
-				SavePluginStatus(wiki, typeName, true);
+				SetUp<IFormatterProviderV40>(plugin.GetType(), configuration);
+				SavePluginStatus(wiki, plugin.GetType().FullName, true);
 			}
 			catch(InvalidConfigurationException icex) {
 			    error = icex.Message;
-				SavePluginStatus(wiki, typeName, false);
+				SavePluginStatus(wiki, plugin.GetType().FullName, false);
 			    return false;
 			}
 			return true;

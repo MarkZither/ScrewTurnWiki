@@ -42,48 +42,18 @@ namespace ScrewTurn.Wiki {
 
 		#region DLLs
 
-		protected void rdo_CheckedChanged(object sender, EventArgs e) {
-			ResetEditor();
-			rptProviders.DataBind();
-		}
-
-		/// <summary>
-		/// Resets the editor.
-		/// </summary>
-		private void ResetEditor() {
-			btnAutoUpdateProviders.Visible = true;
-		}
-
 		protected void rptProviders_DataBinding(object sender, EventArgs e) {
-			List<IProviderV40> providers = new List<IProviderV40>(5);
+			IFormatterProviderV40[] plugins = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
 
-			int enabledCount = 0;
+			btnAutoUpdateProviders.Visible = true;
+			btnAutoUpdateProviders.Enabled = plugins.Length > 0;
 
-			if(rdoFormatter.Checked) {
-				IFormatterProviderV40[] formatterProviders = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
-				enabledCount = formatterProviders.Length;
-				providers.AddRange(formatterProviders);
-			}
-			else {
-				IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = Collectors.CollectorsBox.GlobalSettingsProvider;
-				providers.Add(globalSettingsStorageProvider);
-				ISettingsStorageProviderV40 settingsStorageProviders = Collectors.CollectorsBox.GetSettingsProvider(currentWiki);
-				providers.Add(settingsStorageProviders);
-				IPagesStorageProviderV40[] pagesStorageProviders = Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki);
-				providers.AddRange(pagesStorageProviders);
-				IFilesStorageProviderV40[] filesStorageProviders = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki);
-				providers.AddRange(filesStorageProviders);
-				IUsersStorageProviderV40[] usersStorageProviders = Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki);
-				providers.AddRange(usersStorageProviders);
-			}
+			List<ProviderRow> result = new List<ProviderRow>(plugins.Length);
 
-			List<ProviderRow> result = new List<ProviderRow>(providers.Count);
-
-			for(int i = 0; i < providers.Count; i++) {
-				IProviderV40 prov = providers[i];
-				result.Add(new ProviderRow(prov.Information,
-					prov.GetType().FullName,
-					GetUpdateStatus(prov.Information),
+			for(int i = 0; i < plugins.Length; i++) {
+				result.Add(new ProviderRow(plugins[i].Information,
+					plugins[i].GetType().FullName,
+					GetUpdateStatus(plugins[i].Information),
 					false,
 					false));
 			}
@@ -126,12 +96,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Providers auto-update requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
-			ProviderUpdater updater = new ProviderUpdater(GlobalSettings.Provider,
-				Collectors.FileNames,
-				new IProviderV40[] { Collectors.CollectorsBox.GetSettingsProvider(currentWiki)},
-				Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki),
-				Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki),
-				Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki),
+			ProviderUpdater updater = new ProviderUpdater(GlobalSettings.Provider, Collectors.FileNames,
 				Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki));
 
 			int count = updater.UpdateAll();
@@ -208,6 +173,7 @@ namespace ScrewTurn.Wiki {
 
 				LoadDlls();
 				LoadSourceProviders();
+				rptProviders.DataBind();
 			}
 		}
 

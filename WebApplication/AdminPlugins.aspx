@@ -21,11 +21,10 @@
 		// -->
 		</script>
 
-		<h2 class="sectiontitle"><asp:Literal ID="lblProviders" runat="server" Text="Providers" EnableViewState="False" meta:resourcekey="lblProvidersResource1" /></h2>
+		<h2 class="sectiontitle"><asp:Literal ID="lblPluginsConfiguration" runat="server" Text="Plugins Configuration" EnableViewState="False" meta:resourcekey="lblPluginsConfigurationResource1" /></h2>
 
 		<asp:Panel ID="pnlList" runat="server" meta:resourcekey="pnlListResource1" >
-			<asp:Literal ID="lblDisplay" runat="server" Text="Display" EnableViewState="False" meta:resourcekey="lblDisplayResource1" />:
-			<asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" Checked="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" AutoPostBack="true" />
+			<asp:Literal ID="lblPlugins" runat="server" Text="Plugins (Formatter Providers)" EnableViewState="False" meta:resourcekey="lblPluginResource1" />
 			<br />
 		
 			<div id="ProvidersListContainerDiv">
@@ -40,6 +39,7 @@
 								<th><asp:Literal ID="lblAuthor" runat="server" EnableViewState="False" meta:resourcekey="lblAuthorResource1" Text="Author" /></th>
 								<th><asp:Literal ID="lblUpdateStatus" runat="server" EnableViewState="false" meta:resourcekey="lblUpdateStatusResource1" Text="Update Status" /></th>
 								<th>&nbsp;</th>
+								<th>&nbsp;</th>
 							</tr>
 							</thead>
 							<tbody>
@@ -50,7 +50,11 @@
 							<td><%# Eval("Version") %></td>
 							<td><a href='<%# Eval("AuthorUrl") %>' target="_blank"><%# Eval("Author") %></a></td>
 							<td><%# Eval("UpdateStatus") %></td>
-							<td><asp:LinkButton ID="btnSelect" runat="server" CommandArgument='<%# Eval("TypeName") %>' CommandName="Select" meta:resourcekey="btnSelectResource2" Text="Select" /></td>
+							<td>
+								<asp:LinkButton ID="btnEnable" runat="server" CommandArgument='<%# Eval("TypeName") %>' CommandName="Enable" meta:resourcekey="btnEnableResource1" Text="Enable" ToolTip="Enable the Provider" Visible='<%# Eval("Disabled") %>' />
+								<asp:LinkButton ID="btnDisable" runat="server" CommandArgument='<%# Eval("TypeName") %>' CommandName="Disable" meta:resourcekey="btnDisableResource1" Text="Disable" ToolTip="Disable the Provider" Visible='<%# Eval("Enabled") %>' />
+							</td>
+							<td><asp:LinkButton ID="btnSelect" runat="server" CommandArgument='<%# Eval("TypeName") %>' CommandName="Select" meta:resourcekey="btnSelectResource1" Text="Select" /></td>
 						</tr>
 					</ItemTemplate>
 					<AlternatingItemTemplate>
@@ -83,23 +87,16 @@
 					<asp:TextBox ID="txtConfigurationString" runat="server" TextMode="MultiLine" CssClass="config" meta:resourcekey="txtConfigurationStringResource1" />
 					<br />
 					<asp:Button ID="btnSave" runat="server" Text="Save" ToolTip="Save the Configuration String" OnClick="btnSave_Click" meta:resourcekey="btnSaveResource1" />
-					<asp:Button ID="btnDisable" runat="server" Text="Disable" ToolTip="Disable the Provider" OnClick="btnDisable_Click" meta:resourcekey="btnDisableResource1" />
-					<asp:Button ID="btnEnable" runat="server" Text="Enable" ToolTip="Enable the Provider" Visible="False" OnClick="btnEnable_Click" meta:resourcekey="btnEnableResource1" />
-					<asp:Button ID="btnUnload" runat="server" Text="Unload" ToolTip="Unloads the Provider" OnClick="btnUnload_Click" meta:resourcekey="btnUnloadResource1" />
 					<asp:Button ID="btnCancel" runat="server" Text="Cancel" ToolTip="Deselect the Provider" OnClick="btnCancel_Click" meta:resourcekey="btnCancelResource1" />
-					<br /><br />
-					<asp:Label ID="lblCannotDisable" runat="server" CssClass="small" Text="Cannot disable the provider because it is the default provider or,<br />in case of a Pages Provider, it manages the default page of the root namespace"
-						meta:resourcekey="lblCannotDisableResource1"/><br />
-					<asp:Label ID="lblResult" runat="server" meta:resourcekey="lblResultResource1" />
-				
+					
 					<div id="ProviderConfigHelpDiv" style="display: none;">
 						<asp:Label ID="lblProviderConfigHelp" runat="server" meta:resourcekey="lblProviderConfigHelpResource1" />
 					</div>
 				</div>
 			</asp:Panel>
-		
 		</asp:Panel>
-	
+		<div class="clear"></div>
+		<asp:Label ID="lblResult" runat="server" meta:resourcekey="lblResultResource1" />
 		<asp:HiddenField ID="txtCurrentProvider" runat="server" />
 	</div>
 

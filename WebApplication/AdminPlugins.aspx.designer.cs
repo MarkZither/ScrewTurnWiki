@@ -13,13 +13,13 @@ namespace ScrewTurn.Wiki {
     public partial class AdminPlugins {
         
         /// <summary>
-        /// lblProviders control.
+        /// lblPluginsConfiguration control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblProviders;
+        protected global::System.Web.UI.WebControls.Literal lblPluginsConfiguration;
         
         /// <summary>
         /// pnlList control.
@@ -31,22 +31,13 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Panel pnlList;
         
         /// <summary>
-        /// lblDisplay control.
+        /// lblPlugins control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblDisplay;
-        
-        /// <summary>
-        /// rdoFormatter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoFormatter;
+        protected global::System.Web.UI.WebControls.Literal lblPlugins;
         
         /// <summary>
         /// rptProviders control.
@@ -121,33 +112,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Button btnSave;
         
         /// <summary>
-        /// btnDisable control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDisable;
-        
-        /// <summary>
-        /// btnEnable control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEnable;
-        
-        /// <summary>
-        /// btnUnload control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUnload;
-        
-        /// <summary>
         /// btnCancel control.
         /// </summary>
         /// <remarks>
@@ -157,13 +121,13 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Button btnCancel;
         
         /// <summary>
-        /// lblCannotDisable control.
+        /// lblProviderConfigHelp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCannotDisable;
+        protected global::System.Web.UI.WebControls.Label lblProviderConfigHelp;
         
         /// <summary>
         /// lblResult control.
@@ -173,15 +137,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblResult;
-        
-        /// <summary>
-        /// lblProviderConfigHelp control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblProviderConfigHelp;
         
         /// <summary>
         /// txtCurrentProvider control.

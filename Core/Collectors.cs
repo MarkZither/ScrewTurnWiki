@@ -166,6 +166,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="assembly">The assembly.</param>
 		public static void AddPlugin(Type plugin, System.Reflection.Assembly assembly) {
 			_formatterProviderCollector.AddProvider(plugin, assembly);
+			FileNames[plugin.GetType().FullName] = assembly.FullName;
 			collectorsBox = null;
 		}
 
@@ -197,11 +198,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="typeName">The provider type name.</param>
 		/// <param name="enabled">A value indicating whether the provider is enabled.</param>
-		/// <param name="canDisable">A value indicating whether the provider can be disabled.</param>
 		/// <returns>The provider, or <c>null</c>.</returns>
-		public static IProviderV40 FindProvider(string wiki, string typeName, out bool enabled, out bool canDisable) {
+		public static IProviderV40 FindProvider(string wiki, string typeName, out bool enabled) {
 			enabled = false;
-			canDisable = true;
 			IProviderV40 prov = null;
 
 			prov = CollectorsBox.FormatterProviderCollector.GetProvider(typeName, wiki);

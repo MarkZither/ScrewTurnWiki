@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki {
 		private List<string> visitedUrls;
 
 		private IGlobalSettingsStorageProviderV40 globalSettingsProvider;
-		private List<IProviderV40> providers;
+		private List<IFormatterProviderV40> plugins;
 		private Dictionary<string, string> fileNamesForProviders;
 
 		/// <summary>
@@ -25,23 +25,20 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="globalSettingsProvider">The settings storage provider.</param>
 		/// <param name="fileNamesForProviders">A provider->file dictionary.</param>
-		/// <param name="providers">The providers to update.</param>
+		/// <param name="plugins">The providers to update.</param>
 		public ProviderUpdater(IGlobalSettingsStorageProviderV40 globalSettingsProvider,
 			Dictionary<string, string> fileNamesForProviders,
-			params IProviderV40[][] providers) {
+			IFormatterProviderV40[] plugins) {
 
 			if(globalSettingsProvider == null) throw new ArgumentNullException("settingsProvider");
 			if(fileNamesForProviders == null) throw new ArgumentNullException("fileNamesForProviders");
-			if(providers == null) throw new ArgumentNullException("providers");
-			if(providers.Length == 0) throw new ArgumentException("Providers cannot be empty", "providers");
+			if(plugins == null) throw new ArgumentNullException("providers");
+			if(plugins.Length == 0) throw new ArgumentException("Providers cannot be empty", "providers");
 
 			this.globalSettingsProvider = globalSettingsProvider;
 			this.fileNamesForProviders = fileNamesForProviders;
 
-			this.providers = new List<IProviderV40>(20);
-			foreach(IProviderV40[] group in providers) {
-				this.providers.AddRange(group);
-			}
+			this.plugins = plugins.ToList();
 
 			visitedUrls = new List<string>(10);
 		}
@@ -55,13 +52,13 @@ namespace ScrewTurn.Wiki {
 
 			int updatedDlls = 0;
 
-			foreach(IProviderV40 prov in providers) {
-				if(string.IsNullOrEmpty(prov.Information.UpdateUrl)) continue;
+			foreach(IFormatterProviderV40 plugin in plugins) {
+				if(string.IsNullOrEmpty(plugin.Information.UpdateUrl)) continue;
 
 				string newVersion;
 				string newDllUrl;
-				UpdateStatus status = Tools.GetUpdateStatus(prov.Information.UpdateUrl,
-					prov.Information.Version, out newVersion, out newDllUrl);
+				UpdateStatus status = Tools.GetUpdateStatus(plugin.Information.UpdateUrl,
+					plugin.Information.Version, out newVersion, out newDllUrl);
 
 				if(status == UpdateStatus.NewVersionFound && !string.IsNullOrEmpty(newDllUrl)) {
 					// Update is possible
@@ -70,20 +67,23 @@ namespace ScrewTurn.Wiki {
 					if(!visitedUrls.Contains(newDllUrl.ToLowerInvariant())) {
 						string dllName = null;
 
-						if(!fileNamesForProviders.TryGetValue(prov.GetType().FullName, out dllName)) {
-							Log.LogEntry("Could not determine DLL name for provider " + prov.GetType().FullName, EntryType.Error, Log.SystemUsername, null);
+						if(!fileNamesForProviders.TryGetValue(plugin.GetType().FullName, out dllName)) {
+							Log.LogEntry("Could not determine DLL name for provider " + plugin.GetType().FullName, EntryType.Error, Log.SystemUsername, null);
 							continue;
 						}
 
 						// Download DLL and install
-						if(DownloadAndUpdateDll(prov, newDllUrl, dllName)) {
+						if(DownloadAndUpdateDll(plugin, newDllUrl, dllName)) {
 							visitedUrls.Add(newDllUrl.ToLowerInvariant());
 							updatedDlls++;
+							foreach(PluginFramework.Wiki wiki in globalSettingsProvider.AllWikis()) {
+								ProviderLoader.SetUp<IFormatterProviderV40>(plugin.GetType(), Settings.GetProvider(wiki.WikiName).GetPluginConfiguration(plugin.GetType().FullName));
+							}
 						}
 					}
 					else {
 						// Skip DLL (already updated)
-						Log.LogEntry("Skipping provider " + prov.GetType().FullName + ": DLL already updated", EntryType.General, Log.SystemUsername, null);
+						Log.LogEntry("Skipping provider " + plugin.GetType().FullName + ": DLL already updated", EntryType.General, Log.SystemUsername, null);
 					}
 				}
 			}
@@ -101,6 +101,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="filename">The file name of the DLL.</param>
 		private bool DownloadAndUpdateDll(IProviderV40 provider, string url, string filename) {
 			try {
+				// They must always be null except in testing where they are mocked
 				HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
 				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 

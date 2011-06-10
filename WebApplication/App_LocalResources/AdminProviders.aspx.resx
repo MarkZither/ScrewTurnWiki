@@ -147,18 +147,6 @@
   <data name="btnSelectResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="btnSelectResource2.Text" xml:space="preserve">
-    <value>Select</value>
-  </data>
-  <data name="btnSelectResource2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="btnUnloadResource1.Text" xml:space="preserve">
-    <value>Unload</value>
-  </data>
-  <data name="btnUnloadResource1.ToolTip" xml:space="preserve">
-    <value>Unloads the Provider</value>
-  </data>
   <data name="lblAuthorResource1.Text" xml:space="preserve">
     <value>Author</value>
   </data>
@@ -168,8 +156,8 @@
   <data name="lblConfigurationStringTitleResource1.Text" xml:space="preserve">
     <value>Configuration String</value>
   </data>
-  <data name="lblDisplayResource1.Text" xml:space="preserve">
-    <value>Display</value>
+  <data name="lblPluginResource1.Text" xml:space="preserve">
+    <value>Plugins (Formatter Providers)</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
     <value>Name</value>
@@ -183,8 +171,8 @@
   <data name="lblProviderNameResource1.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="lblProvidersResource1.Text" xml:space="preserve">
-    <value>Providers</value>
+  <data name="lblPluginsConfigurationResource1.Text" xml:space="preserve">
+    <value>Plugins Configuration</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -216,12 +204,6 @@
   <data name="pnlProviderDetailsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rdoFormatterResource1.Text" xml:space="preserve">
-    <value>Formatter Providers</value>
-  </data>
-  <data name="rdoFormatterResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="txtConfigurationStringResource1.Text" xml:space="preserve">
     <value />
   </data>
@@ -230,12 +212,6 @@
   </data>
   <data name="lblUpdateStatusResource1.Text" xml:space="preserve">
     <value>Update Status</value>
-  </data>
-  <data name="lblCannotDisableResource1.Text" xml:space="preserve">
-    <value>Cannot disable the provider because it is the default provider or,&lt;br /&gt;in case of a Pages Provider, it manages the default page of the root namespace</value>
-  </data>
-  <data name="lblCannotDisableResource1.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="lblProviderDllResource1.Text" xml:space="preserve">
     <value />

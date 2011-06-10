@@ -13,40 +13,22 @@ namespace ScrewTurn.Wiki {
     public partial class AdminProvidersManagement {
         
         /// <summary>
-        /// lblProvidersManagementTitle control.
+        /// lblPluginsManagementTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblProvidersManagementTitle;
+        protected global::System.Web.UI.WebControls.Literal lblPluginsManagementTitle;
         
         /// <summary>
-        /// lblDisplay control.
+        /// lblPlugins control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblDisplay;
-        
-        /// <summary>
-        /// rdoStorageProviders control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoStorageProviders;
-        
-        /// <summary>
-        /// rdoFormatter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdoFormatter;
+        protected global::System.Web.UI.WebControls.Literal lblPlugins;
         
         /// <summary>
         /// rptProviders control.
