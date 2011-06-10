@@ -6,6 +6,7 @@ using System.Text;
 using NUnit.Framework;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.Tests;
+using System.Configuration;
 
 namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
@@ -14,8 +15,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 		public override ISettingsStorageProviderV40 GetProvider() {
 			AzureSettingsStorageProvider settingsProvider = new AzureSettingsStorageProvider();
-			settingsProvider.SetUp(MockHost(), "DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==");
-			settingsProvider.Init(MockHost(), "DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "");
+			settingsProvider.SetUp(MockHost(), ConfigurationManager.AppSettings["AzureConnString"]);
+			settingsProvider.Init(MockHost(), ConfigurationManager.AppSettings["AzureConnString"], "");
 
 			return settingsProvider;
 		}
@@ -24,18 +25,18 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 		public new void TearDown() {
 			base.TearDown();
 
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureSettingsStorageProvider.SettingsTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureSettingsStorageProvider.MetadataTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureSettingsStorageProvider.OutgoingLinksTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureSettingsStorageProvider.RecentChangesTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureSettingsStorageProvider.AclEntriesTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzureSettingsStorageProvider.PluginsTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzureSettingsStorageProvider.SettingsTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzureSettingsStorageProvider.MetadataTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzureSettingsStorageProvider.OutgoingLinksTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzureSettingsStorageProvider.RecentChangesTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzureSettingsStorageProvider.AclEntriesTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzureSettingsStorageProvider.PluginsTable);
 		}
 
 		[Test]
 		public void Init() {
 			ISettingsStorageProviderV40 prov = GetProvider();
-			prov.Init(MockHost(), "DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "");
+			prov.Init(MockHost(), ConfigurationManager.AppSettings["AzureConnString"], "");
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}

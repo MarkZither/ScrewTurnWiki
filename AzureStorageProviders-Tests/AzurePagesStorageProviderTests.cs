@@ -6,6 +6,7 @@ using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
 using NUnit.Framework;
 using ScrewTurn.Wiki.Tests;
+using System.Configuration;
 
 namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
@@ -14,8 +15,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 		public override IPagesStorageProviderV40 GetProvider() {
 			AzurePagesStorageProvider prov = new AzurePagesStorageProvider();
-			prov.SetUp(MockHost(), "DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==");
-			prov.Init(MockHost(), "DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", "");
+			prov.SetUp(MockHost(), ConfigurationManager.AppSettings["AzureConnString"]);
+			prov.Init(MockHost(), ConfigurationManager.AppSettings["AzureConnString"], "");
 			return prov;
 		}
 
@@ -23,15 +24,15 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 		public new void TearDown() {
 			base.TearDown();
 
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.CategoriesTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.ContentTemplatesTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.MessagesTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.NamespacesTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.NavigationPathsTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.PagesContentsTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.PagesInfoTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.SnippetsTable);
-			TableStorage.TruncateTable("DefaultEndpointsProtocol=http;AccountName=unittestonazurestorage;AccountKey=YJYFEAfNT88YBhYnneUNAO8EqYUcPHU6ito1xKHI5g9wHB0dxEiostlZJIz2BjUY0wICXusR0A7QB5P7toK9eg==", AzurePagesStorageProvider.IndexWordMappingTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.CategoriesTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.ContentTemplatesTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.MessagesTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.NamespacesTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.NavigationPathsTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.PagesContentsTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.PagesInfoTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.SnippetsTable);
+			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.IndexWordMappingTable);
 		}
 
 		[Test]
