@@ -501,7 +501,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				mappings.Add(new DumpedWordMapping((uint)wordId,
 					(uint)(int)reader["Document"],
 					(ushort)(short)reader["FirstCharIndex"], (ushort)(short)reader["WordIndex"],
-					(byte)reader["Location"]));
+					(byte)(sbyte)reader["Location"]));
 			}
 			CloseReader(reader);
 
