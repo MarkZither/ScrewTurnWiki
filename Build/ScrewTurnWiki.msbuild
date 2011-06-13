@@ -54,16 +54,15 @@
 		<Delete Files=".\Artifacts\WebApplication-SqlServer\Web.Azure.config" />
 		
 		<!-- Windows Azure Package -->
-		<MakeDir Directories=".\Artifacts\TempAzure\" />
-		<CreateItem Include=".\Artifacts\WebApplication\**\*.*">
-			<Output ItemName="TempAzureInput" TaskParameter="Include" />
+		<Copy SourceFiles="..\WebApplication\Web.config" DestinationFiles="..\WebApplication\Web.config.bak" />
+		<Copy SourceFiles="..\WebApplication\Web.Azure.config" DestinationFiles="..\WebApplication\Web.config" />
+		<MSBuild Projects="@(AzureProjectFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration)" Targets="Publish" />
+		<Copy SourceFiles="..\WebApplication\Web.config.bak" DestinationFiles="..\WebApplication\Web.config" />
+		<CreateItem Include="Temp\Publish\*">
+			<Output ItemName="BuiltAzurePackage" TaskParameter="Include" />
 		</CreateItem>
-		<Copy SourceFiles="@(TempAzureInput)" DestinationFolder=".\Artifacts\TempAzure\%(RecursiveDir)" />
-		<Copy SourceFiles="..\WebApplication\Web.Azure.config" DestinationFiles=".\Artifacts\TempAzure\Web.config" />
-		<MakeDir Directories=".\Artifacts\Azure\" />
-		<Exec Command='"$(ProgramFiles)\Windows Azure SDK\v1.4\bin\cspack.exe" ..\Azure\ServiceDefinition.csdef /out:Artifacts\Azure\ScrewTurnWiki.cspkg /role:WebApplication;Artifacts\TempAzure /sites:WebApplication;Web;Artifacts\TempAzure /rolePropertiesFile:WebApplication;AzureProps.txt' />
-		<Copy SourceFiles="..\Azure\ServiceConfiguration.cscfg" DestinationFolder=".\Artifacts\Azure\" />
-		<RemoveDir Directories=".\Artifacts\TempAzure" />
+		<Copy SourceFiles="@(BuiltAzurePackage)" DestinationFolder=".\Artifacts\Azure" />
+		<Delete Files="..\WebApplication\Web.config.bak" />
 		
 		<!-- Plugins Assemblies -->
 		<CreateItem Include="Temp\*Plugin.dll">
