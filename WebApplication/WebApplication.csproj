@@ -659,13 +659,6 @@
     <Compile Include="Sitemap.aspx.designer.cs">
       <DependentUpon>Sitemap.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ThemeSelector.ascx.cs">
-      <DependentUpon>ThemeSelector.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ThemeSelector.ascx.designer.cs">
-      <DependentUpon>ThemeSelector.ascx</DependentUpon>
-    </Compile>
     <Compile Include="ThemesProviderSelector.ascx.cs">
       <DependentUpon>ThemesProviderSelector.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1385,7 +1378,6 @@
     <Content Include="robots.txt" />
     <Content Include="RSS.aspx" />
     <Content Include="SessionRefresh.aspx" />
-    <Content Include="ThemeSelector.ascx" />
     <Content Include="ThemesProviderSelector.ascx" />
     <Content Include="Themes\Admin.css" />
     <Content Include="Themes\Elegant\Icon.ico" />
