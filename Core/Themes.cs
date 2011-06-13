@@ -34,7 +34,7 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 			else {
-				foreach(IThemeStorageProviderV40 prov in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(wiki)) {
+				foreach(IThemesStorageProviderV40 prov in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(wiki)) {
 					if(prov.ToString() == provider) result.AddRange(prov.ListThemes());
 				}
 			}
@@ -48,7 +48,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="themeName">The name of the theme to be deleted.</param>
 		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
 		public static bool DeleteTheme(string wiki, string themeName) {
-			foreach(IThemeStorageProviderV40 themeDeleteProvider in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(wiki)) {
+			foreach(IThemesStorageProviderV40 themeDeleteProvider in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(wiki)) {
 				if(!IsThemeInUse(wiki, themeName)) {
 					string[] theme = themeName.Split('|');
 					if (theme[0] == themeDeleteProvider.ToString())	return themeDeleteProvider.DeleteTheme(theme[theme.Length-1]);
@@ -104,7 +104,7 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 				else {
-					IThemeStorageProviderV40 themeListFileProvider = Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(provider, wiki);
+					IThemesStorageProviderV40 themeListFileProvider = Collectors.CollectorsBox.ThemesProviderCollector.GetProvider(provider, wiki);
 					if(themeListFileProvider == null) return null;
 					List<string> lists = themeListFileProvider.ListThemeFiles(theme, searchPattern);
 					if((lists == null) || (lists.Count == 0)) return null;
@@ -130,7 +130,7 @@ namespace ScrewTurn.Wiki {
 			string[] values = themeName.Split('|');
 			string provider = values[0];
 			string theme = values[values.Length - 1];
-			IThemeStorageProviderV40 themeStorageProvider = Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(provider, wiki);
+			IThemesStorageProviderV40 themeStorageProvider = Collectors.CollectorsBox.ThemesProviderCollector.GetProvider(provider, wiki);
 			return themeStorageProvider.StoreTheme(theme, zipFile);
 		}
 
@@ -145,7 +145,7 @@ namespace ScrewTurn.Wiki {
 			string provider = values[0];
 			string theme = values[values.Length-1];
 			if(provider == "standard") return "Themes/" + GetRelativePath(Path.Combine(GlobalSettings.ThemesDirectory, theme), theme) + "/";
-			IThemeStorageProviderV40 themePathProvider = Collectors.CollectorsBox.ThemeProviderCollector.GetProvider(provider, wiki);
+			IThemesStorageProviderV40 themePathProvider = Collectors.CollectorsBox.ThemesProviderCollector.GetProvider(provider, wiki);
 			return themePathProvider.GetThemePath(theme);
 		}
 	}

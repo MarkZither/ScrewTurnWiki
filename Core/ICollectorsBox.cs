@@ -40,7 +40,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the theme provider collector.
 		/// </summary>
-		ProviderCollector<IThemeStorageProviderV40> ThemeProviderCollector { get; }
+		ProviderCollector<IThemesStorageProviderV40> ThemesProviderCollector { get; }
 
 		/// <summary>
 		/// Gets the users provider collector.

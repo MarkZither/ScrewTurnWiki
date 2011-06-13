@@ -98,7 +98,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			return output;
 		}
 
-		#region IFormatterProviderV30 Member
+		#region IFormatterProviderV40 Member
 
 		/// <summary>
 		/// Specifies whether or not to execute Phase 1.
@@ -140,7 +140,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		#endregion
 
-		#region IProviderV30 Member
+		#region IProviderV40 Member
 
 		void IDisposable.Dispose() {
 		}

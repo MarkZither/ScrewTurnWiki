@@ -347,33 +347,40 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Gets the default provider of the specified type.
 		/// </summary>
 		/// <param name="providerType">The type of the provider (
-		/// <see cref="T:IPagesStorageProviderV30" />, 
-		/// <see cref="T:IUsersStorageProviderV30" />, 
-		/// <see cref="T:IFilesStorageProviderV30" />,
-		/// <see cref="T:IFormatterProviderV30" />).</param>
+		/// <see cref="T:IPagesStorageProviderV40" />, 
+		/// <see cref="T:IUsersStorageProviderV40" />, 
+		/// <see cref="T:IFilesStorageProviderV40" />,
+		/// <see cref="T:IFormatterProviderV40" />).</param>
 		/// <returns>The Full type name of the default provider of the specified type or <c>null</c>.</returns>
 		string GetDefaultProvider(Type providerType);
 
 		/// <summary>
-		/// Gets the pages storage providers, either enabled or disabled.
+		/// Gets the pages storage providers.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
 		IPagesStorageProviderV40[] GetPagesStorageProviders(string wiki);
 
 		/// <summary>
-		/// Gets the users storage providers, either enabled or disabled.
+		/// Gets the users storage providers.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
 		IUsersStorageProviderV40[] GetUsersStorageProviders(string wiki);
 
 		/// <summary>
-		/// Gets the files storage providers, either enabled or disabled.
+		/// Gets the files storage providers.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
 		IFilesStorageProviderV40[] GetFilesStorageProviders(string wiki);
+
+		/// <summary>
+		/// Gets the theme providers.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The providers.</returns>
+		IThemesStorageProviderV40[] GetThemesProviders(string wiki);
 
 		/// <summary>
 		/// Gets the formatter providers, either enabled or disabled.

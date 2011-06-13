@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements the methods to view, add or delete Themes
 	/// </summary>
-	public class ThemeStorageProvider : ProviderBase, IThemeStorageProviderV40 {
+	public class ThemesStorageProvider : ProviderBase, IThemesStorageProviderV40 {
 
 		private const string ThemeDirectory = ("Themes");
 		/// <summary>
@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the path.
 		/// </summary>
-		/// <returns>The path generated from hostV30 and ThemeDirectory</returns>
+		/// <returns>The path generated from host and ThemeDirectory</returns>
 		private string GetPath(string path1, string path2) {
 			return Path.Combine(path1, path2);
 		}

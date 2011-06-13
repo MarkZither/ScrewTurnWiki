@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki {
 			Type settingsProvider,
 			System.Reflection.Assembly settingsProviderAssembly,
 			ProviderCollector<IUsersStorageProviderV40> usersProviderCollector,
-			ProviderCollector<IThemeStorageProviderV40> themeProviderCollector,
+			ProviderCollector<IThemesStorageProviderV40> themeProviderCollector,
 			ProviderCollector<IPagesStorageProviderV40> pagesProviderCollector,
 			ProviderCollector<IFilesStorageProviderV40> filesProviderCollector,
 			ProviderCollector<IFormatterProviderV40> formatterProviderCollector) {
@@ -39,7 +39,7 @@ namespace ScrewTurn.Wiki {
 			_settingsProviderAssembly = settingsProviderAssembly;
 			_settingsProvider = new Dictionary<string, ISettingsStorageProviderV40>();
 			_usersProviderCollector = usersProviderCollector;
-			_themeProviderCollector = themeProviderCollector;
+			_themesProviderCollector = themeProviderCollector;
 			_pagesProviderCollector = pagesProviderCollector;
 			_filesProviderCollector = filesProviderCollector;
 			_formatterProviderCollector = formatterProviderCollector; ;
@@ -54,7 +54,7 @@ namespace ScrewTurn.Wiki {
 		private Dictionary<string, ISettingsStorageProviderV40> _settingsProvider;
 
 		private ProviderCollector<IUsersStorageProviderV40> _usersProviderCollector;
-		private ProviderCollector<IThemeStorageProviderV40> _themeProviderCollector;
+		private ProviderCollector<IThemesStorageProviderV40> _themesProviderCollector;
 		private ProviderCollector<IPagesStorageProviderV40> _pagesProviderCollector;
 		private ProviderCollector<IFilesStorageProviderV40> _filesProviderCollector;
 		private ProviderCollector<IFormatterProviderV40> _formatterProviderCollector;
@@ -97,11 +97,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// The Theme Provider Collector istance.
+		/// The Themes Provider Collector istance.
 		/// </summary>
-		public ProviderCollector<IThemeStorageProviderV40> ThemeProviderCollector {
+		public ProviderCollector<IThemesStorageProviderV40> ThemesProviderCollector {
 			get {
-				return _themeProviderCollector;
+				return _themesProviderCollector;
 			}
 		}
 
@@ -143,7 +143,7 @@ namespace ScrewTurn.Wiki {
 				_settingsProvider.Clear();
 			}
 			_usersProviderCollector.Dispose();
-			_themeProviderCollector.Dispose();
+			_themesProviderCollector.Dispose();
 			_pagesProviderCollector.Dispose();
 			_filesProviderCollector.Dispose();
 			_formatterProviderCollector.Dispose();

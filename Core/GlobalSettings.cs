@@ -369,7 +369,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultThemesProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultThemesProvider"), typeof(ThemeStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultThemesProvider"), typeof(ThemesStorageProvider).ToString());
 			}
 			set {
 				Provider.SetSetting("DefaultThemesProvider", value);

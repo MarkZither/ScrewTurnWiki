@@ -25,7 +25,7 @@
     <DocumentationFile>bin\Debug\AzureStorageProviders.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -38,6 +38,7 @@
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\References\Lib\DotNetZipLib-DevKit-v1.9\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>False</Private>
@@ -60,7 +61,8 @@
     <Compile Include="AzurePagesStorageProvider.cs" />
     <Compile Include="AzureSettingsStorageProvider.cs" />
     <Compile Include="AzureUsersStorageProvider.cs" />
-    <Compile Include="AzureThemeStorageProvider.cs" />
+    <Compile Include="AzureThemesStorageProvider.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="IIndexConnector.cs" />
     <Compile Include="IndexConnector.cs" />

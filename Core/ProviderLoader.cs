@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki {
 		internal const string UsersProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IUsersStorageProviderV40";
 		internal const string PagesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IPagesStorageProviderV40";
 		internal const string FilesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IFilesStorageProviderV40";
-		internal const string ThemesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IThemeStorageProviderV40";
+		internal const string ThemesProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IThemesStorageProviderV40";
 		internal const string FormatterProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.IFormatterProviderV40";
 
 		internal static string GlobalSettingsStorageProviderAssemblyName = "";

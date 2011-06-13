@@ -138,7 +138,7 @@
     <Compile Include="SubjectInfo.cs" />
     <Compile Include="Templates.cs" />
     <Compile Include="Themes.cs" />
-    <Compile Include="ThemeStorageProvider.cs" />
+    <Compile Include="ThemesStorageProvider.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="UrlTools.cs" />
     <Compile Include="Users.cs">

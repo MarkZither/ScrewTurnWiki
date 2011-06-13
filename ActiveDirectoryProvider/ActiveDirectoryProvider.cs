@@ -571,7 +571,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 
 		/// <summary>
 		/// Gets a user account.
-		/// Not Implemented - Passed Directly to the IUsersStorageProviderV30
+		/// Not Implemented - Passed Directly to the IUsersStorageProviderV40
 		/// </summary>
 		/// <param name="email">The email address.</param>
 		/// <returns>
@@ -587,7 +587,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 
 		/// <summary>
 		/// Notifies the provider that a user has logged in through the authentication cookie.
-		/// Not Implemented - Passed Directly to the IUsersStorageProviderV30
+		/// Not Implemented - Passed Directly to the IUsersStorageProviderV40
 		/// </summary>
 		/// <param name="user">The user who has logged in.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="user"/> is <c>null</c>.</exception>
@@ -598,7 +598,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 
 		/// <summary>
 		/// Notifies the provider that a user has logged out.
-		/// Not Implemented - Passed Directly to the IUsersStorageProviderV30
+		/// Not Implemented - Passed Directly to the IUsersStorageProviderV40
 		/// </summary>
 		/// <param name="user">The user who has logged out.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="user"/> is <c>null</c>.</exception>
@@ -609,7 +609,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 
 		/// <summary>
 		/// Stores a user data element, overwriting the previous one if present.
-		/// Not Implemented - Passed Directly to the IUsersStorageProviderV30
+		/// Not Implemented - Passed Directly to the IUsersStorageProviderV40
 		/// </summary>
 		/// <param name="user">The user the data belongs to.</param>
 		/// <param name="key">The key of the data element (case insensitive).</param>
@@ -626,7 +626,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 
 		/// <summary>
 		/// Gets a user data element, if any.
-		/// Not Implemented - Passed Directly to the IUsersStorageProviderV30
+		/// Not Implemented - Passed Directly to the IUsersStorageProviderV40
 		/// </summary>
 		/// <param name="user">The user the data belongs to.</param>
 		/// <param name="key">The key of the data element.</param>
@@ -642,7 +642,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 
 		/// <summary>
 		/// Retrieves all the user data elements for a user.
-		/// Not Implemented - Passed Directly to the IUsersStorageProviderV30
+		/// Not Implemented - Passed Directly to the IUsersStorageProviderV40
 		/// </summary>
 		/// <param name="user">The user.</param>
 		/// <returns>The user data elements (key-&gt;value).</returns>
@@ -654,7 +654,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 
 		/// <summary>
 		/// Gets all the users that have the specified element in their data.
-		/// Not Implemented - Passed Directly to the IUsersStorageProviderV30
+		/// Not Implemented - Passed Directly to the IUsersStorageProviderV40
 		/// </summary>
 		/// <param name="key">The key of the data.</param>
 		/// <returns>The users and the data.</returns>
