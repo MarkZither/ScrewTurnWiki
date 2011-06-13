@@ -255,8 +255,11 @@ namespace ScrewTurn.Wiki {
 							break;
 						case "span":
 							if(node.Attributes["style"] != null) {
-								if(node.Attributes["style"].Value.Replace(" ", "").Contains("font-weight:normal")) {
+								if(node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("font-weight:normal")) {
 									result += ProcessChild(node.ChildNodes);
+								}
+								if(node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("white-space:pre")) {
+									result += ": ";
 								}
 							}
 							if(node.Attributes.Count > 0) {
