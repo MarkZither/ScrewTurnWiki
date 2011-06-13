@@ -66,7 +66,7 @@
 		<MakeDir Directories="@(WebAppOutput_SqlServer_PublicDirectory_Plugins)" />
 		
 		<!-- Plugins Assemblies -->
-		<CreateItem Include="Temp\SqlServerProviders.dll;Temp\ActiveDirectoryProvider.dll;Temp\*Plugin.dll">
+		<CreateItem Include="Temp\SqlServerProviders.dll;Temp\ActiveDirectoryProvider.dll;Temp\AzureStorageProviders.dll;Temp\*Plugin.dll">
 			<Output ItemName="BuiltPlugins" TaskParameter="Include" />
 		</CreateItem>
 		<Copy SourceFiles="@(BuiltPlugins)" DestinationFolder=".\Artifacts\Plugins\" />
@@ -83,6 +83,7 @@
 			<Output ItemName="BuiltTests" TaskParameter="Include" />
 		</CreateItem>
 		<Copy SourceFiles="@(BuiltTests)" DestinationFolder=".\Artifacts\Tests\" />
+		<Copy SourceFiles="..\AzureStorageProviders-Tests\App.config" DestinationFiles=".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll.config" />
 		
 		<!-- Delete Temp directory -->
 		<RemoveDir Directories="@(BuildTemp)" />
