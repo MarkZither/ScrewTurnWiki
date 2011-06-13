@@ -76,7 +76,7 @@ namespace ScrewTurn.Wiki {
 
 			string newVersion = null;
 			string ignored = null;
-			UpdateStatus status = Tools.GetUpdateStatus("http://www.screwturn.eu/Version/Wiki/4.htm",
+			UpdateStatus status = Tools.GetUpdateStatus("http://www.screwturn.eu/Version4.0/Wiki/4.htm",
 				GlobalSettings.WikiVersion, out newVersion, out ignored);
 
 			if(status == UpdateStatus.Error) {
