@@ -61,7 +61,7 @@
     <Compile Include="AzurePagesStorageProvider.cs" />
     <Compile Include="AzureSettingsStorageProvider.cs" />
     <Compile Include="AzureUsersStorageProvider.cs" />
-    <Compile Include="AzureThemeStorageProvider.cs" />
+    <Compile Include="AzureThemesStorageProvider.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="IIndexConnector.cs" />

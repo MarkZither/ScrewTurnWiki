@@ -93,7 +93,7 @@
     <Compile Include="IResourceExchanger.cs" />
     <Compile Include="ISettingsStorageProvider.cs" />
     <Compile Include="IStorageProvider.cs" />
-    <Compile Include="IThemeStorageProvider.cs" />
+    <Compile Include="IThemesStorageProvider.cs" />
     <Compile Include="IUsersStorageProvider.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageDocument.cs" />

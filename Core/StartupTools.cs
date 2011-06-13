@@ -91,7 +91,7 @@ namespace ScrewTurn.Wiki {
 			// Add StorageProviders, from WebConfig, to Collectors and Setup them
 			ProviderLoader.LoadStorageProviders<ISettingsStorageProviderV40>(new List<StorageProvider>() { ((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/settingsProvider"))[0] });
 			ProviderLoader.LoadStorageProviders<IFilesStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/filesProviders"));
-			ProviderLoader.LoadStorageProviders<IThemeStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/themesProviders"));
+			ProviderLoader.LoadStorageProviders<IThemesStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/themesProviders"));
 			ProviderLoader.LoadStorageProviders<IUsersStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/usersProviders"));
 			ProviderLoader.LoadStorageProviders<IPagesStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/pagesProviders"));
 

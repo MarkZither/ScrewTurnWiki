@@ -36,7 +36,7 @@ namespace ScrewTurn.Wiki {
 		public void Reload() {
 			IProviderV40[] allProviders = null;
 
-			allProviders = Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki);
+			allProviders = Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(currentWiki);
 			lstThemesProviders.Items.Clear();
 
 			lstThemesProviders.Items.Add(new ListItem("standard", "standard"));

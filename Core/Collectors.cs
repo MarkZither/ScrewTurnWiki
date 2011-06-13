@@ -85,7 +85,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The Theme Provider Collector istance.
 		/// </summary>
-		private static ProviderCollector<IThemeStorageProviderV40> _themeProviderCollector;
+		private static ProviderCollector<IThemesStorageProviderV40> _themeProviderCollector;
 
 		/// <summary>
 		/// The Pages Provider Collector instance.
@@ -111,7 +111,7 @@ namespace ScrewTurn.Wiki {
 			_usersProviderCollector = new ProviderCollector<IUsersStorageProviderV40>();
 			_pagesProviderCollector = new ProviderCollector<IPagesStorageProviderV40>();
 			_filesProviderCollector = new ProviderCollector<IFilesStorageProviderV40>();
-			_themeProviderCollector = new ProviderCollector<IThemeStorageProviderV40>();
+			_themeProviderCollector = new ProviderCollector<IThemesStorageProviderV40>();
 			_formatterProviderCollector = new ProviderCollector<IFormatterProviderV40>();
 		}
 		
@@ -142,7 +142,7 @@ namespace ScrewTurn.Wiki {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_pagesProviderCollector.AddProvider(provider, assembly);
 			}
-			else if(providerInterface.FullName == typeof(IThemeStorageProviderV40).FullName) {
+			else if(providerInterface.FullName == typeof(IThemesStorageProviderV40).FullName) {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_themeProviderCollector.AddProvider(provider, assembly);
 			}

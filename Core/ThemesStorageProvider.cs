@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Implements the methods to view, add or delete Themes
 	/// </summary>
-	public class ThemeStorageProvider : ProviderBase, IThemeStorageProviderV40 {
+	public class ThemesStorageProvider : ProviderBase, IThemesStorageProviderV40 {
 
 		private const string ThemeDirectory = ("Themes");
 		/// <summary>

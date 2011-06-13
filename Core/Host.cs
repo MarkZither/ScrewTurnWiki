@@ -713,7 +713,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="providerType">The type of the provider (
 		/// <see cref="T:IPagesStorageProviderV40" />, 
 		/// <see cref="T:IUsersStorageProviderV40" />, 
-		/// <see cref="T:IFilesStorageProviderV40" />.</param>
+		/// <see cref="T:IFilesStorageProviderV40" />,
+		/// <see cref="T:IThemesStorageProviderV40" />.</param>
 		/// <returns>The Full type name of the default provider of the specified type or <c>null</c>.</returns>
 		public string GetDefaultProvider(Type providerType) {
 			switch(providerType.FullName) {
@@ -731,7 +732,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the pages storage providers, either enabled or disabled.
+		/// Gets the pages storage providers.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
@@ -744,7 +745,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the users storage providers, either enabled or disabled.
+		/// Gets the users storage providers.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
@@ -757,7 +758,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the files storage providers, either enabled or disabled.
+		/// Gets the files storage providers.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
@@ -770,13 +771,13 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the theme providers, either enabled or disabled.
+		/// Gets the theme providers.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		public IThemeStorageProviderV40[] GetThemeProviders(string wiki) {
-			List<IThemeStorageProviderV40> themesStorageProviders = new List<IThemeStorageProviderV40>();
-			foreach(IThemeStorageProviderV40 themesStorageProvider in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(wiki)) {
+		public IThemesStorageProviderV40[] GetThemesProviders(string wiki) {
+			List<IThemesStorageProviderV40> themesStorageProviders = new List<IThemesStorageProviderV40>();
+			foreach(IThemesStorageProviderV40 themesStorageProvider in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(wiki)) {
 				themesStorageProviders.Add(themesStorageProvider);
 			}
 			return themesStorageProviders.ToArray();

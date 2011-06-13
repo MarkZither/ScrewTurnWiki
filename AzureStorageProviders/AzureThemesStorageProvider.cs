@@ -13,13 +13,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 	/// <summary>
 	/// Implements the methods to view, add or delete Themes
 	/// </summary>
-	public class AzureThemeStorageProvider :IThemeStorageProviderV40 {
+	public class AzureThemesStorageProvider :IThemesStorageProviderV40 {
 
 		private IHostV40 _host;
 		private string _wiki;
 		private CloudBlobClient _client;
 
-		#region IThemeStorageProviderV40 Members
+		#region IThemesStorageProviderV40 Members
 
 		private List<string> ListFilesForInternalUse(string directory, bool flatBlob) {
 			try {

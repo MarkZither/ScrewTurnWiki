@@ -39,12 +39,12 @@ namespace ScrewTurn.Wiki {
 		# region Themes
 		private void LoadThemes() {
 			lstProvThemeSelectorUpload.Items.Clear();
-			foreach(IProviderV40 themesProv in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki)) {
+			foreach(IProviderV40 themesProv in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(currentWiki)) {
 				lstProvThemeSelectorUpload.Items.Add(new ListItem(themesProv.Information.Name, themesProv.ToString()));
 			}
 
 			provThemeSelector.Items.Clear();
-			foreach(IProviderV40 themesProvider in Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki)) {
+			foreach(IProviderV40 themesProvider in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(currentWiki)) {
 				provThemeSelector.Items.Add(new ListItem(themesProvider.Information.Name, themesProvider.ToString()));
 			}
 			fillThemeList(SelectedProviderThemeDelete);

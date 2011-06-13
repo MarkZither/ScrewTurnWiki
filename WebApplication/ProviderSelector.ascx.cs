@@ -50,7 +50,7 @@ namespace ScrewTurn.Wiki {
 					defaultProvider = GlobalSettings.DefaultPagesProvider;
 					break;
 				case ProviderType.Themes:
-					allProviders = Collectors.CollectorsBox.ThemeProviderCollector.GetAllProviders(currentWiki);
+					allProviders = Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(currentWiki);
 					break;
 				case ProviderType.Files:
 					allProviders = Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki);
