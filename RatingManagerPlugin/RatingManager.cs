@@ -23,7 +23,7 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 		private IHostV40 _host;
 		private string _wiki;
 		private bool _enableLogging = true;
-		private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "3.0.3.555", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RatingManager2.txt");
+		private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "4.0.1.71", "http://www.screwturn.eu", "http://www.screwturn.eu/Version4.0/PluginPack/RatingManager.txt");
 
 		private bool foundRatings = false;
 
@@ -394,6 +394,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
 		public void SetUp(IHostV40 host, string config) {
+			_host = host;
 			IFilesStorageProviderV40 filesStorageProvider = GetDefaultFilesStorageProvider();
 
 			if(!DirectoryExists(filesStorageProvider, defaultDirectoryName)) {

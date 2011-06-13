@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		private const string ConfigHelpHtmlValue = "Config consists of three lines:<br/><i>&lt;Url&gt;</i> - The base url to the Unfuddle API (i.e. http://account_name.unfuddle.com/api/v1/projects/project_ID)<br/><i>&lt;Username&gt;</i> - The username to the unfuddle account to use for authentication<br/><i>&lt;Password&gt;</i> - The password to the unfuddle account to use for authentication<br/>";
 		private const string LoadErrorMessage = "Unable to load ticket report at this time.";
 		private static readonly Regex UnfuddleRegex = new Regex(@"{unfuddle}", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-		private static readonly ComponentInformation Info = new ComponentInformation("Unfuddle Tickets Plugin", "Threeplicate Srl", "3.0.4.575", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/UnfuddleTickets2.txt");
+		private static readonly ComponentInformation Info = new ComponentInformation("Unfuddle Tickets Plugin", "Threeplicate Srl", "4.0.1.71", "http://www.screwturn.eu", "http://www.screwturn.eu/Version4.0/PluginPack/UnfuddleTickets.txt");
 
 		private string _config;
 		private IHostV40 _host;

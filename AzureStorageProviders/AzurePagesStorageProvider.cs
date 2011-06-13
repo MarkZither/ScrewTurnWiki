@@ -2771,7 +2771,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// Gets the Information about the Provider.
 		/// </summary>
 		public ComponentInformation Information {
-			get { return new ComponentInformation("Azure Table Storage Pages Storage Provider", "Threeplicate Srl", _host.GetGlobalSettingValue(GlobalSettingName.WikiVersion), "", ""); }
+			get { return new ComponentInformation("Azure Table Storage Pages Storage Provider", "Threeplicate Srl", "4.0.1.71", "http://www.screwturn.eu", null); }
 		}
 
 		/// <summary>

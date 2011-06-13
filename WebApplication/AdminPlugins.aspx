@@ -63,6 +63,10 @@
 							<td><%# Eval("Version") %></td>
 							<td><a href='<%# Eval("AuthorUrl") %>' target="_blank"><%# Eval("Author") %></a></td>
 							<td><%# Eval("UpdateStatus") %></td>
+							<td>
+								<asp:LinkButton ID="btnEnable" runat="server" CommandArgument='<%# Eval("TypeName") %>' CommandName="Enable" meta:resourcekey="btnEnableResource1" Text="Enable" ToolTip="Enable the Provider" Visible='<%# Eval("Disabled") %>' />
+								<asp:LinkButton ID="btnDisable" runat="server" CommandArgument='<%# Eval("TypeName") %>' CommandName="Disable" meta:resourcekey="btnDisableResource1" Text="Disable" ToolTip="Disable the Provider" Visible='<%# Eval("Enabled") %>' />
+							</td>
 							<td><asp:LinkButton ID="btnSelect" runat="server" Text="Select" CommandName="Select" CommandArgument='<%# Eval("TypeName") %>' meta:resourcekey="btnSelectResource1" /></td>
 						</tr>
 					</AlternatingItemTemplate>
