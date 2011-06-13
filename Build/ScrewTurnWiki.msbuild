@@ -61,7 +61,7 @@
 		<Copy SourceFiles="@(TempAzureInput)" DestinationFolder=".\Artifacts\TempAzure\%(RecursiveDir)" />
 		<Copy SourceFiles="..\WebApplication\Web.Azure.config" DestinationFiles=".\Artifacts\TempAzure\Web.config" />
 		<MakeDir Directories=".\Artifacts\Azure\" />
-		<Exec Command='"$(ProgramFiles)\Windows Azure SDK\v1.4\bin\cspack.exe" ..\Azure\ServiceDefinition.csdef /out:Artifacts\Azure\ScrewTurnWiki.cspkg /role:WebApplication;Artifacts\TempAzure /sites:WebApplication;Web;Artifacts\TempAzure' />
+		<Exec Command='"$(ProgramFiles)\Windows Azure SDK\v1.4\bin\cspack.exe" ..\Azure\ServiceDefinition.csdef /out:Artifacts\Azure\ScrewTurnWiki.cspkg /role:WebApplication;Artifacts\TempAzure /sites:WebApplication;Web;Artifacts\TempAzure /rolePropertiesFile:WebApplication;AzureProps.txt' />
 		<Copy SourceFiles="..\Azure\ServiceConfiguration.cscfg" DestinationFolder=".\Artifacts\Azure\" />
 		<RemoveDir Directories=".\Artifacts\TempAzure" />
 		
