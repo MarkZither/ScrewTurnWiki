@@ -23,9 +23,11 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The created section handler object.</returns>
 		public object Create(object parent, object configContext, XmlNode section) {
 			List<StorageProvider> storageProviders = new List<StorageProvider>();
-
+			bool defaultFound = false;
 			foreach(XmlNode provider in section) {
 				XmlAttributeCollection attributeCollection = provider.Attributes;
+				if(attributeCollection == null) continue;
+
 				string typeName = attributeCollection["name"].Value;
 				string assemblyName = attributeCollection["assembly"].Value;
 				string config = attributeCollection["config"].Value;
@@ -36,9 +38,12 @@ namespace ScrewTurn.Wiki {
 					TypeName = typeName,
 					AssemblyName = assemblyName,
 					ConfigurationString = config,
-					IsDefault = isDefault
+					IsDefault = defaultFound ? false : isDefault
 				});
 			}
+
+			if(!defaultFound) storageProviders[0].IsDefault = true;
+
 			return storageProviders;
 		}
 

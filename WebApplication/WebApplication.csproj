@@ -2808,11 +2808,6 @@
     <Content Include="User.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.Release.config">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Images\Editor\OL.png" />
     <Content Include="Images\Editor\UL.png" />
     <Content Include="JS\jquery-1.4.2.min.js" />
@@ -2849,12 +2844,19 @@
     <Content Include="Themes\Elegant\Images\EmailNotifOff-Discussion.png" />
     <Content Include="Themes\Elegant\Images\EmailNotifOn-Discussion.png" />
     <Content Include="Themes\Elegant\Images\RSS-Discussion.png" />
-    <Content Include="Web.SqlServer.Release.config">
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MasterPageClean.master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.SqlServer.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MasterPageClean.master" />
+    <Content Include="Web.Azure.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

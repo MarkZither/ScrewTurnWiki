@@ -47,16 +47,13 @@
 		<Copy SourceFiles="@(BuiltWebApp)" DestinationFolder=".\Artifacts\WebApplication-SqlServer\%(RecursiveDir)" />
 		
 		<!-- Release Web.config -->
-		<Copy Condition="'$(Configuration)' == 'Release'"
-			SourceFiles=".\Artifacts\WebApplication\Web.Release.config" DestinationFiles=".\Artifacts\WebApplication\Web.config" />
-		<Delete Files=".\Artifacts\WebApplication\Web.Release.config" />
-		<Delete Files=".\Artifacts\WebApplication\Web.SqlServer.Release.config" />
+		<Delete Files=".\Artifacts\WebApplication\Web.Azure.config" />
+		<Delete Files=".\Artifacts\WebApplication\Web.SqlServer.config" />
 		
 		<!-- Release Web.config, SQL Server -->
 		<Copy Condition="'$(Configuration)' == 'Release'"
-			SourceFiles=".\Artifacts\WebApplication-SqlServer\Web.SqlServer.Release.config" DestinationFiles=".\Artifacts\WebApplication-SqlServer\Web.config" />
-		<Delete Files=".\Artifacts\WebApplication-SqlServer\Web.Release.config" />
-		<Delete Files=".\Artifacts\WebApplication-SqlServer\Web.SqlServer.Release.config" />
+			SourceFiles=".\Artifacts\WebApplication-SqlServer\Web.SqlServer.config" DestinationFiles=".\Artifacts\WebApplication-SqlServer\Web.config" />
+		<Delete Files=".\Artifacts\WebApplication-SqlServer\Web.Azure.config" />
 		
 		<!-- Web Application Public Directory -->
 		<MakeDir Directories="@(WebAppOutput_PublicDirectory)" />
