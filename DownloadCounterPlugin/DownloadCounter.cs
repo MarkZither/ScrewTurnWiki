@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using ScrewTurn.Wiki.PluginFramework;
+using System.IO;
 
 namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
@@ -227,6 +228,8 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 			IFilesStorageProviderV40 provider = GetProvider(providerName);
 			if(provider == null) return 0;
+
+			fullFilePath = Path.Combine(_wiki, fullFilePath);
 
 			if(!fullFilePath.StartsWith("/")) fullFilePath = "/" + fullFilePath;
 
