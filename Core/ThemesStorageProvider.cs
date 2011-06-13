@@ -26,6 +26,10 @@ namespace ScrewTurn.Wiki {
 		private IHostV40 host;
 		private string wiki;
 
+		private string GetMasterDirectory() {
+			return Path.Combine(GetDataDirectory(host), wiki);
+		}
+
 		/// <summary>
 		/// Gets the path.
 		/// </summary>
@@ -40,7 +44,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>A list of theme names.</returns>
 		public List<string> ListThemes() {
 			List<string> listTheme = new List<string>();
-			string parent = GetDataDirectory(host);
+			string parent = GetMasterDirectory();
 			string pathFolders = GetPath(parent, ThemeDirectory);
 			foreach(string dir in Directory.GetDirectories(pathFolders)) {
 				DirectoryInfo themeName = new DirectoryInfo(dir);
@@ -56,11 +60,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="searchPattern">The search string to match against the name of files.</param>
 		/// <returns>The list of files matching the searchPattern.</returns>
 		public List<string> ListThemeFiles(string themeName, string searchPattern) {
-			string parent = GetDataDirectory(host);
+			string parent = GetMasterDirectory();
 			string path = GetPath(GetPath(parent, ThemeDirectory), themeName);
 			string[] files;
 			if(!String.IsNullOrEmpty(path) && Directory.Exists(path))
-				files = Directory.GetFiles(path, searchPattern);
+				files = Directory.GetFiles(path, "*" + searchPattern);
 			else return null;
 
 			for(int i = 0; i < files.Length; i++) {
@@ -70,7 +74,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private string GetRelativePath(string file) {
-			string parent = GetDataDirectory(host);
+			string parent = GetMasterDirectory();
 			DirectoryInfo publicPath = new DirectoryInfo(parent);
 			return file.Substring(file.IndexOf(publicPath.Name)).Replace(Path.DirectorySeparatorChar.ToString(),"/");
 		}
@@ -81,7 +85,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="themeName">The name of the theme to be deleted.</param>
 		/// <returns><c>true</c> if the theme is removed, <c>false</c> otherwise.</returns>
 		public bool DeleteTheme(string themeName) {
-			string parent = GetDataDirectory(host);
+			string parent = GetMasterDirectory();
 			Directory.Delete(GetPath(GetPath(parent, ThemeDirectory), themeName), true);
 				return true;
 		}
@@ -97,7 +101,7 @@ namespace ScrewTurn.Wiki {
 			if(themeName.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
 			if(zipFile == null) throw new ArgumentNullException("assembly");
 			if(zipFile.Length == 0) throw new ArgumentException("Assembly cannot be empty", "assembly");
-			string parent = GetDataDirectory(host);
+			string parent = GetMasterDirectory();
 			//parent = parent.Replace("public\\", "");
 			string targetPath = GetPath(GetPath(parent, ThemeDirectory), themeName);
 
@@ -121,7 +125,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="themeName">The name of the theme.</param>
 		/// <returns>The relative path of the theme.</returns>
 		public string GetThemePath(string themeName) {
-			string parent = GetDataDirectory(host);
+			string parent = GetMasterDirectory();
 			//parent = parent.Replace("public\\", "");
 			return GetRelativePath(GetPath(GetPath(parent, ThemeDirectory), themeName)) + "/";
 		}
@@ -168,6 +172,15 @@ namespace ScrewTurn.Wiki {
 			
 			this.host = host;
 			this.wiki = wiki;
+
+			if(!LocalProvidersTools.CheckWritePermissions(GetMasterDirectory())) {
+				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
+			}
+
+			string pathFolders = GetPath(GetMasterDirectory(), ThemeDirectory);
+			if(!Directory.Exists(pathFolders)) {
+				Directory.CreateDirectory(pathFolders);
+			}
 		}
 
 		/// <summary>
@@ -181,16 +194,6 @@ namespace ScrewTurn.Wiki {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			this.host = host;
-
-			if(!LocalProvidersTools.CheckWritePermissions(GetDataDirectory(host))) {
-				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");
-			}
-
-			string pathFolders = GetPath(GetDataDirectory(host), ThemeDirectory);
-			if(!Directory.Exists(pathFolders)) {
-				Directory.CreateDirectory(pathFolders);
-			}
 		}
 
 		void IDisposable.Dispose() { }
