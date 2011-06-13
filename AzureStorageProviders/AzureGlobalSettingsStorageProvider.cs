@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		private TableServiceContext _context;
 		private CloudBlobClient _client;
 
-		#region IGlobalSettingsStorageProviderV30 Members
+		#region IGlobalSettingsStorageProviderV40 Members
 
 		private Dictionary<string, string> _settingsDictionary;
 
@@ -385,7 +385,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		#endregion
 
-		#region IProviderV30 Members
+		#region IProviderV40 Members
 
 		/// <summary>
 		/// The global settings table name.
@@ -421,7 +421,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
+			if(config == "") config = Config.GetConnectionString();
 
 			_host = host;
 			_wiki = wiki;
@@ -442,7 +442,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
+			if(config == "") config = Config.GetConnectionString();
 
 			TableStorage.CreateTable(config, GlobalSettingsTable);
 			TableStorage.CreateTable(config, LogsTable);

@@ -688,7 +688,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
+			if(config == "") config = Config.GetConnectionString();
 
 			_host = host;
 			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki.ToLowerInvariant();
@@ -696,10 +696,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			_context = TableStorage.GetContext(config);
 
 			_aclManager = new AzureTableStorageAclManager(StoreEntry, DeleteEntries, RenameAclResource, RetrieveAllAclEntries, RetrieveAclEntriesForResource, RetrieveAclEntriesForSubject);
-
-			//string firstStart = GetSetting("FirstStart");
-			//isFirstWikiStart = string.IsNullOrEmpty(firstStart);
-			//if(isFirstWikiStart) SetSetting("FirstStart", "true");
 		}
 
 		/// <summary>
@@ -713,7 +709,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
+			if(config == "") config = Config.GetConnectionString();
 
 			TableStorage.CreateTable(config, SettingsTable);
 			TableStorage.CreateTable(config, MetadataTable);

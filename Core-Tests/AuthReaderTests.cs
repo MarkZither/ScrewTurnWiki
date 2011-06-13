@@ -1064,7 +1064,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 		private class DummySettingsStorageProvider : ISettingsStorageProviderV40 {
 
-			#region ISettingsStorageProviderV30 Members
+			#region ISettingsStorageProviderV40 Members
 
 			public string GetSetting(string name) {
 				throw new NotImplementedException();
@@ -1183,7 +1183,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			#endregion
 
-			#region IProviderV30 Members
+			#region IProviderV40 Members
 
 			public string CurrentWiki {
 				get { throw new NotImplementedException(); }

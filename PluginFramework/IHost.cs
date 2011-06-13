@@ -347,10 +347,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Gets the default provider of the specified type.
 		/// </summary>
 		/// <param name="providerType">The type of the provider (
-		/// <see cref="T:IPagesStorageProviderV30" />, 
-		/// <see cref="T:IUsersStorageProviderV30" />, 
-		/// <see cref="T:IFilesStorageProviderV30" />,
-		/// <see cref="T:IFormatterProviderV30" />).</param>
+		/// <see cref="T:IPagesStorageProviderV40" />, 
+		/// <see cref="T:IUsersStorageProviderV40" />, 
+		/// <see cref="T:IFilesStorageProviderV40" />,
+		/// <see cref="T:IFormatterProviderV40" />).</param>
 		/// <returns>The Full type name of the default provider of the specified type or <c>null</c>.</returns>
 		string GetDefaultProvider(Type providerType);
 

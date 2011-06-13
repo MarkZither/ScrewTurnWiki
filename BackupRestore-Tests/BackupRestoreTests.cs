@@ -147,7 +147,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		private Dictionary<string, string[]> outgoingLinks = new Dictionary<string, string[]>();
 		private IAclManager aclManager;
 
-		#region ISettingsStorageProviderV30 Members
+		#region ISettingsStorageProviderV40 Members
 
 		public string GetSetting(string name) {
 			return settings[name];
@@ -262,7 +262,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 
 		#endregion
 
-		#region IProviderV30 Members
+		#region IProviderV40 Members
 
 		public string CurrentWiki {
 			get { throw new NotImplementedException(); }
@@ -358,7 +358,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		Dictionary<string, string> settings = new Dictionary<string, string>();
 		Dictionary<string, byte[]> pluginsAssemblies = new Dictionary<string, byte[]>();
 
-		#region IGlobalSettingsStorageProviderV30 Members
+		#region IGlobalSettingsStorageProviderV40 Members
 
 		public string GetSetting(string name) {
 			return settings[name];
@@ -416,7 +416,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 
 		#endregion
 
-		#region IProviderV30 Members
+		#region IProviderV40 Members
 
 		public string CurrentWiki {
 			get { throw new NotImplementedException(); }

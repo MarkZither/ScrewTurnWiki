@@ -120,7 +120,7 @@ namespace ScrewTurn.Wiki {
 			// Nothing to-do
 		}
 
-		#region IGlobalSettingsStorageProviderV30 Members
+		#region IGlobalSettingsStorageProviderV40 Members
 
 		/// <summary>
 		/// Retrieves the value of a Setting.

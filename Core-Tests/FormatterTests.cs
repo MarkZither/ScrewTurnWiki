@@ -48,15 +48,12 @@ second line";
 		public void SetUp() {
 			mocks = new MockRepository();
 			
-			//System.Web.UI.HtmlTextWriter writer = new System.Web.UI.HtmlTextWriter(new System.IO.StreamWriter(new System.IO.MemoryStream()));
-			//System.Web.Hosting.SimpleWorkerRequest request = new System.Web.Hosting.SimpleWorkerRequest("Default.aspx", "?Page=MainPage", writer);
 			System.Web.HttpContext.Current = new System.Web.HttpContext(new DummyRequest());
 
 			Collectors.InitCollectors();
 
 			Collectors.AddGlobalSettingsStorageProvider(typeof(DummyGlobalSettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyGlobalSettingsStorageProvider)));
 
-			//ISettingsStorageProviderV30 settingsProvider = new DummySettingsStorageProvider();
 			Collectors.AddProvider(typeof(DummySettingsStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummySettingsStorageProvider)), "", typeof(ISettingsStorageProviderV40));
 			
 			Collectors.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)), "", typeof(IPagesStorageProviderV40));
@@ -71,7 +68,7 @@ second line";
 
 		private class DummyGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV40 {
 
-			#region IGlobalSettingsStorageProviderV30 Members
+			#region IGlobalSettingsStorageProviderV40 Members
 
 			public string GetSetting(string name) {
 				switch(name) {
@@ -150,7 +147,7 @@ second line";
 
 			#endregion
 
-			#region IProviderV30 Members
+			#region IProviderV40 Members
 			
 			public string CurrentWiki {
 				get { throw new NotImplementedException(); }
@@ -185,7 +182,7 @@ second line";
 
 		private class DummySettingsStorageProvider : ISettingsStorageProviderV40 {
 
-			#region ISettingsStorageProviderV30 Members
+			#region ISettingsStorageProviderV40 Members
 
 			public string GetSetting(string name) {
 				switch(name) {
@@ -278,7 +275,7 @@ second line";
 
 			#endregion
 
-			#region IProviderV30 Members
+			#region IProviderV40 Members
 
 			public string CurrentWiki {
 				get { throw new NotImplementedException(); }

@@ -38,6 +38,7 @@
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\References\Lib\DotNetZipLib-DevKit-v1.9\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>False</Private>
@@ -61,6 +62,7 @@
     <Compile Include="AzureSettingsStorageProvider.cs" />
     <Compile Include="AzureUsersStorageProvider.cs" />
     <Compile Include="AzureThemeStorageProvider.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="IIndexConnector.cs" />
     <Compile Include="IndexConnector.cs" />

@@ -11,8 +11,8 @@
 		<Endpoints>
 			<InputEndpoint name="HTTP" protocol="http" port="80" />
 		</Endpoints>
-		<Imports>
-			<Import moduleName="Diagnostics" />
-		</Imports>
+		<ConfigurationSettings>
+			<Setting name="ConnectionString" />
+		</ConfigurationSettings>
 	</WebRole>
 </ServiceDefinition>

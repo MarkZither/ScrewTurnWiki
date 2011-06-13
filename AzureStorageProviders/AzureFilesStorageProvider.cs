@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		private CloudBlobClient _client;
 		private TableServiceContext _context;
 
-		#region IFilesStorageProviderV30 Members
+		#region IFilesStorageProviderV40 Members
 
 		private string BuildNameForBlobStorage(string name) {
 			return !string.IsNullOrEmpty(name) ? name.Trim('/') : "";
@@ -826,7 +826,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		#endregion
 
-		#region IStorageProviderV30 Members
+		#region IStorageProviderV40 Members
 
 		/// <summary>
 		/// Gets a value specifying whether the provider is read-only, i.e. it can only provide data and not store it.
@@ -837,7 +837,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		#endregion
 
-		#region IProviderV30 Members
+		#region IProviderV40 Members
 
 
 		/// <summary>
@@ -864,7 +864,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
+			if(config == "") config = Config.GetConnectionString();
 
 			_host = host;
 			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki.ToLowerInvariant();
@@ -891,7 +891,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			if(config == "") throw new InvalidConfigurationException("The given connections string is invalid.");
+			if(config == "") config = Config.GetConnectionString();
 
 			_host = host;
 
