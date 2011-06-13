@@ -16,6 +16,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -2731,6 +2732,10 @@
     <ProjectReference Include="..\AclEngine\AclEngine.csproj">
       <Project>{44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81}</Project>
       <Name>AclEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ActiveDirectoryProvider\ActiveDirectoryProvider.csproj">
+      <Project>{C7169CA4-9893-4361-96A8-09F87FCF5E8C}</Project>
+      <Name>ActiveDirectoryProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzureStorageProviders\AzureStorageProviders.csproj">
       <Project>{F38D7FDA-08CA-4FE1-9E0D-F49FFFA12E79}</Project>
