@@ -80,7 +80,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			if(config == null) throw new ArgumentNullException("config");
 
 			_host = host;
-			_config = config ?? string.Empty;
+			if(string.IsNullOrEmpty(config)) throw new InvalidConfigurationException("Configuration is missing required parameters");
 
 			var settings = new XsltSettings {
 				EnableScript = true,

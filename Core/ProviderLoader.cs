@@ -101,7 +101,12 @@ namespace ScrewTurn.Wiki {
 			if(typeof(T) == typeof(IFormatterProviderV40)) {
 				enabled = !IsPluginDisabled(wiki, instance.GetType().FullName);
 			}
-			if(enabled) instance.Init(Host.Instance, configuration, wiki);
+			try {
+				if(enabled) instance.Init(Host.Instance, configuration, wiki);
+			}
+			catch(InvalidConfigurationException ex) {
+				Log.LogEntry(instance.Information.Name + " not initialized due to Invalid Configuration Exception. " + ex.Message, EntryType.Error, Log.SystemUsername, wiki);
+			}
 		}
 
 		/// <summary>
