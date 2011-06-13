@@ -80,7 +80,8 @@
 			<Output ItemName="BuiltTests" TaskParameter="Include" />
 		</CreateItem>
 		<Copy SourceFiles="@(BuiltTests)" DestinationFolder=".\Artifacts\Tests\" />
-		<Copy SourceFiles="..\AzureStorageProviders-Tests\App.config" DestinationFiles=".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll.config" />
+		<Copy Condition="'$(AzureTestConfig)' == ''" SourceFiles="..\AzureStorageProviders-Tests\App.config" DestinationFiles=".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll.config" />
+		<Copy Condition="'$(AzureTestConfig)' != ''" SourceFiles="$(AzureTestConfig)" DestinationFiles=".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll.config" />
 		
 		<!-- Delete Temp directory -->
 		<RemoveDir Directories="@(BuildTemp)" />
