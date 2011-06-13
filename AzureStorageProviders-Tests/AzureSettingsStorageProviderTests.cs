@@ -41,7 +41,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}
 
-		[TestCase("", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		public void Init_InvalidConnString(string c) {
 			ISettingsStorageProviderV40 prov = GetProvider();
