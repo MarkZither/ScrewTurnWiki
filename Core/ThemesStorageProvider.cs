@@ -171,7 +171,7 @@ namespace ScrewTurn.Wiki {
 			if(config == null) throw new ArgumentNullException("config");
 			
 			this.host = host;
-			this.wiki = wiki;
+			this.wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 
 			if(!LocalProvidersTools.CheckWritePermissions(GetMasterDirectory())) {
 				throw new InvalidConfigurationException("Cannot write into the public directory - check permissions");

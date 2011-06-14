@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki {
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
-			this.wiki = string.IsNullOrEmpty(wiki) ? "" : wiki;
+			this.wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 
 			if(!Directory.Exists(GetFullPath(""))) {
 				Directory.CreateDirectory(GetFullPath(""));

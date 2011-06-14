@@ -54,7 +54,7 @@ namespace ScrewTurn.Wiki {
 			if(config == null) throw new ArgumentNullException("config");
 
 			this.host = host;
-			this.wiki = string.IsNullOrEmpty(wiki) ? "" : wiki;
+			this.wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 
 			// Create directories, if needed
 			if(!Directory.Exists(GetFullPath(""))) {
