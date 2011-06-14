@@ -117,25 +117,31 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		private IList<PluginFramework.Wiki> GetWikiList() {
-			string config = RoleEnvironment.GetConfigurationSettingValue("Wikis");
-			if(string.IsNullOrEmpty(config)) throw new InvalidConfigurationException("Wikis not specified in service configuration");
+			if(RoleEnvironment.IsAvailable) {
+				string config = RoleEnvironment.GetConfigurationSettingValue("Wikis");
+				if(string.IsNullOrEmpty(config)) throw new InvalidConfigurationException("Wikis not specified in service configuration");
 
-			string[] wikis = config.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-			if(wikis.Length == 0) throw new InvalidConfigurationException("Wikis not specified in service configuration");
+				string[] wikis = config.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+				if(wikis.Length == 0) throw new InvalidConfigurationException("Wikis not specified in service configuration");
 
-			char[] sep = new[] { '=' };
+				char[] sep = new[] { '=' };
 
-			List<PluginFramework.Wiki> result = new List<PluginFramework.Wiki>();
-			foreach(string line in wikis) {
-				string[] fields = line.Split(sep, StringSplitOptions.RemoveEmptyEntries);
-				if(fields.Length == 0) continue;
+				List<PluginFramework.Wiki> result = new List<PluginFramework.Wiki>();
+				foreach(string line in wikis) {
+					string[] fields = line.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+					if(fields.Length == 0) continue;
 
-				PluginFramework.Wiki wiki = new PluginFramework.Wiki(fields[0], fields.Length > 1 ? fields[1].Split(';').ToList() : new List<string>());
+					PluginFramework.Wiki wiki = new PluginFramework.Wiki(fields[0], fields.Length > 1 ? fields[1].Split(';').ToList() : new List<string>());
 
-				result.Add(wiki);
+					result.Add(wiki);
+				}
+				return result;
+			}
+			else {
+				return (List<PluginFramework.Wiki>)System.Web.Configuration.WebConfigurationManager.GetWebApplicationSection("wikiList");
 			}
 
-			return result;
+
 		}
 
 		/// <summary>
