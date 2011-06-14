@@ -795,6 +795,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			allWords.AddRange(title);
 			allWords.AddRange(keywords);
 
+			int count = 0;
 			foreach(WordInfo word in allWords) {
 				IndexWordMappingEntity indexWordMappingEntity = new IndexWordMappingEntity() {
 					PartitionKey = _wiki,
@@ -808,6 +809,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					DateTime = document.DateTime
 				};
 				_context.AddObject(IndexWordMappingTable, indexWordMappingEntity);
+				count++;
+				if(count == 100) {
+					_context.SaveChangesStandard();
+					count = 0;
+				}
 			}
 			_context.SaveChangesStandard();
 			return allWords.Count;
