@@ -354,7 +354,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		public void Init(IHostV40 host, string config, string wiki) {
 			this._host = host;
 			this._config = config != null ? config : "";
-			this._wiki = wiki;
+			this._wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 
 			if(this._config.ToLowerInvariant() == "nolog") _enableLogging = false;
 		}

@@ -14,6 +14,8 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 
 		[Test]
 		public void Format() {
+			string wiki = "wiki1";
+
 			MockRepository mocks = new MockRepository();
 
 			IFilesStorageProviderV40 prov = mocks.StrictMock<IFilesStorageProviderV40>();
@@ -43,7 +45,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 			LastCall.On(host).IgnoreArguments().Repeat.Any();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider)).Return(
 				prov.GetType().FullName).Repeat.Times(4);
-			Expect.Call(host.GetFilesStorageProviders(null)).Return(
+			Expect.Call(host.GetFilesStorageProviders(wiki)).Constraints(RMC.Is.Equal(wiki)).Return(
 				new IFilesStorageProviderV40[] { prov }).Repeat.Times(8);
 
 			StFileInfo[] myFiles = new StFileInfo[] {
@@ -78,15 +80,24 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack.Tests {
 
 			PageInfo page = new PageInfo("page", null, DateTime.Now);
 
-			Expect.Call(host.FindPage(null, "page")).Return(page).Repeat.Times(4);
-			Expect.Call(host.FindPage(null, "inexistent-page")).Return(null).Repeat.Twice();
+			Expect.Call(host.FindPage(wiki, "page")).Constraints(
+				RMC.Is.Equal(wiki),
+				RMC.Is.Equal("page"))
+				.Return(page).Repeat.Times(4);
+			Expect.Call(host.FindPage(wiki, "inexistent-page")).Constraints(
+				RMC.Is.Equal(wiki),
+				RMC.Is.Equal("inexistent-page"))
+				.Return(null).Repeat.Twice();
 
-			Expect.Call(host.ListPageAttachments(null, page)).Return(attachments).Repeat.Times(4);
+			Expect.Call(host.ListPageAttachments(wiki, page)).Constraints(
+				RMC.Is.Equal(wiki),
+				RMC.Is.Equal(page))
+				.Return(attachments).Repeat.Times(4);
 
 			mocks.ReplayAll();
 
 			DownloadCounter counter = new DownloadCounter();
-			counter.Init(host, "", null);
+			counter.Init(host, "", wiki);
 
 			string output = counter.Format(content, null, FormattingPhase.Phase3);
 
