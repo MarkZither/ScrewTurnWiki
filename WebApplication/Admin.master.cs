@@ -294,7 +294,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can approve/reject a draft of the page, <c>false</c> otherwise.</returns>
 		public static bool CanApproveDraft(PageInfo page, string username, string[] groups) {
-			return Pages.CanApproveDraft(Tools.DetectCurrentWiki(), page, username, groups);
+			return Pages.CanApproveDraft(page, username, groups);
 		}
 
 	}

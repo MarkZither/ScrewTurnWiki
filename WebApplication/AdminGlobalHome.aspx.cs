@@ -30,11 +30,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="pages">The pages.</param>
 		private void RebuildPageLinks(IList<PageInfo> pages) {
-			string currentWiki = DetectWiki();
-
 			foreach(PageInfo page in pages) {
 				PageContent content = Content.GetPageContent(page);
-				Pages.StorePageOutgoingLinks(currentWiki, page, content.Content);				
+				Pages.StorePageOutgoingLinks(page, content.Content);				
 			}
 		}
 

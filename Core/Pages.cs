@@ -434,11 +434,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Performs the rollpack of a Page of the specified wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page.</param>
 		/// <param name="version">The revision to rollback the Page to.</param>
-		public static bool Rollback(string wiki, PageInfo page, int version) {
+		public static bool Rollback(PageInfo page, int version) {
 			if(page.Provider.ReadOnly) return false;
+
+			string wiki = page.Provider.CurrentWiki;
 
 			bool done = page.Provider.RollbackPage(page, version);
 
@@ -539,11 +540,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Deletes a Page in the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page to delete.</param>
-		public static bool DeletePage(string wiki, PageInfo page) {
+		public static bool DeletePage(PageInfo page) {
 			if(page.Provider.ReadOnly) return false;
 
+			string wiki = page.Provider.CurrentWiki;
 			string title = Content.GetPageContent(page).Title;
 
 			bool done = page.Provider.RemovePage(page);
@@ -581,12 +582,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Renames a Page in the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page to rename.</param>
 		/// <param name="name">The new name.</param>
-		public static bool RenamePage(string wiki, PageInfo page, string name) {
+		public static bool RenamePage(PageInfo page, string name) {
 			if(page.Provider.ReadOnly) return false;
 
+			string wiki = page.Provider.CurrentWiki;
 			string newFullName = NameTools.GetFullName(NameTools.GetNamespace(page.FullName), NameTools.GetLocalName(name));
 
 			if(FindPage(wiki, newFullName) != null) return false;
@@ -606,7 +607,7 @@ namespace ScrewTurn.Wiki {
 					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), pg);
 				}
 
-				StorePageOutgoingLinks(wiki, pg, originalContent.Content);
+				StorePageOutgoingLinks(pg, originalContent.Content);
 
 				SessionFacade.Breadcrumbs(wiki).RemovePage(page);
 				Redirections.Clear();
@@ -628,20 +629,20 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Migrates a page of the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page to migrate.</param>
 		/// <param name="targetNamespace">The target namespace.</param>
 		/// <param name="copyCategories">A value indicating whether to copy the page categories to the target namespace.</param>
 		/// <returns><c>true</c> if the page is migrated, <c>false</c> otherwise.</returns>
-		public static bool MigratePage(string wiki, PageInfo page, NamespaceInfo targetNamespace, bool copyCategories) {
+		public static bool MigratePage(PageInfo page, NamespaceInfo targetNamespace, bool copyCategories) {
 			string oldName = page.FullName;
 
 			PageInfo result = page.Provider.MovePage(page, targetNamespace, copyCategories);
 			if(result != null) {
+				string wiki = page.Provider.CurrentWiki;
 				Settings.GetProvider(wiki).StoreOutgoingLinks(page.FullName, new string[0]);
 				
 				PageContent content = Content.GetPageContent(result);
-				StorePageOutgoingLinks(wiki, result, content.Content);
+				StorePageOutgoingLinks(result, content.Content);
 
 				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), result);
@@ -653,7 +654,6 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Modifies a Page of the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page to modify.</param>
 		/// <param name="title">The Title of the Page.</param>
 		/// <param name="username">The Username of the user who modified the Page.</param>
@@ -664,10 +664,12 @@ namespace ScrewTurn.Wiki {
 		/// <param name="description">The description, usually used for SEO.</param>
 		/// <param name="saveMode">The save mode.</param>
 		/// <returns>True if the Page has been modified successfully.</returns>
-		public static bool ModifyPage(string wiki, PageInfo page, string title, string username, DateTime dateTime, string comment, string content,
+		public static bool ModifyPage(PageInfo page, string title, string username, DateTime dateTime, string comment, string content,
 			string[] keywords, string description, SaveMode saveMode) {
 
 			if(page.Provider.ReadOnly) return false;
+
+			string wiki = page.Provider.CurrentWiki;
 
 			StringBuilder sb = new StringBuilder(content);
 			sb.Replace("~~~~", "§§(" + username + "," + dateTime.ToString("yyyy'/'MM'/'dd' 'HH':'mm':'ss") + ")§§");
@@ -681,12 +683,12 @@ namespace ScrewTurn.Wiki {
 			if(done) {
 				Log.LogEntry("Page Content updated for " + page.FullName, EntryType.General, Log.SystemUsername, wiki);
 
-				StorePageOutgoingLinks(wiki, page, content);
+				StorePageOutgoingLinks(page, content);
 
 				if(saveMode != SaveMode.Draft) {
 					RecentChanges.AddChange(wiki, page.FullName, title, null, dateTime, username, Change.PageUpdated, comment);
 					Host.Instance.OnPageActivity(page, null, username, PageActivity.PageModified);
-					SendEmailNotificationForPage(wiki, page, Users.FindUser(wiki, username));
+					SendEmailNotificationForPage(page, Users.FindUser(wiki, username));
 				}
 				else {
 					Host.Instance.OnPageActivity(page, null, username, PageActivity.PageDraftSaved);
@@ -694,7 +696,7 @@ namespace ScrewTurn.Wiki {
 
 				if(saveMode == SaveMode.Backup) {
 					// Delete old backups, if needed
-					DeleteOldBackupsIfNeeded(wiki, page);
+					DeleteOldBackupsIfNeeded(page);
 				}
 			}
 			else Log.LogEntry("Page Content update failed for " + page.FullName, EntryType.Error, Log.SystemUsername, wiki);
@@ -704,11 +706,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Stores outgoing links for a page of the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="content">The raw content.</param>
-		public static void StorePageOutgoingLinks(string wiki, PageInfo page, string content) {
+		public static void StorePageOutgoingLinks(PageInfo page, string content) {
 			string[] linkedPages;
+			string wiki = page.Provider.CurrentWiki;
 			Formatter.Format(wiki, content, false, FormattingContext.PageContent, page, out linkedPages);
 
 			string lowercaseName = page.FullName.ToLowerInvariant();
@@ -733,10 +735,9 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Deletes the old backups if the current number of backups exceeds the limit in the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
-		private static void DeleteOldBackupsIfNeeded(string wiki, PageInfo page) {
-			int maxBackups = Settings.GetKeptBackupNumber(wiki);
+		private static void DeleteOldBackupsIfNeeded(PageInfo page) {
+			int maxBackups = Settings.GetKeptBackupNumber(page.Provider.CurrentWiki);
 			if(maxBackups == -1) return;
 
 			// Oldest to newest: 0, 1, 2, 3
@@ -766,12 +767,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Sends the email notification for a page change in the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page that was modified.</param>
 		/// <param name="author">The author of the modification.</param>
-		private static void SendEmailNotificationForPage(string wiki, PageInfo page, UserInfo author) {
+		private static void SendEmailNotificationForPage(PageInfo page, UserInfo author) {
 			if(page == null) return;
 
+			string wiki = page.Provider.CurrentWiki;
 			PageContent content = Content.GetPageContent(page);
 
 			UserInfo[] usersToNotify = Users.GetUsersToNotifyForPageChange(wiki, page);
@@ -794,17 +795,17 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Determines whether a user of the given wiki can edit a page.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="groups">The groups.</param>
 		/// <param name="canEdit">A value indicating whether the user can edit the page.</param>
 		/// <param name="canEditWithApproval">A value indicating whether the user can edit the page with subsequent approval.</param>
-		public static void CanEditPage(string wiki, PageInfo page, string username, string[] groups,
+		public static void CanEditPage(PageInfo page, string username, string[] groups,
 			out bool canEdit, out bool canEditWithApproval) {
 
 			canEdit = false;
 			canEditWithApproval = false;
+			string wiki = page.Provider.CurrentWiki;
 
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 			switch(Settings.GetModerationMode(wiki)) {
@@ -869,12 +870,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Determines whether a user can approve/reject a draft of a page, in the specified wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can approve/reject a draft of the page, <c>false</c> otherwise.</returns>
-		public static bool CanApproveDraft(string wiki, PageInfo page, string username, string[] groups) {
+		public static bool CanApproveDraft(PageInfo page, string username, string[] groups) {
 			string requiredAction = Actions.ForPages.ManagePage;
 
 			// TODO: decide whether it is incorrect to require only ModifyPage permission
@@ -891,28 +891,29 @@ namespace ScrewTurn.Wiki {
 					throw new NotSupportedException();
 			}*/
 
-			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
+			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(page.Provider.CurrentWiki));
 			return authChecker.CheckActionForPage(page, requiredAction, username, groups);
 		}
 
 		/// <summary>
-		/// Sends a draft notification to "administrators" of the given wiki.
+		/// Sends a draft notification to "administrators".
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="currentPage">The edited page.</param>
 		/// <param name="title">The title.</param>
 		/// <param name="comment">The comment.</param>
 		/// <param name="author">The author.</param>
-		public static void SendEmailNotificationForDraft(string wiki, PageInfo currentPage, string title, string comment, string author) {
+		public static void SendEmailNotificationForDraft(PageInfo currentPage, string title, string comment, string author) {
 			// Decide the users to notify based on the ChangeModerationMode
 			// Retrieve the list of matching users
 			// Asynchronously send the notification
+
+			string wiki = currentPage.Provider.CurrentWiki;
 
 			// Retrieve all the users that have a grant on requiredAction for the current page
 			// TODO: make this work when Users.GetUsers does not return all existing users but only a sub-set
 			List<UserInfo> usersToNotify = new List<UserInfo>(10);
 			foreach(UserInfo user in Users.GetUsers(wiki)) {
-				if(user.Active && CanApproveDraft(wiki, currentPage, user.Username, user.Groups)) {
+				if(user.Active && CanApproveDraft(currentPage, user.Username, user.Groups)) {
 					usersToNotify.Add(user);
 				}
 			}
@@ -977,13 +978,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the incoming links for a page in a wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <returns>The incoming links.</returns>
-		public static string[] GetPageIncomingLinks(string wiki, PageInfo page) {
+		public static string[] GetPageIncomingLinks(PageInfo page) {
 			if(page == null) return null;
 
-			return GetPageIncomingLinks(page, Settings.GetProvider(wiki).GetAllOutgoingLinks());
+			return GetPageIncomingLinks(page, Settings.GetProvider(page.Provider.CurrentWiki).GetAllOutgoingLinks());
 		}
 
 		private static string[] GetPageIncomingLinks(PageInfo page, IDictionary<string, string[]> allOutgoingLinks) {
@@ -1023,12 +1023,11 @@ namespace ScrewTurn.Wiki {
 
 		/// <summary>
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <returns>The outgoing links.</returns>
-		public static string[] GetPageOutgoingLinks(string wiki, PageInfo page) {
+		public static string[] GetPageOutgoingLinks(PageInfo page) {
 			if(page == null) return null;
-			return Settings.GetProvider(wiki).GetOutgoingLinks(page.FullName);
+			return Settings.GetProvider(page.Provider.CurrentWiki).GetOutgoingLinks(page.FullName);
 		}
 
 		/// <summary>
@@ -1231,15 +1230,15 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Renames a Category in the given wiki.
+		/// Renames a Category.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="category">The Category to rename.</param>
 		/// <param name="newName">The new Name of the Category.</param>
 		/// <returns>True if the Category has been renamed successfully.</returns>
-		public static bool RenameCategory(string wiki, CategoryInfo category, string newName) {
+		public static bool RenameCategory(CategoryInfo category, string newName) {
 			if(category.Provider.ReadOnly) return false;
 
+			string wiki = category.Provider.CurrentWiki;
 			string newFullName = NameTools.GetFullName(NameTools.GetNamespace(category.FullName), newName);
 
 			if(FindCategory(wiki, newFullName) != null) return false;
@@ -1300,10 +1299,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the valid Categories for a Page of a wiki, i.e. the Categories managed by the Page's Provider and in the same namespace as the page.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page, or <c>null</c> to use the default provider.</param>
 		/// <returns>The valid Categories.</returns>
-		public static CategoryInfo[] GetAvailableCategories(string wiki, PageInfo page) {
+		public static CategoryInfo[] GetAvailableCategories(PageInfo page) {
+			string wiki = page.Provider.CurrentWiki;
 			NamespaceInfo pageNamespace = FindNamespace(wiki, NameTools.GetNamespace(page.FullName));
 
 			if(page != null) {
@@ -1315,12 +1314,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the other Categories of the Provider and Namespace of the specified Category in the given wiki.
+		/// Gets the other Categories of the Provider, Wiki and Namespace of the specified Category.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="category">The Category.</param>
 		/// <returns>The matching Categories.</returns>
-		public static CategoryInfo[] GetMatchingCategories(string wiki, CategoryInfo category) {
+		public static CategoryInfo[] GetMatchingCategories(CategoryInfo category) {
+			string wiki = category.Provider.CurrentWiki;
 			NamespaceInfo nspace = FindNamespace(wiki, NameTools.GetNamespace(category.FullName));
 
 			List<CategoryInfo> allCategories = GetCategories(wiki, nspace);
@@ -1452,9 +1451,8 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Adds a new Message to a Page of the given wiki.
+		/// Adds a new Message to a Page.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="subject">The Subject.</param>
@@ -1462,12 +1460,13 @@ namespace ScrewTurn.Wiki {
 		/// <param name="body">The Body.</param>
 		/// <param name="parent">The Parent Message ID, or -1.</param>
 		/// <returns>True if the Message has been added successfully.</returns>
-		public static bool AddMessage(string wiki, PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
+		public static bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
 			if(page.Provider.ReadOnly) return false;
 
 			bool done = page.Provider.AddMessage(page, username, subject, dateTime, body, parent);
 			if(done) {
-				SendEmailNotificationForMessage(wiki, page, Users.FindUser(wiki, username), Tools.GetMessageIdForAnchor(dateTime), subject, dateTime);
+				string wiki = page.Provider.CurrentWiki;
+				SendEmailNotificationForMessage(page, Users.FindUser(wiki, username), Tools.GetMessageIdForAnchor(dateTime), subject, dateTime);
 
 				PageContent content = Content.GetPageContent(page);
 				RecentChanges.AddChange(wiki, page.FullName, content.Title, subject, dateTime, username, Change.MessagePosted, "");
@@ -1479,15 +1478,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Sends the email notification for a new message.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page the message was posted to.</param>
 		/// <param name="author">The author of the message.</param>
 		/// <param name="id">The message ID to be used for anchors.</param>
 		/// <param name="subject">The message subject.</param>
 		/// <param name="dateTime">The message date/time.</param>
-		private static void SendEmailNotificationForMessage(string wiki, PageInfo page, UserInfo author, string id, string subject, DateTime dateTime) {
+		private static void SendEmailNotificationForMessage(PageInfo page, UserInfo author, string id, string subject, DateTime dateTime) {
 			if(page == null) return;
 
+			string wiki = page.Provider.CurrentWiki;
 			PageContent content = Content.GetPageContent(page);
 
 			UserInfo[] usersToNotify = Users.GetUsersToNotifyForDiscussionMessages(wiki, page);
@@ -1510,12 +1509,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Removes a Message.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page.</param>
 		/// <param name="id">The ID of the Message to remove.</param>
 		/// <param name="removeReplies">A value specifying whether or not to remove the replies.</param>
 		/// <returns>True if the Message has been removed successfully.</returns>
-		public static bool RemoveMessage(string wiki, PageInfo page, int id, bool removeReplies) {
+		public static bool RemoveMessage(PageInfo page, int id, bool removeReplies) {
 			if(page.Provider.ReadOnly) return false;
 
 			Message[] messages = page.Provider.GetMessages(page);
@@ -1524,7 +1522,7 @@ namespace ScrewTurn.Wiki {
 			bool done = page.Provider.RemoveMessage(page, id, removeReplies);
 			if(done) {
 				PageContent content = Content.GetPageContent(page);
-				RecentChanges.AddChange(wiki, page.FullName, content.Title, msg.Subject, DateTime.Now, msg.Username, Change.MessageDeleted, "");
+				RecentChanges.AddChange(page.Provider.CurrentWiki, page.FullName, content.Title, msg.Subject, DateTime.Now, msg.Username, Change.MessageDeleted, "");
 				Host.Instance.OnPageActivity(page, null, null, PageActivity.MessageDeleted);
 			}
 			return done;
@@ -1551,7 +1549,6 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Modifies a Message.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The Page.</param>
 		/// <param name="id">The ID of the Message to modify.</param>
 		/// <param name="username">The Username.</param>
@@ -1559,13 +1556,13 @@ namespace ScrewTurn.Wiki {
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <returns>True if the Message has been modified successfully.</returns>
-		public static bool ModifyMessage(string wiki, PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
+		public static bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
 			if(page.Provider.ReadOnly) return false;
 
 			bool done = page.Provider.ModifyMessage(page, id, username, subject, dateTime, body);
 			if(done) {
 				PageContent content = Content.GetPageContent(page);
-				RecentChanges.AddChange(wiki, page.FullName, content.Title, subject, dateTime, username, Change.MessageEdited, "");
+				RecentChanges.AddChange(page.Provider.CurrentWiki, page.FullName, content.Title, subject, dateTime, username, Change.MessageEdited, "");
 				Host.Instance.OnPageActivity(page, null, username, PageActivity.MessageModified);
 			}
 			return done;

@@ -45,7 +45,7 @@ namespace ScrewTurn.Wiki {
 			bool canView = authChecker.CheckActionForPage(currentPage, Actions.ForPages.ReadPage, currentUsername, currentGroups);
 			bool canEdit = false;
 			bool canEditWithApproval = false;
-			Pages.CanEditPage(currentWiki, currentPage, currentUsername, currentGroups, out canEdit, out canEditWithApproval);
+			Pages.CanEditPage(currentPage, currentUsername, currentGroups, out canEdit, out canEditWithApproval);
 			if(canEditWithApproval && canEdit) canEditWithApproval = false;
 			bool canDownloadAttachments = authChecker.CheckActionForPage(currentPage, Actions.ForPages.DownloadAttachments, currentUsername, currentGroups);
 			bool canSetPerms = authChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, currentUsername, currentGroups);
@@ -463,7 +463,7 @@ namespace ScrewTurn.Wiki {
 			// Generate list DIV
 			// Return DIV's ID
 
-			string[] outgoingLinks = Pages.GetPageOutgoingLinks(currentWiki, page);
+			string[] outgoingLinks = Pages.GetPageOutgoingLinks(page);
 			if(outgoingLinks == null || outgoingLinks.Length == 0) return null;
 
 			string id = dbPrefix + Guid.NewGuid().ToString();

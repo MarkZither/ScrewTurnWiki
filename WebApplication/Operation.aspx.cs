@@ -92,7 +92,7 @@ namespace ScrewTurn.Wiki {
 			int id = int.Parse(Request["Message"]);
 			PageInfo page = Pages.FindPage(currentWiki, Request["Page"]);
 			Log.LogEntry("Message deletion requested for " + page.FullName + "." + id.ToString(), EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
-			bool done = Pages.RemoveMessage(currentWiki, page, id, chkDeleteMessageReplies.Checked);
+			bool done = Pages.RemoveMessage(page, id, chkDeleteMessageReplies.Checked);
 			UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, Request["Page"], GlobalSettings.PageExtension + "?Discuss=1"));
 		}
 

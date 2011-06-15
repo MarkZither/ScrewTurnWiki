@@ -43,7 +43,7 @@ namespace ScrewTurn.Wiki {
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			if(currentPage != null) {
-				Pages.CanEditPage(currentWiki, currentPage, currentUser, currentGroups, out canEdit, out canEditWithApproval);
+				Pages.CanEditPage(currentPage, currentUser, currentGroups, out canEdit, out canEditWithApproval);
 				canCreateNewPages = false; // Least privilege
 				canCreateNewCategories = authChecker.CheckActionForNamespace(Pages.FindNamespace(currentWiki, NameTools.GetNamespace(currentPage.FullName)),
 					Actions.ForNamespaces.ManageCategories, currentUser, currentGroups);
@@ -593,7 +593,7 @@ namespace ScrewTurn.Wiki {
 				}
 				Log.LogEntry("Page update requested for " + txtName.Text, EntryType.General, username, currentWiki);
 
-				Pages.ModifyPage(currentWiki, pg, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+				Pages.ModifyPage(pg, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
 					GetKeywords(), txtDescription.Text, saveMode);
 
 				// Save categories binding
@@ -640,11 +640,11 @@ namespace ScrewTurn.Wiki {
 					if(start > 0) sb.Append(cont.Content.Substring(0, start));
 					sb.Append(editor.GetContent());
 					if(start + len < cont.Content.Length - 1) sb.Append(cont.Content.Substring(start + len));
-					Pages.ModifyPage(currentWiki, currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, sb.ToString(),
+					Pages.ModifyPage(currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, sb.ToString(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				else {
-					Pages.ModifyPage(currentWiki, currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+					Pages.ModifyPage(currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				
@@ -669,7 +669,7 @@ namespace ScrewTurn.Wiki {
 				// clicking "Save & Continue" but not "Save" or "Cancel" - in other words, it is necessary
 				// to take every chance to send a notification because no more chances might be available
 				if(!canEdit && canEditWithApproval) {
-					Pages.SendEmailNotificationForDraft(currentWiki, currentPage, txtTitle.Text, txtComment.Text, username);
+					Pages.SendEmailNotificationForDraft(currentPage, txtTitle.Text, txtComment.Text, username);
 				}
 
 				if(redirect) {

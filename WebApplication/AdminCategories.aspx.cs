@@ -212,7 +212,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Category rename requested for " + txtCurrentCategory.Value + " to " + txtNewName.Text, EntryType.General, Log.SystemUsername, currentWiki);
 
-			if(Pages.RenameCategory(currentWiki, Pages.FindCategory(currentWiki, txtCurrentCategory.Value), txtNewName.Text)) {
+			if(Pages.RenameCategory(Pages.FindCategory(currentWiki, txtCurrentCategory.Value), txtNewName.Text)) {
 				RefreshList();
 				lblRenameResult.CssClass = "resultok";
 				lblRenameResult.Text = Properties.Messages.CategoryRenamed;

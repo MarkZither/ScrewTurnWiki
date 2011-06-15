@@ -86,7 +86,7 @@ namespace ScrewTurn.Wiki {
 		private void RebuildPageLinks(IList<PageInfo> pages) {
 			foreach(PageInfo page in pages) {
 				PageContent content = Content.GetPageContent(page);
-				Pages.StorePageOutgoingLinks(currentWiki, page, content.Content);				
+				Pages.StorePageOutgoingLinks(page, content.Content);				
 			}
 		}
 

@@ -133,7 +133,7 @@ namespace ScrewTurn.Wiki {
 
 				Log.LogEntry("Page rollback requested for " + txtCurrentPage.Value + " to rev. " + targetRevision.ToString(), EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
 
-				Pages.Rollback(currentWiki, externallySelectedPage, targetRevision);
+				Pages.Rollback(externallySelectedPage, targetRevision);
 
 				UrlTools.Redirect(externallySelectedPage.FullName + GlobalSettings.PageExtension);
 			}
@@ -540,7 +540,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Page draft approval requested for " + draft.PageInfo.FullName, EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
-			bool done = Pages.ModifyPage(currentWiki, draft.PageInfo, draft.Title, draft.User, draft.LastModified, draft.Comment,
+			bool done = Pages.ModifyPage(draft.PageInfo, draft.Title, draft.User, draft.LastModified, draft.Comment,
 				draft.Content, draft.Keywords, draft.Description, SaveMode.Backup);
 
 			if(done) {
@@ -605,14 +605,14 @@ namespace ScrewTurn.Wiki {
 			PageInfo oldPage = Pages.FindPage(currentWiki, txtCurrentPage.Value);
 			PageContent oldContent = Content.GetPageContent(oldPage);
 
-			bool done = Pages.RenamePage(currentWiki, oldPage, txtNewName.Text);
+			bool done = Pages.RenamePage(oldPage, txtNewName.Text);
 
 			if(done) {
 				if(chkShadowPage.Checked) {
 					done = Pages.CreatePage(currentWiki, currentNamespace, currentPage);
 
 					if(done) {
-						done = Pages.ModifyPage(currentWiki, Pages.FindPage(currentWiki, txtCurrentPage.Value),
+						done = Pages.ModifyPage(Pages.FindPage(currentWiki, txtCurrentPage.Value),
 							oldContent.Title, oldContent.User, oldContent.LastModified,
 							oldContent.Comment, ">>> [" + txtNewName.Text + "]",
 							new string[0], oldContent.Description, SaveMode.Normal);
@@ -664,7 +664,7 @@ namespace ScrewTurn.Wiki {
 				Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
 
 			if(canManageAllPages && canManageAllPagesInTarget) {
-				bool done = Pages.MigratePage(currentWiki, page, targetNamespace, chkCopyCategories.Checked);
+				bool done = Pages.MigratePage(page, targetNamespace, chkCopyCategories.Checked);
 				if(done) {
 					chkCopyCategories.Checked = false;
 
@@ -694,7 +694,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Page rollback requested for " + txtCurrentPage.Value + " to rev. " + targetRevision.ToString(), EntryType.General, Log.SystemUsername, currentWiki);
 
-			bool done = Pages.Rollback(currentWiki, page, targetRevision);
+			bool done = Pages.Rollback(page, targetRevision);
 
 			if(done) {
 				RefreshList();
@@ -769,7 +769,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Page deletion requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername, currentWiki);
 
-			bool done = Pages.DeletePage(currentWiki, page);
+			bool done = Pages.DeletePage(page);
 
 			if(done) {
 				ResetPageList();
@@ -897,7 +897,7 @@ namespace ScrewTurn.Wiki {
 
 			bool allDone = true;
 			foreach(PageInfo pg in selectedPages) {
-				allDone &= Pages.MigratePage(currentWiki, pg, selectedNamespace, chkBulkMigrateCopyCategories.Checked);
+				allDone &= Pages.MigratePage(pg, selectedNamespace, chkBulkMigrateCopyCategories.Checked);
 			}
 
 			if(allDone) {

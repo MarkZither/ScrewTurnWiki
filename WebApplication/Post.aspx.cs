@@ -115,12 +115,12 @@ namespace ScrewTurn.Wiki {
 				}
 				catch { }
 
-				Pages.AddMessage(currentWiki, page, username, txtSubject.Text, DateTime.Now, content, parent);
+				Pages.AddMessage(page, username, txtSubject.Text, DateTime.Now, content, parent);
 			}
 			else {
 				Message[] messages = Pages.GetPageMessages(page);
 				Message msg = Pages.FindMessage(messages, int.Parse(Request["Edit"]));
-				Pages.ModifyMessage(currentWiki, page, int.Parse(Request["Edit"]), msg.Username, txtSubject.Text, DateTime.Now, content);
+				Pages.ModifyMessage(page, int.Parse(Request["Edit"]), msg.Username, txtSubject.Text, DateTime.Now, content);
 			}
 			UrlTools.Redirect(page.FullName + GlobalSettings.PageExtension + "?Discuss=1&NoRedirect=1");
 		}

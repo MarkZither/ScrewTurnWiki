@@ -214,7 +214,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		private static void CreateMainPage(string wiki) {
 			Pages.CreatePage(wiki, null as string, Settings.GetDefaultPage(wiki));
-			Pages.ModifyPage(wiki, Pages.FindPage(wiki, Settings.GetDefaultPage(wiki)), "Main Page", Log.SystemUsername,
+			Pages.ModifyPage(Pages.FindPage(wiki, Settings.GetDefaultPage(wiki)), "Main Page", Log.SystemUsername,
 				DateTime.Now, "", Defaults.MainPageContent, null, null, SaveMode.Normal);
 		}
 

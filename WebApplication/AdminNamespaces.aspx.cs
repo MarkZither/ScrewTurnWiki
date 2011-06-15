@@ -237,7 +237,7 @@ namespace ScrewTurn.Wiki {
 				PageInfo page = Pages.FindPage(currentWiki, NameTools.GetFullName(nspace.Name, "MainPage"));
 
 				if(done) {
-					done = Pages.ModifyPage(currentWiki, page, "Main Page", Log.SystemUsername,
+					done = Pages.ModifyPage(page, "Main Page", Log.SystemUsername,
 						DateTime.Now, "", Defaults.MainPageContentForSubNamespace,
 						new string[0], "", SaveMode.Normal);
 

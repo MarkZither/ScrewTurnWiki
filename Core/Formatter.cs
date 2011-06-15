@@ -1152,15 +1152,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Builds the incoming links list for a page (valid only in Phase3).
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="context">The formatting context.</param>
 		/// <param name="current">The current page, if any.</param>
 		/// <returns>The list.</returns>
-		private static string BuildIncomingLinksList(string wiki, PageInfo page, FormattingContext context, PageInfo current) {
+		private static string BuildIncomingLinksList(PageInfo page, FormattingContext context, PageInfo current) {
 			if(page == null) return "";
 
-			string[] links = Pages.GetPageIncomingLinks(wiki, page);
+			string wiki = page.Provider.CurrentWiki;
+			string[] links = Pages.GetPageIncomingLinks(page);
 			if(links.Length == 0) return "";
 
 			StringBuilder sb = new StringBuilder(500);
@@ -1186,15 +1186,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Builds the outgoing links list for a page (valid only in Phase3).
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="page">The page.</param>
 		/// <param name="context">The formatting context.</param>
 		/// <param name="current">The current page, if any.</param>
 		/// <returns>The list.</returns>
-		private static string BuildOutgoingLinksList(string wiki, PageInfo page, FormattingContext context, PageInfo current) {
+		private static string BuildOutgoingLinksList(PageInfo page, FormattingContext context, PageInfo current) {
 			if(page == null) return "";
 
-			string[] links = Pages.GetPageOutgoingLinks(wiki, page);
+			string wiki = page.Provider.CurrentWiki;
+			string[] links = Pages.GetPageOutgoingLinks(page);
 			if(links.Length == 0) return "";
 
 			StringBuilder sb = new StringBuilder(500);
@@ -2447,10 +2447,10 @@ namespace ScrewTurn.Wiki {
 						sb.Insert(match.Index, BuildCurrentNamespaceDropDown(wiki));
 						break;
 					case "INCOMING":
-						sb.Insert(match.Index, BuildIncomingLinksList(wiki, current, context, current));
+						sb.Insert(match.Index, BuildIncomingLinksList(current, context, current));
 						break;
 					case "OUTGOING":
-						sb.Insert(match.Index, BuildOutgoingLinksList(wiki, current, context, current));
+						sb.Insert(match.Index, BuildOutgoingLinksList(current, context, current));
 						break;
 					case "USERNAME":
 						if(SessionFacade.LoginKey != null) sb.Insert(match.Index, GetProfileLink(wiki, SessionFacade.CurrentUsername));
@@ -2495,7 +2495,7 @@ namespace ScrewTurn.Wiki {
 				bool canEdit = false;
 				bool canEditWithApproval = false;
 
-				Pages.CanEditPage(wiki, current, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(wiki),
+				Pages.CanEditPage(current, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(wiki),
 					out canEdit, out canEditWithApproval);
 
 				if(canEdit || canEditWithApproval) {
