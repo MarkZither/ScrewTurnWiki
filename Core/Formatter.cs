@@ -2155,8 +2155,13 @@ namespace ScrewTurn.Wiki {
 			bool thAdded = false;
 
 			string item;
+			bool inCell = false;
 			for(int i = count; i < lines.Length - 1; i++) {
 				if(lines[i].Trim().StartsWith("|-")) {
+					if (inCell) {
+						sb.Append ("</td>");
+						inCell = false;
+					}
 					// New line
 					if(i != count) sb.Append("</tr>");
 
@@ -2171,31 +2176,44 @@ namespace ScrewTurn.Wiki {
 					sb.Append(">");
 				}
 				else if(lines[i].Trim().StartsWith("|")) {
+					if (inCell) {
+						sb.Append ("</td>");
+						inCell = false;
+					}
 					// Cell
-					if(lines[i].Length < 3) continue;
+					inCell = true;
+					if(lines[i].Length < 3) {
+						sb.Append ("<td>");
+						sb.Append (lines[i].Substring (1));
+						continue;
+					}
 					item = lines[i].Substring(2);
 					if(item.IndexOf(" || ") != -1) {
 						sb.Append("<td>");
 						sb.Append(item.Replace(" || ", "</td><td>"));
-						sb.Append("</td>");
 					}
 					else if(item.IndexOf(" | ") != -1) {
 						sb.Append("<td ");
 						sb.Append(item.Substring(0, item.IndexOf(" | ")));
 						sb.Append(">");
 						sb.Append(item.Substring(item.IndexOf(" | ") + 3));
-						sb.Append("</td>");
 					}
 					else {
 						sb.Append("<td>");
 						sb.Append(item);
-						sb.Append("</td>");
 					}
 				}
 				else if(lines[i].Trim().StartsWith("!")) {
 					// Header
-					if(lines[i].Length < 3) continue;
-
+					if(lines[i].Length < 3) {
+						if (inCell)
+							sb.Append (lines [i]);
+						continue;
+					}
+					if (inCell) {
+						sb.Append ("</td>");
+						inCell = false;
+					}
                     // only if ! is found in the first row of the table, it is an header
                     if(lines[i + 1] == "|-") thAdded = true;
 
@@ -2217,8 +2235,15 @@ namespace ScrewTurn.Wiki {
 						sb.Append(item);
 						sb.Append("</th>");
 					}
+				} else if (inCell) {
+					string l = lines [i];
+					if (l.IndexOf (" || ", StringComparison.Ordinal) != -1)
+						l = l.Replace (" || ", "</td><td>");
+					if (l.IndexOf ("<br />|| ", StringComparison.Ordinal) != -1) // Might happen if a list is in the table
+						l = l.Replace ("<br />|| ", "<br /></td><td>");
+					sb.Append (l);
 				}
-			}
+			} 
 			if(sb.ToString().EndsWith("<tr>")) {
 				sb.Remove(sb.Length - 4 - 1, 4);
 				sb.Append("</table>");
