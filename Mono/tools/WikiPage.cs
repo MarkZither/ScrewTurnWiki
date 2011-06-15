@@ -146,16 +146,10 @@ class WikiPage
 		int newStart = 0;
 		WikiImage image;
 		while (match.Success) {
-			Console.WriteLine ("image: {0}", match.Value);
 			value = match.Value.TrimStart ('[').TrimEnd (']').Replace ("Image:", String.Empty);
 			image = new WikiImage (value);
-			if (!image.Valid) {
-				Console.WriteLine ("\tinvalid");
+			if (!image.Valid)
 				continue;
-			}
-			Console.WriteLine ("\tparsed: Name=={0}; Type=={1}; Border=={2}; Location=={3}; Alignment=={4}; Size=={5}; Caption=={6}; Link=={7}",
-					   image.Name, image.Type, image.Border, image.Location, image.Alignment, image.Size, image.Caption, image.Link);
-			Console.WriteLine ("\tconverted: {0}", image);
 			tmp = image.ToString ();
 			sb.Remove (match.Index, match.Length);
 			sb.Insert (match.Index, tmp);
@@ -295,6 +289,7 @@ class WikiPage
 		// * In STW only the 2nd or 3rd lines can start with " !" to mark heading cells
 		// * If a trailing || is found on the line, it must be followed by some text '&nbsp;'
 		//   does the trick
+		// * If a leading || is found, it must be preceeded by a space
 		var sb = new StringBuilder ();
 		string line, trimmed;
 		for (int i = start; i < lines.Length - 1; i++) {
@@ -315,13 +310,21 @@ class WikiPage
 							sb.Append (line.Substring (idx + 1));
 					}
 				}
-			} else
+			} else {
+				if (line.StartsWith ("||"))
+					sb.Append (' ');
 				sb.Append (line);
+			}
 			
 			if (trimmed.EndsWith ("||"))
 				sb.Append (" &nbsp;");
 			ret.AppendLine (sb.ToString ());
 		}
+		// Due to parsing quirks in STW we must make sure that the last line of the table is preceeded
+		// by a blank line. Otherwise the |} ending the table might end up on the last content line and
+		// STW will ignore the content entirely (it ignores the first and the last table line when parsing)
+		if (lines [lines.Length - 1].Trim ().Length > 0)
+			ret.AppendLine ();
 		ret.AppendLine (lines [lines.Length - 1]);
 		
 		return ret.ToString ();
