@@ -27,11 +27,11 @@ namespace ScrewTurn.Wiki.Tests {
 		/// </summary>
 		/// <param name="expected">The expected date/time value.</param>
 		/// <param name="actual">The actual date/time value.</param>
-		/// <param name="ignoreUpToOneSecond">A value indicating whether to ignore a difference up to 10 seconds.</param>
-		public static void AssertDateTimesAreEqual(DateTime expected, DateTime actual, bool ignoreUpToTenSecondsDifference) {
-			if(ignoreUpToTenSecondsDifference) {
+		/// <param name="ignoreUpToOneMinuteDifference">A value indicating whether to ignore a difference up to 60 seconds.</param>
+		public static void AssertDateTimesAreEqual(DateTime expected, DateTime actual, bool ignoreUpToOneMinuteDifference) {
+			if(ignoreUpToOneMinuteDifference) {
 				TimeSpan span = expected - actual;
-				Assert.IsTrue(Math.Abs(span.TotalSeconds) <= 30, "Wrong date/time value");
+				Assert.IsTrue(Math.Abs(span.TotalSeconds) <= 60, "Wrong date/time value");
 				/*Assert.AreEqual(
 					PrintDateTime(expected).Substring(0, DateTimeFormat.Length - 1),
 					PrintDateTime(actual).Substring(0, DateTimeFormat.Length - 1),
