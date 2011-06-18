@@ -1,0 +1,208 @@
+/*
+	*
+	*	This stylesheet only contains color information such as:  
+	*	Font color, borders, shadows, backgrounds, background images...
+	*	Refer to screen.css to edit structural elements and layout/formatting
+	*
+*/
+
+body,
+p.quotebox a {
+	color:#555;
+}
+
+a:link,
+a:visited,
+a:active,
+.widgettitle {
+	color:#dc3522;
+}
+
+a:hover,
+#footer-bottom a:hover,
+#footer .widget_links ul a:hover,
+#footer .widget_links ol a:hover,
+.iconlist h5,
+.iconlist h5 a,
+.sf-menu a:hover,
+.sfHover a,
+.sf-menu ul li.sfHover > a {
+	color:#b7a66d;
+}
+
+html,
+body,
+#footer-bottom{
+	background:#2b2b2b;
+}
+
+#outer {
+	background:#fff;
+}
+
+h1, h2, h3, h4, h5, h6,
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
+#main .widgettitle,
+form.standard .button,
+.sf-menu a {
+	color:#333;
+}
+
+hr,
+.post,
+.widgettitle,
+.sf-menu li li {
+	border-bottom:1px solid #ddd;
+}
+
+.postmeta,
+#footer-bottom a,
+#searchform #s {
+	color:#888;
+}
+
+#header,
+.promo-navigation a,
+.pagination a,
+.pagination a span,
+p.quotebox,
+.ads,
+.boxed,
+.sf-menu ul a {
+	background:#f2f2f2;
+}
+
+#header {
+	border-bottom:10px solid #ddd;
+}
+
+#topbar,
+.sf-menu li li:last-child {
+	border-bottom:1px solid #fff;
+}
+
+#topbar,
+#footer {
+	background:#333;
+}
+
+#topbar a,
+#footer .widgettitle,
+.error,
+.warning,
+.success,
+.error a,
+.warning a,
+.success a {
+	color:#fff;
+}
+
+#searchform #searchsubmit {
+	background:url(../../images/searchsubmit.gif) no-repeat center center;
+}
+
+#searchform #s {
+	background:#555;
+}
+
+#footer {
+	border-bottom:1px solid #444;
+}
+
+#footer-bottom {
+	border-top:1px solid #222;
+}
+
+#footer-bottom a.scroll-top {
+	background:url(../../images/to-top.gif) no-repeat left center;
+}
+
+.promo-navigation a,
+.pagination a,
+.pagination a span,
+.ads,
+.demogrid p {
+	border:1px solid #ddd;
+}
+
+.promo-navigation .activeSlide,
+form.standard .button,
+.sfHover,
+.sf-menu li ul {
+	background:#ddd;
+}
+
+#topbar,
+#footer,
+#footer .widget_links ul a,
+#footer .widget_links ol a {
+	color:#ddd;
+}
+
+p.quotebox {
+	background-position:10px center;
+	background-repeat:no-repeat;
+	background-image:url(../../images/quote_left.gif);
+}
+
+form.standard .textbox,
+form.standard .textarea,
+form.standard .select,
+form.standard .button,
+form.standard .checkbox,
+form.standard .radio {
+	border:1px solid #ccc;
+}
+
+form.standard .button:hover {
+	background:#e5e5e5;
+}
+
+.shadow {
+	-moz-box-shadow:0 0 2px #ddd;
+	-webkit-box-shadow:0 0 2px #ddd;
+	box-shadow:0 0 2px #ddd; 
+}
+
+.hovershadow:hover,
+.pagination a:hover {
+	-moz-box-shadow:0 0 3px #d0d0d0;
+	-webkit-box-shadow:0 0 3px #d0d0d0;
+	box-shadow:0 0 3px #d0d0d0; 
+}
+
+.highlight {
+	background-color:#ff6;
+}
+
+.error {
+	background:#C00;
+}
+
+.warning {
+	background:#f93;
+}
+
+.success {
+	background:#090;
+}
+
+.sf-menu ul a:hover {
+	background:#ebebeb;
+}
+.sf-menu li li {
+	background:#e8e8e8;
+	border-left:1px solid #fff;
+	border-right:1px solid #fff;
+}
+.sf-menu li li:first-child {
+	border-top:1px solid #fff;
+}
+.sf-menu li ul {
+	-moz-box-shadow:2px 2px 2px #ddd;
+	-webkit-box-shadow:2px 2px 2px #ddd;
+	box-shadow:2px 2px 2px #ddd; 
+}
+.sf-sub-indicator {
+	background:url('../../images/menu/default-submenu-sprite.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+}

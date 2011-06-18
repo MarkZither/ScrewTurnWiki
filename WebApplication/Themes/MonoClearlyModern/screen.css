@@ -1,0 +1,606 @@
+/* Stylesheet / CSS */
+
+/* CSS Reset - Do not edit this line */ 
+html {margin:0;padding:0;border:0;}body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, dialog, figure, footer, header, hgroup, nav, section {margin:0;padding:0;border:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}article, aside, dialog, figure, footer, header, hgroup, nav, section {display:block;}body {line-height:1.5;background:white;}table {border-collapse:separate;border-spacing:0;}caption, th, td {text-align:left;font-weight:normal;float:none !important;}table, th, td {vertical-align:middle;}blockquote:before, blockquote:after, q:before, q:after {content:'';}blockquote, q {quotes:"" "";}a img {border:none;}:focus {outline:0;}
+
+/*
+	*
+	*	For Color Information - see the css/themes folder.
+	*
+*/
+
+
+/* General Style Information */
+
+body {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+	line-height:22px;
+}
+
+
+
+h1, h2, h3, h4, h5, h6,
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+	padding:0 0 20px 0;
+	font-weight:bold;
+	text-decoration:none;
+}
+
+h1, 
+h2 {
+	font-size:27px;
+	letter-spacing:-1px;
+}
+
+h3 {
+	font-size:18px;
+}
+
+h4 {
+	font-size:16px;
+}
+
+h5 {
+	font-size:15px;
+}
+
+h6 {
+	font-size:12px;
+}
+
+p {
+	padding:0 0 20px 0;
+}
+
+
+hr {
+	background:none;
+	height:1px;
+	line-height:1px;
+	border:0;
+	margin:0 0 20px 0;
+}
+ul, 
+ol { 
+	margin:0 20px 20px 0; 
+	padding-left:40px; 
+}
+blockquote { 
+	margin:0 0 0 40px; 
+}
+strong, dfn { 
+	font-weight:bold; 
+}
+em, dfn { 
+	font-style:italic; 
+}
+sup, sub { 
+	line-height:0; 
+}
+pre  { 
+	white-space:pre; 
+}
+pre,code,tt { 
+	font-family:"Courier New", Courier, mono;
+	font-size:12px;
+}
+dl { 
+	margin: 0 0 20px 0; 
+}
+dl dt { 
+	font-weight: bold; 
+}
+dd { 
+	margin:0 0 20px 20px;
+}
+
+small {
+	font-size:75%;
+}
+
+
+
+
+.post {
+	margin-bottom:40px;
+	padding-bottom:20px;
+}
+.entry-title {
+	padding-bottom:5px;
+}
+.postmeta {
+	font-size:11px;
+	text-transform:uppercase;
+}
+.post:last-child {
+	border:0;
+	margin-bottom:0;
+	padding-bottom:20px;
+}
+.postmeta {
+}
+a.more-link {
+	font-weight:bold;
+	text-decoration:none;
+}
+
+#header {
+	padding:40px 0;
+	position:relative;
+	z-index:2;
+}
+#header-container {
+	position:relative;
+}
+#topbar p {
+	padding:0;
+	font-size:12px;
+	line-height:35px;
+}
+#topbar a {
+	text-decoration:none;
+}
+
+
+#searchform {
+	position:relative;
+}
+#searchform #searchsubmit {
+	position:absolute;
+	top:0;
+	right:4px;
+	border:0;
+	height:22px;
+	width:20px;
+	text-indent:-9999px;
+	cursor:pointer;
+}
+#searchform #s {
+	width:99%;
+	height:20px;
+	border:0;
+	position:absolute;
+	top:0;
+	left:0;
+	text-indent:5px;
+}
+
+#topbar #searchform {
+	margin-top:6px;
+}
+
+
+
+#logo h1 {
+	padding:0;
+	margin:0;
+}
+
+#main {
+	padding:40px 0 20px 0;
+	position:relative;
+	z-index:1;
+}
+
+
+
+#footer {
+	padding:40px 0 0 0;
+}
+#footer-bottom {
+	padding:10px 0;
+	font-size:12px;
+}
+#footer-bottom a.scroll-top {
+	padding-left:15px;
+	text-decoration:none;
+}
+#footer a {
+	text-decoration:none;	
+}
+
+
+
+
+
+.primary-promo-container {
+	margin:0 0 40px 0;
+}
+.promo-container {
+	position:relative;
+}
+.promo-navigation {
+	position:absolute;
+	bottom:20px;
+	right:20px;
+	z-index:20;
+}
+
+.promo-navigation a {
+	display:block;
+	float:left;
+	width:20px;
+	height:20px;
+	text-indent:-9999px;
+	margin-left:5px;
+}
+.promo-navigation-small a {
+	width:10px;
+	height:10px;
+}
+
+.promo-bottom-navigation  {
+	padding-bottom:20px;
+	clear:both;
+}
+.promo-bottom-navigation .promo-navigation {
+	bottom:0;
+	right:0;
+}
+
+
+
+
+/* Post / Page Navigation */
+.pagination {
+	margin:0 0 40px 0;
+	line-height:30px;
+	font-size:12px;
+}
+.pagination a,
+.pagination a span {
+	padding:5px 10px;
+	margin:2px;
+	text-decoration:none;
+}
+.pagination span.current {
+	font-weight:bold;
+	padding:3px 3px;
+	margin:2px;
+}
+
+
+
+
+
+
+
+.widget {
+	margin:0 0 40px 0;
+}
+.widget,
+.widgettitle {
+	font-size:12px;
+	line-height:18px;
+}
+.widgettitle {
+	font-weight:bold;
+	text-transform:uppercase;
+	padding:0 0 10px 0;
+	margin:0 0 20px 0;
+	line-height:100%;
+	
+}
+
+.widget UL,
+.widget OL {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+.widget p {
+	padding:0;
+}
+.textwidget p {
+	padding:0 0 10px 0;
+}
+.widget li {
+	padding-bottom:10px;
+}
+.widget a {
+	text-decoration:none;
+}
+
+#footer .widget li {
+	padding-bottom:10px;
+}
+#footer .widget_links li {
+	padding-bottom:1px;
+}
+#footer .widget li:last-child {
+	padding-bottom:0;
+}
+
+
+
+
+.iconlist h5 {
+	line-height:100%;
+	font-size:15px;
+}
+.iconlist h5,
+.iconlist h5 a {
+	font-weight:bold;
+	text-decoration:none;
+	padding:0;
+}
+.iconlist p {
+	font-size:12px;
+}
+.iconlist img.left
+{
+	margin:0 10px 10px 0;
+	padding:0;
+}
+ul.iconlist, ul.iconlist li {
+	margin:0;
+	padding:0;
+}
+
+
+
+p.quotebox {
+	padding:14px 20px 14px 40px;
+	line-height:100%;
+	margin:0 0 40px 0;
+	font-size:12px;
+}
+
+
+
+.ads {
+	padding:16px 0 0 16px;
+}
+.ads img {
+	padding:0 16px 16px 0;
+	display:block;
+	float:left;
+}
+.ads .widgettitle {
+	margin-right:16px;
+}
+
+
+
+.grid-item {
+	padding:10px 0 0 0;
+	margin:0 0 40px 0;
+}
+.grid-item p, 
+.grid-item h3 
+ {
+	padding-bottom:5px;
+}
+
+
+
+/* Contact Form */
+form.standard .field {
+	padding:0 0 15px 0;
+}
+form.standard label {
+	display:block;
+	padding:0 0 2px 2px;
+}
+form.standard .textbox,
+form.standard .textarea,
+form.standard .select,
+form.standard .button,
+form.standard .checkbox,
+form.standard .radio {
+	padding:8px 5px;
+}
+form.standard .checkbox,
+form.standard .radio {
+	border:0;
+}
+form.standard .button {
+	cursor:pointer;
+	padding:5px 8px;
+	line-height:100%;
+}
+form.standard .error {
+	padding:1px 6px;
+	line-height:100%;
+}
+
+
+
+/* Other Common Classes */
+.rounded {
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+}
+.message {
+	padding:8px;
+	margin-bottom:20px;
+}
+.error,
+.warning,
+.success,
+.error a,
+.warning a,
+.success a {
+	font-size:13px;
+}
+.left {
+	float:left;
+}
+.center {
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+}
+.right {
+	float:right;
+}
+img.left {
+	padding:3px 20px 20px 0;
+}
+img.right {
+	padding:3px 0 20px 20px;
+}
+.widget img.left {
+	padding:5px 10px 10px 0;
+}
+.widget img.right {
+	padding:5px 0 10px 10px;
+}
+.hidden {
+	display:none;
+}
+.pad {
+	padding:10px;
+}
+UL.clean,
+OL.clean {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}	
+.demogrid p {
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+	margin:10px 0;
+	padding:8px 0;
+}
+/* ** */
+
+
+
+/* Drop down menu */
+.sf-menu, .sf-menu * {
+	margin:			0;
+	padding:		0;
+	list-style:		none;
+	font-size:16px;
+}
+.sf-menu {
+	line-height:100%;
+	position:absolute;
+	right:0;
+	bottom:0;
+	float:left;
+}
+.sf-menu ul {
+	position:		absolute;
+	top:			-999em;
+	width:			20em; /* left offset of submenus need to match (see below) */
+}
+.sf-menu ul li {
+	width:			100%;
+}
+.sf-menu li:hover {
+	visibility:		inherit; /* fixes IE7 'sticky bug' */
+}
+.sf-menu li {
+	float:			left;
+	position:		relative;
+}
+.sf-menu a {
+	display:		block;
+	position:		relative;
+	padding: 		.75em 1em;
+	text-decoration:none;
+	font-weight:bold;
+}
+.sf-menu li:hover ul,
+.sf-menu li.sfHover ul {
+	left:			0;
+	top:			2.5em; /* match top ul list item height */
+	z-index:		99;
+}
+ul.sf-menu li:hover li ul,
+ul.sf-menu li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li:hover ul,
+ul.sf-menu li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			-11px;
+	margin-left:	2px;
+}
+ul.sf-menu li li:hover li ul,
+ul.sf-menu li li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li li:hover ul,
+ul.sf-menu li li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			-11px;
+}
+.sf-menu ul a
+{
+	font-size:12px;
+}
+.sf-menu li ul {
+	padding:10px;
+}
+.sf-menu a.sf-with-ul {
+	padding-right: 	30px;
+	min-width:		1px; /* trigger IE7 hasLayout so spans position accurately */
+}
+.sf-sub-indicator {
+	position:		absolute;
+	display:		block;
+	right:			10px;
+	top:			1.05em; /* IE6 only */
+	width:			10px;
+	height:			10px;
+	text-indent: 	-999em;
+	overflow:		hidden;
+}
+a > .sf-sub-indicator {  /* give all except IE6 the correct values */
+	top:			1em;
+	background-position: 0 -100px; /* use translucent arrow for modern browsers*/
+}
+
+/* apply hovers to modern browsers */
+a:focus > .sf-sub-indicator,
+a:hover > .sf-sub-indicator,
+a:active > .sf-sub-indicator,
+li:hover > a > .sf-sub-indicator,
+li.sfHover > a > .sf-sub-indicator {
+	background-position: -10px -100px; /* arrow hovers for modern browsers*/	
+}
+
+/* point right for anchors in subs */
+.sf-menu ul .sf-sub-indicator { background-position:  -10px 0; top:0.75em; }
+.sf-menu ul a > .sf-sub-indicator { background-position:  0 0; }
+
+/* apply hovers to modern browsers */
+.sf-menu ul a:focus > .sf-sub-indicator,
+.sf-menu ul a:hover > .sf-sub-indicator,
+.sf-menu ul a:active > .sf-sub-indicator,
+.sf-menu ul li:hover > a > .sf-sub-indicator,
+.sf-menu ul li.sfHover > a > .sf-sub-indicator {
+	background-position: -10px 0; /* arrow hovers for modern browsers*/
+}
+/* ** */
+
+
+
+/* Clearfix */
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+* html .clearfix {
+	height: 1%;
+}
