@@ -172,7 +172,7 @@ class WikiPage
 				value = value.Substring (1, match.Length - 2).Trim ();
 			if (value.IndexOf ('|') != -1) {
 				fields = value.Split ('|');
-				fields [0] = fields [0].Trim ().Replace (":", "_").Replace ("&", "_").Replace (" ", "_");
+				fields [0] = fields [0].Trim ().Replace (":", "_").Replace ("&", "_").Replace (" ", "_").Replace (".", "_");
 				sb.Remove (match.Index, match.Length);
 				tmp = String.Format ("[{0}]", String.Join ("|", fields));
 				newStart = match.Index + tmp.Length;
@@ -184,13 +184,13 @@ class WikiPage
 				sb.Remove (match.Index, match.Length);
 				fields = value.Split (' ');
 				if (!UrlRegex.IsMatch (fields [0]))
-					fields [0] = fields [0].Trim ().Replace (":", "_").Replace ("&", "_").Replace (" ", "_");
+					fields [0] = fields [0].Trim ().Replace (":", "_").Replace ("&", "_").Replace (" ", "_").Replace (".", "_");
 				tmp = String.Format ("[{0}|{1}]", fields [0], String.Join (" ", fields, 1, fields.Length - 1));
 				newStart = match.Index + tmp.Length;
 				sb.Insert (match.Index, tmp);
 			} else {
-				if (value.IndexOf (':') != -1 || value.IndexOf ('&') != -1) {
-					tmp = String.Format ("[{0}]", value.Trim ().Replace (":", "_").Replace ("&", "_").Replace (" ", "_"));
+				if (value.IndexOf (':') != -1 || value.IndexOf ('&') != -1 || value.IndexOf ('.') != -1) {
+					tmp = String.Format ("[{0}|{1}]", value.Trim ().Replace (":", "_").Replace ("&", "_").Replace (" ", "_").Replace (".", "_"), value);
 					sb.Remove (match.Index, match.Length);
 					sb.Insert (match.Index, tmp);
 					newStart = match.Index + tmp.Length;
