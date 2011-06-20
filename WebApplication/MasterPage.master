@@ -1,62 +1,132 @@
 <%@ Master Language="C#" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.MasterPage" Codebehind="MasterPage.master.cs" %>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <html dir="<%= ScrewTurn.Wiki.Settings.Direction %>" xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=8" />
-    <title runat="server">Title</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=8" />
+  <title runat="server">Title</title>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 </head>
 <body>
-    <form runat="server" id="FrmMaster">
-		<asp:Literal ID="lblStrings" runat="server" EnableViewState="false" />
-		<script type="text/javascript">
-		<!--
-			function __GetServerElementById(id) {
-				return document.getElementById(__BaseName + id);
-			}
-			function __RequestConfirm() {
-				return confirm(__ConfirmMessage);
-			}
-		// -->
-		</script>
-    
-        <div id="HeaderDiv">
-            <asp:Literal ID="lblHeaderDiv" runat="server" EnableViewState="false" />
-        </div>
-                   
-        <div id="ContainerDiv">
-                 
-            <div id="SidebarDiv">
-                <div id="SidebarHeaderDiv">
-                    <!-- Used for layout purposes only -->
-                </div>
-                <div id="SidebarContentDiv">
-                    <asp:Literal ID="lblSidebarDiv" runat="server" EnableViewState="false" />
-                </div>
-                <div id="SidebarFooterDiv">
-                    <!-- Used for layout purposes only -->
-                </div>
-            </div>
-            <div id="MainDiv">
-                <div id="MainHeaderDiv">
-                    <!-- Used for layout purposes only -->
-                </div>
-                <asp:Literal ID="lblPageHeaderDiv" runat="server" EnableViewState="false" />
-                <asp:contentplaceholder id="CphMaster" runat="server" />
-                <asp:Literal ID="lblPageFooterDiv" runat="server" EnableViewState="false" />
-                <div id="MainFooterDiv">
-                    <!-- Used for layout purposes only -->
-                </div>
-            </div>
+  <form runat="server" id="FrmMaster">
+    <div id="outer" class="clearfix">
+      <div id="topbar" class="clearfix">
+        <div class="container_12">
+          <div class="grid_6">
+            <p><a href="index.html"><strong>Xamarin</strong></a>: build cross-platform, native mobile apps.</p>
+          </div><!-- //grid_6 -->
 
-        </div>
+	  <div class="grid_4">
+            <p>phone: <strong>(800) 000-0000</strong> email: <strong><a href="#">contact@xamarin.com</a></strong></p>
+          </div><!-- //grid_4 -->
+
+          <div class="grid_2">
+	    <script type="text/javascript">
+	      <!--
+		 function _DoSearch_TopBar() { document.location = 'Search.aspx?AllNamespaces=1&FilesAndAttachments=1&Query=' + encodeURI(document.getElementById('topbar_search').value); }
+		 // -->
+	    </script>
+	    <input type="text" onkeydown="javascript:var keycode; if(window.event) keycode = event.keyCode; else keycode = event.which; if(keycode == 10 || keycode == 13) { _DoSearch_TopBar(); return false; }" id="topbar_search" class="rounded" />
+            <input type="submit" value="Seach" id="searchsubmit" title="Search the Site" onclick="javascript:_DoSearch_TopBar(); return false" />
+          </div><!-- //grid_2 -->
+        </div><!-- //container_12 -->      
+      </div><!-- //topbar -->
+      <div id="header" class="clearfix">          
+        <div class="container_12">
+          <div class="grid_12" id="header-container">
+	    <div><asp:Literal ID="lblStrings" runat="server" EnableViewState="false" /></div>
+            <div id="logo">
+              <h1><a href="index.html" title="Go to the home page"><img src="Themes/MonoClearlyModern/images/logo-trans.png" alt="Logo" /></a></h1>
+            </div><!-- //logo -->
+	    <ul class="sf-menu"><asp:Literal ID="lblSidebarDiv" runat="server" EnableViewState="false" /></ul>
+	  </div> // grid_12
+	  <div class="grid_12" id="HeaderDiv">
+	    <asp:Literal ID="lblHeaderDiv" runat="server" EnableViewState="false" />
+	  </div> <!-- // HeaderDiv -->
+	</div><!-- //container_12 -->
+      </div><!-- //header -->
+
+    <script type="text/javascript">
+      <!--
+	 function __GetServerElementById(id) {
+	 return document.getElementById(__BaseName + id);
+	 }
+	 function __RequestConfirm() {
+	 return confirm(__ConfirmMessage);
+	 }
+	 // -->
+    </script>    
+
+    <div id="main" class="clearfix">
+      <div class="container_12">                
+        <div class="grid_12">	  
+          <asp:Literal ID="lblPageHeaderDiv" runat="server" EnableViewState="false" />
+          <asp:contentplaceholder id="CphMaster" runat="server" />
+          <asp:Literal ID="lblPageFooterDiv" runat="server" EnableViewState="false" />
+	</div><!--//grid_12-->
+      </div><!-- //container_12 -->
+    </div><!-- //main -->
+
+    <div id="footer" class="clearfix">
+      <div class="container_12">
+        <div class="grid_3">
+          <div class="widget widget_links">
+            <h3 class="widgettitle">Xamarin links</h3>
+            <ul>
+	      <li><a href="http://xamarin.com/">Home page</a></li>
+	    </ul>
+	    </div>
+	</div><!--//grid_3-->
+
+        <div class="grid_3">                
+          <div class="widget widget_links">
+            <h3 class="widgettitle">More links if needed</h3>
+            <ul>
+	      <li><a href="http://google.com/">Google</a></li>
+	    </ul>
+	  </div>
+
+	  <div class="widget widget_links">
+            <h3 class="widgettitle">And even more links</h3>
+            <ul>
+	      <li><a href="http://msdn.microsoft.com/">MSDN</a></li>
+	    </ul>
+	  </div>
+	</div><!--//grid_3-->
+
+        <div class="grid_6">
+	  <div class="grid_6">
+            <div class="widget twitter-widget">
+              <h3 class="widgettitle"><small class="right">Follow us <a href="http://twitter.com/">@xamarin_com</a></small>Twitter</h3>
+              <div id="latest-footer-tweets"></div>
+            </div>
             
-        <div id="FooterDiv">
-            <asp:Literal ID="lblFooterDiv" runat="server" EnableViewState="false" />
-        </div>
+            <div class="widget">
+              <h3 class="widgettitle">Suggested Reading</h3>
+              <ul>
+                <li><strong><a href="#">PSD to HTML Part 1 of 22</a></strong><br />
+                  Phasellus mollis turpis ipsum. Aenean vitae mi in est pulvinar ornare.</li>
+                
+                <li><strong><a href="#">Sample Headings are Very Exciting</a></strong><br />
+                  Phasellus mollis turpis ipsum. Aenean vitae mi in est pulvinar ornare.</li>
+              </ul>
+            </div>
+          </div><!--//grid_6-->          
+        </div><!--//container_12-->
+      </div><!-- //footer -->
 
-    </form>  
+      <div id="footer-bottom" class="clearfix">
+        <div class="container_12">
+	  <div class="grid_6">
+	    <asp:Literal ID="lblFooterDiv" runat="server" EnableViewState="false" />
+	  </div>
+          <div class="grid_6">
+            <p class="left">&copy; 2010 - Theme created by <a href="http://cudazi.com/" title="Curt Ziegler / Cudazi Web Design Portfolio ">Cudazi</a> for <a href="http://themeforest.net/user/cudazi/?ref=cudazi" title="More WordPress and HTML themes by Cudazi on ThemeForest">ThemeForest.net</a></p>
+            <p class="right"><a href="#" class="scroll-top" title="Back to the Top">TOP</a></p>
+          </div>
+        </div><!--//container_12-->
+      </div>      
+    </div><!-- //outer -->
+  </form>  
 </body>
 </html>
