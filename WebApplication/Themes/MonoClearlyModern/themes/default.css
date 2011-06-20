@@ -98,7 +98,7 @@ p.quotebox,
 }
 
 #searchform #searchsubmit {
-	background:url(../../images/searchsubmit.gif) no-repeat center center;
+	background:url(images/searchsubmit.gif) no-repeat center center;
 }
 
 #searchform #s {
@@ -114,7 +114,7 @@ p.quotebox,
 }
 
 #footer-bottom a.scroll-top {
-	background:url(../../images/to-top.gif) no-repeat left center;
+	background:url(images/to-top.gif) no-repeat left center;
 }
 
 .promo-navigation a,
@@ -142,7 +142,7 @@ form.standard .button,
 p.quotebox {
 	background-position:10px center;
 	background-repeat:no-repeat;
-	background-image:url(../../images/quote_left.gif);
+	background-image:url(images/quote_left.gif);
 }
 
 form.standard .textbox,
@@ -204,5 +204,383 @@ form.standard .button:hover {
 	box-shadow:2px 2px 2px #ddd; 
 }
 .sf-sub-indicator {
-	background:url('../../images/menu/default-submenu-sprite.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+	background:url('images/menu/default-submenu-sprite.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
 }
+
+/*
+ *
+ * ScrewTurnWiki additions 
+ *
+ */
+#BreadcrumbsDiv {
+	border-bottom: solid 1px #ddd;
+	border-top: solid 1px #ddd;
+}
+
+/* Link to unknown/inexistent pages */
+a.unknownlink, a.unknownlink:link, a.unknownlink:active {
+	color: #005500;
+}
+a.unknownlink:hover {
+	color: #990000;
+}
+
+#PageAttachmentsLink {
+	background-image: url(images/DropDown.png);
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+
+#AdminToolsLink {
+	background-image: url(images/DropDown.png);
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+
+/* Link to an external URL */
+a.externallink {
+	background-image: url(images/ExternalLink.gif);
+	background-position: right;
+	background-repeat: no-repeat;
+}
+
+/* The link to the Page RSS */
+#RssLink {
+	background-image: url(images/icons/rss32.png);
+}
+#RssLink.discuss {
+	background-image: url(images/RSS-Discussion.png);
+}
+
+#PrintLinkDiv {
+	float: right;
+	position: relative;
+}
+#PrintLink {
+	background-image: url(images/icons/printer32.png);
+	background-repeat: no-repeat;
+}
+#BreadcrumbsDiv {
+	border-bottom: solid 1px #F0F0F0;
+	border-top: solid 1px #F0F0F0;
+}
+
+h1.pagetitle, h1.pagetitlesystem {
+	background-color: #f2f2f2;
+	border-bottom: 2px solid #999999;
+	border-top: 3px solid #f0f0f0;
+}
+
+h1.pagetitlesystem {
+	margin-bottom: 10px;
+}
+
+/* Class for applying a separator under H elements (useful to avoid usage of HR) */
+h1.separator, h2.separator, h3.separator {
+	background-color: #f2f2f2;
+	border-bottom: 2px solid #999999;
+	border-top: 3px solid #f0f0f0;
+}
+h4.separator {
+}
+h1.separator a.headeranchor, h2.separator a.headeranchor, h3.separator a.headeranchor, h4.separator a.headeranchor {
+	color: #F7F3F7;
+}
+h1.separator:hover a.headeranchor, h2.separator:hover a.headeranchor, h3.separator:hover a.headeranchor, h4.separator:hover a.headeranchor {
+	color: #888888;
+}
+a.headeranchor:hover {
+	background-color: #f0f0f0;
+}
+
+code, pre {
+	color: #000000;
+}
+
+pre {
+	background-color: #EEEEEE;
+	border: solid 1px #DDDDDD;
+}
+
+table.recentchanges {
+	border-top: solid 1px #999999;
+}
+
+tr.tableheader td, th {
+	background-color: #CCCCCC;
+	color: #000000;
+	border-bottom: solid 1px #999999;
+}
+
+tr.tablerow td {
+	border-bottom: solid 1px #999999;
+}
+tr.tablerow:hover, tr.tablerow:hover td {
+	background-color: #FFFFCC;
+}
+
+tr.tablerowalternate td {
+	background-color: #F0F0F0;
+	border-bottom: solid 1px #999999;
+}
+tr.tablerowalternate:hover, tr.tablerowalternate:hover td {
+	background-color: #FFFFCC;
+}
+
+/* Class for general purpose images (contained in Wiki pages) */
+img.image {
+	border: solid 1px #CCCCCC;
+}
+
+/* Div containing images alighed to the left */
+div.imageleft {
+	border: solid 1px #CCCCCC;
+	background-color: #F9F9F9;
+}
+
+/* Div containing images alighed to the right */
+div.imageright {
+	border: solid 1px #CCCCCC;
+	background-color: #F9F9F9;
+}
+
+/* Table containing images not aligned */
+table.imageauto {
+	border: solid 1px #CCCCCC;
+	background-color: #F9F9F9;
+}
+
+div.pageoutgoinglinksmenu {
+	background-color: #FFFFFF;
+	border: solid 1px #999999;
+}
+
+div.pageoutgoinglinksmenu a:hover {
+	color: #FFFFFF;
+	background-color: #555555;
+}
+
+input.activenotification {
+	background-image: url(Images/EmailNotifOn.png);
+}
+input.inactivenotification {
+	background-image: url(Images/EmailNotifOff.png);
+}
+input.activenotification.discuss {
+	background-image: url(Images/EmailNotifOn-Discussion.png);
+}
+input.inactivenotification.discuss {
+	background-image: url(Images/EmailNotifOff-Discussion.png);
+}
+
+#PreviewDiv {
+	border: solid 4px #CCCCCC;
+}
+
+blockquote {
+	border-left: solid 8px #FFDDDD;
+}
+
+div.rootmessagecontainer {
+	border-top: solid 4px #990000;
+}
+
+div.messageheader {
+	background-color: #FFFFDD;
+	border-top: solid 1px #990000;
+	border-left: solid 1px #990000;
+	border-right: solid 1px #990000;
+}
+
+div.messagebody {
+	border-bottom: solid 1px #990000;
+	border-left: solid 1px #990000;
+	border-right: solid 1px #990000;
+}
+
+a.reply {
+	background-image: url(images/MessageReply.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+a.edit {
+	background-image: url(images/MessageEdit.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+a.delete {
+	background-image: url(images/MessageDelete.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+div.warning {
+	background-color: #FEF693;
+	border: solid 1px #FFCF10;
+}
+
+input.txtsearchbox {
+	background-image: url(images/Search.png);
+	background-repeat: no-repeat;
+	background-position: right center;
+	background-color: #FFFFFF;
+	border: solid 1px #CCCCCC;
+}
+
+#TocContainer {
+	border: solid 1px #CCCCCC;
+	background-color: #F9F9F9;
+}
+
+a.attachment {
+	background-image: url(images/Attachment.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+#RedirectionInfoDiv {
+	color: #999999;
+}
+
+#RedirectionDiv {
+	background-image: url(images/Redirect.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+/* BEGIN Edit.aspx */
+
+div.anonymous {
+	background-color: #FEF693;
+	border: solid 1px #FFCF10;
+}
+
+div.autotemplate {
+	background-color: #FEF693;
+	border: solid 1px #FFCF10;
+}
+
+div.collisionsmanagement {
+	background-color: #FEF693;
+	border: solid 1px #FFCF10;
+}
+
+div.draftmanagement {
+	background-color: #FEF693;
+	border: solid 1px #FFCF10;
+}
+
+#EditNoticeDiv {
+	background-color: #F5F5F5;
+}
+
+#TemplatesInternalDiv {
+	background-color: #F5F5F5;
+}
+
+#TemplatePreviewDiv {
+	border: solid 1px #CCCCCC;
+}
+
+div.captcha {
+	background-color: #FEF693;
+	border: solid 1px #FFCF10;
+}
+
+#CategoriesListDiv {
+	border: solid 1px #999999;
+}
+
+/* END Edit.aspx */
+
+/* BEGIN Search.aspx */
+
+#CategoryFilterDiv {
+	border: solid 1px #999999;
+	background-color: #FFFFFF;
+}
+
+h3.searchresultpage {
+	background-image: url(images/Page.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+h3.searchresultmessage {
+	background-image: url(images/Message.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+h3.searchresultfile {
+	background-image: url(images/File.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+h3.searchresultattachment {
+	background-image: url(images/Attachment.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+p.excerpt {
+	border-left: solid 4px #DDDDDD;
+}
+
+p.excerpt b.searchkeyword, b.searchkeyword {
+	background-color: #FFEE64;
+}
+/* END Search.aspx */
+
+/* BEGIN FileManager.ascx */
+#ItemRenameDiv {
+	border: solid 1px #999999;
+}
+
+#NewDirectoryDiv, #UploadDiv, #PermissionsDiv {
+	border: solid 1px #999999;
+	background-color: #FFFFFF;
+}
+
+#AclSelectorDiv {
+	background-color: #FEF693;
+	border: solid 1px #FFCF10;
+}
+
+/* END FileManager.ascx */
+
+/* BEGIN AttachmentManager.ascx */
+#UploadAttachmentDiv {
+	border: solid 1px #999999;
+	background-color: #FFFFFF;
+}
+
+/* END AttachmentManager.ascx */
+
+/* BEGIN Non-content pages */
+
+#ContainerSADiv {
+	background-color: #FFFFFF;
+	border: solid 1px #888888;
+}
+
+/* END Non-content pages */
+
+/* BEGIN User.aspx */
+
+#UserGravatarDiv img {
+	border: solid 1px #CCCCCC;
+}
+/* END User.aspx */
+
+/* BEGIN AllPages.aspx */
+#PageSelectorDiv a:hover, a.selected, a:hover.selected {
+	background-color: #555555;
+	color: #FFFFFF;
+}
+#PageSelectorDiv a.selected, a:hover.selected {
+	font-weight: bold;
+}
+
+/* END AllPages.aspx */
+

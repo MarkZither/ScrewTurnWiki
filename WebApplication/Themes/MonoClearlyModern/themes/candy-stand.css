@@ -98,7 +98,7 @@ p.quotebox,
 }
 
 #searchform #searchsubmit {
-	background:url(../../images/searchsubmit.gif) no-repeat center center;
+	background:url(images/searchsubmit.gif) no-repeat center center;
 }
 
 #searchform #s {
@@ -114,7 +114,7 @@ p.quotebox,
 }
 
 #footer-bottom a.scroll-top {
-	background:url(../../images/to-top.gif) no-repeat left center;
+	background:url(images/to-top.gif) no-repeat left center;
 }
 
 .promo-navigation a,
@@ -142,7 +142,7 @@ form.standard .button,
 p.quotebox {
 	background-position:10px center;
 	background-repeat:no-repeat;
-	background-image:url(../../images/quote_left.gif);
+	background-image:url(images/quote_left.gif);
 }
 
 form.standard .textbox,
@@ -204,5 +204,5 @@ form.standard .button:hover {
 	box-shadow:2px 2px 2px #ddd; 
 }
 .sf-sub-indicator {
-	background:url('../../images/menu/default-submenu-sprite.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+	background:url('images/menu/default-submenu-sprite.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
 }

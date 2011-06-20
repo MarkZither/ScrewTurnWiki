@@ -125,7 +125,7 @@ jQuery(function($) {
 		// Latest Tweets
 		$("#latest-footer-tweets").tweet({
 			join_text: "auto",
-			username: "cudazi",
+			username: "xamarin_com",
 			count: 4,
 			auto_join_text_default: "we said,", 
 			auto_join_text_ed: "we",
