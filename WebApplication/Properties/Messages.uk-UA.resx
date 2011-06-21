@@ -133,7 +133,7 @@
     <value>Відображати виділений текст, як коментар (приховано від користувачів сторінок)</value>
   </data>
   <data name="EscapeTitle" xml:space="preserve">
-    <value>Вставити виділений текст в 'escape' блок, що зачепить всю wiki та HTML-пов'язані символи</value>
+    <value>Вставити виділений текст в 'escape' блок, що зачепить відображення всіх wiki- та HTML-пов'язаних символів</value>
   </data>
   <data name="ExternalLinkTitle" xml:space="preserve">
     <value>Вставити поислання на персональний сайт чи свою email-адресу</value>
@@ -160,28 +160,28 @@
     <value>Вставити зображення в сторінку</value>
   </data>
   <data name="ItalicTitle" xml:space="preserve">
-    <value>Визначити стиль, як похилий</value>
+    <value>Визначити стиль, як нахилений</value>
   </data>
   <data name="LineBreakTitle" xml:space="preserve">
     <value>Вставити додатковий рядок</value>
   </data>
   <data name="NoBrTitle" xml:space="preserve">
-    <value>Вставити виділений текст у 'nobr' блок, що ігнорує переведення до нового рядку</value>
+    <value>Вставити виділений текст у 'nobr' блок, що ігнорує переніс тексту у новий рядок</value>
   </data>
   <data name="NoWikiTitle" xml:space="preserve">
-    <value>Вставити виділений текст у 'nowiki' блок, що ігнорує WikiMarkup</value>
+    <value>Вставити виділений текст у 'nowiki' блок, що дозволяє ігнорувати мову WikiMarkup</value>
   </data>
   <data name="OrderedListTitle" xml:space="preserve">
-    <value>Використувуйте упорядкований список, або ж оберніть виділений текст в упорядкований список (1,2,3, ...)</value>
+    <value>Використувуйте упорядкований перелік, або ж оберніть виділений текст в упорядкований перелік (1,2,3, ...)</value>
   </data>
   <data name="PageLinkTitle" xml:space="preserve">
     <value>Вставте посилання на сторінку wiki</value>
   </data>
   <data name="SnippetsTitle" xml:space="preserve">
-    <value>Переглянути існуючи сніпети та вставити один з них</value>
+    <value>Переглянути існуючи сніпети та використати один з них</value>
   </data>
   <data name="SpecialTagsTitle" xml:space="preserve">
-    <value>Переглянути спеціальні теги та використати один з них</value>
+    <value>Переглянути спеціальні теги та скористатися одним з них</value>
   </data>
   <data name="StrikedTitle" xml:space="preserve">
     <value>Обрати для виділеного тексту, стиль закреслений</value>
@@ -199,7 +199,7 @@
     <value>Підкреслити виділений текст</value>
   </data>
   <data name="UnorderedListTitle" xml:space="preserve">
-    <value>Вставити невпорядкований список, або обернути виділений текст у такий (bullet points)</value>
+    <value>Вставити невпорядкований перелік, або обернути виділений текст у такий (bullet points)</value>
   </data>
   <data name="WrapperBoxTitle" xml:space="preserve">
     <value>Обернути виділений текст в 'box'</value>
@@ -251,10 +251,10 @@
     <value>Помилкове ім'я файлу</value>
   </data>
   <data name="OrderedList" xml:space="preserve">
-    <value>Нумерований список</value>
+    <value>Нумерований перелік</value>
   </data>
   <data name="UnorderedList" xml:space="preserve">
-    <value>Ненумерований список</value>
+    <value>Ненумерований перелік</value>
   </data>
   <data name="LinkToThisSection" xml:space="preserve">
     <value>Посилання на цей Розділ</value>
@@ -290,7 +290,7 @@
     <value>Горизонтальна лінія</value>
   </data>
   <data name="Snippets" xml:space="preserve">
-    <value>Сніппети (шаблони коду)</value>
+    <value>Сніппети (фрагменти коду)</value>
   </data>
   <data name="Symbols" xml:space="preserve">
     <value>Спеціальні позначення</value>
@@ -317,7 +317,7 @@
     <value>##USER## змінив повідомлення в обговоренні сторінки ##PAGE##.</value>
   </data>
   <data name="UserPostedMessage" xml:space="preserve">
-    <value>##USER## відправив повідомлення до обговорення сторінки ##PAGE##.</value>
+    <value>##USER## відправив повідомлення до розділу обговорення сторінки ##PAGE##.</value>
   </data>
   <data name="UserRenamedPage" xml:space="preserve">
     <value>##USER## змінив назву сторінки ##PAGE##.</value>
@@ -533,7 +533,7 @@
     <value>Параметри</value>
   </data>
   <data name="CouldNotDeleteCategory" xml:space="preserve">
-    <value>Помилка створення категорії</value>
+    <value>Помилка видалення категорії</value>
   </data>
   <data name="CouldNotMergeCategories" xml:space="preserve">
     <value>Помилка об'єднання категорій</value>
@@ -599,7 +599,7 @@
     <value>Помилка видалення одного чи декількох повідомлень</value>
   </data>
   <data name="CouldNotDeletePageBackups" xml:space="preserve">
-    <value>Помилка видалення копії сторінки</value>
+    <value>Помилка видалення бекапів сторінки</value>
   </data>
   <data name="CouldNotRollbackPage" xml:space="preserve">
     <value>Не вдалося повернутися до обраної версії сторінки</value>
@@ -761,7 +761,7 @@
     <value>Управління навігаційними меню</value>
   </data>
   <data name="Action_Man_Ns" xml:space="preserve">
-    <value>Управління Простором Імен</value>
+    <value>Управління Просторами Імен</value>
   </data>
   <data name="Action_Man_Pg" xml:space="preserve">
     <value>Управління сторінками</value>
@@ -863,7 +863,7 @@
     <value>Вгору на один рівень</value>
   </data>
   <data name="CannotRenameItem" xml:space="preserve">
-    <value>Ім'я, зазначеного Вами не змінено</value>
+    <value>Ім'я, зазначеного Вами не може бути змінено</value>
   </data>
   <data name="CannotStoreFile" xml:space="preserve">
     <value>Файл не збережений</value>
@@ -966,7 +966,7 @@
     <value>Доступ заборонено</value>
   </data>
   <data name="AccountActivated" xml:space="preserve">
-    <value>Ваш запис користувача активований. Авторизуйтеся, будь-ласка.</value>
+    <value>Ваш запис користувача активований. Входіть, будь-ласка.</value>
   </data>
   <data name="AccountActivation" xml:space="preserve">
     <value>Активація запису користувача</value>
@@ -1053,7 +1053,7 @@
     <value>Категорії</value>
   </data>
   <data name="CategoriesMerged" xml:space="preserve">
-    <value>Змішані категорії</value>
+    <value>Об'єднані категорії</value>
   </data>
   <data name="CategorizedAs" xml:space="preserve">
     <value>Категорії сторінки</value>
@@ -1209,7 +1209,7 @@
     <value>Зміст верхнього колонтитулу</value>
   </data>
   <data name="HidePreview" xml:space="preserve">
-    <value>Не відображати попередній вид</value>
+    <value>Не відображати попередній перегляд</value>
   </data>
   <data name="HideShow" xml:space="preserve">
     <value>Не відображати/Відображати</value>
@@ -1252,7 +1252,7 @@
     <comment>Количество бездействующих пользователей, например, Пользователей: 8 (3 неактивно)</comment>
   </data>
   <data name="InvalidBackupNumber" xml:space="preserve">
-    <value>Невірне число: має бути більше або дорівнювати нолю (відсутнє значення відключає автоматичне видалення бекапу)</value>
+    <value>Невірне число: має бути більше або дорівнювати нулю (відсутнє значення відключає автоматичне видалення бекапу)</value>
   </data>
   <data name="InvalidCacheCutSize" xml:space="preserve">
     <value>Невірне значення упакованого кешу: має бути цілим числом, більше нуля і менше розміру самого кешу</value>
@@ -1261,7 +1261,7 @@
     <value>Невірне значення кешу: повинно бути більше нуля</value>
   </data>
   <data name="InvalidCategoryName" xml:space="preserve">
-    <value>Невірні назва Категорії</value>
+    <value>Невірна назва Категорії</value>
   </data>
   <data name="InvalidContactEmail" xml:space="preserve">
     <value>Невірна контактна Email</value>
@@ -1315,7 +1315,7 @@
     <value>Неправильне ім'я сніпета</value>
   </data>
   <data name="InvalidUsername" xml:space="preserve">
-    <value>Неправильне ім'я користувача: має містити більше 4 символів, не можна використовувати слова 'Admin' або 'Guest', й використовувати букви, цифри, разом з пробілами й точками.</value>
+    <value>Неправильне ім'я користувача: має містити більше 4 символів, не можна використовувати слова 'Admin' або 'Guest', й використовувати букви, цифри, разом з пробілами й крапками.</value>
   </data>
   <data name="InvalidWikiTitle" xml:space="preserve">
     <value>Невірна Назва Wiki: не может бути порожнім, не можна використовувати символ нового рядку та символи псевдографіки</value>
@@ -1324,13 +1324,13 @@
     <value>Нахилений</value>
   </data>
   <data name="LastModifiedPage" xml:space="preserve">
-    <value>Останні зміни сторінка</value>
+    <value>Останні зміни сторінки</value>
   </data>
   <data name="LatestUser" xml:space="preserve">
     <value>Останній користувач</value>
   </data>
   <data name="LineBreak" xml:space="preserve">
-    <value>Новий рядок (перевід рядку)</value>
+    <value>Новий рядок (переведення рядку)</value>
   </data>
   <data name="LinkTitle" xml:space="preserve">
     <value>Текстова підкладка відсилки</value>
@@ -1354,7 +1354,7 @@
     <value>Вихід</value>
   </data>
   <data name="LostPassword" xml:space="preserve">
-    <value>Загубили Пароль?</value>
+    <value>Не пам'ятаєте Пароль?</value>
   </data>
   <data name="MassEmailSent" xml:space="preserve">
     <value>Масована розсилка (тільки затребувана доставка, не спам)</value>
@@ -1548,7 +1548,7 @@
     <value>Перезавантажити</value>
   </data>
   <data name="RegisterTitle" xml:space="preserve">
-    <value>Стоврити Запис Користувача</value>
+    <value>Створити Запис Користувача</value>
   </data>
   <data name="RegistrationDisabled" xml:space="preserve">
     <value>Створення записів користувачів відключено.</value>
@@ -1635,10 +1635,10 @@
     <value>Розмір тимчасових файлів</value>
   </data>
   <data name="TextareaSize" xml:space="preserve">
-    <value>Розмір шрифту</value>
+    <value>Розмір textarea</value>
   </data>
   <data name="ThePageHasBeenDeletedBy" xml:space="preserve">
-    <value>Сторінка була видалено</value>
+    <value>Сторінка була видалена</value>
   </data>
   <data name="ThePageHasBeenRenamedBy" xml:space="preserve">
     <value>Сторінка отримала нове ім'я</value>
@@ -1665,7 +1665,7 @@
     <value>Написати</value>
   </data>
   <data name="UnallowedFileType" xml:space="preserve">
-    <value>Такі файли, заборонені до завантаження.</value>
+    <value>Подібні файли, заборонені до завантаження.</value>
   </data>
   <data name="Uncategorized" xml:space="preserve">
     <value>Без категорій</value>
@@ -1698,7 +1698,7 @@
     <value>Таке Ім'я Користувача вже існує, спробуйте інше, будь ласка</value>
   </data>
   <data name="UsernameIsRequired" xml:space="preserve">
-    <value>Якщо є пароль SMTP користувача, то потрібно й його ім'я</value>
+    <value>Якщо є пароль SMTP користувача, то потрібно й його ім'я (логін)</value>
   </data>
   <data name="UserPromoted" xml:space="preserve">
     <value>Статус користувача змінено на "Адміністратора"</value>
@@ -1725,7 +1725,7 @@
     <value>Може одна із цих сторінок?</value>
   </data>
   <data name="WikiUpToDate" xml:space="preserve">
-    <value>Ви маєте найновішу версію Wiki</value>
+    <value>Встановлена остання версія Wiki</value>
   </data>
   <data name="WikiVersion" xml:space="preserve">
     <value>Версія Wiki</value>

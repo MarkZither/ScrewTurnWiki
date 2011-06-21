@@ -124,7 +124,7 @@
     <value>Видалити старі та недіючі облікові записи</value>
   </data>
   <data name="lblBulkDeleteResource1.Text" xml:space="preserve">
-    <value>Видалити всі &lt;b&gt;неактівні&lt;/b&gt; облікові записи, яким більш ніж &lt;b&gt;1 місяць&lt;/b&gt;.&lt;br /&gt;Будь ласка, заархівуйте дані до початку видалення.</value>
+    <value>Видалити всі &lt;b&gt;неактівні&lt;/b&gt; облікові записи, яким більш ніж &lt;b&gt;1 місяць&lt;/b&gt;.&lt;br /&gt;Будь ласка, збережіть (заархівуйте) дані до початку видалення.</value>
   </data>
   <data name="lblBulkDeleteTitleResource1.Text" xml:space="preserve">
     <value>Масове видалення</value>
