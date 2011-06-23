@@ -44,8 +44,8 @@ class WikiPage
 		{"[User:", "[User_"},
 		{"[Help:", "[Help_"},
 		{"[Mono_Runtime", "[Runtime"},
-		{"#REDIRECT", ">>>"},
-		{"#redirect", ">>>"},
+		{"#REDIRECT", ">>> "},
+		{"#redirect", ">>> "},
 		{"{{:Supported Platforms}}", "{s:Supported_Platforms}"}
 	};
 	
@@ -94,12 +94,12 @@ class WikiPage
 				
 		}
 		Title = titlePrefix + reader ["cur_title"] as string;
-		Text = FixupContent (reader ["cur_text"] as string, templates);
 		Comment = (reader ["cur_comment"] as byte[]).TinyBlobToString ();
 		User = (uint)reader ["cur_user"];
 		LastModified = (reader ["cur_touched"] as string).ParseDekiTime ();
 		Created = (reader ["cur_timestamp"] as string).ParseDekiTime ();
 		IsRedirect = ((byte)reader ["cur_is_redirect"]) == 1;
+		Text = FixupContent (reader ["cur_text"] as string, templates);
 	}
 
 	public void ResolveCategories ()
@@ -193,7 +193,10 @@ class WikiPage
 				fields = value.Split ('|');
 				fields [0] = FixupString (fields [0].Trim (), out tmp);
 				sb.Remove (match.Index, match.Length);
-				tmp = String.Format ("[{0}]", String.Join ("|", fields));
+				if (IsRedirect)
+					tmp = String.Format ("{0}", fields [0]);
+				else
+					tmp = String.Format ("[{0}]", String.Join ("|", fields));
 				newStart = match.Index + tmp.Length;
 				sb.Insert (match.Index, tmp);
 			} else if (value.IndexOf (' ') != -1) {
@@ -207,21 +210,21 @@ class WikiPage
 				if (!UrlRegex.IsMatch (fields [0])) {
 					value = FixupString (value, out tmp);
 					if (!String.IsNullOrEmpty (tmp))
-						tmp = String.Format ("[{0}|{1}]", value, tmp);
+						tmp = String.Format (IsRedirect ? "{0}" : "[{0}|{1}]", value, tmp);
 					else
-						tmp = value;
+						tmp = IsRedirect ? value : "[" + value + "]";
 				} else
-					  tmp = String.Format ("[{0}|{1}]", fields [0], String.Join (" ", fields, 1, fields.Length - 1));
+					  tmp = String.Format (IsRedirect ? "{0}" : "[{0}|{1}]", fields [0], String.Join (" ", fields, 1, fields.Length - 1));
 				newStart = match.Index + tmp.Length;
 				sb.Insert (match.Index, tmp);
 			} else {
-				if (value.IndexOfAny (linkReplaceChars) != -1) {
-					tmp = String.Format ("[{0}|{1}]", FixupString (value.Trim (), out tmp), value);
+				//if (value.IndexOfAny (linkReplaceChars) != -1) {
+					tmp = String.Format (IsRedirect ? "{0}" : "[{0}|{1}]", FixupString (value.Trim (), out tmp), value);
 					sb.Remove (match.Index, match.Length);
 					sb.Insert (match.Index, tmp);
 					newStart = match.Index + tmp.Length;
-				} else 
-					newStart = match.Index + match.Length;
+				//} else 
+				//	newStart = match.Index + match.Length;
 			}
 			
 			match = LinkRegex.Match (sb.ToString (), newStart);

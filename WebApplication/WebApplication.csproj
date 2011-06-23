@@ -2636,9 +2636,8 @@
     <Content Include="Themes\Default\Images\RSS-Discussion.png" />
     <Content Include="Themes\Elegant\Images\EmailNotifOff-Discussion.png" />
     <Content Include="Themes\Elegant\Images\EmailNotifOn-Discussion.png" />
-    <Content Include="Themes\Elegant\Images\RSS-Discussion.png" />
-    <Content Include="Themes\Elegant\Images\RSS.png" />
-    <Content Include="Themes\Elegant\Images\Print.png" />
+
+    
     <Content Include="Web.SqlServer.Release.config" />
   </ItemGroup>
   <ItemGroup>
@@ -2824,6 +2823,9 @@
 <Content Include="Themes\MonoClearlyModern\themes\sun-and-sand.css" />
 <Content Include="Themes\MonoClearlyModern\themes\the-beach.css" />
 <Content Include="Themes\MonoClearlyModern\themes\wild-apple.css" />
+<Content Include="Themes\MonoClearlyModern\images\RSS.png" />
+<Content Include="Themes\MonoClearlyModern\images\Print.png" />
+<Content Include="Themes\MonoClearlyModern\images\RSS-Discussion.png" />
 
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
