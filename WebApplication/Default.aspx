@@ -217,7 +217,17 @@
 				AutoUpdateAfterCallBack="True" ImageUrl="~/Images/Blank.png" meta:resourcekey="btnEmailNotificationResource1" UpdateAfterCallBack="True" />
 		</div>
 		
-		<asp:Panel ID="pnlPageInfo" runat="server" meta:resourcekey="pnlPageInfoResource1">
+		<asp:Literal ID="lblBreadcrumbsTrail" runat="server" EnableViewState="False" meta:resourcekey="lblBreadcrumbsTrailResource1" />
+		
+		<asp:Literal ID="lblRedirectionSource" runat="server" EnableViewState="False" meta:resourcekey="lblRedirectionSourceResource1" />
+	
+	</div>
+	
+	<div id="PageContentDiv">
+		<asp:PlaceHolder ID="plhContent" runat="server" EnableViewState="False" />
+	</div>
+  	
+	<asp:Panel ID="pnlPageInfo" runat="server" meta:resourcekey="pnlPageInfoResource1">
 			<div id="PageInfoDiv">
 				<span id="ModificationSpan">
 					<asp:Literal ID="lblModified" runat="server" Text="Modified on " EnableViewState="False" meta:resourcekey="lblModifiedResource1" />
@@ -240,18 +250,8 @@
 					<asp:Literal ID="lblDiscussedPage" runat="server" EnableViewState="False" meta:resourcekey="lblDiscussedPageResource1" />
 				</span>
 			</div>
-		</asp:Panel>
-		
-		<asp:Literal ID="lblBreadcrumbsTrail" runat="server" EnableViewState="False" meta:resourcekey="lblBreadcrumbsTrailResource1" />
-		
-		<asp:Literal ID="lblRedirectionSource" runat="server" EnableViewState="False" meta:resourcekey="lblRedirectionSourceResource1" />
-	
-	</div>
-	
-	<div id="PageContentDiv">
-		<asp:PlaceHolder ID="plhContent" runat="server" EnableViewState="False" />
-	</div>
-	
+	</asp:Panel>
+
 	<asp:Literal ID="lblDoubleClickHandler" runat="server" EnableViewState="False" meta:resourcekey="lblDoubleClickHandlerResource1" />
 	
 	<div id="PageAttachmentsDiv" style="position: absolute; left: 10000px;">

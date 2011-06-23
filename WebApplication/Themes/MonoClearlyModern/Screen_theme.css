@@ -13,7 +13,7 @@ html {margin:0;padding:0;border:0;}body, div, span, object, iframe, h1, h2, h3, 
 /* General Style Information */
 
 body {
-	font-family:Arial, Helvetica, sans-serif;
+	font-family:Ubuntu, DejaVu Sans, Tahoma, Arial, Helvetica, sans-serif;
 	font-size:15px;
 	line-height:22px;
 }
@@ -82,7 +82,7 @@ pre  {
 	white-space:pre; 
 }
 pre,code,tt { 
-	font-family:"Courier New", Courier, mono;
+	font-family:DejaVu Sans Mono, "Courier New", Courier, mono;
 	font-size:12px;
 }
 dl { 

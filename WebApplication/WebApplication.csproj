@@ -2637,6 +2637,8 @@
     <Content Include="Themes\Elegant\Images\EmailNotifOff-Discussion.png" />
     <Content Include="Themes\Elegant\Images\EmailNotifOn-Discussion.png" />
     <Content Include="Themes\Elegant\Images\RSS-Discussion.png" />
+    <Content Include="Themes\Elegant\Images\RSS.png" />
+    <Content Include="Themes\Elegant\Images\Print.png" />
     <Content Include="Web.SqlServer.Release.config" />
   </ItemGroup>
   <ItemGroup>

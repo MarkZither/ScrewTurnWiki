@@ -11,7 +11,6 @@ class WikiPage
 	static readonly Regex LinkRegex = new Regex (@"(\[\[.+?\]\])|(\[.+?\])", RegexOptions.Compiled);
 	static readonly Regex UrlRegex = new Regex (@"\w.+://", RegexOptions.Compiled);
 	static readonly Regex DashesRegex = new Regex (@"[-]{2}", RegexOptions.Compiled);
-	static readonly Regex TableRegex = new Regex (@"\{\|(\ [^\n]*)?\n.+?\|\}", RegexOptions.Compiled | RegexOptions.Singleline);
 	static readonly Regex HRegex = new Regex (@"^={1,4}.+?={1,4}\n?", RegexOptions.Compiled | RegexOptions.Multiline);
 	static readonly Regex MagicWordRegex = new Regex (@"\{\{.+?\}\}", RegexOptions.Compiled | RegexOptions.Singleline);
 	static readonly Regex ImageRegex = new Regex (@"\[\[Image:.+?\]\]", RegexOptions.Compiled);
@@ -45,7 +44,9 @@ class WikiPage
 		{"[User:", "[User_"},
 		{"[Help:", "[Help_"},
 		{"[Mono_Runtime", "[Runtime"},
-		{"#REDIRECT", ">>>"}
+		{"#REDIRECT", ">>>"},
+		{"#redirect", ">>>"},
+		{"{{:Supported Platforms}}", "{s:Supported_Platforms}"}
 	};
 	
 	public uint Id { get; set; }
@@ -67,6 +68,7 @@ class WikiPage
 				DekiNameSpace == DekiNamespace.Category_talk;
 		}
 	}
+	public bool IsRedirect { get; set; }
 	
 	public WikiPage (MySqlDataReader reader, Dictionary <string, bool> templates)
 	{
@@ -97,6 +99,7 @@ class WikiPage
 		User = (uint)reader ["cur_user"];
 		LastModified = (reader ["cur_touched"] as string).ParseDekiTime ();
 		Created = (reader ["cur_timestamp"] as string).ParseDekiTime ();
+		IsRedirect = ((byte)reader ["cur_is_redirect"]) == 1;
 	}
 
 	public void ResolveCategories ()
@@ -113,6 +116,21 @@ class WikiPage
 				Categories.Sort ();
 			}
 		}
+	}
+
+	static char[] linkReplaceChars = {':', '&', ' ', '.'};
+	string FixupString (string s, out string original)
+	{
+		original = null;
+		if (String.IsNullOrEmpty (s))
+			return s;
+		if (s.IndexOfAny (linkReplaceChars) == -1)
+			return s;
+		original = s;
+		foreach (char ch in linkReplaceChars)
+			s = s.Replace (ch, '_');
+
+		return s;
 	}
 	
 	string FixupContent (string content, Dictionary <string, bool> templates)
@@ -170,27 +188,35 @@ class WikiPage
 				value = value.Substring (2, match.Length - 4).Trim ();
 			else
 				value = value.Substring (1, match.Length - 2).Trim ();
+			
 			if (value.IndexOf ('|') != -1) {
 				fields = value.Split ('|');
-				fields [0] = fields [0].Trim ().Replace (":", "_").Replace ("&", "_").Replace (" ", "_").Replace (".", "_");
+				fields [0] = FixupString (fields [0].Trim (), out tmp);
 				sb.Remove (match.Index, match.Length);
 				tmp = String.Format ("[{0}]", String.Join ("|", fields));
 				newStart = match.Index + tmp.Length;
 				sb.Insert (match.Index, tmp);
 			} else if (value.IndexOf (' ') != -1) {
 				// Might be a special case of [url://link text] or [SomeOther text]
-				// We replace the first ' ' with '|' and remove invalid characters
-				// before it unless it's an url
+				// If the part before the first ' ' is an URL, we do nothing to it and just put the
+				// entire text that follows it as the link name.
+				// If the first part is not an URL, we replace invalid characters in it and make the
+				// original text the new link's name
 				sb.Remove (match.Index, match.Length);
 				fields = value.Split (' ');
-				if (!UrlRegex.IsMatch (fields [0]))
-					fields [0] = fields [0].Trim ().Replace (":", "_").Replace ("&", "_").Replace (" ", "_").Replace (".", "_");
-				tmp = String.Format ("[{0}|{1}]", fields [0], String.Join (" ", fields, 1, fields.Length - 1));
+				if (!UrlRegex.IsMatch (fields [0])) {
+					value = FixupString (value, out tmp);
+					if (!String.IsNullOrEmpty (tmp))
+						tmp = String.Format ("[{0}|{1}]", value, tmp);
+					else
+						tmp = value;
+				} else
+					  tmp = String.Format ("[{0}|{1}]", fields [0], String.Join (" ", fields, 1, fields.Length - 1));
 				newStart = match.Index + tmp.Length;
 				sb.Insert (match.Index, tmp);
 			} else {
-				if (value.IndexOf (':') != -1 || value.IndexOf ('&') != -1 || value.IndexOf ('.') != -1) {
-					tmp = String.Format ("[{0}|{1}]", value.Trim ().Replace (":", "_").Replace ("&", "_").Replace (" ", "_").Replace (".", "_"), value);
+				if (value.IndexOfAny (linkReplaceChars) != -1) {
+					tmp = String.Format ("[{0}|{1}]", FixupString (value.Trim (), out tmp), value);
 					sb.Remove (match.Index, match.Length);
 					sb.Insert (match.Index, tmp);
 					newStart = match.Index + tmp.Length;
@@ -199,16 +225,6 @@ class WikiPage
 			}
 			
 			match = LinkRegex.Match (sb.ToString (), newStart);
-		}
-
-		match = TableRegex.Match (sb.ToString ());
-		newStart = 0;
-		while (match.Success) {
-			sb.Remove (match.Index, match.Length);
-			tmp = TranslateTable (match.Value);
-			sb.Insert (match.Index, tmp);
-			newStart = match.Index + tmp.Length;
-			match = TableRegex.Match (sb.ToString (), newStart);
 		}
 
 		match = HRegex.Match (sb.ToString ());
@@ -223,7 +239,7 @@ class WikiPage
 				equalcount++;
 			}
 			
-			if (equalcount >= 4)
+			if (equalcount > 4)
 				tmp = "\n";
 			else
 				tmp = "\n=";
@@ -235,7 +251,7 @@ class WikiPage
 					break;
 				equalcount++;
 			}
-			if (equalcount < 4)
+			if (equalcount <= 4)
 				tmp += "=";
 			
 			sb.Remove (match.Index, match.Length);
@@ -258,6 +274,9 @@ class WikiPage
 			} else {
 				if (value.StartsWith ("Template:", StringComparison.OrdinalIgnoreCase))
 					value = value.Substring (9);
+				else if (value.StartsWith (":"))
+					value = value.Substring (1);
+				
 				tmp = "{s:" + value + "}";
 				sb.Remove (match.Index, match.Length);
 				sb.Insert (match.Index, tmp);
@@ -268,65 +287,5 @@ class WikiPage
 		}
 		
 		return sb.ToString ();
-	}
-	
-	string TranslateTable (string table)
-	{
-		string[] lines = table.Split (new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-		if (lines.Length < 3)
-			return table;
-
-		var ret = new StringBuilder ();
-
-		int start = 1;
-		ret.AppendLine (lines [0]);
-		if (lines [1].Trim ().StartsWith ("|+")) {
-			// Caption
-			start++;
-			ret.AppendLine (lines [1]);
-		}
-		
-		// * In STW only the 2nd or 3rd lines can start with " !" to mark heading cells
-		// * If a trailing || is found on the line, it must be followed by some text '&nbsp;'
-		//   does the trick
-		// * If a leading || is found, it must be preceeded by a space
-		var sb = new StringBuilder ();
-		string line, trimmed;
-		for (int i = start; i < lines.Length - 1; i++) {
-			sb.Length = 0;
-			line = lines [i];
-			trimmed = line.Trim ();
-			if (trimmed.StartsWith ("!")) {
-				if (i == start)
-					sb.Append (line);
-				else {
-					int idx = line.IndexOf ('!');
-					if (idx == 0)
-						sb.Append ("|" + line.Substring (1));
-					else {
-						sb.Append (line.Substring (0, idx));
-						sb.Append ("|");
-						if (idx < line.Length)
-							sb.Append (line.Substring (idx + 1));
-					}
-				}
-			} else {
-				if (line.StartsWith ("||"))
-					sb.Append (' ');
-				sb.Append (line);
-			}
-			
-			if (trimmed.EndsWith ("||"))
-				sb.Append (" &nbsp;");
-			ret.AppendLine (sb.ToString ());
-		}
-		// Due to parsing quirks in STW we must make sure that the last line of the table is preceeded
-		// by a blank line. Otherwise the |} ending the table might end up on the last content line and
-		// STW will ignore the content entirely (it ignores the first and the last table line when parsing)
-		if (lines [lines.Length - 1].Trim ().Length > 0)
-			ret.AppendLine ();
-		ret.AppendLine (lines [lines.Length - 1]);
-		
-		return ret.ToString ();
-	}
+	}	
 }

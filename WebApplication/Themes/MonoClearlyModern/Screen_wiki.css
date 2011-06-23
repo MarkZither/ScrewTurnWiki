@@ -116,7 +116,7 @@ ul, ol {
 	padding-bottom: 0px;
 	padding-left: 28px;
 	padding-right: 8px;
-	font-size: 12px;
+	font-size: 14px;
 }
 
 li {
@@ -478,6 +478,10 @@ span.signature {
 	display: table-cell;
 	padding: 4px;
 	background-color: #F9F9F9;
+}
+
+#TocContainerTable {
+    float: right;
 }
 
 a.attachment {
@@ -890,7 +894,7 @@ p.excerpt b.searchkeyword, b.searchkeyword {
 	margin-top: 6px;
 	width: 98%;
 	height: 200px;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-family: Ubuntu, DejaVu Sans, Tahoma, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 }
 

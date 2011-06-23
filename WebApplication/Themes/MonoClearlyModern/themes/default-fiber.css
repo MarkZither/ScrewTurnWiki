@@ -15,7 +15,7 @@ a:link,
 a:visited,
 a:active,
 .widgettitle {
-	color:#86bdd9;
+	color:#C26144;
 }
 
 a:hover,
@@ -225,6 +225,11 @@ a.unknownlink:hover {
 	color: #990000;
 }
 
+#PageInfoDiv {
+	border-top: 1px #dddddd solid;
+	color: darkgray;
+}
+
 #PageAttachmentsLink {
 	background-image: url(images/DropDown.png);
 	background-repeat: no-repeat;
@@ -246,7 +251,7 @@ a.externallink {
 
 /* The link to the Page RSS */
 #RssLink {
-	background-image: url(images/icons/rss32.png);
+	background-image: url(images/RSS.png);
 }
 #RssLink.discuss {
 	background-image: url(images/RSS-Discussion.png);
@@ -257,7 +262,7 @@ a.externallink {
 	position: relative;
 }
 #PrintLink {
-	background-image: url(images/icons/printer32.png);
+	background-image: url(images/Print.png);
 	background-repeat: no-repeat;
 }
 #BreadcrumbsDiv {

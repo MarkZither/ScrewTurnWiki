@@ -161,7 +161,7 @@ class DekiMigration
 				isUpdate = false;
 				try {
 					page = new WikiPage (reader, templates);
-					if (page.Ignore) {
+					if (page.Ignore && !page.IsRedirect) {
 						StepProgress ("M", processed == 1);
 						ignoredPages.Add (String.Format ("Ignored settings page '{0}'", page.Title));
 						continue;
@@ -198,7 +198,7 @@ class DekiMigration
 				}
 
 				if (page.DekiNameSpace == DekiNamespace.Template) {
-					sw.WriteLine ("INSERT INTO Snippet (Name,Content) VALUES ('{0}', '{1}');", page.Title, page.Text.SqlEncode ());
+					sw.WriteLine ("INSERT INTO Snippet (Name,Content) VALUES ('{0}', '{1}');", page.Title, page.Text.Replace ("{TOC}", String.Empty).SqlEncode ());
 					continue;
 				}
 				
@@ -245,6 +245,12 @@ class DekiMigration
 						      page.Comment.SqlEncode (), page.Text.SqlEncode (), String.Empty);
 					sw.WriteLine ("INSERT INTO PageKeyword (Page,Namespace,Revision,Keyword) VALUES ('{0}','',-1,'');",
 						      page.Title.SqlEncodeForName ());
+
+					// Special case. Deki is able to handle templates which are redirects to a
+					// regular (non-template) page, STW doesn't do that so we need to duplicate this
+					// page as a snippet.
+					if (page.Title == "Supported_Platforms")
+						sw.WriteLine ("INSERT INTO Snippet (Name,Content) VALUES ('{0}', '{1}');", page.Title, page.Text.Replace ("{TOC}", String.Empty).SqlEncode ());
 				}
 			}
 			Console.Error.WriteLine ();
