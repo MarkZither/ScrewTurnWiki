@@ -19,8 +19,7 @@ namespace ScrewTurn.Wiki {
 
 	public partial class Edit : BasePage {
 
-		private PageInfo currentPage = null;
-		private PageContent currentContent = null;
+		private PageContent currentPage = null;
 		private string currentWiki = null;
 		private bool isDraft = false;
 		private int currentSection = -1;
@@ -43,12 +42,12 @@ namespace ScrewTurn.Wiki {
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			if(currentPage != null) {
-				Pages.CanEditPage(currentPage, currentUser, currentGroups, out canEdit, out canEditWithApproval);
+				Pages.CanEditPage(currentPage.Provider.CurrentWiki, currentPage.FullName, currentUser, currentGroups, out canEdit, out canEditWithApproval);
 				canCreateNewPages = false; // Least privilege
 				canCreateNewCategories = authChecker.CheckActionForNamespace(Pages.FindNamespace(currentWiki, NameTools.GetNamespace(currentPage.FullName)),
 					Actions.ForNamespaces.ManageCategories, currentUser, currentGroups);
-				canManagePageCategories = authChecker.CheckActionForPage(currentPage, Actions.ForPages.ManageCategories, currentUser, currentGroups);
-				canDownloadAttachments = authChecker.CheckActionForPage(currentPage, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
+				canManagePageCategories = authChecker.CheckActionForPage(currentPage.FullName, Actions.ForPages.ManageCategories, currentUser, currentGroups);
+				canDownloadAttachments = authChecker.CheckActionForPage(currentPage.FullName, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
 			}
 			else {
 				NamespaceInfo ns = DetectNamespaceInfo();
@@ -106,10 +105,10 @@ namespace ScrewTurn.Wiki {
 				// otherwise pre-fill page name
 				if(currentPage != null) {
 					// Look for a draft
-					currentContent = Pages.GetDraft(currentPage);
+					PageContent draftContent = Pages.GetDraft(currentPage);
 
-					if(currentContent == null) {
-						currentContent = Content.GetPageContent(currentPage);
+					if(draftContent == null) {
+						draftContent = currentPage;
 					}
 					else isDraft = true;
 
@@ -122,8 +121,8 @@ namespace ScrewTurn.Wiki {
 					// Fill data, if not posted back
 					if(!Page.IsPostBack) {
 						// Set keywords, description
-						SetKeywords(currentContent.Keywords);
-						txtDescription.Text = currentContent.Description;
+						SetKeywords(draftContent.Keywords);
+						txtDescription.Text = draftContent.Description;
 
 						txtName.Text = NameTools.GetLocalName(currentPage.FullName);
 						txtName.Enabled = false;
@@ -132,18 +131,18 @@ namespace ScrewTurn.Wiki {
 
 						PopulateCategories(Pages.GetCategoriesForPage(currentPage));
 
-						txtTitle.Text = currentContent.Title;
+						txtTitle.Text = draftContent.Title;
 
 						// Manage section, if appropriate (disable if draft)
 						if(!isDraft && currentSection != -1) {
 							int startIndex, len;
 							string dummy = "";
-							ExtractSection(currentContent.Content, currentSection, out startIndex, out len, out dummy);
-							editor.SetContent(currentContent.Content.Substring(startIndex, len), Settings.GetUseVisualEditorAsDefault(currentWiki));
+							ExtractSection(draftContent.Content, currentSection, out startIndex, out len, out dummy);
+							editor.SetContent(draftContent.Content.Substring(startIndex, len), Settings.GetUseVisualEditorAsDefault(currentWiki));
 						}
 						else {
 							// Select default editor view (WikiMarkup or Visual) and populate content
-							editor.SetContent(currentContent.Content, Settings.GetUseVisualEditorAsDefault(currentWiki));
+							editor.SetContent(draftContent.Content, Settings.GetUseVisualEditorAsDefault(currentWiki));
 						}
 					}
 				}
@@ -324,8 +323,8 @@ namespace ScrewTurn.Wiki {
 				chkMinorChange.Enabled = false;
 				pnlDraft.Visible = true;
 				lblDraftInfo.Text = lblDraftInfo.Text.Replace("##USER##",
-					Users.UserLink(currentWiki, currentContent.User, true)).Replace("##DATETIME##",
-					Preferences.AlignWithTimezone(currentWiki, currentContent.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki))).Replace("##VIEWCHANGES##",
+					Users.UserLink(currentWiki, currentPage.User, true)).Replace("##DATETIME##",
+					Preferences.AlignWithTimezone(currentWiki, currentPage.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki))).Replace("##VIEWCHANGES##",
 					string.Format("<a href=\"{0}\" target=\"_blank\">{1}</a>", UrlTools.BuildUrl(currentWiki, "Diff.aspx?Page=",
 					Tools.UrlEncode(currentPage.FullName), "&amp;Rev1=Current&amp;Rev2=Draft"),
 					Properties.Messages.ViewChanges));
@@ -445,7 +444,7 @@ namespace ScrewTurn.Wiki {
 				string anchor = null;
 				if(currentSection != -1) {
 					int start, len;
-					ExtractSection(Content.GetPageContent(currentPage).Content, currentSection, out start, out len, out anchor);
+					ExtractSection(currentPage.Content, currentSection, out start, out len, out anchor);
 				}
 
 				UrlTools.Redirect(Tools.UrlEncode(currentPage.FullName) + GlobalSettings.PageExtension + (anchor != null ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
@@ -584,24 +583,25 @@ namespace ScrewTurn.Wiki {
 
 			if(txtName.Enabled) {
 				// Find page, if inexistent create it
-				PageInfo pg = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text), provider);
-				if(pg == null) {
-					Pages.CreatePage(currentWiki, DetectNamespaceInfo(), txtName.Text, provider);
-					pg = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text), provider);
-					saveMode = SaveMode.Normal;
-					attachmentManager.CurrentPage = pg;
-				}
 				Log.LogEntry("Page update requested for " + txtName.Text, EntryType.General, username, currentWiki);
 
-				Pages.ModifyPage(pg, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+				PageContent pg = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text), provider);
+				if(pg == null) {
+					saveMode = SaveMode.Normal;
+					pg = Pages.SetPageContent(currentWiki, DetectNamespaceInfo().Name, txtName.Text, provider, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
 					GetKeywords(), txtDescription.Text, saveMode);
-
+					attachmentManager.CurrentPage = pg;
+				}
+				else {
+					Pages.SetPageContent(currentWiki, DetectNamespaceInfo().Name, txtName.Text, provider, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+						GetKeywords(), txtDescription.Text, saveMode);
+				}
 				// Save categories binding
 				Pages.Rebind(pg, categories.ToArray());
 
 				// If not a draft, remove page draft
 				if(saveMode != SaveMode.Draft) {
-					Pages.DeleteDraft(currentPage);
+					Pages.DeleteDraft(currentPage.FullName, currentPage.Provider);
 					isDraft = false;
 				}
 				else isDraft = true;
@@ -633,18 +633,17 @@ namespace ScrewTurn.Wiki {
 				// Save data
 				Log.LogEntry("Page update requested for " + currentPage.FullName, EntryType.General, username, currentWiki);
 				if(!isDraft && currentSection != -1) {
-					PageContent cont = Content.GetPageContent(currentPage);
-					StringBuilder sb = new StringBuilder(cont.Content.Length);
+					StringBuilder sb = new StringBuilder(currentPage.Content.Length);
 					int start, len;
-					ExtractSection(cont.Content, currentSection, out start, out len, out anchor);
-					if(start > 0) sb.Append(cont.Content.Substring(0, start));
+					ExtractSection(currentPage.Content, currentSection, out start, out len, out anchor);
+					if(start > 0) sb.Append(currentPage.Content.Substring(0, start));
 					sb.Append(editor.GetContent());
-					if(start + len < cont.Content.Length - 1) sb.Append(cont.Content.Substring(start + len));
-					Pages.ModifyPage(currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, sb.ToString(),
+					if(start + len < currentPage.Content.Length - 1) sb.Append(currentPage.Content.Substring(start + len));
+					Pages.SetPageContent(currentPage.Provider.CurrentWiki, NameTools.GetNamespace(currentPage.FullName), NameTools.GetLocalName(currentPage.FullName), txtTitle.Text, username, DateTime.Now, txtComment.Text, sb.ToString(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				else {
-					Pages.ModifyPage(currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+					Pages.SetPageContent(currentPage.Provider.CurrentWiki, NameTools.GetNamespace(currentPage.FullName), NameTools.GetLocalName(currentPage.FullName), txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				
@@ -653,7 +652,7 @@ namespace ScrewTurn.Wiki {
 
 				// If not a draft, remove page draft
 				if(saveMode != SaveMode.Draft) {
-					Pages.DeleteDraft(currentPage);
+					Pages.DeleteDraft(currentPage.FullName, currentPage.Provider);
 					isDraft = false;
 				}
 				else isDraft = true;
@@ -669,7 +668,7 @@ namespace ScrewTurn.Wiki {
 				// clicking "Save & Continue" but not "Save" or "Cancel" - in other words, it is necessary
 				// to take every chance to send a notification because no more chances might be available
 				if(!canEdit && canEditWithApproval) {
-					Pages.SendEmailNotificationForDraft(currentPage, txtTitle.Text, txtComment.Text, username);
+					Pages.SendEmailNotificationForDraft(currentPage.Provider.CurrentWiki, currentPage.FullName, txtTitle.Text, txtComment.Text, username);
 				}
 
 				if(redirect) {

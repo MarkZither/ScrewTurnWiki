@@ -61,9 +61,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullName">The full name of the File.</param>
 		/// <param name="output">The output stream.</param>
-		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the file is retrieved, <c>false</c> otherwise.</returns>
-		public static bool RetrieveFile(string wiki, string fullName, Stream output, bool countHit) {
+		public static bool RetrieveFile(string wiki, string fullName, Stream output) {
 			if(fullName == null) throw new ArgumentNullException("fullName");
 			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
 			if(output == null) throw new ArgumentNullException("destinationStream");
@@ -74,7 +73,7 @@ namespace ScrewTurn.Wiki {
 			IFilesStorageProviderV40 provider = FindFileProvider(wiki, fullName);
 
 			if(provider == null) return false;
-			else return provider.RetrieveFile(fullName, output, countHit);
+			else return provider.RetrieveFile(fullName, output);
 		}
 
 		#endregion
@@ -202,16 +201,16 @@ namespace ScrewTurn.Wiki {
 		/// Finds the provider that has a page attachment.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="attachmentName">The name of the attachment.</param>
 		/// <returns>The provider that has the attachment, or <c>null</c> if the attachment could not be found.</returns>
-		public static IFilesStorageProviderV40 FindPageAttachmentProvider(string wiki, PageInfo page, string attachmentName) {
-			if(page == null) throw new ArgumentNullException("page");
+		public static IFilesStorageProviderV40 FindPageAttachmentProvider(string wiki, string pageFullName, string attachmentName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(attachmentName == null) throw new ArgumentNullException("attachmentName");
 			if(attachmentName.Length == 0) throw new ArgumentException("Attachment Name cannot be empty", "attachmentName");
 
 			foreach(IFilesStorageProviderV40 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
-				FileDetails details = provider.GetPageAttachmentDetails(page, attachmentName);
+				FileDetails details = provider.GetPageAttachmentDetails(pageFullName, attachmentName);
 				if(details != null) return provider;
 			}
 
@@ -222,16 +221,16 @@ namespace ScrewTurn.Wiki {
 		/// Gets the details of a page attachment.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="attachmentName">The name of the attachment.</param>
 		/// <returns>The details of the attachment, or <c>null</c> if the attachment could not be found.</returns>
-		public static FileDetails GetPageAttachmentDetails(string wiki, PageInfo page, string attachmentName) {
-			if(page == null) throw new ArgumentNullException("page");
+		public static FileDetails GetPageAttachmentDetails(string wiki, string pageFullName, string attachmentName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(attachmentName == null) throw new ArgumentNullException("attachmentName");
 			if(attachmentName.Length == 0) throw new ArgumentException("Attachment Name cannot be empty", "attachmentName");
 
 			foreach(IFilesStorageProviderV40 provider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
-				FileDetails details = provider.GetPageAttachmentDetails(page, attachmentName);
+				FileDetails details = provider.GetPageAttachmentDetails(pageFullName, attachmentName);
 				if(details != null) return details;
 			}
 
@@ -242,22 +241,21 @@ namespace ScrewTurn.Wiki {
 		/// Retrieves a Page Attachment.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The full name of the page that owns the Attachment.</param>
 		/// <param name="attachmentName">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <param name="output">The output stream.</param>
-		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the Attachment is retrieved, <c>false</c> otherwise.</returns>
-		public static bool RetrievePageAttachment(string wiki, PageInfo page, string attachmentName, Stream output, bool countHit) {
-			if(page == null) throw new ArgumentNullException("pageInfo");
+		public static bool RetrievePageAttachment(string wiki, string pageFullName, string attachmentName, Stream output) {
+			if(pageFullName == null) throw new ArgumentNullException("pageInfo");
 			if(attachmentName == null) throw new ArgumentNullException("name");
 			if(attachmentName.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
 			if(output == null) throw new ArgumentNullException("destinationStream");
 			if(!output.CanWrite) throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
 
-			IFilesStorageProviderV40 provider = FindPageAttachmentProvider(wiki, page, attachmentName);
+			IFilesStorageProviderV40 provider = FindPageAttachmentProvider(wiki, pageFullName, attachmentName);
 
 			if(provider == null) return false;
-			else return provider.RetrievePageAttachment(page, attachmentName, output, countHit);
+			else return provider.RetrievePageAttachment(pageFullName, attachmentName, output);
 		}
 
 		#endregion

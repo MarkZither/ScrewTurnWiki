@@ -104,7 +104,6 @@
     <Compile Include="PageActivityEventArgs.cs" />
     <Compile Include="PageContent.cs" />
     <Compile Include="PageDocument.cs" />
-    <Compile Include="PageInfo.cs" />
     <Compile Include="RecentChange.cs" />
     <Compile Include="Snippet.cs" />
     <Compile Include="StandardAclManager.cs" />

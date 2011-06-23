@@ -83,9 +83,9 @@ namespace ScrewTurn.Wiki {
 				string currentUser = SessionFacade.GetCurrentUsername();
 				string[] currentGroups = SessionFacade.GetCurrentGroupNames(currentWiki);
 				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
-				canDownload = authChecker.CheckActionForPage(CurrentPage, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
-				canUpload = authChecker.CheckActionForPage(CurrentPage, Actions.ForPages.UploadAttachments, currentUser, currentGroups);
-				canDelete = authChecker.CheckActionForPage(CurrentPage, Actions.ForPages.DeleteAttachments, currentUser, currentGroups);
+				canDownload = authChecker.CheckActionForPage(CurrentPage.FullName, Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
+				canUpload = authChecker.CheckActionForPage(CurrentPage.FullName, Actions.ForPages.UploadAttachments, currentUser, currentGroups);
+				canDelete = authChecker.CheckActionForPage(CurrentPage.FullName, Actions.ForPages.DeleteAttachments, currentUser, currentGroups);
 				isAdmin = Array.Find(currentGroups, delegate(string g) { return g == Settings.GetAdministratorsGroup(currentWiki); }) != null;
 			}
 			else {
@@ -113,7 +113,7 @@ namespace ScrewTurn.Wiki {
 		/// Gets or sets the PageInfo object.
 		/// </summary>
 		/// <remarks>This property must be set at page load.</remarks>
-		public PageInfo CurrentPage {
+		public PageContent CurrentPage {
 			get { return Pages.FindPage(Tools.DetectCurrentWiki(), ViewState["CP"] as string); }
 			set {
 				if(value == null) ViewState["CP"] = null;
@@ -141,13 +141,12 @@ namespace ScrewTurn.Wiki {
 			table.Columns.Add("Editable", typeof(bool));
 			table.Columns.Add("Page");
 			table.Columns.Add("Link");
-			table.Columns.Add("Downloads");
 			table.Columns.Add("CanDelete", typeof(bool));
 			table.Columns.Add("CanDownload", typeof(bool));
 
-			string[] attachments = provider.ListPageAttachments(CurrentPage);
+			string[] attachments = provider.ListPageAttachments(CurrentPage.FullName);
 			foreach(string s in attachments) {
-				FileDetails details = provider.GetPageAttachmentDetails(CurrentPage, s);
+				FileDetails details = provider.GetPageAttachmentDetails(CurrentPage.FullName, s);
 
 				DataRow row = table.NewRow();
 				string ext = Path.GetExtension(s).ToLowerInvariant();
@@ -163,7 +162,6 @@ namespace ScrewTurn.Wiki {
 				else {
 					row["Link"] = "";
 				}
-				row["Downloads"] = details.RetrievalCount.ToString();
 				row["CanDelete"] = canDelete;
 				row["CanDownload"] = canDownload;
 				table.Rows.Add(row);
@@ -208,7 +206,7 @@ namespace ScrewTurn.Wiki {
 						}
 						else {
 							// Store attachment
-							bool done = provider.StorePageAttachment(CurrentPage, fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
+							bool done = provider.StorePageAttachment(CurrentPage.FullName, fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
 							if(!done) {
 								lblUploadResult.Text = Properties.Messages.CannotStoreFile;
 								lblUploadResult.CssClass = "resulterror";
@@ -248,7 +246,7 @@ namespace ScrewTurn.Wiki {
 				case "Delete":
 					if(canDelete) {
 						// Delete Attachment
-						bool d = provider.DeletePageAttachment(CurrentPage, (string)e.CommandArgument);
+						bool d = provider.DeletePageAttachment(CurrentPage.FullName, (string)e.CommandArgument);
 
 						if(d) {
 							Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
@@ -283,7 +281,7 @@ namespace ScrewTurn.Wiki {
 
 				bool done = true;
 				if(txtNewName.Text.ToLowerInvariant() != lblItem.Text.ToLowerInvariant()) {
-					done = provider.RenamePageAttachment(CurrentPage, lblItem.Text, txtNewName.Text);
+					done = provider.RenamePageAttachment(CurrentPage.FullName, lblItem.Text, txtNewName.Text);
 				}
 
 				if(done) {

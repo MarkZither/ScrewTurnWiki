@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki {
 
 	public partial class PageDiscussion : System.Web.UI.UserControl {
 
-		private PageInfo currentPage;
+		private PageContent currentPage;
 		private bool canPostMessages = false;
 		private bool canManageDiscussion = false;
 
@@ -24,7 +24,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets or sets the current page.
 		/// </summary>
-		public PageInfo CurrentPage {
+		public PageContent CurrentPage {
 			get { return currentPage; }
 			set { currentPage = value; }
 		}
@@ -151,7 +151,7 @@ namespace ScrewTurn.Wiki {
 			// Print subject
 			if(message.Subject.Length > 0) {
 				sb.Append(@"<span class=""messagesubject"">");
-				sb.Append(FormattingPipeline.PrepareTitle(currentWiki, message.Subject, false, FormattingContext.MessageBody, currentPage));
+				sb.Append(FormattingPipeline.PrepareTitle(currentWiki, message.Subject, false, FormattingContext.MessageBody, currentPage.FullName));
 				sb.Append("</span>");
 			}
 
@@ -170,8 +170,8 @@ namespace ScrewTurn.Wiki {
 
 			// Print body
 			sb.Append(@"<div class=""messagebody"">");
-			sb.Append(FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, message.Body, false, FormattingContext.MessageBody, currentPage),
-				FormattingContext.MessageBody, currentPage));
+			sb.Append(FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, message.Body, false, FormattingContext.MessageBody, currentPage.FullName),
+				FormattingContext.MessageBody, currentPage.FullName));
 			sb.Append("</div>");
 		}
 

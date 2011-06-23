@@ -177,24 +177,24 @@ namespace ScrewTurn.Wiki {
 			int count = 0;
 			foreach(SearchResult res in results) {
 				// Filter by category
-				PageInfo currentPage = null;
+				PageContent currentPage = null;
 				pageCategories = new CategoryInfo[0];
 
 				if(res.Document.TypeTag == PageDocument.StandardTypeTag) {
-					currentPage = (res.Document as PageDocument).PageInfo;
+					currentPage = (res.Document as PageDocument).Page;
 					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
 					// Verify permissions
-					bool canReadPage = authChecker.CheckActionForPage(currentPage,
+					bool canReadPage = authChecker.CheckActionForPage(currentPage.FullName,
 						Actions.ForPages.ReadPage, currentUser, currentGroups);
 					if(!canReadPage) continue; // Skip
 				}
 				else if(res.Document.TypeTag == MessageDocument.StandardTypeTag) {
-					currentPage = (res.Document as MessageDocument).PageInfo;
+					currentPage = (res.Document as MessageDocument).Page;
 					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
 					// Verify permissions
-					bool canReadDiscussion = authChecker.CheckActionForPage(currentPage,
+					bool canReadDiscussion = authChecker.CheckActionForPage(currentPage.FullName,
 						Actions.ForPages.ReadDiscussion, currentUser, currentGroups);
 					if(!canReadDiscussion) continue; // Skip
 				}
@@ -203,7 +203,7 @@ namespace ScrewTurn.Wiki {
 					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
 					// Verify permissions
-					bool canDownloadAttn = authChecker.CheckActionForPage(currentPage,
+					bool canDownloadAttn = authChecker.CheckActionForPage(currentPage.FullName,
 						Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
 					if(!canDownloadAttn) continue; // Skip
 				}
@@ -258,12 +258,12 @@ namespace ScrewTurn.Wiki {
 		private void GenerateOpenSearchDescription() {
 			string xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>
 <OpenSearchDescription xmlns=""http://a9.com/-/spec/opensearch/1.1/"">
-    <ShortName>{0}</ShortName>
-    <Description>{1}</Description>
-    <Url type=""text/html"" method=""get"" template=""{2}Search.aspx?AllNamespaces=1&amp;FilesAndAttachments=1&amp;Query={3}""/>
-    <Image width=""16"" height=""16"" type=""image/x-icon"">{2}{4}</Image>
-    <InputEncoding>UTF-8</InputEncoding>
-    <SearchForm>{2}Search.aspx</SearchForm>
+	<ShortName>{0}</ShortName>
+	<Description>{1}</Description>
+	<Url type=""text/html"" method=""get"" template=""{2}Search.aspx?AllNamespaces=1&amp;FilesAndAttachments=1&amp;Query={3}""/>
+	<Image width=""16"" height=""16"" type=""image/x-icon"">{2}{4}</Image>
+	<InputEncoding>UTF-8</InputEncoding>
+	<SearchForm>{2}Search.aspx</SearchForm>
 </OpenSearchDescription>";
 
 			Response.Clear();
@@ -359,19 +359,19 @@ namespace ScrewTurn.Wiki {
 			if(result.Document.TypeTag == PageDocument.StandardTypeTag) {
 				PageDocument pageDoc = result.Document as PageDocument;
 
-				return new SearchResultRow(pageDoc.PageInfo.FullName + GlobalSettings.PageExtension + "?" + queryStringKeywords, Page,
-					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), pageDoc.Title, false, FormattingContext.PageContent, pageDoc.PageInfo),
-					result.Relevance.Value, GetExcerpt(pageDoc.PageInfo, result.Matches));
+				return new SearchResultRow(pageDoc.Page.FullName + GlobalSettings.PageExtension + "?" + queryStringKeywords, Page,
+					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), pageDoc.Title, false, FormattingContext.PageContent, pageDoc.Page.FullName),
+					result.Relevance.Value, GetExcerpt(pageDoc.Page, result.Matches));
 			}
 			else if(result.Document.TypeTag == MessageDocument.StandardTypeTag) {
 				MessageDocument msgDoc = result.Document as MessageDocument;
 
-				PageContent content = Content.GetPageContent(msgDoc.PageInfo);
+				PageContent content = msgDoc.Page;
 
-				return new SearchResultRow(msgDoc.PageInfo.FullName + GlobalSettings.PageExtension + "?" + queryStringKeywords +"&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(msgDoc.DateTime), Message,
-					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), msgDoc.Title, false, FormattingContext.MessageBody, content.PageInfo) + " (" +
-					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.MessageBody, content.PageInfo) +
-					")", result.Relevance.Value, GetExcerpt(msgDoc.PageInfo, msgDoc.MessageID, result.Matches));
+				return new SearchResultRow(msgDoc.Page.FullName + GlobalSettings.PageExtension + "?" + queryStringKeywords +"&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(msgDoc.DateTime), Message,
+					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), msgDoc.Title, false, FormattingContext.MessageBody, content.FullName) + " (" +
+					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.MessageBody, content.FullName) +
+					")", result.Relevance.Value, GetExcerpt(msgDoc.Page, msgDoc.MessageID, result.Matches));
 			}
 			else if(result.Document.TypeTag == FileDocument.StandardTypeTag) {
 				FileDocument fileDoc = result.Document as FileDocument;
@@ -382,11 +382,11 @@ namespace ScrewTurn.Wiki {
 			}
 			else if(result.Document.TypeTag == PageAttachmentDocument.StandardTypeTag) {
 				PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
-				PageContent content = Content.GetPageContent(attnDoc.Page);
+				PageContent content = attnDoc.Page;
 
 				return new SearchResultRow(attnDoc.Page.FullName + GlobalSettings.PageExtension, Attachment,
 					attnDoc.Title + " (" +
-					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.PageContent, content.PageInfo) +
+					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.PageContent, content.FullName) +
 					")", result.Relevance.Value, "");
 			}
 			else throw new NotSupportedException();
@@ -398,15 +398,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The page.</param>
 		/// <param name="matches">The matches to highlight.</param>
 		/// <returns>The excerpt.</returns>
-		private static string GetExcerpt(PageInfo page, WordInfoCollection matches) {
-			PageContent pageContent = Content.GetPageContent(page);
-			string content = pageContent.Content;
+		private static string GetExcerpt(PageContent page, WordInfoCollection matches) {
+			string content = page.Content;
 
 			List<WordInfo> sortedMatches = new List<WordInfo>(matches);
 			sortedMatches.RemoveAll(delegate(WordInfo wi) { return wi.Location != WordLocation.Content; });
 			sortedMatches.Sort(delegate(WordInfo x, WordInfo y) { return x.FirstCharIndex.CompareTo(y.FirstCharIndex); });
 
-			return BuildFormattedExcerpt(sortedMatches, Host.Instance.PrepareContentForIndexing(Tools.DetectCurrentWiki(), page, content));
+			return BuildFormattedExcerpt(sortedMatches, Host.Instance.PrepareContentForIndexing(Tools.DetectCurrentWiki(), page.FullName, content));
 		}
 
 		/// <summary>
@@ -416,7 +415,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="messageID">The message ID.</param>
 		/// <param name="matches">The matches to highlight.</param>
 		/// <returns>The excerpt.</returns>
-		private static string GetExcerpt(PageInfo page, int messageID, WordInfoCollection matches) {
+		private static string GetExcerpt(PageContent page, int messageID, WordInfoCollection matches) {
 			Message message = Pages.FindMessage(Pages.GetPageMessages(page), messageID);
 
 			string content = message.Body;

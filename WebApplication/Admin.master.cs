@@ -289,12 +289,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Determines whether a user can approve/reject a draft of a page.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="pageFullName">The page.</param>
 		/// <param name="username">The username.</param>
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can approve/reject a draft of the page, <c>false</c> otherwise.</returns>
-		public static bool CanApproveDraft(PageInfo page, string username, string[] groups) {
-			return Pages.CanApproveDraft(page, username, groups);
+		public static bool CanApproveDraft(string wiki, string pageFullName, string username, string[] groups) {
+			return Pages.CanApproveDraft(wiki, pageFullName, username, groups);
 		}
 
 	}

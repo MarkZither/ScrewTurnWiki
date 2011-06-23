@@ -39,19 +39,17 @@ namespace ScrewTurn.Wiki {
 		public void PrintSearchResults() {
 			StringBuilder sb = new StringBuilder(1000);
 
-			PageInfo[] results = SearchTools.SearchSimilarPages(currentWiki, Request["Page"], DetectNamespace());
+			PageContent[] results = SearchTools.SearchSimilarPages(Request["Page"], DetectNamespace(), currentWiki);
 			if(results.Length > 0) {
 				sb.Append("<p>");
 				sb.Append(Properties.Messages.WereYouLookingFor);
 				sb.Append("</p>");
 				sb.Append("<ul>");
-				PageContent c;
 				for(int i = 0; i < results.Length; i++) {
-					c = Content.GetPageContent(results[i]);
 					sb.Append(@"<li><a href=""");
 					UrlTools.BuildUrl(currentWiki, sb, Tools.UrlEncode(results[i].FullName), GlobalSettings.PageExtension);
 					sb.Append(@""">");
-					sb.Append(FormattingPipeline.PrepareTitle(currentWiki, c.Title, false, FormattingContext.PageContent, c.PageInfo));
+					sb.Append(FormattingPipeline.PrepareTitle(currentWiki, results[i].Title, false, FormattingContext.PageContent, results[i].FullName));
 					sb.Append("</a></li>");
 				}
 				sb.Append("</ul>");

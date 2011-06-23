@@ -97,13 +97,14 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Checks whether an action is allowed for a page in the given page.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <param name="action">The action (see <see cref="Actions.ForPages"/> class)</param>
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b>, <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
-		bool CheckActionForPage(string wiki, PageInfo page, string action, UserInfo user);
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		bool CheckActionForPage(string wiki, string pageFullName, string action, UserInfo user);
 
 		/// <summary>
 		/// Checks whether an action is allowed for a directory in the given wiki.
@@ -146,7 +147,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The pages.</returns>
-		PageInfo[] GetPages(string wiki, NamespaceInfo nspace);
+		PageContent[] GetPages(string wiki, NamespaceInfo nspace);
 
 		/// <summary>
 		/// Gets the list of the Categories in a namespace.
@@ -177,7 +178,8 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="page">The Page.</param>
 		/// <returns>The Categories.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		CategoryInfo[] GetCategoriesPerPage(PageInfo page);
+		/// <exception cref="ArgumentException">If <paramref name="page"/> is empty.</exception>
+		CategoryInfo[] GetCategoriesPerPage(PageContent page);
 
 		/// <summary>
 		/// Gets the WikiPage with the specified full Name.
@@ -187,15 +189,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <returns>The Wiki Page, or <c>null</c> if no pages are found.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
-		PageInfo FindPage(string wiki, string fullName);
-
-		/// <summary>
-		/// Gets the Content of a Page.
-		/// </summary>
-		/// <param name="page">The Page.</param>
-		/// <returns>The Page Content.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		PageContent GetPageContent(PageInfo page);
+		PageContent FindPage(string wiki, string fullName);
 
 		/// <summary>
 		/// Gets the Backup/Revision numbers of a Page.
@@ -203,7 +197,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="page">The Page.</param>
 		/// <returns>The Backup/Revision numbers.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		int[] GetBackups(PageInfo page);
+		int[] GetBackups(PageContent page);
 
 		/// <summary>
 		/// Gets the Content of a Page Backup.
@@ -213,16 +207,17 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <returns>The Backup Content.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
-		PageContent GetBackupContent(PageInfo page, int revision);
+		PageContent GetBackupContent(PageContent page, int revision);
 
 		/// <summary>
 		/// Gets the formatted content of a Page.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <returns>The formatted content of the Page.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		string GetFormattedContent(string wiki, PageInfo page);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		string GetFormattedContent(string wiki, string pageFullName);
 
 		/// <summary>
 		/// Formats a block of WikiMarkup, using the built-in formatter only.
@@ -237,21 +232,21 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Prepares content for indexing in the search engine, performing bare-bones formatting and removing all WikiMarkup and XML-like characters.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page being indexed, if any, <c>null</c> otherwise.</param>
+		/// <param name="pageFullName">The full name of the page being indexed, if any, <c>null</c> otherwise.</param>
 		/// <param name="content">The string to prepare.</param>
 		/// <returns>The sanitized string.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="content"/> is <c>null</c>.</exception>
-		string PrepareContentForIndexing(string wiki, PageInfo page, string content);
+		string PrepareContentForIndexing(string wiki, string pageFullName, string content);
 
 		/// <summary>
 		/// Prepares a title for indexing in the search engine, removing all WikiMarkup and XML-like characters.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page being indexed, if any, <c>null</c> otherwise.</param>
+		/// <param name="pageFullName">The full name of the page being indexed, if any, <c>null</c> otherwise.</param>
 		/// <param name="title">The title to prepare.</param>
 		/// <returns>The sanitized string.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="title"/> is <c>null</c>.</exception>
-		string PrepareTitleForIndexing(string wiki, PageInfo page, string title);
+		string PrepareTitleForIndexing(string wiki, string pageFullName, string title);
 
 		/// <summary>
 		/// Performs a search.
@@ -286,10 +281,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Lists page attachments.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page.</param>
 		/// <returns>The attachments.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		StFileInfo[] ListPageAttachments(string wiki, PageInfo page);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		StFileInfo[] ListPageAttachments(string wiki, string pageFullName);
 
 		/// <summary>
 		/// Sends an Email.
@@ -436,12 +432,13 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Upgrades the old Page Status to use the new ACL facilities.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page of which to upgrade the status.</param>
+		/// <param name="pageFullName">The full name of the page of which to upgrade the status.</param>
 		/// <param name="oldStatus">The old status ('L' = Locked, 'P' = Public).</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">If <b>oldStatus</b> is invalid.</exception>
-		bool UpgradePageStatusToAcl(string wiki, PageInfo page, char oldStatus);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="oldStatus"/> is invalid.</exception>
+		bool UpgradePageStatusToAcl(string wiki, string pageFullName, char oldStatus);
 
 		/// <summary>
 		/// Upgrades the old security flags to use the new ACL facilities and user groups support.

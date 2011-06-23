@@ -18,8 +18,7 @@ namespace ScrewTurn.Wiki {
 
 	public partial class History : BasePage {
 
-		private PageInfo page;
-		private PageContent content;
+		private PageContent page;
 		private string currentWiki = null;
 		private bool canRollback;
 
@@ -32,13 +31,12 @@ namespace ScrewTurn.Wiki {
 
 			if(page != null) {
 				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
-				canRollback = authChecker.CheckActionForPage(page, Actions.ForPages.ManagePage,
+				canRollback = authChecker.CheckActionForPage(page.FullName, Actions.ForPages.ManagePage,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 
-				content = Content.GetPageContent(page);
-				lblTitle.Text = Properties.Messages.PageHistory + ": " + FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, page);
+				lblTitle.Text = Properties.Messages.PageHistory + ": " + FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.PageContent, page.FullName);
 
-				bool canView = authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
+				bool canView = authChecker.CheckActionForPage(page.FullName, Actions.ForPages.ReadPage,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 				if(!canView) UrlTools.Redirect("AccessDenied.aspx");
 			}
@@ -85,7 +83,7 @@ namespace ScrewTurn.Wiki {
 
 				List<RevisionRow> result = new List<RevisionRow>(revisions.Count + 1);
 
-				result.Add(new RevisionRow(-1, Content.GetPageContent(page), false));
+				result.Add(new RevisionRow(-1, page, false));
 
 				foreach(int rev in revisions) {
 					PageContent content = Pages.GetBackupContent(page, rev);
@@ -153,7 +151,7 @@ namespace ScrewTurn.Wiki {
 				sb.Append("</h3><br />");
 
 				sb.Append(FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, revision.Content,
-					false, FormattingContext.PageContent, page).Replace(Formatter.EditSectionPlaceHolder, ""), FormattingContext.PageContent, page));
+					false, FormattingContext.PageContent, page.FullName).Replace(Formatter.EditSectionPlaceHolder, ""), FormattingContext.PageContent, page.FullName));
 			}
 
 			lblHistory.Text = sb.ToString();
@@ -196,10 +194,10 @@ namespace ScrewTurn.Wiki {
 			string currentWiki = Tools.DetectCurrentWiki();
 
 			this.wiki = currentWiki;
-			this.page = content.PageInfo.FullName;
+			this.page = content.FullName;
 			if(revision == -1) this.revision = Properties.Messages.Current;
 			else this.revision = revision.ToString();
-			title = FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, content.PageInfo);
+			title = FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.PageContent, content.FullName);
 			savedOn = Preferences.AlignWithTimezone(currentWiki, content.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki));
 			savedBy = Users.UserLink(currentWiki, content.User);
 			comment = content.Comment;

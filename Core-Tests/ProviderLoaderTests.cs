@@ -10,12 +10,8 @@ namespace ScrewTurn.Wiki.Tests {
 	[TestFixture]
 	public class ProviderLoaderTests {
 
-		[TestCase(null, typeof(GlobalSettingsStorageProvider))]
-		[TestCase("", typeof(GlobalSettingsStorageProvider))]
-		[TestCase("default", typeof(GlobalSettingsStorageProvider))]
-		[TestCase("DEfaulT", typeof(GlobalSettingsStorageProvider))]
-		[TestCase("ScrewTurn.Wiki.GlobalSettingsStorageProvider, ScrewTurn.Wiki.Core", typeof(GlobalSettingsStorageProvider))]
-		[TestCase("ScrewTurn.Wiki.GlobalSettingsStorageProvider, ScrewTurn.Wiki.Core.dll", typeof(GlobalSettingsStorageProvider))]
+		[TestCase(null, typeof(TestGlobalSettingsStorageProvider), ExpectedException = typeof(Exception))]
+		[TestCase("", typeof(TestGlobalSettingsStorageProvider), ExpectedException = typeof(Exception))]
 		[TestCase("ScrewTurn.Wiki.Tests.TestGlobalSettingsStorageProvider, ScrewTurn.Wiki.Core.Tests.dll", typeof(TestGlobalSettingsStorageProvider))]
 		[TestCase("glglglglglglg, gfgfgfgfggf.dll", typeof(string), ExpectedException = typeof(ArgumentException))]
 		public void Static_LoadSettingsStorageProvider(string p, Type type) {

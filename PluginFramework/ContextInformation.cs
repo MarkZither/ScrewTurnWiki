@@ -14,7 +14,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		private bool forIndexing;
 		private bool forWysiwyg;
 		private FormattingContext context;
-		private PageInfo page;
+		private string pageFullName;
 		private string language;
 		private HttpContext httpContext;
 		private string username;
@@ -26,16 +26,16 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="forIndexing">A value indicating whether the formatting is being done for content indexing.</param>
 		/// <param name="forWysiwyg">A value indicating whether the formatting is being done for display in the WYSIWYG editor.</param>
 		/// <param name="context">The formatting context.</param>
-		/// <param name="page">The Page Information, if any, <c>null</c> otherwise.</param>
+		/// <param name="pageFullName">The Page Information, if any, <c>null</c> otherwise.</param>
 		/// <param name="language">The current Thread's language (for example "en-US").</param>
 		/// <param name="httpContext">The current HTTP Context object.</param>
 		/// <param name="username">The current User's Username (or <c>null</c>).</param>
 		/// <param name="groups">The groups the user is member of (or <c>null</c>).</param>
-		public ContextInformation(bool forIndexing, bool forWysiwyg, FormattingContext context, PageInfo page, string language, HttpContext httpContext, string username, string[] groups) {
+		public ContextInformation(bool forIndexing, bool forWysiwyg, FormattingContext context, string pageFullName, string language, HttpContext httpContext, string username, string[] groups) {
 			this.forIndexing = forIndexing;
 			this.forWysiwyg = forWysiwyg;
 			this.context = context;
-			this.page = page;
+			this.pageFullName = pageFullName;
 			this.language = language;
 			this.httpContext = httpContext;
 			this.username = username;
@@ -66,8 +66,8 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets the Page Information.
 		/// </summary>
-		public PageInfo Page {
-			get { return page; }
+		public string Page {
+			get { return pageFullName; }
 		}
 
 		/// <summary>

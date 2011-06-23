@@ -20,11 +20,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		/// <param name="size">The size of the file in bytes.</param>
 		/// <param name="lastModified">The last modification date/time.</param>
-		/// <param name="downloadCount">The download count.</param>
 		/// <param name="fullName">The full name of the file, for example <b>/dir/sub/file.txt</b> or <b>/file.txt</b>.</param>
 		/// <param name="provider">The provider that handles the file.</param>
-		public StFileInfo(long size, DateTime lastModified, int downloadCount, string fullName, IFilesStorageProviderV40 provider)
-			: base(size, lastModified, downloadCount) {
+		public StFileInfo(long size, DateTime lastModified, string fullName, IFilesStorageProviderV40 provider)
+			: base(size, lastModified) {
 
 			this.fullName = fullName;
 			this.provider = provider;
@@ -37,7 +36,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="fullName">The full name.</param>
 		/// <param name="provider">The provider.</param>
 		public StFileInfo(FileDetails details, string fullName, IFilesStorageProviderV40 provider)
-			: this(details.Size, details.LastModified, details.RetrievalCount, fullName, provider) {
+			: this(details.Size, details.LastModified, fullName, provider) {
 		}
 
 		/// <summary>

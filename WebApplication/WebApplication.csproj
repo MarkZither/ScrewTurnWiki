@@ -194,6 +194,7 @@
     <Compile Include="AdminGlobalHome.aspx.designer.cs">
       <DependentUpon>AdminGlobalHome.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Code\ExtendedPageInfo.cs" />
     <Compile Include="Code\WebRole.cs" />
     <Compile Include="CreateMasterPassword.aspx.cs">
       <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
@@ -283,7 +284,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Code\Compressor.cs" />
-    <Compile Include="Code\ExtendedPageInfo.cs" />
     <Compile Include="Code\LoginTools.cs" />
     <Compile Include="Code\PageSortingTools.cs" />
     <Compile Include="Code\ResourceExchanger.cs" />
@@ -2742,6 +2742,10 @@
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{C353A35C-86D0-4154-9500-4F88CAAB29C3}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSProviders\FSProviders.csproj">
+      <Project>{1EF2D87B-C7DF-4EF1-BBD8-F73BF7FFC07F}</Project>
+      <Name>FSProviders</Name>
     </ProjectReference>
     <ProjectReference Include="..\PluginFramework\PluginFramework.csproj">
       <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>

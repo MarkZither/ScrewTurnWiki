@@ -17,7 +17,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		private IHostV40 _host;
 		private string _wiki;
 		private CloudBlobClient _client;
-		private TableServiceContext _context;
 
 		#region IFilesStorageProviderV40 Members
 
@@ -178,31 +177,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
-		private FileRetrievalStatEntity GetFileRetrievalStatEntity(string partitionKey, string fullFileName) {
-			var query = (from e in _context.CreateQuery<FileRetrievalStatEntity>(FileRetrievalStatsTable).AsTableServiceQuery()
-						 where e.PartitionKey.Equals(partitionKey) && e.RowKey.Equals(BuildNameForTableStorage(fullFileName))
-						 select e).AsTableServiceQuery();
-			return QueryHelper<FileRetrievalStatEntity>.FirstOrDefault(query);
-		}
-
-		private IList<FileRetrievalStatEntity> GetFileRetrievalStatEntities(string partitionKey) {
-			var query = (from e in _context.CreateQuery<FileRetrievalStatEntity>(FileRetrievalStatsTable).AsTableServiceQuery()
-						 where e.PartitionKey.Equals(partitionKey)
-						 select e).AsTableServiceQuery();
-			return QueryHelper<FileRetrievalStatEntity>.All(query);
-		}
-
 		/// <summary>
 		/// Retrieves a File.
 		/// </summary>
 		/// <param name="fullName">The full name of the File.</param>
 		/// <param name="destinationStream">A Stream object used as <b>destination</b> of a byte stream,
 		/// i.e. the method writes to the Stream the file content.</param>
-		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the file is retrieved, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="destinationStream"/> does not support writing, or if <paramref name="fullName"/> does not exist.</exception>
-		public bool RetrieveFile(string fullName, System.IO.Stream destinationStream, bool countHit) {
+		public bool RetrieveFile(string fullName, System.IO.Stream destinationStream) {
 			if(fullName == null) throw new ArgumentNullException("fullName");
 			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
 			if(destinationStream == null) throw new ArgumentNullException("destinationStream");
@@ -216,50 +200,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var blobRef = containerRef.GetBlobReference(blobName);
 				blobRef.DownloadToStream(destinationStream);
 
-				if(countHit) SetFileRetrievalCount(_wiki, fullName, 0, false);
-
 				return true;
 			}
 			catch(StorageClientException ex) {
 				if(ex.ErrorCode == StorageErrorCode.BlobNotFound) return false;
-				throw ex;
-			}
-		}
-
-		private void SetFileRetrievalCount(string partitionKey, string fullName, int count, bool overwrite) {
-			FileRetrievalStatEntity fileRetrievalStatEntity = GetFileRetrievalStatEntity(partitionKey, fullName);
-			if(fileRetrievalStatEntity == null) {
-				fileRetrievalStatEntity = new FileRetrievalStatEntity() {
-					PartitionKey = partitionKey,
-					RowKey = BuildNameForTableStorage(fullName),
-					Count = overwrite ? count : 1
-				};
-				_context.AddObject(FileRetrievalStatsTable, fileRetrievalStatEntity);
-			}
-			else {
-				fileRetrievalStatEntity.Count = overwrite ? count : fileRetrievalStatEntity.Count + 1;
-				_context.UpdateObject(fileRetrievalStatEntity);
-			}
-			_context.SaveChangesStandard();
-		}
-
-		/// <summary>
-		/// Sets the number of times a file was retrieved.
-		/// </summary>
-		/// <param name="fullName">The full name of the file.</param>
-		/// <param name="count">The count to set.</param>
-		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than zero.</exception>
-		public void SetFileRetrievalCount(string fullName, int count) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
-			if(count < 0) throw new ArgumentOutOfRangeException("count", "Count must be greater than or equal to zero");
-
-			try {
-				SetFileRetrievalCount(_wiki, fullName, count, true);
-			}
-			catch(Exception ex) {
 				throw ex;
 			}
 		}
@@ -282,10 +226,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var blobRef = containerRef.GetBlobReference(blobName);
 				blobRef.FetchAttributes();
 
-				FileRetrievalStatEntity fileRetrievalStatEntity = GetFileRetrievalStatEntity(_wiki, fullName);
-				int count = fileRetrievalStatEntity != null ? fileRetrievalStatEntity.Count : 0;
-
-				return new FileDetails(blobRef.Properties.Length, blobRef.Properties.LastModifiedUtc.ToLocalTime(), count);
+				return new FileDetails(blobRef.Properties.Length, blobRef.Properties.LastModifiedUtc.ToLocalTime());
 			}
 			catch(StorageClientException ex) {
 				if(ex.ErrorCode == StorageErrorCode.BlobNotFound) return null;
@@ -311,14 +252,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				var blobRef = containerRef.GetBlobReference(blobName);
 				bool deleted = blobRef.DeleteIfExists();
-
-				if(deleted) {
-					var entity = GetFileRetrievalStatEntity(_wiki, fullName);
-					if(entity != null) {
-						_context.DeleteObject(entity);
-						_context.SaveChangesStandard();
-					}
-				}
 
 				return deleted;
 			}
@@ -352,30 +285,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				newBlobRef.CopyFromBlob(oldBlobRef);
 				oldBlobRef.Delete();
+
+				return true;
 			}
 			catch(StorageClientException ex) {
 				if(ex.ErrorCode == StorageErrorCode.BlobNotFound) throw new ArgumentException("Old File does not exist", "oldFullName");
 				if(ex.ErrorCode == StorageErrorCode.BlobAlreadyExists) throw new ArgumentException("New File already exists", "newFullName");
-				throw ex;
-			}
-
-			try {
-				FileRetrievalStatEntity oldFileRetrievalStatEntity = GetFileRetrievalStatEntity(_wiki, oldFullName);
-				
-				if(oldFileRetrievalStatEntity != null) {
-					FileRetrievalStatEntity newFileRetrievalStatEntity = new FileRetrievalStatEntity() {
-						PartitionKey = _wiki,
-						RowKey = BuildNameForTableStorage(newFullName),
-						Count = oldFileRetrievalStatEntity.Count
-					};
-					_context.AddObject(FileRetrievalStatsTable, newFileRetrievalStatEntity);
-					_context.DeleteObject(oldFileRetrievalStatEntity);
-					_context.SaveChangesStandard();
-				}
-
-				return true;
-			}
-			catch(Exception ex) {
 				throw ex;
 			}
 		}
@@ -432,15 +347,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					blobRef.Delete();
 				}
 
-				var fileRetrievalStatEntities = GetFileRetrievalStatEntities(_wiki);
-				string fullNameForTableStorage = BuildNameForTableStorage(fullPath);
-				foreach(FileRetrievalStatEntity entity in fileRetrievalStatEntities) {
-					if(entity.RowKey.StartsWith(fullNameForTableStorage)) {
-						_context.DeleteObject(entity);
-					}
-				}
-				_context.SaveChangesStandard();
-
 				return true;
 			}
 			catch(Exception ex) {
@@ -483,21 +389,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					oldBlobReference.Delete();
 				}
 
-				var fileRetrievalStatEntities = GetFileRetrievalStatEntities(_wiki);
-				string oldNameForTableStorage = BuildNameForTableStorage(oldFullPath);
-				foreach(FileRetrievalStatEntity entity in fileRetrievalStatEntities) {
-					if(entity.RowKey.StartsWith(oldNameForTableStorage)) {
-						FileRetrievalStatEntity newEntity = new FileRetrievalStatEntity() {
-							PartitionKey = _wiki,
-							RowKey = BuildNameForTableStorage(newFullPath) + entity.RowKey.Substring(entity.RowKey.IndexOf(oldNameForTableStorage) + oldNameForTableStorage.Length),
-							Count = entity.Count
-						};
-						_context.AddObject(FileRetrievalStatsTable, newEntity);
-						_context.DeleteObject(entity);
-					}
-				}
-				_context.SaveChangesStandard();
-
 				return true;
 			}
 			catch(Exception ex) {
@@ -526,14 +417,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Returns the names of the Attachments of a Page.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info object that owns the Attachments.</param>
+		/// <param name="pageFullName">The full name of the page that owns the Attachments.</param>
 		/// <returns>The names, or an empty list.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> is <c>null</c>.</exception>
-		public string[] ListPageAttachments(PageInfo pageInfo) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public string[] ListPageAttachments(string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("pageFullName");
 
 			try {
-				string dirName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageInfo.FullName));
+				string dirName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageFullName));
 				if(dirName == null) return new string[0];
 
 				string[] blobs = ListFilesForInternalUse(_wiki + "-attachments", dirName, false, true);
@@ -552,16 +445,17 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Stores a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
 		/// <param name="name">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <param name="sourceStream">A Stream object used as <b>source</b> of a byte stream,
 		/// i.e. the method reads from the Stream and stores the content properly.</param>
 		/// <param name="overwrite"><c>true</c> to overwrite an existing Attachment.</param>
 		/// <returns><c>true</c> if the Attachment is stored, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="name"/> or <paramref name="sourceStream"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="sourceStream"/> does not support reading.</exception>
-		public bool StorePageAttachment(PageInfo pageInfo, string name, System.IO.Stream sourceStream, bool overwrite) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="name"/> or <paramref name="sourceStream"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/>, <paramref name="name"/> are empty or if <paramref name="sourceStream"/> does not support reading.</exception>
+		public bool StorePageAttachment(string pageFullName, string name, System.IO.Stream sourceStream, bool overwrite) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("pageFullName");
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
 			if(sourceStream == null) throw new ArgumentNullException("sourceStream");
@@ -570,15 +464,15 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			try {
 				var containerRef = _client.GetContainerReference(_wiki + "-attachments");
 
-				if(BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageInfo.FullName)) == null) {
-					CloudBlobDirectory directoryRef = containerRef.GetDirectoryReference(BuildNameForBlobStorage(pageInfo.FullName));
+				if(BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageFullName)) == null) {
+					CloudBlobDirectory directoryRef = containerRef.GetDirectoryReference(BuildNameForBlobStorage(pageFullName));
 					directoryRef.GetBlobReference(".stw.dat").UploadText("");
 				}
 
-				string blobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageInfo.FullName) + "/" + BuildNameForBlobStorage(name));
+				string blobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageFullName) + "/" + BuildNameForBlobStorage(name));
 				if(!overwrite && blobName != null) return false;
 
-				blobName = blobName != null ? blobName : BuildNameForBlobStorage(pageInfo.FullName) + "/" + BuildNameForBlobStorage(name);
+				blobName = blobName != null ? blobName : BuildNameForBlobStorage(pageFullName) + "/" + BuildNameForBlobStorage(name);
 
 				var blobRef = containerRef.GetBlockBlobReference(blobName);
 				blobRef.UploadFromStream(sourceStream);
@@ -593,17 +487,17 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Retrieves a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
 		/// <param name="name">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <param name="destinationStream">A Stream object used as <b>destination</b> of a byte stream,
 		/// i.e. the method writes to the Stream the file content.</param>
-		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the Attachment is retrieved, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="name"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="destinationStream"/> does not support writing,
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="name"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="name"/> are empty or if <paramref name="destinationStream"/> does not support writing,
 		/// or if the page does not have attachments or if the attachment does not exist.</exception>
-		public bool RetrievePageAttachment(PageInfo pageInfo, string name, System.IO.Stream destinationStream, bool countHit) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+		public bool RetrievePageAttachment(string pageFullName, string name, System.IO.Stream destinationStream) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("pageFullName");
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
 			if(destinationStream == null) throw new ArgumentNullException("destinationStream");
@@ -611,7 +505,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				var containerRef = _client.GetContainerReference(_wiki + "-attachments");
-				string dirName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageInfo.FullName));
+				string dirName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageFullName));
 				if(dirName == null) throw new ArgumentException("No attachments for Page", "pageInfo");
 
 				string blobName = BlobExists(_wiki + "-attachments", dirName.TrimEnd('/') + "/" + BuildNameForBlobStorage(name));
@@ -619,8 +513,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				var blobRef = containerRef.GetBlobReference(blobName);
 				blobRef.DownloadToStream(destinationStream);
-
-				if(countHit) SetFileRetrievalCount(_wiki + "-attachments", pageInfo.FullName + "|" + name, 0, false);
 
 				return true;
 			}
@@ -630,52 +522,26 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		/// <summary>
-		/// Sets the number of times a page attachment was retrieved.
-		/// </summary>
-		/// <param name="pageInfo">The page.</param>
-		/// <param name="name">The name of the attachment.</param>
-		/// <param name="count">The count to set.</param>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than zero.</exception>
-		public void SetPageAttachmentRetrievalCount(PageInfo pageInfo, string name, int count) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
-			if(count < 0) throw new ArgumentOutOfRangeException("Count must be greater than or equal to zero", "count");
-
-			try {
-				SetFileRetrievalCount(_wiki + "-attachments", pageInfo.FullName + "|" + name, count, true);
-			}
-			catch(Exception ex) {
-				throw ex;
-			}
-		}
-
-		/// <summary>
 		/// Gets the details of a page attachment.
 		/// </summary>
-		/// <param name="pageInfo">The page that owns the attachment.</param>
-		/// <param name="name">The name of the attachment, for example "myfile.jpg".</param>
+		/// <param name="pageFullName">The full name of the page that owns the attachment.</param>
+		/// <param name="attachmentName">The name of the attachment, for example "myfile.jpg".</param>
 		/// <returns>The details of the attachment, or <c>null</c> if the attachment does not exist.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-		public FileDetails GetPageAttachmentDetails(PageInfo pageInfo, string name) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are empty.</exception>
+		public FileDetails GetPageAttachmentDetails(string pageFullName, string attachmentName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageInfo");
+			if(attachmentName == null) throw new ArgumentNullException("name");
+			if(attachmentName.Length == 0) throw new ArgumentException("Name cannot be empty");
 
 			try {
-				var blobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageInfo.FullName) + "/" + BuildNameForBlobStorage(name));
+				var blobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageFullName) + "/" + BuildNameForBlobStorage(attachmentName));
 				if(blobName == null) return null;
 				var containerRef = _client.GetContainerReference(_wiki + "-attachments");
 				var blobRef = containerRef.GetBlobReference(blobName);
 				blobRef.FetchAttributes();
 
-				FileRetrievalStatEntity fileRetrievalStatEntity = GetFileRetrievalStatEntity(_wiki + "-attachments", pageInfo.FullName + "|" + name);
-				int count = fileRetrievalStatEntity != null ? fileRetrievalStatEntity.Count : 0;
-
-				return new FileDetails(blobRef.Properties.Length, blobRef.Properties.LastModifiedUtc.ToLocalTime(), count);
+				return new FileDetails(blobRef.Properties.Length, blobRef.Properties.LastModifiedUtc.ToLocalTime());
 			}
 			catch(StorageClientException ex) {
 				if(ex.ErrorCode == StorageErrorCode.BlobNotFound) return null;
@@ -686,31 +552,24 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Deletes a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
-		/// <param name="name">The name of the Attachment, for example "myfile.jpg".</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
+		/// <param name="attachmentName">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <returns><c>true</c> if the Attachment is deleted, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if the page or attachment do not exist.</exception>
-		public bool DeletePageAttachment(PageInfo pageInfo, string name) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are empty or if the page or attachment do not exist.</exception>
+		public bool DeletePageAttachment(string pageFullName, string attachmentName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("pageFullName");
+			if(attachmentName == null) throw new ArgumentNullException("name");
+			if(attachmentName.Length == 0) throw new ArgumentException("Name cannot be empty");
 
 			try {
 				var containerRef = _client.GetContainerReference(_wiki + "-attachments");
-				string blobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageInfo.FullName) + "/" + BuildNameForBlobStorage(name));
+				string blobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageFullName) + "/" + BuildNameForBlobStorage(attachmentName));
 				if(blobName == null) throw new ArgumentException("File does not exist", "fullName");
 
 				var blobRef = containerRef.GetBlobReference(blobName);
 				bool deleted = blobRef.DeleteIfExists();
-
-				if(deleted) {
-					var entity = GetFileRetrievalStatEntity(_wiki + "-attachments", pageInfo.FullName + "|" + name);
-					if(entity != null) {
-						_context.DeleteObject(entity);
-						_context.SaveChangesStandard();
-					}
-				}
 
 				return deleted;
 			}
@@ -722,15 +581,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Renames a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
 		/// <param name="oldName">The old name of the Attachment.</param>
 		/// <param name="newName">The new name of the Attachment.</param>
 		/// <returns><c>true</c> if the Attachment is renamed, false otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="oldName"/> or <paramref name="newName"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="pageInfo"/>, <paramref name="oldName"/> or <paramref name="newName"/> are empty,
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="oldName"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/>, <paramref name="oldName"/> or <paramref name="newName"/> are empty,
 		/// or if the page or old attachment do not exist, or the new attachment name already exists.</exception>
-		public bool RenamePageAttachment(PageInfo pageInfo, string oldName, string newName) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+		public bool RenamePageAttachment(string pageFullName, string oldName, string newName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("pageFullName");
 			if(oldName == null) throw new ArgumentNullException("oldName");
 			if(oldName.Length == 0) throw new ArgumentException("Old Name cannot be empty", "oldName");
 			if(newName == null) throw new ArgumentNullException("newName");
@@ -738,39 +598,20 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			try {
 				var containerRef = _client.GetContainerReference(_wiki + "-attachments");
-				string oldBlobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageInfo.FullName) + "/" + BuildNameForBlobStorage(oldName));
+				string oldBlobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageFullName) + "/" + BuildNameForBlobStorage(oldName));
 				if(oldBlobName == null) throw new ArgumentException("Old File does not exist", "oldFullName");
 				var oldBlobRef = containerRef.GetBlobReference(oldBlobName);
-				string newBlobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageInfo.FullName) + "/" + BuildNameForBlobStorage(newName));
+				string newBlobName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(pageFullName) + "/" + BuildNameForBlobStorage(newName));
 				if(newBlobName != null) throw new ArgumentException("New File already exists", "newFullName");
-				var newBlobRef = containerRef.GetBlobReference(BuildNameForBlobStorage(pageInfo.FullName) + "/" + BuildNameForBlobStorage(newName));
+				var newBlobRef = containerRef.GetBlobReference(BuildNameForBlobStorage(pageFullName) + "/" + BuildNameForBlobStorage(newName));
 
 				newBlobRef.CopyFromBlob(oldBlobRef);
 				oldBlobRef.Delete();
+				return true;
 			}
 			catch(StorageClientException ex) {
 				if(ex.ErrorCode == StorageErrorCode.BlobNotFound) throw new ArgumentException("Old File does not exist", "oldFullName");
 				if(ex.ErrorCode == StorageErrorCode.BlobAlreadyExists) throw new ArgumentException("New File already exists", "newFullName");
-				throw ex;
-			}
-
-			try {
-				FileRetrievalStatEntity oldFileRetrievalStatEntity = GetFileRetrievalStatEntity(_wiki + "-attachments", pageInfo.FullName + "|" + oldName);
-
-				if(oldFileRetrievalStatEntity != null) {
-					FileRetrievalStatEntity newFileRetrievalStatEntity = new FileRetrievalStatEntity() {
-						PartitionKey = _wiki + "-attachments",
-						RowKey = BuildNameForTableStorage(pageInfo.FullName + "|" + newName),
-						Count = oldFileRetrievalStatEntity.Count
-					};
-					_context.AddObject(FileRetrievalStatsTable, newFileRetrievalStatEntity);
-					_context.DeleteObject(oldFileRetrievalStatEntity);
-					_context.SaveChangesStandard();
-				}
-
-				return true;
-			}
-			catch(Exception ex) {
 				throw ex;
 			}
 		}
@@ -778,23 +619,25 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Notifies the Provider that a Page has been renamed.
 		/// </summary>
-		/// <param name="oldPage">The old Page Info object.</param>
-		/// <param name="newPage">The new Page Info object.</param>
-		/// <exception cref="ArgumentNullException">If <paramref name="oldPage"/> or <paramref name="newPage"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If the new page is already in use.</exception>
-		public void NotifyPageRenaming(PageInfo oldPage, PageInfo newPage) {
-			if(oldPage == null) throw new ArgumentNullException("oldPage");
-			if(newPage == null) throw new ArgumentNullException("newPage");
+		/// <param name="oldPageFullName">The old page full name.</param>
+		/// <param name="newPageFullName">The new page full name.</param>
+		/// <exception cref="ArgumentNullException">If <paramref name="oldPageFullName"/> or <paramref name="newPageFullName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="oldPageFullName"/> or <paramref name="newPageFullName"/> are empty or if the new page full name is already in use.</exception>
+		public void NotifyPageRenaming(string oldPageFullName, string newPageFullName) {
+			if(oldPageFullName == null) throw new ArgumentNullException("oldPageFullName");
+			if(oldPageFullName.Length == 0) throw new ArgumentException("oldPageFullName");
+			if(newPageFullName == null) throw new ArgumentNullException("newPageFullName");
+			if(newPageFullName.Length == 0) throw new ArgumentException("newPageFullName");
 
 			try {
-				string oldDirectoryName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(oldPage.FullName));
+				string oldDirectoryName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(oldPageFullName));
 				if(oldDirectoryName == null) return;
-				string newDirectoryName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(newPage.FullName));
+				string newDirectoryName = BlobExists(_wiki + "-attachments", BuildNameForBlobStorage(newPageFullName));
 				if(newDirectoryName != null) throw new ArgumentException("New Page already exists", "newPage");
-				newDirectoryName = BuildNameForBlobStorage(newPage.FullName);
+				newDirectoryName = BuildNameForBlobStorage(newPageFullName);
 
 				var containerRef = _client.GetContainerReference(_wiki + "-attachments");
-				string[] blobs = ListFilesForInternalUse(_wiki + "-attachments", oldPage.FullName, true, true);
+				string[] blobs = ListFilesForInternalUse(_wiki + "-attachments", oldPageFullName, true, true);
 				foreach(string blob in blobs) {
 					string newBlobName = blob.Substring(blob.IndexOf(oldDirectoryName) + oldDirectoryName.Length);
 					newBlobName = newDirectoryName + newBlobName;
@@ -803,21 +646,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					newBlobReference.CopyFromBlob(oldBlobReference);
 					oldBlobReference.Delete();
 				}
-
-				var fileRetrievalStatEntities = GetFileRetrievalStatEntities(_wiki + "-attachments");
-				string oldNameForTableStorage = BuildNameForTableStorage(oldPage.FullName);
-				foreach(FileRetrievalStatEntity entity in fileRetrievalStatEntities) {
-					if(entity.RowKey.StartsWith(oldNameForTableStorage + "|")) {
-						FileRetrievalStatEntity newEntity = new FileRetrievalStatEntity() {
-							PartitionKey = _wiki + "-attachments",
-							RowKey = BuildNameForTableStorage(newPage.FullName) + entity.RowKey.Substring(entity.RowKey.IndexOf(oldNameForTableStorage + "|") + oldNameForTableStorage.Length),
-							Count = entity.Count
-						};
-						_context.AddObject(FileRetrievalStatsTable, newEntity);
-						_context.DeleteObject(entity);
-					}
-				}
-				_context.SaveChangesStandard();
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -838,12 +666,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		#endregion
 
 		#region IProviderV40 Members
-
-
-		/// <summary>
-		/// The file retrieval stats table name.
-		/// </summary>
-		public static readonly string FileRetrievalStatsTable = "FileRetrievalStats";
 
 		/// <summary>
 		/// Gets the wiki that has been used to initialize the current instance of the provider.
@@ -876,8 +698,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			containerRef = _client.GetContainerReference(_wiki + "-attachments");
 			containerRef.CreateIfNotExist();
-
-			_context = TableStorage.GetContext(config);
 		}
 
 		/// <summary>
@@ -894,8 +714,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(config == "") config = Config.GetConnectionString();
 
 			_host = host;
-
-			TableStorage.CreateTable(config, FileRetrievalStatsTable);
 		}
 
 		/// <summary>

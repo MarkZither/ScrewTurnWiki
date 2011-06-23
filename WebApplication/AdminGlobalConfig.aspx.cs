@@ -227,17 +227,8 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			Content.InvalidateAllPages();
-
 			lblResult.CssClass = "resultok";
 			lblResult.Text = Properties.Messages.ConfigSaved;
-		}
-
-		/// <summary>
-		/// Performs all the actions that are needed after a provider status is changed.
-		/// </summary>
-		private void PerformPostProviderChangeActions() {
-			Content.InvalidateAllPages();
 		}
 
 	}

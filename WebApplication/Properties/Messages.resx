@@ -1206,9 +1206,6 @@
   <data name="CouldNotSetNamespaceTheme" xml:space="preserve">
     <value>Could not set the Theme for the Namespace</value>
   </data>
-  <data name="NamespaceCreatedCouldNotCreateDefaultPage" xml:space="preserve">
-    <value>Namespace created, but could not create the default Page</value>
-  </data>
   <data name="NamespaceCreatedCouldNotSetDefaultPage" xml:space="preserve">
     <value>Namespace created, but could not set its default Page</value>
   </data>
@@ -1250,9 +1247,6 @@
   </data>
   <data name="CouldNotRenamePage" xml:space="preserve">
     <value>Could not rename Page</value>
-  </data>
-  <data name="PageRenamedCouldNotCreateShadowPage" xml:space="preserve">
-    <value>Page renamed, but could not create shadow Page</value>
   </data>
   <data name="PageRenamedCouldNotSetShadowPageContent" xml:space="preserve">
     <value>Page renamed, but could not set the content for the shadow Page</value>

@@ -81,10 +81,9 @@ namespace ScrewTurn.Wiki {
 
 				NavigationPath path = NavigationPaths.Find(currentWiki, txtCurrentNavPath.Value);
 				foreach(string page in path.Pages) {
-					PageInfo pageInfo = Pages.FindPage(currentWiki, page);
-					if(pageInfo != null) {
-						PageContent content = Content.GetPageContent(pageInfo);
-						lstPages.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.Other, pageInfo), pageInfo.FullName));
+					PageContent pageContent = Pages.FindPage(currentWiki, page);
+					if(pageContent != null) {
+						lstPages.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, pageContent.Title, false, FormattingContext.Other, pageContent.FullName), pageContent.FullName));
 					}
 				}
 
@@ -164,13 +163,12 @@ namespace ScrewTurn.Wiki {
 
 			string currentWiki = DetectWiki();
 
-			PageInfo[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, lstNamespace.SelectedValue, currentWiki);
+			PageContent[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, lstNamespace.SelectedValue, currentWiki);
 
 			lstAvailablePage.Items.Clear();
 
-			foreach(PageInfo page in pages) {
-				PageContent content = Content.GetPageContent(page);
-				lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.Other, page), page.FullName));
+			foreach(PageContent page in pages) {
+				lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.Other, page.FullName), page.FullName));
 			}
 
 			btnAdd.Enabled = pages.Length > 0;
@@ -179,10 +177,9 @@ namespace ScrewTurn.Wiki {
 		protected void btnAdd_Click(object sender, EventArgs e) {
 			string currentWiki = DetectWiki();
 
-			PageInfo page = Pages.FindPage(currentWiki, lstAvailablePage.SelectedValue);
-			PageContent content = Content.GetPageContent(page);
+			PageContent page = Pages.FindPage(currentWiki, lstAvailablePage.SelectedValue);
 
-			lstPages.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.Other, page), page.FullName));
+			lstPages.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.Other, page.FullName), page.FullName));
 
 			txtPageName.Text = "";
 			lstAvailablePage.Items.Clear();
@@ -290,18 +287,12 @@ namespace ScrewTurn.Wiki {
 		/// Gets the selected pages for the navigation path.
 		/// </summary>
 		/// <returns>The selected pages.</returns>
-		private List<PageInfo> GetSelectedPages() {
-			List<PageInfo> result = new List<PageInfo>(lstPages.Items.Count);
-
-			string currentWiki = DetectWiki();
+		private List<string> GetSelectedPages() {
+			List<string> result = new List<string>(lstPages.Items.Count);
 
 			foreach(ListItem item in lstPages.Items) {
-				PageInfo page = Pages.FindPage(currentWiki, item.Value);
-				if(page != null) {
-					result.Add(page);
-				}
+				result.Add(item.Value);
 			}
-
 			return result;
 		}
 

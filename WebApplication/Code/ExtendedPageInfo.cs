@@ -9,33 +9,29 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public class ExtendedPageInfo {
 
-		private PageInfo pageInfo;
+		private PageContent pageContent;
 		private string title, creator, lastAuthor;
-		private DateTime modificationDateTime;
 		private int messageCount;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:ExtendedPageInfo" /> class.
 		/// </summary>
-		/// <param name="pageInfo">The <see cref="T:PageInfo" /> object.</param>
-		/// <param name="title">The title of the page.</param>
-		/// <param name="modificationDateTime">The modification date/time.</param>
+		/// <param name="pageContent">The <see cref="T:PageContent" /> object.</param>
 		/// <param name="creator">The creator.</param>
 		/// <param name="lastAuthor">The last author.</param>
-		public ExtendedPageInfo(PageInfo pageInfo, string title, DateTime modificationDateTime, string creator, string lastAuthor) {
-			this.pageInfo = pageInfo;
-			this.title = FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), title, false, FormattingContext.PageContent, pageInfo);
-			this.modificationDateTime = modificationDateTime;
+		public ExtendedPageInfo(PageContent pageContent, string creator, string lastAuthor) {
+			this.pageContent = pageContent;
+			this.title = FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), title, false, FormattingContext.PageContent, pageContent.FullName);
 			this.creator = creator;
 			this.lastAuthor = lastAuthor;
-			this.messageCount = Pages.GetMessageCount(pageInfo);
+			this.messageCount = Pages.GetMessageCount(pageContent);
 		}
 
 		/// <summary>
-		/// Gets the PageInfo object.
+		/// Gets the PageContent object.
 		/// </summary>
-		public PageInfo PageInfo {
-			get { return pageInfo; }
+		public PageContent PageContent {
+			get { return pageContent; }
 		}
 
 		/// <summary>
@@ -49,14 +45,7 @@ namespace ScrewTurn.Wiki {
 		/// Gets the creation date/time.
 		/// </summary>
 		public DateTime CreationDateTime {
-			get { return pageInfo.CreationDateTime; }
-		}
-
-		/// <summary>
-		/// Gets the modification date/time.
-		/// </summary>
-		public DateTime ModificationDateTime {
-			get { return modificationDateTime; }
+			get { return pageContent.CreationDateTime; }
 		}
 
 		/// <summary>

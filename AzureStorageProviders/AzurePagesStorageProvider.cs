@@ -62,6 +62,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			return _namespaces[namespaceName];
 		}
 
+		// Invalidate namespaces temporary cache
+		private void InvalidateNamespacesTempCache() {
+			_namespaces = null;
+			_namespacesList = null;
+		}
+
 		/// <summary>
 		/// Gets a namespace.
 		/// </summary>
@@ -76,7 +82,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			try {
 				var entity = GetNamespacesEntity(_wiki, name);
 				if(entity == null) return null;
-				return new NamespaceInfo(entity.RowKey, this, entity.DefaultPageFullName == null ? null : GetPage(entity.DefaultPageFullName));
+				return new NamespaceInfo(entity.RowKey, this, entity.DefaultPageFullName);
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -94,7 +100,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				List<NamespaceInfo> namespaces = new List<NamespaceInfo>(entities.Count);
 				foreach(NamespacesEntity entity in entities) {
-					namespaces.Add(new NamespaceInfo(entity.RowKey, this, entity.DefaultPageFullName == null ? null : GetPage(entity.DefaultPageFullName)));
+					namespaces.Add(new NamespaceInfo(entity.RowKey, this, entity.DefaultPageFullName));
 				}
 				return namespaces.ToArray();
 			}
@@ -127,8 +133,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.SaveChangesStandard();
 
 				// Invalidate local cache.
-				_namespaces = null;
-				_namespacesList = null;
+				InvalidateNamespacesTempCache();
 
 				return new NamespaceInfo(name, this, null);
 			}
@@ -157,44 +162,96 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(GetNamespacesEntity(_wiki, newName) != null) return null;
 
 				// Move all pages from old namespace to the new one
-				List<PagesInfoEntity> pagesInNamespace = GetPagesInfoEntities(_wiki, nspace.Name);
+				List<PagesContentsEntity> pagesInNamespace = GetAllPagesContentsEntities(_wiki, nspace.Name);
 
 				// Unindex pages
-				foreach(PagesInfoEntity pageInfoEntity in pagesInNamespace) {
-					PageInfo page = new PageInfo(pageInfoEntity.RowKey, this, pageInfoEntity.CreationDateTime.ToLocalTime());
-					PageContent content = GetContent(page);
-					if(content != null) {
-						UnindexPage(content);
+				foreach(PagesContentsEntity entity in pagesInNamespace) {
+					PageContent page = new PageContent(entity.PageFullName, this, entity.CreationDateTime.ToLocalTime(), entity.Title, entity.User, entity.LastModified.ToLocalTime(), string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment, entity.Content, entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(entity.Description) ? null : entity.Description);
+					if(page != null) {
+						UnindexPage(page);
 					}
-					Message[] messages = GetMessages(page);
+					Message[] messages = GetMessages(page.FullName);
 					if(messages != null) {
 						foreach(Message msg in messages) {
 							UnindexMessageTree(page, msg);
 						}
 					}
 				}
-	
-				foreach(PagesInfoEntity pageInfoEntity in pagesInNamespace) {
-					PagesInfoEntity newPage = new PagesInfoEntity() {
-						PartitionKey = pageInfoEntity.PartitionKey,
-						RowKey = NameTools.GetFullName(newName, NameTools.GetLocalName(pageInfoEntity.RowKey)),
-						CreationDateTime = pageInfoEntity.CreationDateTime,
-						Namespace = newName,
-						PageId = pageInfoEntity.PageId
-					};
-					_context.DeleteObject(pageInfoEntity);
-					_context.AddObject(PagesInfoTable, newPage);
+
+				int count = 0;
+				foreach(PagesContentsEntity entity in pagesInNamespace) {
+					string newPageFullName = NameTools.GetFullName(newName, NameTools.GetLocalName(entity.PageFullName));
+					IList<PagesContentsEntity> allRevisions = GetPagesContentEntities(_wiki, entity.PageFullName);
+					foreach(PagesContentsEntity revision in allRevisions) {
+						PagesContentsEntity newPage = new PagesContentsEntity() {
+							PartitionKey = revision.PartitionKey,
+							RowKey = newPageFullName + "|" + revision.Revision,
+							PageFullName = newPageFullName,
+							Revision = revision.Revision,
+							Namespace = newName,
+							CreationDateTime = revision.CreationDateTime,
+							Comment = revision.Comment,
+							Content = revision.Content,
+							Description = revision.Description,
+							Keywords = revision.Keywords,
+							LastModified = revision.LastModified,
+							Title = revision.Title,
+							User = revision.User
+						};
+						_context.DeleteObject(revision);
+						_context.AddObject(PagesContentsTable, newPage);
+						count = count + 2;
+						if(count >= 98) {
+							_context.SaveChangesStandard();
+							count = 0;
+						}
+					}
 				}
-				_context.SaveChangesStandard();
+				if(count > 0) _context.SaveChangesStandard();
+
+				foreach(PagesContentsEntity entity in pagesInNamespace) {
+					string newPageFullName = NameTools.GetFullName(newName, NameTools.GetLocalName(entity.PageFullName));
+					IList<MessageEntity> messages = GetMessagesEntities(_wiki, entity.PageFullName);
+					count = 0;
+					foreach(MessageEntity message in messages) {
+						MessageEntity newMessage = new MessageEntity() {
+							PartitionKey = _wiki + "|" + newPageFullName,
+							RowKey = message.RowKey,
+							Body = message.Body,
+							DateTime = message.DateTime,
+							ParetnId = message.ParetnId,
+							Subject = message.Subject,
+							Username = message.Username
+						};
+						_context.AddObject(MessagesTable, newMessage);
+						count++;
+						if(count >= 99) {
+							_context.SaveChangesStandard();
+							count = 0;
+						}
+					}
+					if(count > 0) _context.SaveChangesStandard();
+
+					count = 0;
+					foreach(MessageEntity message in messages) {
+						_context.DeleteObject(message);
+						count++;
+						if(count >= 99) {
+							_context.SaveChangesStandard();
+							count = 0;
+						}
+					}
+					if(count > 0) _context.SaveChangesStandard();
+				}
 
 				// Index pages
-				foreach(PagesInfoEntity pageInfoEntity in pagesInNamespace) {
-					PageInfo page = new PageInfo(NameTools.GetFullName(newName, NameTools.GetLocalName(pageInfoEntity.RowKey)), this, pageInfoEntity.CreationDateTime.ToLocalTime());
-					PageContent content = GetContent(page);
-					if(content != null) {
-						IndexPage(content);
+				foreach(PagesContentsEntity entity in pagesInNamespace) {
+					string newPageFullName = NameTools.GetFullName(newName, NameTools.GetLocalName(entity.PageFullName));
+					PageContent page = new PageContent(newPageFullName, this, entity.CreationDateTime.ToLocalTime(), entity.Title, entity.User, entity.LastModified.ToLocalTime(), string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment, entity.Content, entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(entity.Description) ? null : entity.Description);
+					if(page != null) {
+						IndexPage(page);
 					}
-					Message[] messages = GetMessages(page);
+					Message[] messages = GetMessages(page.FullName);
 					if(messages != null) {
 						foreach(Message msg in messages) {
 							IndexMessageTree(page, msg);
@@ -202,8 +259,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					}
 				}
 
-				// Invalidate pagesInfoCache
-				_pagesInfoCache = null;
+				// Invalidate temporaty page content cache
+				InvalidatePagesTempCache();
 
 				List<CategoriesEntity> categoryEntities = GetCategoriesEntities(_wiki, nspace.Name);
 				foreach(CategoriesEntity categoryEntity in categoryEntities) {
@@ -250,10 +307,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.SaveChangesStandard();
 
 				// Invalidate local cache.
-				_namespaces = null;
-				_namespacesList = null;
+				InvalidateNamespacesTempCache();
 
-				return new NamespaceInfo(newName, this, GetPage(newNamespaceEntity.DefaultPageFullName));
+				return new NamespaceInfo(newName, this, newNamespaceEntity.DefaultPageFullName);
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -264,10 +320,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// Sets the default page of a namespace.
 		/// </summary>
 		/// <param name="nspace">The namespace of which to set the default page.</param>
-		/// <param name="page">The page to use as default page, or <c>null</c>.</param>
+		/// <param name="pageFullName">The full name of the page to use as default page, or <c>null</c>.</param>
 		/// <returns>The correct <see cref="T:NamespaceInfo"/> object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="nspace"/> is <c>null</c>.</exception>
-		public NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, PageInfo page) {
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, string pageFullName) {
 			if(nspace == null) throw new ArgumentNullException("nspace");
 
 			try {
@@ -276,17 +333,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(entity == null) return null;
 
 				// If the page does not exists return null
-				if(page != null && GetPagesInfoEntity(_wiki, page.FullName) == null) return null;
+				if(pageFullName != null && GetPage(pageFullName) == null) return null;
 
-				entity.DefaultPageFullName = page != null ? page.FullName : null;
+				entity.DefaultPageFullName = pageFullName != null ? pageFullName : null;
 				_context.UpdateObject(entity);
 				_context.SaveChangesStandard();
 
 				// Invalidate local cache.
-				_namespaces = null;
-				_namespacesList = null;
+				InvalidateNamespacesTempCache();
 
-				nspace.DefaultPage = page;
+				nspace.DefaultPageFullName = pageFullName;
 				return nspace;
 			}
 			catch(Exception ex) {
@@ -309,15 +365,14 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				var pagesInNamespace = GetPages(nspace);
 				foreach(var pageInNamespace in pagesInNamespace) {
-					RemovePage(pageInNamespace);
+					RemovePage(pageInNamespace.FullName);
 				}
 
 				_context.DeleteObject(nspaceEntity);
 				_context.SaveChangesStandard();
 
 				// Invalidate local cache.
-				_namespaces = null;
-				_namespacesList = null;
+				InvalidateNamespacesTempCache();
 
 				return true;
 			}
@@ -329,40 +384,42 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Moves a page from its namespace into another.
 		/// </summary>
-		/// <param name="page">The page to move.</param>
+		/// <param name="pageFullName">The full name of the page to move.</param>
 		/// <param name="destination">The destination namespace (<c>null</c> for the root).</param>
 		/// <param name="copyCategories">A value indicating whether to copy the page categories in the destination
 		/// namespace, if not already available.</param>
-		/// <returns>The correct instance of <see cref="T:PageInfo"/>.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		public PageInfo MovePage(PageInfo page, NamespaceInfo destination, bool copyCategories) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <returns>The correct instance of <see cref="T:PageContent"/>.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public PageContent MovePage(string pageFullName, NamespaceInfo destination, bool copyCategories) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("pageFullName");
 
 			try {
-				PagesInfoEntity oldPageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(oldPageInfoEntity == null) return null;
+				List<PagesContentsEntity> oldPagesContentsEntities = GetPagesContentEntities(_wiki, pageFullName);
+				if(oldPagesContentsEntities == null || oldPagesContentsEntities.Count == 0) return null;
 
 				string destinationName = destination != null ? destination.Name : null;
 
-				string currentNsName = NameTools.GetNamespace(page.FullName);
+				string currentNsName = NameTools.GetNamespace(pageFullName);
 				NamespaceInfo currentNs = currentNsName != null ? GetNamespace(currentNsName) : null;
 				NamespaceComparer nsComp = new NamespaceComparer();
 				if((currentNs == null && destination == null) || nsComp.Compare(currentNs, destination) == 0) return null;
 
-				if(GetPagesInfoEntity(_wiki, NameTools.GetFullName(destinationName, NameTools.GetLocalName(page.FullName))) != null) return null;
+				if(GetPage(NameTools.GetFullName(destinationName, NameTools.GetLocalName(pageFullName))) != null) return null;
 				if(destination != null && GetNamespacesEntity(_wiki, destinationName) == null) return null;
 
-				if(currentNs != null && currentNs.DefaultPage != null) {
+				if(currentNs != null && currentNs.DefaultPageFullName != null) {
 					// Cannot move the default page
-					if(new PageNameComparer().Compare(currentNs.DefaultPage, page) == 0) return null;
+					if(currentNs.DefaultPageFullName.ToLowerInvariant() == pageFullName.ToLowerInvariant()) return null;
 				}
 
-				string newPageFullName = NameTools.GetFullName(destinationName, NameTools.GetLocalName(page.FullName));
+				string newPageFullName = NameTools.GetFullName(destinationName, NameTools.GetLocalName(pageFullName));
 
-				List<CategoryInfo> pageCategories = GetCategoriesForPage(page).ToList();
+				List<CategoryInfo> pageCategories = GetCategoriesForPage(pageFullName).ToList();
 				foreach(CategoryInfo category in pageCategories) {
 					CategoriesEntity categoryEntity = GetCategoriesEntity(_wiki, category.FullName);
-					categoryEntity.PagesFullNames = string.Join("|", categoryEntity.PagesFullNames.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries).ToList().Remove(oldPageInfoEntity.RowKey));
+					categoryEntity.PagesFullNames = string.Join("|", categoryEntity.PagesFullNames.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries).ToList().Remove(pageFullName));
 					_context.UpdateObject(categoryEntity);
 					if(copyCategories) {
 						string newCategoryFullName = NameTools.GetFullName(destinationName, NameTools.GetLocalName(category.FullName));
@@ -385,42 +442,86 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.SaveChangesStandard();
 
 				// Unindex page with the old fullName
-				PageContent pageContent = GetContent(page);
-				UnindexPage(pageContent);
-				Message[] messages = GetMessages(page);
+				PageContent page = GetPage(pageFullName);
+				UnindexPage(page);
+				Message[] messages = GetMessages(pageFullName);
 				foreach(Message msg in messages) {
 					UnindexMessageTree(page, msg);
 				}
 
-				// Update the pageInfo with values from the new namespace
-				var newPageInfoEntity = new PagesInfoEntity();
-				newPageInfoEntity.PartitionKey = _wiki;
-				newPageInfoEntity.RowKey = newPageFullName;
-				newPageInfoEntity.Namespace = destinationName;
-				newPageInfoEntity.PageId = oldPageInfoEntity.PageId;
-				newPageInfoEntity.CreationDateTime = oldPageInfoEntity.CreationDateTime;
-				_context.AddObject(PagesInfoTable, newPageInfoEntity);
-				_context.DeleteObject(oldPageInfoEntity);
-				_context.SaveChangesStandard();
+				// Update all page versions with values from the new namespace
+				int count = 0;
+				foreach(PagesContentsEntity entity in oldPagesContentsEntities) {
+					PagesContentsEntity newPageEntity = new PagesContentsEntity() {
+						PartitionKey = entity.PartitionKey,
+						RowKey = newPageFullName + "|" + entity.Revision,
+						Comment = entity.Comment,
+						Content = entity.Content,
+						CreationDateTime = entity.CreationDateTime,
+						Description = entity.Description,
+						Keywords = entity.Keywords,
+						LastModified = entity.LastModified,
+						Namespace = destinationName,
+						PageFullName = newPageFullName,
+						Revision = entity.Revision,
+						Title = entity.Title,
+						User = entity.User
+					};
+					if(entity.Revision == CurrentRevision) {
+						page = new PageContent(newPageEntity.PageFullName, this, newPageEntity.CreationDateTime.ToLocalTime(), newPageEntity.Title, newPageEntity.User, newPageEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(newPageEntity.Comment) ? "" : newPageEntity.Comment, newPageEntity.Content, newPageEntity.Keywords == null ? new string[0] : newPageEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(newPageEntity.Description) ? null : newPageEntity.Description);
+					}
+					_context.DeleteObject(entity);
+					_context.AddObject(PagesContentsTable, newPageEntity);
+					count = count + 2;
+					if(count >= 98) {
+						_context.SaveChangesStandard();
+						count = 0;
+					}
+				}
+				if(count > 0) _context.SaveChangesStandard();
 
-				// Invalidate pageInfoCache
-				_pagesInfoCache = null;
+				IList<MessageEntity> messagesEntities = GetMessagesEntities(_wiki, pageFullName);
+				count = 0;
+				foreach(MessageEntity message in messagesEntities) {
+					MessageEntity newMessage = new MessageEntity() {
+						PartitionKey = _wiki + "|" + newPageFullName,
+						RowKey = message.RowKey,
+						Body = message.Body,
+						DateTime = message.DateTime,
+						ParetnId = message.ParetnId,
+						Subject = message.Subject,
+						Username = message.Username
+					};
+					_context.AddObject(MessagesTable, newMessage);
+					count++;
+					if(count >= 99) {
+						_context.SaveChangesStandard();
+						count = 0;
+					}
+				}
+				if(count > 0) _context.SaveChangesStandard();
 
-				PageInfo newPage = new PageInfo(newPageFullName, this, page.CreationDateTime);
+				count = 0;
+				foreach(MessageEntity message in messagesEntities) {
+					_context.DeleteObject(message);
+					count++;
+					if(count >= 99) {
+						_context.SaveChangesStandard();
+						count = 0;
+					}
+				}
+				if(count > 0) _context.SaveChangesStandard();
+
+				// Invalidate pageContent temporary cache 
+				InvalidatePagesTempCache();
 
 				// Index page with the new fullName
-				IndexPage(new PageContent(newPage,
-					pageContent.Title,
-					pageContent.User,
-					pageContent.LastModified.ToUniversalTime(),
-					pageContent.Comment, pageContent.Content,
-					pageContent.Keywords,
-					pageContent.Description));
+				IndexPage(page);
 				foreach(Message msg in messages) {
-					IndexMessageTree(newPage, msg);
+					IndexMessageTree(page, msg);
 				}
 
-				return newPage;
+				return page;
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -434,6 +535,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 						 where e.PartitionKey.Equals(_wiki) && e.RowKey.Equals(categoryFullName)
 						 select e).AsTableServiceQuery();
 			return QueryHelper<CategoriesEntity>.FirstOrDefault(query);
+		}
+
+		private List<CategoriesEntity> GetCategoriesEntities(string wiki) {
+			var query = (from e in _context.CreateQuery<CategoriesEntity>(CategoriesTable).AsTableServiceQuery()
+						 where e.PartitionKey.Equals(_wiki)
+						 select e).AsTableServiceQuery();
+			return QueryHelper<CategoriesEntity>.All(query).ToList();
 		}
 
 		private List<CategoriesEntity> GetCategoriesEntities(string wiki, string namespaceName) {
@@ -501,22 +609,19 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Gets all the categories of a page.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <returns>The categories, sorted by name.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		public CategoryInfo[] GetCategoriesForPage(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public CategoryInfo[] GetCategoriesForPage(string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 
 			try {
-				var pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
-				var query = (from e in _context.CreateQuery<CategoriesEntity>(CategoriesTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki)
-							 select e).AsTableServiceQuery();
-				var categoriesEntities = QueryHelper<CategoriesEntity>.All(query);
+				var categoriesEntities = GetCategoriesEntities(_wiki);
 
 				List<CategoryInfo> categories = new List<CategoryInfo>();
 				foreach(CategoriesEntity categoryEntity in categoriesEntities) {
-					if(categoryEntity.PagesFullNames != null && categoryEntity.PagesFullNames.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries).ToList<string>().Contains(pageInfoEntity.RowKey)) {
+					if(categoryEntity.PagesFullNames != null && categoryEntity.PagesFullNames.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries).ToList<string>().Contains(pageFullName)) {
 						CategoryInfo categoryInfo = new CategoryInfo(categoryEntity.RowKey, this);
 						categoryInfo.Pages = categoryEntity.PagesFullNames.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
 						categories.Add(categoryInfo);
@@ -748,11 +853,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			int indexedElements = 0;
 
 			foreach(NamespaceInfo nspace in allNamespaces) {
-				foreach(PageInfo page in GetPages(nspace)) {
-					IndexPage(GetContent(page));
+				foreach(PageContent page in GetPages(nspace)) {
+					IndexPage(page);
 					indexedElements++;
 
-					foreach(Message msg in GetMessages(page)) {
+					foreach(Message msg in GetMessages(page.FullName)) {
 						IndexMessageTree(page, msg);
 						indexedElements++;
 					}
@@ -770,10 +875,16 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			IList<IndexWordMappingEntity> indexWordMappingEntitites = GetIndexWordMappingEntitiesByDocumentName(_wiki, document.Name);
 
+			int count = 0;
 			foreach(IndexWordMappingEntity indexWordMappingEntity in indexWordMappingEntitites) {
 				_context.DeleteObject(indexWordMappingEntity);
+				count++;
+				if(count >= 99) {
+					_context.SaveChangesStandard();
+					count = 0;
+				}
 			}
-			_context.SaveChangesStandard();
+			if(count > 0) _context.SaveChangesStandard();
 		}
 
 		/// <summary>
@@ -815,7 +926,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					count = 0;
 				}
 			}
-			_context.SaveChangesStandard();
+			if (count > 0) _context.SaveChangesStandard();
 			return allWords.Count;
 		}
 		
@@ -887,7 +998,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(dumpedDocument.TypeTag == PageDocument.StandardTypeTag) {
 				string pageName = PageDocument.GetPageName(dumpedDocument.Name);
 
-				PageInfo page = GetPage(pageName);
+				PageContent page = GetPage(pageName);
 
 				if(page == null) return null;
 				else return new PageDocument(page, dumpedDocument, TokenizeContent);
@@ -897,7 +1008,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				int id;
 				MessageDocument.GetMessageDetails(dumpedDocument.Name, out pageFullName, out id);
 
-				PageInfo page = GetPage(pageFullName);
+				PageContent page = GetPage(pageFullName);
 				if(page == null) return null;
 				else return new MessageDocument(page, id, dumpedDocument, TokenizeContent);
 			}
@@ -1013,29 +1124,29 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Indexes a page.
 		/// </summary>
-		/// <param name="content">The page content.</param>
+		/// <param name="page">The page content.</param>
 		/// <returns>The number of indexed words, including duplicates.</returns>
-		private int IndexPage(PageContent content) {
+		private int IndexPage(PageContent page) {
 			try {
-				string documentName = PageDocument.GetDocumentName(content.PageInfo);
+				string documentName = PageDocument.GetDocumentName(page);
 
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, content.PageInfo, content.Title),
-					PageDocument.StandardTypeTag, content.LastModified);
+				DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, page.FullName, page.Title),
+					PageDocument.StandardTypeTag, page.LastModified);
 
 				// Store the document
 				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
-				int count = index.StoreDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent),
-					content.Keywords, _host.PrepareContentForIndexing(_wiki, content.PageInfo, content.Content), null);
+				int count = index.StoreDocument(new PageDocument(page, ddoc, TokenizeContent),
+					page.Keywords, _host.PrepareContentForIndexing(_wiki, page.FullName, page.Content), null);
 
-				if(count == 0 && content.Content.Length > 0) {
-					_host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
+				if(count == 0 && page.Content.Length > 0) {
+					_host.LogEntry("Indexed 0 words for page " + page.FullName + ": possible index corruption. Please report this error to the developers",
 						LogEntryType.Warning, null, this, _wiki);
 				}
 
 				return count;
 			}
 			catch(Exception ex) {
-				_host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this, _wiki);
+				_host.LogEntry("Page indexing error for " + page.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this, _wiki);
 				return 0;
 			}
 		}
@@ -1045,11 +1156,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		/// <param name="content">The content of the page to remove.</param>
 		private void UnindexPage(PageContent content) {
-			string documentName = PageDocument.GetDocumentName(content.PageInfo);
+			string documentName = PageDocument.GetDocumentName(content);
 
-			DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, content.PageInfo, content.Title),
+			DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, content.FullName, content.Title),
 				PageDocument.StandardTypeTag, content.LastModified);
-			index.RemoveDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent), null);
+			index.RemoveDocument(new PageDocument(content, ddoc, TokenizeContent), null);
 		}
 
 		/// <summary>
@@ -1057,7 +1168,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		/// <param name="root">The root message.</param>
-		private void IndexMessageTree(PageInfo page, Message root) {
+		private void IndexMessageTree(PageContent page, Message root) {
 			IndexMessage(page, root.ID, root.Subject, root.DateTime, root.Body);
 			foreach(Message reply in root.Replies) {
 				IndexMessageTree(page, reply);
@@ -1073,12 +1184,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="dateTime">The date/time.</param>
 		/// <param name="body">The body.</param>
 		/// <returns>The number of indexed words, including duplicates.</returns>
-		private int IndexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body) {
+		private int IndexMessage(PageContent page, int id, string subject, DateTime dateTime, string body) {
 			try {
 				// Trim "RE:" to avoid polluting the search engine index
 				if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
 
-				string documentName = MessageDocument.GetDocumentName(page, id);
+				string documentName = MessageDocument.GetDocumentName(page.FullName, id);
 
 				DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, null, subject),
 					MessageDocument.StandardTypeTag, dateTime);
@@ -1110,11 +1221,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="dateTime">The date/time.</param>
 		/// <param name="body">The body.</param>
 		/// <returns>The number of indexed words, including duplicates.</returns>
-		private void UnindexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body) {
+		private void UnindexMessage(PageContent page, int id, string subject, DateTime dateTime, string body) {
 			// Trim "RE:" to avoid polluting the search engine index
 			if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
 
-			string documentName = MessageDocument.GetDocumentName(page, id);
+			string documentName = MessageDocument.GetDocumentName(page.FullName, id);
 
 			DumpedDocument ddoc = new DumpedDocument(0, documentName, _host.PrepareTitleForIndexing(_wiki, null, subject),
 				MessageDocument.StandardTypeTag, DateTime.Now);
@@ -1126,7 +1237,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		/// <param name="root">The tree root.</param>
-		private void UnindexMessageTree(PageInfo page, Message root) {
+		private void UnindexMessageTree(PageContent page, Message root) {
 			UnindexMessage(page, root.ID, root.Subject, root.DateTime, root.Body);
 			foreach(Message reply in root.Replies) {
 				UnindexMessageTree(page, reply);
@@ -1143,54 +1254,107 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			return words;
 		}
 
-		private Dictionary<string, PagesInfoEntity> _pagesInfoCache;
+		// wiki -> (pageFullName|revision -> pageContentEntity)
+		private Dictionary<string, Dictionary<string, PagesContentsEntity>> _pagesContentCache;
 
-		private PagesInfoEntity GetPagesInfoEntity(string wiki, string pageFullName) {
-			if(_pagesInfoCache == null) _pagesInfoCache = new Dictionary<string, PagesInfoEntity>();
+		// A list containing the wiki|FullName of the pages for wich all versions have been retrieved
+		private List<string> allVersionRetrieved = new List<string>();
 
-			if(!_pagesInfoCache.ContainsKey(pageFullName)) {
-				var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(pageFullName)
+		// if true allPagesContent has been called and doesn't need to be called again
+		private bool allPagesContentRetrieved = false;
+
+		private PagesContentsEntity GetPagesContentsEntityByRevision(string wiki, string pageFullName, string revision) {
+			if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
+
+			if(!_pagesContentCache.ContainsKey(wiki)) _pagesContentCache[wiki] = new Dictionary<string, PagesContentsEntity>();
+
+			if(!_pagesContentCache[wiki].ContainsKey(pageFullName + "|" + revision)) {
+				var query = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
+							 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(pageFullName + "|" + revision)
 							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesInfoEntity>.FirstOrDefault(query);
-				if(entity == null) return null;
-				_pagesInfoCache[pageFullName] = entity;
-				
-			}
-			return _pagesInfoCache[pageFullName];
-		}
-
-		private List<PagesInfoEntity> GetPagesInfoEntities(string wiki, string namespaceName) {
-			var query = (from e in _context.CreateQuery<PagesInfoEntity>(PagesInfoTable).AsTableServiceQuery()
-						 where e.PartitionKey.Equals(wiki)
-						 select e).AsTableServiceQuery();
-			var entities = QueryHelper<PagesInfoEntity>.All(query);
-
-			List<PagesInfoEntity> pagesInfoEntities = new List<PagesInfoEntity>();
-			foreach(PagesInfoEntity entity in entities) {
-				if(namespaceName == null && entity.Namespace == null || namespaceName != null && namespaceName == entity.Namespace) {
-					pagesInfoEntities.Add(entity);
+				var entity = QueryHelper<PagesContentsEntity>.FirstOrDefault(query);
+				if(entity == null) {
+					return null;
+				}
+				else {
+					_pagesContentCache[wiki][pageFullName + "|" + revision] = entity;
 				}
 			}
-			return pagesInfoEntities;
+			return _pagesContentCache[wiki][pageFullName + "|" + revision];
+		}
+
+		private List<PagesContentsEntity> GetPagesContentEntities(string wiki, string pageFullName) {
+			if(!allVersionRetrieved.Contains(wiki + "|" + pageFullName)) {
+				// pagesContents not present in temp local cache retrieve from table storage
+				if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
+				_pagesContentCache[wiki] = new Dictionary<string, PagesContentsEntity>();
+				allVersionRetrieved.Add(wiki + "|" + pageFullName);
+
+				var query = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
+							 where e.PartitionKey.Equals(wiki) && e.PageFullName.Equals(pageFullName)
+							 select e).AsTableServiceQuery();
+				var entities = QueryHelper<PagesContentsEntity>.All(query);
+
+				foreach(PagesContentsEntity entity in entities) {
+					if(entity != null) _pagesContentCache[wiki][entity.RowKey] = entity;
+				}
+			}
+
+			List<PagesContentsEntity> pagesContentsEntities = new List<PagesContentsEntity>();
+			foreach(var item in _pagesContentCache[wiki]) {
+				if(item.Value.PageFullName == pageFullName) pagesContentsEntities.Add(item.Value);
+			}
+			return pagesContentsEntities;
+		}
+
+		private List<PagesContentsEntity> GetAllPagesContentsEntities(string wiki, string nspace) {
+			if(!(allPagesContentRetrieved && _pagesContentCache != null && _pagesContentCache.ContainsKey(wiki))) {
+				// pagesContents not present in temp local cache retrieve from table storage
+				if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
+				_pagesContentCache[wiki] = new Dictionary<string, PagesContentsEntity>();
+				allPagesContentRetrieved = true;
+
+				CloudTableQuery<PagesContentsEntity> query = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
+															  where e.PartitionKey.Equals(wiki) && e.Revision.Equals(CurrentRevision)
+															  select e).AsTableServiceQuery();
+
+				var entities = QueryHelper<PagesContentsEntity>.All(query);
+
+				foreach(PagesContentsEntity entity in entities) {
+					if(entity != null) _pagesContentCache[wiki][entity.RowKey] = entity;
+				}
+			}
+
+			List<PagesContentsEntity> pagesContentsEntities = new List<PagesContentsEntity>();
+			foreach(var item in _pagesContentCache[wiki]) {
+				if(item.Value.Namespace == nspace && item.Value.Revision == CurrentRevision) pagesContentsEntities.Add(item.Value);
+			}
+			return pagesContentsEntities;
+		}
+
+		// Invalidate temporary pages local cache
+		private void InvalidatePagesTempCache() {
+			_pagesContentCache = null;
+			allPagesContentRetrieved = false;
+			allVersionRetrieved = new List<string>();
 		}
 
 		/// <summary>
 		/// Gets a page.
 		/// </summary>
 		/// <param name="fullName">The full name of the page.</param>
-		/// <returns>The <see cref="T:PageInfo"/>, or <c>null</c> if no page is found.</returns>
+		/// <returns>The <see cref="T:PageContent"/>, or <c>null</c> if no page is found.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
-		public PageInfo GetPage(string fullName) {
+		public PageContent GetPage(string fullName) {
 			if(fullName == null) throw new ArgumentNullException("fullName");
 			if(fullName.Length == 0) throw new ArgumentException("fullName");
 
 			try {
-				var entity = GetPagesInfoEntity(_wiki, fullName);
+				var entity = GetPagesContentsEntityByRevision(_wiki, fullName, CurrentRevision);
 				if(entity == null) return null;
 
-				return new PageInfo(entity.RowKey, this, entity.CreationDateTime.ToLocalTime());
+				return new PageContent(entity.PageFullName, this, entity.CreationDateTime.ToLocalTime(), entity.Title, entity.User, entity.LastModified.ToLocalTime(), string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment, entity.Content, entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(entity.Description) ? null : entity.Description);
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1202,15 +1366,15 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>All the Pages in the namespace, sorted by name.</returns>
-		public PageInfo[] GetPages(NamespaceInfo nspace) {
+		public PageContent[] GetPages(NamespaceInfo nspace) {
 			try {
-				var entities = GetPagesInfoEntities(_wiki, nspace == null ? null : nspace.Name);
+				var entities = GetAllPagesContentsEntities(_wiki, nspace == null ? null : nspace.Name);
 
-				List<PageInfo> pagesInfo = new List<PageInfo>(entities.Count);
-				foreach(PagesInfoEntity entity in entities) {
-						pagesInfo.Add(new PageInfo(entity.RowKey, this, entity.CreationDateTime.ToLocalTime()));
+				List<PageContent> pagesContent = new List<PageContent>(entities.Count);
+				foreach(PagesContentsEntity entity in entities) {
+						pagesContent.Add(new PageContent(entity.PageFullName, this, entity.CreationDateTime.ToLocalTime(), entity.Title, entity.User, entity.LastModified.ToLocalTime(), string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment, entity.Content, entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(entity.Description) ? null : entity.Description));
 				}
-				return pagesInfo.ToArray();
+				return pagesContent.ToArray();
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1222,14 +1386,14 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The pages, sorted by name.</returns>
-		public PageInfo[] GetUncategorizedPages(NamespaceInfo nspace) {
+		public PageContent[] GetUncategorizedPages(NamespaceInfo nspace) {
 			lock(this) {
-				PageInfo[] pages = GetPages(nspace);
+				PageContent[] pages = GetPages(nspace);
 				CategoryInfo[] categories = GetCategories(nspace);
 
-				List<PageInfo> result = new List<PageInfo>(pages.Length);
+				List<PageContent> result = new List<PageContent>(pages.Length);
 
-				foreach(PageInfo p in pages) {
+				foreach(PageContent p in pages) {
 					bool found = false;
 					foreach(CategoryInfo c in categories) {
 						foreach(string name in c.Pages) {
@@ -1246,102 +1410,22 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
-		// pageId -> (revision -> pageContentEntity)
-		private Dictionary<string, Dictionary<string, PagesContentsEntity>> _pagesContentCache;
-
-		// if true allPagesContent has been called and doesn't need to be called again
-		private bool allPagesContentRetireved = false;
-
-		private PagesContentsEntity GetPagesContentsEntityByRevision(string pageId, string revision) {
-			if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
-
-			if(!_pagesContentCache.ContainsKey(pageId)) _pagesContentCache[pageId] = new Dictionary<string, PagesContentsEntity>();
-			
-			if(!_pagesContentCache[pageId].ContainsKey(revision)) {
-				var query = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(pageId) && e.RowKey.Equals(revision)
-							 select e).AsTableServiceQuery();
-				var entity = QueryHelper<PagesContentsEntity>.FirstOrDefault(query);
-				if(entity == null) {
-					return null;
-				}
-				else {
-					_pagesContentCache[pageId][revision] = entity;
-				}
-			}
-			return _pagesContentCache[pageId][revision];
-		}
-
-		private List<PagesContentsEntity> GetPagesContentEntities(string pageId) {
-			if(!(allPagesContentRetireved && _pagesContentCache != null && _pagesContentCache.ContainsKey(pageId))) {
-				// pagesContents not present in temp local cache retrieve from table storage
-				if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
-				_pagesContentCache[pageId] = new Dictionary<string, PagesContentsEntity>();
-				allPagesContentRetireved = true;
-
-				var query = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(pageId)
-							 select e).AsTableServiceQuery();
-				var entities = QueryHelper<PagesContentsEntity>.All(query);
-
-				foreach(PagesContentsEntity entity in entities) {
-					if(entity != null) _pagesContentCache[pageId][entity.RowKey] = entity;
-				}
-			}
-
-			List<PagesContentsEntity> pagesContentsEntities = new List<PagesContentsEntity>();
-			foreach(var item in _pagesContentCache[pageId]) {
-				pagesContentsEntities.Add(item.Value);
-			}
-			return pagesContentsEntities;
-		}
-
-		/// <summary>
-		/// Gets the Content of a Page.
-		/// </summary>
-		/// <param name="page">The Page.</param>
-		/// <returns>
-		/// The Page Content object, <c>null</c> if the page does not exist or <paramref name="page"/> is <c>null</c>,
-		/// or an empty instance if the content could not be retrieved (<seealso cref="PageContent.GetEmpty"/>).
-		/// </returns>
-		public PageContent GetContent(PageInfo page) {
-			if(page == null) return null;
-
-			try {
-				// Find the PageInfo; if not found return null
-				var entity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(entity == null) return null;
-
-				// Find the associated PageContent; if not found return an empty PageContent
-				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, CurrentRevision);
-				if(pageContentEntity == null) return null;
-
-				return new PageContent(page, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
-			}
-			catch(Exception ex) {
-				throw ex;
-			}
-		}
-
 		/// <summary>
 		/// Gets the content of a draft of a Page.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="fullName">The full name of the page.</param>
 		/// <returns>The draft, or <c>null</c> if no draft exists.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		public PageContent GetDraft(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
+		public PageContent GetDraft(string fullName) {
+			if(fullName == null) throw new ArgumentNullException("page");
 
 			try {
-				// Find the PageInfo; if not found return null
-				var entity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(entity == null) return null;
-
 				// Find the associated draft PageContent; if not found return an empty PageContent
-				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, Draft);
+				var pageContentEntity = GetPagesContentsEntityByRevision(_wiki, fullName, Draft);
 				if(pageContentEntity == null) return null;
 
-				return new PageContent(page, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
+				return new PageContent(fullName, this, pageContentEntity.CreationDateTime.ToLocalTime(), pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1351,27 +1435,23 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Deletes a draft of a Page.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="fullName">The full name of the page.</param>
 		/// <returns><c>true</c> if the draft is deleted, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		public bool DeleteDraft(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
+		public bool DeleteDraft(string fullName) {
+			if(fullName == null) throw new ArgumentNullException("page");
 
 			try {
-				// Find the PageInfo; if not found return null
-				var entity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(entity == null) return false;
-
 				// Find the associated draft PageContent; if not found return an empty PageContent
-				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, Draft);
+				var pageContentEntity = GetPagesContentsEntityByRevision(_wiki, fullName, Draft);
 				if(pageContentEntity == null) return false;
 
 				_context.DeleteObject(pageContentEntity);
 				_context.SaveChangesStandard();
 
 				// Invalidate pagesContentCache
-				_pagesContentCache = null;
-				allPagesContentRetireved = false;
+				InvalidatePagesTempCache();
 
 				return true;
 			}
@@ -1383,26 +1463,24 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Gets the Backup/Revision numbers of a Page.
 		/// </summary>
-		/// <param name="page">The Page to get the Backups of.</param>
+		/// <param name="fullName">The full name of the page to get the Backups of.</param>
 		/// <returns>The Backup/Revision numbers.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		public int[] GetBackups(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
+		public int[] GetBackups(string fullName) {
+			if(fullName == null) throw new ArgumentNullException("fullName");
+			if(fullName.Length == 0) throw new ArgumentException("fullName");
 
 			try {
-				// Find the PageInfo; if not found return null
-				var entity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(entity == null) return null;
-
-				// Find the associated PageContent
-				var pageContentEntities = GetPagesContentEntities(entity.PageId);
-				if(pageContentEntities == null) return null;
+				// Find the PageContent; if not found return null
+				var pageContentEntities = GetPagesContentEntities(_wiki, fullName);
+				if(pageContentEntities == null || pageContentEntities.Count == 0) return null;
 
 				List<int> revisions = new List<int>(pageContentEntities.Count);
 				foreach(PagesContentsEntity pageContentEntity in pageContentEntities) {
 					if(pageContentEntity.RowKey != CurrentRevision && pageContentEntity.RowKey != Draft) {
 						int rev;
-						if(int.TryParse(pageContentEntity.RowKey,out rev)) revisions.Add(rev);
+						if(int.TryParse(pageContentEntity.Revision, out rev)) revisions.Add(rev);
 					}
 				}
 				return revisions.ToArray();
@@ -1415,25 +1493,22 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Gets the Content of a Backup of a Page.
 		/// </summary>
-		/// <param name="page">The Page to get the backup of.</param>
+		/// <param name="fullName">The full name of the page to get the backup of.</param>
 		/// <param name="revision">The Backup/Revision number.</param>
 		/// <returns>The Page Backup.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
-		public PageContent GetBackupContent(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
+		public PageContent GetBackupContent(string fullName, int revision) {
+			if(fullName == null) throw new ArgumentNullException("page");
 			if(revision < 0) throw new ArgumentOutOfRangeException("revision");
 
 			try {
-				// Find the PageInfo; if not found return null
-				var entity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(entity == null) return null;
-
-				// Find the associated PageContent
-				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, revision.ToString());
+				// Find the PageContent; if not found return null
+				var pageContentEntity = GetPagesContentsEntityByRevision(_wiki, fullName, revision.ToString());
 				if(pageContentEntity == null) return null;
 
-				return new PageContent(page, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
+				return new PageContent(fullName, this, pageContentEntity.CreationDateTime.ToLocalTime(), pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1453,12 +1528,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(revision < 0) throw new ArgumentOutOfRangeException("revision");
 
 			try {
-				// Find the PageInfo; if not found return null
-				var entity = GetPagesInfoEntity(_wiki, content.PageInfo.FullName);
-				if(entity == null) return false;
+				// Find the Page; if not found return null
+				if(GetPage(content.FullName) == null) return false;
 
-				// Find the associated PageContent
-				var pageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, revision.ToString());
+				var pageContentEntity = GetPagesContentsEntityByRevision(_wiki, content.FullName, revision.ToString());
 				if(pageContentEntity != null) {
 					pageContentEntity.Title = content.Title;
 					pageContentEntity.User = content.User;
@@ -1471,15 +1544,18 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					_context.SaveChangesStandard();
 
 					// Invalidate pagesContetnCache
-					_pagesContentCache = null;
-					allPagesContentRetireved = false;
+					InvalidatePagesTempCache();
 
 					return true;
 				}
 				else {
 					pageContentEntity = new PagesContentsEntity() {
-						PartitionKey = entity.PageId,
-						RowKey = revision.ToString(),
+						PartitionKey = _wiki,
+						RowKey = content.FullName + "|" + revision.ToString(),
+						Revision = revision.ToString(),
+						PageFullName = content.FullName,
+						Namespace = NameTools.GetNamespace(content.FullName),
+						CreationDateTime = content.CreationDateTime,
 						Title = content.Title,
 						User = content.User,
 						LastModified = content.LastModified.ToUniversalTime(),
@@ -1492,8 +1568,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					_context.SaveChangesStandard();
 
 					// Invalidate pagesContetnCache
-					_pagesContentCache = null;
-					allPagesContentRetireved = false;
+					InvalidatePagesTempCache();
 
 					return true;
 				}
@@ -1504,82 +1579,47 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		/// <summary>
-		/// Adds a Page.
-		/// </summary>
-		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
-		/// <param name="name">The Page Name.</param>
-		/// <param name="creationDateTime">The creation Date/Time.</param>
-		/// <returns>The correct PageInfo object or null.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-		public PageInfo AddPage(string nspace, string name, DateTime creationDateTime) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("name");
-
-			try {
-				if(GetPagesInfoEntity(_wiki, NameTools.GetFullName(nspace, name)) != null) return null;
-				PagesInfoEntity pageInfoEntity = new PagesInfoEntity() {
-					PartitionKey = _wiki,
-					RowKey = NameTools.GetFullName(nspace, name),
-					Namespace = nspace,
-					PageId = Guid.NewGuid().ToString("N"),
-					CreationDateTime = creationDateTime.ToUniversalTime()
-				};
-
-				_context.AddObject(PagesInfoTable, pageInfoEntity);
-				_context.SaveChangesStandard();
-
-				// Invalidate pagesInfoCache
-				_pagesInfoCache = null;
-
-				return new PageInfo(NameTools.GetFullName(nspace, name), this, creationDateTime);
-			}
-			catch(Exception ex) {
-				throw ex;
-			}
-		}
-
-		/// <summary>
 		/// Renames a Page.
 		/// </summary>
-		/// <param name="page">The Page to rename.</param>
+		/// <param name="fullName">The full name of the page to rename.</param>
 		/// <param name="newName">The new Name.</param>
-		/// <returns>The correct <see cref="T:PageInfo"/> object.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="newName"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty.</exception>
-		public PageInfo RenamePage(PageInfo page, string newName) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <returns>The correct <see cref="T:PageContent"/> object.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> or <paramref name="newName"/> are empty.</exception>
+		public PageContent RenamePage(string fullName, string newName) {
+			if(fullName == null) throw new ArgumentNullException("fullName");
+			if(fullName.Length == 0) throw new ArgumentException("fullName");
 			if(newName == null) throw new ArgumentNullException("newName");
 			if(newName.Length == 0) throw new ArgumentException("newName");
 
 			try {
-				var oldPageEntity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(oldPageEntity == null) return null;
+				List<PagesContentsEntity> allOldRevisions = GetPagesContentEntities(_wiki, fullName);
+				if(allOldRevisions == null || allOldRevisions.Count == 0) return null; // Inexistent source page
 
-				NamespaceInfo currentNs = NameTools.GetNamespace(page.FullName) != null ? GetNamespace(NameTools.GetNamespace(page.FullName)) : null;
-				if(currentNs != null && currentNs.DefaultPage != null) {
+				NamespaceInfo currentNs = NameTools.GetNamespace(fullName) != null ? GetNamespace(NameTools.GetNamespace(fullName)) : null;
+				if(currentNs != null && currentNs.DefaultPageFullName != null) {
 					// Cannot rename the default page
-					if(new PageNameComparer().Compare(currentNs.DefaultPage, page) == 0) return null;
+					if(currentNs.DefaultPageFullName.ToLowerInvariant() == fullName.ToLowerInvariant()) return null;
 				}
 
-				string newPageFullName = NameTools.GetFullName(NameTools.GetNamespace(page.FullName), newName);
+				string newPageFullName = NameTools.GetFullName(NameTools.GetNamespace(fullName), newName);
 
-				if(GetPagesInfoEntity(_wiki, newPageFullName) != null) return null;
+				if(GetPage(newPageFullName) != null) return null;
 
-				CategoryInfo[] categoriesInfo = GetCategoriesForPage(page);
+				CategoryInfo[] categoriesInfo = GetCategoriesForPage(fullName);
 				foreach(CategoryInfo categoryInfo in categoriesInfo) {
 					CategoriesEntity categoryEntity = GetCategoriesEntity(_wiki, categoryInfo.FullName);
 					string[] oldNamesCategoryPages = categoryEntity.PagesFullNames != null ? categoryEntity.PagesFullNames.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries) : new string[0];
 					List<string> newNamesCategoryPages = new List<string>(oldNamesCategoryPages.Length);
 					foreach(string oldName in oldNamesCategoryPages) {
-						newNamesCategoryPages.Add(NameTools.GetFullName(NameTools.GetNamespace(page.FullName), newName));
+						newNamesCategoryPages.Add(NameTools.GetFullName(NameTools.GetNamespace(fullName), newName));
 					}
 					categoryEntity.PagesFullNames = string.Join("|", newNamesCategoryPages);
 					_context.UpdateObject(categoryEntity);
 				}
 				_context.SaveChangesStandard();
 
-				List<NavigationPathEntity> navigationPathEntities = GetNavigationPathEntities(_wiki, NameTools.GetNamespace(page.FullName));
+				List<NavigationPathEntity> navigationPathEntities = GetNavigationPathEntities(_wiki, NameTools.GetNamespace(fullName));
 				foreach(NavigationPathEntity navigationPathEntity in navigationPathEntities) {
 					string[] oldNamesNavigationPathPages = navigationPathEntity.PagesFullNames != null ? navigationPathEntity.PagesFullNames.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries) : new string[0];
 					List<string> newNamesNavigationPathPages = new List<string>(oldNamesNavigationPathPages.Length);
@@ -1592,44 +1632,93 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				_context.SaveChangesStandard();
 
 				// Unindex page
-				PageContent currentContent = GetContent(page);
+				PageContent currentContent = GetPage(fullName);
 				UnindexPage(currentContent);
-				Message[] messages = GetMessages(page);
+				Message[] messages = GetMessages(fullName);
 				foreach(Message msg in messages) {
-					UnindexMessageTree(page, msg);
+					UnindexMessageTree(currentContent, msg);
 				}
 
-				PagesInfoEntity newPage = new PagesInfoEntity() {
-					PartitionKey = oldPageEntity.PartitionKey,
-					RowKey = newPageFullName,
-					Namespace = oldPageEntity.Namespace,
-					CreationDateTime = oldPageEntity.CreationDateTime,
-					PageId = oldPageEntity.PageId
-				};
-				_context.AddObject(PagesInfoTable, newPage);
-				_context.DeleteObject(oldPageEntity);
-				_context.SaveChangesStandard();
+				int count = 0;
+				foreach(PagesContentsEntity entity in allOldRevisions) {
+					PagesContentsEntity newEntity = new PagesContentsEntity() {
+						PartitionKey = entity.PartitionKey,
+						RowKey = newPageFullName + "|" + entity.Revision,
+						PageFullName = newPageFullName,
+						Namespace = entity.Namespace,
+						Revision = entity.Revision,
+						CreationDateTime = entity.CreationDateTime,
+						Title = entity.Title,
+						User = entity.User,
+						LastModified = entity.LastModified,
+						Comment = entity.Comment,
+						Content = entity.Content,
+						Keywords = entity.Keywords,
+						Description = entity.Description
+					};
+					_context.DeleteObject(entity);
+					_context.AddObject(PagesContentsTable, newEntity);
+					count = count + 2;
+					if(count >= 98) {
+						_context.SaveChangesStandard();
+						count = 0;
+					}
+				}
+				if(count > 0) _context.SaveChangesStandard();
 
-				PageInfo newPageInfo = new PageInfo(newPageFullName, this, newPage.CreationDateTime.ToLocalTime());
+				IList<MessageEntity> messagesEntities = GetMessagesEntities(_wiki, fullName);
+				count = 0;
+				foreach(MessageEntity message in messagesEntities) {
+					MessageEntity newMessage = new MessageEntity() {
+						PartitionKey = _wiki + "|" + newPageFullName,
+						RowKey = message.RowKey,
+						Body = message.Body,
+						DateTime = message.DateTime,
+						ParetnId = message.ParetnId,
+						Subject = message.Subject,
+						Username = message.Username
+					};
+					_context.AddObject(MessagesTable, newMessage);
+					count++;
+					if(count >= 99) {
+						_context.SaveChangesStandard();
+						count = 0;
+					}
+				}
+				if(count > 0) _context.SaveChangesStandard();
+
+				count = 0;
+				foreach(MessageEntity message in messagesEntities) {
+					_context.DeleteObject(message);
+					count++;
+					if(count >= 99) {
+						_context.SaveChangesStandard();
+						count = 0;
+					}
+				}
+				if(count > 0) _context.SaveChangesStandard();
 
 				// Index page
-				IndexPage(new PageContent(
-					newPageInfo,
+				PageContent newCurrentContent = new PageContent(
+					newPageFullName,
+					this,
+					currentContent.CreationDateTime,
 					currentContent.Title,
 					currentContent.User,
 					currentContent.LastModified,
 					currentContent.Comment,
 					currentContent.Content,
 					currentContent.Keywords,
-					currentContent.Description));
+					currentContent.Description);
+				IndexPage(newCurrentContent);
 				foreach(Message msg in messages) {
-					IndexMessageTree(newPageInfo, msg);
+					IndexMessageTree(newCurrentContent, msg);
 				}
 
-				// Invalidate pagesInfoCache
-				_pagesInfoCache = null;
+				// Invalidate local cache
+				InvalidatePagesTempCache();
 
-				return newPageInfo;
+				return newCurrentContent;
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1637,9 +1726,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		/// <summary>
-		/// Modifies the Content of a Page.
+		/// Adds a new page content.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
+		/// <param name="pageName">The Page Name.</param>
+		/// <param name="creationDateTime">The creation Date/Time.</param>
 		/// <param name="title">The Title of the Page.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="dateTime">The Date/Time.</param>
@@ -1648,12 +1739,15 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="keywords">The keywords, usually used for SEO.</param>
 		/// <param name="description">The description, usually used for SEO.</param>
 		/// <param name="saveMode">The save mode for this modification.</param>
-		/// <returns><c>true</c> if the Page has been modified successfully, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="title"/>
-		/// 	<paramref name="username"/> or <paramref name="content"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="title"/> or <paramref name="username"/> are empty.</exception>
-		public bool ModifyPage(PageInfo page, string title, string username, DateTime dateTime, string comment, string content, string[] keywords, string description, SaveMode saveMode) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <returns>The correct PageInfo object or null.</returns>
+		/// <remarks>This method should <b>not</b> create the content of the Page.</remarks>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageName"/>, <paramref name="title"/> <paramref name="username"/> or <paramref name="content"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageName"/>, <paramref name="title"/> or <paramref name="username"/> are empty.</exception>
+		public PageContent SetPageContent(string nspace, string pageName, DateTime creationDateTime, string title, string username, DateTime dateTime, string comment, string content,
+			string[] keywords, string description, SaveMode saveMode) {
+
+			if(pageName == null) throw new ArgumentNullException("pageName");
+			if(pageName.Length == 0) throw new ArgumentException("pageName");
 			if(title == null) throw new ArgumentNullException("title");
 			if(username == null) throw new ArgumentNullException("username");
 			if(content == null) throw new ArgumentNullException("content");
@@ -1661,20 +1755,20 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(username.Length == 0) throw new ArgumentException("username");
 
 			try {
-				// Find the PageInfo; if not found return false
-				var entity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(entity == null) return false;
-
 				switch(saveMode) {
 					case SaveMode.Draft:
 						bool newDraft = false;
 						// Find the "Draft" PageContent if present
-						var draftPageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, Draft);
+						var draftPageContentEntity = GetPagesContentsEntityByRevision(_wiki, pageName, Draft);
 						if(draftPageContentEntity == null) {
 							newDraft = true;
 							draftPageContentEntity = new PagesContentsEntity();
-							draftPageContentEntity.PartitionKey = entity.PageId;
-							draftPageContentEntity.RowKey = Draft;
+							draftPageContentEntity.PartitionKey = _wiki;
+							draftPageContentEntity.RowKey = NameTools.GetFullName(nspace, pageName) + "|" + Draft;
+							draftPageContentEntity.PageFullName = NameTools.GetFullName(nspace, pageName);
+							draftPageContentEntity.Revision = Draft;
+							draftPageContentEntity.CreationDateTime = creationDateTime.ToUniversalTime();
+							draftPageContentEntity.Namespace = nspace;
 						}
 						draftPageContentEntity.Title = title;
 						draftPageContentEntity.User = username;
@@ -1690,21 +1784,29 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 							_context.UpdateObject(draftPageContentEntity);
 						}
 						_context.SaveChangesStandard();
-						break;
+
+						// Invalidate pagesContetnCache
+						InvalidatePagesTempCache();
+
+						return new PageContent(NameTools.GetFullName(nspace, pageName), this, creationDateTime, title, username, dateTime, comment, content, keywords, description);
 					default:
 						bool update = false;
 						// Find the "CurrentRevision" PageContent if present
-						var currentPageContentEntity = GetPagesContentsEntityByRevision(entity.PageId, CurrentRevision);
+						var currentPageContentEntity = GetPagesContentsEntityByRevision(_wiki, NameTools.GetFullName(nspace, pageName), CurrentRevision);
 
 						// If currentPageContent is not found the page has never been saved and has no backups
 						if(currentPageContentEntity != null) {
 							update = true;
 							if(saveMode == SaveMode.Backup) {
-								int[] backupsRevisions = GetBackups(page);
+								int[] backupsRevisions = GetBackups(NameTools.GetFullName(nspace, pageName));
 								int rev = (backupsRevisions.Length > 0 ? backupsRevisions[backupsRevisions.Length - 1] + 1 : 0);
 								PagesContentsEntity backupPageContentEntity = new PagesContentsEntity() {
 									PartitionKey = currentPageContentEntity.PartitionKey,
-									RowKey = rev.ToString(),
+									RowKey = currentPageContentEntity.PageFullName + "|" + rev.ToString(),
+									PageFullName = currentPageContentEntity.PageFullName,
+									Namespace = currentPageContentEntity.Namespace,
+									Revision = rev.ToString(),
+									CreationDateTime = currentPageContentEntity.CreationDateTime.ToUniversalTime(),
 									Comment = currentPageContentEntity.Comment,
 									Content = currentPageContentEntity.Content,
 									Description = currentPageContentEntity.Description,
@@ -1719,9 +1821,13 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 						}
 						else {
 							currentPageContentEntity = new PagesContentsEntity();
+							currentPageContentEntity.PartitionKey = _wiki;
+							currentPageContentEntity.RowKey = NameTools.GetFullName(nspace, pageName) + "|" + CurrentRevision;
 						}
-						currentPageContentEntity.PartitionKey = entity.PageId;
-						currentPageContentEntity.RowKey = CurrentRevision;
+						currentPageContentEntity.PageFullName = NameTools.GetFullName(nspace, pageName);
+						currentPageContentEntity.Namespace = nspace;
+						currentPageContentEntity.Revision = CurrentRevision;
+						currentPageContentEntity.CreationDateTime = creationDateTime.ToUniversalTime();
 						currentPageContentEntity.Title = title;
 						currentPageContentEntity.User = username;
 						currentPageContentEntity.LastModified = dateTime.ToUniversalTime();
@@ -1739,7 +1845,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 						_context.SaveChangesStandard();
 
 						IndexPage(new PageContent(
-								new PageInfo(entity.RowKey, this, entity.CreationDateTime.ToLocalTime()),
+								currentPageContentEntity.PageFullName,
+								this,
+								currentPageContentEntity.CreationDateTime.ToLocalTime(),
 								currentPageContentEntity.Title,
 								currentPageContentEntity.User,
 								currentPageContentEntity.LastModified.ToLocalTime(),
@@ -1747,14 +1855,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 								currentPageContentEntity.Content,
 								currentPageContentEntity.Keywords != null ? currentPageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries) : null,
 								currentPageContentEntity.Description));
-						break;
+						// Invalidate pagesContetnCache
+						InvalidatePagesTempCache();
+
+						return new PageContent(currentPageContentEntity.PageFullName, this, currentPageContentEntity.CreationDateTime.ToLocalTime(), currentPageContentEntity.Title, currentPageContentEntity.User, currentPageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(currentPageContentEntity.Comment) ? "" : currentPageContentEntity.Comment, currentPageContentEntity.Content, currentPageContentEntity.Keywords == null ? new string[0] : currentPageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(currentPageContentEntity.Description) ? null : currentPageContentEntity.Description);
 				}
-
-				// Invalidate pagesContetnCache
-				_pagesContentCache = null;
-				allPagesContentRetireved = false;
-
-				return true;
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1764,72 +1869,70 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Performs the rollback of a Page to a specified revision.
 		/// </summary>
-		/// <param name="page">The Page to rollback.</param>
+		/// <param name="pageFullName">The full name of the page to rollback.</param>
 		/// <param name="revision">The Revision to rollback the Page to.</param>
 		/// <returns><c>true</c> if the rollback succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
-		public bool RollbackPage(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
+		public bool RollbackPage(string pageFullName, int revision) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(revision < 0) throw new ArgumentOutOfRangeException("revision");
 
-			PageContent currentContent = GetContent(page);
+			PageContent currentContent = GetPage(pageFullName);
 			if(currentContent == null) return false;
 			
 			// Unindex the current page content
 			UnindexPage(currentContent);
 
 			// Get the pageContet at the specified revision
-			PageContent rollbackPageContent = GetBackupContent(page, revision);
+			PageContent rollbackPageContent = GetBackupContent(pageFullName, revision);
 			// If rollbackPageContent is null, the page does not exists and return false
 			if(rollbackPageContent == null) return false;
 
 			// Save a new version of the page with the content at the given revision
-			bool success = ModifyPage(page, rollbackPageContent.Title, rollbackPageContent.User, rollbackPageContent.LastModified, rollbackPageContent.Comment, rollbackPageContent.Content, rollbackPageContent.Keywords, rollbackPageContent.Description, SaveMode.Backup);
+			PageContent newPageContent = SetPageContent(NameTools.GetNamespace(pageFullName), NameTools.GetLocalName(pageFullName), rollbackPageContent.CreationDateTime, rollbackPageContent.Title, rollbackPageContent.User, rollbackPageContent.LastModified, rollbackPageContent.Comment, rollbackPageContent.Content, rollbackPageContent.Keywords, rollbackPageContent.Description, SaveMode.Backup);
 
-			if(success) {
+			if(newPageContent != null) {
 				IndexPage(rollbackPageContent);
 			}
 
 			// Invalidate pagesContetnCache
-			_pagesContentCache = null;
-			allPagesContentRetireved = false;
+			InvalidatePagesTempCache();
 
-			return success;
+			return newPageContent != null;
 		}
 
 		/// <summary>
 		/// Deletes the Backups of a Page, up to a specified revision.
 		/// </summary>
-		/// <param name="page">The Page to delete the backups of.</param>
+		/// <param name="pageFullName">The full name of the page to delete the backups of.</param>
 		/// <param name="revision">The newest revision to delete (newer revision are kept) or -1 to delete all the Backups.</param>
 		/// <returns><c>true</c> if the deletion succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than -1.</exception>
-		public bool DeleteBackups(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
+		public bool DeleteBackups(string pageFullName, int revision) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("pageFullName");
 			if(revision < -1) throw new ArgumentOutOfRangeException("revision");
 
 			try {
-				// Find the PageInfo; if not found return false
-				var entity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(entity == null) return false;
-
-				// Find the associated PageContent
+				// Find the PageContent; if not found return false
 				var pageContentQuery = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
-										where e.PartitionKey.Equals(entity.PageId) && e.RowKey != CurrentRevision && e.RowKey != Draft
+										where e.PartitionKey.Equals(_wiki) && e.PageFullName.Equals(pageFullName) && !e.Revision.Equals(CurrentRevision) && !e.Revision.Equals(Draft)
 										select e).AsTableServiceQuery();
 				var pageContentEntities = QueryHelper<PagesContentsEntity>.All(pageContentQuery);
-				if(pageContentEntities == null) return false;
+				if(pageContentEntities == null || pageContentEntities.Count == 0) return false;
 
-				var pageContentEntityWithSpecifiedRevision = pageContentEntities.Any(c => c.RowKey == revision.ToString());
+				var pageContentEntityWithSpecifiedRevision = pageContentEntities.Any(c => c.Revision == revision.ToString());
 
 				int idx = -1;
 				if(revision != -1) {
 					idx = pageContentEntityWithSpecifiedRevision ? revision : -1;
 				}
 				else {
-					idx = pageContentEntities.Max((c) => { return int.Parse(c.RowKey); });
+					idx = pageContentEntities.Max((c) => { return int.Parse(c.Revision); });
 				}
 
 
@@ -1838,17 +1941,21 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				// - Rename newer backups starting from 0
 
 				for(int i = 0; i <= idx; i++) {
-					var pageContentEntity = pageContentEntities.First(c => c.RowKey == i.ToString());
+					var pageContentEntity = pageContentEntities.First(c => c.Revision == i.ToString());
 					_context.DeleteObject(pageContentEntity);
 				}
 				_context.SaveChangesStandard();
 
 				if(revision != -1) {
 					for(int i = revision + 1; i < pageContentEntities.Count; i++) {
-						var pageContentEntity = pageContentEntities.First(c => c.RowKey == i.ToString());
+						var pageContentEntity = pageContentEntities.First(c => c.Revision == i.ToString());
 						var newPageContentEntity = new PagesContentsEntity() {
 							PartitionKey = pageContentEntity.PartitionKey,
-							RowKey = (int.Parse(pageContentEntity.RowKey) - revision - 1).ToString(),
+							RowKey = pageFullName + "|" + (int.Parse(pageContentEntity.Revision) - revision - 1).ToString(),
+							PageFullName = pageFullName,
+							Revision = (int.Parse(pageContentEntity.Revision) - revision - 1).ToString(),
+							Namespace = pageContentEntity.Namespace,
+							CreationDateTime = pageContentEntity.CreationDateTime,
 							Comment = pageContentEntity.Comment,
 							Content = pageContentEntity.Content,
 							Description = pageContentEntity.Description,
@@ -1864,8 +1971,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				}
 
 				// Invalidate pagesContetnCache
-				_pagesContentCache = null;
-				allPagesContentRetireved = false;
+				InvalidatePagesTempCache();
 
 				return true;
 			}
@@ -1877,34 +1983,44 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Removes a Page.
 		/// </summary>
-		/// <param name="page">The Page to remove.</param>
+		/// <param name="pageFullName">The full name of the page to remove.</param>
 		/// <returns>True if the Page is removed successfully.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		public bool RemovePage(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public bool RemovePage(string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("pageFullName");
 			
 			try {
-				// Find the PageInfo; if not found return false
-				var entity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(entity == null) return false;
+				NamespaceInfo currentNs = NameTools.GetNamespace(pageFullName) != null ? GetNamespace(NameTools.GetNamespace(pageFullName)) : null;
+				if(currentNs != null && currentNs.DefaultPageFullName != null) {
+					// Cannot remove the default page
+					if(currentNs.DefaultPageFullName.ToLowerInvariant() == pageFullName.ToLowerInvariant()) return false;
+				}
 
-				// Find the associated PageContent
-				var pageContentEntities = GetPagesContentEntities(entity.PageId);
-				if(pageContentEntities == null) return false;
+				// Find the PageContent; if not found return false
+				var pageContentEntities = GetPagesContentEntities(_wiki, pageFullName);
+				if(pageContentEntities == null || pageContentEntities.Count == 0) return false;
 
 				// Delete all the pageContent including draft and backups
 				bool deleteExecuted = false;
 				foreach(PagesContentsEntity pageContentEntity in pageContentEntities) {
-					if(pageContentEntity.RowKey == CurrentRevision) {
-						PageContent currentContent = new PageContent(page, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(),
+					if(pageContentEntity.Revision == CurrentRevision) {
+						PageContent currentContent = new PageContent(
+							pageFullName,
+							this,
+							pageContentEntity.CreationDateTime.ToLocalTime(),
+							pageContentEntity.Title,
+							pageContentEntity.User,
+							pageContentEntity.LastModified.ToLocalTime(),
 							pageContentEntity.Comment,
 							pageContentEntity.Content,
 							pageContentEntity.Keywords != null ? pageContentEntity.Keywords.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries) : null,
 							pageContentEntity.Description);
 						_context.SaveChangesStandard();
 						UnindexPage(currentContent);
-						foreach(Message msg in GetMessages(page)) {
-							UnindexMessageTree(page, msg);
+						foreach(Message msg in GetMessages(pageFullName)) {
+							UnindexMessageTree(currentContent, msg);
 						}
 					}
 					_context.DeleteObject(pageContentEntity);
@@ -1912,16 +2028,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				}
 				_context.SaveChangesStandard();
 
-				// Delete the PageInfo entity
-				_context.DeleteObject(entity);
-				_context.SaveChangesStandard();
-
-				// Invalidate pagesInfoCache
-				_pagesInfoCache = null;
-
 				// Invalidate pagesContetnCache
-				_pagesContentCache = null;
-				allPagesContentRetireved = false;
+				InvalidatePagesTempCache();
 
 				return deleteExecuted;
 			}
@@ -1933,28 +2041,24 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Binds a Page with one or more Categories.
 		/// </summary>
-		/// <param name="page">The Page to bind.</param>
+		/// <param name="pageFullName">The full name of the page to bind.</param>
 		/// <param name="categories">The Categories to bind the Page with.</param>
 		/// <returns>True if the binding succeeded.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="categories"/> are <c>null</c>.</exception>
-		public bool RebindPage(PageInfo page, string[] categories) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="categories"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public bool RebindPage(string pageFullName, string[] categories) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(categories == null) throw new ArgumentNullException("categories");
 
 			try {
-				var pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
-				// If the page does not exists retur false
-				if(pageInfoEntity == null) return false;
+				if(GetPage(pageFullName) == null) return false;
 
-				var query = (from e in _context.CreateQuery<CategoriesEntity>(CategoriesTable).AsTableServiceQuery()
-							 where e.PartitionKey.Equals(_wiki)
-							 select e).AsTableServiceQuery();
-				var categoriesEntities = QueryHelper<CategoriesEntity>.All(query);
+				var categoriesEntities = GetCategoriesEntities(_wiki);
 
 				foreach(CategoriesEntity entity in categoriesEntities) {
 					List<string> categoryPages = entity.PagesFullNames != null ? entity.PagesFullNames.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries).ToList<string>() : new List<string>();
-					if(categoryPages.Contains(pageInfoEntity.RowKey)) {
-						categoryPages.Remove(pageInfoEntity.RowKey);
+					if(categoryPages.Contains(pageFullName)) {
+						categoryPages.Remove(pageFullName);
 						entity.PagesFullNames = string.Join("|", categoryPages);
 						_context.UpdateObject(entity);
 					}
@@ -1968,7 +2072,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					if(categoryEntity == null) return false;
 
 					List<string> categoryPages = categoryEntity.PagesFullNames != null ? categoryEntity.PagesFullNames.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries).ToList<string>() : new List<string>();
-					categoryPages.Add(pageInfoEntity.RowKey);
+					categoryPages.Add(pageFullName);
 					categoryEntity.PagesFullNames = string.Join("|", categoryPages);
 					_context.UpdateObject(categoryEntity);
 				}
@@ -1980,23 +2084,23 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
-		private MessageEntity GetMessageEntity(string pageId, int messageId) {
+		private MessageEntity GetMessageEntity(string wiki, string pageFullName, int messageId) {
 			var messagesQuery = (from e in _context.CreateQuery<MessageEntity>(MessagesTable).AsTableServiceQuery()
-								 where e.PartitionKey.Equals(pageId) && e.RowKey.Equals(messageId.ToString())
+								 where e.PartitionKey.Equals(wiki + "|" + pageFullName) && e.RowKey.Equals(messageId.ToString())
 								 select e).AsTableServiceQuery();
 			return QueryHelper<MessageEntity>.FirstOrDefault(messagesQuery);
 		}
 
-		private IList<MessageEntity> GetMessagesEntities(string pageId) {
+		private IList<MessageEntity> GetMessagesEntities(string wiki, string pageFullName) {
 			var messagesQuery = (from e in _context.CreateQuery<MessageEntity>(MessagesTable).AsTableServiceQuery()
-								 where e.PartitionKey.Equals(pageId)
+								 where e.PartitionKey.Equals(wiki + "|" + pageFullName)
 								 select e).AsTableServiceQuery();
 			return QueryHelper<MessageEntity>.All(messagesQuery);
 		}
 
-		private MessageEntity BuildMessageEntity(string pageId, int messageId, string username, string subject, DateTime dateTime, string body, int parent) {
+		private MessageEntity BuildMessageEntity(string wiki, string pageFullName, int messageId, string username, string subject, DateTime dateTime, string body, int parent) {
 			return new MessageEntity() {
-				PartitionKey = pageId,
+				PartitionKey = wiki + "|" + pageFullName,
 				RowKey = messageId.ToString(),
 				Username = username,
 				Subject = subject,
@@ -2006,27 +2110,24 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			};
 		}
 		
-		private int GetNextMessageId(string pageId) {
-			IList<MessageEntity> messagesEntities = GetMessagesEntities(pageId);
+		private int GetNextMessageId(string wiki, string pageFullName) {
+			IList<MessageEntity> messagesEntities = GetMessagesEntities(wiki, pageFullName);
 			if(messagesEntities.Count == 0) return 0;
 			return messagesEntities.Max<MessageEntity>(m => int.Parse(m.RowKey)) + 1;
 		}
-		
+
 		/// <summary>
 		/// Gets the Page Messages.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The list of the <b>first-level</b> Messages, containing the replies properly nested, sorted by date/time.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		public Message[] GetMessages(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public Message[] GetMessages(string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 
 			try {
-				var pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
-				// If the page does not exists return null
-				if(pageInfoEntity == null) return null;
-
-				var messagesEntities = GetMessagesEntities(pageInfoEntity.PageId);
+				var messagesEntities = GetMessagesEntities(_wiki, pageFullName);
 
 				List<Message> messages = new List<Message>(messagesEntities.Count);
 				foreach(MessageEntity messageEntity in messagesEntities) {
@@ -2052,21 +2153,15 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Gets the total number of Messages in a Page Discussion.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The number of messages.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		public int GetMessageCount(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public int GetMessageCount(string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 
 			try {
-				var pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
-				// If the page does not exists return -1
-				if(pageInfoEntity == null) return -1;
-
-				var messagesQuery = (from e in _context.CreateQuery<MessageEntity>(MessagesTable).AsTableServiceQuery()
-									 where e.PartitionKey.Equals(pageInfoEntity.PageId)
-									 select e).AsTableServiceQuery();
-				var messagesEntities = QueryHelper<MessageEntity>.All(messagesQuery);
+				var messagesEntities = GetMessagesEntities(_wiki, pageFullName);
 				return messagesEntities.Count;
 			}
 			catch(Exception ex) {
@@ -2077,19 +2172,20 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Removes all messages for a page and stores the new messages.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <param name="messages">The new messages to store.</param>
 		/// <returns><c>true</c> if the messages are stored, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="messages"/> are <c>null</c>.</exception>
-		public bool BulkStoreMessages(PageInfo page, Message[] messages) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="messages"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public bool BulkStoreMessages(string pageFullName, Message[] messages) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(messages == null) throw new ArgumentNullException("messages");
 
 			try {
-				var pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(pageInfoEntity == null) return false;
+				PageContent page = GetPage(pageFullName);
+				if(page == null) return false;
 
-				foreach(Message msg in GetMessages(page)) {
+				foreach(Message msg in GetMessages(pageFullName)) {
 					UnindexMessageTree(page, msg);
 				}
 
@@ -2105,15 +2201,15 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				}
 
 				// Remove all messages for the given page
-				var oldMessagesIds = GetMessagesEntities(pageInfoEntity.PageId).Select(m => m.RowKey);
+				var oldMessagesIds = GetMessagesEntities(_wiki, pageFullName).Select(m => m.RowKey);
 				foreach(string oldMessageId in oldMessagesIds) {
-					RemoveMessage(page, int.Parse(oldMessageId), true);
+					RemoveMessage(pageFullName, int.Parse(oldMessageId), true);
 				}
 
 				foreach(Message message in messages) {
-					_context.AddObject(MessagesTable, BuildMessageEntity(pageInfoEntity.PageId, message.ID, message.Username, message.Subject, message.DateTime, message.Body, -1));
+					_context.AddObject(MessagesTable, BuildMessageEntity(_wiki, pageFullName, message.ID, message.Username, message.Subject, message.DateTime, message.Body, -1));
 					foreach(Message reply in message.Replies) {
-						var replayEntity = BuildMessageEntity(pageInfoEntity.PageId, reply.ID, reply.Username, reply.Subject, reply.DateTime, reply.Body, message.ID);
+						var replayEntity = BuildMessageEntity(_wiki, pageFullName, reply.ID, reply.Username, reply.Subject, reply.DateTime, reply.Body, message.ID);
 						_context.AddObject(MessagesTable, replayEntity);
 					}
 				}
@@ -2140,18 +2236,18 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Adds a new Message to a Page.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="subject">The Subject.</param>
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <param name="parent">The Parent Message ID, or -1.</param>
 		/// <returns>True if the Message is added successfully.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> or <paramref name="pageFullName"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
-		public bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
-			if(page == null) throw new ArgumentNullException("page");
+		public bool AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(username == null) throw new ArgumentNullException("username");
 			if(subject == null) throw new ArgumentNullException("subject");
 			if(body == null) throw new ArgumentNullException("body");
@@ -2160,17 +2256,17 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(parent < -1) throw new ArgumentOutOfRangeException("parent");
 
 			try {
-				var pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
 				// If page does not exists return false
-				if(pageInfoEntity == null) return false;
+				PageContent page = GetPage(pageFullName);
+				if(page == null) return false;
 
 				if(parent != -1) {
 					// If the given parent message with the given id does not exists return false;
-					var parentMessageEntity = GetMessageEntity(pageInfoEntity.PageId, parent);
+					var parentMessageEntity = GetMessageEntity(_wiki, pageFullName, parent);
 					if(parentMessageEntity == null) return false;
 				}
 
-				var messageEntity = BuildMessageEntity(pageInfoEntity.PageId, GetNextMessageId(pageInfoEntity.PageId), username, subject, dateTime, body, parent);
+				var messageEntity = BuildMessageEntity(_wiki, pageFullName, GetNextMessageId(_wiki, pageFullName), username, subject, dateTime, body, parent);
 				_context.AddObject(MessagesTable, messageEntity);
 				_context.SaveChangesStandard();
 
@@ -2186,27 +2282,28 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Removes a Message.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <param name="id">The ID of the Message to remove.</param>
 		/// <param name="removeReplies">A value specifying whether or not to remove the replies.</param>
 		/// <returns>True if the Message is removed successfully.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="id"/> is less than zero.</exception>
-		public bool RemoveMessage(PageInfo page, int id, bool removeReplies) {
-			if(page == null) throw new ArgumentNullException("page");
+		public bool RemoveMessage(string pageFullName, int id, bool removeReplies) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(id < 0) throw new ArgumentOutOfRangeException("id");
 
 			try {
-				var pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(pageInfoEntity == null) return false;
+				PageContent page = GetPage(pageFullName);
+				if(page == null) return false;
 
-				var messageEntity = GetMessageEntity(pageInfoEntity.PageId, id);
+				var messageEntity = GetMessageEntity(_wiki, pageFullName, id);
 				if(messageEntity == null) return false;
 
 				UnindexMessage(page, int.Parse(messageEntity.RowKey), messageEntity.Subject, messageEntity.DateTime.ToLocalTime(), messageEntity.Body);
 				_context.DeleteObject(messageEntity);
 
-				var messagesEntities = GetMessagesEntities(pageInfoEntity.PageId);
+				var messagesEntities = GetMessagesEntities(_wiki, pageFullName);
 				List<MessageEntity> messagesToBeUnindexed = new List<MessageEntity>();
 				foreach(var entity in messagesEntities) {
 					if(entity.ParetnId == id.ToString()) {
@@ -2237,18 +2334,18 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <summary>
 		/// Modifies a Message.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The Page.</param>
 		/// <param name="id">The ID of the Message to modify.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="subject">The Subject.</param>
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <returns>True if the Message is modified successfully.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="id"/> is less than zero.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
-		public bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> or <paramref name="pageFullName"/> are empty.</exception>
+		public bool ModifyMessage(string pageFullName, int id, string username, string subject, DateTime dateTime, string body) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(username == null) throw new ArgumentNullException("username");
 			if(subject == null) throw new ArgumentNullException("subject");
 			if(body == null) throw new ArgumentNullException("body");
@@ -2257,10 +2354,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(subject.Length == 0) throw new ArgumentException("subject");
 
 			try {
-				var pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
-				if(pageInfoEntity == null) return false;
+				PageContent page = GetPage(pageFullName);
+				if(page == null) return false;
 
-				var messageEntity = GetMessageEntity(pageInfoEntity.PageId, id);
+				var messageEntity = GetMessageEntity(_wiki, pageFullName, id);
 				if(messageEntity == null) return false;
 
 				UnindexMessage(page, int.Parse(messageEntity.RowKey), messageEntity.Subject, messageEntity.DateTime.ToLocalTime(), messageEntity.Body);
@@ -2331,11 +2428,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// </summary>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Name of the Path.</param>
-		/// <param name="pages">The Pages array.</param>
+		/// <param name="pages">The full name of the pages array.</param>
 		/// <returns>The correct <see cref="T:NavigationPath"/> object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="pages"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> or <paramref name="pages"/> are empty.</exception>
-		public NavigationPath AddNavigationPath(string nspace, string name, PageInfo[] pages) {
+		public NavigationPath AddNavigationPath(string nspace, string name, string[] pages) {
 			if(name == null) throw new ArgumentNullException("name");
 			if(pages == null) throw new ArgumentNullException("pages");
 			if(name.Length == 0) throw new ArgumentException("name");
@@ -2346,11 +2443,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				NavigationPath navigationPath = new NavigationPath(NameTools.GetFullName(nspace, name), this);
 				List<string> pagesNames = new List<string>(pages.Length);
-				foreach(PageInfo page in pages) {
+				foreach(string page in pages) {
 					if(page == null) throw new ArgumentNullException();
-					PagesInfoEntity pageInfoEntity = GetPagesInfoEntity(_wiki, page.FullName);
-					if(pageInfoEntity == null) throw new ArgumentException();
-					pagesNames.Add(page.FullName);
+					if(GetPage(page) == null) throw new ArgumentException();
+					pagesNames.Add(page);
 				}
 				NavigationPathEntity navigationPathEntity = new NavigationPathEntity();
 				navigationPathEntity.PartitionKey = _wiki;
@@ -2369,16 +2465,15 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				throw ex;
 			}
 		}
-
 		/// <summary>
 		/// Modifies an existing navigation path.
 		/// </summary>
 		/// <param name="path">The navigation path to modify.</param>
-		/// <param name="pages">The new pages array.</param>
+		/// <param name="pages">The new pages full names array.</param>
 		/// <returns>The correct <see cref="T:NavigationPath"/> object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="path"/> or <paramref name="pages"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="pages"/> is empty.</exception>
-		public NavigationPath ModifyNavigationPath(NavigationPath path, PageInfo[] pages) {
+		public NavigationPath ModifyNavigationPath(NavigationPath path, string[] pages) {
 			if(path == null) throw new ArgumentNullException("path");
 			if(pages == null) throw new ArgumentNullException("pages");
 			if(pages.Length == 0) throw new ArgumentException("pages");
@@ -2388,10 +2483,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(navigationPathEntity == null) return null;
 
 				List<string> pagesNames = new List<string>(pages.Length);
-				foreach(PageInfo page in pages) {
+				foreach(string page in pages) {
 					if(page == null) throw new ArgumentNullException("pages", "A page element cannot be null");
-					if(GetPagesInfoEntity(_wiki, page.FullName) == null) throw new ArgumentException("Page not found", "pages");
-					pagesNames.Add(page.FullName);
+					if(GetPage(page) == null) throw new ArgumentException("Page not found", "pages");
+					pagesNames.Add(page);
 				}
 				navigationPathEntity.PagesFullNames = string.Join("|", pagesNames);
 
@@ -2799,6 +2894,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		#endregion
+
 	}
 
 	internal class NamespacesEntity : TableServiceEntity {
@@ -2816,19 +2912,14 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		public string PagesFullNames { get; set; }
 	}
 
-	internal class PagesInfoEntity : TableServiceEntity {
+	internal class PagesContentsEntity : TableServiceEntity {
 		// PartitionKey = wiki
-		// RowKey = pageFullName
+		// RowKey = pageFullName|revision
 
+		public string Revision { get; set; }
+		public string PageFullName { get; set; }
 		public string Namespace { get; set; }
 		public DateTime CreationDateTime { get; set; }
-		public string PageId { get; set; }
-	}
-
-	internal class PagesContentsEntity : TableServiceEntity {
-		// PartitionKey = pageId
-		// RowKey = revision
-
 		public string Title { get; set; }
 		public string User { get; set; }
 		public DateTime LastModified { get; set; }
@@ -2839,8 +2930,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 	}
 
 	internal class MessageEntity : TableServiceEntity {
-		// PartitionKey = pageId
-		// RowKey = GUID
+		// PartitionKey = wiki|pageFullName
+		// RowKey = messageId
 
 		public string Username { get; set; }
 		public string Subject { get; set; }

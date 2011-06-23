@@ -83,18 +83,12 @@
     <Compile Include="AuthReaderTests.cs" />
     <Compile Include="AuthToolsTests.cs" />
     <Compile Include="AuthWriterTests.cs" />
-    <Compile Include="GlobalSettingsStorageProviderTests.cs" />
-    <Compile Include="DataMigratorTests.cs" />
-    <Compile Include="FilesStorageProviderTests.cs" />
     <Compile Include="FormatterTests.cs" />
     <Compile Include="IndexStorerTests.cs" />
-    <Compile Include="PagesStorageProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderLoaderTests.cs" />
     <Compile Include="ReverseFormatterTests.cs" />
-    <Compile Include="SettingsStorageProviderTests.cs" />
     <Compile Include="TestGlobalSettingsStorageProvider.cs" />
-    <Compile Include="UsersStorageProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AclEngine\AclEngine.csproj">

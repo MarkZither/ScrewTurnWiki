@@ -125,8 +125,6 @@ namespace ScrewTurn.Wiki {
 
 				ProviderLoader.SavePluginStatus(currentWiki, txtCurrentProvider.Value, false);
 
-				PerformPostProviderChangeActions();
-
 				lblResult.CssClass = "resultok";
 				lblResult.Text = Properties.Messages.ProviderDisabled;
 
@@ -150,18 +148,9 @@ namespace ScrewTurn.Wiki {
 					lblResult.Text = Properties.Messages.ProviderRejectedConfiguration;
 				}
 
-				PerformPostProviderChangeActions();
-
 				ResetEditor();
 				rptProviders.DataBind();
 			}
-		}
-
-		/// <summary>
-		/// Performs all the actions that are needed after a provider status is changed.
-		/// </summary>
-		private void PerformPostProviderChangeActions() {
-			Content.InvalidateAllPages();
 		}
 
 		protected void btnSave_Click(object sender, EventArgs e) {
@@ -171,8 +160,6 @@ namespace ScrewTurn.Wiki {
 
 			string error;
 			if(ProviderLoader.TryChangePluginConfiguration(prov, txtConfigurationString.Text, currentWiki, out error)) {
-				PerformPostProviderChangeActions();
-
 				lblResult.CssClass = "resultok";
 				lblResult.Text = Properties.Messages.ProviderConfigurationSaved;
 

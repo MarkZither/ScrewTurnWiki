@@ -34,8 +34,8 @@ namespace ScrewTurn.Wiki {
 			filename = filename.Replace("..", "");
 
 			bool isPageAttachment = !string.IsNullOrEmpty(Request["Page"]);
-			PageInfo pageInfo = isPageAttachment ? Pages.FindPage(currentWiki, Request["Page"]) : null;
-			if(isPageAttachment && pageInfo == null) {
+			PageContent pageContent = isPageAttachment ? Pages.FindPage(currentWiki, Request["Page"]) : null;
+			if(isPageAttachment && pageContent == null) {
 				Response.StatusCode = 404;
 				Response.Write(Properties.Messages.FileNotFound);
 				return;
@@ -45,7 +45,7 @@ namespace ScrewTurn.Wiki {
 
 			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(Request["Provider"], currentWiki);
 			else {
-				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(currentWiki, pageInfo, filename);
+				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(currentWiki, pageContent.FullName, filename);
 				else provider = FilesAndAttachments.FindFileProvider(currentWiki, filename);
 			}
 
@@ -61,15 +61,13 @@ namespace ScrewTurn.Wiki {
 				filename = filename.Replace("\\", "/");
 			}
 
-			bool countHit = CountHit(currentWiki, filename);
-
 			// Verify permissions
 			bool canDownload = false;
 
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			if(isPageAttachment) {
-				canDownload = authChecker.CheckActionForPage(pageInfo, Actions.ForPages.DownloadAttachments,
+				canDownload = authChecker.CheckActionForPage(pageContent.FullName, Actions.ForPages.DownloadAttachments,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			}
 			else {
@@ -86,12 +84,12 @@ namespace ScrewTurn.Wiki {
 			long size = -1;
 
 			FileDetails details = null;
-			if(isPageAttachment) details = provider.GetPageAttachmentDetails(pageInfo, filename);
+			if(isPageAttachment) details = provider.GetPageAttachmentDetails(pageContent.FullName, filename);
 			else details = provider.GetFileDetails(filename);
 
 			if(details != null) size = details.Size;
 			else {
-				Log.LogEntry("Attempted to download an inexistent file/attachment (" + (pageInfo != null ? pageInfo.FullName + "/" : "") + filename + ")", EntryType.Warning, Log.SystemUsername, currentWiki);
+				Log.LogEntry("Attempted to download an inexistent file/attachment (" + (pageContent != null ? pageContent.FullName + "/" : "") + filename + ")", EntryType.Warning, Log.SystemUsername, currentWiki);
 				Response.StatusCode = 404;
 				Response.Write("File not found.");
 				return;
@@ -126,15 +124,15 @@ namespace ScrewTurn.Wiki {
 			bool retrieved = false;
 			if(isPageAttachment) {
 				try {
-					retrieved = provider.RetrievePageAttachment(pageInfo, filename, Response.OutputStream, countHit);
+					retrieved = provider.RetrievePageAttachment(pageContent.FullName, filename, Response.OutputStream);
 				}
 				catch(ArgumentException ex) {
-					Log.LogEntry("Attempted to download an inexistent attachment (" + pageInfo.FullName + "/" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername, currentWiki);
+					Log.LogEntry("Attempted to download an inexistent attachment (" + pageContent.FullName + "/" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername, currentWiki);
 				}
 			}
 			else {
 				try {
-					retrieved = provider.RetrieveFile(filename, Response.OutputStream, countHit);
+					retrieved = provider.RetrieveFile(filename, Response.OutputStream);
 				}
 				catch(ArgumentException ex) {
 					Log.LogEntry("Attempted to download an inexistent file/attachment (" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername, currentWiki);
@@ -165,40 +163,6 @@ namespace ScrewTurn.Wiki {
 			string mime = "";
 			if(MimeTypes.Types.TryGetValue(ext, out mime)) return mime;
 			else return "application/octet-stream";
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether or not to count the hit.
-		/// </summary>
-		/// <param name="currentWiki">The wiki.</param>
-		/// <param name="file">The name of the file.</param>
-		/// <returns><c>true</c> if the hit must be counted, <c>false</c> otherwise.</returns>
-		private bool CountHit(string currentWiki, string file) {
-			bool result = Request["NoHit"] != "1";
-
-			if(!result) return false;
-			else {
-				FileDownloadCountFilterMode mode = Settings.GetFileDownloadCountFilterMode(currentWiki);
-				if(mode == FileDownloadCountFilterMode.CountAll) return true;
-				else {
-					string[] allowedExtensions = Settings.GetFileDownloadCountFilter(currentWiki);
-					string extension = Path.GetExtension(file);
-					if(string.IsNullOrEmpty(extension)) return false;
-					else extension = extension.Trim('.').ToLowerInvariant();
-
-					bool found = false;
-					foreach(string ex in allowedExtensions) {
-						if(ex == extension) {
-							found = true;
-							break;
-						}
-					}
-
-					if(found && mode == FileDownloadCountFilterMode.CountSpecifiedExtensions) return true;
-					else if(!found && mode == FileDownloadCountFilterMode.ExcludeSpecifiedExtensions) return true;
-					else return false;
-				}
-			}
 		}
 
 	}

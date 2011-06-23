@@ -469,7 +469,7 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Replay(aclManager);
 
 			AuthReader authReader = new AuthReader(prov);
-			SubjectInfo[] infos = authReader.RetrieveSubjectsForPage(new PageInfo("NS.Page", null, DateTime.Now));
+			SubjectInfo[] infos = authReader.RetrieveSubjectsForPage(NameTools.GetFullName(null, "NS.Page"));
 
 			Assert.AreEqual(3, infos.Length, "Wrong info count");
 
@@ -508,7 +508,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthReader authReader = new AuthReader(settingsProvider);
 			string[] grants = authReader.RetrieveGrantsForPage(new UserGroup("Group", "Group", null),
-				new PageInfo("Page", null, DateTime.Now));
+				NameTools.GetFullName(null, "Page"));
 
 			Assert.AreEqual(1, grants.Length, "Wrong grant count");
 			Assert.AreEqual(Actions.ForPages.ModifyPage, grants[0], "Wrong grant");
@@ -518,7 +518,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrieveGrantsForPage_Group_NullGroup() {
 			AuthReader authReader = new AuthReader(MockProvider());
-			authReader.RetrieveGrantsForPage(null as UserGroup, new PageInfo("Page", null, DateTime.Now));
+			authReader.RetrieveGrantsForPage(null as UserGroup, NameTools.GetFullName(null, "Page"));
 		}
 
 		[Test]
@@ -545,7 +545,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthReader authReader = new AuthReader(settingsProvider);
 			string[] grants = authReader.RetrieveGrantsForPage(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null),
-				new PageInfo("Page", null, DateTime.Now));
+				NameTools.GetFullName(null, "Page"));
 
 			Assert.AreEqual(1, grants.Length, "Wrong grant count");
 			Assert.AreEqual(Actions.ForPages.ModifyPage, grants[0], "Wrong grant");
@@ -555,7 +555,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrieveGrantsForPage_User_NullUser() {
 			AuthReader authReader = new AuthReader(MockProvider());
-			authReader.RetrieveGrantsForPage(null as UserInfo, new PageInfo("Page", null, DateTime.Now));
+			authReader.RetrieveGrantsForPage(null as UserInfo, NameTools.GetFullName(null, "Page"));
 		}
 
 		[Test]
@@ -582,7 +582,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthReader authReader = new AuthReader(prov);
 			string[] grants = authReader.RetrieveDenialsForPage(new UserGroup("Group", "Group", null),
-				new PageInfo("Page", null, DateTime.Now));
+				NameTools.GetFullName(null, "Page"));
 
 			Assert.AreEqual(1, grants.Length, "Wrong denial count");
 			Assert.AreEqual(Actions.ForPages.ModifyPage, grants[0], "Wrong denial");
@@ -592,7 +592,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrieveDenialsForPage_Group_NullGroup() {
 			AuthReader authReader = new AuthReader(MockProvider());
-			authReader.RetrieveDenialsForPage(null as UserGroup, new PageInfo("Page", null, DateTime.Now));
+			authReader.RetrieveDenialsForPage(null as UserGroup, NameTools.GetFullName(null, "Page"));
 		}
 
 		[Test]
@@ -619,7 +619,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthReader authReader = new AuthReader(settingsProvider);
 			string[] grants = authReader.RetrieveDenialsForPage(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null),
-				new PageInfo("Page", null, DateTime.Now));
+				NameTools.GetFullName(null, "Page"));
 
 			Assert.AreEqual(1, grants.Length, "Wrong denial count");
 			Assert.AreEqual(Actions.ForPages.ModifyPage, grants[0], "Wrong denial");
@@ -629,7 +629,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrieveDenialsForPage_User_NullUser() {
 			AuthReader authReader = new AuthReader(MockProvider());
-			authReader.RetrieveDenialsForPage(null as UserInfo, new PageInfo("Page", null, DateTime.Now));
+			authReader.RetrieveDenialsForPage(null as UserInfo, NameTools.GetFullName(null, "Page"));
 		}
 
 		[Test]

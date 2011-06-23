@@ -22,29 +22,30 @@ namespace ScrewTurn.Wiki {
 		private string title;
 		private string typeTag = StandardTypeTag;
 		private DateTime dateTime;
-		private PageInfo page;
+		private string pageFullName;
 		private string provider;
+		private string wiki;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:PageAttachmentDocument" /> class.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page.</param>
 		/// <param name="name">The attachment name.</param>
 		/// <param name="provider">The file provider.</param>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="dateTime">The modification date/time.</param>
-		public PageAttachmentDocument(PageInfo page, string name, string provider, string wiki, DateTime dateTime) {
-			if(page == null) throw new ArgumentNullException("page");
+		public PageAttachmentDocument(string pageFullName, string name, string provider, string wiki, DateTime dateTime) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
 			if(provider == null) throw new ArgumentNullException("provider");
 			if(provider.Length == 0) throw new ArgumentException("Provider cannot be empty", "provider");
 
-			this.name = page.FullName + "|" + provider + "|" + name + "|" + wiki;
+			this.name = pageFullName + "|" + provider + "|" + name + "|" + wiki;
 			id = Tools.HashDocumentNameForTemporaryIndex(this.name);
 			title = name;
 			this.dateTime = dateTime;
-			this.page = page;
+			this.pageFullName = pageFullName;
 			this.provider = provider;
 		}
 
@@ -60,8 +61,8 @@ namespace ScrewTurn.Wiki {
 			title = doc.Title;
 			dateTime = doc.DateTime;
 			provider = fields[1];
-			string wiki = fields.Length > 3 ? fields[3] : null; // check fields lenght for compatibility with versions previous to 4
-			page = Pages.FindPage(wiki, fields[0]);
+			wiki = fields.Length > 3 ? fields[3] : null; // check fields lenght for compatibility with versions previous to 4
+			pageFullName = fields[0];
 		}
 
 		/// <summary>
@@ -112,8 +113,8 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the page.
 		/// </summary>
-		public PageInfo Page {
-			get { return page; }
+		public PageContent Page {
+			get { return Pages.FindPage(wiki, pageFullName); }
 		}
 
 		/// <summary>

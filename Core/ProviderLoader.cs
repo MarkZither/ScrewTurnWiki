@@ -274,8 +274,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The fully qualified name (such as "Namespace.ProviderClass, MyAssembly"), or <c>null</c>/<b>String.Empty</b>/"<b>default</b>" for the default provider.</param>
 		/// <returns>The global settings storage provider.</returns>
 		public static IGlobalSettingsStorageProviderV40 LoadGlobalSettingsStorageProvider(string name) {
-			if(name == null || name.Length == 0 || string.Compare(name, "default", true, CultureInfo.InvariantCulture) == 0) {
-				return new GlobalSettingsStorageProvider();
+			if(name == null || name.Length == 0) {
+				throw new Exception("Global Settings Storage Provider must be specified in the Web.congfig file.");
 			}
 
 			IGlobalSettingsStorageProviderV40 result = null;

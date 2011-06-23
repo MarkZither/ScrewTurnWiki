@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki {
 
 	public partial class PopupWYSIWYG : BasePage {
 
-		private PageInfo currentPage = null;
+		private PageContent currentPage = null;
 		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
@@ -157,18 +157,17 @@ namespace ScrewTurn.Wiki {
 			NamespaceInfo selectedNamespace = Pages.FindNamespace(currentWiki, lstNamespace.SelectedValue);
 			NamespaceInfo currentNamespace = DetectNamespaceInfo();
 
-			foreach(PageInfo pi in Pages.GetPages(currentWiki, selectedNamespace)) {
-				PageContent cont = Content.GetPageContent(pi);
-				string formattedTitle = FormattingPipeline.PrepareTitle(currentWiki, cont.Title, false, FormattingContext.Other, pi);
+			foreach(PageContent pi in Pages.GetPages(currentWiki, selectedNamespace)) {
+				string formattedTitle = FormattingPipeline.PrepareTitle(currentWiki, pi.Title, false, FormattingContext.Other, pi.FullName);
 				string onClickJavascript = "javascript:";
 				// Populate the page title box if the title is different to the page name
-				if (pi.FullName != cont.Title) {
+				if (pi.FullName != pi.Title) {
 					// Supply the page title to the Javascript that sets the page title on the page
 					// We can safely escape the \ character, but the " character is interpreted by the browser even if it is escaped to Javascript, so we can't allow it.
 					// The non-wysiwyg version escapes ' and replaces " with escaped ', but ' breaks the html insertion, so remove it altogether
 					// Similarly, < on it's own is fine, but causes problems when combined with text and > to form a tag.  Safest to remove < characters to prevent
 					// breaking the drop-down.
-					onClickJavascript += "SetValue('txtPageTitle', '" + cont.Title.Replace("\\", "\\\\").Replace("'", "").Replace("\"", "").Replace("<", "") + "');";
+					onClickJavascript += "SetValue('txtPageTitle', '" + pi.Title.Replace("\\", "\\\\").Replace("'", "").Replace("\"", "").Replace("<", "") + "');";
 				}
 				else {
 					onClickJavascript += "SetValue('txtPageTitle', '');";
@@ -200,7 +199,7 @@ namespace ScrewTurn.Wiki {
 
 			if(chkFilesAttachments.Checked) {
 				// Load page attachments
-				files = provider.ListPageAttachments(currentPage);
+				files = provider.ListPageAttachments(currentPage.FullName);
 			}
 			else {
 				// Load files
@@ -220,7 +219,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			foreach(string f in files) {
-				long size = chkFilesAttachments.Checked ? provider.GetPageAttachmentDetails(currentPage, f).Size : provider.GetFileDetails(f).Size;
+				long size = chkFilesAttachments.Checked ? provider.GetPageAttachmentDetails(currentPage.FullName, f).Size : provider.GetFileDetails(f).Size;
 				TreeElement item = new TreeElement(f, f.Substring(f.LastIndexOf("/") + 1) + " (" + Tools.BytesToString(size) + ")",
 					"javascript:return SelectFile('" +
 					(chkFilesAttachments.Checked ? "(" + Tools.UrlEncode(currentPage.FullName) + ")" : "") + "', '" + f.Replace("'", "\\\\\\'") + "');");
@@ -254,7 +253,7 @@ namespace ScrewTurn.Wiki {
 
 			if(chkImageAttachments.Checked) {
 				// Load page attachments
-				files = provider.ListPageAttachments(currentPage);
+				files = provider.ListPageAttachments(currentPage.FullName);
 			}
 			else {
 				// Load files

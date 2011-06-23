@@ -83,10 +83,9 @@ namespace ScrewTurn.Wiki {
 		/// Rebuilds the page links for the specified pages.
 		/// </summary>
 		/// <param name="pages">The pages.</param>
-		private void RebuildPageLinks(IList<PageInfo> pages) {
-			foreach(PageInfo page in pages) {
-				PageContent content = Content.GetPageContent(page);
-				Pages.StorePageOutgoingLinks(page, content.Content);				
+		private void RebuildPageLinks(IList<PageContent> pages) {
+			foreach(PageContent page in pages) {
+				Pages.StorePageOutgoingLinks(page);				
 			}
 		}
 
@@ -174,12 +173,10 @@ namespace ScrewTurn.Wiki {
 
 			StringBuilder sb = new StringBuilder(100);
 			for(int i = 0; i < linkingPages.Count; i++) {
-				PageInfo page = Pages.FindPage(currentWiki, linkingPages[i]);
+				PageContent page = Pages.FindPage(currentWiki, linkingPages[i]);
 				if(page != null) {
-					PageContent content = Content.GetPageContent(page);
-
 					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" target=""_blank"">{2}</a>, ", page.FullName, GlobalSettings.PageExtension,
-						FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.Other, page));
+						FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.Other, page.FullName));
 				}
 			}
 			this.linkingPages = sb.ToString().TrimEnd(' ', ',');

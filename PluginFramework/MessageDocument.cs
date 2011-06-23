@@ -19,12 +19,13 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets the document name for a message.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <param name="messageID">The message ID.</param>
 		/// <returns>The document name.</returns>
-		public static string GetDocumentName(PageInfo page, int messageID) {
-			if(page == null) throw new ArgumentNullException("page");
-			return page.FullName + "..." + messageID.ToString();
+		public static string GetDocumentName(string pageFullName, int messageID) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName == "") throw new ArgumentException("pageFullName");
+			return pageFullName + "..." + messageID.ToString();
 		}
 
 		/// <summary>
@@ -48,22 +49,22 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		private string name, title, typeTag;
 		private DateTime dateTime;
 		private int messageID;
-		private PageInfo pageInfo;
+		private PageContent page;
 
 		private Tokenizer tokenizer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:MessageDocument" /> class.
 		/// </summary>
-		/// <param name="pageInfo">The page.</param>
+		/// <param name="page">The page.</param>
 		/// <param name="messageID">The message ID.</param>
 		/// <param name="dumpedDocument">The dumped document data.</param>
 		/// <param name="tokenizer">The tokenizer.</param>
-		public MessageDocument(PageInfo pageInfo, int messageID, DumpedDocument dumpedDocument, Tokenizer tokenizer) {
+		public MessageDocument(PageContent page, int messageID, DumpedDocument dumpedDocument, Tokenizer tokenizer) {
 			if(dumpedDocument == null) throw new ArgumentNullException("dumpedDocument");
 			if(tokenizer == null) throw new ArgumentNullException("tokenizer");
 
-			this.pageInfo = pageInfo;
+			this.page = page;
 			this.messageID = messageID;
 			id = dumpedDocument.ID;
 			name = dumpedDocument.Name;
@@ -126,10 +127,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		}
 
 		/// <summary>
-		/// Gets the page information.
+		/// Gets the page full name.
 		/// </summary>
-		public PageInfo PageInfo {
-			get { return pageInfo; }
+		public PageContent Page {
+			get { return page; }
 		}
 
 	}

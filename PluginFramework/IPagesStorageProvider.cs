@@ -50,10 +50,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Sets the default page of a namespace.
 		/// </summary>
 		/// <param name="nspace">The namespace of which to set the default page.</param>
-		/// <param name="page">The page to use as default page, or <c>null</c>.</param>
+		/// <param name="pageFullName">The full name of the page to use as default page, or <c>null</c>.</param>
 		/// <returns>The correct <see cref="T:NamespaceInfo" /> object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="nspace"/> is <c>null</c>.</exception>
-		NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, PageInfo page);
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, string pageFullName);
 
 		/// <summary>
 		/// Removes a namespace.
@@ -66,13 +67,14 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Moves a page from its namespace into another.
 		/// </summary>
-		/// <param name="page">The page to move.</param>
+		/// <param name="pageFullName">The full name of the page to move.</param>
 		/// <param name="destination">The destination namespace (<c>null</c> for the root).</param>
 		/// <param name="copyCategories">A value indicating whether to copy the page categories in the destination 
 		/// namespace, if not already available.</param>
-		/// <returns>The correct instance of <see cref="T:PageInfo" />.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		PageInfo MovePage(PageInfo page, NamespaceInfo destination, bool copyCategories);
+		/// <returns>The correct instance of <see cref="T:PageContent" />.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		PageContent MovePage(string pageFullName, NamespaceInfo destination, bool copyCategories);
 
 		/// <summary>
 		/// Gets a category.
@@ -93,10 +95,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets all the categories of a page.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <returns>The categories, sorted by name.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		CategoryInfo[] GetCategoriesForPage(PageInfo page);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		CategoryInfo[] GetCategoriesForPage(string pageFullName);
 
 		/// <summary>
 		/// Adds a Category.
@@ -169,66 +172,62 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Gets a page.
 		/// </summary>
 		/// <param name="fullName">The full name of the page.</param>
-		/// <returns>The <see cref="T:PageInfo" />, or <c>null</c> if no page is found.</returns>
+		/// <returns>The <see cref="T:PageContent" />, or <c>null</c> if no page is found.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
-		PageInfo GetPage(string fullName);
+		PageContent GetPage(string fullName);
 
 		/// <summary>
 		/// Gets all the Pages in a namespace.
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>All the Pages in the namespace, sorted by name.</returns>
-		PageInfo[] GetPages(NamespaceInfo nspace);
+		PageContent[] GetPages(NamespaceInfo nspace);
 
 		/// <summary>
 		/// Gets all the pages in a namespace that are bound to zero categories.
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The pages, sorted by name.</returns>
-		PageInfo[] GetUncategorizedPages(NamespaceInfo nspace);
-
-		/// <summary>
-		/// Gets the Content of a Page.
-		/// </summary>
-		/// <param name="page">The Page.</param>
-		/// <returns>The Page Content object, <c>null</c> if the page does not exist or <paramref name="page"/> is <c>null</c>,
-		/// or an empty instance if the content could not be retrieved (<seealso cref="PageContent.GetEmpty"/>).</returns>
-		PageContent GetContent(PageInfo page);
+		PageContent[] GetUncategorizedPages(NamespaceInfo nspace);
 
 		/// <summary>
 		/// Gets the content of a draft of a Page.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="fullName">The full name of the page.</param>
 		/// <returns>The draft, or <c>null</c> if no draft exists.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		PageContent GetDraft(PageInfo page);
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
+		PageContent GetDraft(string fullName);
 
 		/// <summary>
 		/// Deletes a draft of a Page.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="fullName">The full name of the page.</param>
 		/// <returns><c>true</c> if the draft is deleted, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		bool DeleteDraft(PageInfo page);
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
+		bool DeleteDraft(string fullName);
 
 		/// <summary>
 		/// Gets the Backup/Revision numbers of a Page.
 		/// </summary>
-		/// <param name="page">The Page to get the Backups of.</param>
+		/// <param name="fullName">The full name of the page to get the Backups of.</param>
 		/// <returns>The Backup/Revision numbers.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		int[] GetBackups(PageInfo page);
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
+		int[] GetBackups(string fullName);
 
 		/// <summary>
 		/// Gets the Content of a Backup of a Page.
 		/// </summary>
-		/// <param name="page">The Page to get the backup of.</param>
+		/// <param name="fullName">The full name of the page to get the backup of.</param>
 		/// <param name="revision">The Backup/Revision number.</param>
 		/// <returns>The Page Backup.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
-		PageContent GetBackupContent(PageInfo page, int revision);
+		PageContent GetBackupContent(string fullName, int revision);
 
 		/// <summary>
 		/// Forces to overwrite or create a Backup.
@@ -241,31 +240,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		bool SetBackupContent(PageContent content, int revision);
 
 		/// <summary>
-		/// Adds a Page.
+		/// Adds a new page content.
 		/// </summary>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
-		/// <param name="name">The Page Name.</param>
+		/// <param name="pageName">The Page Name.</param>
 		/// <param name="creationDateTime">The creation Date/Time.</param>
-		/// <returns>The correct PageInfo object or null.</returns>
-		/// <remarks>This method should <b>not</b> create the content of the Page.</remarks>
-		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-		PageInfo AddPage(string nspace, string name, DateTime creationDateTime);
-
-		/// <summary>
-		/// Renames a Page.
-		/// </summary>
-		/// <param name="page">The Page to rename.</param>
-		/// <param name="newName">The new Name.</param>
-		/// <returns>The correct <see cref="T:PageInfo" /> object.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="newName"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty.</exception>
-		PageInfo RenamePage(PageInfo page, string newName);
-
-		/// <summary>
-		/// Modifies the Content of a Page.
-		/// </summary>
-		/// <param name="page">The Page.</param>
 		/// <param name="title">The Title of the Page.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="dateTime">The Date/Time.</param>
@@ -274,116 +253,134 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="keywords">The keywords, usually used for SEO.</param>
 		/// <param name="description">The description, usually used for SEO.</param>
 		/// <param name="saveMode">The save mode for this modification.</param>
-		/// <returns><c>true</c> if the Page has been modified successfully, <c>false</c> otherwise.</returns>
-		/// <remarks>If <b>saveMode</b> equals <b>Draft</b> and a draft already exists, it is overwritten.</remarks>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="title"/> <paramref name="username"/> or <paramref name="content"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="title"/> or <paramref name="username"/> are empty.</exception>
-		bool ModifyPage(PageInfo page, string title, string username, DateTime dateTime, string comment, string content,
+		/// <returns>The correct PageInfo object or null.</returns>
+		/// <remarks>This method should <b>not</b> create the content of the Page.</remarks>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageName"/>, <paramref name="title"/> <paramref name="username"/> or <paramref name="content"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageName"/>, <paramref name="title"/> or <paramref name="username"/> are empty.</exception>
+		PageContent SetPageContent(string nspace, string pageName, DateTime creationDateTime, string title, string username, DateTime dateTime, string comment, string content,
 			string[] keywords, string description, SaveMode saveMode);
+
+		/// <summary>
+		/// Renames a Page.
+		/// </summary>
+		/// <param name="fullName">The full name of the page to rename.</param>
+		/// <param name="newName">The new Name.</param>
+		/// <returns>The correct <see cref="T:PageContent" /> object.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> or <paramref name="newName"/> are empty.</exception>
+		PageContent RenamePage(string fullName, string newName);
 
 		/// <summary>
 		/// Performs the rollback of a Page to a specified revision.
 		/// </summary>
-		/// <param name="page">The Page to rollback.</param>
+		/// <param name="pageFullName">The full name of the page to rollback.</param>
 		/// <param name="revision">The Revision to rollback the Page to.</param>
 		/// <returns><c>true</c> if the rollback succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
-		bool RollbackPage(PageInfo page, int revision);
+		bool RollbackPage(string pageFullName, int revision);
 
 		/// <summary>
 		/// Deletes the Backups of a Page, up to a specified revision.
 		/// </summary>
-		/// <param name="page">The Page to delete the backups of.</param>
+		/// <param name="pageFullName">The full name of the page to delete the backups of.</param>
 		/// <param name="revision">The newest revision to delete (newer revision are kept) or -1 to delete all the Backups.</param>
 		/// <returns><c>true</c> if the deletion succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than -1.</exception>
-		bool DeleteBackups(PageInfo page, int revision);
+		bool DeleteBackups(string pageFullName, int revision);
 
 		/// <summary>
 		/// Removes a Page.
 		/// </summary>
-		/// <param name="page">The Page to remove.</param>
+		/// <param name="pageFullName">The full name of the page to remove.</param>
 		/// <returns>True if the Page is removed successfully.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		bool RemovePage(PageInfo page);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		bool RemovePage(string pageFullName);
 
 		/// <summary>
 		/// Binds a Page with one or more Categories.
 		/// </summary>
-		/// <param name="page">The Page to bind.</param>
+		/// <param name="pageFullName">The full name of the page to bind.</param>
 		/// <param name="categories">The Categories to bind the Page with.</param>
 		/// <returns>True if the binding succeeded.</returns>
 		/// <remarks>After a successful operation, the Page is bound with all and only the categories passed as argument.</remarks>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="categories"/> are <c>null</c>.</exception>
-		bool RebindPage(PageInfo page, string[] categories);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="categories"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		bool RebindPage(string pageFullName, string[] categories);
 
 		/// <summary>
 		/// Gets the Page Messages.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The list of the <b>first-level</b> Messages, containing the replies properly nested, sorted by date/time.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		Message[] GetMessages(PageInfo page);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		Message[] GetMessages(string pageFullName);
 
 		/// <summary>
 		/// Gets the total number of Messages in a Page Discussion.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The number of messages.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
-		int GetMessageCount(PageInfo page);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		int GetMessageCount(string pageFullName);
 
 		/// <summary>
 		/// Removes all messages for a page and stores the new messages.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <param name="messages">The new messages to store.</param>
 		/// <returns><c>true</c> if the messages are stored, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="messages"/> are <c>null</c>.</exception>
-		bool BulkStoreMessages(PageInfo page, Message[] messages);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="messages"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		bool BulkStoreMessages(string pageFullName, Message[] messages);
 
 		/// <summary>
 		/// Adds a new Message to a Page.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="subject">The Subject.</param>
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <param name="parent">The Parent Message ID, or -1.</param>
 		/// <returns>True if the Message is added successfully.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> or <paramref name="pageFullName"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
-		bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent);
+		bool AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent);
 
 		/// <summary>
 		/// Removes a Message.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <param name="id">The ID of the Message to remove.</param>
 		/// <param name="removeReplies">A value specifying whether or not to remove the replies.</param>
 		/// <returns>True if the Message is removed successfully.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="id"/> is less than zero.</exception>
-		bool RemoveMessage(PageInfo page, int id, bool removeReplies);
+		bool RemoveMessage(string pageFullName, int id, bool removeReplies);
 
 		/// <summary>
 		/// Modifies a Message.
 		/// </summary>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The Page.</param>
 		/// <param name="id">The ID of the Message to modify.</param>
 		/// <param name="username">The Username.</param>
 		/// <param name="subject">The Subject.</param>
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <returns>True if the Message is modified successfully.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="id"/> is less than zero.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
-		bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body);
+		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> or <paramref name="pageFullName"/> are empty.</exception>
+		bool ModifyMessage(string pageFullName, int id, string username, string subject, DateTime dateTime, string body);
 
 		/// <summary>
 		/// Gets all the Navigation Paths in a Namespace.
@@ -397,21 +394,21 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Name of the Path.</param>
-		/// <param name="pages">The Pages array.</param>
+		/// <param name="pages">The full name of the pages array.</param>
 		/// <returns>The correct <see cref="T:NavigationPath" /> object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="pages"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> or <paramref name="pages"/> are empty.</exception>
-		NavigationPath AddNavigationPath(string nspace, string name, PageInfo[] pages);
+		NavigationPath AddNavigationPath(string nspace, string name, string[] pages);
 
 		/// <summary>
 		/// Modifies an existing navigation path.
 		/// </summary>
 		/// <param name="path">The navigation path to modify.</param>
-		/// <param name="pages">The new pages array.</param>
+		/// <param name="pages">The new pages full names array.</param>
 		/// <returns>The correct <see cref="T:NavigationPath" /> object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="path"/> or <paramref name="pages"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="pages"/> is empty.</exception>
-		NavigationPath ModifyNavigationPath(NavigationPath path, PageInfo[] pages);
+		NavigationPath ModifyNavigationPath(NavigationPath path, string[] pages);
 
 		/// <summary>
 		/// Removes a Navigation Path.

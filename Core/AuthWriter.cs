@@ -268,40 +268,41 @@ namespace ScrewTurn.Wiki {
 		/// Sets a permission for a page.
 		/// </summary>
 		/// <param name="status">The authorization status.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="action">The action of which to modify the authorization status.</param>
 		/// <param name="group">The group subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
-		public bool SetPermissionForPage(AuthStatus status, PageInfo page, string action, UserGroup group) {
+		public bool SetPermissionForPage(AuthStatus status, string pageFullName, string action, UserGroup group) {
 			if(group == null) throw new ArgumentNullException("group");
 
-			return SetPermissionForPage(status, page, action, AuthTools.PrepareGroup(group.Name));
+			return SetPermissionForPage(status, pageFullName, action, AuthTools.PrepareGroup(group.Name));
 		}
 
 		/// <summary>
 		/// Sets a permission for a page.
 		/// </summary>
 		/// <param name="status">The authorization status.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="action">The action of which to modify the authorization status.</param>
 		/// <param name="user">The user subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
-		public bool SetPermissionForPage(AuthStatus status, PageInfo page, string action, UserInfo user) {
+		public bool SetPermissionForPage(AuthStatus status, string pageFullName, string action, UserInfo user) {
 			if(user == null) throw new ArgumentNullException("user");
 
-			return SetPermissionForPage(status, page, action, AuthTools.PrepareUsername(user.Username));
+			return SetPermissionForPage(status, pageFullName, action, AuthTools.PrepareUsername(user.Username));
 		}
 
 		/// <summary>
 		/// Sets a permission for a page.
 		/// </summary>
 		/// <param name="status">The authorization status.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="action">The action of which to modify the authorization status.</param>
 		/// <param name="subject">The subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
-		private bool SetPermissionForPage(AuthStatus status, PageInfo page, string action, string subject) {
-			if(page == null) throw new ArgumentNullException("page");
+		private bool SetPermissionForPage(AuthStatus status, string pageFullName, string action, string subject) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
+			if(pageFullName.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
 			if(action != Actions.FullControl && !AuthTools.IsValidAction(action, Actions.ForPages.All)) {
@@ -309,30 +310,30 @@ namespace ScrewTurn.Wiki {
 			}
 
 			if(status == AuthStatus.Delete) {
-				bool done = _settingsProvider.AclManager.DeleteEntry(Actions.ForPages.ResourceMasterPrefix + page.FullName,
+				bool done = _settingsProvider.AclManager.DeleteEntry(Actions.ForPages.ResourceMasterPrefix + pageFullName,
 					action, subject);
 
 				if(done) {
-					Log.LogEntry(MessageDeleteSuccess + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, page.FullName,
+					Log.LogEntry(MessageDeleteSuccess + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, pageFullName,
 						action, subject, Delete), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
-					Log.LogEntry(MessageDeleteFailure + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, page.FullName,
+					Log.LogEntry(MessageDeleteFailure + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, pageFullName,
 						action, subject, Delete), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
 				return done;
 			}
 			else {
-				bool done = _settingsProvider.AclManager.StoreEntry(Actions.ForPages.ResourceMasterPrefix + page.FullName,
+				bool done = _settingsProvider.AclManager.StoreEntry(Actions.ForPages.ResourceMasterPrefix + pageFullName,
 					action, subject, status == AuthStatus.Grant ? Value.Grant : Value.Deny);
 
 				if(done) {
-					Log.LogEntry(MessageSetSuccess + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, page.FullName,
+					Log.LogEntry(MessageSetSuccess + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, pageFullName,
 						action, subject, Set + status.ToString()), EntryType.General, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 				else {
-					Log.LogEntry(MessageSetFailure + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, page.FullName,
+					Log.LogEntry(MessageSetFailure + GetLogMessage(Actions.ForPages.ResourceMasterPrefix, pageFullName,
 						action, subject, Set + status.ToString()), EntryType.Error, Log.SystemUsername, _settingsProvider.CurrentWiki);
 				}
 
@@ -432,43 +433,44 @@ namespace ScrewTurn.Wiki {
 		/// Removes all the ACL Entries for a page that are bound to a user group.
 		/// </summary>
 		/// <param name="group">The user group.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		public bool RemoveEntriesForPage(UserGroup group, PageInfo page) {
+		public bool RemoveEntriesForPage(UserGroup group, string pageFullName) {
 			if(group == null) throw new ArgumentNullException("group");
 
-			return RemoveEntriesForPage(AuthTools.PrepareGroup(group.Name), page);
+			return RemoveEntriesForPage(AuthTools.PrepareGroup(group.Name), pageFullName);
 		}
 
 		/// <summary>
 		/// Removes all the ACL Entries for a page that are bound to a user.
 		/// </summary>
 		/// <param name="user">The user.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		public bool RemoveEntriesForPage(UserInfo user, PageInfo page) {
+		public bool RemoveEntriesForPage(UserInfo user, string pageFullName) {
 			if(user == null) throw new ArgumentNullException("user");
 
-			return RemoveEntriesForPage(AuthTools.PrepareUsername(user.Username), page);
+			return RemoveEntriesForPage(AuthTools.PrepareUsername(user.Username), pageFullName);
 		}
 
 		/// <summary>
 		/// Removes all the ACL Entries for a page that are bound to a subject.
 		/// </summary>
 		/// <param name="subject">The subject.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		private bool RemoveEntriesForPage(string subject, PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		private bool RemoveEntriesForPage(string subject, string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
+			if(pageFullName.Length == 0) throw new ArgumentException("page");
 
-			string resourceName = Actions.ForPages.ResourceMasterPrefix + page.FullName;
+			string resourceName = Actions.ForPages.ResourceMasterPrefix + pageFullName;
 
 			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForSubject(subject);
 
 			foreach(AclEntry entry in entries) {
 				if(entry.Resource == resourceName) {
 					// This call automatically logs the operation result
-					bool done = SetPermissionForPage(AuthStatus.Delete, page, entry.Action, subject);
+					bool done = SetPermissionForPage(AuthStatus.Delete, pageFullName, entry.Action, subject);
 					if(!done) return false;
 				}
 			}

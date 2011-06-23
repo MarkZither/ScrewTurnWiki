@@ -11,8 +11,8 @@ namespace ScrewTurn.Wiki {
 
 	public partial class Editor : System.Web.UI.UserControl {
 
-		private PageInfo currentPage = null;
-        private bool inWYSIWYG = false;
+		private PageContent currentPage = null;
+		private bool inWYSIWYG = false;
 		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
@@ -35,8 +35,8 @@ namespace ScrewTurn.Wiki {
 				InitToolbar();
 			}
 
-            if(mlvEditor.ActiveViewIndex == 1) inWYSIWYG = true;
-            else inWYSIWYG = false;
+			if(mlvEditor.ActiveViewIndex == 1) inWYSIWYG = true;
+			else inWYSIWYG = false;
 
 			//SelectTab(0);
 			if(ViewState["Tab"] != null) SelectTab((int)ViewState["Tab"]);
@@ -135,45 +135,45 @@ namespace ScrewTurn.Wiki {
 		protected void btnWikiMarkup_Click(object sender, EventArgs e) {
 			SelectTab(0);
 
-            //added for WYSIWYG
-            //if last view was WYSIWYG take text from WYSIWYG to Markup
+			//added for WYSIWYG
+			//if last view was WYSIWYG take text from WYSIWYG to Markup
 			if(inWYSIWYG) {
 				ReverseFormatter reverseFormatter = new ReverseFormatter();
 				txtMarkup.Text = reverseFormatter.ReverseFormat(currentWiki, lblWYSIWYG.Text);
 			}
-            //end
+			//end
 		}
 
-        protected void btnVisual_Click(object sender, EventArgs e) {
+		protected void btnVisual_Click(object sender, EventArgs e) {
 			SelectTab(1);
 
-            //added for WYSIWYG
+			//added for WYSIWYG
 			//lblWYSIWYG.Text = FormattingPipeline.FormatWithPhase1And2(txtMarkup.Text, null);
 			string[] links = null;
 			lblWYSIWYG.Text = Formatter.Format(currentWiki, txtMarkup.Text.Replace("<", "&lt;").Replace(">", "&gt;"),
 				false, FormattingContext.Unknown, null, out links, true);
-            //end
+			//end
 		}
 
 		protected void btnPreview_Click(object sender, EventArgs e) {
 			SelectTab(2);
 
-            //added for WYSIWYG
-            //if last view was WYSIWYG take text from WYSIWYG to Preview
-            //in both cases I need to synchronize WYSIWYG and Markup view
-            if(inWYSIWYG) {
+			//added for WYSIWYG
+			//if last view was WYSIWYG take text from WYSIWYG to Preview
+			//in both cases I need to synchronize WYSIWYG and Markup view
+			if(inWYSIWYG) {
 				lblPreview.Text = lblWYSIWYG.Text.Replace("&lt;", "<").Replace("&gt;", ">");
 				ReverseFormatter reverseFormatter = new ReverseFormatter();
-                txtMarkup.Text = reverseFormatter.ReverseFormat(currentWiki, lblWYSIWYG.Text);
-            }
-            else {
-                lblPreview.Text = FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, txtMarkup.Text, false, FormattingContext.Unknown, null),
+				txtMarkup.Text = reverseFormatter.ReverseFormat(currentWiki, lblWYSIWYG.Text);
+			}
+			else {
+				lblPreview.Text = FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, txtMarkup.Text, false, FormattingContext.Unknown, null),
 					FormattingContext.Unknown, null);
-                //lblWYSIWYG.Text = lblPreview.Text;
+				//lblWYSIWYG.Text = lblPreview.Text;
 				string[] links = null;
 				lblWYSIWYG.Text = Formatter.Format(currentWiki, txtMarkup.Text, false, FormattingContext.Unknown, null, out links, true);
-            }
-            //end
+			}
+			//end
 		}
 
 		#endregion
@@ -297,7 +297,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <remarks>This property is used for enabling the "link attachment" feature in the editor.
 		/// If the current Page is null, the feature is disabled.</remarks>
-		public PageInfo CurrentPage {
+		public PageContent CurrentPage {
 			get { return currentPage; }
 			set { currentPage = value; }
 		}

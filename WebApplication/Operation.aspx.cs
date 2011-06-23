@@ -50,12 +50,12 @@ namespace ScrewTurn.Wiki {
 			string pg = Request["Page"];
 			if(ms == null || ms.Length == 0 || pg == null || pg.Length == 0) UrlTools.RedirectHome(currentWiki);
 
-			PageInfo page = Pages.FindPage(currentWiki, pg);
+			PageContent page = Pages.FindPage(currentWiki, pg);
 			if(page == null) UrlTools.RedirectHome(currentWiki);
 			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, page.FullName, GlobalSettings.PageExtension));
 
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
-			bool canManageDiscussion = authChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion,
+			bool canManageDiscussion = authChecker.CheckActionForPage(page.FullName, Actions.ForPages.ManageDiscussion,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			if(!canManageDiscussion) UrlTools.Redirect("AccessDenied.aspx");
 
@@ -72,7 +72,7 @@ namespace ScrewTurn.Wiki {
 
 			StringBuilder sb = new StringBuilder(500);
 			sb.Append("<b>");
-			sb.Append(FormattingPipeline.PrepareTitle(currentWiki, message.Subject, false, FormattingContext.MessageBody, page));
+			sb.Append(FormattingPipeline.PrepareTitle(currentWiki, message.Subject, false, FormattingContext.MessageBody, page.FullName));
 			sb.Append("</b><br /><small>");
 			sb.Append(Properties.Messages.Posted);
 			sb.Append(" ");
@@ -82,15 +82,15 @@ namespace ScrewTurn.Wiki {
 			sb.Append(" ");
 			sb.Append(Users.UserLink(currentWiki, message.Username));
 			sb.Append("</small><br /><br />");
-			sb.Append(FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, message.Body, false, FormattingContext.MessageBody, page),
-				FormattingContext.MessageBody, page));
+			sb.Append(FormattingPipeline.FormatWithPhase3(currentWiki, FormattingPipeline.FormatWithPhase1And2(currentWiki, message.Body, false, FormattingContext.MessageBody, page.FullName),
+				FormattingContext.MessageBody, page.FullName));
 
 			lblDeleteMessageContent.Text = sb.ToString();
 		}
 
 		protected void btnDeleteMessage_Click(object sender, EventArgs e) {
 			int id = int.Parse(Request["Message"]);
-			PageInfo page = Pages.FindPage(currentWiki, Request["Page"]);
+			PageContent page = Pages.FindPage(currentWiki, Request["Page"]);
 			Log.LogEntry("Message deletion requested for " + page.FullName + "." + id.ToString(), EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
 			bool done = Pages.RemoveMessage(page, id, chkDeleteMessageReplies.Checked);
 			UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, Request["Page"], GlobalSettings.PageExtension + "?Discuss=1"));

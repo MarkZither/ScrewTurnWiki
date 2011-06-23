@@ -37,11 +37,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="raw">The raw WikiMarkup to format.</param>
 		/// <param name="forIndexing">A value indicating whether the formatting is being done for content indexing.</param>
 		/// <param name="context">The formatting context.</param>
-		/// <param name="current">The current Page, if any.</param>
+		/// <param name="currentPageFullName">The full name of the current Page, if any.</param>
 		/// <returns>The formatted content.</returns>
-		public static string FormatWithPhase1And2(string wiki, string raw, bool forIndexing, FormattingContext context, PageInfo current) {
+		public static string FormatWithPhase1And2(string wiki, string raw, bool forIndexing, FormattingContext context, string currentPageFullName) {
 			string[] tempLinks;
-			return FormatWithPhase1And2(wiki, raw, forIndexing, context, current, out tempLinks);
+			return FormatWithPhase1And2(wiki, raw, forIndexing, context, currentPageFullName, out tempLinks);
 		}
 
 		/// <summary>
@@ -51,13 +51,13 @@ namespace ScrewTurn.Wiki {
 		/// <param name="raw">The raw WikiMarkup to format.</param>
 		/// <param name="forIndexing">A value indicating whether the formatting is being done for content indexing.</param>
 		/// <param name="context">The formatting context.</param>
-		/// <param name="current">The current Page, if any.</param>
+		/// <param name="currentPageFullName">The full name of the current Page, if any.</param>
 		/// <param name="linkedPages">The Pages linked by the current Page.</param>
 		/// <returns>The formatted content.</returns>
-		public static string FormatWithPhase1And2(string wiki, string raw, bool forIndexing, FormattingContext context, PageInfo current, out string[] linkedPages) {
+		public static string FormatWithPhase1And2(string wiki, string raw, bool forIndexing, FormattingContext context, string currentPageFullName, out string[] linkedPages) {
 			ContextInformation info = null;
 			string username = SessionFacade.CurrentUsername;
-			info = new ContextInformation(forIndexing, false, context, current, System.Threading.Thread.CurrentThread.CurrentCulture.Name, HttpContext.Current,
+			info = new ContextInformation(forIndexing, false, context, currentPageFullName, System.Threading.Thread.CurrentThread.CurrentCulture.Name, HttpContext.Current,
 				username, SessionFacade.GetCurrentGroupNames(wiki));
 
 			IList<IFormatterProviderV40> providers = GetSortedFormatters(wiki);
@@ -76,7 +76,7 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			raw = Formatter.Format(wiki, raw, forIndexing, context, current, out linkedPages);
+			raw = Formatter.Format(wiki, raw, forIndexing, context, currentPageFullName, out linkedPages);
 
 			// Phase 2
 			foreach(IFormatterProviderV40 provider in providers) {
@@ -101,14 +101,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="raw">The raw WikiMarkup to format.</param>
 		/// <param name="context">The formatting context.</param>
-		/// <param name="current">The current Page, if any.</param>
+		/// <param name="currentPageFullName">The full name of the current Page, if any.</param>
 		/// <returns>The formatted content.</returns>
-		public static string FormatWithPhase3(string wiki, string raw, FormattingContext context, PageInfo current) {
-			raw = Formatter.FormatPhase3(wiki, raw, context, current);
+		public static string FormatWithPhase3(string wiki, string raw, FormattingContext context, string currentPageFullName) {
+			raw = Formatter.FormatPhase3(wiki, raw, context, currentPageFullName);
 
 			ContextInformation info = null;
 			string username = SessionFacade.CurrentUsername;
-			info = new ContextInformation(false, false, context, current, System.Threading.Thread.CurrentThread.CurrentCulture.Name, HttpContext.Current,
+			info = new ContextInformation(false, false, context, currentPageFullName, System.Threading.Thread.CurrentThread.CurrentCulture.Name, HttpContext.Current,
 				username, SessionFacade.GetCurrentGroupNames(wiki));
 
 			// Phase 3
@@ -135,11 +135,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="title">The input title.</param>
 		/// <param name="forIndexing">A value indicating whether the formatting is being done for content indexing.</param>
 		/// <param name="context">The context information.</param>
-		/// <param name="current">The current page, if any.</param>
+		/// <param name="currentPageFullName">The full name of the current page, if any.</param>
 		/// <returns>The prepared title, properly sanitized.</returns>
-		public static string PrepareTitle(string wiki, string title, bool forIndexing, FormattingContext context, PageInfo current) {
+		public static string PrepareTitle(string wiki, string title, bool forIndexing, FormattingContext context, string currentPageFullName) {
 			string temp = title;
-			ContextInformation info = new ContextInformation(forIndexing, false, context, current, System.Threading.Thread.CurrentThread.CurrentCulture.Name,
+			ContextInformation info = new ContextInformation(forIndexing, false, context, currentPageFullName, System.Threading.Thread.CurrentThread.CurrentCulture.Name,
 				HttpContext.Current, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(wiki));
 
 			foreach(IFormatterProviderV40 prov in GetSortedFormatters(wiki)) {

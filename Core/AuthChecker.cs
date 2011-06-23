@@ -111,13 +111,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Checks whether an action is allowed for a page.
 		/// </summary>
-		/// <param name="page">The current page.</param>
+		/// <param name="pageFullName">The current page full name.</param>
 		/// <param name="action">The action the user is attempting to perform.</param>
 		/// <param name="currentUser">The current user.</param>
 		/// <param name="groups">The groups the user is member of.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
-		public bool CheckActionForPage(PageInfo page, string action, string currentUser, string[] groups) {
-			if(page == null) throw new ArgumentNullException("page");
+		public bool CheckActionForPage(string pageFullName, string action, string currentUser, string[] groups) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
@@ -130,8 +130,8 @@ namespace ScrewTurn.Wiki {
 
 			if(currentUser == "admin") return true;
 
-			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForPages.ResourceMasterPrefix + page.FullName);
-			Authorization auth = AclEvaluator.AuthorizeAction(Actions.ForPages.ResourceMasterPrefix + page.FullName, action,
+			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForPages.ResourceMasterPrefix + pageFullName);
+			Authorization auth = AclEvaluator.AuthorizeAction(Actions.ForPages.ResourceMasterPrefix + pageFullName, action,
 				AuthTools.PrepareUsername(currentUser), AuthTools.PrepareGroups(groups), entries);
 
 			if(auth != Authorization.Unknown) return auth == Authorization.Granted;
@@ -140,14 +140,14 @@ namespace ScrewTurn.Wiki {
 			string[] localEscalators = null;
 			if(Actions.ForPages.LocalEscalators.TryGetValue(action, out localEscalators)) {
 				foreach(string localAction in localEscalators) {
-					bool authorized = CheckActionForPage(page, localAction, currentUser, groups);
+					bool authorized = CheckActionForPage(pageFullName, localAction, currentUser, groups);
 					if(authorized) return true;
 				}
 			}
 
 			// Try namespace escalators
 			string[] namespaceEscalators = null;
-			string nsName = NameTools.GetNamespace(page.FullName);
+			string nsName = NameTools.GetNamespace(pageFullName);
 			NamespaceInfo ns = string.IsNullOrEmpty(nsName) ? null : new NamespaceInfo(nsName, null, null);
 			if(Actions.ForPages.NamespaceEscalators.TryGetValue(action, out namespaceEscalators)) {
 				foreach(string namespaceAction in namespaceEscalators) {

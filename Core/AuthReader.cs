@@ -228,12 +228,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Retrieves the subjects that have ACL entries set for a page.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page.</param>
 		/// <returns>The subjects.</returns>
-		public SubjectInfo[] RetrieveSubjectsForPage(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		public SubjectInfo[] RetrieveSubjectsForPage(string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
+			if(pageFullName.Length == 0) throw new ArgumentException("page");
 
-			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForPages.ResourceMasterPrefix + page.FullName);
+			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForPages.ResourceMasterPrefix + pageFullName);
 
 			List<SubjectInfo> result = new List<SubjectInfo>(entries.Length);
 
@@ -255,36 +256,37 @@ namespace ScrewTurn.Wiki {
 		/// Gets all the actions for a page that are granted to a group.
 		/// </summary>
 		/// <param name="group">The user group.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The granted actions.</returns>
-		public string[] RetrieveGrantsForPage(UserGroup group, PageInfo page) {
+		public string[] RetrieveGrantsForPage(UserGroup group, string pageFullName) {
 			if(group == null) throw new ArgumentNullException("group");
 
-			return RetrieveGrantsForPage(AuthTools.PrepareGroup(group.Name), page);
+			return RetrieveGrantsForPage(AuthTools.PrepareGroup(group.Name), pageFullName);
 		}
 
 		/// <summary>
 		/// Gets all the actions for a page that are granted to a user.
 		/// </summary>
 		/// <param name="user">The user.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The granted actions.</returns>
-		public string[] RetrieveGrantsForPage(UserInfo user, PageInfo page) {
+		public string[] RetrieveGrantsForPage(UserInfo user, string pageFullName) {
 			if(user == null) throw new ArgumentNullException("user");
 
-			return RetrieveGrantsForPage(AuthTools.PrepareUsername(user.Username), page);
+			return RetrieveGrantsForPage(AuthTools.PrepareUsername(user.Username), pageFullName);
 		}
 
 		/// <summary>
 		/// Gets all the actions for a page that are granted to a subject.
 		/// </summary>
 		/// <param name="subject">The subject.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The granted actions.</returns>
-		private string[] RetrieveGrantsForPage(string subject, PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		private string[] RetrieveGrantsForPage(string subject, string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
+			if(pageFullName.Length == 0) throw new ArgumentException("page");
 
-			string resourceName = Actions.ForPages.ResourceMasterPrefix + page.FullName;
+			string resourceName = Actions.ForPages.ResourceMasterPrefix + pageFullName;
 
 			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForSubject(subject);
 
@@ -303,36 +305,37 @@ namespace ScrewTurn.Wiki {
 		/// Gets all the actions for a page that are denied to a group.
 		/// </summary>
 		/// <param name="group">The user group.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The granted actions.</returns>
-		public string[] RetrieveDenialsForPage(UserGroup group, PageInfo page) {
+		public string[] RetrieveDenialsForPage(UserGroup group, string pageFullName) {
 			if(group == null) throw new ArgumentNullException("group");
 
-			return RetrieveDenialsForPage(AuthTools.PrepareGroup(group.Name), page);
+			return RetrieveDenialsForPage(AuthTools.PrepareGroup(group.Name), pageFullName);
 		}
 
 		/// <summary>
 		/// Gets all the actions for a page that are denied to a user.
 		/// </summary>
 		/// <param name="user">The user.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The granted actions.</returns>
-		public string[] RetrieveDenialsForPage(UserInfo user, PageInfo page) {
+		public string[] RetrieveDenialsForPage(UserInfo user, string pageFullName) {
 			if(user == null) throw new ArgumentNullException("user");
 
-			return RetrieveDenialsForPage(AuthTools.PrepareUsername(user.Username), page);
+			return RetrieveDenialsForPage(AuthTools.PrepareUsername(user.Username), pageFullName);
 		}
 
 		/// <summary>
 		/// Gets all the actions for a page that are denied to a subject.
 		/// </summary>
 		/// <param name="subject">The subject.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The granted actions.</returns>
-		private string[] RetrieveDenialsForPage(string subject, PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		private string[] RetrieveDenialsForPage(string subject, string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
+			if(pageFullName.Length == 0) throw new ArgumentException("page");
 
-			string resourceName = Actions.ForPages.ResourceMasterPrefix + page.FullName;
+			string resourceName = Actions.ForPages.ResourceMasterPrefix + pageFullName;
 
 			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForSubject(subject);
 

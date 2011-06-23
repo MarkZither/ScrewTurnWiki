@@ -84,15 +84,15 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 			try {
 				if(context.Context == FormattingContext.PageContent && context.Page != null) {
 					if(context.HttpContext.Request["vote"] != null) {
-						AddRating(context.Page.FullName, int.Parse(context.HttpContext.Request["vote"]));
-						System.Web.HttpCookie cookie = new System.Web.HttpCookie("RatingManagerPlugin_" + context.Page.FullName, context.HttpContext.Request["vote"]);
+						AddRating(context.Page, int.Parse(context.HttpContext.Request["vote"]));
+						System.Web.HttpCookie cookie = new System.Web.HttpCookie("RatingManagerPlugin_" + context.Page, context.HttpContext.Request["vote"]);
 						cookie.Expires = DateTime.Now.AddYears(10);
 						context.HttpContext.Response.Cookies.Add(cookie);
 						return "";
 					}
 				}
 				if(context.Page != null) {
-					ComputeRating(context, buffer, context.Page.FullName);
+					ComputeRating(context, buffer, context.Page);
 				}
 				else {
 					return raw;
@@ -211,7 +211,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 				string fileContent = "";
 
 				if(FileExists(filesStorageProvider, DefaultDirectoryName(), ratingFileName)) {
-					filesStorageProvider.RetrieveFile(DefaultDirectoryName() + ratingFileName, stream, true);
+					filesStorageProvider.RetrieveFile(DefaultDirectoryName() + ratingFileName, stream);
 					stream.Seek(0, SeekOrigin.Begin);
 					fileContent = Encoding.UTF8.GetString(stream.ToArray());
 				}
@@ -239,7 +239,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 			MemoryStream stream = new MemoryStream();
 
 			if(FileExists(filesStorageProvider, DefaultDirectoryName(), ratingFileName)) {
-				filesStorageProvider.RetrieveFile(DefaultDirectoryName() + ratingFileName, stream, true);
+				filesStorageProvider.RetrieveFile(DefaultDirectoryName() + ratingFileName, stream);
 				stream.Seek(0, SeekOrigin.Begin);
 			}
 			string fileContent = Encoding.UTF8.GetString(stream.ToArray());

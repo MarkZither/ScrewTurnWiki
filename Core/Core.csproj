@@ -62,9 +62,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip.Reduced">
-      <HintPath>..\References\Lib\DotNetZipLib-DevKit-v1.9\Ionic.Zip.Reduced.dll</HintPath>
-    </Reference>
     <Reference Include="SgmlReaderDll">
       <HintPath>..\References\Lib\MindTouch SGML Reader\SgmlReaderDll.dll</HintPath>
     </Reference>
@@ -90,24 +87,19 @@
     <Compile Include="CollectorsBox.cs" />
     <Compile Include="Collisions.cs" />
     <Compile Include="Content.cs" />
-    <Compile Include="DataMigrator.cs" />
     <Compile Include="Defaults.cs" />
     <Compile Include="DiffTools.cs" />
     <Compile Include="EmailTools.cs" />
     <Compile Include="FileDocument.cs" />
     <Compile Include="FilesAndAttachments.cs" />
-    <Compile Include="FilesStorageProvider.cs" />
     <Compile Include="Formatter.cs" />
     <Compile Include="FormattingPipeline.cs" />
     <Compile Include="GlobalSettings.cs" />
-    <Compile Include="GlobalSettingsStorageProvider.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="Host.cs" />
     <Compile Include="ICollectorsBox.cs" />
     <Compile Include="IndexStorer.cs" />
-    <Compile Include="LocalPageInfo.cs" />
     <Compile Include="LocalProvidersTools.cs" />
-    <Compile Include="LocalUserInfo.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="NavigationPaths.cs" />
@@ -115,11 +107,9 @@
     <Compile Include="Pages.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PagesStorageProvider.cs" />
     <Compile Include="AuthReader.cs" />
     <Compile Include="Preferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProviderBase.cs" />
     <Compile Include="ProviderCollector.cs" />
     <Compile Include="ProviderLoader.cs" />
     <Compile Include="ProviderUpdater.cs" />
@@ -129,7 +119,6 @@
     <Compile Include="SearchTools.cs" />
     <Compile Include="SessionFacade.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="SettingsStorageProvider.cs" />
     <Compile Include="SettingsTools.cs" />
     <Compile Include="Snippets.cs" />
     <Compile Include="StartupTools.cs" />
@@ -138,13 +127,11 @@
     <Compile Include="SubjectInfo.cs" />
     <Compile Include="Templates.cs" />
     <Compile Include="Themes.cs" />
-    <Compile Include="ThemesStorageProvider.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="UrlTools.cs" />
     <Compile Include="Users.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UsersStorageProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AclEngine\AclEngine.csproj">

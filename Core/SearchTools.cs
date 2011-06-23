@@ -17,34 +17,34 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name to look for (<c>null</c> for the root).</param>
 		/// <param name="nspace">The namespace to search into.</param>
-		/// <param name="wiki">The wiki.</param>
+		/// <param name="wiki">The wiki to search into.</param>
 		/// <returns>The similar pages, if any.</returns>
-		public static PageInfo[] SearchSimilarPages(string name, string nspace, string wiki) {
+		public static PageContent[] SearchSimilarPages(string name, string nspace, string wiki) {
 			if(string.IsNullOrEmpty(nspace)) nspace = null;
 
 			SearchResultCollection searchResults = Search(wiki, name, false, false, SearchOptions.AtLeastOneWord);
 
-			List<PageInfo> result = new List<PageInfo>(20);
+			List<PageContent> result = new List<PageContent>(20);
 
 			foreach(SearchResult res in searchResults) {
 				PageDocument pageDoc = res.Document as PageDocument;
 				if(pageDoc != null) {
-					string pageNamespace = NameTools.GetNamespace(pageDoc.PageInfo.FullName);
+					string pageNamespace = NameTools.GetNamespace(pageDoc.Page.FullName);
 					if(string.IsNullOrEmpty(pageNamespace)) pageNamespace = null;
 
 					if(pageNamespace == nspace) {
-						result.Add(pageDoc.PageInfo);
+						result.Add(pageDoc.Page);
 					}
 				}
 			}
 			
 			// Search page names for matches
-			List<PageInfo> allPages = Pages.GetPages(wiki, Pages.FindNamespace(wiki, nspace));
+			List<PageContent> allPages = Pages.GetPages(wiki, Pages.FindNamespace(wiki, nspace));
 			PageNameComparer comp = new PageNameComparer();
 			string currentName = name.ToLowerInvariant();
-			foreach(PageInfo page in allPages) {
+			foreach(PageContent page in allPages) {
 				if(NameTools.GetLocalName(page.FullName).ToLowerInvariant().Contains(currentName)) {
-					if(result.Find(delegate(PageInfo p) { return comp.Compare(p, page) == 0; }) == null) {
+					if(result.Find(delegate(PageContent p) { return (comp.Compare(p, page) == 0); }) == null) {
 						result.Add(page);
 					}
 				}
@@ -123,16 +123,12 @@ namespace ScrewTurn.Wiki {
 					string[] pagesWithAttachments = prov.GetPagesWithAttachments();
 					foreach(string page in pagesWithAttachments) {
 						// Store attachments for the current page in the index
-						PageInfo pageInfo = Pages.FindPage(wiki, page);
 
-						// pageInfo can be null if the index is corrupted
-						if(pageInfo != null) {
-							foreach(string attachment in prov.ListPageAttachments(pageInfo)) {
-								FileDetails details = prov.GetPageAttachmentDetails(pageInfo, attachment);
-								temporaryIndex.StoreDocument(new PageAttachmentDocument(pageInfo,
-									attachment, prov.GetType().FullName, wiki, details.LastModified),
-									new string[0], "", null);
-							}
+						foreach(string attachment in prov.ListPageAttachments(page)) {
+							FileDetails details = prov.GetPageAttachmentDetails(page, attachment);
+							temporaryIndex.StoreDocument(new PageAttachmentDocument(page,
+								attachment, prov.GetType().FullName, wiki, details.LastModified),
+								new string[0], "", null);
 						}
 					}
 				}

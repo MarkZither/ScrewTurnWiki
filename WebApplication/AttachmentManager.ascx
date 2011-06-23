@@ -51,7 +51,6 @@
 					<th>&nbsp;</th>
 					<th><asp:Literal ID="lblName" runat="server" Text="Name" EnableViewState="False" meta:resourcekey="lblNameResource1" /></th>
 					<th><asp:Literal ID="lblSize" runat="server" Text="Size" EnableViewState="False" meta:resourcekey="lblSizeResource1" /></th>
-					<th><asp:Literal ID="lblDownloads" runat="server" Text="Downloads" EnableViewState="False" meta:resourcekey="lblDownloadsResource1" /></th>
 					<th>&nbsp;</th>
 				</tr>
 				</thead>
@@ -62,7 +61,6 @@
 				<td><img src="Images/File.png" alt="-" /></td>
 				<td><a href='<%# Eval("Link") %>' title="<%# ScrewTurn.Wiki.Properties.Messages.Download %>" style='<%# ((bool)Eval("CanDownload") ? "" : "text-decoration: line-through;") %>'><%# Eval("Name") %></a></td>
 				<td><%# Eval("Size") %></td>
-				<td><%# Eval("Downloads") %></td>
 				<td>
 					<asp:LinkButton ID="btnRename" runat="server" Visible='<%# (bool)Eval("CanDelete") %>' Text="Rename" CommandName="Rename" ToolTip="Rename this Attachment" CommandArgument='<%# Eval("Name") %>' meta:resourcekey="btnRenameResource2" />
 					&bull;
@@ -76,7 +74,6 @@
 				<td><img src="Images/File.png" alt="-" /></td>
 				<td><a href='<%# Eval("Link") %>' title="<%# ScrewTurn.Wiki.Properties.Messages.Download %>" style='<%# ((bool)Eval("CanDownload") ? "" : "text-decoration: line-through;") %>'><%# Eval("Name") %></a></td>
 				<td><%# Eval("Size") %></td>
-				<td><%# Eval("Downloads") %></td>
 				<td>
 					<asp:LinkButton ID="btnRename" runat="server" Visible='<%# (bool)Eval("CanDelete") %>' Text="Rename" CommandName="Rename" ToolTip="Rename this Attachment" CommandArgument='<%# Eval("Name") %>' meta:resourcekey="btnRenameResource3" />
 					&bull;

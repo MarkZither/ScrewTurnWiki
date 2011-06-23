@@ -328,9 +328,9 @@ namespace ScrewTurn.Wiki {
 
 			string currentWiki = DetectWiki();
 
-			List<PageInfo> selectedPages = new List<PageInfo>(20);
+			List<PageContent> selectedPages = new List<PageContent>(20);
 			foreach(string pg in pageListBuilder.SelectedPages) {
-				PageInfo page = Pages.FindPage(currentWiki, pg);
+				PageContent page = Pages.FindPage(currentWiki, pg);
 				if(page != null) selectedPages.Add(page);
 			}
 
@@ -356,7 +356,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Bulk rebind requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
-			foreach(PageInfo page in selectedPages) {
+			foreach(PageContent page in selectedPages) {
 				CategoryInfo[] cats = null;
 				if(rdoBulkAdd.Checked) {
 					// Merge selected categories with previous ones

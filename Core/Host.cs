@@ -253,21 +253,22 @@ namespace ScrewTurn.Wiki {
 		/// Checks whether an action is allowed for a page in the given page.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="action">The action (see <see cref="Actions.ForPages"/> class)</param>
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b>, <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
-		public bool CheckActionForPage(string wiki, PageInfo page, string action, UserInfo user) {
-			if(page == null) throw new ArgumentNullException("page");
+		public bool CheckActionForPage(string wiki, string pageFullName, string action, UserInfo user) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
+			if(pageFullName.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
 
 			var temp = user != null ? user : Users.GetAnonymousAccount(wiki);
 			
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
-			return authChecker.CheckActionForPage(page, action, temp.Username, temp.Groups);
+			return authChecker.CheckActionForPage(pageFullName, action, temp.Username, temp.Groups);
 		}
 
 		/// <summary>
@@ -326,7 +327,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The pages.</returns>
-		public PageInfo[] GetPages(string wiki, NamespaceInfo nspace) {
+		public PageContent[] GetPages(string wiki, NamespaceInfo nspace) {
 			return Pages.GetPages(wiki, nspace).ToArray();
 		}
 
@@ -365,7 +366,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The Page.</param>
 		/// <returns>The Categories.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
-		public CategoryInfo[] GetCategoriesPerPage(PageInfo page) {
+		public CategoryInfo[] GetCategoriesPerPage(PageContent page) {
 			if(page == null) throw new ArgumentNullException("page");
 
 			return Pages.GetCategoriesForPage(page);
@@ -379,23 +380,11 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Wiki Page or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>fullName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>fullName</b> is empty.</exception>
-		public PageInfo FindPage(string wiki, string fullName) {
+		public PageContent FindPage(string wiki, string fullName) {
 			if(fullName == null) throw new ArgumentNullException("fullName");
 			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty");
 
 			return Pages.FindPage(wiki, fullName);
-		}
-
-		/// <summary>
-		/// Gets the Content of a Page.
-		/// </summary>
-		/// <param name="page">The Page.</param>
-		/// <returns>The Page Content.</returns>
-		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
-		public PageContent GetPageContent(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
-
-			return Content.GetPageContent(page);
 		}
 
 		/// <summary>
@@ -404,7 +393,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The Page.</param>
 		/// <returns>The Backup/Revision numbers.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
-		public int[] GetBackups(PageInfo page) {
+		public int[] GetBackups(PageContent page) {
 			if(page == null) throw new ArgumentNullException("page");
 
 			return Pages.GetBackups(page).ToArray();
@@ -416,9 +405,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The Page.</param>
 		/// <param name="revision">The revision.</param>
 		/// <returns>The Backup Content.</returns>
-		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <b>revision</b> is less than zero.</exception>
-		public PageContent GetBackupContent(PageInfo page, int revision) {
+		public PageContent GetBackupContent(PageContent page, int revision) {
 			if(page == null) throw new ArgumentNullException("page");
 			if(revision < 0) throw new ArgumentOutOfRangeException("revision", "Revision must be greater than or equal to zero");
 
@@ -429,16 +418,15 @@ namespace ScrewTurn.Wiki {
 		/// Gets the formatted content of a Wiki Page.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The formatted content.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
-		public string GetFormattedContent(string wiki, PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		public string GetFormattedContent(string wiki, string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 
-			PageInfo pageInfo = Pages.FindPage(wiki, page.FullName);
-			if(pageInfo == null) return null;
-			PageContent content = Content.GetPageContent(pageInfo);
-			return Formatter.Format(wiki, content.Content, false, FormattingContext.PageContent, page);
+			PageContent pageContent = Pages.FindPage(wiki, pageFullName);
+			if(pageContent == null) return null;
+			return Formatter.Format(wiki, pageContent.Content, false, FormattingContext.PageContent, pageFullName);
 		}
 
 		/// <summary>
@@ -458,31 +446,31 @@ namespace ScrewTurn.Wiki {
 		/// Prepares content for indexing in the search engine, performing bare-bones formatting and removing all WikiMarkup and XML-like characters.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page being indexed, if any, <c>null</c> otherwise.</param>
+		/// <param name="pageFullName">The full name of the page being indexed, if any, <c>null</c> otherwise.</param>
 		/// <param name="content">The string to prepare.</param>
 		/// <returns>The sanitized string.</returns>
 		/// <exception cref="ArgumentNullException">If <b>content</b> is <c>null</c>.</exception>
-		public string PrepareContentForIndexing(string wiki, PageInfo page, string content) {
+		public string PrepareContentForIndexing(string wiki, string pageFullName, string content) {
 			if(content == null) throw new ArgumentNullException("content");
 
 			// TODO: Improve this method - HTML formatting should not be needed
 			return Tools.RemoveHtmlMarkup(FormattingPipeline.FormatWithPhase1And2(wiki, content, true,
-				page != null ? FormattingContext.PageContent : FormattingContext.Unknown, page));
+				pageFullName != null ? FormattingContext.PageContent : FormattingContext.Unknown, pageFullName));
 		}
 
 		/// <summary>
 		/// Prepares a title for indexing in the search engine, removing all WikiMarkup and XML-like characters.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page being indexed, if any, <c>null</c> otherwise.</param>
+		/// <param name="pageFullName">The full name of the page being indexed, if any, <c>null</c> otherwise.</param>
 		/// <param name="title">The title to prepare.</param>
 		/// <returns>The sanitized string.</returns>
 		/// <exception cref="ArgumentNullException">If <b>title</b> is <c>null</c>.</exception>
-		public string PrepareTitleForIndexing(string wiki, PageInfo page, string title) {
+		public string PrepareTitleForIndexing(string wiki, string pageFullName, string title) {
 			if(title == null) throw new ArgumentNullException("title");
 
 			return FormattingPipeline.PrepareTitle(wiki, title, true,
-				page != null ? FormattingContext.PageContent : FormattingContext.Unknown, page);
+				pageFullName != null ? FormattingContext.PageContent : FormattingContext.Unknown, pageFullName);
 		}
 
 		/// <summary>
@@ -547,7 +535,7 @@ namespace ScrewTurn.Wiki {
 
 					foreach(string file in files) {
 						FileDetails details = prov.GetFileDetails(file);
-						result.Add(new StFileInfo(details.Size, details.LastModified, details.RetrievalCount, file, prov));
+						result.Add(new StFileInfo(details.Size, details.LastModified, file, prov));
 					}
 				}
 			}
@@ -556,7 +544,7 @@ namespace ScrewTurn.Wiki {
 
 				foreach(string file in files) {
 					FileDetails details = directory.Provider.GetFileDetails(file);
-					result.Add(new StFileInfo(details.Size, details.LastModified, details.RetrievalCount, file, directory.Provider));
+					result.Add(new StFileInfo(details.Size, details.LastModified, file, directory.Provider));
 				}
 			}
 
@@ -567,19 +555,20 @@ namespace ScrewTurn.Wiki {
 		/// Lists page attachments.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The attachments.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
-		public StFileInfo[] ListPageAttachments(string wiki, PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		public StFileInfo[] ListPageAttachments(string wiki, string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
+			if(pageFullName.Length == 0) throw new ArgumentException("page");
 
 			List<StFileInfo> result = new List<StFileInfo>(10);
 			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
-				string[] attachments = prov.ListPageAttachments(page);
+				string[] attachments = prov.ListPageAttachments(pageFullName);
 
 				foreach(string attn in attachments) {
-					FileDetails details = prov.GetPageAttachmentDetails(page, attn);
-					result.Add(new StFileInfo(details.Size, details.LastModified, details.RetrievalCount, attn, prov));
+					FileDetails details = prov.GetPageAttachmentDetails(pageFullName, attn);
+					result.Add(new StFileInfo(details.Size, details.LastModified, attn, prov));
 				}
 			}
 
@@ -867,24 +856,26 @@ namespace ScrewTurn.Wiki {
 		/// Upgrades the old Page Status to use the new ACL facilities.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page of which to upgrade the status.</param>
+		/// <param name="pageFullName">The full name of the page of which to upgrade the status.</param>
 		/// <param name="oldStatus">The old status ('L' = Locked, 'P' = Public).</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">If <b>oldStatus</b> is invalid.</exception>
-		public bool UpgradePageStatusToAcl(string wiki, PageInfo page, char oldStatus) {
-			if(page == null) throw new ArgumentNullException("page");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="oldStatus"/> is invalid.</exception>
+		public bool UpgradePageStatusToAcl(string wiki, string pageFullName, char oldStatus) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
+			if(pageFullName.Length == 0) throw new ArgumentException("page");
 
 			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 
 			switch(oldStatus) {
 				case 'L':
 					// Locked: only administrators can edit this page
-					return authWriter.SetPermissionForPage(AuthStatus.Deny, page, Actions.ForPages.ModifyPage,
+					return authWriter.SetPermissionForPage(AuthStatus.Deny, pageFullName, Actions.ForPages.ModifyPage,
 						Users.FindUserGroup(wiki, Settings.GetUsersGroup(wiki)));
 				case 'P':
 					// Public: anonymous users can edit this page
-					return authWriter.SetPermissionForPage(AuthStatus.Grant, page, Actions.ForPages.ModifyPage,
+					return authWriter.SetPermissionForPage(AuthStatus.Grant, pageFullName, Actions.ForPages.ModifyPage,
 						Users.FindUserGroup(wiki, Settings.GetAnonymousGroup(wiki)));
 				default:
 					throw new ArgumentOutOfRangeException("oldStatus", "Invalid old status code");
@@ -981,13 +972,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Fires the PageActivity event.
 		/// </summary>
-		/// <param name="page">The page the activity refers to.</param>
+		/// <param name="pageFullName">The full name of the page the activity refers to.</param>
 		/// <param name="pageOldName">The old name of the renamed page, or <c>null</c>.</param>
 		/// <param name="author">The author of the activity.</param>
 		/// <param name="activity">The activity.</param>
-		public void OnPageActivity(PageInfo page, string pageOldName, string author, PageActivity activity) {
+		public void OnPageActivity(string pageFullName, string pageOldName, string author, PageActivity activity) {
 			if(PageActivity != null) {
-				PageActivity(this, new PageActivityEventArgs(page, pageOldName, author, activity));
+				PageActivity(this, new PageActivityEventArgs(pageFullName, pageOldName, author, activity));
 			}
 		}
 
@@ -1025,10 +1016,9 @@ namespace ScrewTurn.Wiki {
 		public void OnAttachmentActivity(string wiki, string provider, string attachment, string page, string oldAttachmentName, FileActivity activity) {
 			if(FileActivity != null) {
 				IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
-				PageInfo pageInfo = Pages.FindPage(wiki, page);
-
+				
 				FileActivity(this, new FileActivityEventArgs(
-					new StFileInfo(prov.GetPageAttachmentDetails(pageInfo, attachment), attachment, prov), oldAttachmentName, null, null, pageInfo, activity));
+					new StFileInfo(prov.GetPageAttachmentDetails(page, attachment), attachment, prov), oldAttachmentName, null, null, page, activity));
 			}
 		}
 

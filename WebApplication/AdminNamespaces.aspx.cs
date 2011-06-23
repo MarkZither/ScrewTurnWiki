@@ -32,10 +32,10 @@ namespace ScrewTurn.Wiki {
 
 			bool canSetPermissions = AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 
-			PageInfo defaultPage = Pages.FindPage(currentWiki, Settings.GetDefaultPage(currentWiki));
+			PageContent defaultPage = Pages.FindPage(currentWiki, Settings.GetDefaultPage(currentWiki));
 
 			// Inject the root namespace as first entry, retrieving the default page in Settings
-			result.Add(new NamespaceRow(new NamespaceInfo(RootName, defaultPage.Provider, defaultPage),
+			result.Add(new NamespaceRow(new NamespaceInfo(RootName, defaultPage.Provider, defaultPage.FullName),
 				Settings.GetTheme(currentWiki, null),
 				Pages.GetPages(currentWiki, null).Count, Pages.GetCategories(currentWiki, null).Count,
 				canSetPermissions, txtCurrentNamespace.Value == RootName));
@@ -233,44 +233,34 @@ namespace ScrewTurn.Wiki {
 
 			if(done) {
 				NamespaceInfo nspace = Pages.FindNamespace(currentWiki, txtName.Text);
-				done = Pages.CreatePage(currentWiki, nspace, "MainPage");
-				PageInfo page = Pages.FindPage(currentWiki, NameTools.GetFullName(nspace.Name, "MainPage"));
+				PageContent page = Pages.SetPageContent(currentWiki, nspace.Name, "MainPage", "Main Page", Log.SystemUsername,
+														DateTime.Now, "", Defaults.MainPageContentForSubNamespace, new string[0], "", SaveMode.Normal);
 
-				if(done) {
-					done = Pages.ModifyPage(page, "Main Page", Log.SystemUsername,
-						DateTime.Now, "", Defaults.MainPageContentForSubNamespace,
-						new string[0], "", SaveMode.Normal);
+				if(page != null) {
+					done = Pages.SetNamespaceDefaultPage(currentWiki, nspace, page);
 
 					if(done) {
-						done = Pages.SetNamespaceDefaultPage(currentWiki, nspace, page);
+						Settings.SetTheme(currentWiki, nspace.Name, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
 
 						if(done) {
-							Settings.SetTheme(currentWiki, nspace.Name, providerThSelector.SelectedProvider + "|" + providerThSelector.SelectedThemes);
-
-							if(done) {
-								RefreshList();
-								lblResult.CssClass = "resultok";
-								lblResult.Text = Properties.Messages.NamespaceCreated;
-								ReturnToList();
-							}
-							else {
-								lblResult.CssClass = "resulterror";
-								lblResult.Text = Properties.Messages.NamespaceCreatedCouldNotSetTheme;
-							}
+							RefreshList();
+							lblResult.CssClass = "resultok";
+							lblResult.Text = Properties.Messages.NamespaceCreated;
+							ReturnToList();
 						}
 						else {
 							lblResult.CssClass = "resulterror";
-							lblResult.Text = Properties.Messages.NamespaceCreatedCouldNotSetDefaultPage;
+							lblResult.Text = Properties.Messages.NamespaceCreatedCouldNotSetTheme;
 						}
 					}
 					else {
 						lblResult.CssClass = "resulterror";
-						lblResult.Text = Properties.Messages.NamespaceCreatedCouldNotStoreDefaultPageContent;
+						lblResult.Text = Properties.Messages.NamespaceCreatedCouldNotSetDefaultPage;
 					}
 				}
 				else {
 					lblResult.CssClass = "resulterror";
-					lblResult.Text = Properties.Messages.NamespaceCreatedCouldNotCreateDefaultPage;
+					lblResult.Text = Properties.Messages.NamespaceCreatedCouldNotStoreDefaultPageContent;
 				}
 			}
 			else {
@@ -371,12 +361,12 @@ namespace ScrewTurn.Wiki {
 				NamespaceInfo nspace = Pages.FindNamespace(
 					currentWiki, txtCurrentNamespace.Value != RootName ? txtCurrentNamespace.Value : null);
 
-				List<PageInfo> pages = Pages.GetPages(currentWiki, nspace);
+				List<PageContent> pages = Pages.GetPages(currentWiki, nspace);
 
-				string currentDefaultPage = nspace != null ? nspace.DefaultPage.FullName : Settings.GetDefaultPage(currentWiki);
+				string currentDefaultPage = nspace != null ? nspace.DefaultPageFullName : Settings.GetDefaultPage(currentWiki);
 
 				lstDefaultPage.Items.Clear();
-				foreach(PageInfo page in pages) {
+				foreach(PageContent page in pages) {
 					ListItem item = new ListItem(NameTools.GetLocalName(page.FullName), page.FullName);
 					if(page.FullName == currentDefaultPage) item.Selected = true;
 					lstDefaultPage.Items.Add(item);
@@ -470,7 +460,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="selected">A value indicating whether the namespace is selected.</param>
 		public NamespaceRow(NamespaceInfo nspace, string theme, int pageCount, int categoryCount, bool canSetPermissions, bool selected) {
 			name = nspace.Name;
-			defaultPage = nspace.DefaultPage.FullName;
+			defaultPage = nspace.DefaultPageFullName;
 			this.theme = theme;
 			this.pageCount = pageCount.ToString();
 			this.categoryCount = categoryCount.ToString();

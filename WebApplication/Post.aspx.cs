@@ -17,8 +17,7 @@ namespace ScrewTurn.Wiki {
 
 	public partial class Post : BasePage {
 
-		private PageInfo page;
-		private PageContent content;
+		private PageContent page;
 		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
@@ -33,12 +32,11 @@ namespace ScrewTurn.Wiki {
 
 			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, page.FullName, GlobalSettings.PageExtension));
 
-			content = Content.GetPageContent(page);
-			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.MessageBody, page);
+			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.MessageBody, page.FullName);
 
 			// Verify permissions and setup captcha
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
-			bool canPostMessage = authChecker.CheckActionForPage(page, Actions.ForPages.PostDiscussion,
+			bool canPostMessage = authChecker.CheckActionForPage(page.FullName, Actions.ForPages.PostDiscussion,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, Tools.UrlEncode(page.FullName), GlobalSettings.PageExtension));
 			captcha.Visible = SessionFacade.LoginKey == null && !Settings.GetDisableCaptchaControl(currentWiki);
