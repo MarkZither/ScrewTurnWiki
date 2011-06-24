@@ -72,7 +72,7 @@ a.unknownlink:hover {
 a.emaillink {
 }
 
-h1.pagetitle, h1.pagetitlesystem {
+.pagetitle, .pagetitlesystem {
 	font-size: 22px;
 	padding: 0px 4px 2px 4px;
 	margin-bottom: 4px;
@@ -254,7 +254,7 @@ select.namespacedropdown {
 /* Contains the link to the page editing form (Edit.aspx) and history */
 #EditHistoryLinkDiv {
 	padding-top: 9px;
-	float: right;
+	/* float: right; */
 	font-size: 11px;
 }
 #EditLink, #HistoryLink, #ViewCodeLink, #PageAttachmentsLink,
@@ -948,4 +948,17 @@ div.cleanupleft {
 
 #TocContainer p {
     padding: 0 0 0 0 !important;
+}
+
+.page-sf-menu {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    float: none !important;
+}
+
+.page-sf-menu li {
+    float: none !important;
 }

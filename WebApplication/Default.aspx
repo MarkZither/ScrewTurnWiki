@@ -186,23 +186,26 @@
 	<div id="PageHeaderDiv">
 	
 		<!-- Change this to PageToolbarDiv -->
-		<div id="EditHistoryLinkDiv">
-			<asp:Literal ID="lblDiscussLink" runat="server" EnableViewState="False" meta:resourcekey="lblDiscussLinkResource1" />
-			<asp:Literal ID="lblEditLink" runat="server" EnableViewState="False" meta:resourcekey="lblEditLinkResource1" />
-			<asp:Literal ID="lblViewCodeLink" runat="server" EnableViewState="False" meta:resourcekey="lblViewCodeLinkResource1" />
-			<asp:Literal ID="lblHistoryLink" runat="server" EnableViewState="False" meta:resourcekey="lblHistoryLinkResource1" />
-			<asp:Literal ID="lblAttachmentsLink" runat="server" EnableViewState="False" meta:resourcekey="lblAttachmentsLinkResource1" />
-			<asp:Literal ID="lblAdminToolsLink" runat="server" EnableViewState="False" meta:resourcekey="lblAdminToolsLinkResource1" />
-			
-			<asp:Literal ID="lblPostMessageLink" runat="server" EnableViewState="False" meta:resourcekey="lblPostMessageLinkResource1" />
-			<asp:Literal ID="lblBackLink" runat="server" EnableViewState="False" meta:resourcekey="lblBackLinkResource1" />
-		</div>
-		
-		<h1 class="pagetitle">
+		<div id="EditHistoryLinkDiv"></div>
+		<div>
 			<asp:Literal ID="lblPreviousPage" runat="server" EnableViewState="False" meta:resourcekey="lblPreviousPageResource1" />
-			<asp:Literal ID="lblPageTitle" runat="server" EnableViewState="False" meta:resourcekey="lblPageTitleResource1" />
+			<ul class="sf-menu page-sf-menu pagetitle">
+			  <li><a href="#"><asp:Literal ID="lblPageTitle" runat="server" EnableViewState="False" meta:resourcekey="lblPageTitleResource1" /></a>
+			    <ul>
+			      <li><asp:Literal ID="lblDiscussLink" runat="server" EnableViewState="False" meta:resourcekey="lblDiscussLinkResource1" />
+			      <li><asp:Literal ID="lblEditLink" runat="server" EnableViewState="False" meta:resourcekey="lblEditLinkResource1" />
+			      <li><asp:Literal ID="lblViewCodeLink" runat="server" EnableViewState="False" meta:resourcekey="lblViewCodeLinkResource1" />
+			      <li><asp:Literal ID="lblHistoryLink" runat="server" EnableViewState="False" meta:resourcekey="lblHistoryLinkResource1" />
+			      <li><asp:Literal ID="lblAttachmentsLink" runat="server" EnableViewState="False" meta:resourcekey="lblAttachmentsLinkResource1" />
+			      <li><asp:Literal ID="lblAdminToolsLink" runat="server" EnableViewState="False" meta:resourcekey="lblAdminToolsLinkResource1" />
+				
+			      <li><asp:Literal ID="lblPostMessageLink" runat="server" EnableViewState="False" meta:resourcekey="lblPostMessageLinkResource1" />
+			      <li><asp:Literal ID="lblBackLink" runat="server" EnableViewState="False" meta:resourcekey="lblBackLinkResource1" />
+			    </ul>
+			  </li>
+			</ul>
 			<asp:Literal ID="lblNextPage" runat="server" EnableViewState="False" meta:resourcekey="lblNextPageResource1" />
-		</h1>
+		</div>
 		
 		<div id="PrintLinkDiv">
 			<asp:Literal ID="lblPrintLink" runat="server" EnableViewState="False" meta:resourcekey="lblPrintLinkResource1" />

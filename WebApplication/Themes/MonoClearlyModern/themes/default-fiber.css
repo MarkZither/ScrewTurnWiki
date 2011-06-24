@@ -270,13 +270,13 @@ a.externallink {
 	border-top: solid 1px #F0F0F0;
 }
 
-h1.pagetitle, h1.pagetitlesystem {
+.pagetitle, .pagetitlesystem {
 	background-color: #f2f2f2;
 	border-bottom: 2px solid #999999;
 	border-top: 3px solid #f0f0f0;
 }
 
-h1.pagetitlesystem {
+.pagetitlesystem {
 	margin-bottom: 10px;
 }
 
