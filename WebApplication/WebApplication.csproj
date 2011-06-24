@@ -2718,7 +2718,7 @@
     <Content Include="Themes\Default\Scripts.js" />
     <Content Include="Themes\Editor.css" />
     <Content Include="Thumb.aspx" />
-    <Content Include="Web.config">
+    <Content Include="Web.FileSystem.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
@@ -2743,10 +2743,6 @@
       <Project>{C353A35C-86D0-4154-9500-4F88CAAB29C3}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FSProviders\FSProviders.csproj">
-      <Project>{1EF2D87B-C7DF-4EF1-BBD8-F73BF7FFC07F}</Project>
-      <Name>FSProviders</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PluginFramework\PluginFramework.csproj">
       <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>
       <Name>PluginFramework</Name>
@@ -2754,10 +2750,6 @@
     <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
       <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
       <Name>SearchEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SqlServerProviders\SqlServerProviders.csproj">
-      <Project>{ECB488D9-C8E9-41E0-BE27-27F41F76F8A0}</Project>
-      <Name>SqlServerProviders</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -2857,7 +2849,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.Azure.config">
+    <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
@@ -2876,7 +2868,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52149</DevelopmentServerPort>
+          <DevelopmentServerPort>5048</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/WebApplication</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

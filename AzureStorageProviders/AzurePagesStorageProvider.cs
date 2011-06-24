@@ -1287,7 +1287,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(!allVersionRetrieved.Contains(wiki + "|" + pageFullName)) {
 				// pagesContents not present in temp local cache retrieve from table storage
 				if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
-				_pagesContentCache[wiki] = new Dictionary<string, PagesContentsEntity>();
+				if(!_pagesContentCache.ContainsKey(wiki)) _pagesContentCache[wiki] = new Dictionary<string, PagesContentsEntity>();
 				allVersionRetrieved.Add(wiki + "|" + pageFullName);
 
 				var query = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
@@ -1311,7 +1311,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			if(!(allPagesContentRetrieved && _pagesContentCache != null && _pagesContentCache.ContainsKey(wiki))) {
 				// pagesContents not present in temp local cache retrieve from table storage
 				if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
-				_pagesContentCache[wiki] = new Dictionary<string, PagesContentsEntity>();
+				if(!_pagesContentCache.ContainsKey(wiki)) _pagesContentCache[wiki] = new Dictionary<string, PagesContentsEntity>();
 				allPagesContentRetrieved = true;
 
 				CloudTableQuery<PagesContentsEntity> query = (from e in _context.CreateQuery<PagesContentsEntity>(PagesContentsTable).AsTableServiceQuery()
@@ -1483,6 +1483,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 						if(int.TryParse(pageContentEntity.Revision, out rev)) revisions.Add(rev);
 					}
 				}
+				revisions.Sort();
 				return revisions.ToArray();
 			}
 			catch(Exception ex) {

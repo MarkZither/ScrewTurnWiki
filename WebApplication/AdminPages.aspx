@@ -156,7 +156,7 @@
 						<h3><asp:Literal ID="lblRenamePageTitle" runat="server" Text="Rename Page" EnableViewState="False" meta:resourcekey="lblRenamePageTitleResource1" /></h3>
 						<br />
 						<asp:Literal ID="lblNewName" runat="server" Text="New Name" EnableViewState="False" meta:resourcekey="lblNewNameResource1" /><br />
-						<asp:TextBox ID="txtNewName" runat="server" Width="200px" ValidationGroup="renpage" meta:resourcekey="txtNewNameResource1" /><br />
+						<asp:TextBox ID="txtNewName" runat="server" Width="200px" ValidationGroup="renpage" meta:resourcekey="txtNewNameResource1" AutoPostBack="true" /><br />
 						<asp:CheckBox ID="chkShadowPage" runat="server" Text="Keep shadow Page" Checked="True"
 							ToolTip="Keep the old Page and set it to auto-redirect to the new Page" meta:resourcekey="chkShadowPageResource1" />
 						<br /><br />
@@ -168,7 +168,7 @@
 						<asp:CustomValidator ID="cvNewName" runat="server" Display="Dynamic" ValidationGroup="renpage"
 							ControlToValidate="txtNewName" CssClass="resulterror" ErrorMessage="Invalid Page Name" OnServerValidate="cvNewName_ServerValidate" 
 							meta:resourcekey="cvNewNameResource1" />
-						<asp:Label ID="lblRenameResult" runat="server" Auto meta:resourcekey="lblRenameResultResource1" />
+						<asp:Label ID="lblRenameResult" runat="server" meta:resourcekey="lblRenameResultResource1" />
 					</div>
 				</asp:Panel>
 			
@@ -178,7 +178,7 @@
 						<br />
 						<asp:Literal ID="lblTargetNamespace" runat="server" Text="Target Namespace" EnableViewState="false" meta:resourcekey="lblTargetNamespaceResource1" />
 						<br />
-						<asp:DropDownList ID="lstTargetNamespace" runat="server" Width="200px" meta:resourcekey="lstTargetNamespaceResource1" />
+						<asp:DropDownList ID="lstTargetNamespace" runat="server" Width="200px" meta:resourcekey="lstTargetNamespaceResource1" AutoPostBack="true" />
 						<br />
 						<asp:CheckBox ID="chkCopyCategories" runat="server" Text="Copy Page Categories" ToolTip="Copy Page Categories to target Namespace" meta:resourcekey="chkCopyCategoriesResource1" />
 						<br /><br />

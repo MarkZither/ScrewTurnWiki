@@ -12,7 +12,6 @@ namespace ScrewTurn.Wiki {
 	public partial class DefaultPage : BasePage {
 
 		private PageContent currentPage = null;
-		private PageContent currentContent = null;
 		private string currentWiki = null;
 
 		private bool discussMode = false;
@@ -242,15 +241,15 @@ namespace ScrewTurn.Wiki {
 				lblCategorizedAs.Visible = false;
 				lblPageCategories.Visible = false;
 				lblNavigationPaths.Visible = false;
-				lblDiscussedPage.Text = "<b>" + FormattingPipeline.PrepareTitle(currentWiki, currentContent.Title, false, FormattingContext.PageContent, currentPage.FullName) + "</b>";
+				lblDiscussedPage.Text = "<b>" + FormattingPipeline.PrepareTitle(currentWiki, currentPage.Title, false, FormattingContext.PageContent, currentPage.FullName) + "</b>";
 			}
 			else {
 				lblPageDiscussionFor.Visible = false;
 				lblDiscussedPage.Visible = false;
 
 				lblModifiedDateTime.Text =
-					Preferences.AlignWithTimezone(currentWiki, currentContent.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki));
-				lblAuthor.Text = Users.UserLink(currentWiki, currentContent.User);
+					Preferences.AlignWithTimezone(currentWiki, currentPage.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki));
+				lblAuthor.Text = Users.UserLink(currentWiki, currentPage.User);
 				lblPageCategories.Text = GetFormattedPageCategories();
 			}
 		}
@@ -316,14 +315,14 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private void SetupMetaInformation() {
 			// Set keywords and description
-			if(currentContent.Keywords != null && currentContent.Keywords.Length > 0) {
+			if(currentPage.Keywords != null && currentPage.Keywords.Length > 0) {
 				Literal lit = new Literal();
-				lit.Text = string.Format("<meta name=\"keywords\" content=\"{0}\" />", PrintKeywords(currentContent.Keywords));
+				lit.Text = string.Format("<meta name=\"keywords\" content=\"{0}\" />", PrintKeywords(currentPage.Keywords));
 				Page.Header.Controls.Add(lit);
 			}
-			if(!string.IsNullOrEmpty(currentContent.Description)) {
+			if(!string.IsNullOrEmpty(currentPage.Description)) {
 				Literal lit = new Literal();
-				lit.Text = string.Format("<meta name=\"description\" content=\"{0}\" />", currentContent.Description);
+				lit.Text = string.Format("<meta name=\"description\" content=\"{0}\" />", currentPage.Description);
 				Page.Header.Controls.Add(lit);
 			}
 		}
@@ -694,22 +693,22 @@ namespace ScrewTurn.Wiki {
 			else if(!discussMode && viewCodeMode) {
 				if(Settings.GetEnableViewPageCodeFeature(currentWiki)) {
 					Literal literal = new Literal();
-					StringBuilder sb = new StringBuilder(currentContent.Content.Length + 100);
+					StringBuilder sb = new StringBuilder(currentPage.Content.Length + 100);
 					sb.Append(@"<textarea style=""width: 98%; height: 500px;"" readonly=""true"">");
-					sb.Append(Server.HtmlEncode(currentContent.Content));
+					sb.Append(Server.HtmlEncode(currentPage.Content));
 					sb.Append("</textarea>");
 					sb.Append("<br /><br />");
 					sb.Append(Properties.Messages.MetaKeywords);
 					sb.Append(": <b>");
-					sb.Append(PrintKeywords(currentContent.Keywords));
+					sb.Append(PrintKeywords(currentPage.Keywords));
 					sb.Append("</b><br />");
 					sb.Append(Properties.Messages.MetaDescription);
 					sb.Append(": <b>");
-					sb.Append(currentContent.Description);
+					sb.Append(currentPage.Description);
 					sb.Append("</b><br />");
 					sb.Append(Properties.Messages.ChangeComment);
 					sb.Append(": <b>");
-					sb.Append(currentContent.Comment);
+					sb.Append(currentPage.Comment);
 					sb.Append("</b>");
 					literal.Text = sb.ToString();
 					plhContent.Controls.Add(literal);

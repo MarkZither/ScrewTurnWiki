@@ -585,15 +585,17 @@ namespace ScrewTurn.Wiki {
 				// Find page, if inexistent create it
 				Log.LogEntry("Page update requested for " + txtName.Text, EntryType.General, username, currentWiki);
 
+				string nspace = DetectNamespaceInfo() != null ? DetectNamespaceInfo().Name : null;
+
 				PageContent pg = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text), provider);
 				if(pg == null) {
 					saveMode = SaveMode.Normal;
-					pg = Pages.SetPageContent(currentWiki, DetectNamespaceInfo().Name, txtName.Text, provider, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+					pg = Pages.SetPageContent(currentWiki, nspace, txtName.Text, provider, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
 					GetKeywords(), txtDescription.Text, saveMode);
 					attachmentManager.CurrentPage = pg;
 				}
 				else {
-					Pages.SetPageContent(currentWiki, DetectNamespaceInfo().Name, txtName.Text, provider, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+					Pages.SetPageContent(currentWiki, nspace, txtName.Text, provider, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				// Save categories binding
@@ -601,7 +603,7 @@ namespace ScrewTurn.Wiki {
 
 				// If not a draft, remove page draft
 				if(saveMode != SaveMode.Draft) {
-					Pages.DeleteDraft(currentPage.FullName, currentPage.Provider);
+					Pages.DeleteDraft(pg.FullName, pg.Provider);
 					isDraft = false;
 				}
 				else isDraft = true;
