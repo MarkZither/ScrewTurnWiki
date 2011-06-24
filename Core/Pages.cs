@@ -554,6 +554,11 @@ namespace ScrewTurn.Wiki {
 				// Remove outgoing links
 				Settings.Provider.DeleteOutgoingLinks(page.FullName);
 
+				RebuildPageLinks(Pages.GetPages(null));
+				foreach(NamespaceInfo nspace in GetNamespaces()) {
+					RebuildPageLinks(GetPages(nspace));
+				}
+
 				Log.LogEntry("Page " + page.FullName + " deleted", EntryType.General, Log.SystemUsername);
 				RecentChanges.AddChange(page.FullName, title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageDeleted, "");
 				Host.Instance.OnPageActivity(page, null, SessionFacade.GetCurrentUsername(), PageActivity.PageDeleted);
@@ -1027,6 +1032,17 @@ namespace ScrewTurn.Wiki {
 			}
 
 			return ExtractNegativeKeys(result);
+		}
+
+		/// <summary>
+		/// Rebuilds the page links for the specified pages.
+		/// </summary>
+		/// <param name="pages">The pages.</param>
+		public static void RebuildPageLinks(IList<PageInfo> pages) {
+			foreach(PageInfo page in pages) {
+				PageContent content = Content.GetPageContent(page, false);
+				StorePageOutgoingLinks(page, content.Content);
+			}
 		}
 
 		/// <summary>

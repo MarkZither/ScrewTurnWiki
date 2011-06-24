@@ -210,6 +210,11 @@ namespace ScrewTurn.Wiki {
 								}
 							}
 						}
+
+						Pages.RebuildPageLinks(Pages.GetPages(null));
+						foreach(ScrewTurn.Wiki.PluginFramework.NamespaceInfo nspace in Pages.GetNamespaces()) {
+							Pages.RebuildPageLinks(Pages.GetPages(nspace));
+						}
 					}
 				}
 			}, WindowsIdentity.GetCurrent());

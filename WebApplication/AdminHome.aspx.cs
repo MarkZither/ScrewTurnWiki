@@ -113,23 +113,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnRebuildPageLinks_Click(object sender, EventArgs e) {
-			RebuildPageLinks(Pages.GetPages(null));
+			Pages.RebuildPageLinks(Pages.GetPages(null));
 			foreach(NamespaceInfo nspace in Pages.GetNamespaces()) {
-				RebuildPageLinks(Pages.GetPages(nspace));
+				Pages.RebuildPageLinks(Pages.GetPages(nspace));
 			}
 
 			DisplayOrphansCount();
-		}
-
-		/// <summary>
-		/// Rebuilds the page links for the specified pages.
-		/// </summary>
-		/// <param name="pages">The pages.</param>
-		private void RebuildPageLinks(IList<PageInfo> pages) {
-			foreach(PageInfo page in pages) {
-				PageContent content = Content.GetPageContent(page, false);
-				Pages.StorePageOutgoingLinks(page, content.Content);				
-			}
 		}
 
 		protected void rptIndex_DataBinding(object sender, EventArgs e) {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.AclEngine;
@@ -1150,13 +1151,11 @@ namespace ScrewTurn.Wiki {
 
 				IDictionary<string, string[]> links = GetAllOutgoingLinks();
 
-				// Step 1: rename source page, if any
+				// Step 1: remove source page, if any
 				removedSomething = links.Remove(page);
 
-				// Step 2: rename all target pages, for all source pages
-				string[] keys = new string[links.Count];
-				links.Keys.CopyTo(keys, 0);
-				foreach(string key in keys) {
+				// Step 2: remove all target pages, for all source pages
+				foreach(string key in links.Keys.ToList()) {
 					List<string> currentLinks = new List<string>(links[key]);
 					removedSomething |= currentLinks.Remove(page);
 					links[key] = currentLinks.ToArray();
