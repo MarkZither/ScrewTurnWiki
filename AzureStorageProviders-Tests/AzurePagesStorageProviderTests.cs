@@ -34,6 +34,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.PagesInfoTable);
 			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.SnippetsTable);
 			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.IndexWordMappingTable);
+
+			TableStorage.DeleteAllBlobs(ConfigurationManager.AppSettings["AzureConnString"]);
 		}
 
 		[Test]

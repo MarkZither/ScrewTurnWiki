@@ -18,6 +18,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		private string _wiki;
 
 		private TableServiceContext _context;
+		private CloudBlobContainer _containerRef;
 
 		private IIndex index;
 
@@ -166,7 +167,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				// Unindex pages
 				foreach(PagesContentsEntity entity in pagesInNamespace) {
-					PageContent page = new PageContent(entity.PageFullName, this, entity.CreationDateTime.ToLocalTime(), entity.Title, entity.User, entity.LastModified.ToLocalTime(), string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment, entity.Content, entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(entity.Description) ? null : entity.Description);
+					PageContent page = BuildPageContent(entity);
 					if(page != null) {
 						UnindexPage(page);
 					}
@@ -196,7 +197,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 							Keywords = revision.Keywords,
 							LastModified = revision.LastModified,
 							Title = revision.Title,
-							User = revision.User
+							User = revision.User,
+							BlobReference = revision.BlobReference
 						};
 						_context.DeleteObject(revision);
 						_context.AddObject(PagesContentsTable, newPage);
@@ -247,7 +249,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				// Index pages
 				foreach(PagesContentsEntity entity in pagesInNamespace) {
 					string newPageFullName = NameTools.GetFullName(newName, NameTools.GetLocalName(entity.PageFullName));
-					PageContent page = new PageContent(newPageFullName, this, entity.CreationDateTime.ToLocalTime(), entity.Title, entity.User, entity.LastModified.ToLocalTime(), string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment, entity.Content, entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(entity.Description) ? null : entity.Description);
+					PageContent page = BuildPageContent(entity);
+					page.FullName = newPageFullName;
 					if(page != null) {
 						IndexPage(page);
 					}
@@ -465,10 +468,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 						PageFullName = newPageFullName,
 						Revision = entity.Revision,
 						Title = entity.Title,
-						User = entity.User
+						User = entity.User,
+						BlobReference = entity.BlobReference,
+						BigContent = entity.BigContent
 					};
 					if(entity.Revision == CurrentRevision) {
-						page = new PageContent(newPageEntity.PageFullName, this, newPageEntity.CreationDateTime.ToLocalTime(), newPageEntity.Title, newPageEntity.User, newPageEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(newPageEntity.Comment) ? "" : newPageEntity.Comment, newPageEntity.Content, newPageEntity.Keywords == null ? new string[0] : newPageEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(newPageEntity.Description) ? null : newPageEntity.Description);
+						page = BuildPageContent(newPageEntity);
 					}
 					_context.DeleteObject(entity);
 					_context.AddObject(PagesContentsTable, newPageEntity);
@@ -529,6 +534,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		#endregion
+
+		#region Categories
 
 		private CategoriesEntity GetCategoriesEntity(string wiki, string categoryFullName) {
 			var query = (from e in _context.CreateQuery<CategoriesEntity>(CategoriesTable).AsTableServiceQuery()
@@ -774,6 +781,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				throw ex;
 			}
 		}
+
+		#endregion
+
+		#region Index
 
 		private bool alwaysGenerateDocument = false;
 
@@ -1254,6 +1265,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			return words;
 		}
 
+		#endregion
+
+		#region Pages
+
 		// wiki -> (pageFullName|revision -> pageContentEntity)
 		private Dictionary<string, Dictionary<string, PagesContentsEntity>> _pagesContentCache;
 
@@ -1265,7 +1280,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		private PagesContentsEntity GetPagesContentsEntityByRevision(string wiki, string pageFullName, string revision) {
 			if(_pagesContentCache == null) _pagesContentCache = new Dictionary<string, Dictionary<string, PagesContentsEntity>>();
-
 			if(!_pagesContentCache.ContainsKey(wiki)) _pagesContentCache[wiki] = new Dictionary<string, PagesContentsEntity>();
 
 			if(!_pagesContentCache[wiki].ContainsKey(pageFullName + "|" + revision)) {
@@ -1277,6 +1291,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					return null;
 				}
 				else {
+					if(entity.BlobReference != null) {
+						CloudBlob blob = _containerRef.GetBlobReference(entity.BlobReference);
+						entity.BigContent = blob.DownloadText();
+					}
 					_pagesContentCache[wiki][pageFullName + "|" + revision] = entity;
 				}
 			}
@@ -1296,15 +1314,17 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var entities = QueryHelper<PagesContentsEntity>.All(query);
 
 				foreach(PagesContentsEntity entity in entities) {
-					if(entity != null) _pagesContentCache[wiki][entity.RowKey] = entity;
+					if(entity.BlobReference != null) {
+						CloudBlob blob = _containerRef.GetBlobReference(entity.BlobReference);
+						entity.BigContent = blob.DownloadText();
+					}
+					_pagesContentCache[wiki][entity.RowKey] = entity;
 				}
 			}
 
-			List<PagesContentsEntity> pagesContentsEntities = new List<PagesContentsEntity>();
-			foreach(var item in _pagesContentCache[wiki]) {
-				if(item.Value.PageFullName == pageFullName) pagesContentsEntities.Add(item.Value);
-			}
-			return pagesContentsEntities;
+			return (from p in _pagesContentCache[wiki].Values
+					where p.PageFullName == pageFullName
+					select p).ToList();
 		}
 
 		private List<PagesContentsEntity> GetAllPagesContentsEntities(string wiki, string nspace) {
@@ -1321,15 +1341,17 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var entities = QueryHelper<PagesContentsEntity>.All(query);
 
 				foreach(PagesContentsEntity entity in entities) {
-					if(entity != null) _pagesContentCache[wiki][entity.RowKey] = entity;
+					if(entity.BlobReference != null) {
+						CloudBlob blob = _containerRef.GetBlobReference(entity.BlobReference);
+						entity.BigContent = blob.DownloadText();
+					}
+					_pagesContentCache[wiki][entity.RowKey] = entity;
 				}
 			}
 
-			List<PagesContentsEntity> pagesContentsEntities = new List<PagesContentsEntity>();
-			foreach(var item in _pagesContentCache[wiki]) {
-				if(item.Value.Namespace == nspace && item.Value.Revision == CurrentRevision) pagesContentsEntities.Add(item.Value);
-			}
-			return pagesContentsEntities;
+			return (from p in _pagesContentCache[wiki].Values
+					where p.Namespace == nspace && p.Revision == CurrentRevision
+					select p).ToList();
 		}
 
 		// Invalidate temporary pages local cache
@@ -1337,6 +1359,65 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			_pagesContentCache = null;
 			allPagesContentRetrieved = false;
 			allVersionRetrieved = new List<string>();
+		}
+
+		private void BuildPageContentEntity(PagesContentsEntity entity, string pageFullName, string revision, DateTime creationLocalDateTime, string title,
+			string username, DateTime lastModificationLocalDateTime, string comment, string content, string[] keywords, string description) {
+
+			BuildPageContentEntity(entity, pageFullName, revision, creationLocalDateTime.ToUniversalTime(), title, username, lastModificationLocalDateTime.ToUniversalTime(),
+				comment, content, keywords != null ? string.Join("|", keywords) : null, description);
+		}
+
+		private void BuildPageContentEntity(PagesContentsEntity entity, string pageFullname, string revision, DateTime creationUniversalDateTime, string title,
+			string username, DateTime lastModificationUniversalDateTime, string comment, string content, string keywords, string description) {
+
+			if(entity == null) entity = new PagesContentsEntity();
+
+			entity.PartitionKey = _wiki;
+			entity.RowKey = pageFullname + "|" + revision;
+			entity.Comment = comment;
+			entity.CreationDateTime = creationUniversalDateTime;
+			entity.Description = description;
+			entity.Keywords = keywords;
+			entity.LastModified = lastModificationUniversalDateTime;
+			entity.Namespace = NameTools.GetNamespace(pageFullname);
+			entity.PageFullName = pageFullname;
+			entity.Revision = revision;
+			entity.Title = title;
+			entity.User = username;
+
+			int count = Encoding.UTF8.GetByteCount(content);
+
+			if(Encoding.UTF8.GetByteCount(content) > 60 * 1024) {
+				string blobName = Guid.NewGuid().ToString("N");
+				CloudBlob blob = _containerRef.GetBlobReference(blobName);
+				blob.UploadText(content);
+				entity.BlobReference = blobName;
+				entity.BigContent = content;
+			}
+			else {
+				entity.Content = content;
+			}
+		}
+
+		private void DeleteOldBlobReference(string blobReference) {
+			_containerRef.GetBlobReference(blobReference).DeleteIfExists();
+		}
+
+		private PageContent BuildPageContent(PagesContentsEntity entity) {
+			PageContent page = new PageContent(
+				entity.PageFullName,
+				this,
+				entity.CreationDateTime.ToLocalTime(),
+				entity.Title,
+				entity.User,
+				entity.LastModified.ToLocalTime(),
+				string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment,
+				entity.BlobReference != null ? entity.BigContent : entity.Content,
+				entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries),
+				string.IsNullOrEmpty(entity.Description) ? null : entity.Description);
+
+			return page;
 		}
 
 		/// <summary>
@@ -1354,7 +1435,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var entity = GetPagesContentsEntityByRevision(_wiki, fullName, CurrentRevision);
 				if(entity == null) return null;
 
-				return new PageContent(entity.PageFullName, this, entity.CreationDateTime.ToLocalTime(), entity.Title, entity.User, entity.LastModified.ToLocalTime(), string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment, entity.Content, entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(entity.Description) ? null : entity.Description);
+				return BuildPageContent(entity);
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1370,11 +1451,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			try {
 				var entities = GetAllPagesContentsEntities(_wiki, nspace == null ? null : nspace.Name);
 
-				List<PageContent> pagesContent = new List<PageContent>(entities.Count);
-				foreach(PagesContentsEntity entity in entities) {
-						pagesContent.Add(new PageContent(entity.PageFullName, this, entity.CreationDateTime.ToLocalTime(), entity.Title, entity.User, entity.LastModified.ToLocalTime(), string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment, entity.Content, entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(entity.Description) ? null : entity.Description));
-				}
-				return pagesContent.ToArray();
+				return (from e in entities
+						select BuildPageContent(e)).ToArray();
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1391,22 +1469,28 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				PageContent[] pages = GetPages(nspace);
 				CategoryInfo[] categories = GetCategories(nspace);
 
-				List<PageContent> result = new List<PageContent>(pages.Length);
+				return (from p in pages
+						where !(from c in categories
+								where c.Pages.Contains(p.FullName)
+								select c).Any()
+						select p).ToArray();
 
-				foreach(PageContent p in pages) {
-					bool found = false;
-					foreach(CategoryInfo c in categories) {
-						foreach(string name in c.Pages) {
-							if(StringComparer.OrdinalIgnoreCase.Compare(name, p.FullName) == 0) {
-								found = true;
-								break;
-							}
-						}
-					}
-					if(!found) result.Add(p);
-				}
+				//List<PageContent> result = new List<PageContent>(pages.Length);
 
-				return result.ToArray();
+				//foreach(PageContent p in pages) {
+				//    bool found = false;
+				//    foreach(CategoryInfo c in categories) {
+				//        foreach(string name in c.Pages) {
+				//            if(StringComparer.OrdinalIgnoreCase.Compare(name, p.FullName) == 0) {
+				//                found = true;
+				//                break;
+				//            }
+				//        }
+				//    }
+				//    if(!found) result.Add(p);
+				//}
+
+				//return result.ToArray();
 			}
 		}
 
@@ -1425,7 +1509,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var pageContentEntity = GetPagesContentsEntityByRevision(_wiki, fullName, Draft);
 				if(pageContentEntity == null) return null;
 
-				return new PageContent(fullName, this, pageContentEntity.CreationDateTime.ToLocalTime(), pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
+				return BuildPageContent(pageContentEntity);
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1447,6 +1531,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var pageContentEntity = GetPagesContentsEntityByRevision(_wiki, fullName, Draft);
 				if(pageContentEntity == null) return false;
 
+				if(pageContentEntity.BlobReference != null) DeleteOldBlobReference(pageContentEntity.BlobReference);
 				_context.DeleteObject(pageContentEntity);
 				_context.SaveChangesStandard();
 
@@ -1509,7 +1594,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var pageContentEntity = GetPagesContentsEntityByRevision(_wiki, fullName, revision.ToString());
 				if(pageContentEntity == null) return null;
 
-				return new PageContent(fullName, this, pageContentEntity.CreationDateTime.ToLocalTime(), pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(pageContentEntity.Comment) ? "" : pageContentEntity.Comment, pageContentEntity.Content, pageContentEntity.Keywords == null ? new string[0] : pageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(pageContentEntity.Description) ? null : pageContentEntity.Description);
+				return BuildPageContent(pageContentEntity);
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1534,45 +1619,23 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				var pageContentEntity = GetPagesContentsEntityByRevision(_wiki, content.FullName, revision.ToString());
 				if(pageContentEntity != null) {
-					pageContentEntity.Title = content.Title;
-					pageContentEntity.User = content.User;
-					pageContentEntity.LastModified = content.LastModified.ToUniversalTime();
-					pageContentEntity.Comment = content.Comment;
-					pageContentEntity.Content = content.Content;
-					pageContentEntity.Keywords = string.Join("|", content.Keywords);
-					pageContentEntity.Description = content.Description;
 					_context.UpdateObject(pageContentEntity);
-					_context.SaveChangesStandard();
-
-					// Invalidate pagesContetnCache
-					InvalidatePagesTempCache();
-
-					return true;
+					if(pageContentEntity.BlobReference != null) {
+						DeleteOldBlobReference(pageContentEntity.BlobReference);
+					}
 				}
 				else {
-					pageContentEntity = new PagesContentsEntity() {
-						PartitionKey = _wiki,
-						RowKey = content.FullName + "|" + revision.ToString(),
-						Revision = revision.ToString(),
-						PageFullName = content.FullName,
-						Namespace = NameTools.GetNamespace(content.FullName),
-						CreationDateTime = content.CreationDateTime,
-						Title = content.Title,
-						User = content.User,
-						LastModified = content.LastModified.ToUniversalTime(),
-						Comment = content.Comment,
-						Content = content.Content,
-						Keywords = string.Join("|", content.Keywords),
-						Description = content.Description
-					};
+					pageContentEntity = new PagesContentsEntity();
 					_context.AddObject(PagesContentsTable, pageContentEntity);
-					_context.SaveChangesStandard();
-
-					// Invalidate pagesContetnCache
-					InvalidatePagesTempCache();
-
-					return true;
 				}
+				BuildPageContentEntity(pageContentEntity, content.FullName, revision.ToString(), content.CreationDateTime, content.Title, content.User, content.LastModified, content.Comment, content.Content, content.Keywords, content.Description);
+				
+				_context.SaveChangesStandard();
+
+				// Invalidate pagesContetnCache
+				InvalidatePagesTempCache();
+
+				return true;
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -1655,7 +1718,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 						Comment = entity.Comment,
 						Content = entity.Content,
 						Keywords = entity.Keywords,
-						Description = entity.Description
+						Description = entity.Description,
+						BlobReference = entity.BlobReference
 					};
 					_context.DeleteObject(entity);
 					_context.AddObject(PagesContentsTable, newEntity);
@@ -1758,108 +1822,63 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			try {
 				switch(saveMode) {
 					case SaveMode.Draft:
-						bool newDraft = false;
 						// Find the "Draft" PageContent if present
 						var draftPageContentEntity = GetPagesContentsEntityByRevision(_wiki, pageName, Draft);
 						if(draftPageContentEntity == null) {
-							newDraft = true;
 							draftPageContentEntity = new PagesContentsEntity();
-							draftPageContentEntity.PartitionKey = _wiki;
-							draftPageContentEntity.RowKey = NameTools.GetFullName(nspace, pageName) + "|" + Draft;
-							draftPageContentEntity.PageFullName = NameTools.GetFullName(nspace, pageName);
-							draftPageContentEntity.Revision = Draft;
-							draftPageContentEntity.CreationDateTime = creationDateTime.ToUniversalTime();
-							draftPageContentEntity.Namespace = nspace;
-						}
-						draftPageContentEntity.Title = title;
-						draftPageContentEntity.User = username;
-						draftPageContentEntity.LastModified = dateTime.ToUniversalTime();
-						draftPageContentEntity.Comment = comment;
-						draftPageContentEntity.Content = content;
-						draftPageContentEntity.Keywords = string.Join("|", keywords);
-						draftPageContentEntity.Description = description;
-						if(newDraft) {
 							_context.AddObject(PagesContentsTable, draftPageContentEntity);
 						}
 						else {
 							_context.UpdateObject(draftPageContentEntity);
+							if(draftPageContentEntity.BlobReference != null) {
+								DeleteOldBlobReference(draftPageContentEntity.BlobReference);
+							}
 						}
+						BuildPageContentEntity(draftPageContentEntity, NameTools.GetFullName(nspace, pageName), Draft, creationDateTime, title, username, dateTime, comment, content, keywords, description);
+
 						_context.SaveChangesStandard();
 
 						// Invalidate pagesContetnCache
 						InvalidatePagesTempCache();
 
-						return new PageContent(NameTools.GetFullName(nspace, pageName), this, creationDateTime, title, username, dateTime, comment, content, keywords, description);
+						return BuildPageContent(draftPageContentEntity);
 					default:
-						bool update = false;
 						// Find the "CurrentRevision" PageContent if present
 						var currentPageContentEntity = GetPagesContentsEntityByRevision(_wiki, NameTools.GetFullName(nspace, pageName), CurrentRevision);
 
-						// If currentPageContent is not found the page has never been saved and has no backups
+						// If currentPageContent is not found the page has never been saved and has no content to backup
 						if(currentPageContentEntity != null) {
-							update = true;
 							if(saveMode == SaveMode.Backup) {
 								int[] backupsRevisions = GetBackups(NameTools.GetFullName(nspace, pageName));
 								int rev = (backupsRevisions.Length > 0 ? backupsRevisions[backupsRevisions.Length - 1] + 1 : 0);
-								PagesContentsEntity backupPageContentEntity = new PagesContentsEntity() {
-									PartitionKey = currentPageContentEntity.PartitionKey,
-									RowKey = currentPageContentEntity.PageFullName + "|" + rev.ToString(),
-									PageFullName = currentPageContentEntity.PageFullName,
-									Namespace = currentPageContentEntity.Namespace,
-									Revision = rev.ToString(),
-									CreationDateTime = currentPageContentEntity.CreationDateTime.ToUniversalTime(),
-									Comment = currentPageContentEntity.Comment,
-									Content = currentPageContentEntity.Content,
-									Description = currentPageContentEntity.Description,
-									Keywords = currentPageContentEntity.Keywords,
-									LastModified = currentPageContentEntity.LastModified,
-									Title = currentPageContentEntity.Title,
-									User = currentPageContentEntity.User
-								};
+								PagesContentsEntity backupPageContentEntity = new PagesContentsEntity();
+								BuildPageContentEntity(backupPageContentEntity, currentPageContentEntity.PageFullName, rev.ToString(), currentPageContentEntity.CreationDateTime, currentPageContentEntity.Title, currentPageContentEntity.User, currentPageContentEntity.LastModified, currentPageContentEntity.Comment, currentPageContentEntity.BlobReference != null ? currentPageContentEntity.BigContent : currentPageContentEntity.Content, currentPageContentEntity.Keywords, currentPageContentEntity.Description);
+
+								backupPageContentEntity.BlobReference = currentPageContentEntity.BlobReference;
 								_context.AddObject(PagesContentsTable, backupPageContentEntity);
 								_context.SaveChangesStandard();
 							}
-						}
-						else {
-							currentPageContentEntity = new PagesContentsEntity();
-							currentPageContentEntity.PartitionKey = _wiki;
-							currentPageContentEntity.RowKey = NameTools.GetFullName(nspace, pageName) + "|" + CurrentRevision;
-						}
-						currentPageContentEntity.PageFullName = NameTools.GetFullName(nspace, pageName);
-						currentPageContentEntity.Namespace = nspace;
-						currentPageContentEntity.Revision = CurrentRevision;
-						currentPageContentEntity.CreationDateTime = creationDateTime.ToUniversalTime();
-						currentPageContentEntity.Title = title;
-						currentPageContentEntity.User = username;
-						currentPageContentEntity.LastModified = dateTime.ToUniversalTime();
-						currentPageContentEntity.Comment = comment;
-						currentPageContentEntity.Content = content;
-						currentPageContentEntity.Keywords = keywords != null ? string.Join("|", keywords) : null;
-						currentPageContentEntity.Description = description;
+							else {
+								if(currentPageContentEntity.BlobReference != null) DeleteOldBlobReference(currentPageContentEntity.BlobReference);
+							}
 
-						if(update) {
 							_context.UpdateObject(currentPageContentEntity);
 						}
 						else {
+							currentPageContentEntity = new PagesContentsEntity();
 							_context.AddObject(PagesContentsTable, currentPageContentEntity);
 						}
+						BuildPageContentEntity(currentPageContentEntity, NameTools.GetFullName(nspace, pageName), CurrentRevision, creationDateTime, title, username, dateTime, comment, content, keywords, description);
+
 						_context.SaveChangesStandard();
 
-						IndexPage(new PageContent(
-								currentPageContentEntity.PageFullName,
-								this,
-								currentPageContentEntity.CreationDateTime.ToLocalTime(),
-								currentPageContentEntity.Title,
-								currentPageContentEntity.User,
-								currentPageContentEntity.LastModified.ToLocalTime(),
-								currentPageContentEntity.Comment,
-								currentPageContentEntity.Content,
-								currentPageContentEntity.Keywords != null ? currentPageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries) : null,
-								currentPageContentEntity.Description));
+						PageContent newPageContent = BuildPageContent(currentPageContentEntity);
+						IndexPage(newPageContent);
+
 						// Invalidate pagesContetnCache
 						InvalidatePagesTempCache();
 
-						return new PageContent(currentPageContentEntity.PageFullName, this, currentPageContentEntity.CreationDateTime.ToLocalTime(), currentPageContentEntity.Title, currentPageContentEntity.User, currentPageContentEntity.LastModified.ToLocalTime(), string.IsNullOrEmpty(currentPageContentEntity.Comment) ? "" : currentPageContentEntity.Comment, currentPageContentEntity.Content, currentPageContentEntity.Keywords == null ? new string[0] : currentPageContentEntity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries), string.IsNullOrEmpty(currentPageContentEntity.Description) ? null : currentPageContentEntity.Description);
+						return newPageContent;
 				}
 			}
 			catch(Exception ex) {
@@ -1940,32 +1959,23 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				// Operations
 				// - Delete old beckups, from 0 to revision
 				// - Rename newer backups starting from 0
-
 				for(int i = 0; i <= idx; i++) {
 					var pageContentEntity = pageContentEntities.First(c => c.Revision == i.ToString());
 					_context.DeleteObject(pageContentEntity);
+					if(pageContentEntity.BlobReference != null) DeleteOldBlobReference(pageContentEntity.BlobReference);
 				}
 				_context.SaveChangesStandard();
 
 				if(revision != -1) {
 					for(int i = revision + 1; i < pageContentEntities.Count; i++) {
 						var pageContentEntity = pageContentEntities.First(c => c.Revision == i.ToString());
-						var newPageContentEntity = new PagesContentsEntity() {
-							PartitionKey = pageContentEntity.PartitionKey,
-							RowKey = pageFullName + "|" + (int.Parse(pageContentEntity.Revision) - revision - 1).ToString(),
-							PageFullName = pageFullName,
-							Revision = (int.Parse(pageContentEntity.Revision) - revision - 1).ToString(),
-							Namespace = pageContentEntity.Namespace,
-							CreationDateTime = pageContentEntity.CreationDateTime,
-							Comment = pageContentEntity.Comment,
-							Content = pageContentEntity.Content,
-							Description = pageContentEntity.Description,
-							Keywords = pageContentEntity.Keywords,
-							LastModified = pageContentEntity.LastModified,
-							Title = pageContentEntity.Title,
-							User = pageContentEntity.User
-						};
+						if(pageContentEntity.BlobReference != null) pageContentEntity.BigContent = _containerRef.GetBlobReference(pageContentEntity.BlobReference).DownloadText();
+						var newPageContentEntity = new PagesContentsEntity();
+						BuildPageContentEntity(newPageContentEntity, pageFullName, (int.Parse(pageContentEntity.Revision) - revision - 1).ToString(), pageContentEntity.CreationDateTime, pageContentEntity.Title, pageContentEntity.User, pageContentEntity.LastModified, pageContentEntity.Comment, pageContentEntity.BlobReference != null ? pageContentEntity.BigContent : pageContentEntity.Content, pageContentEntity.Keywords, pageContentEntity.Description);
+						
+						newPageContentEntity.BlobReference = pageContentEntity.BlobReference;
 						_context.DeleteObject(pageContentEntity);
+						
 						_context.AddObject(PagesContentsTable, newPageContentEntity);
 						_context.SaveChangesStandard();
 					}
@@ -2007,23 +2017,14 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				bool deleteExecuted = false;
 				foreach(PagesContentsEntity pageContentEntity in pageContentEntities) {
 					if(pageContentEntity.Revision == CurrentRevision) {
-						PageContent currentContent = new PageContent(
-							pageFullName,
-							this,
-							pageContentEntity.CreationDateTime.ToLocalTime(),
-							pageContentEntity.Title,
-							pageContentEntity.User,
-							pageContentEntity.LastModified.ToLocalTime(),
-							pageContentEntity.Comment,
-							pageContentEntity.Content,
-							pageContentEntity.Keywords != null ? pageContentEntity.Keywords.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries) : null,
-							pageContentEntity.Description);
+						PageContent currentContent = BuildPageContent(pageContentEntity);
 						_context.SaveChangesStandard();
 						UnindexPage(currentContent);
 						foreach(Message msg in GetMessages(pageFullName)) {
 							UnindexMessageTree(currentContent, msg);
 						}
 					}
+					if(pageContentEntity.BlobReference != null) DeleteOldBlobReference(pageContentEntity.BlobReference);
 					_context.DeleteObject(pageContentEntity);
 					deleteExecuted = true;
 				}
@@ -2084,6 +2085,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				throw ex;
 			}
 		}
+
+		#endregion
+
+		#region Messages
 
 		private MessageEntity GetMessageEntity(string wiki, string pageFullName, int messageId) {
 			var messagesQuery = (from e in _context.CreateQuery<MessageEntity>(MessagesTable).AsTableServiceQuery()
@@ -2380,6 +2385,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
+		#endregion
+
+		#region NavigationPaths
+
 		private NavigationPathEntity GetNavigationPathEntity(string wiki, string fullName) {
 			var messagesQuery = (from e in _context.CreateQuery<NavigationPathEntity>(NavigationPathsTable).AsTableServiceQuery()
 								 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(fullName)
@@ -2525,6 +2534,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			}
 		}
 
+		#endregion
+
+		#region Snippets
+
 		private SnippetEntity GetSnippetEntity(string wiki, string snippetName) {
 			var messagesQuery = (from e in _context.CreateQuery<SnippetEntity>(SnippetsTable).AsTableServiceQuery()
 								 where e.PartitionKey.Equals(wiki) && e.RowKey.Equals(snippetName)
@@ -2638,6 +2651,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				throw ex;
 			}
 		}
+
+		#endregion
+
+		#region ContentTemplates
 
 		private ContentTemplateEntity GetContentTemplateEntity(string wiki, string contentTemplateName) {
 			var messagesQuery = (from e in _context.CreateQuery<ContentTemplateEntity>(ContentTemplatesTable).AsTableServiceQuery()
@@ -2757,6 +2774,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 		#endregion
 
+		#endregion
+
 		#region IStorageProviderV40 Members
 
 		/// <summary>
@@ -2841,6 +2860,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki.ToLowerInvariant();
 			
 			_context = TableStorage.GetContext(config);
+			_containerRef = TableStorage.StorageAccount(config).CreateCloudBlobClient().GetContainerReference(_wiki + "-pages");
+			_containerRef.CreateIfNotExist();
 
 			index = new AzureIndex(new IndexConnector(GetWordFetcher, GetSize, GetCount, ClearIndex, DeleteDataForDocument, SaveDataForDocument, TryFindWord));
 		}
@@ -2928,6 +2949,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		public string Content { get; set; }
 		public string Description { get; set; }
 		public string Keywords { get; set; }    // Separated by '|' (pipe)
+		public string BlobReference { get; set; }    // Contains the name of the blob where the content is stored for long pages
+													 // (if null all the content is stored in the Content property)
+		internal string BigContent { get; set; }    // Not stored on TableStorage
 	}
 
 	internal class MessageEntity : TableServiceEntity {

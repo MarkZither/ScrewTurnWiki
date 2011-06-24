@@ -12,6 +12,8 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// <remarks>A class that implements this interface <b>should not</b> have any kind of data caching.</remarks>
 	public interface IPagesStorageProviderV40 : IStorageProviderV40 {
 
+		#region Namespaces
+
 		/// <summary>
 		/// Gets a namespace.
 		/// </summary>
@@ -75,6 +77,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		PageContent MovePage(string pageFullName, NamespaceInfo destination, bool copyCategories);
+
+		#endregion
+
+		#region Categories
 
 		/// <summary>
 		/// Gets a category.
@@ -142,6 +148,21 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		CategoryInfo MergeCategories(CategoryInfo source, CategoryInfo destination);
 
 		/// <summary>
+		/// Binds a Page with one or more Categories.
+		/// </summary>
+		/// <param name="pageFullName">The full name of the page to bind.</param>
+		/// <param name="categories">The Categories to bind the Page with.</param>
+		/// <returns>True if the binding succeeded.</returns>
+		/// <remarks>After a successful operation, the Page is bound with all and only the categories passed as argument.</remarks>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="categories"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		bool RebindPage(string pageFullName, string[] categories);
+
+		#endregion
+
+		#region Index
+
+		/// <summary>
 		/// Performs a search in the index.
 		/// </summary>
 		/// <param name="parameters">The search parameters.</param>
@@ -167,6 +188,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// Gets a value indicating whether the search engine index is corrupted and needs to be rebuilt.
 		/// </summary>
 		bool IsIndexCorrupted { get; }
+
+		#endregion
+
+		#region Pages
 
 		/// <summary>
 		/// Gets a page.
@@ -301,16 +326,9 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		bool RemovePage(string pageFullName);
 
-		/// <summary>
-		/// Binds a Page with one or more Categories.
-		/// </summary>
-		/// <param name="pageFullName">The full name of the page to bind.</param>
-		/// <param name="categories">The Categories to bind the Page with.</param>
-		/// <returns>True if the binding succeeded.</returns>
-		/// <remarks>After a successful operation, the Page is bound with all and only the categories passed as argument.</remarks>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="categories"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
-		bool RebindPage(string pageFullName, string[] categories);
+		#endregion
+
+		#region Messages
 
 		/// <summary>
 		/// Gets the Page Messages.
@@ -382,6 +400,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> or <paramref name="pageFullName"/> are empty.</exception>
 		bool ModifyMessage(string pageFullName, int id, string username, string subject, DateTime dateTime, string body);
 
+		#endregion
+
+		#region NavigationPaths
+
 		/// <summary>
 		/// Gets all the Navigation Paths in a Namespace.
 		/// </summary>
@@ -418,6 +440,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentNullException">If <paramref name="path"/> is <c>null</c>.</exception>
 		bool RemoveNavigationPath(NavigationPath path);
 
+		#endregion
+
+		#region Snippets
+
 		/// <summary>
 		/// Gets all the snippets.
 		/// </summary>
@@ -452,6 +478,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		bool RemoveSnippet(string name);
+
+		#endregion
+
+		#region ContentTemplates
 
 		/// <summary>
 		/// Gets all the content templates.
@@ -488,6 +518,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		bool RemoveContentTemplate(string name);
 
+		#endregion
 	}
 
 	/// <summary>

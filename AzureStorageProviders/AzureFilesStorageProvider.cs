@@ -24,10 +24,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			return !string.IsNullOrEmpty(name) ? name.Trim('/') : "";
 		}
 
-		private string BuildNameForTableStorage(string name) {
-			return name.Replace('/', '|').Replace('\\', '<').Replace('#', '*');
-		}
-
 		/// <summary>
 		/// Check if a blob with the given full name (ignoring case) exists.
 		/// </summary>
