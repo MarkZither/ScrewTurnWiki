@@ -100,29 +100,6 @@ namespace ScrewTurn.Wiki {
 				Log.LogEntry("Wiki " + wiki.WikiName + " is ready", EntryType.General, Log.SystemUsername, null);
 			}
 
-			System.Threading.ThreadPool.QueueUserWorkItem(state => {
-				using(((WindowsIdentity)state).Impersonate()) {
-					foreach(Wiki.PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
-						if((DateTime.Now - Settings.GetLastPageIndexing(wiki.WikiName)).TotalDays > 7) {
-							Settings.SetLastPageIndexing(wiki.WikiName, DateTime.Now);
-							System.Threading.Thread.Sleep(10000);
-							using(MemoryStream ms = new MemoryStream()) {
-								using(StreamWriter wr = new System.IO.StreamWriter(ms)) {
-									System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
-									foreach(var provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki.WikiName)) {
-										if(!provider.ReadOnly) {
-											Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name + " for wiki: " + wiki.WikiName, EntryType.General, Log.SystemUsername, null);
-											provider.RebuildIndex();
-											Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name + " for wiki: " + wiki.WikiName, EntryType.General, Log.SystemUsername, null);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}, WindowsIdentity.GetCurrent());
-
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername, null);
 		}
 
