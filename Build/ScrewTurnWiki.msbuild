@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Compile" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<SolutionRoot Include=".." />
+		<SolutionFile Include="..\ScrewTurnWiki.sln" />
+		<AzureProjectFile Include="..\Azure\Azure.ccproj" />
+		
+		<BuildTemp Include=".\Temp\" />
+		
+		<Artifacts Include=".\Artifacts\" />
+		<WebAppOutput Include=".\Artifacts\WebApplication\" />
+		<WebAppOutput_PublicDirectory Include=".\Artifacts\WebApplication\public\" />
+		<WebAppOutput_SqlServer Include=".\Artifacts\WebApplication-SqlServer\" />
+		<PluginsOutput Include=".\Artifacts\Plugins\" />
+		<TestsOutput Include=".\Artifacts\Tests\" />
+	</ItemGroup>
+
+	<Target Name="Clean">
+		<RemoveDir Directories="@(Artifacts)" />
+		<RemoveDir Directories="@(Temp)" />
+	</Target>
+
+	<Target Name="Init" DependsOnTargets="Clean">
+		<MakeDir Directories="@(Artifacts)" />
+		<MakeDir Directories="@(BuildTemp)" />
+		<MakeDir Directories="@(WebAppOutput)" />
+		<MakeDir Directories="@(PluginsOutput)" />
+		<MakeDir Directories="@(TestsOutput)" />
+	</Target>
+
+	<Target Name="Compile" DependsOnTargets="Init">
+		<MSBuild Projects="@(SolutionFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration)" />
+		
+		<!-- Web Application -->
+		<CreateItem Include="Temp\_PublishedWebsites\WebApplication\**\*.*" Exclude="**\*.xml">
+			<Output ItemName="BuiltWebApp" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(BuiltWebApp)" DestinationFolder=".\Artifacts\WebApplication\%(RecursiveDir)" />
+		<MakeDir Directories="@(WebAppOutput_PublicDirectory)" />
+		
+		<!-- Web Application, SQL Server -->
+		<Copy SourceFiles="@(BuiltWebApp)" DestinationFolder=".\Artifacts\WebApplication-SqlServer\%(RecursiveDir)" />
+		
+		<!-- Release Web.config, files -->
+		<Delete Files=".\Artifacts\WebApplication\Web.Azure.config" />
+		<Delete Files=".\Artifacts\WebApplication\Web.SqlServer.config" />
+		
+		<!-- Release Web.config, SQL Server -->
+		<Copy Condition="'$(Configuration)' == 'Release'"
+			SourceFiles=".\Artifacts\WebApplication-SqlServer\Web.SqlServer.config" DestinationFiles=".\Artifacts\WebApplication-SqlServer\Web.config" />
+		<Delete Files=".\Artifacts\WebApplication-SqlServer\Web.Azure.config" />
+		
+		<!-- Windows Azure Package -->
+		<Copy SourceFiles="..\WebApplication\Web.config" DestinationFiles="..\WebApplication\Web.config.bak" />
+		<Copy SourceFiles="..\WebApplication\Web.Azure.config" DestinationFiles="..\WebApplication\Web.config" />
+		<MSBuild Projects="@(AzureProjectFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration)" Targets="Publish" />
+		<Copy SourceFiles="..\WebApplication\Web.config.bak" DestinationFiles="..\WebApplication\Web.config" />
+		<CreateItem Include="Temp\Publish\*">
+			<Output ItemName="BuiltAzurePackage" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(BuiltAzurePackage)" DestinationFolder=".\Artifacts\Azure" />
+		<Delete Files="..\WebApplication\Web.config.bak" />
+		
+		<!-- Plugins Assemblies -->
+		<CreateItem Include="Temp\*Plugin.dll">
+			<Output ItemName="BuiltPlugins" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(BuiltPlugins)" DestinationFolder=".\Artifacts\Plugins\" />
+		
+		<!-- Install.txt, Install-SqlServer.txt -->
+		<Copy SourceFiles=".\Install.txt" DestinationFolder=".\Artifacts\" />
+		<Copy SourceFiles=".\Install-SqlServer.txt" DestinationFolder=".\Artifacts\" />
+		
+		<!-- Tests Assemblies -->
+		<CreateItem Include="Temp\*.dll;Temp\*.pdb">
+			<Output ItemName="BuiltTests" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(BuiltTests)" DestinationFolder=".\Artifacts\Tests\" />
+		<Copy Condition="'$(AzureTestConfig)' == ''" SourceFiles="..\AzureStorageProviders-Tests\App.config" DestinationFiles=".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll.config" />
+		<Copy Condition="'$(AzureTestConfig)' != ''" SourceFiles="$(AzureTestConfig)" DestinationFiles=".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll.config" />
+		
+		<!-- Delete Temp directory -->
+		<RemoveDir Directories="@(BuildTemp)" />
+	</Target>
+	
+	<Target Name="Test" DependsOnTargets="Compile">
+		<!-- Requires SQL Server 2005/2008 installed on the system, and it must grant the necessary rights to the current Windows user -->
+		
+		<Exec Command='..\References\Tools\NUnit\nunit-console.exe ".\Artifacts\Tests\ScrewTurn.Wiki.AclEngine.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Core.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.PluginPack.DownloadCounterPlugin.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.SqlCommon.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.SqlServer.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.SearchEngine.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.BackupRestore.Tests.dll" /xml=".\Artifacts\TestResult.xml" /labels' />
+	</Target>
+	
+	<Target Name="Package" DependsOnTargets="Compile">
+		<!-- Requires 7-Zip installed on the system in the location %PROGRAMFILES% points to - use a symlink alternatively -->
+		
+		<GetAssemblyIdentity AssemblyFiles=".\Artifacts\WebApplication\bin\ScrewTurn.Wiki.Core.dll">
+			<Output TaskParameter="Assemblies" ItemName="MyAsm" />
+		</GetAssemblyIdentity>
+		
+		<CreateItem Include="..\**\*.*" Exclude="..\.hg\**\*.*;..\Build\Artifacts\**\*.*;..\**\bin\**\*.*;..\**\obj\**\*.*;..\.hgignore;..\.hgtags">
+			<Output ItemName="SourceCode" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(SourceCode)" DestinationFolder=".\Artifacts\Source\%(RecursiveDir)" />
+		
+		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-%(MyAsm.Version).zip" ".\Artifacts\WebApplication\" ".\Artifacts\Plugins\" ".\Artifacts\Install.txt"' />
+		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-SqlServer-%(MyAsm.Version).zip" ".\Artifacts\WebApplication-SqlServer\" ".\Artifacts\Plugins\" ".\Artifacts\Install-SqlServer.txt"' />
+		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-Azure-%(MyAsm.Version).zip" ".\Artifacts\Azure\" ".\Artifacts\Plugins\"' />
+		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-%(MyAsm.Version)-Source.zip" ".\Artifacts\Source\*"' />
+	</Target>
+	
+</Project>

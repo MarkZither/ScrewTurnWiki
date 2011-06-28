@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+	<WebRole name="WebApplication" enableNativeCodeExecution="true">
+		<Sites>
+			<Site name="Web">
+				<Bindings>
+					<Binding name="HTTP" endpointName="HTTP" />
+				</Bindings>
+			</Site>
+		</Sites>
+		<Endpoints>
+			<InputEndpoint name="HTTP" protocol="http" port="80" />
+		</Endpoints>
+		<ConfigurationSettings>
+			<Setting name="ConnectionString" />
+			<Setting name="Wikis" />
+		</ConfigurationSettings>
+	</WebRole>
+</ServiceDefinition>
