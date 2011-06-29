@@ -16,6 +16,11 @@ the table creation statements as well. After that, data can be imported to the n
 
 ScrewTurnWiki requires Mono 2.10 from the 2.10 branch.
 
+## Things to keep in mind
+
+- If you add anything to the web application (found in the *WebApplication/* directory) make sure to edit the *WebApplication.csproj*
+  file and add appropriate `<Content Include="..."/>` lines or otherwise the new files will not be copied to the website output directory
+  on build
 
 ## Conversion process
 
