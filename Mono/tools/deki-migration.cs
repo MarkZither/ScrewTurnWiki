@@ -221,7 +221,7 @@ class DekiMigration
 
 					var fi = new FileInfo (imagePath);
 					sw.Write ("INSERT INTO File (Name,Directory,Size,Downloads,LastModified,Data) " +
-						  "VALUES ('{0}', '/images/', {1}, 0, {2}, '",
+						  "VALUES ('{0}', '/', {1}, 0, {2}, '",
 						      page.Title.SqlEncodeForName (true), fi.Length, page.LastModified.ToMySqlDateTime ());
 					WriteFileData (imagePath, sw);
 					sw.WriteLine ("');");

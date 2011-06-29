@@ -76,7 +76,7 @@ namespace MediaWikiCompat
 			if (phase != FormattingPhase.Phase1)
 				return raw;
 			
-			return Table.Parse (raw);
+			return Toc.Parse (Table.Parse (raw));
 		}
 
 		public string PrepareTitle (string title, ContextInformation context)

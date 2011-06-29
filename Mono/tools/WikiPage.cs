@@ -13,7 +13,7 @@ class WikiPage
 	static readonly Regex DashesRegex = new Regex (@"[-]{2}", RegexOptions.Compiled);
 	static readonly Regex HRegex = new Regex (@"^={1,4}.+?={1,4}\n?", RegexOptions.Compiled | RegexOptions.Multiline);
 	static readonly Regex MagicWordRegex = new Regex (@"\{\{.+?\}\}", RegexOptions.Compiled | RegexOptions.Singleline);
-	static readonly Regex ImageRegex = new Regex (@"\[\[Image:.+?\]\]", RegexOptions.Compiled);
+	static readonly Regex ImageRegex = new Regex (@"\[\[image:.+?\]\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 	static readonly SortedList <string, string> codeHighlightBlocks = new SortedList <string, string> () {
 		{"<csharp>", "\n@@ csharp\n"},
@@ -164,7 +164,7 @@ class WikiPage
 		int newStart = 0;
 		WikiImage image;
 		while (match.Success) {
-			value = match.Value.TrimStart ('[').TrimEnd (']').Replace ("Image:", String.Empty);
+			value = match.Value.TrimStart ('[').TrimEnd (']').Substring (6);
 			image = new WikiImage (value);
 			if (!image.Valid)
 				continue;
@@ -256,6 +256,7 @@ class WikiPage
 			}
 			if (equalcount <= 4)
 				tmp += "=";
+			tmp += "\n";
 			
 			sb.Remove (match.Index, match.Length);
 			sb.Insert (match.Index, tmp);
