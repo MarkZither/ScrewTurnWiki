@@ -2826,6 +2826,8 @@
 <Content Include="Themes\MonoClearlyModern\images\RSS.png" />
 <Content Include="Themes\MonoClearlyModern\images\Print.png" />
 <Content Include="Themes\MonoClearlyModern\images\RSS-Discussion.png" />
+<Content Include="Themes\MonoClearlyModern\images\mp-white-square.png" />
+<Content Include="Themes\MonoClearlyModern\images\mp-gray-square.png" />
 
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

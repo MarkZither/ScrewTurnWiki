@@ -225,7 +225,7 @@ a.unknownlink:hover {
 	color: #990000;
 }
 
-#PageInfoDiv {
+#PageInfoDiv, #PageInternalFooterDiv {
 	border-top: 1px #dddddd solid;
 	color: darkgray;
 }

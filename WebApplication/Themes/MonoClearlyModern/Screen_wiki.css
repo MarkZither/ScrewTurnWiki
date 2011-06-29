@@ -297,7 +297,7 @@ p.editlink {
 	font-size: 11px;
 }
 
-#PageInfoDiv {
+#PageInfoDiv, #PageInternalFooterDiv {
 	font-size: 11px;
 }
 
@@ -336,7 +336,7 @@ div.pageoutgoinglinksmenu a:hover {
 
 /* Contains the link to the Page RSS */
 #RssLinkDiv {
-	float: left;
+	float: right;
 	position: relative;
 }
 /* The link to the Page RSS */
@@ -350,7 +350,7 @@ div.pageoutgoinglinksmenu a:hover {
 }
 
 #PrintLinkDiv {
-	float: left;
+	float: right;
 	position: relative;
 }
 #PrintLink {
@@ -360,6 +360,11 @@ div.pageoutgoinglinksmenu a:hover {
 	height: 16px;
 	width: 16px;
 	margin-top: 4px;
+}
+#EditLinkDiv {
+    float: right;
+    position: relative;
+    font-size: 0.6em;
 }
 
 #EmailNotificationDiv {
@@ -999,4 +1004,81 @@ div.cleanupleft {
 
 #toc div.tocindent {
     padding-left: 10px;
+}
+
+/* Main Page top-level tables */
+#home-intro {
+    width: 940px;
+}
+
+#home-intro-banner {
+    height: 271px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+table.mpTable {
+    width: 800px;
+}
+
+table.mpTable tr td.square {
+    background: url("images/mp-gray-square.png") no-repeat scroll center top transparent;
+    height: 181px;
+    vertical-align: top;
+    width: 271px;    
+    line-height: 125%;
+}
+
+table.mpTable td {
+    margin: 5px !important;
+}
+
+td.square {
+    display: block;
+    position: relative;
+    padding: 3px !important;
+}
+
+table.mpTable div.home-caption {
+    color: #274E80;
+    font-size: 1em;
+    font-weight: bold;
+    left: 20px;
+    max-width: 200px;
+    position: absolute;
+    top: 10px;
+}
+
+table.mpTable div.home-content {
+    color: #19194B;
+    font-size: 0.9em;
+    margin: 50px 20px 0;
+    width: 230px;
+}
+
+table.mpTable .buy, table.mpTable .download {
+    bottom: 20px;
+    display: block;
+    font-size: 80%;
+    font-weight: bold;
+    position: absolute;
+    right: 20px;
+}
+
+table.mpTable .learn {
+    bottom: 20px;
+    display: block;
+    font-size: 80%;
+    font-weight: bold;
+    left: 20px;
+    position: absolute;
+}
+
+table.mpTable .try {
+    bottom: 40px;
+    display: block;
+    font-size: 80%;
+    font-weight: bold;
+    position: absolute;
+    right: 20px;
 }
