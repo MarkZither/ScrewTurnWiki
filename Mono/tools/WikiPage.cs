@@ -137,7 +137,7 @@ class WikiPage
 	{
 		if (String.IsNullOrEmpty (content))
 			return String.Empty;
-
+		
 		string ret = CategoryLinkRegex.Replace (content, String.Empty, -1);
 		ret = DashesRegex.Replace (ret, "<nowiki>--</nowiki>", -1);
 		var sb = new StringBuilder (ret);
@@ -289,7 +289,53 @@ class WikiPage
 			
 			match = MagicWordRegex.Match (sb.ToString (), newStart);
 		}
+
+		if (Title == "Main_Page")
+			sb.Insert (0, mainPageContent);
 		
 		return sb.ToString ();
-	}	
+	}
+
+	static readonly string mainPageContent = @"<table><tbody><tr>
+          <td class=""rounded""><div class=""home-caption"">Mono</div><div><img src=""http://mono-project.com/skins/MonoWaveWide/images/mp-thumb-mono.png"" style=""float: right;padding-right:10px;padding-top:3px;""></div>
+          <div class=""home-content"">An open source, cross-platform, implementation of C# and the CLR that is binary compatible with Microsoft.NET</div>
+          <a class=""download"" href=""/Download"">Download</a>
+          <a class=""learn"" href=""/Start"">Learn More</a>
+          </td>
+          <td></td>
+          <td class=""square""><div class=""home-caption"">MonoDevelop</div><div><img src=""http://mono-project.com/skins/MonoWaveWide/images/mp-thumb-md.png"" style=""float: right;padding-right:8px;padding-top:3px;""></div>
+          <div class=""home-content"">An open Source C# and .NET development environment for Linux, Windows, and Mac OS X</div>
+          <a class=""download"" href=""http://monodevelop.com/Download"">Download</a>
+          <a class=""learn"" href=""http://monodevelop.com/"">Learn More</a>
+          </td>
+          <td></td>
+          <td class=""square""><div class=""home-caption"">Mono Tools for<br> Visual Studio</div><div><img src=""http://mono-project.com/skins/MonoWaveWide/images/mp-thumb-monovs.png"" style=""float: right;padding-right:12px;padding-top:3px;""></div>
+          <div class=""home-content"">Develop and migrate .NET applications to Mono on Linux without leaving Visual Studio</div>
+          <a class=""try"" href=""http://go-mono.com/monotools/download/"">Try</a><br>
+          <a class=""buy"" href=""/Store"">Buy</a>
+          <a class=""learn"" href=""http://go-mono.com/monotools/"">Learn More</a>
+          </td>
+          </tr></tbody></table>
+	  <br/>
+	  <table><tbody><tr>
+          <td class=""square""><div class=""home-caption"">Moonlight</div><div><img src=""http://mono-project.com/skins/MonoWaveWide/images/mp-thumb-moonlight.png"" style=""float: right;padding-right:5px;padding-top:3px;""></div>
+          <div class=""home-content"">An open source implementation of Microsoft Silverlight for Linux and other Unix/X11 based operating systems</div>
+          <a class=""download"" href=""http://www.go-mono.com/moonlight/"">Download</a>
+          <a class=""learn"" href=""http://mono-project.com/Moonlight"">Learn More</a>
+          </td>
+          <td></td>
+          <td class=""square""><div class=""home-caption"">SUSE Linux Enterprise Mono Extension</div><div><img src=""http://mono-project.com/skins/MonoWaveWide/images/mp-thumb-geeko.png"" style=""float: right;padding-right:10px;padding-top:6px;""></div>
+          <div class=""home-content"">Run .NET applications, including ASP.NET, ASP.NET AJAX, and ASP.NET MVC, commercially supported on SUSE Linux Enterprise Server</div>
+          <a class=""try"" href=""http://www.novell.com/products/mono/eval.html"">Try</a><br>
+          <a class=""buy"" href=""http://www.novell.com/products/mono/howtobuy.html"">Buy</a>
+          <a class=""learn"" href=""http://www.novell.com/products/mono/"">Learn More</a>
+          </td>
+          <td></td>
+          <td class=""square""><div class=""home-caption"">MonoTouch</div><div><img src=""http://mono-project.com/skins/MonoWaveWide/images/mp-thumb-iphone.png"" style=""float: right;padding-right:10px;padding-top:2px;""></div>
+          <div class=""home-content"">Create C# and .NET apps for iPhone and iPod Touch, while taking advantage of iPhone APIs, and reusing existing .NET code, libraries, and skills</div>
+          <a class=""try"" href=""http://monotouch.net/DownloadTrial"">Try</a><br>
+          <a class=""buy"" href=""http://monotouch.net/Store"">Buy</a>
+          <a class=""learn"" href=""http://monotouch.net/"">Learn More</a>
+          </td>
+          </tr></tbody></table><br/>";
 }
