@@ -8,7 +8,7 @@
     <ProjectGuid>{1EF2D87B-C7DF-4EF1-BBD8-F73BF7FFC07F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FSProviders</RootNamespace>
+    <RootNamespace>ScrewTurn.Wiki.Plugins.FSProviders</RootNamespace>
     <AssemblyName>FSProviders</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\FSProviders.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,15 +50,20 @@
       <Link>AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="FilesStorageProvider.cs" />
-    <Compile Include="GlobalSettingsStorageProvider.cs" />
-    <Compile Include="LocalPageInfo.cs" />
-    <Compile Include="LocalUserInfo.cs" />
-    <Compile Include="PagesStorageProvider.cs" />
+    <Compile Include="LocalProvidersTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ProviderBase.cs" />
-    <Compile Include="SettingsStorageProvider.cs" />
+    <Compile Include="SqlCECommandBuilder.cs" />
+    <Compile Include="SqlCEGlobalSettingsStorageProvider.cs" />
+    <Compile Include="SqlCEPagesStorageProvider.cs" />
+    <Compile Include="SqlCESettingsStorageProvider.cs" />
+    <Compile Include="SqlCEUsersStorageProvider.cs" />
     <Compile Include="ThemesStorageProvider.cs" />
-    <Compile Include="UsersStorageProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AclEngine\AclEngine.csproj">
@@ -71,6 +78,40 @@
       <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
       <Name>SearchEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SqlProvidersCommon\SqlProvidersCommon.csproj">
+      <Project>{617D5D30-97F9-48B2-903D-29D4524492E8}</Project>
+      <Name>SqlProvidersCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UsersDatabase.sql">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SettingsDatabase.sql">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PagesInitNamespaceTableDatabase.sql">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PagesDatabase.sql">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GlobalSettingsDatabase.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

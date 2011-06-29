@@ -6,8 +6,9 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using ScrewTurn.Wiki.PluginFramework;
+using ScrewTurn.Wiki.Tests;
 
-namespace ScrewTurn.Wiki.Tests {
+namespace ScrewTurn.Wiki.Plugins.FSProviders.Tests {
 
 	public class FilesStorageProviderTests : FilesStorageProviderTestScaffolding {
 

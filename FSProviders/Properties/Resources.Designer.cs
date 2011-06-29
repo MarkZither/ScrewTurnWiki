@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
+namespace ScrewTurn.Wiki.Plugins.FSProviders.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ScrewTurn.Wiki.Plugins.SqlServer.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ScrewTurn.Wiki.Plugins.FSProviders.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,30 +57,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 
-        ///create table [Directory] (
-        ///	[Wiki] varchar(100) not null,
-        ///	[FullPath] nvarchar(250) not null,
-        ///	[Parent] nvarchar(250),
-        ///	constraint [PK_Directory] primary key clustered ([Wiki], [FullPath])
-        ///)
-        ///
-        ///create table [File] (
-        ///	[Wiki] varchar(100) not null,
-        ///	[Name] nvarchar(200) not null,
-        ///	[Directory] nvarchar(250) not null,
-        ///	[Size] bigint not null,
-        ///	[LastModified] datetime not null,
-        ///	[Data] varbinary(max) not null,
-        ///	constraint [FK_File_Directory] foreign key ([Wiki], [Directory]) references [Directory]( [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string FilesDatabase {
-            get {
-                return ResourceManager.GetString("FilesDatabase", resourceCulture);
             }
         }
         

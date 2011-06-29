@@ -8,8 +8,8 @@
     <ProjectGuid>{9A64022E-93F5-4609-A17C-ECDD553E458E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FSProviders_Tests</RootNamespace>
-    <AssemblyName>FSProviders-Tests</AssemblyName>
+    <RootNamespace>ScrewTurn.Wiki.Plugins.FSProviders.Tests</RootNamespace>
+    <AssemblyName>ScrewTurn.Wiki.Plugins.FSProviders.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,12 +31,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\References\Tools\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\References\Tools\Rhino.Mocks\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -44,11 +50,38 @@
       <Link>AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="FilesStorageProviderTests.cs" />
-    <Compile Include="GlobalSettingsStorageProviderTests.cs" />
-    <Compile Include="PagesStorageProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsStorageProviderTests.cs" />
-    <Compile Include="UsersStorageProviderTests.cs" />
+    <Compile Include="SqlCEGlobalSettingsStorageProviderTests.cs" />
+    <Compile Include="SqlCEPagesStorageProviderTests.cs" />
+    <Compile Include="SqlCEPagesStorageProvider_SqlIndexTests.cs" />
+    <Compile Include="SqlCESettingsStorageProviderTests.cs" />
+    <Compile Include="SqlCEUsersStorageProviderTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FSProviders\FSProviders.csproj">
+      <Project>{1EF2D87B-C7DF-4EF1-BBD8-F73BF7FFC07F}</Project>
+      <Name>FSProviders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginFramework\PluginFramework.csproj">
+      <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>
+      <Name>PluginFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SearchEngine-Tests\SearchEngine-Tests.csproj">
+      <Project>{07625628-842E-4CAA-A029-4D6852C7CA20}</Project>
+      <Name>SearchEngine-Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
+      <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
+      <Name>SearchEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlProvidersCommon\SqlProvidersCommon.csproj">
+      <Project>{617D5D30-97F9-48B2-903D-29D4524492E8}</Project>
+      <Name>SqlProvidersCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestScaffolding\TestScaffolding.csproj">
+      <Project>{F865670A-DEDE-41B5-B426-48D73C3B5B1C}</Project>
+      <Name>TestScaffolding</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -99,7 +99,6 @@
     <Compile Include="Host.cs" />
     <Compile Include="ICollectorsBox.cs" />
     <Compile Include="IndexStorer.cs" />
-    <Compile Include="LocalProvidersTools.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="NavigationPaths.cs" />
