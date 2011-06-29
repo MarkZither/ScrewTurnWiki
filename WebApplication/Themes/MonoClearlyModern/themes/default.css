@@ -589,3 +589,23 @@ p.excerpt b.searchkeyword, b.searchkeyword {
 
 /* END AllPages.aspx */
 
+/* TOC */
+
+#toc {
+	background-color: #efefef;
+	border-left: 1px solid #c8daee;
+}
+
+#sidebar h5 {
+    color: #152D47;
+}
+
+#toc a {
+    color: #234974;
+}
+
+#toc .number {
+    background: none repeat scroll 0 0 #B6CEE9;
+    border-radius: 3px 3px 3px 3px;
+    color: #5D91CD;
+}

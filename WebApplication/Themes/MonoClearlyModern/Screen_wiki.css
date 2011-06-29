@@ -336,7 +336,7 @@ div.pageoutgoinglinksmenu a:hover {
 
 /* Contains the link to the Page RSS */
 #RssLinkDiv {
-	float: right;
+	float: left;
 	position: relative;
 }
 /* The link to the Page RSS */
@@ -350,7 +350,7 @@ div.pageoutgoinglinksmenu a:hover {
 }
 
 #PrintLinkDiv {
-	float: right;
+	float: left;
 	position: relative;
 }
 #PrintLink {
@@ -387,6 +387,7 @@ input.inactivenotification.discuss {
 /* Contains the Page Content */
 #PageContentDiv {
 	margin: 10px 0px 0px 0px;
+	clear: both;
 }
 
 /* Contains the Footer */
@@ -474,14 +475,14 @@ span.signature {
 }
 
 #TocContainer {
-	border: solid 1px #CCCCCC;
 	display: table-cell;
-	padding: 4px;
-	background-color: #F9F9F9;
+	padding-left: 10px;
 }
 
 #TocContainerTable {
     float: right;
+    font-size: 0.8em;
+    width: 250px;
 }
 
 a.attachment {
@@ -961,4 +962,41 @@ div.cleanupleft {
 
 .page-sf-menu li {
     float: none !important;
+}
+
+/* TOC */
+#sidebar {
+	font-size: 0.8em;
+	display: block;
+	float: right;
+	margin: 0;
+	padding: 8px;
+	width: 250px;
+}
+
+#toc {
+	padding-left: 5px;
+}
+
+#sidebar h5:first-child {
+    margin-top: 0 !important;
+}
+
+#sidebar h5 {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin: 1.5em 0 0.75em;
+    padding: 0;
+}
+
+#toc a {
+    font-weight: normal;
+}
+
+#toc .number {
+    padding: 1px 3px;
+}
+
+#toc div.tocindent {
+    padding-left: 10px;
 }
