@@ -43,7 +43,7 @@
 	    <ul class="sf-menu"><asp:Literal ID="lblSidebarDiv" runat="server" EnableViewState="false" /></ul>
 	  </div> <!-- // grid_12 -->
 	  <div class="grid_12 pad" id="HeaderDiv">
-	    <asp:Literal ID="lblHeaderDiv" runat="server" EnableViewState="false" />
+	  <asp:Literal ID="lblHeaderDiv" runat="server" EnableViewState="false" />
 	  </div> <!-- // HeaderDiv -->
 	</div><!-- //container_12 -->
       </div><!-- //header -->
@@ -73,9 +73,9 @@
 	<div class="container_12">
           <div class="grid_3">
             <div class="widget widget_links">
-              <h3 class="widgettitle">Xamarin links</h3>
+              <h3 class="widgettitle">Wiki links</h3>
               <ul>
-		<li><a href="http://xamarin.com/">Home page</a></li>
+                <li></li>
 	      </ul>
 	    </div>
 	  </div><!--//grid_3-->
