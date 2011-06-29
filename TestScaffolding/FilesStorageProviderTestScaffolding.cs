@@ -287,7 +287,7 @@ namespace ScrewTurn.Wiki.Tests {
 			prov.DeleteFile("/File.txt");
 
 			Assert.IsNull(prov.GetFileDetails("/File.txt"), "GetFileDetails should return null");
-			
+
 			details = prov.GetFileDetails("/File2.txt");
 			Assert.AreEqual(7, details.Size, "Wrong file size");
 			Tools.AssertDateTimesAreEqual(now, details.LastModified, true);
@@ -1013,7 +1013,7 @@ namespace ScrewTurn.Wiki.Tests {
 			IFilesStorageProviderV40 prov = GetProvider();
 
 			string page = "Page";
-			string page2 ="Page2";
+			string page2 = "Page2";
 			string newPage = "newPage";
 
 			DateTime now = DateTime.Now;
@@ -1296,8 +1296,8 @@ namespace ScrewTurn.Wiki.Tests {
 		public void NotifyPageRenaming_ExistentNewPage() {
 			IFilesStorageProviderV40 prov = GetProvider();
 
-			string p1 ="Page1";
-			string p2 ="Page2";
+			string p1 = "Page1";
+			string p2 = "Page2";
 
 			using(Stream s = FillStream("Blah")) {
 				prov.StorePageAttachment(p1, "File1.txt", s, false);

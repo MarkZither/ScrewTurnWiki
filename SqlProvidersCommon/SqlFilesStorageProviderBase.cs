@@ -378,15 +378,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 			}
 			else {
-				query = queryBuilder.InsertInto("File", new string[] { "Wiki", "Name", "Directory", "Size", "Downloads", "LastModified", "Data" },
-					new string[] { "Wiki", "Name", "Directory", "Size", "Downloads", "LastModified", "Data" });
+				query = queryBuilder.InsertInto("File", new string[] { "Wiki", "Name", "Directory", "Size", "LastModified", "Data" },
+					new string[] { "Wiki", "Name", "Directory", "Size", "LastModified", "Data" });
 
-				parameters = new List<Parameter>(7);
+				parameters = new List<Parameter>(6);
 				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Name", filename));
 				parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
 				parameters.Add(new Parameter(ParameterType.Int64, "Size", (long)size));
-				parameters.Add(new Parameter(ParameterType.Int32, "Downloads", 0));
 				parameters.Add(new Parameter(ParameterType.DateTime, "LastModified", DateTime.Now));
 				parameters.Add(new Parameter(ParameterType.ByteArray, "Data", fileData));
 			}
@@ -406,11 +405,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="fullName">The full name of the File.</param>
 		/// <param name="destinationStream">A Stream object used as <b>destination</b> of a byte stream,
 		/// i.e. the method writes to the Stream the file content.</param>
-		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the file is retrieved, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="destinationStream"/> does not support writing.</exception>
-		public bool RetrieveFile(string fullName, System.IO.Stream destinationStream, bool countHit) {
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="destinationStream"/> does not support writing, or if <paramref name="fullName"/> does not exist.</exception>
+		public bool RetrieveFile(string fullName, System.IO.Stream destinationStream) {
 			if(fullName == null) throw new ArgumentNullException("fullName");
 			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
 			if(destinationStream == null) throw new ArgumentNullException("destinationStream");
@@ -463,27 +461,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			else {
 				RollbackTransaction(transaction);
 				return false;
-			}
-
-			if(countHit) {
-				// Update download count
-				query = queryBuilder.UpdateIncrement("File", "Downloads", 1);
-				query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-				query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
-				query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
-
-				parameters = new List<Parameter>(3);
-				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-				parameters.Add(new Parameter(ParameterType.String, "Name", filename));
-				parameters.Add(new Parameter(ParameterType.String, "Directory", directory));
-
-				command = builder.GetCommand(transaction, query, parameters);
-
-				int rows = ExecuteNonQuery(command, false);
-				if(rows != 1) {
-					RollbackTransaction(transaction);
-					return false;
-				}
 			}
 
 			CommitTransaction(transaction);
@@ -543,7 +520,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string directory, filename;
 			SplitFileFullName(fullName, out directory, out filename);
 
-			string query = queryBuilder.SelectFrom("File", new string[] { "Size", "Downloads", "LastModified" });
+			string query = queryBuilder.SelectFrom("File", new string[] { "Size", "LastModified" });
 			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Directory", WhereOperator.Equals, "Directory");
@@ -562,7 +539,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				if(reader.Read()) {
 					details = new FileDetails((long)reader["Size"],
-						(DateTime)reader["LastModified"], (int)reader["Downloads"]);
+						(DateTime)reader["LastModified"]);
 				}
 
 				CloseReader(command, reader);
@@ -913,9 +890,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// Returns the names of the Attachments of a Page.
 		/// </summary>
 		/// <param name="transaction">A database transaction.</param>
-		/// <param name="pageInfo">The Page Info object that owns the Attachments.</param>
+		/// <param name="pageFullName">The Page Info object that owns the Attachments.</param>
 		/// <returns>The names, or an empty list.</returns>
-		private string[] ListPageAttachments(DbTransaction transaction, PageInfo pageInfo) {
+		private string[] ListPageAttachments(DbTransaction transaction, string pageFullName) {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
@@ -926,7 +903,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			List<Parameter> parameters = new List<Parameter>(2);
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+			parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
@@ -950,9 +927,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// Returns the names of the Attachments of a Page.
 		/// </summary>
 		/// <param name="connection">A database connection.</param>
-		/// <param name="pageInfo">The Page Info object that owns the Attachments.</param>
+		/// <param name="pageFullName">The full name of the page that owns the Attachments.</param>
 		/// <returns>The names, or an empty list.</returns>
-		private string[] ListPageAttachments(DbConnection connection, PageInfo pageInfo) {
+		private string[] ListPageAttachments(DbConnection connection, string pageFullName) {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
@@ -963,7 +940,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			List<Parameter> parameters = new List<Parameter>(2);
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+			parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
 
@@ -986,16 +963,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>
 		/// Returns the names of the Attachments of a Page.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info object that owns the Attachments.</param>
+		/// <param name="pageFullName">The full name of the page that owns the Attachments.</param>
 		/// <returns>The names, or an empty list.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> is <c>null</c>.</exception>
-		public string[] ListPageAttachments(PageInfo pageInfo) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public string[] ListPageAttachments(string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageInfo");
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
 
-			string[] result = ListPageAttachments(connection, pageInfo);
+			string[] result = ListPageAttachments(connection, pageFullName);
 			CloseConnection(connection);
 
 			return result;
@@ -1005,10 +983,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// Determines whether a page attachment exists.
 		/// </summary>
 		/// <param name="connection">A database connection.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="name">The attachment.</param>
 		/// <returns><c>true</c> if the attachment exists, <c>false</c> otherwise.</returns>
-		private bool AttachmentExists(DbConnection connection, PageInfo page, string name) {
+		private bool AttachmentExists(DbConnection connection, string pageFullName, string name) {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
@@ -1020,7 +998,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			List<Parameter> parameters = new List<Parameter>(3);
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
-			parameters.Add(new Parameter(ParameterType.String, "Page", page.FullName));
+			parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 
 			DbCommand command = builder.GetCommand(connection, query, parameters);
 
@@ -1033,10 +1011,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// Determines whether a page attachment exists.
 		/// </summary>
 		/// <param name="transaction">A database transaction.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="name">The attachment.</param>
 		/// <returns><c>true</c> if the attachment exists, <c>false</c> otherwise.</returns>
-		private bool AttachmentExists(DbTransaction transaction, PageInfo page, string name) {
+		private bool AttachmentExists(DbTransaction transaction, string pageFullName, string name) {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
@@ -1048,7 +1026,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			List<Parameter> parameters = new List<Parameter>(3);
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
-			parameters.Add(new Parameter(ParameterType.String, "Page", page.FullName));
+			parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
@@ -1060,17 +1038,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>
 		/// Stores a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
 		/// <param name="name">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <param name="sourceStream">A Stream object used as <b>source</b> of a byte stream,
 		/// i.e. the method reads from the Stream and stores the content properly.</param>
 		/// <param name="overwrite"><c>true</c> to overwrite an existing Attachment.</param>
 		/// <returns><c>true</c> if the Attachment is stored, <c>false</c> otherwise.</returns>
-		/// <remarks>If <b>overwrite</b> is <c>false</c> and Attachment already exists, the method returns <c>false</c>.</remarks>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="name"/> or <paramref name="sourceStream"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="sourceStream"/> does not support reading.</exception>
-		public bool StorePageAttachment(PageInfo pageInfo, string name, System.IO.Stream sourceStream, bool overwrite) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="name"/> or <paramref name="sourceStream"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/>, <paramref name="name"/> are empty or if <paramref name="sourceStream"/> does not support reading.</exception>
+		public bool StorePageAttachment(string pageFullName, string name, System.IO.Stream sourceStream, bool overwrite) {
+			if(pageFullName == null) throw new ArgumentNullException("pageInfo");
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
 			if(sourceStream == null) throw new ArgumentNullException("sourceStream");
@@ -1080,7 +1057,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbConnection connection = builder.GetConnection(connString);
 			DbTransaction transaction = BeginTransaction(connection);
 
-			bool attachmentExists = AttachmentExists(transaction, pageInfo, name);
+			bool attachmentExists = AttachmentExists(transaction, pageFullName, name);
 
 			if(attachmentExists && !overwrite) {
 				RollbackTransaction(transaction);
@@ -1114,18 +1091,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				parameters.Add(new Parameter(ParameterType.DateTime, "LastModified", DateTime.Now));
 				parameters.Add(new Parameter(ParameterType.ByteArray, "Data", attachmentData));
 				parameters.Add(new Parameter(ParameterType.String, "Name", name));
-				parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+				parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 			}
 			else {
-				query = queryBuilder.InsertInto("Attachment", new string[] { "Wiki", "Name", "Page", "Size", "Downloads", "LastModified", "Data" },
-					new string[] { "Wiki", "Name", "Page", "Size", "Downloads", "LastModified", "Data" });
+				query = queryBuilder.InsertInto("Attachment", new string[] { "Wiki", "Name", "Page", "Size", "LastModified", "Data" },
+					new string[] { "Wiki", "Name", "Page", "Size", "LastModified", "Data" });
 
 				parameters = new List<Parameter>(7);
 				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Name", name));
-				parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+				parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 				parameters.Add(new Parameter(ParameterType.Int64, "Size", (long)size));
-				parameters.Add(new Parameter(ParameterType.Int32, "Downloads", 0));
 				parameters.Add(new Parameter(ParameterType.DateTime, "LastModified", DateTime.Now));
 				parameters.Add(new Parameter(ParameterType.ByteArray, "Data", attachmentData));
 			}
@@ -1142,17 +1118,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>
 		/// Retrieves a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
 		/// <param name="name">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <param name="destinationStream">A Stream object used as <b>destination</b> of a byte stream,
 		/// i.e. the method writes to the Stream the file content.</param>
-		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the Attachment is retrieved, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="name"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="destinationStream"/> does not support writing,
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="name"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="name"/> are empty or if <paramref name="destinationStream"/> does not support writing,
 		/// or if the page does not have attachments or if the attachment does not exist.</exception>
-		public bool RetrievePageAttachment(PageInfo pageInfo, string name, System.IO.Stream destinationStream, bool countHit) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+		public bool RetrievePageAttachment(string pageFullName, string name, System.IO.Stream destinationStream) {
+			if(pageFullName == null) throw new ArgumentNullException("pageInfo");
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
 			if(destinationStream == null) throw new ArgumentNullException("destinationStream");
@@ -1162,7 +1137,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbConnection connection = builder.GetConnection(connString);
 			DbTransaction transaction = BeginTransaction(connection);
 
-			if(!AttachmentExists(transaction, pageInfo, name)) {
+			if(!AttachmentExists(transaction, pageFullName, name)) {
 				RollbackTransaction(transaction);
 				throw new ArgumentException("Attachment does not exist", "name");
 			}
@@ -1177,7 +1152,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			List<Parameter> parameters = new List<Parameter>(3);
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
-			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+			parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
@@ -1203,91 +1178,36 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				return false;
 			}
 
-			if(countHit) {
-				// Update download count
-				query = queryBuilder.UpdateIncrement("Attachment", "Downloads", 1);
-				query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-				query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
-				query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
-
-				parameters = new List<Parameter>(3);
-				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-				parameters.Add(new Parameter(ParameterType.String, "Name", name));
-				parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
-
-				command = builder.GetCommand(transaction, query, parameters);
-
-				int rows = ExecuteNonQuery(command, false);
-				if(rows != 1) {
-					RollbackTransaction(transaction);
-					return false;
-				}
-			}
-
 			CommitTransaction(transaction);
 
 			return true;
 		}
 
 		/// <summary>
-		/// Sets the number of times a page attachment was retrieved.
-		/// </summary>
-		/// <param name="pageInfo">The page.</param>
-		/// <param name="name">The name of the attachment.</param>
-		/// <param name="count">The count to set.</param>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than zero.</exception>
-		public void SetPageAttachmentRetrievalCount(PageInfo pageInfo, string name, int count) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
-			if(count < 0) throw new ArgumentOutOfRangeException("Count must be greater than or equal to zero", "count");
-
-			ICommandBuilder builder = GetCommandBuilder();
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			string query = queryBuilder.Update("Attachment", new string[] { "Downloads" }, new string[] { "Downloads" });
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
-			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
-
-			List<Parameter> parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.String, "Name", name));
-			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
-			parameters.Add(new Parameter(ParameterType.Int32, "Downloads", count));
-
-			DbCommand command = builder.GetCommand(connString, query, parameters);
-
-			ExecuteNonQuery(command);
-		}
-
-		/// <summary>
 		/// Gets the details of a page attachment.
 		/// </summary>
-		/// <param name="pageInfo">The page that owns the attachment.</param>
-		/// <param name="name">The name of the attachment, for example "myfile.jpg".</param>
+		/// <param name="pageFullName">The full name of the page that owns the attachment.</param>
+		/// <param name="attachmentName">The name of the attachment, for example "myfile.jpg".</param>
 		/// <returns>The details of the attachment, or <c>null</c> if the attachment does not exist.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-		public FileDetails GetPageAttachmentDetails(PageInfo pageInfo, string name) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are empty.</exception>
+		public FileDetails GetPageAttachmentDetails(string pageFullName, string attachmentName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageInfo");
+			if(attachmentName == null) throw new ArgumentNullException("name");
+			if(attachmentName.Length == 0) throw new ArgumentException("Name cannot be empty");
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query = queryBuilder.SelectFrom("Attachment", new string[] { "Size", "Downloads", "LastModified" });
+			string query = queryBuilder.SelectFrom("Attachment", new string[] { "Size", "LastModified" });
 			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 			query = queryBuilder.AndWhere(query, "Page", WhereOperator.Equals, "Page");
 
 			List<Parameter> parameters = new List<Parameter>(3);
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.String, "Name", name));
-			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+			parameters.Add(new Parameter(ParameterType.String, "Name", attachmentName));
+			parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
 
@@ -1297,8 +1217,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				FileDetails details = null;
 
 				if(reader.Read()) {
-					details = new FileDetails((long)reader["Size"],
-						(DateTime)reader["LastModified"], (int)reader["Downloads"]);
+					details = new FileDetails((long)reader["Size"], (DateTime)reader["LastModified"]);
 				}
 
 				CloseReader(command, reader);
@@ -1311,21 +1230,21 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>
 		/// Deletes a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
-		/// <param name="name">The name of the Attachment, for example "myfile.jpg".</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
+		/// <param name="attachmentName">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <returns><c>true</c> if the Attachment is deleted, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if the page or attachment do not exist.</exception>
-		public bool DeletePageAttachment(PageInfo pageInfo, string name) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are empty or if the page or attachment do not exist.</exception>
+		public bool DeletePageAttachment(string pageFullName, string attachmentName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageInfo");
+			if(attachmentName == null) throw new ArgumentNullException("name");
+			if(attachmentName.Length == 0) throw new ArgumentException("Name cannot be empty");
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
 			DbTransaction transaction = BeginTransaction(connection);
 
-			if(!AttachmentExists(transaction, pageInfo, name)) {
+			if(!AttachmentExists(transaction, pageFullName, attachmentName)) {
 				RollbackTransaction(transaction);
 				throw new ArgumentException("Attachment does not exist", "name");
 			}
@@ -1339,8 +1258,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			List<Parameter> parameters = new List<Parameter>(3);
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.String, "Name", name));
-			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+			parameters.Add(new Parameter(ParameterType.String, "Name", attachmentName));
+			parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
@@ -1354,15 +1273,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>
 		/// Renames a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
 		/// <param name="oldName">The old name of the Attachment.</param>
 		/// <param name="newName">The new name of the Attachment.</param>
 		/// <returns><c>true</c> if the Attachment is renamed, false otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="oldName"/> or <paramref name="newName"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="pageInfo"/>, <paramref name="oldName"/> or <paramref name="newName"/> are empty,
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="oldName"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/>, <paramref name="oldName"/> or <paramref name="newName"/> are empty,
 		/// or if the page or old attachment do not exist, or the new attachment name already exists.</exception>
-		public bool RenamePageAttachment(PageInfo pageInfo, string oldName, string newName) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+		public bool RenamePageAttachment(string pageFullName, string oldName, string newName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageInfo");
 			if(oldName == null) throw new ArgumentNullException("oldName");
 			if(oldName.Length == 0) throw new ArgumentException("Old Name cannot be empty", "oldName");
 			if(newName == null) throw new ArgumentNullException("newName");
@@ -1372,11 +1291,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbConnection connection = builder.GetConnection(connString);
 			DbTransaction transaction = BeginTransaction(connection);
 
-			if(!AttachmentExists(transaction, pageInfo, oldName)) {
+			if(!AttachmentExists(transaction, pageFullName, oldName)) {
 				RollbackTransaction(transaction);
 				throw new ArgumentException("Attachment does not exist", "name");
 			}
-			if(AttachmentExists(transaction, pageInfo, newName)) {
+			if(AttachmentExists(transaction, pageFullName, newName)) {
 				RollbackTransaction(transaction);
 				throw new ArgumentException("Attachment already exists", "name");
 			}
@@ -1392,7 +1311,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewName", newName));
 			parameters.Add(new Parameter(ParameterType.String, "OldName", oldName));
-			parameters.Add(new Parameter(ParameterType.String, "Page", pageInfo.FullName));
+			parameters.Add(new Parameter(ParameterType.String, "Page", pageFullName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
@@ -1406,19 +1325,19 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>
 		/// Notifies the Provider that a Page has been renamed.
 		/// </summary>
-		/// <param name="oldPage">The old Page Info object.</param>
-		/// <param name="newPage">The new Page Info object.</param>
-		/// <exception cref="ArgumentNullException">If <paramref name="oldPage"/> or <paramref name="newPage"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If the new page is already in use.</exception>
-		public void NotifyPageRenaming(PageInfo oldPage, PageInfo newPage) {
-			if(oldPage == null) throw new ArgumentNullException("oldPage");
-			if(newPage == null) throw new ArgumentNullException("newPage");
+		/// <param name="oldPageFullName">The old page full name.</param>
+		/// <param name="newPageFullName">The new page full name.</param>
+		/// <exception cref="ArgumentNullException">If <paramref name="oldPageFullName"/> or <paramref name="newPageFullName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="oldPageFullName"/> or <paramref name="newPageFullName"/> are empty or if the new page full name is already in use.</exception>
+		public void NotifyPageRenaming(string oldPageFullName, string newPageFullName) {
+			if(oldPageFullName == null) throw new ArgumentNullException("oldPage");
+			if(newPageFullName == null) throw new ArgumentNullException("newPage");
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
 			DbTransaction transaction = BeginTransaction(connection);
 
-			if(ListPageAttachments(transaction, newPage).Length > 0) {
+			if(ListPageAttachments(transaction, newPageFullName).Length > 0) {
 				RollbackTransaction(transaction);
 				throw new ArgumentException("New Page already exists", "newPage");
 			}
@@ -1431,8 +1350,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			List<Parameter> parameters = new List<Parameter>(3);
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.String, "NewPage", newPage.FullName));
-			parameters.Add(new Parameter(ParameterType.String, "OldPage", oldPage.FullName));
+			parameters.Add(new Parameter(ParameterType.String, "NewPage", newPageFullName));
+			parameters.Add(new Parameter(ParameterType.String, "OldPage", oldPageFullName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
