@@ -296,8 +296,8 @@ class WikiPage
 		return sb.ToString ();
 	}
 
-	static readonly string mainPageContent = @"<table><tbody><tr>
-          <td class=""rounded""><div class=""home-caption"">Mono</div><div><img src=""http://mono-project.com/skins/MonoWaveWide/images/mp-thumb-mono.png"" style=""float: right;padding-right:10px;padding-top:3px;""></div>
+	static readonly string mainPageContent = @"<div id=""home-intro""><div id=""home-intro-banner""><table class=""mpTable""><tbody><tr>
+          <td class=""square""><div class=""home-caption"">Mono</div><div><img src=""http://mono-project.com/skins/MonoWaveWide/images/mp-thumb-mono.png"" style=""float: right;padding-right:10px;padding-top:3px;""></div>
           <div class=""home-content"">An open source, cross-platform, implementation of C# and the CLR that is binary compatible with Microsoft.NET</div>
           <a class=""download"" href=""/Download"">Download</a>
           <a class=""learn"" href=""/Start"">Learn More</a>
@@ -315,9 +315,9 @@ class WikiPage
           <a class=""buy"" href=""/Store"">Buy</a>
           <a class=""learn"" href=""http://go-mono.com/monotools/"">Learn More</a>
           </td>
-          </tr></tbody></table>
+          </tr></tbody></table></div>
 	  <br/>
-	  <table><tbody><tr>
+	  <div id=""home-intro-banner""><table class=""mpTable""><tbody><tr>
           <td class=""square""><div class=""home-caption"">Moonlight</div><div><img src=""http://mono-project.com/skins/MonoWaveWide/images/mp-thumb-moonlight.png"" style=""float: right;padding-right:5px;padding-top:3px;""></div>
           <div class=""home-content"">An open source implementation of Microsoft Silverlight for Linux and other Unix/X11 based operating systems</div>
           <a class=""download"" href=""http://www.go-mono.com/moonlight/"">Download</a>
@@ -337,5 +337,5 @@ class WikiPage
           <a class=""buy"" href=""http://monotouch.net/Store"">Buy</a>
           <a class=""learn"" href=""http://monotouch.net/"">Learn More</a>
           </td>
-          </tr></tbody></table><br/>";
+          </tr></tbody></table><br/></div></div>";
 }
