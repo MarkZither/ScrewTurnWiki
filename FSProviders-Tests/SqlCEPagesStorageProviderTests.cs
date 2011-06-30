@@ -8,6 +8,7 @@ using Rhino.Mocks;
 using ScrewTurn.Wiki.Tests;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.SearchEngine;
+using System.Data.SqlServerCe;
 
 namespace ScrewTurn.Wiki.Plugins.FSProviders.Tests {
 
@@ -15,85 +16,40 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders.Tests {
 	public class SqlCEPagesStorageProviderTests : PagesStorageProviderTestScaffolding {
 
 		//private const string ConnString = "Data Source=(local)\\SQLExpress;User ID=sa;Password=password;";
-		private const string ConnString = "Data Source=(local)\\SQLExpress;Integrated Security=SSPI;";
-		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
+		private const string ConnString = "Persist Security Info = False; Data Source = 'ScrewTurnWikiTest.sdf';";
 
 		public override IPagesStorageProviderV40 GetProvider() {
 			SqlCEPagesStorageProvider prov = new SqlCEPagesStorageProvider();
-			prov.SetUp(MockHost(), ConnString + InitialCatalog);
-			prov.Init(MockHost(), ConnString + InitialCatalog, null);
+			prov.SetUp(MockHost(), ConnString);
+			prov.Init(MockHost(), ConnString, null);
 
 			return prov;
 		}
 
-		[TestFixtureSetUp]
-		public void FixtureSetUp() {
+		[SetUp]
+		public void SetUp() {
 			// Create database with no tables
-			SqlConnection cn = new SqlConnection(ConnString);
-			cn.Open();
-
-			SqlCommand cmd = cn.CreateCommand();
-			cmd.CommandText = "if (select count(*) from sys.databases where [Name] = 'ScrewTurnWikiTest') = 0 begin create database [ScrewTurnWikiTest] end";
-			cmd.ExecuteNonQuery();
-
-			cn.Close();
+			SqlCeEngine engine = new SqlCeEngine(ConnString);
+			engine.CreateDatabase();
+			engine.Dispose();
 		}
 
 		[TearDown]
 		public new void TearDown() {
 			base.TearDown();
 
-			// Clear all tables
-			SqlConnection cn = new SqlConnection(ConnString);
-			cn.Open();
-
-			SqlCommand cmd = cn.CreateCommand();
-			cmd.CommandText = "use [ScrewTurnWikiTest]; delete from [IndexWordMapping]; delete from [IndexWord]; delete from [IndexDocument]; delete from [ContentTemplate]; delete from [Snippet]; delete from [NavigationPath]; delete from [Message]; delete from [PageKeyword]; delete from [CategoryBinding]; delete from [PageContent]; delete from [Category]; delete from [Namespace] where [Name] <> '';";
-			try {
-				cmd.ExecuteNonQuery();
-			}
-			catch(SqlException sqlex) {
-				Console.WriteLine(sqlex.ToString());
-			}
-
-			cn.Close();
+			System.IO.File.Delete("ScrewTurnWikiTest.sdf");
 		}
 
 		[TestFixtureTearDown]
 		public void FixtureTearDown() {
-			// Delete database
-			SqlConnection cn = new SqlConnection(ConnString);
-			cn.Open();
 
-			SqlCommand cmd = cn.CreateCommand();
-			cmd.CommandText = "alter database [ScrewTurnWikiTest] set single_user with rollback immediate";
-			try {
-				cmd.ExecuteNonQuery();
-			}
-			catch(SqlException sqlex) {
-				Console.WriteLine(sqlex.ToString());
-			}
-
-			cmd = cn.CreateCommand();
-			cmd.CommandText = "drop database [ScrewTurnWikiTest]";
-			try {
-				cmd.ExecuteNonQuery();
-			}
-			catch(SqlException sqlex) {
-				Console.WriteLine(sqlex.ToString());
-			}
-
-			cn.Close();
-
-			// This is neede because the pooled connection are using a session
-			// that is now invalid due to the commands executed above
-			SqlConnection.ClearAllPools();
 		}
 
 		[Test]
 		public void Init() {
 			IPagesStorageProviderV40 prov = GetProvider();
-			prov.Init(MockHost(), ConnString + InitialCatalog, null);
+			prov.Init(MockHost(), ConnString, null);
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}

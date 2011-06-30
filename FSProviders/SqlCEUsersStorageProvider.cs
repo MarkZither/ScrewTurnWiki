@@ -5,6 +5,8 @@ using System.Text;
 using ScrewTurn.Wiki.Plugins.SqlCommon;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Data.SqlClient;
+using System.Data.SqlServerCe;
+using System.Data.Common;
 
 namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
@@ -24,8 +26,8 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <param name="connString">The connection string.</param>
 		/// <returns>The command.</returns>
-		private SqlCommand GetCommand(string connString) {
-			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as SqlCommand;
+		private DbCommand GetCommand(string connString) {
+			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as SqlCeCommand;
 		}
 
 		/// <summary>
@@ -42,7 +44,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// <param name="connString">The connection string to validate.</param>
 		/// <remarks>If the connection string is invalid, the method throws <see cref="T:InvalidConfigurationException"/>.</remarks>
 		protected override void ValidateConnectionString(string connString) {
-			SqlCommand cmd = null;
+			DbCommand cmd = null;
 			try {
 				cmd = GetCommand(connString);
 			}
@@ -68,7 +70,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
-			SqlCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Users'";
 
 			bool exists = false;
@@ -96,7 +98,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
-			SqlCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Users'";
 
 			bool exists = false;
@@ -122,12 +124,25 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// Creates the standard database schema.
 		/// </summary>
 		private void CreateStandardSchema() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = Properties.Resources.UsersDatabase;
+			DbCommand cmd = GetCommand(connString);
 
-			cmd.ExecuteNonQuery();
+			try {
+				cmd.CommandText = "create table [User] ([Wiki] nvarchar(100) not null, [Username] nvarchar(100) not null, [PasswordHash] nvarchar(100) not null, [DisplayName] nvarchar(150), [Email] nvarchar(100) not null, [Active] bit not null, [DateTime] datetime not null, constraint [PK_User] primary key ([Wiki], [Username]))";
+				cmd.ExecuteNonQuery();
 
-			cmd.Connection.Close();
+				cmd.CommandText = "create table [UserGroup] ([Wiki] nvarchar(100) not null, [Name] nvarchar(100) not null, [Description] nvarchar(150), constraint [PK_UserGroup] primary key ([Wiki], [Name]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [UserGroupMembership] ([Wiki] nvarchar(100) not null, [User] nvarchar(100) not null, [UserGroup] nvarchar(100) not null, constraint [FK_UserGroupMembership_User] foreign key ([Wiki], [User]) references [User]([Wiki], [UserName]) on delete cascade on update cascade, constraint [FK_UserGroupMembership_UserGroup] foreign key ([Wiki], [UserGroup]) references [UserGroup]([Wiki], [Name]) on delete cascade on update cascade, constraint [PK_UserGroupMembership] primary key ([Wiki], [User], [UserGroup]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [UserData] ([Wiki] nvarchar(100) not null, [User] nvarchar(100) not null, [Key] nvarchar(100) not null, [Data] nvarchar(4000) not null, constraint [FK_UserData_User] foreign key ([Wiki], [User]) references [User]([Wiki], [UserName]) on delete cascade on update cascade, constraint [PK_UserData] primary key ([Wiki], [User], [Key]))";
+				cmd.ExecuteNonQuery();
+			}
+			catch(DbException) { }
+			finally {
+				cmd.Connection.Close();
+			}
 		}
 
 		/// <summary>

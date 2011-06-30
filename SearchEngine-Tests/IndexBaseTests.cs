@@ -379,7 +379,7 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			IInMemoryIndex imIndex = index as IInMemoryIndex;
 
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
-			
+
 			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
 
 			index.StoreDocument(doc1, null, "", null);

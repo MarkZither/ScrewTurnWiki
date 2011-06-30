@@ -5,6 +5,8 @@ using System.Text;
 using ScrewTurn.Wiki.Plugins.SqlCommon;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Data.SqlClient;
+using System.Data.SqlServerCe;
+using System.Data.Common;
 
 namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
@@ -24,8 +26,8 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <param name="connString">The connection string.</param>
 		/// <returns>The command.</returns>
-		private SqlCommand GetCommand(string connString) {
-			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as SqlCommand;
+		private DbCommand GetCommand(string connString) {
+			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as SqlCeCommand;
 		}
 
 		/// <summary>
@@ -42,7 +44,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// <param name="connString">The connection string to validate.</param>
 		/// <remarks>If the connection string is invalid, the method throws <see cref="T:InvalidConfigurationException"/>.</remarks>
 		protected override void ValidateConnectionString(string connString) {
-			SqlCommand cmd = null;
+			DbCommand cmd = null;
 			try {
 				cmd = GetCommand(connString);
 			}
@@ -68,7 +70,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
-			SqlCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'GlobalSettings'";
 
 			bool exists = false;
@@ -78,7 +80,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 				if(version > CurrentSchemaVersion) throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
 				exists = version != -1;
 			}
-			catch(SqlException) {
+			catch(SqlCeException) {
 				exists = false;
 			}
 			finally {
@@ -96,7 +98,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
-			SqlCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'GlobalSettings'";
 
 			bool exists = false;
@@ -105,7 +107,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 				int version = ExecuteScalar<int>(cmd, -1);
 				exists = version < CurrentSchemaVersion;
 			}
-			catch(SqlException) {
+			catch(SqlCeException) {
 				exists = false;
 			}
 			finally {
@@ -122,12 +124,21 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// Creates the standard database schema.
 		/// </summary>
 		private void CreateStandardSchema() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = Properties.Resources.GlobalSettingsDatabase;
+			DbCommand cmd = GetCommand(connString);
+			try {
+				cmd.CommandText = "create table [GlobalSetting] ([Name] nvarchar(100) not null, [Value] nvarchar(4000) not null, constraint [PK_GlobalSetting] primary key ([Name]));";
+				cmd.ExecuteNonQuery();
 
-			cmd.ExecuteNonQuery();
+				cmd.CommandText = "create table [Log] ([Id] int not null identity, [DateTime] datetime not null, [EntryType] nchar not null, [User] nvarchar(100) not null, [Message] nvarchar(4000) not null, [Wiki] nvarchar(100), constraint [PK_Log] primary key ([Id]))";
+				cmd.ExecuteNonQuery();
 
-			cmd.Connection.Close();
+				cmd.CommandText = "create table [PluginAssembly] ([Name] nvarchar(100) not null, [Assembly] image not null, constraint [PK_PluginAssembly] primary key ([Name]))";
+				cmd.ExecuteNonQuery();
+			}
+			catch(DbException) { }
+			finally {
+				cmd.Connection.Close();
+			}
 		}
 
 		/// <summary>

@@ -282,6 +282,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "DocName", document.Name));
 
+			DbCommand command = null;
+			if(state != null) command = builder.GetCommand((DbTransaction)state, query, parameters);
+			else command = builder.GetCommand(connString, query, parameters);
+
+			ExecuteNonQuery(command, state == null);
+
 			string subQuery = queryBuilder.SelectFrom("IndexWordMapping", new string[] { "Word" });
 			subQuery = queryBuilder.Where(subQuery, "Wiki", WhereOperator.Equals, "Wiki");
 			subQuery = queryBuilder.GroupBy(subQuery, new string[] { "Word" });
@@ -289,11 +295,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query2 = queryBuilder.WhereNotInSubquery(query2, "IndexWord", "Id", subQuery);
 			query2 = queryBuilder.AndWhere(query2, "Wiki", WhereOperator.Equals, "Wiki");
 
-			query = queryBuilder.AppendForBatch(query, query2);
+			//query = queryBuilder.AppendForBatch(query, query2);
 
-			DbCommand command = null;
-			if(state != null) command = builder.GetCommand((DbTransaction)state, query, parameters);
-			else command = builder.GetCommand(connString, query, parameters);
+			command = null;
+			if(state != null) command = builder.GetCommand((DbTransaction)state, query2, parameters);
+			else command = builder.GetCommand(connString, query2, parameters);
 
 			// Close only if state is null
 			ExecuteNonQuery(command, state == null);
@@ -587,13 +593,21 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string query = queryBuilder.DeleteFrom("IndexWordMapping");
 			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			query = queryBuilder.AppendForBatch(query, queryBuilder.DeleteFrom("IndexWord"));
-			query = queryBuilder.AppendForBatch(query, queryBuilder.DeleteFrom("IndexDocument"));
-
 			DbCommand command = null;
 			if(state == null) command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 			else command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
+			ExecuteNonQuery(command, state == null);
 
+			query = queryBuilder.DeleteFrom("IndexWord");
+			command = null;
+			if(state == null) command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
+			else command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
+			ExecuteNonQuery(command, state == null);
+
+			query = queryBuilder.DeleteFrom("IndexDocument");
+			command = null;
+			if(state == null) command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
+			else command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 			ExecuteNonQuery(command, state == null);
 		}
 
@@ -1152,11 +1166,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			NameTools.ExpandFullName(pageFullName, out sourceName, out pageName);
 			if(sourceName == null) sourceName = "";
 
+			if(destinationName.ToLowerInvariant() == sourceName.ToLowerInvariant()) return null;
+
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
 			DbTransaction transaction = BeginTransaction(connection);
 
-			if(destinationName.ToLowerInvariant() == sourceName.ToLowerInvariant()) return null;
 			if(IsDefaultPage(transaction, pageFullName)) {
 				RollbackTransaction(transaction);
 				return null;
@@ -1851,45 +1866,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				return null;
 			}
 
-			string finalQuery = "";
-			parameters = new List<Parameter>(MaxStatementsInBatch * 3 + 1);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			rows = 0;
-			int count = 1;
-			string countString;
-
 			foreach(string page in mergedPages) {
-				// This batch is executed in small chunks (MaxStatementsInBatch) to avoid exceeding DB's max batch length/size
-
-				countString = count.ToString();
-
 				query = queryBuilder.InsertInto("CategoryBinding", new string[] { "Wiki", "Namespace", "Category", "Page" },
-					new string[] { "Wiki", "Namespace" + countString, "Category" + countString, "Page" + countString });
-				finalQuery = queryBuilder.AppendForBatch(finalQuery, query);
+					new string[] { "Wiki", "Namespace", "Category", "Page" });
 
-				parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
-				parameters.Add(new Parameter(ParameterType.String, "Category" + countString, destinationName));
-				parameters.Add(new Parameter(ParameterType.String, "Page" + countString, NameTools.GetLocalName(page)));
+				parameters = new List<Parameter>(4);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
+				parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
+				parameters.Add(new Parameter(ParameterType.String, "Category", destinationName));
+				parameters.Add(new Parameter(ParameterType.String, "Page", NameTools.GetLocalName(page)));
 
-				count++;
-
-				if(count == MaxStatementsInBatch) {
-					// Batch is complete -> execute
-					command = builder.GetCommand(transaction, finalQuery, parameters);
-					rows += ExecuteNonQuery(command, false);
-
-					count = 1;
-					finalQuery = "";
-					parameters.Clear();
-				}
-			}
-
-			if(finalQuery.Length > 0) {
-				// Execute remaining queries, if any
-				command = builder.GetCommand(transaction, finalQuery, parameters);
+				command = builder.GetCommand(transaction, query, parameters);
 				rows += ExecuteNonQuery(command, false);
 			}
-
 			if(rows == mergedPages.Length) {
 				CommitTransaction(transaction);
 				CategoryInfo result = new CategoryInfo(actualDestination.FullName, this);
@@ -2476,30 +2466,23 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows != 1) return false;
 
 			if(content.Keywords.Length > 0) {
-				parameters = new List<Parameter>(content.Keywords.Length * 4 + 1);
-				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-				string fullQuery = "";
-				int count = 0;
-				string countString;
+				rows = 0;
 				foreach(string kw in content.Keywords) {
-					countString = count.ToString();
-
 					query = queryBuilder.InsertInto("PageKeyword", new string[] { "Wiki", "Page", "Namespace", "Revision", "Keyword" },
-						new string[] { "Wiki", "Page" + countString, "Namespace" + countString, "Revision" + countString, "Keyword" + countString });
-					fullQuery = queryBuilder.AppendForBatch(fullQuery, query);
+						new string[] { "Wiki", "Page", "Namespace", "Revision", "Keyword" });
 
-					parameters.Add(new Parameter(ParameterType.String, "Page" + countString, name));
-					parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
-					parameters.Add(new Parameter(ParameterType.Int16, "Revision" + countString, revision));
-					parameters.Add(new Parameter(ParameterType.String, "Keyword" + countString, kw));
+					parameters = new List<Parameter>(5);
+					parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
+					parameters.Add(new Parameter(ParameterType.String, "Page", name));
+					parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
+					parameters.Add(new Parameter(ParameterType.Int16, "Revision", revision));
+					parameters.Add(new Parameter(ParameterType.String, "Keyword", kw));
 
-					count++;
+					command = builder.GetCommand(transaction, query, parameters);
+
+					rows += ExecuteNonQuery(command, false);
+
 				}
-
-				command = builder.GetCommand(transaction, fullQuery, parameters);
-
-				rows = ExecuteNonQuery(command, false);
-
 				return rows == content.Keywords.Length;
 			}
 			else return true;
@@ -3058,30 +3041,21 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows < 0) return false;
 
 			if(categories.Length > 0) {
-				string finalQuery = "";
-				parameters = new List<Parameter>(categories.Length * 3 + 1);
-				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-				int count = 0;
-				string countString;
-
+				rows = 0;
 				foreach(string cat in categories) {
-					countString = count.ToString();
-
 					query = queryBuilder.InsertInto("CategoryBinding", new string[] { "Wiki", "Namespace", "Category", "Page" },
-						new string[] { "Wiki", "Namespace" + countString, "Category" + countString, "Page" + countString });
-					finalQuery = queryBuilder.AppendForBatch(finalQuery, query);
+						new string[] { "Wiki", "Namespace", "Category", "Page" });
 
-					parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
-					parameters.Add(new Parameter(ParameterType.String, "Category" + countString, NameTools.GetLocalName(cat)));
-					parameters.Add(new Parameter(ParameterType.String, "Page" + countString, name));
+					parameters = new List<Parameter>(4);
+					parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
+					parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
+					parameters.Add(new Parameter(ParameterType.String, "Category", NameTools.GetLocalName(cat)));
+					parameters.Add(new Parameter(ParameterType.String, "Page", name));
 
-					count++;
+					command = builder.GetCommand(transaction, query, parameters);
+
+					rows += ExecuteNonQuery(command, false);
 				}
-
-				command = builder.GetCommand(transaction, finalQuery, parameters);
-
-				rows = ExecuteNonQuery(command, false);
-
 				return rows == categories.Length;
 			}
 			else return true;
@@ -3120,30 +3094,21 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows < 0) return false;
 
 			if(categories.Length > 0) {
-				string finalQuery = "";
-				parameters = new List<Parameter>(categories.Length * 3 + 1);
-				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-				int count = 0;
-				string countString;
-
+				rows  = 0;
 				foreach(string cat in categories) {
-					countString = count.ToString();
-
 					query = queryBuilder.InsertInto("CategoryBinding", new string[] { "Wiki", "Namespace", "Category", "Page" },
-						new string[] { "Wiki", "Namespace" + countString, "Category" + countString, "Page" + countString});
-					finalQuery = queryBuilder.AppendForBatch(finalQuery, query);
+						new string[] { "Wiki", "Namespace", "Category", "Page" });
 
-					parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
-					parameters.Add(new Parameter(ParameterType.String, "Category" + countString, NameTools.GetLocalName(cat)));
-					parameters.Add(new Parameter(ParameterType.String, "Page" + countString, name));
+					parameters = new List<Parameter>(4);
+					parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
+					parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
+					parameters.Add(new Parameter(ParameterType.String, "Category", NameTools.GetLocalName(cat)));
+					parameters.Add(new Parameter(ParameterType.String, "Page", name));
 
-					count++;
+					command = builder.GetCommand(connection, query, parameters);
+
+					rows += ExecuteNonQuery(command, false);
 				}
-
-				command = builder.GetCommand(connection, finalQuery, parameters);
-
-				rows = ExecuteNonQuery(command, false);
-
 				return rows == categories.Length;
 			}
 			else return true;
@@ -3448,52 +3413,31 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			UnTreeMessages(messages, out allMessages, out parents, -1);
 
-			string finalQuery = "";
-			int count = 1;
-			string countString;
-			parameters = new List<Parameter>(MaxStatementsInBatch * 8 + 1);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-
 			int rowsDone = 0;
 
 			for(int i = 0; i < allMessages.Count; i++) {
+
 				// Execute the batch in smaller chunks
 
 				Message msg = allMessages[i];
 				int parent = parents[i];
 
-				countString = count.ToString();
-
 				query = queryBuilder.InsertInto("Message", new string[] { "Wiki", "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" },
-					new string[] { "Wiki", "Page" + countString, "Namespace" + countString, "Id" + countString, "Parent" + countString, "Username" + countString, "Subject" + countString, "DateTime" + countString, "Body" + countString });
+					new string[] { "Wiki", "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" });
 
-				parameters.Add(new Parameter(ParameterType.String, "Page" + countString, name));
-				parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
-				parameters.Add(new Parameter(ParameterType.Int16, "Id" + countString, (short)msg.ID));
-				if(parent != -1) parameters.Add(new Parameter(ParameterType.Int16, "Parent" + countString, parent));
-				else parameters.Add(new Parameter(ParameterType.Int16, "Parent" + countString, DBNull.Value));
-				parameters.Add(new Parameter(ParameterType.String, "Username" + countString, msg.Username));
-				parameters.Add(new Parameter(ParameterType.String, "Subject" + countString, msg.Subject));
-				parameters.Add(new Parameter(ParameterType.DateTime, "DateTime" + countString, msg.DateTime));
-				parameters.Add(new Parameter(ParameterType.String, "Body" + countString, msg.Body));
+				parameters = new List<Parameter>(9);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
+				parameters.Add(new Parameter(ParameterType.String, "Page", name));
+				parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
+				parameters.Add(new Parameter(ParameterType.Int16, "Id", (short)msg.ID));
+				if(parent != -1) parameters.Add(new Parameter(ParameterType.Int16, "Parent", parent));
+				else parameters.Add(new Parameter(ParameterType.Int16, "Parent", DBNull.Value));
+				parameters.Add(new Parameter(ParameterType.String, "Username", msg.Username));
+				parameters.Add(new Parameter(ParameterType.String, "Subject", msg.Subject));
+				parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", msg.DateTime));
+				parameters.Add(new Parameter(ParameterType.String, "Body", msg.Body));
 
-				finalQuery = queryBuilder.AppendForBatch(finalQuery, query);
-
-				count++;
-
-				if(count == MaxStatementsInBatch) {
-					command = builder.GetCommand(transaction, finalQuery, parameters);
-
-					rowsDone += ExecuteNonQuery(command, false);
-
-					finalQuery = "";
-					count = 1;
-					parameters.Clear();
-				}
-			}
-
-			if(finalQuery.Length > 0) {
-				command = builder.GetCommand(transaction, finalQuery, parameters);
+				command = builder.GetCommand(transaction, query, parameters);
 
 				rowsDone += ExecuteNonQuery(command, false);
 			}
@@ -3932,32 +3876,23 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-			string query, finalQuery = "";
-			List<Parameter> parameters = new List<Parameter>(3 * pages.Length + 1);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
+			int rows = 0;
 			int count = 0;
-			string countString;
-
 			foreach(string pageFullName in pages) {
-				countString = count.ToString();
+				string query = queryBuilder.InsertInto("NavigationPath", new string[] { "Wiki", "Name", "Namespace", "Page", "Number" },
+					new string[] { "Wiki", "Name", "Namespace", "Page", "Number" });
 
-				query = queryBuilder.InsertInto("NavigationPath", new string[] { "Wiki", "Name", "Namespace", "Page", "Number" },
-					new string[] { "Wiki", "Name" + countString, "Namespace" + countString, "Page" + countString, "Number" + countString });
+				List<Parameter> parameters = new List<Parameter>(5);
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
+				parameters.Add(new Parameter(ParameterType.String, "Name", name));
+				parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
+				parameters.Add(new Parameter(ParameterType.String, "Page", NameTools.GetLocalName(pageFullName)));
+				parameters.Add(new Parameter(ParameterType.Int32, "Number", (short)count));
 
-				parameters.Add(new Parameter(ParameterType.String, "Name" + countString, name));
-				parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
-				parameters.Add(new Parameter(ParameterType.String, "Page" + countString, NameTools.GetLocalName(pageFullName)));
-				parameters.Add(new Parameter(ParameterType.Int32, "Number" + countString, (short)count));
+				DbCommand command = builder.GetCommand(transaction, query, parameters);
 
-				finalQuery = queryBuilder.AppendForBatch(finalQuery, query);
-
-				count++;
+				rows += ExecuteNonQuery(command, false);
 			}
-
-			DbCommand command = builder.GetCommand(transaction, finalQuery, parameters);
-
-			int rows = ExecuteNonQuery(command, false);
-
 			if(rows == pages.Length) {
 				NavigationPath result = new NavigationPath(NameTools.GetFullName(nspace, name), this);
 				result.Pages = pages;

@@ -70,7 +70,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// <param name="connString">The connection string.</param>
 		/// <returns>The connection.</returns>
 		public DbConnection GetConnection(string connString) {
-			DbConnection cn = new SqlConnection(connString);
+			DbConnection cn = new SqlCeConnection(connString);
 			cn.Open();
 
 			return cn;
@@ -99,7 +99,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 			cmd.CommandText = preparedQuery;
 
 			foreach(Parameter param in parameters) {
-				cmd.Parameters.Add(new SqlParameter("@" + param.Name, param.Value));
+				cmd.Parameters.Add(new SqlCeParameter("@" + param.Name, param.Value));
 			}
 
 			return cmd;
@@ -118,7 +118,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 			cmd.CommandText = preparedQuery;
 
 			foreach(Parameter param in parameters) {
-				cmd.Parameters.Add(new SqlParameter("@" + param.Name, param.Value));
+				cmd.Parameters.Add(new SqlCeParameter("@" + param.Name, param.Value));
 			}
 
 			return cmd;

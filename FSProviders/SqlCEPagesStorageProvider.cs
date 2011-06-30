@@ -5,6 +5,8 @@ using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.Plugins.SqlCommon;
 using System.Data.SqlClient;
+using System.Data.Common;
+using System.Data.SqlServerCe;
 
 namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
@@ -24,8 +26,8 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <param name="connString">The connection string.</param>
 		/// <returns>The command.</returns>
-		private SqlCommand GetCommand(string connString) {
-			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as SqlCommand;
+		private DbCommand GetCommand(string connString) {
+			return commandBuilder.GetCommand(connString, "select current_user", new List<Parameter>()) as SqlCeCommand;
 		}
 
 		/// <summary>
@@ -42,7 +44,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// <param name="connString">The connection string to validate.</param>
 		/// <remarks>If the connection string is invalid, the method throws <see cref="T:InvalidConfigurationException"/>.</remarks>
 		protected override void ValidateConnectionString(string connString) {
-			SqlCommand cmd = null;
+			DbCommand cmd = null;
 			try {
 				cmd = GetCommand(connString);
 			}
@@ -68,7 +70,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
-			SqlCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Pages'";
 
 			bool exists = false;
@@ -78,7 +80,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 				if(version > CurrentSchemaVersion) throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
 				exists = version != -1;
 			}
-			catch(SqlException) {
+			catch(DbException) {
 				exists = false;
 			}
 			finally {
@@ -96,7 +98,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
-			SqlCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Pages'";
 
 			bool exists = false;
@@ -105,7 +107,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 				int version = ExecuteScalar<int>(cmd, -1);
 				exists = version < CurrentSchemaVersion;
 			}
-			catch(SqlException) {
+			catch(SqlCeException) {
 				exists = false;
 			}
 			finally {
@@ -122,22 +124,63 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// Creates the standard database schema.
 		/// </summary>
 		private void CreateStandardSchema() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = Properties.Resources.PagesDatabase;
+			DbCommand cmd = GetCommand(connString);
 
-			cmd.ExecuteNonQuery();
+			try {
+				cmd.CommandText = "create table [Namespace] ([Wiki] nvarchar(100) not null, [Name] nvarchar(100) not null, [DefaultPage] nvarchar(200), constraint [PK_Namespace] primary key ([Wiki], [Name]))";
+				cmd.ExecuteNonQuery();
 
-			cmd.Connection.Close();
+				cmd.CommandText = "create table [Category]([Wiki] nvarchar(100) not null, [Name] nvarchar(100) not null, [Namespace] nvarchar(100) not null, constraint [FK_Category_Namespace] foreign key ([Wiki], [Namespace]) references [Namespace]([Wiki], [Name])	on delete cascade on update cascade, constraint [PK_Category] primary key ([Wiki], [Name], [Namespace]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [PageContent] ([Wiki] nvarchar(100) not null, [Name] nvarchar(200) not null, [CreationDateTime] datetime not null, [Namespace] nvarchar(100) not null, [Revision] smallint not null, [Title] nvarchar(200) not null, [User] nvarchar(100) not null, [LastModified] datetime not null, [Comment] nvarchar(300), [Content] ntext not null, [Description] nvarchar(200), constraint [FK_Page_Namespace] foreign key ([Wiki], [Namespace]) references [Namespace]([Wiki], [Name]) on delete cascade on update cascade,constraint [PK_PageContent] primary key ([Wiki], [Name], [Namespace], [Revision]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [CategoryBinding] ([Wiki] nvarchar(100) not null, [Namespace] nvarchar(100) not null, [Category] nvarchar(100) not null, [Page] nvarchar(200) not null, constraint [FK_CategoryBinding_Namespace] foreign key ([Wiki], [Namespace]) references [Namespace]([Wiki], [Name]), constraint [FK_CategoryBinding_Category] foreign key ([Wiki], [Category], [Namespace]) references [Category]([Wiki], [Name], [Namespace]) on delete cascade on update cascade, constraint [PK_CategoryBinding] primary key ([Wiki], [Namespace], [Page], [Category]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [PageKeyword] ([Wiki] nvarchar(100) not null, [Page] nvarchar(200) not null, [Namespace] nvarchar(100) not null, [Revision] smallint not null, [Keyword] nvarchar(50) not null, constraint [FK_PageKeyword_PageContent] foreign key ([Wiki], [Page], [Namespace], [Revision]) references [PageContent]([Wiki], [Name], [Namespace], [Revision]) on delete cascade on update cascade, constraint [PK_PageKeyword] primary key ([Wiki], [Page], [Namespace], [Revision], [Keyword]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [Message] ([Wiki] nvarchar(100) not null, [Page] nvarchar(200) not null, [Namespace] nvarchar(100) not null, [Id] smallint not null, [Parent] smallint, [Username] nvarchar(100) not null, [Subject] nvarchar(200) not null, [DateTime] datetime not null, [Body] ntext not null, constraint [PK_Message] primary key ([Wiki], [Page], [Namespace], [Id]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [NavigationPath] ([Wiki] nvarchar(100) not null, [Name] nvarchar(100) not null, [Namespace] nvarchar(100) not null, [Page] nvarchar(200) not null, [Number] smallint not null, constraint [PK_NavigationPath] primary key ([Wiki], [Name], [Namespace], [Page]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [Snippet] ([Wiki] nvarchar(100) not null, [Name] nvarchar(200) not null, [Content] ntext not null, constraint [PK_Snippet] primary key ([Wiki], [Name]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [ContentTemplate] ([Wiki] nvarchar(100) not null, [Name] nvarchar(200) not null, [Content] ntext not null, constraint [PK_ContentTemplate] primary key ([Wiki], [Name]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [IndexDocument] ([Wiki] nvarchar(100) not null, [Id] int not null, [Name] nvarchar(200) not null, [Title] nvarchar(200) not null, [TypeTag] nvarchar(10) not null, [DateTime] datetime not null, constraint [UQ_IndexDocument] unique ([Wiki], [Name]), constraint [PK_IndexDocument] primary key ([Wiki], [Id]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [IndexWord] ([Wiki] nvarchar(100) not null, [Id] int not null, [Text] nvarchar(200) not null, constraint [UQ_IndexWord] unique ([Wiki], [Text]), constraint [PK_IndexWord] primary key ([Wiki], [Id]))";
+				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "create table [IndexWordMapping] ([Wiki] nvarchar(100) not null, [Word] int not null, [Document] int not null, [FirstCharIndex] smallint not null, [WordIndex] smallint not null, [Location] tinyint not null, constraint [FK_IndexWordMapping_IndexWord] foreign key ([Wiki], [Word]) references [IndexWord]([Wiki], [Id]) on delete cascade on update cascade, constraint [FK_IndexWordMapping_IndexDocument] foreign key ([Wiki], [Document]) references [IndexDocument]([Wiki], [Id]) on delete cascade on update cascade, constraint [PK_IndexWordMapping] primary key ([Wiki], [Word], [Document], [FirstCharIndex], [WordIndex], [Location]))";
+				cmd.ExecuteNonQuery();
+			}
+			catch(DbException) { }
+			finally {
+				cmd.Connection.Close();
+			}
 		}
 
 		private void InitNamespaceTable(string wikiName) {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = Properties.Resources.PagesInitNamespaceTableDatabase;
-			cmd.Parameters.Add(new SqlParameter("Wiki", wikiName));
+			DbCommand cmd = GetCommand(connString);
+			try {
+				cmd.CommandText = "insert into [Namespace] ([Wiki], [Name], [DefaultPage]) values (@wiki, '', null)";
+				cmd.Parameters.Add(new SqlCeParameter("Wiki", wikiName));
 
-			cmd.ExecuteNonQuery();
-
-			cmd.Connection.Close();
+				cmd.ExecuteNonQuery();
+			}
+			catch(DbException) { }
+			finally {
+				cmd.Connection.Close();
+			}
 		}
 
 		/// <summary>
