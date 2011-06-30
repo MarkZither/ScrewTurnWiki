@@ -1397,6 +1397,12 @@
     <Content Include="Themes\Elegant\Scripts.js" />
     <Content Include="Themes\Print.css" />
     <Content Include="Upload.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.SqlServer.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\PageListBuilder.ascx.resx" />
@@ -2718,9 +2724,6 @@
     <Content Include="Themes\Default\Scripts.js" />
     <Content Include="Themes\Editor.css" />
     <Content Include="Thumb.aspx" />
-    <Content Include="Web.FileSystem.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AclEngine\AclEngine.csproj">
@@ -2844,14 +2847,7 @@
     <Content Include="MasterPageClean.master" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.SqlServer.config">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.Azure.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
