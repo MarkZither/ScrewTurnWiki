@@ -56,7 +56,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders.Tests {
 
 		[TestCase("", ExpectedException = typeof(InvalidConfigurationException))]
 		[TestCase("blah", ExpectedException = typeof(InvalidConfigurationException))]
-		[TestCase("Persist Security Info = False; Data Source = 'ScrewTurnWikiTest2.sdf'; File Mode = 'shared read';", ExpectedException = typeof(InvalidConfigurationException))]
+		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;", ExpectedException = typeof(InvalidConfigurationException))]
 		public void SetUp_InvalidConnString(string c) {
 			SqlCESettingsStorageProvider prov = new SqlCESettingsStorageProvider();
 			prov.SetUp(MockHost(), c);
