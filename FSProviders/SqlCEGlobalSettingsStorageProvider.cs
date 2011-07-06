@@ -22,10 +22,20 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
 		private const int CurrentSchemaVersion = 4000;
 
+		private const string PluginsDirectory = "Plugins";
+
 		private string connString = null;
 
 		private string BuildDbConnectionString(IHostV40 host) {
 			return "Data Source = '" + host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory) + "ScrewTurnWiki.sdf';";
+		}
+
+		private string GetFullPath(string finalChunk) {
+			return Path.Combine(Path.Combine(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory), wiki), finalChunk);
+		}
+
+		private string GetFullPathForPlugin(string name) {
+			return Path.Combine(GetFullPath(PluginsDirectory), name);
 		}
 
 		/// <summary>
@@ -51,7 +61,98 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 			connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
 
 			base.Init(host, connString, wiki);
+
+			if(!Directory.Exists(GetFullPath(PluginsDirectory))) {
+				Directory.CreateDirectory(GetFullPath(PluginsDirectory));
+			}
 		}
+
+
+		/// <summary>
+		/// Lists the stored plugin assemblies.
+		/// </summary>
+		/// <returns></returns>
+		public new string[] ListPluginAssemblies() {
+			lock(this) {
+				string[] files = Directory.GetFiles(GetFullPath(PluginsDirectory), "*.dll");
+				string[] result = new string[files.Length];
+				for(int i = 0; i < files.Length; i++) result[i] = Path.GetFileName(files[i]);
+				return result;
+			}
+		}
+
+		/// <summary>
+		/// Stores a plugin's assembly, overwriting existing ones if present.
+		/// </summary>
+		/// <param name="filename">The file name of the assembly, such as "Assembly.dll".</param>
+		/// <param name="assembly">The assembly content.</param>
+		/// <returns><c>true</c> if the assembly is stored, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <b>filename</b> or <b>assembly</b> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <b>filename</b> or <b>assembly</b> are empty.</exception>
+		public new bool StorePluginAssembly(string filename, byte[] assembly) {
+			if(filename == null) throw new ArgumentNullException("filename");
+			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
+			if(assembly == null) throw new ArgumentNullException("assembly");
+			if(assembly.Length == 0) throw new ArgumentException("Assembly cannot be empty", "assembly");
+
+			lock(this) {
+				try {
+					File.WriteAllBytes(GetFullPathForPlugin(filename), assembly);
+				}
+				catch(IOException) {
+					return false;
+				}
+				return true;
+			}
+		}
+
+		/// <summary>
+		/// Retrieves a plugin's assembly.
+		/// </summary>
+		/// <param name="filename">The file name of the assembly.</param>
+		/// <returns>The assembly content, or <c>null</c>.</returns>
+		/// <exception cref="ArgumentNullException">If <b>filename</b> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <b>filename</b> is empty.</exception>
+		public new byte[] RetrievePluginAssembly(string filename) {
+			if(filename == null) throw new ArgumentNullException("filename");
+			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
+
+			if(!File.Exists(GetFullPathForPlugin(filename))) return null;
+
+			lock(this) {
+				try {
+					return File.ReadAllBytes(GetFullPathForPlugin(filename));
+				}
+				catch(IOException) {
+					return null;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Removes a plugin's assembly.
+		/// </summary>
+		/// <param name="filename">The file name of the assembly to remove, such as "Assembly.dll".</param>
+		/// <returns><c>true</c> if the assembly is removed, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <b>filename</b> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <b>filename</b> is empty.</exception>
+		public new bool DeletePluginAssembly(string filename) {
+			if(filename == null) throw new ArgumentNullException(filename);
+			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
+
+			lock(this) {
+				string fullName = GetFullPathForPlugin(filename);
+				if(!File.Exists(fullName)) return false;
+				try {
+					File.Delete(fullName);
+					return true;
+				}
+				catch(IOException) {
+					return false;
+				}
+			}
+		}
+
 
 		/// <summary>
 		/// Gets a new command with an open connection.
