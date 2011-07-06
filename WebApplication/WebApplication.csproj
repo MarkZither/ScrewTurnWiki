@@ -2746,6 +2746,10 @@
       <Project>{C353A35C-86D0-4154-9500-4F88CAAB29C3}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FSProviders\FSProviders.csproj">
+      <Project>{1EF2D87B-C7DF-4EF1-BBD8-F73BF7FFC07F}</Project>
+      <Name>FSProviders</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PluginFramework\PluginFramework.csproj">
       <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>
       <Name>PluginFramework</Name>
@@ -2753,6 +2757,10 @@
     <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
       <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
       <Name>SearchEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlServerProviders\SqlServerProviders.csproj">
+      <Project>{ECB488D9-C8E9-41E0-BE27-27F41F76F8A0}</Project>
+      <Name>SqlServerProviders</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -2849,6 +2857,12 @@
   <ItemGroup>
     <Content Include="Web.Azure.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -2864,7 +2878,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>5048</DevelopmentServerPort>
+          <DevelopmentServerPort>21870</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/WebApplication</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
