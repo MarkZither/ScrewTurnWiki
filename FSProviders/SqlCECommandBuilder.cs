@@ -14,6 +14,8 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 	/// </summary>
 	public class SqlCECommandBuilder : ICommandBuilder {
 
+		private static SqlCeConnection connection = null;
+
 		/// <summary>
 		/// Gets the table and column name prefix.
 		/// </summary>
@@ -70,10 +72,14 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// <param name="connString">The connection string.</param>
 		/// <returns>The connection.</returns>
 		public DbConnection GetConnection(string connString) {
-			DbConnection cn = new SqlCeConnection(connString);
-			cn.Open();
+			if(connection == null || connection.ConnectionString != connString) {
+				connection = new SqlCeConnection(connString);
+			}
+			if(connection.State != System.Data.ConnectionState.Open) {
+				connection.Open();
+			}
 
-			return cn;
+			return connection;
 		}
 
 		/// <summary>

@@ -18,7 +18,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private const int MaxParametersInQuery = 50;
 
 		private IAclManager aclManager;
-		private string _wiki;
 
 		/// <summary>
 		/// Initializes the Storage Provider.
@@ -30,7 +29,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public new void Init(IHostV40 host, string config, string wiki) {
 			base.Init(host, config, wiki);
 
-			_wiki = wiki;
 			aclManager = new SqlAclManager(StoreEntry, DeleteEntries, RenameAclResource, RetrieveAllAclEntries, RetrieveAclEntriesForResource, RetrieveAclEntriesForSubject);
 		}
 		
@@ -55,7 +53,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -104,7 +102,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -119,7 +117,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.InsertInto("Setting",
 				new string[] { "wiki", "Name", "Value" }, new string[] { "Wiki", "Name", "Value" });
 			parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", name));
 			parameters.Add(new Parameter(ParameterType.String, "Value", value));
 
@@ -145,7 +143,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string query = queryBuilder.SelectFrom("Setting");
 			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", _wiki) });
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			DbDataReader reader = ExecuteReader(command);
 
@@ -195,7 +193,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Tag", WhereOperator.Equals, "Tag");
 
 			List<Parameter> parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", item.ToString()));
 			parameters.Add(new Parameter(ParameterType.String, "Tag", tag));
 
@@ -232,7 +230,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Tag", WhereOperator.Equals, "Tag");
 
 			List<Parameter> parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", item.ToString()));
 			parameters.Add(new Parameter(ParameterType.String, "Tag", tag));
 
@@ -248,7 +246,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.InsertInto("MetaDataItem", new string[] { "Wiki", "Name", "Tag", "Data" }, new string[] { "Wiki", "Name", "Tag", "Content" });
 
 			parameters = new List<Parameter>(4);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", item.ToString()));
 			parameters.Add(new Parameter(ParameterType.String, "Tag", tag));
 			parameters.Add(new Parameter(ParameterType.String, "Content", content));
@@ -327,7 +325,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.OrderBy(query, new string[] { "DateTime" }, new Ordering[] { Ordering.Asc });
 
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", _wiki) });
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			DbDataReader reader = ExecuteReader(command);
 
@@ -375,7 +373,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				new string[] { "Wiki", "Page", "Title", "MessageSubject", "DateTime", "User", "Change", "Description" });
 
 			List<Parameter> parameters = new List<Parameter>(8);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Page", page));
 			parameters.Add(new Parameter(ParameterType.String, "Title", title));
 			if(!string.IsNullOrEmpty(messageSubject)) parameters.Add(new Parameter(ParameterType.String, "MessageSubject", messageSubject));
@@ -411,7 +409,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteScalar<int>(command, -1, false);
 
-			int maxChanges = int.Parse(host.GetSettingValue(_wiki, SettingName.MaxRecentChanges));
+			int maxChanges = int.Parse(host.GetSettingValue(wiki, SettingName.MaxRecentChanges));
 
 			if(rows > maxChanges) {
 				// Remove 10% of old changes to avoid 1-by-1 deletion every time a change is made
@@ -481,7 +479,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", typeName));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -496,7 +494,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				query = queryBuilder.InsertInto("PluginStatus", new string[] { "Wiki", "Name", "Enabled", "Configuration" }, new string[] { "Wiki", "Name", "Enabled", "Configuration" });
 
 				parameters = new List<Parameter>(4);
-				parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Name", typeName));
 				parameters.Add(new Parameter(ParameterType.Boolean, "Enabled", true));
 				parameters.Add(new Parameter(ParameterType.String, "Configuration", ""));
@@ -532,7 +530,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.Boolean, "Enabled", enabled));
 			parameters.Add(new Parameter(ParameterType.String, "Name", typeName));
 
@@ -565,7 +563,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", typeName));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -615,7 +613,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Configuration", config));
 			parameters.Add(new Parameter(ParameterType.String, "Name", typeName));
 
@@ -648,7 +646,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Name", typeName));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -697,7 +695,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Source", WhereOperator.Equals, "Source");
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Source", page));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -711,7 +709,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				query = queryBuilder.InsertInto("OutgoingLink", new string[] { "Wiki", "Source", "Destination" }, new string[] { "Wiki", "Source", "Destination" });
 
 				parameters = new List<Parameter>(3);
-				parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Source", page));
 				parameters.Add(new Parameter(ParameterType.String, "Destination", link));
 
@@ -749,7 +747,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.OrderBy(query, new[] { "Destination" }, new[] { Ordering.Asc });
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Source", page));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -783,7 +781,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 			query = queryBuilder.GroupBy(query, new string[] { "Source", "Destination" });
 
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", _wiki) });
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			DbDataReader reader = ExecuteReader(command);
 
@@ -837,7 +835,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.OrWhere(query, "Destination", WhereOperator.Equals, "Destination");
 
 			List<Parameter> parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Source", page));
 			parameters.Add(new Parameter(ParameterType.String, "Destination", page));
 
@@ -876,7 +874,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Source", WhereOperator.Equals, "OldSource");
 
 			List<Parameter> parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewSource", newName));
 			parameters.Add(new Parameter(ParameterType.String, "OldSource", oldName));
 
@@ -896,7 +894,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Destination", WhereOperator.Equals, "OldDestination");
 
 			parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "NewDestination", newName));
 			parameters.Add(new Parameter(ParameterType.String, "OldDestination", oldName));
 
@@ -967,7 +965,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string query = queryBuilder.SelectFrom("AclEntry");
 			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
 
-			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", _wiki) });
+			DbCommand command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
 
 			DbDataReader reader = ExecuteReader(command);
 
@@ -1002,7 +1000,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Resource", WhereOperator.Equals, "Resource");
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Resource", resource));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -1040,7 +1038,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Subject", WhereOperator.Equals, "Subject");
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Subject", subject));
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
@@ -1082,7 +1080,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				query = queryBuilder.AndWhere(query, "Subject", WhereOperator.Equals, "Subject");
 
 				List<Parameter> parameters = new List<Parameter>(4);
-				parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+				parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 				parameters.Add(new Parameter(ParameterType.String, "Resource", entry.Resource));
 				parameters.Add(new Parameter(ParameterType.String, "Action", entry.Action));
 				parameters.Add(new Parameter(ParameterType.String, "Subject", entry.Subject));
@@ -1115,7 +1113,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string query = queryBuilder.InsertInto("AclEntry", new string[] { "Wiki", "Resource", "Action", "Subject", "Value" }, new string[] { "Wiki", "Resource", "Action", "Subject", "Value" });
 
 			List<Parameter> parameters = new List<Parameter>(4);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "Resource", entry.Resource));
 			parameters.Add(new Parameter(ParameterType.String, "Action", entry.Action));
 			parameters.Add(new Parameter(ParameterType.String, "Subject", entry.Subject));
@@ -1151,7 +1149,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AndWhere(query, "Resource", WhereOperator.Equals, "ResourceOld");
 
 			List<Parameter> parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
 			parameters.Add(new Parameter(ParameterType.String, "ResourceNew", newName));
 			parameters.Add(new Parameter(ParameterType.String, "ResourceOld", resource));
 

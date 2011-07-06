@@ -9,7 +9,8 @@ using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.SearchEngine;
 using Ionic.Zip;
 
-namespace ScrewTurn.Wiki {
+namespace ScrewTurn.Wiki.Plugins.FSProviders {
+
 	/// <summary>
 	/// Implements the methods to view, add or delete Themes
 	/// </summary>

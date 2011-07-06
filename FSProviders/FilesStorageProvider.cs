@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
 
-namespace ScrewTurn.Wiki {
+namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
 	/// <summary>
 	/// Implements a Local Files Storage Provider.
@@ -19,9 +19,6 @@ namespace ScrewTurn.Wiki {
 		// in BuildFullPath method
 		private readonly string UploadDirectory = "Upload" + Path.DirectorySeparatorChar;
 		private readonly string AttachmentsDirectory = "Attachments" + Path.DirectorySeparatorChar;
-
-		private const string FileDownloadsFile = "FileDownloads.cs";
-		private const string AttachmentDownloadsFile = "AttachmentDownloads.cs";
 
 		// 16 KB buffer used in the StreamCopy method
 		// 16 KB seems to be the best break-even between performance and memory usage
@@ -66,12 +63,6 @@ namespace ScrewTurn.Wiki {
 			}
 			if(!Directory.Exists(GetFullPath(AttachmentsDirectory))) {
 				Directory.CreateDirectory(GetFullPath(AttachmentsDirectory));
-			}
-			if(!File.Exists(GetFullPath(FileDownloadsFile))) {
-				File.Create(GetFullPath(FileDownloadsFile)).Close();
-			}
-			if(!File.Exists(GetFullPath(AttachmentDownloadsFile))) {
-				File.Create(GetFullPath(AttachmentDownloadsFile)).Close();
 			}
 		}
 

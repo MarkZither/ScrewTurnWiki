@@ -7,6 +7,7 @@ using ScrewTurn.Wiki.PluginFramework;
 using System.Data.SqlClient;
 using System.Data.SqlServerCe;
 using System.Data.Common;
+using System.IO;
 
 namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
@@ -15,11 +16,50 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 	/// </summary>
 	public class SqlCEUsersStorageProvider : SqlUsersStorageProviderBase, IUsersStorageProviderV40 {
 
-		private readonly ComponentInformation info = new ComponentInformation("SQL Server Users Storage Provider", "Threeplicate Srl", "4.0.1.71", "http://www.screwturn.eu", null);
+		private readonly ComponentInformation info = new ComponentInformation("SQL CE Users Storage Provider", "Threeplicate Srl", "4.0.2.76", "http://www.screwturn.eu", null);
 
 		private readonly SqlCECommandBuilder commandBuilder = new SqlCECommandBuilder();
 
 		private const int CurrentSchemaVersion = 4000;
+
+		private string connString = null;
+
+		private string BuildDbConnectionString(IHostV40 host) {
+			return "Data Source = '" + host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory) + "ScrewTurnWiki.sdf';";
+		}
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
+		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
+		public new void SetUp(IHostV40 host, string config) {
+			if(host == null) throw new ArgumentNullException("host");
+			if(config == null) throw new ArgumentNullException("config");
+
+			connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
+
+			base.SetUp(host, connString);
+		}
+
+		/// <summary>
+		/// Initializes the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
+		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
+		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
+		public new void Init(IHostV40 host, string config, string wiki) {
+			if(host == null) throw new ArgumentNullException("host");
+			if(config == null) throw new ArgumentNullException("config");
+
+			connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
+
+			base.Init(host, connString, wiki);
+		}
 
 		/// <summary>
 		/// Gets a new command with an open connection.
@@ -43,25 +83,20 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <param name="connString">The connection string to validate.</param>
 		/// <remarks>If the connection string is invalid, the method throws <see cref="T:InvalidConfigurationException"/>.</remarks>
-		protected override void ValidateConnectionString(string connString) {
-			DbCommand cmd = null;
-			try {
-				cmd = GetCommand(connString);
+		protected override void ValidateConnectionString(string connString) { }
+
+		// Check if the database with the given name exists, otherwise a new one is created.
+		private void CreateDatabaseIfNotExists(string connString) {
+			SqlCeConnection connection = new SqlCeConnection(connString);
+			string dbFileName = connection.Database;
+			if(!Path.IsPathRooted(dbFileName)) {
+				dbFileName = Path.Combine(Path.Combine(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory), dbFileName));
 			}
-			catch(SqlException ex) {
-				throw new InvalidConfigurationException("Provided connection string is not valid", ex);
-			}
-			catch(InvalidOperationException ex) {
-				throw new InvalidConfigurationException("Provided connection string is not valid", ex);
-			}
-			catch(ArgumentException ex) {
-				throw new InvalidConfigurationException("Provided connection string is not valid", ex);
-			}
-			finally {
-				try {
-					cmd.Connection.Close();
-				}
-				catch { }
+			if(!File.Exists(dbFileName)) {
+				// Create database with no tables
+				SqlCeEngine engine = new SqlCeEngine(connString);
+				engine.CreateDatabase();
+				engine.Dispose();
 			}
 		}
 
@@ -138,8 +173,14 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
 				cmd.CommandText = "create table [UserData] ([Wiki] nvarchar(100) not null, [User] nvarchar(100) not null, [Key] nvarchar(100) not null, [Data] nvarchar(4000) not null, constraint [FK_UserData_User] foreign key ([Wiki], [User]) references [User]([Wiki], [UserName]) on delete cascade on update cascade, constraint [PK_UserData] primary key ([Wiki], [User], [Key]))";
 				cmd.ExecuteNonQuery();
+
+				cmd.CommandText = "insert into [Version] ([Component], [Version]) values ('Users', 4000)";
+				cmd.ExecuteNonQuery();
 			}
-			catch(DbException) { }
+			catch(DbException ex) {
+				host.LogEntry("Error while creating database schema. " + ex.Message, LogEntryType.Error, null, this, wiki);
+				throw;
+			}
 			finally {
 				cmd.Connection.Close();
 			}
@@ -168,7 +209,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// Gets a brief summary of the configuration string format, in HTML. Returns <c>null</c> if no configuration is needed.
 		/// </summary>
 		public override string ConfigHelpHtml {
-			get { return "Connection string format:<br /><code>Data Source=<i>Database Address and Instance</i>;Initial Catalog=<i>Database name</i>;User ID=<i>login</i>;Password=<i>password</i>;</code>"; }
+			get { return ""; }
 		}
 
 	}

@@ -227,12 +227,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// Closes a connection, swallowing all exceptions.
 		/// </summary>
 		/// <param name="connection">The connection to close.</param>
-		protected void CloseConnection(DbConnection connection) {
-			try {
-				connection.Close();
-			}
-			catch { }
-		}
+		protected abstract void CloseConnection(DbConnection connection);
 
 		/// <summary>
 		/// Closes a reader, a command and the associated connection.

@@ -183,7 +183,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GlobalSettingsDatabase.sql" />
+    <None Include="GlobalSettingsDatabase.sql">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="PagesInitNamespaceTableDatabase.sql">

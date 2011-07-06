@@ -168,7 +168,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		public override string ConfigHelpHtml {
 			get { return "Connection string format:<br /><code>Data Source=<i>Database Address and Instance</i>;Initial Catalog=<i>Database name</i>;User ID=<i>login</i>;Password=<i>password</i>;</code>"; }
 		}
-	
+
+		/// <summary>
+		/// Closes the database connection.
+		/// </summary>
+		/// <param name="connection">The connection.</param>
+		protected override void CloseConnection(System.Data.Common.DbConnection connection) {
+			try {
+				connection.Close();
+			}
+			catch { } 
+		}
 	}
 
 }
