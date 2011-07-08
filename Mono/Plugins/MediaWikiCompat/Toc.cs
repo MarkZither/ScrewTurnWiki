@@ -40,17 +40,9 @@ namespace MediaWikiCompat
 	public class Toc 
 	{
 		static readonly Regex TocRegex = new Regex (@"\{toc\}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-		
-		public static string Parse (string page)
-		{
-			if (String.IsNullOrEmpty (page))
-				return page;
 
-			Match match = TocRegex.Match (page);
-			if (!match.Success)
-				return page;
-			
-			List <HPosition> hPos = Formatter.DetectHeaders (page);
+		static string GenerateToc (List <HPosition> hPos)
+		{
 			var sb = new StringBuilder ();
 
 			hPos.Sort (new HPositionComparer ());
@@ -58,28 +50,34 @@ namespace MediaWikiCompat
 			sb.Append ("<div id=\"sidebar\"><div id=\"toc-parent\"><div id=\"toc\"><h5>Table of Contents</h5>");
 			sb.AppendLine ();
 			var levels = new Stack <int> ();
-			levels.Push (2);
+			levels.Push (1);
 			var numbers = new Dictionary <int, int> () {
+				{1, 0},
 				{2, 0},
 				{3, 0},
 				{4, 0},
 				{5, 0}
 			};
-			int hpLevel, level;
+			int hpLevel = 0, level, lowestLevel;
+			var sectionNumber = new List <string> ();
+			lowestLevel = hPos [0].Level;
 			
 			foreach (HPosition hp in hPos) {
 				hpLevel = hp.Level;
 				if (levels.Peek () != hpLevel) {
 					level = levels.Pop ();
-					if (level > 2)
+					if (level > lowestLevel)
 						sb.Append ("</p>");
 					if (level > hpLevel) {
 						for (int i = level; i > hpLevel; i--)
 							sb.Append ("</div>");
-						if (hpLevel > 2)
+						
+						if (hpLevel > lowestLevel)
 							sb.Append ("<p>");
-					} else if (hpLevel > 2)
-						sb.Append ("<div class=\"tocindent\"><p>");
+					} else if (hpLevel > lowestLevel) {
+						for (int i = level; i < hpLevel; i++)
+							sb.Append ("<div class=\"tocindent\"><p>");
+					}
 					levels.Push (hpLevel);
 				}
 
@@ -91,15 +89,23 @@ namespace MediaWikiCompat
 				for (int i = hpLevel + 1; i < 6; i++)
 					numbers [i] = 0;
 				
-				if (hpLevel == 2)
+				if (hpLevel == lowestLevel)
 					sb.Append ("<div class=\"tocline\">");
 
 				sb.Append ("<span class=\"number\">");
-				for (int i = 2; i <= hpLevel; i++) {
-					if (i > 2)
-						sb.Append ('.');
-					sb.Append (numbers [i]);
+				bool skipLeadingZeros = true;
+				sectionNumber.Clear ();
+				for (int i = lowestLevel; i <= hpLevel; i++) {
+					if (skipLeadingZeros) {
+						if (numbers [i] == 0)
+							continue;
+						skipLeadingZeros = false;
+					}
+					sectionNumber.Add (numbers [i].ToString ());
 				}
+				if (sectionNumber.Count > 0)
+					sb.Append (String.Join (".", sectionNumber.ToArray ()));
+				
 				sb.Append ("</span> ");
 				
 				sb.Append ("<a href=\"#");
@@ -107,12 +113,33 @@ namespace MediaWikiCompat
 				sb.Append ("\">");
 				sb.Append (StripWikiMarkup (Formatter.StripHtml (hp.Text)));
 				sb.Append ("</a><br/>");
-				if (hpLevel == 2)
+				if (hpLevel == lowestLevel)
 					sb.Append ("</div>");
 			}
-			sb.Append ("</div></div></div>");
+			if (hpLevel != lowestLevel)
+				sb.Append ("</div>");
 			
-			return page.Replace (match.Value, sb.ToString ());
+			sb.Append ("</div></div></div>");
+			return sb.ToString ();
+		}
+		
+		public static string Parse (string page)
+		{
+			if (String.IsNullOrEmpty (page))
+				return page;
+
+			Match match = TocRegex.Match (page);
+			if (!match.Success)
+				return page;
+			
+			List <HPosition> hPos = Formatter.DetectHeaders (page);
+			string toc;
+			if (hPos == null || hPos.Count == 0)
+				toc = String.Empty;
+			else
+				toc = GenerateToc (hPos);
+			
+			return page.Replace (match.Value, toc);
 		}
 
 		static string StripWikiMarkup (string content)
