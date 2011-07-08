@@ -1006,6 +1006,10 @@ div.cleanupleft {
     padding-left: 10px;
 }
 
+#toc-parent p {
+    padding: 0 0 5px !important;
+}
+
 /* Main Page top-level tables */
 #home-intro {
     width: 940px;
