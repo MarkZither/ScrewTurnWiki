@@ -2513,16 +2513,20 @@ namespace ScrewTurn.Wiki {
 			match = SignRegex.Match(sb.ToString());
 			while(match.Success) {
 				sb.Remove(match.Index, match.Length);
-				string txt = match.Value.Substring(3, match.Length - 6);
-				int idx = txt.LastIndexOf(",");
-				string[] fields = new string[] { txt.Substring(0, idx), txt.Substring(idx + 1) };
-				dummy = new StringBuilder();
-				dummy.Append(@"<span class=""signature"">");
-				dummy.Append(Users.UserLink(fields[0]));
-				dummy.Append(", ");
-				dummy.Append(Preferences.AlignWithTimezone(DateTime.Parse(fields[1])).ToString(Settings.DateTimeFormat));
-				dummy.Append("</span>");
-				sb.Insert(match.Index, dummy.ToString());
+				try {
+					// Avoid that malformed tags cause a crash
+					string txt = match.Value.Substring(3, match.Length - 6);
+					int idx = txt.LastIndexOf(",");
+					string[] fields = new string[] { txt.Substring(0, idx), txt.Substring(idx + 1) };
+					dummy = new StringBuilder();
+					dummy.Append(@"<span class=""signature"">");
+					dummy.Append(Users.UserLink(fields[0]));
+					dummy.Append(", ");
+					dummy.Append(Preferences.AlignWithTimezone(DateTime.Parse(fields[1])).ToString(Settings.DateTimeFormat));
+					dummy.Append("</span>");
+					sb.Insert(match.Index, dummy.ToString());
+				}
+				catch { }
 				match = SignRegex.Match(sb.ToString());
 			}
 
