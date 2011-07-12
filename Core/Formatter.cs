@@ -185,6 +185,14 @@ namespace ScrewTurn.Wiki {
 							destination = destination.Substring(1, destination.Length - 2);
 						}
 						while(sb[match.Index] == '\n' && match.Index < sb.Length - 1) sb.Remove(match.Index, 1);
+
+						if(!destination.StartsWith("++") && !destination.Contains(".") && current.FullName.Contains(".")) {
+							// Adjust namespace
+							destination = NameTools.GetFullName(NameTools.GetNamespace(current.FullName), destination);
+						}
+
+						destination = destination.Trim('+');
+
 						PageInfo dest = Pages.FindPage(destination);
 						if(dest != null) {
 							Redirections.AddRedirection(current, dest);
