@@ -1561,7 +1561,7 @@ namespace ScrewTurn.Wiki {
 				name.Contains("?") || name.Contains("<") || name.Contains(">") || name.Contains("|") || name.Contains(":") ||
 				name.Contains("*") || name.Contains("\"") || name.Contains("/") || name.Contains("\\") || name.Contains("&") ||
 				name.Contains("%") || name.Contains("'") || name.Contains("\"") || name.Contains("+") || name.Contains(".") ||
-				name.Contains("#") || name.Contains("[") || name.Contains("]")) {
+				name.Contains("#") || name.Contains("[") || name.Contains("]") || name.Contains("__")) {
 				return false;
 			}
 			else return true;
