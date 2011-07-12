@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The includes.</returns>
         public static string GetIncludes(string nspace) {
 			string theme = Settings.GetTheme(nspace);
-			string themePath = Settings.GetThemePath(nspace);
+			string themePath = "/" + Settings.GetThemePath(nspace);
 
             StringBuilder result = new StringBuilder(300);
 
@@ -51,11 +51,11 @@ namespace ScrewTurn.Wiki {
 
 			string customEditorCss = Path.Combine(Settings.ThemesDirectory, theme);
 			customEditorCss = Path.Combine(customEditorCss, "Editor.css");
-			if(File.Exists(customEditorCss)) result.AppendFormat(@"<link rel=""stylesheet"" href=""Themes/{0}/Editor.css"" type=""text/css"" />" + "\n", theme);
-			else result.Append(@"<link rel=""stylesheet"" href=""Themes/Editor.css"" type=""text/css"" />" + "\n");
+			if(File.Exists(customEditorCss)) result.AppendFormat(@"<link rel=""stylesheet"" href=""/Themes/{0}/Editor.css"" type=""text/css"" />" + "\n", theme);
+			else result.Append(@"<link rel=""stylesheet"" href=""/Themes/Editor.css"" type=""text/css"" />" + "\n");
 
 			// OpenSearch
-			result.AppendFormat(@"<link rel=""search"" href=""Search.aspx?OpenSearch=1"" type=""application/opensearchdescription+xml"" title=""{1}"" />",
+			result.AppendFormat(@"<link rel=""search"" href=""/Search.aspx?OpenSearch=1"" type=""application/opensearchdescription+xml"" title=""{1}"" />",
 				Settings.MainUrl, Settings.WikiTitle + " - Search");
 
 			string[] js = Directory.GetFiles(Settings.ThemesDirectory + theme, "*.js");
@@ -96,7 +96,7 @@ namespace ScrewTurn.Wiki {
 			StringBuilder buffer = new StringBuilder(100);
 
 			foreach(string js in Directory.GetFiles(Settings.JsDirectory, "*.js")) {
-				buffer.Append(@"<script type=""text/javascript"" src=""" + Settings.JsDirectoryName + "/" + Path.GetFileName(js) + @"""></script>" + "\n");
+				buffer.Append(@"<script type=""text/javascript"" src=""/" + Settings.JsDirectoryName + "/" + Path.GetFileName(js) + @"""></script>" + "\n");
 			}
 
 			return buffer.ToString();

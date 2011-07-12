@@ -768,7 +768,7 @@ namespace ScrewTurn.Wiki {
 				body.Replace("##PAGE##", title).Replace("##USER##", author != null ? Users.GetDisplayName(author) : "anonymous").Replace("##DATETIME##",
 				Preferences.AlignWithServerTimezone(content.LastModified).ToString(Settings.DateTimeFormat)).Replace("##COMMENT##",
 				(string.IsNullOrEmpty(content.Comment) ? Exchanger.ResourceExchanger.GetResource("None") : content.Comment)).Replace("##LINK##",
-				Settings.MainUrl + Tools.UrlEncode(page.FullName) + Settings.PageExtension).Replace("##WIKITITLE##", Settings.WikiTitle),
+				Settings.MainUrl + Settings.PageVirtualFolder + Tools.UrlEncode(page.FullName) + Settings.PageExtension).Replace("##WIKITITLE##", Settings.WikiTitle),
 				false);
 		}
 
@@ -1445,7 +1445,7 @@ namespace ScrewTurn.Wiki {
 				body.Replace("##PAGE##", title).Replace("##USER##", author != null ? Users.GetDisplayName(author) : "anonymous").Replace("##DATETIME##",
 				Preferences.AlignWithServerTimezone(content.LastModified).ToString(Settings.DateTimeFormat)).Replace("##SUBJECT##",
 				subject).Replace("##LINK##", Settings.MainUrl + Tools.UrlEncode(page.FullName) +
-				Settings.PageExtension + "?Discuss=1#" + id).Replace("##WIKITITLE##", Settings.WikiTitle),
+				Settings.PageVirtualFolder + Settings.PageExtension + "?Discuss=1#" + id).Replace("##WIKITITLE##", Settings.WikiTitle),
 				false);
 		}
 

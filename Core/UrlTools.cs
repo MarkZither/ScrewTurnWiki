@@ -30,15 +30,27 @@ namespace ScrewTurn.Wiki {
 
 			// Extract the physical page name, e.g. MainPage, Edit or Category
 			string pageName = Path.GetFileNameWithoutExtension(physicalPath);
+
 			// Exctract the extension, e.g. .ashx or .aspx
 			string ext = Path.GetExtension(HttpContext.Current.Request.PhysicalPath).ToLowerInvariant();
-			// Remove trailing dot, .ashx -> ashx
-			if(ext.Length > 0) ext = ext.Substring(1);
-
+			bool hasContent = false;
+			if (HttpContext.Current.Request.FilePath.StartsWith (Settings.PageVirtualFolder)) {
+				if (String.IsNullOrEmpty (ext))
+					ext = "ashx";
+				hasContent = true;
+			} else {
+				// Remove trailing dot, .ashx -> ashx
+				if(ext.Length > 0) ext = ext.Substring(1);
+			}
+			
 			// IIS7+Integrated Pipeline handles all requests through the ASP.NET engine
 			// All non-interesting files are not processed, such as GIF, CSS, etc.
-			if(ext != "ashx" && ext != "aspx") return;
-
+			if(ext != "ashx" && ext != "aspx") {
+				if (hasContent)
+					HttpContext.Current.RewritePath ("~/" + HttpContext.Current.Request.RawUrl.Substring (Settings.PageVirtualFolder.Length));
+				return;
+			}
+			
 			// Extract the current namespace, if any
 			string nspace = GetCurrentNamespace() + "";
 			if(!string.IsNullOrEmpty(nspace)) {
@@ -67,7 +79,7 @@ namespace ScrewTurn.Wiki {
 			else if(ext.Equals("aspx")) {
 				// System page requested, redirect to the root of the application
 				// For example: http://www.server.com/Namespace.Edit.aspx?Page=MainPage -> http://www.server.com/Edit.aspx?Page=MainPage&NS=Namespace
-				if(!string.IsNullOrEmpty(nspace)) {
+				if(hasContent || !string.IsNullOrEmpty(nspace)) {
 					if(!queryString.Contains("NS=")) {
 						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + "?NS=" + Tools.UrlEncode(nspace) + queryString);
 					}
@@ -167,7 +179,7 @@ namespace ScrewTurn.Wiki {
 		/// Redirects to the default page of the current namespace.
 		/// </summary>
 		public static void RedirectHome() {
-			Redirect(BuildUrl(Settings.DefaultPage, Settings.PageExtension));
+			Redirect(BuildUrl(Settings.PageVirtualFolder, Settings.DefaultPage, Settings.PageExtension));
 		}
 
 	}

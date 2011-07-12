@@ -1010,7 +1010,7 @@ namespace ScrewTurn.Wiki {
 			PageInfo page = Pages.FindPage(change.Page);
 			if(page != null) {
 				return string.Format(@"<a href=""{0}{1}"" class=""pagelink"">{2}</a>",
-					change.Page, Settings.PageExtension, FormattingPipeline.PrepareTitle(change.Title, false, context, currentPage));
+					Settings.PageVirtualFolder + change.Page, Settings.PageExtension, FormattingPipeline.PrepareTitle(change.Title, false, context, currentPage));
 			}
 			else {
 				return FormattingPipeline.PrepareTitle(change.Title, false, context, currentPage) + " (" + change.Page + ")";
@@ -1028,7 +1028,7 @@ namespace ScrewTurn.Wiki {
 			PageInfo page = Pages.FindPage(change.Page);
 			if(page != null) {
 				return string.Format(@"<a href=""{0}{1}?Discuss=1#{2}"" class=""pagelink"">{3}</a>",
-					change.Page, Settings.PageExtension, Tools.GetMessageIdForAnchor(change.DateTime),
+					Settings.PageVirtualFolder + change.Page, Settings.PageExtension, Tools.GetMessageIdForAnchor(change.DateTime),
 					FormattingPipeline.PrepareTitle(change.Title, false, context, currentPage) + " (" +
 					FormattingPipeline.PrepareTitle(change.MessageSubject, false, context, currentPage) + ")");
 			}
@@ -1055,7 +1055,7 @@ namespace ScrewTurn.Wiki {
 			foreach(PageInfo page in orhpans) {
 				PageContent content = Content.GetPageContent(page, false);
 				sb.Append("<li>");
-				sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" class=""pagelink"">{2}</a>", Tools.UrlEncode(page.FullName), Settings.PageExtension,
+				sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" class=""pagelink"">{2}</a>", Settings.PageVirtualFolder + Tools.UrlEncode(page.FullName), Settings.PageExtension,
 					FormattingPipeline.PrepareTitle(content.Title, false, context, current));
 				sb.Append("</li>");
 			}
@@ -1080,7 +1080,7 @@ namespace ScrewTurn.Wiki {
 
 			foreach(string page in wanted.Keys) {
 				sb.Append("<li>");
-				sb.AppendFormat(@"<a href=""{0}{1}"" title=""{0}"" class=""unknownlink"">{2}</a>", page, Settings.PageExtension, NameTools.GetLocalName(page));
+				sb.AppendFormat(@"<a href=""{0}{1}"" title=""{0}"" class=""unknownlink"">{2}</a>", Settings.PageVirtualFolder + page, Settings.PageExtension, NameTools.GetLocalName(page));
 				sb.Append("</li>");
 			}
 
@@ -1111,7 +1111,7 @@ namespace ScrewTurn.Wiki {
 					PageContent content = Content.GetPageContent(linkedPage, false);
 
 					sb.Append("<li>");
-					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" class=""pagelink"">{2}</a>", Tools.UrlEncode(link), Settings.PageExtension,
+					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" class=""pagelink"">{2}</a>", Settings.PageVirtualFolder + Tools.UrlEncode(link), Settings.PageExtension,
 						FormattingPipeline.PrepareTitle(content.Title, false, context, current));
 					sb.Append("</li>");
 				}
@@ -1144,7 +1144,7 @@ namespace ScrewTurn.Wiki {
 					PageContent content = Content.GetPageContent(linkedPage, false);
 
 					sb.Append("<li>");
-					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" class=""pagelink"">{2}</a>", Tools.UrlEncode(link), Settings.PageExtension,
+					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" class=""pagelink"">{2}</a>", Settings.PageVirtualFolder + Tools.UrlEncode(link), Settings.PageExtension,
 						FormattingPipeline.PrepareTitle(content.Title, false, context, current));
 					sb.Append("</li>");
 				}
@@ -1745,12 +1745,12 @@ namespace ScrewTurn.Wiki {
 
 						if(targetUrl.IndexOf("#") != -1) {
 							tempLink = targetUrl.Substring(0, targetUrl.IndexOf("#"));
-							targetUrl = Tools.UrlEncode(targetUrl.Substring(0, targetUrl.IndexOf("#"))) + Settings.PageExtension + targetUrl.Substring(targetUrl.IndexOf("#"));
+							targetUrl = Settings.PageVirtualFolder + Tools.UrlEncode(targetUrl.Substring(0, targetUrl.IndexOf("#"))) + Settings.PageExtension + targetUrl.Substring(targetUrl.IndexOf("#"));
 						}
 						else {
 							targetUrl += Settings.PageExtension;
 							// #468: Preserve ++ for ReverseFormatter
-							targetUrl = (bareBones && explicitNamespace ? "++" : "") + Tools.UrlEncode(targetUrl);
+							targetUrl = Settings.PageVirtualFolder + (bareBones && explicitNamespace ? "++" : "") + Tools.UrlEncode(targetUrl);
 						}
 
 						string fullName = "";

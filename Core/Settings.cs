@@ -88,10 +88,18 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		///  Gets page content virtual folder. Used by Mono site to get rid of .ashx from URLs. MUST contain the
+		///  leading and trailing slashes.
+		/// </summary>
+		public static string PageVirtualFolder {
+			get { return "/content/"; }
+		}
+		
+		/// <summary>
 		/// Gets the extension used for Pages, including the dot.
 		/// </summary>
 		public static string PageExtension {
-			get { return ".ashx"; }
+			get { return String.Empty; }
 		}
 
 		/// <summary>
