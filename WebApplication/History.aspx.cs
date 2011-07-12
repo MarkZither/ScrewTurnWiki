@@ -94,11 +94,11 @@ namespace ScrewTurn.Wiki {
 			}
 			else {
 				int rev = -1;
-				if(!int.TryParse(Request["Revision"], out rev)) UrlTools.Redirect(page.FullName + Settings.PageExtension);
+				if(!int.TryParse(Request["Revision"], out rev)) UrlTools.Redirect(Settings.PageVirtualFolder + page.FullName + Settings.PageExtension);
 				
 				List<int> backups = Pages.GetBackups(page);
 				if(!backups.Contains(rev)) {
-					UrlTools.Redirect(page.FullName + Settings.PageExtension);
+					UrlTools.Redirect(Settings.PageVirtualFolder + page.FullName + Settings.PageExtension);
 					return;
 				}
 				PageContent revision = Pages.GetBackupContent(page, rev);
@@ -135,7 +135,7 @@ namespace ScrewTurn.Wiki {
 				}
 				else {
 					sb.Append(@"<a href=""");
-					UrlTools.BuildUrl(sb, Tools.UrlEncode(page.FullName), Settings.PageExtension);
+					UrlTools.BuildUrl(sb, Settings.PageVirtualFolder, Tools.UrlEncode(page.FullName), Settings.PageExtension);
 					sb.Append(@""">");
 					sb.Append(Properties.Messages.CurrentRevision);
 					sb.Append("</a>");

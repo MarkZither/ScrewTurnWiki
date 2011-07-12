@@ -381,7 +381,7 @@ namespace ScrewTurn.Wiki {
 			if(result.Document.TypeTag == PageDocument.StandardTypeTag) {
 				PageDocument pageDoc = result.Document as PageDocument;
 
-				return new SearchResultRow(pageDoc.PageInfo.FullName + Settings.PageExtension + "?" + queryStringKeywords, Page,
+				return new SearchResultRow(Settings.PageVirtualFolder + pageDoc.PageInfo.FullName + Settings.PageExtension + "?" + queryStringKeywords, Page,
 					FormattingPipeline.PrepareTitle(pageDoc.Title, false, FormattingContext.PageContent, pageDoc.PageInfo),
 					result.Relevance.Value, GetExcerpt(pageDoc.PageInfo, result.Matches));
 			}
@@ -390,7 +390,7 @@ namespace ScrewTurn.Wiki {
 
 				PageContent content = Content.GetPageContent(msgDoc.PageInfo, true);
 
-				return new SearchResultRow(msgDoc.PageInfo.FullName + Settings.PageExtension + "?" + queryStringKeywords +"&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(msgDoc.DateTime), Message,
+				return new SearchResultRow(Settings.PageVirtualFolder + msgDoc.PageInfo.FullName + Settings.PageExtension + "?" + queryStringKeywords +"&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(msgDoc.DateTime), Message,
 					FormattingPipeline.PrepareTitle(msgDoc.Title, false, FormattingContext.MessageBody, content.PageInfo) + " (" +
 					FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.MessageBody, content.PageInfo) +
 					")", result.Relevance.Value, GetExcerpt(msgDoc.PageInfo, msgDoc.MessageID, result.Matches));
@@ -406,7 +406,7 @@ namespace ScrewTurn.Wiki {
 				PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
 				PageContent content = Content.GetPageContent(attnDoc.Page, false);
 
-				return new SearchResultRow(attnDoc.Page.FullName + Settings.PageExtension, Attachment,
+				return new SearchResultRow(Settings.PageVirtualFolder + attnDoc.Page.FullName + Settings.PageExtension, Attachment,
 					attnDoc.Title + " (" +
 					FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, content.PageInfo) +
 					")", result.Relevance.Value, "");

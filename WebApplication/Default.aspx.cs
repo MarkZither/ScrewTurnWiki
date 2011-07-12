@@ -124,7 +124,7 @@ namespace ScrewTurn.Wiki {
 			if(lblDiscussLink.Visible) {
 				lblDiscussLink.Text = string.Format(@"<a id=""DiscussLink"" title=""{0}"" href=""{3}?Discuss=1"">{1} ({2})</a>",
 					Properties.Messages.Discuss, Properties.Messages.Discuss, Pages.GetMessageCount(currentPage),
-					UrlTools.BuildUrl(NameTools.GetLocalName(currentPage.FullName), Settings.PageExtension));
+					UrlTools.BuildUrl(Settings.PageVirtualFolder, NameTools.GetLocalName(currentPage.FullName), Settings.PageExtension));
 			}
 
 			lblEditLink.Visible = Settings.EnablePageToolbar && !discussMode && !viewCodeMode && canEdit;
@@ -140,7 +140,7 @@ namespace ScrewTurn.Wiki {
 				if(lblViewCodeLink.Visible) {
 					lblViewCodeLink.Text = string.Format(@"<a id=""ViewCodeLink"" title=""{0}"" href=""{2}?Code=1"">{1}</a>",
 						Properties.Messages.ViewPageCode, Properties.Messages.ViewPageCode,
-						UrlTools.BuildUrl(NameTools.GetLocalName(currentPage.FullName), Settings.PageExtension));
+						UrlTools.BuildUrl(Settings.PageVirtualFolder, NameTools.GetLocalName(currentPage.FullName), Settings.PageExtension));
 				}
 			}
 			else lblViewCodeLink.Visible = false;
@@ -202,7 +202,7 @@ namespace ScrewTurn.Wiki {
 			if(lblBackLink.Visible) {
 				lblBackLink.Text = string.Format(@"<a id=""BackLink"" title=""{0}"" href=""{1}"">{2}</a>",
 					Properties.Messages.Back,
-					UrlTools.BuildUrl(Tools.UrlEncode(currentPage.FullName), Settings.PageExtension, "?NoRedirect=1"),
+					UrlTools.BuildUrl(Settings.PageVirtualFolder, Tools.UrlEncode(currentPage.FullName), Settings.PageExtension, "?NoRedirect=1"),
 					Properties.Messages.Back);
 			}
 		}
@@ -353,7 +353,7 @@ namespace ScrewTurn.Wiki {
 
 			if(dest != null) {
 				if(Request["NoRedirect"] != "1") {
-					UrlTools.Redirect(dest.FullName + Settings.PageExtension + "?From=" + currentPage.FullName, false);
+					UrlTools.Redirect(Settings.PageVirtualFolder + dest.FullName + Settings.PageExtension + "?From=" + currentPage.FullName, false);
 				}
 				else {
 					// Write redirection hint
@@ -362,7 +362,7 @@ namespace ScrewTurn.Wiki {
 					sb.Append(Properties.Messages.ThisPageRedirectsTo);
 					sb.Append(": ");
 					sb.Append(@"<a href=""");
-					UrlTools.BuildUrl(sb, "++", Tools.UrlEncode(dest.FullName), Settings.PageExtension, "?From=", Tools.UrlEncode(currentPage.FullName));
+					UrlTools.BuildUrl(sb, "++", Settings.PageVirtualFolder, Tools.UrlEncode(dest.FullName), Settings.PageExtension, "?From=", Tools.UrlEncode(currentPage.FullName));
 					sb.Append(@""">");
 					PageContent k = Content.GetPageContent(dest, true);
 					sb.Append(FormattingPipeline.PrepareTitle(k.Title, false, FormattingContext.PageContent, currentPage));
@@ -438,7 +438,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append("&raquo; ");
 			if(comp.Compare(page, currentPage) == 0) sb.Append("<b>");
 			sb.AppendFormat(@"<a href=""{0}"" title=""{1}""{2}{3}{4}>{1}</a>",
-				Tools.UrlEncode(page.FullName) + Settings.PageExtension,
+				Settings.PageVirtualFolder + Tools.UrlEncode(page.FullName) + Settings.PageExtension,
 				FormattingPipeline.PrepareTitle(pc.Title, false, FormattingContext.PageContent, currentPage) + (string.IsNullOrEmpty(nspace) ? "" : (" (" + NameTools.GetNamespace(page.FullName) + ")")),
 				(id != null ? @" onmouseover=""javascript:return __ShowDropDown(event, '" + id + @"', this);""" : ""),
 				(id != null ? @" id=""lnk" + id + @"""" : ""),
@@ -476,7 +476,7 @@ namespace ScrewTurn.Wiki {
 
 					string title = FormattingPipeline.PrepareTitle(cont.Title, false, FormattingContext.PageContent, currentPage);
 
-					buffer.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"">{2}</a>", link, Settings.PageExtension, title, title);
+					buffer.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"">{2}</a>", Settings.PageVirtualFolder + link, Settings.PageExtension, title, title);
 				}
 				if(count >= 20) break;
 			}
@@ -502,7 +502,7 @@ namespace ScrewTurn.Wiki {
 					sb.Append(Properties.Messages.RedirectedFrom);
 					sb.Append(": ");
 					sb.Append(@"<a href=""");
-					sb.Append(UrlTools.BuildUrl("++", Tools.UrlEncode(source.FullName), Settings.PageExtension, "?NoRedirect=1"));
+					sb.Append(UrlTools.BuildUrl("++", Settings.PageVirtualFolder + Tools.UrlEncode(source.FullName), Settings.PageExtension, "?NoRedirect=1"));
 					sb.Append(@""">");
 					PageContent w = Content.GetPageContent(source, true);
 					sb.Append(FormattingPipeline.PrepareTitle(w.Title, false, FormattingContext.PageContent, currentPage));

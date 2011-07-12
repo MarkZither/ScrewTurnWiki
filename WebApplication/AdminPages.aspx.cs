@@ -124,7 +124,7 @@ namespace ScrewTurn.Wiki {
 
 				Pages.Rollback(externallySelectedPage, targetRevision);
 
-				UrlTools.Redirect(externallySelectedPage.FullName + Settings.PageExtension);
+				UrlTools.Redirect(Settings.PageVirtualFolder + externallySelectedPage.FullName + Settings.PageExtension);
 			}
 		}
 
@@ -484,7 +484,7 @@ namespace ScrewTurn.Wiki {
 			LoadExternallySelectedPage();
 			if(externallySelectedPage != null) {
 				// Return to page
-				UrlTools.Redirect(externallySelectedPage.FullName + Settings.PageExtension);
+				UrlTools.Redirect(Settings.PageVirtualFolder + externallySelectedPage.FullName + Settings.PageExtension);
 			}
 			else {
 				// Return to list

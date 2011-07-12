@@ -239,7 +239,7 @@ namespace ScrewTurn.Wiki {
 				if(page != null) {
 					PageContent content = Content.GetPageContent(page, false);
 
-					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" target=""_blank"">{2}</a>, ", page.FullName, Settings.PageExtension,
+					sb.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"" target=""_blank"">{2}</a>, ", Settings.PageVirtualFolder + page.FullName, Settings.PageExtension,
 						FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page));
 				}
 			}

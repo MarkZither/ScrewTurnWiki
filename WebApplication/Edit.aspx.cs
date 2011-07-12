@@ -447,7 +447,7 @@ namespace ScrewTurn.Wiki {
 					ExtractSection(Content.GetPageContent(currentPage, true).Content, currentSection, out start, out len, out anchor);
 				}
 
-				UrlTools.Redirect(Tools.UrlEncode(currentPage.FullName) + Settings.PageExtension + (anchor != null ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
+				UrlTools.Redirect(Settings.PageVirtualFolder + Tools.UrlEncode(currentPage.FullName) + Settings.PageExtension + (anchor != null ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
 			}
 			else UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
 		}
@@ -616,7 +616,7 @@ namespace ScrewTurn.Wiki {
 				// No notification must be sent for drafts awaiting approval
 				if(redirect) {
 					Collisions.CancelEditingSession(pg, username);
-					string target = UrlTools.BuildUrl(Tools.UrlEncode(txtName.Text), Settings.PageExtension, "?NoRedirect=1");
+					string target = UrlTools.BuildUrl(Settings.PageVirtualFolder, Tools.UrlEncode(txtName.Text), Settings.PageExtension, "?NoRedirect=1");
 					UrlTools.Redirect(target);
 				}
 				else {
@@ -675,7 +675,7 @@ namespace ScrewTurn.Wiki {
 
 				if(redirect) {
 					Collisions.CancelEditingSession(currentPage, username);
-					string target = UrlTools.BuildUrl(Tools.UrlEncode(currentPage.FullName), Settings.PageExtension, "?NoRedirect=1",
+					string target = UrlTools.BuildUrl(Settings.PageVirtualFolder, Tools.UrlEncode(currentPage.FullName), Settings.PageExtension, "?NoRedirect=1",
 						(!string.IsNullOrEmpty(anchor) ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
 					UrlTools.Redirect(target);
 				}

@@ -75,7 +75,7 @@ namespace ScrewTurn.Wiki {
 				// Try to redirect an inexistent .aspx page to a probably existing .ashx page
 				if(httpEx.GetHttpCode() == 404) {
 					string page = System.IO.Path.GetFileNameWithoutExtension(Request.PhysicalPath);
-					ScrewTurn.Wiki.UrlTools.Redirect(page + ScrewTurn.Wiki.Settings.PageExtension);
+					ScrewTurn.Wiki.UrlTools.Redirect(Settings.PageVirtualFolder + page + ScrewTurn.Wiki.Settings.PageExtension);
 					return;
 				}
 			}

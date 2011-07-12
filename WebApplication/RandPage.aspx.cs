@@ -19,7 +19,7 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			List<PageInfo> pages = Pages.GetPages(Tools.DetectCurrentNamespaceInfo());
 			Random r = new Random();
-			UrlTools.Redirect(pages[r.Next(0, pages.Count)].FullName + Settings.PageExtension);
+			UrlTools.Redirect(Settings.PageVirtualFolder + pages[r.Next(0, pages.Count)].FullName + Settings.PageExtension);
 		}
 
 	}

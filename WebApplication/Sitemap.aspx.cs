@@ -60,7 +60,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="writer">The writer.</param>
 		private void WritePage(string mainUrl, PageInfo page, bool isDefault, XmlWriter writer) {
 			writer.WriteStartElement("url");
-			writer.WriteElementString("loc", mainUrl + Tools.UrlEncode(page.FullName) + Settings.PageExtension);
+			writer.WriteElementString("loc", mainUrl + Settings.PageVirtualFolder + Tools.UrlEncode(page.FullName) + Settings.PageExtension);
 			writer.WriteElementString("priority", isDefault ? "0.75" : "0.5");
 			writer.WriteElementString("changefreq", "daily");
 			writer.WriteEndElement();

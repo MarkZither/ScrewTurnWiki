@@ -46,7 +46,7 @@ namespace ScrewTurn.Wiki {
 				for(int i = 0; i < results.Length; i++) {
 					c = Content.GetPageContent(results[i], true);
 					sb.Append(@"<li><a href=""");
-					UrlTools.BuildUrl(sb, Tools.UrlEncode(results[i].FullName), Settings.PageExtension);
+					UrlTools.BuildUrl(sb, Settings.PageVirtualFolder, Tools.UrlEncode(results[i].FullName), Settings.PageExtension);
 					sb.Append(@""">");
 					sb.Append(FormattingPipeline.PrepareTitle(c.Title, false, FormattingContext.PageContent, c.PageInfo));
 					sb.Append("</a></li>");

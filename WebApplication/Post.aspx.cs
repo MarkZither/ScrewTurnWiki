@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki {
 			if(page == null) UrlTools.RedirectHome();
 			editor.CurrentPage = page;
 
-			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension));
+			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(Settings.PageVirtualFolder, page.FullName, Settings.PageExtension));
 
 			content = Content.GetPageContent(page, true);
 			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.MessageBody, page);
@@ -36,7 +36,7 @@ namespace ScrewTurn.Wiki {
 			// Verify permissions and setup captcha
 			bool canPostMessage = AuthChecker.CheckActionForPage(page, Actions.ForPages.PostDiscussion,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
-			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(Tools.UrlEncode(page.FullName), Settings.PageExtension));
+			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(Settings.PageVirtualFolder, Tools.UrlEncode(page.FullName), Settings.PageExtension));
 			captcha.Visible = SessionFacade.LoginKey == null && !Settings.DisableCaptchaControl;
 
 			if(Page.IsPostBack) return;
@@ -118,11 +118,11 @@ namespace ScrewTurn.Wiki {
 				Message msg = Pages.FindMessage(messages, int.Parse(Request["Edit"]));
 				Pages.ModifyMessage(page, int.Parse(Request["Edit"]), msg.Username, txtSubject.Text, DateTime.Now, content);
 			}
-			UrlTools.Redirect(page.FullName + Settings.PageExtension + "?Discuss=1&NoRedirect=1");
+			UrlTools.Redirect(Settings.PageVirtualFolder + page.FullName + Settings.PageExtension + "?Discuss=1&NoRedirect=1");
 		}
 
 		protected void btnCancel_Click(object sender, EventArgs e) {
-			UrlTools.Redirect(page.FullName + Settings.PageExtension + "?Discuss=1&NoRedirect=1");
+			UrlTools.Redirect(Settings.PageVirtualFolder + page.FullName + Settings.PageExtension + "?Discuss=1&NoRedirect=1");
 		}
 
 	}

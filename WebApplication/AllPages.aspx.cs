@@ -270,7 +270,7 @@ namespace ScrewTurn.Wiki {
 					// Page title
 					sb.Append(@"<td>");
 					sb.Append(@"<a href=""");
-					UrlTools.BuildUrl(sb, Tools.UrlEncode(pageList[i].PageInfo.FullName), Settings.PageExtension);
+					UrlTools.BuildUrl(sb, Settings.PageVirtualFolder, Tools.UrlEncode(pageList[i].PageInfo.FullName), Settings.PageExtension);
 					sb.Append(@""">");
 					sb.Append(pageList[i].Title);
 					sb.Append("</a>");
@@ -281,7 +281,7 @@ namespace ScrewTurn.Wiki {
 					int msg = pageList[i].MessageCount;
 					if(msg > 0) {
 						sb.Append(@"<a href=""");
-						UrlTools.BuildUrl(sb, Tools.UrlEncode(pageList[i].PageInfo.FullName), Settings.PageExtension, "?Discuss=1");
+						UrlTools.BuildUrl(sb, Settings.PageVirtualFolder, Tools.UrlEncode(pageList[i].PageInfo.FullName), Settings.PageExtension, "?Discuss=1");
 						sb.Append(@""" title=""");
 						sb.Append(Properties.Messages.Discuss);
 						sb.Append(@""">");
