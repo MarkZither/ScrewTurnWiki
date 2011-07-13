@@ -62,6 +62,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="SgmlReaderDll">
       <HintPath>..\References\Lib\MindTouch SGML Reader\SgmlReaderDll.dll</HintPath>
     </Reference>
@@ -115,6 +118,9 @@
     <Compile Include="RecentChanges.cs" />
     <Compile Include="Redirections.cs" />
     <Compile Include="ReverseFormatter.cs" />
+    <Compile Include="Search.cs" />
+    <Compile Include="SearchField.cs" />
+    <Compile Include="SearchResult.cs" />
     <Compile Include="SearchTools.cs" />
     <Compile Include="SessionFacade.cs" />
     <Compile Include="Settings.cs" />

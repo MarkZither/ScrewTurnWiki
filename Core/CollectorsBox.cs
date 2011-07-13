@@ -18,6 +18,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="globalSettingsProviderAssembly">The global settings provider assembly.</param>
 		/// <param name="settingsProvider">The settings provider Type.</param>
 		/// <param name="settingsProviderAssembly">The settings provider assembly.</param>
+		/// <param name="indexDirectoryProvider">The indexDirectory provider Type.</param>
+		/// <param name="indexDirectoryProviderAssembly">The indexDirectory provider assembly.</param>
 		/// <param name="usersProviderCollector">The users provider collector.</param>
 		/// <param name="themeProviderCollector">The theme provider collector.</param>
 		/// <param name="pagesProviderCollector">The pages provider collector.</param>
@@ -27,6 +29,8 @@ namespace ScrewTurn.Wiki {
 			System.Reflection.Assembly globalSettingsProviderAssembly,
 			Type settingsProvider,
 			System.Reflection.Assembly settingsProviderAssembly,
+			Type indexDirectoryProvider,
+			System.Reflection.Assembly indexDirectoryProviderAssembly,
 			ProviderCollector<IUsersStorageProviderV40> usersProviderCollector,
 			ProviderCollector<IThemesStorageProviderV40> themeProviderCollector,
 			ProviderCollector<IPagesStorageProviderV40> pagesProviderCollector,
@@ -38,6 +42,9 @@ namespace ScrewTurn.Wiki {
 			_settingsProviderType = settingsProvider;
 			_settingsProviderAssembly = settingsProviderAssembly;
 			_settingsProvider = new Dictionary<string, ISettingsStorageProviderV40>();
+			_indexDirectoryProviderType = indexDirectoryProvider;
+			_indexDirectoryProviderAssembly = indexDirectoryProviderAssembly;
+			_indexDirectoryProvider = new Dictionary<string, IIndexDirectoryProviderV40>();
 			_usersProviderCollector = usersProviderCollector;
 			_themesProviderCollector = themeProviderCollector;
 			_pagesProviderCollector = pagesProviderCollector;
@@ -52,6 +59,10 @@ namespace ScrewTurn.Wiki {
 		private Type _settingsProviderType;
 		private System.Reflection.Assembly _settingsProviderAssembly;
 		private Dictionary<string, ISettingsStorageProviderV40> _settingsProvider;
+
+		private Type _indexDirectoryProviderType;
+		private System.Reflection.Assembly _indexDirectoryProviderAssembly;
+		private Dictionary<string, IIndexDirectoryProviderV40> _indexDirectoryProvider;
 
 		private ProviderCollector<IUsersStorageProviderV40> _usersProviderCollector;
 		private ProviderCollector<IThemesStorageProviderV40> _themesProviderCollector;
@@ -85,6 +96,20 @@ namespace ScrewTurn.Wiki {
 				_settingsProvider[wikiKey].Init(Host.Instance, ProviderLoader.LoadStorageProviderConfiguration(_settingsProviderType.FullName), wiki);
 			}
 			return _settingsProvider[wikiKey];
+		}
+
+		/// <summary>
+		/// The index directory provider.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The indexDirectoryProvider initialized for the given wiki.</returns>
+		public IIndexDirectoryProviderV40 GetIndexDirectoryProvider(string wiki) {
+			string wikiKey = wiki != null ? wiki : "-";
+			if(!_indexDirectoryProvider.ContainsKey(wikiKey)) {
+				_indexDirectoryProvider[wikiKey] = ProviderLoader.CreateInstance<IIndexDirectoryProviderV40>(_indexDirectoryProviderAssembly, _indexDirectoryProviderType);
+				_indexDirectoryProvider[wikiKey].Init(Host.Instance, ProviderLoader.LoadStorageProviderConfiguration(_indexDirectoryProviderType.FullName), wiki);
+			}
+			return _indexDirectoryProvider[wikiKey];
 		}
 
 		/// <summary>
@@ -141,6 +166,12 @@ namespace ScrewTurn.Wiki {
 					settingsProvider.Dispose();
 				}
 				_settingsProvider.Clear();
+			}
+			if(_indexDirectoryProvider != null) {
+				foreach(var IndexDirectoryProvider in _indexDirectoryProvider.Values) {
+					IndexDirectoryProvider.Dispose();
+				}
+				_indexDirectoryProvider.Clear();
 			}
 			_usersProviderCollector.Dispose();
 			_themesProviderCollector.Dispose();

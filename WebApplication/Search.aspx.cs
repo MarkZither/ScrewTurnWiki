@@ -175,7 +175,7 @@ namespace ScrewTurn.Wiki {
 
 			CategoryInfo[] pageCategories;
 			int count = 0;
-			foreach(SearchResult res in results) {
+			foreach(ScrewTurn.Wiki.SearchEngine.SearchResult res in results) {
 				// Filter by category
 				PageContent currentPage = null;
 				pageCategories = new CategoryInfo[0];
@@ -353,7 +353,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="result">The result to use.</param>
 		/// <returns>The instance.</returns>
-		public static SearchResultRow CreateInstance(SearchResult result) {
+		public static SearchResultRow CreateInstance(ScrewTurn.Wiki.SearchEngine.SearchResult result) {
 			string queryStringKeywords = "HL=" + GetKeywordsForQueryString(result.Matches);
 
 			if(result.Document.TypeTag == PageDocument.StandardTypeTag) {

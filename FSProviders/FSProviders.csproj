@@ -35,6 +35,9 @@
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\References\Lib\DotNetZipLib-DevKit-v1.9\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
+    <Reference Include="Lucene.Net, Version=2.9.2.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -52,6 +55,7 @@
       <Link>AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="FilesStorageProvider.cs" />
+    <Compile Include="FSIndexDirectoryProvider.cs" />
     <Compile Include="LocalProvidersTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderBase.cs" />

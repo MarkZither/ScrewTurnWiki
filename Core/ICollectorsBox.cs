@@ -23,6 +23,13 @@ namespace ScrewTurn.Wiki {
 		ISettingsStorageProviderV40 GetSettingsProvider(string wiki);
 
 		/// <summary>
+		/// The index directory provider.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <returns>The indexDirectoryProvider initialized for the given wiki.</returns>
+		IIndexDirectoryProviderV40 GetIndexDirectoryProvider(string wiki);
+
+		/// <summary>
 		/// Gets the files provider collector.
 		/// </summary>
 		ProviderCollector<IFilesStorageProviderV40> FilesProviderCollector { get; }

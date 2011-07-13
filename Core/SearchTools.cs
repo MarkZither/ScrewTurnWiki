@@ -26,7 +26,7 @@ namespace ScrewTurn.Wiki {
 
 			List<PageContent> result = new List<PageContent>(20);
 
-			foreach(SearchResult res in searchResults) {
+			foreach(ScrewTurn.Wiki.SearchEngine.SearchResult res in searchResults) {
 				PageDocument pageDoc = res.Document as PageDocument;
 				if(pageDoc != null) {
 					string pageNamespace = NameTools.GetNamespace(pageDoc.Page.FullName);
@@ -74,7 +74,7 @@ namespace ScrewTurn.Wiki {
 					// All non title-related matches must be removed
 					SearchResultCollection filteredResults = new SearchResultCollection(10);
 
-					foreach(SearchResult res in currentResults) {
+					foreach(ScrewTurn.Wiki.SearchEngine.SearchResult res in currentResults) {
 						foreach(WordInfo word in res.Matches) {
 							if(word.Location == WordLocation.Title) {
 								filteredResults.Add(res);
@@ -91,7 +91,7 @@ namespace ScrewTurn.Wiki {
 			// ... normalize relevance based on the number of providers
 			float providerNormalizationFactor = 1F / (float)Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki).Length;
 			foreach(SearchResultCollection coll in allCollections) {
-				foreach(SearchResult result in coll) {
+				foreach(ScrewTurn.Wiki.SearchEngine.SearchResult result in coll) {
 					result.Relevance.NormalizeAfterFinalization(providerNormalizationFactor);
 				}
 			}
@@ -136,7 +136,7 @@ namespace ScrewTurn.Wiki {
 				// ... then search in the temporary index and normalize relevance
 				SearchResultCollection filesAndAttachments = temporaryIndex.Search(new SearchParameters(query, options));
 				providerNormalizationFactor = 1F / (float)Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki).Length;
-				foreach(SearchResult result in filesAndAttachments) {
+				foreach(ScrewTurn.Wiki.SearchEngine.SearchResult result in filesAndAttachments) {
 					result.Relevance.NormalizeAfterFinalization(providerNormalizationFactor);
 				}
 
@@ -187,16 +187,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="collections">The collections.</param>
 		/// <returns>The resulting <see cref="T:SearchResultCollection" />.</returns>
 		private static SearchResultCollection CombineCollections(List<SearchResultCollection> collections) {
-			List<SearchResult> tempResults = new List<SearchResult>(100);
+			List<ScrewTurn.Wiki.SearchEngine.SearchResult> tempResults = new List<ScrewTurn.Wiki.SearchEngine.SearchResult>(100);
 
 			foreach(SearchResultCollection coll in collections) {
 				tempResults.AddRange(coll);
 			}
 
-			tempResults.Sort(delegate(SearchResult x, SearchResult y) { return y.Relevance.Value.CompareTo(x.Relevance.Value); });
+			tempResults.Sort(delegate(ScrewTurn.Wiki.SearchEngine.SearchResult x, ScrewTurn.Wiki.SearchEngine.SearchResult y) { return y.Relevance.Value.CompareTo(x.Relevance.Value); });
 
 			SearchResultCollection resultCollection = new SearchResultCollection(50);
-			foreach(SearchResult singleResult in tempResults) {
+			foreach(ScrewTurn.Wiki.SearchEngine.SearchResult singleResult in tempResults) {
 				resultCollection.Add(singleResult);
 			}
 

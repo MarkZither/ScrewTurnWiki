@@ -3003,7 +3003,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			SearchResultCollection result = prov.PerformSearch(new SearchParameters("new1 new11 new2 blah"));
 			Assert.AreEqual(3, result.Count, "Wrong result count");
-			foreach(SearchResult res in result) {
+			foreach(ScrewTurn.Wiki.SearchEngine.SearchResult res in result) {
 				foreach(WordInfo info in res.Matches) {
 					Assert.AreNotEqual("blah", info.Text, "Invalid search macth");
 				}
@@ -3176,7 +3176,7 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(2, result.Count, "Wrong result count");
 
 			bool found1 = false, found2 = false;
-			foreach(SearchResult res in result) {
+			foreach(ScrewTurn.Wiki.SearchEngine.SearchResult res in result) {
 				Assert.AreEqual(MessageDocument.StandardTypeTag, res.Document.TypeTag, "Wrong type tag");
 				if(res.Matches[0].Text == "dummy") found1 = true;
 				if(res.Matches[0].Text == "message") found2 = true;

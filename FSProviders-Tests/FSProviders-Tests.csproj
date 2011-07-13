@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lucene.Net, Version=2.9.2.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\References\Tools\NUnit\nunit.framework.dll</HintPath>
     </Reference>
@@ -53,6 +56,7 @@
     </Compile>
     <Compile Include="FilesStorageProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FSIndexDirectoryProviderTests.cs" />
     <Compile Include="SqlCEGlobalSettingsStorageProviderTests.cs" />
     <Compile Include="SqlCEPagesStorageProviderTests.cs" />
     <Compile Include="SqlCEPagesStorageProvider_SqlIndexTests.cs" />
@@ -60,6 +64,10 @@
     <Compile Include="SqlCEUsersStorageProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{C353A35C-86D0-4154-9500-4F88CAAB29C3}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FSProviders\FSProviders.csproj">
       <Project>{1EF2D87B-C7DF-4EF1-BBD8-F73BF7FFC07F}</Project>
       <Name>FSProviders</Name>
