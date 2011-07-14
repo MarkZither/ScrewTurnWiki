@@ -34,10 +34,9 @@ namespace ScrewTurn.Wiki.Tests {
 			PageContent page = new PageContent("pagefullname", pagesStorageProvider, DateTime.Now, pageTitle,
 												"user-test", DateTime.Now, "comment to last editing", pageContent, null, "Description of the page");
 
-
 			Assert.IsTrue(SearchClass.IndexPage(page));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle }, "page");
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
@@ -71,7 +70,7 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsTrue(SearchClass.IndexPage(page1));
 			Assert.IsTrue(SearchClass.IndexPage(page2));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle }, "page");
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(2, results.Count, "Wrong result length");
 
@@ -108,7 +107,7 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsTrue(SearchClass.IndexPage(page1));
 			Assert.IsTrue(SearchClass.IndexPage(page2));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle, SearchField.PageContent }, "page");
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle, SearchField.PageContent }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(2, results.Count, "Wrong result length");
 
@@ -145,7 +144,7 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsTrue(SearchClass.IndexPage(page1));
 			Assert.IsTrue(SearchClass.IndexPage(page2));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle, SearchField.PageContent }, "page");
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle, SearchField.PageContent }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(2, results.Count, "Wrong result length");
 
@@ -161,7 +160,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Assert.IsTrue(SearchClass.UnindexPage(page1));
 
-			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle, SearchField.PageContent }, "page");
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle, SearchField.PageContent }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 

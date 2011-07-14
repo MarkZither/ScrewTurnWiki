@@ -640,6 +640,13 @@
     <Compile Include="RSS.aspx.designer.cs">
       <DependentUpon>RSS.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SessionRefresh.aspx.cs">
       <DependentUpon>SessionRefresh.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1372,6 +1379,7 @@
     <Content Include="Register.aspx" />
     <Content Include="robots.txt" />
     <Content Include="RSS.aspx" />
+    <Content Include="Search.aspx" />
     <Content Include="SessionRefresh.aspx" />
     <Content Include="ThemesProviderSelector.ascx" />
     <Content Include="Themes\Admin.css" />

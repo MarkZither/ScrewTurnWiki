@@ -12,6 +12,11 @@ namespace ScrewTurn.Wiki {
 	public class SearchResult {
 
 		/// <summary>
+		/// The type of the found document.
+		/// </summary>
+		public DocumentType DocumentType;
+
+		/// <summary>
 		/// The wiki to witch belongs the found document.
 		/// </summary>
 		public string Wiki;

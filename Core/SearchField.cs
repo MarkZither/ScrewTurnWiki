@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 
 namespace ScrewTurn.Wiki {
+
 	/// <summary>
 	/// Lists legal values for search fields.
 	/// </summary>
 	public enum SearchField {
 		/// <summary>
-		/// The id of a page.
+		/// The type of the indexed document.
 		/// </summary>
-		/// <remarks>Composed by wiki|pagefullname</remarks>
-		Id,
+		DocumentType,
 		/// <summary>
 		/// The wiki of a page.
 		/// </summary>
@@ -29,7 +29,19 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The content of a page.
 		/// </summary>
-		PageContent
+		PageContent,
+		/// <summary>
+		/// The id of the message.
+		/// </summary>
+		MessageId,
+		/// <summary>
+		/// The subject of the message.
+		/// </summary>
+		MessageSubject,
+		/// <summary>
+		/// The body of the message
+		/// </summary>
+		MessageBody
 	}
 
 	/// <summary>
@@ -44,8 +56,8 @@ namespace ScrewTurn.Wiki {
 		/// <returns></returns>
 		public static string AsString(this SearchField field) {
 			switch(field) {
-				case SearchField.Id:
-					return "Id";
+				case SearchField.DocumentType:
+					return "DocumentType";
 				case SearchField.Wiki:
 					return "Wiki";
 				case SearchField.PageFullName:
@@ -54,6 +66,12 @@ namespace ScrewTurn.Wiki {
 					return "Title";
 				case SearchField.PageContent:
 					return "Content";
+				case SearchField.MessageId:
+					return "MessageId";
+				case SearchField.MessageSubject:
+					return "MessageSubject";
+				case SearchField.MessageBody:
+					return "MessageBody";
 				default:
 					throw new ArgumentException("The given SearchField is not valid");
 			}
