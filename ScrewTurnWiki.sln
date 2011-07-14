@@ -9,19 +9,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{F6E9DB23-D200-4CCE-B42D-7CD1D20FC92D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginFramework", "PluginFramework\PluginFramework.csproj", "{531A83D6-76F9-4014-91C5-295818E2D948}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2DF980A6-4742-49B1-A090-DE79314644D0} = {2DF980A6-4742-49B1-A090-DE79314644D0}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{C353A35C-86D0-4154-9500-4F88CAAB29C3}"
 	ProjectSection(ProjectDependencies) = postProject
-		{2DF980A6-4742-49B1-A090-DE79314644D0} = {2DF980A6-4742-49B1-A090-DE79314644D0}
 		{44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81} = {44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{1DB1E325-A12E-4415-990C-A5DB669BE835}"
 	ProjectSection(ProjectDependencies) = postProject
-		{2DF980A6-4742-49B1-A090-DE79314644D0} = {2DF980A6-4742-49B1-A090-DE79314644D0}
 		{44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81} = {44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81}
 	EndProjectSection
 EndProject
@@ -29,10 +24,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core-Tests", "Core-Tests\Co
 	ProjectSection(ProjectDependencies) = postProject
 		{44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81} = {44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81}
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchEngine", "SearchEngine\SearchEngine.csproj", "{2DF980A6-4742-49B1-A090-DE79314644D0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchEngine-Tests", "SearchEngine-Tests\SearchEngine-Tests.csproj", "{07625628-842E-4CAA-A029-4D6852C7CA20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestScaffolding", "TestScaffolding\TestScaffolding.csproj", "{F865670A-DEDE-41B5-B426-48D73C3B5B1C}"
 EndProject
@@ -98,14 +89,6 @@ Global
 		{013B5DA5-76F9-4D7F-A174-4926BF51E24B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{013B5DA5-76F9-4D7F-A174-4926BF51E24B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{013B5DA5-76F9-4D7F-A174-4926BF51E24B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2DF980A6-4742-49B1-A090-DE79314644D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2DF980A6-4742-49B1-A090-DE79314644D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2DF980A6-4742-49B1-A090-DE79314644D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2DF980A6-4742-49B1-A090-DE79314644D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07625628-842E-4CAA-A029-4D6852C7CA20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07625628-842E-4CAA-A029-4D6852C7CA20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07625628-842E-4CAA-A029-4D6852C7CA20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07625628-842E-4CAA-A029-4D6852C7CA20}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F865670A-DEDE-41B5-B426-48D73C3B5B1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F865670A-DEDE-41B5-B426-48D73C3B5B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F865670A-DEDE-41B5-B426-48D73C3B5B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU

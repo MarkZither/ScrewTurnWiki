@@ -24,7 +24,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
 		private const string PluginsDirectory = "Plugins";
 
-		private string connString = null;
+		private string _connString = null;
 
 		private string BuildDbConnectionString(IHostV40 host) {
 			return "Data Source = '" + host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory) + "ScrewTurnWiki.sdf';";
@@ -49,18 +49,26 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
+			_connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
 
-			base.SetUp(host, connString);
+			base.SetUp(host, _connString);
 		}
 
+		/// <summary>
+		/// Initializes the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <param name="wiki">The wiki.</param>
+		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
+		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
 		public new void Init(IHostV40 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
+			_connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
 
-			base.Init(host, connString, wiki);
+			base.Init(host, _connString, wiki);
 
 			if(!Directory.Exists(GetFullPath(PluginsDirectory))) {
 				Directory.CreateDirectory(GetFullPath(PluginsDirectory));
@@ -199,7 +207,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'GlobalSettings'";
 
 			bool exists = false;
@@ -227,7 +235,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'GlobalSettings'";
 
 			bool exists = false;
@@ -253,7 +261,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// Creates the standard database schema.
 		/// </summary>
 		private void CreateStandardSchema() {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 			try {
 				cmd.CommandText = "create table [GlobalSetting] ([Name] nvarchar(100) not null, [Value] nvarchar(4000) not null, constraint [PK_GlobalSetting] primary key ([Name]));";
 				cmd.ExecuteNonQuery();
@@ -284,7 +292,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		protected override void CreateOrUpdateDatabaseIfNecessary() {
 			// Check if the SqlCe database exists, otherwise creates a new one.
-			CreateDatabaseIfNotExists(connString);
+			CreateDatabaseIfNotExists(_connString);
 
 			if(!SchemaExists()) {
 				CreateStandardSchema();

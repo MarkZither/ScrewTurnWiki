@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
-using ScrewTurn.Wiki.SearchEngine;
 using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki.Tests {
@@ -45,8 +44,6 @@ namespace ScrewTurn.Wiki.Tests {
 			pagesStorageProvider.AddProvider(typeof(DummyPagesStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyPagesStorageProvider)));
 			Expect.Call(collectorsBox.PagesProviderCollector).Return(pagesStorageProvider).Repeat.Any();
 			Expect.Call(collectorsBox.FormatterProviderCollector).Return(new ProviderCollector<IFormatterProviderV40>()).Repeat.Any();
-			Expect.Call(host.PrepareContentForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, string p, string input) { return input; }).Repeat.Any();
-			Expect.Call(host.PrepareTitleForIndexing(null, null, null)).IgnoreArguments().Do((ToStringDelegate)delegate(string wiki, string p, string input) { return input; }).Repeat.Any();
 			Host.Instance = new Host();
 
 			IResourceExchanger resourceExchanger = mocks.DynamicMock<IResourceExchanger>();
@@ -255,22 +252,6 @@ namespace ScrewTurn.Wiki.Tests {
 
 			public CategoryInfo MergeCategories(CategoryInfo source, CategoryInfo destination) {
 				throw new NotImplementedException();
-			}
-
-			public SearchResultCollection PerformSearch(SearchParameters parameters) {
-				throw new NotImplementedException();
-			}
-
-			public void RebuildIndex() {
-				throw new NotImplementedException();
-			}
-
-			public void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size) {
-				throw new NotImplementedException();
-			}
-
-			public bool IsIndexCorrupted {
-				get { throw new NotImplementedException(); }
 			}
 
 			public PageContent GetPage(string fullName) {
@@ -631,41 +612,6 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		public void RenameNamespace_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			NamespaceInfo ns = prov.AddNamespace("NS");
-
-			PageContent page1 = prov.SetPageContent(ns.Name, "Page1", DateTime.Now, "Title1", "NUnit", DateTime.Now, "Comment1", "Content1", new string[0], "Descr1", SaveMode.Normal);
-
-			PageContent page2 = prov.SetPageContent(ns.Name, "Page2", DateTime.Now, "Title2", "NUnit", DateTime.Now, "Comment2", "Content2", new string[0], "Descr2", SaveMode.Normal);
-
-			prov.AddMessage(page1.FullName, "NUnit", "Test1", DateTime.Now, "Body1", -1);
-			prov.AddMessage(page1.FullName, "NUnit", "Test2", DateTime.Now, "Body2", prov.GetMessages(page1.FullName)[0].ID);
-
-			NamespaceInfo renamedNamespace = prov.RenameNamespace(ns, "NS_Ren");
-
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("content1 content2"));
-			Assert.AreEqual(2, result.Count, "Wrong result count");
-			Assert.AreEqual(renamedNamespace.Name, NameTools.GetNamespace(PageDocument.GetPageName(result[0].Document.Name)), "Wrong document name");
-			Assert.AreEqual(renamedNamespace.Name, NameTools.GetNamespace(PageDocument.GetPageName(result[1].Document.Name)), "Wrong document name");
-
-			result = prov.PerformSearch(new SearchParameters("test1 test2"));
-			Assert.AreEqual(2, result.Count, "Wrong result count");
-			Assert.AreEqual(1, result[0].Matches.Count, "Wrong match count");
-			Assert.AreEqual(1, result[1].Matches.Count, "Wrong match count");
-
-			string page;
-			int id;
-
-			MessageDocument.GetMessageDetails(result[0].Document.Name, out page, out id);
-			Assert.AreEqual(renamedNamespace.Name, NameTools.GetNamespace(page), "Wrong document name");
-
-			MessageDocument.GetMessageDetails(result[1].Document.Name, out page, out id);
-			Assert.AreEqual(renamedNamespace.Name, NameTools.GetNamespace(page), "Wrong document name");
-		}
-
-		[Test]
 		public void SetNamespaceDefaultPage() {
 			IPagesStorageProviderV40 prov = GetProvider();
 
@@ -720,26 +666,6 @@ namespace ScrewTurn.Wiki.Tests {
 		public void RemoveNamespace_NullNamespace() {
 			IPagesStorageProviderV40 prov = GetProvider();
 			prov.RemoveNamespace(null);
-		}
-
-		[Test]
-		public void RemoveNamespace_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			NamespaceInfo ns = prov.AddNamespace("NS");
-
-			PageContent page1 = prov.SetPageContent(ns.Name, "Page1", DateTime.Now, "Title1", "NUnit", DateTime.Now, "Comment1", "Content1", new string[0], "Descr1", SaveMode.Normal);
-
-			prov.AddMessage(page1.FullName, "NUnit", "Test1", DateTime.Now, "Body1", -1);
-			prov.AddMessage(page1.FullName, "NUnit", "Test2", DateTime.Now, "Body2", prov.GetMessages(page1.FullName)[0].ID);
-
-			PageContent page2 = prov.SetPageContent(ns.Name, "Page2", DateTime.Now, "Title2", "NUnit", DateTime.Now, "Comment2", "Content2", new string[0], "Descr2", SaveMode.Normal);
-
-			prov.RemoveNamespace(ns);
-
-			Assert.AreEqual(0, prov.PerformSearch(new SearchParameters("content1 content2")).Count, "Wrong result count");
-
-			Assert.AreEqual(0, prov.PerformSearch(new SearchParameters("test1 test2 comment1 comment2")).Count, "Wrong result count");
 		}
 
 		[Test]
@@ -1078,97 +1004,6 @@ namespace ScrewTurn.Wiki.Tests {
 			prov.SetNamespaceDefaultPage(ns, page.FullName);
 
 			Assert.IsNull(prov.MovePage(page.FullName, null, false), "Cannot move the default page");
-		}
-
-		[Test]
-		public void MovePage_Root2Sub_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			NamespaceInfo ns = prov.AddNamespace("NS");
-
-			PageContent page = prov.SetPageContent(null, "Page", DateTime.Now, "Title", "NUnit", DateTime.Now, "Comment", "Content", new string[0], "Descr", SaveMode.Normal);
-
-			prov.AddMessage(page.FullName, "NUnit", "Test1", DateTime.Now, "Body1", -1);
-			prov.AddMessage(page.FullName, "NUnit", "Test2", DateTime.Now, "Body2", prov.GetMessages(page.FullName)[0].ID);
-
-			PageContent movedPage = prov.MovePage(page.FullName, ns, false);
-
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("content"));
-			Assert.AreEqual(1, result.Count, "Wrong result count");
-			Assert.AreEqual(movedPage.FullName, PageDocument.GetPageName(result[0].Document.Name), "Wrong document name");
-
-			result = prov.PerformSearch(new SearchParameters("test1 test2 body1 body2"));
-			Assert.AreEqual(2, result.Count, "Wrong result count");
-
-			string pageName;
-			int id;
-
-			MessageDocument.GetMessageDetails(result[0].Document.Name, out pageName, out id);
-			Assert.AreEqual(ns.Name, NameTools.GetNamespace(pageName), "Wrong document name");
-
-			MessageDocument.GetMessageDetails(result[1].Document.Name, out pageName, out id);
-			Assert.AreEqual(ns.Name, NameTools.GetNamespace(pageName), "Wrong document name");
-		}
-
-		[Test]
-		public void MovePage_Sub2Root_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			NamespaceInfo ns = prov.AddNamespace("NS");
-
-			PageContent page = prov.SetPageContent(ns.Name, "Page", DateTime.Now, "Title", "NUnit", DateTime.Now, "Comment", "Content", new string[0], "Descr", SaveMode.Normal);
-
-			prov.AddMessage(page.FullName, "NUnit", "Test1", DateTime.Now, "Body1", -1);
-			prov.AddMessage(page.FullName, "NUnit", "Test2", DateTime.Now, "Body2", prov.GetMessages(page.FullName)[0].ID);
-
-			PageContent movedPage = prov.MovePage(page.FullName, null, false);
-
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("content"));
-			Assert.AreEqual(1, result.Count, "Wrong result count");
-			Assert.AreEqual(movedPage.FullName, PageDocument.GetPageName(result[0].Document.Name), "Wrong document name");
-
-			result = prov.PerformSearch(new SearchParameters("test1 test2 body1 body2"));
-			Assert.AreEqual(2, result.Count, "Wrong result count");
-
-			string pageName;
-			int id;
-
-			MessageDocument.GetMessageDetails(result[0].Document.Name, out pageName, out id);
-			Assert.AreEqual(null, NameTools.GetNamespace(pageName), "Wrong document name");
-
-			MessageDocument.GetMessageDetails(result[1].Document.Name, out pageName, out id);
-			Assert.AreEqual(null, NameTools.GetNamespace(pageName), "Wrong document name");
-		}
-
-		[Test]
-		public void MovePage_Sub2Sub_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			NamespaceInfo ns1 = prov.AddNamespace("NS1");
-			NamespaceInfo ns2 = prov.AddNamespace("NS2");
-
-			PageContent page = prov.SetPageContent(ns1.Name, "Page", DateTime.Now, "Title", "NUnit", DateTime.Now, "Comment", "Content", new string[0], "Descr", SaveMode.Normal);
-
-			prov.AddMessage(page.FullName, "NUnit", "Test1", DateTime.Now, "Body1", -1);
-			prov.AddMessage(page.FullName, "NUnit", "Test2", DateTime.Now, "Body2", prov.GetMessages(page.FullName)[0].ID);
-
-			PageContent movedPage = prov.MovePage(page.FullName, ns2, false);
-
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("content"));
-			Assert.AreEqual(1, result.Count, "Wrong result count");
-			Assert.AreEqual(movedPage.FullName, PageDocument.GetPageName(result[0].Document.Name), "Wrong document name");
-
-			result = prov.PerformSearch(new SearchParameters("test1 test2 body1 body2"));
-			Assert.AreEqual(2, result.Count, "Wrong result count");
-
-			string pageName;
-			int id;
-
-			MessageDocument.GetMessageDetails(result[0].Document.Name, out pageName, out id);
-			Assert.AreEqual(ns2.Name, NameTools.GetNamespace(pageName), "Wrong document name");
-
-			MessageDocument.GetMessageDetails(result[1].Document.Name, out pageName, out id);
-			Assert.AreEqual(ns2.Name, NameTools.GetNamespace(pageName), "Wrong document name");
 		}
 
 		private void AssertCategoryInfosAreEqual(CategoryInfo expected, CategoryInfo actual, bool checkProvider) {
@@ -1606,23 +1441,6 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		public void PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			PageContent page = prov.SetPageContent(null, "Page", DateTime.Now, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
-
-			Assert.AreEqual(1, prov.PerformSearch(new SearchParameters("content")).Count, "Wrong result count");
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void PerformSearch_NullParameters() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			prov.PerformSearch(null);
-		}
-
-		[Test]
 		public void AddPage_GetPages_Root() {
 			IPagesStorageProviderV40 prov = GetProvider();
 
@@ -1833,43 +1651,6 @@ namespace ScrewTurn.Wiki.Tests {
 			PageContent backup = prov.GetBackupContent(p.FullName, baks[0]);
 			Assert.IsNotNull(backup, "GetBackupContent should return something");
 			AssertPageContentsAreEqual(c, backup);
-		}
-
-		[Test]
-		public void ModifyPage_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			// Added to check that pages inserted in reverse alphabetical order work with the search engine
-			PageContent p0 = prov.SetPageContent(null, "PagZ", DateTime.Now, "ZZZ", "NUnit", DateTime.Now, "", "", null, "", SaveMode.Normal);
-
-			DateTime dt = DateTime.Now;
-
-			PageContent p = prov.SetPageContent(null, "Page", DateTime.Now, "TitleOld", "NUnitOld", dt, "CommentOld", "ContentOld",
-				new string[] { "keyword3", "keyword4" }, null, SaveMode.Normal);
-
-			Assert.IsNotNull(p, "p must be not null");
-
-			p = prov.SetPageContent(null, "Page", DateTime.Now, "Title", "NUnit", dt, "Comment", "Content",
-				new string[] { "keyword1", "keyword2" }, null, SaveMode.Normal);
-			Assert.IsNotNull(p, "p must be not null");
-
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("content"));
-			Assert.AreEqual(1, result.Count, "Wrong search result count");
-			Assert.AreEqual(PageDocument.StandardTypeTag, result[0].Document.TypeTag, "Wrong type tag");
-			Assert.AreEqual(1, result[0].Matches.Count, "Wrong match count");
-			Assert.AreEqual(WordLocation.Content, result[0].Matches[0].Location, "Wrong word location");
-
-			result = prov.PerformSearch(new SearchParameters("title"));
-			Assert.AreEqual(1, result.Count, "Wrong search result count");
-			Assert.AreEqual(PageDocument.StandardTypeTag, result[0].Document.TypeTag, "Wrong type tag");
-			Assert.AreEqual(1, result[0].Matches.Count, "Wrong match count");
-			Assert.AreEqual(WordLocation.Title, result[0].Matches[0].Location, "Wrong word location");
-
-			result = prov.PerformSearch(new SearchParameters("keyword1"));
-			Assert.AreEqual(1, result.Count, "Wrong search count");
-			Assert.AreEqual(PageDocument.StandardTypeTag, result[0].Document.TypeTag, "Wrong type tag");
-			Assert.AreEqual(1, result[0].Matches.Count, "Wrong match count");
-			Assert.AreEqual(WordLocation.Keywords, result[0].Matches[0].Location, "Wrong word location");
 		}
 
 		[Test]
@@ -2429,47 +2210,6 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		public void RenamePage_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			PageContent p = Pages.SetPageWithEmptyContent(null, "Page", prov, DateTime.Now);
-			prov.AddMessage(p.FullName, "NUnit", "Message1", DateTime.Now, "Body1", -1);
-			prov.AddMessage(p.FullName, "NUnit", "Message2", DateTime.Now, "Body2", prov.GetMessages(p.FullName)[0].ID);
-
-			DateTime dt = DateTime.Now;
-
-			Assert.IsNotNull(prov.SetPageContent(NameTools.GetNamespace(p.FullName), NameTools.GetLocalName(p.FullName), p.CreationDateTime, "TitleOld", "NUnitOld", dt, "CommentOld", "ContentOld", null, null, SaveMode.Normal),
-				"SetPageContent should return a not null value");
-			Assert.IsNotNull(prov.SetPageContent(NameTools.GetNamespace(p.FullName), NameTools.GetLocalName(p.FullName), p.CreationDateTime, "Title", "NUnit", dt, "Comment", "Content", null, null, SaveMode.Backup),
-				"ModifyPage should return true");
-			prov.RenamePage(p.FullName, "Page2");
-
-			SearchResultCollection results = prov.PerformSearch(new SearchParameters("content"));
-
-			Assert.AreEqual(1, results.Count, "Wrong search result count");
-			Assert.AreEqual("Page2", PageDocument.GetPageName(results[0].Document.Name), "Wrong document name");
-
-			results = prov.PerformSearch(new SearchParameters("title"));
-
-			Assert.AreEqual(1, results.Count, "Wrong search result count");
-			Assert.AreEqual("Page2", PageDocument.GetPageName(results[0].Document.Name), "Wrong document name");
-
-			results = prov.PerformSearch(new SearchParameters("message1 body1 message2 body2"));
-			Assert.AreEqual(2, results.Count, "Wrong result count");
-			Assert.AreEqual(2, results[0].Matches.Count, "Wrong match count");
-			Assert.AreEqual(2, results[1].Matches.Count, "Wrong match count");
-
-			string page;
-			int id;
-
-			MessageDocument.GetMessageDetails(results[0].Document.Name, out page, out id);
-			Assert.AreEqual("Page2", page, "Wrong document name");
-
-			MessageDocument.GetMessageDetails(results[1].Document.Name, out page, out id);
-			Assert.AreEqual("Page2", page, "Wrong document name");
-		}
-
-		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RenamePage_NullPage() {
 			IPagesStorageProviderV40 prov = GetProvider();
@@ -2534,30 +2274,6 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(3, prov.GetBackups(p.FullName).Length, "Wrong backup count");
 
 			AssertPageContentsAreEqual(content, prov.GetPage(p.FullName));
-		}
-
-		[Test]
-		public void RollbackPage_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			DateTime dt = DateTime.Now;
-
-			PageContent p = prov.SetPageContent(null, "Page", DateTime.Now, "Title", "NUnit", dt, "Comment", "Content", new string[] { "k1" }, "descr", SaveMode.Normal);
-
-			Assert.IsNotNull(p, "p should not be null");
-			Assert.IsNotNull(prov.SetPageContent(NameTools.GetNamespace(p.FullName), NameTools.GetLocalName(p.FullName), p.CreationDateTime, "TitleMod", "NUnit", dt, "Comment", "ContentMod", new string[] { "k2" }, "descr2", SaveMode.Backup), "SetPageContent should return a not null value");
-			// Depending on the implementation, providers might start backups numbers from 0 or 1, or even don't perform a backup if the page has no content (as in this case)
-			int[] baks = prov.GetBackups(p.FullName);
-			prov.RollbackPage(p.FullName, baks[baks.Length - 1]);
-
-			Assert.AreEqual(0, prov.PerformSearch(new SearchParameters("contentmod")).Count, "Wrong search result count");
-			Assert.AreEqual(1, prov.PerformSearch(new SearchParameters("content")).Count, "Wrong search result count");
-
-			Assert.AreEqual(0, prov.PerformSearch(new SearchParameters("k2")).Count, "Wrong search result count");
-			Assert.AreEqual(1, prov.PerformSearch(new SearchParameters("k1")).Count, "Wrong search result count");
-
-			Assert.AreEqual(0, prov.PerformSearch(new SearchParameters("titlemod")).Count, "Wrong search result count");
-			Assert.AreEqual(1, prov.PerformSearch(new SearchParameters("title")).Count, "Wrong search result count");
 		}
 
 		[Test]
@@ -2694,27 +2410,6 @@ namespace ScrewTurn.Wiki.Tests {
 			prov.SetNamespaceDefaultPage(ns, page.FullName);
 
 			Assert.IsFalse(prov.RemovePage(page.FullName), "Cannot remove default page");
-		}
-
-		[Test]
-		public void RemovePage_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			DateTime dt = DateTime.Now;
-
-			PageContent p = prov.SetPageContent(null, "Page", DateTime.Now, "Title", "NUnit", dt, "Comment", "Content", null, null, SaveMode.Normal);
-
-			Assert.IsNotNull(p, "p should not be null");
-
-			prov.AddMessage(p.FullName, "NUnit", "Test1", DateTime.Now, "Body1", -1);
-			prov.AddMessage(p.FullName, "NUnit", "Test2", DateTime.Now, "Body2", prov.GetMessages(p.FullName)[0].ID);
-
-			prov.RemovePage(p.FullName);
-
-			Assert.AreEqual(0, prov.PerformSearch(new SearchParameters("content")).Count, "Wrong search result count");
-			Assert.AreEqual(0, prov.PerformSearch(new SearchParameters("title")).Count, "Wrong search result count");
-
-			Assert.AreEqual(0, prov.PerformSearch(new SearchParameters("test1 test2 body1 body2")).Count, "Wrong result count");
 		}
 
 		[Test]
@@ -2987,30 +2682,6 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		public void BulkStoreMessages_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			PageContent page = Pages.SetPageWithEmptyContent(null, "Page", prov, DateTime.Now);
-
-			prov.AddMessage(page.FullName, "NUnit", "Blah", DateTime.Now, "Blah", -1);
-
-			List<Message> newMessages = new List<Message>();
-			newMessages.Add(new Message(1, "NUnit", "New1", DateTime.Now, "Body1"));
-			newMessages[0].Replies = new Message[] { new Message(2, "NUnit", "New11", DateTime.Now, "Body11") };
-			newMessages.Add(new Message(3, "NUnit", "New2", DateTime.Now, "Body2"));
-
-			prov.BulkStoreMessages(page.FullName, newMessages.ToArray());
-
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("new1 new11 new2 blah"));
-			Assert.AreEqual(3, result.Count, "Wrong result count");
-			foreach(ScrewTurn.Wiki.SearchEngine.SearchResult res in result) {
-				foreach(WordInfo info in res.Matches) {
-					Assert.AreNotEqual("blah", info.Text, "Invalid search macth");
-				}
-			}
-		}
-
-		[Test]
 		public void AddMessage_GetMessages_Root() {
 			IPagesStorageProviderV40 prov = GetProvider();
 
@@ -3164,29 +2835,6 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		public void AddMessage_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			PageContent page = Pages.SetPageWithEmptyContent(null, "Page", prov, DateTime.Now);
-
-			prov.AddMessage(page.FullName, "NUnit", "Message", DateTime.Now, "Blah, Test.", -1);
-			prov.AddMessage(page.FullName, "NUnit", "Re: Message2", DateTime.Now, "Dummy.", prov.GetMessages(page.FullName)[0].ID);
-
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("dummy message"));
-			Assert.AreEqual(2, result.Count, "Wrong result count");
-
-			bool found1 = false, found2 = false;
-			foreach(ScrewTurn.Wiki.SearchEngine.SearchResult res in result) {
-				Assert.AreEqual(MessageDocument.StandardTypeTag, res.Document.TypeTag, "Wrong type tag");
-				if(res.Matches[0].Text == "dummy") found1 = true;
-				if(res.Matches[0].Text == "message") found2 = true;
-			}
-
-			Assert.IsTrue(found1, "First word not found");
-			Assert.IsTrue(found2, "Second word not found");
-		}
-
-		[Test]
 		public void RemoveMessage_Root() {
 			IPagesStorageProviderV40 prov = GetProvider();
 
@@ -3282,18 +2930,11 @@ namespace ScrewTurn.Wiki.Tests {
 
 			prov.RemoveMessage(page.FullName, prov.GetMessages(page.FullName)[0].ID, false);
 
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("test blah test2 blah2"));
-			Assert.AreEqual(1, result.Count, "Wrong result count");
-			Assert.AreEqual(2, result[0].Matches.Count, "Wrong match count");
-
-			bool found1 = false, found2 = false;
-			foreach(WordInfo info in result[0].Matches) {
-				if(info.Text == "test2") found1 = true;
-				if(info.Text == "blah2") found2 = true;
-			}
-
-			Assert.IsTrue(found1, "First word not found");
-			Assert.IsTrue(found2, "Second word not found");
+			Assert.AreEqual(1, prov.GetMessageCount(page.FullName));
+			Message message = prov.GetMessages(page.FullName)[0];
+			Assert.AreEqual(-1, message.ID, "Wrong message ID");
+			Assert.AreEqual("RE: Test2", message.Subject, "Wrong message subject");
+			Assert.AreEqual("Blah2", message.Body, "Wromg message body");
 		}
 
 		[Test]
@@ -3306,8 +2947,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			prov.RemoveMessage(page.FullName, prov.GetMessages(page.FullName)[0].ID, true);
 
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("test blah test2 blah2"));
-			Assert.AreEqual(0, result.Count, "Wrong result count");
+			Assert.AreEqual(0, prov.GetMessageCount(page.FullName), "Wrong number of messages");
 		}
 
 		[Test]
@@ -3426,22 +3066,6 @@ namespace ScrewTurn.Wiki.Tests {
 			prov.AddMessage(page.FullName, "NUnit", "Subject", DateTime.Now, "Body", -1);
 
 			Assert.IsFalse(prov.ModifyMessage(page.FullName, prov.GetMessages(page.FullName)[0].ID, "NUnit", "Subject", DateTime.Now, null), "ModifyMessage should return false");
-		}
-
-		[Test]
-		public void ModifyMessage_PerformSearch() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			PageContent page = Pages.SetPageWithEmptyContent(null, "Page", prov, DateTime.Now);
-
-			prov.AddMessage(page.FullName, "NUnit", "Message", DateTime.Now, "Blah, Test.", -1);
-			prov.ModifyMessage(page.FullName, prov.GetMessages(page.FullName)[0].ID, "NUnit", "MessageMod", DateTime.Now, "Modified");
-
-			SearchResultCollection result = prov.PerformSearch(new SearchParameters("message modified"));
-			Assert.AreEqual(1, result.Count, "Wrong result count");
-
-			Assert.AreEqual(1, result[0].Matches.Count, "Wrong match count");
-			Assert.AreEqual("modified", result[0].Matches[0].Text, "Wrong match");
 		}
 
 		[Test]
@@ -3949,39 +3573,6 @@ namespace ScrewTurn.Wiki.Tests {
 			IPagesStorageProviderV40 prov = GetProvider();
 
 			prov.RemoveContentTemplate(n);
-		}
-
-		[Test]
-		public void RebuildIndex_ManyPages() {
-			IPagesStorageProviderV40 prov = GetProvider();
-
-			for(int i = 0; i < PagesContent.Length; i++) {
-				PageContent page = Pages.SetPageWithEmptyContent(null, "The Longest Page Name Ever Seen In The Whole Universe (Maybe) - " + i.ToString(), prov, DateTime.Now);
-				Assert.IsNotNull(page, "AddPage should return something");
-
-				PageContent pageModified = prov.SetPageContent(NameTools.GetNamespace(page.FullName), NameTools.GetLocalName(page.FullName), page.CreationDateTime, "Page " + i.ToString(), "NUnit", DateTime.Now, "Comment " + i.ToString(),
-					PagesContent[i], null, "Test Page " + i.ToString(), SaveMode.Normal);
-				Assert.IsNotNull(pageModified, "SetPageContent should return a not null value");
-			}
-
-			DoChecksFor_RebuildIndex_ManyPages(prov);
-
-			prov.RebuildIndex();
-
-			DoChecksFor_RebuildIndex_ManyPages(prov);
-		}
-
-		private void DoChecksFor_RebuildIndex_ManyPages(IPagesStorageProviderV40 prov) {
-			int docCount, wordCount, matchCount;
-			long size;
-			prov.GetIndexStats(out docCount, out wordCount, out matchCount, out size);
-			Assert.AreEqual(PagesContent.Length, docCount, "Wrong document count");
-			Assert.IsTrue(wordCount > 0, "Wrong word count");
-			Assert.IsTrue(matchCount > 0, "Wrong match count");
-			Assert.IsTrue(size > 0, "Wrong size");
-
-			SearchResultCollection results = prov.PerformSearch(new SearchParameters("lorem"));
-			Assert.IsTrue(results.Count > 0, "No results returned");
 		}
 
 		private static readonly string[] PagesContent =

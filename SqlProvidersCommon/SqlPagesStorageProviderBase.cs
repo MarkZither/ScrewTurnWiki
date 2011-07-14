@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
-using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
@@ -18,743 +17,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private const int FirstRevision = 0;
 		private const int CurrentRevision = -1;
 		private const int DraftRevision = -100;
-
-		private IIndex index;
-
-		private bool alwaysGenerateDocument = false;
-
-		/// <summary>
-		/// Initializes the Storage Provider.
-		/// </summary>
-		/// <param name="host">The Host of the Component.</param>
-		/// <param name="config">The Configuration data, if any.</param>
-		/// <param name="wiki">The wiki.</param>
-		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
-		public new void Init(IHostV40 host, string config, string wiki) {
-			base.Init(host, config, wiki);
-
-			index = new SqlIndex(new IndexConnector(GetWordFetcher, GetSize, GetCount, ClearIndex, DeleteDataForDocument, SaveDataForDocument, TryFindWord));
-		}
-
-		#region Index and Search Engine
-
-		/// <summary>
-		/// Sets test flags (to be used only for tests).
-		/// </summary>
-		/// <param name="alwaysGenerateDocument">A value indicating whether to always generate a result when resolving a document, 
-		/// even when the page does not exist.</param>
-		public void SetFlags(bool alwaysGenerateDocument) {
-			this.alwaysGenerateDocument = alwaysGenerateDocument;
-		}
-
-		/// <summary>
-		/// Gets a word fetcher.
-		/// </summary>
-		/// <returns>The word fetcher.</returns>
-		private IWordFetcher GetWordFetcher() {
-			return new SqlWordFetcher(GetCommandBuilder().GetConnection(connString), TryFindWord);
-		}
-
-		/// <summary>
-		/// Gets the search index (only used for testing purposes).
-		/// </summary>
-		public IIndex Index {
-			get { return index; }
-		}
-
-		/// <summary>
-		/// Performs a search in the index.
-		/// </summary>
-		/// <param name="parameters">The search parameters.</param>
-		/// <returns>The results.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
-		public SearchResultCollection PerformSearch(SearchParameters parameters) {
-			if(parameters == null) throw new ArgumentNullException("parameters");
-
-			return index.Search(parameters);
-		}
-
-		/// <summary>
-		/// Rebuilds the search index.
-		/// </summary>
-		public void RebuildIndex() {
-			index.Clear(null);
-
-			ICommandBuilder builder = GetCommandBuilder();
-			DbConnection connection = builder.GetConnection(connString);
-			DbTransaction transaction = BeginTransaction(connection);
-
-			List<NamespaceInfo> allNamespaces = new List<NamespaceInfo>(GetNamespaces());
-			allNamespaces.Add(null);
-
-			int indexedElements = 0;
-
-			foreach(NamespaceInfo nspace in allNamespaces) {
-				foreach(PageContent page in GetPages(transaction, nspace)) {
-					IndexPage(page, transaction);
-					indexedElements++;
-
-					foreach(Message msg in GetMessages(transaction, page.FullName)) {
-						IndexMessageTree(page, msg, transaction);
-						indexedElements++;
-					}
-
-					// Every 10 indexed documents, commit the transaction to 
-					// reduce the number of database locks
-					if(indexedElements >= 10) {
-						CommitTransaction(transaction);
-						indexedElements = 0;
-
-						connection = builder.GetConnection(connString);
-						transaction = BeginTransaction(connection);
-					}
-				}
-			}
-
-			CommitTransaction(transaction);
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether the search engine index is corrupted and needs to be rebuilt.
-		/// </summary>
-		public bool IsIndexCorrupted {
-			get { return false; }
-		}
-
-		/// <summary>
-		/// Handles the construction of an <see cref="T:IDocument" /> for the search engine.
-		/// </summary>
-		/// <param name="dumpedDocument">The input dumped document.</param>
-		/// <returns>The resulting <see cref="T:IDocument" />.</returns>
-		private IDocument BuildDocument(DumpedDocument dumpedDocument) {
-			if(alwaysGenerateDocument) {
-				return new DummyDocument() {
-					ID = dumpedDocument.ID,
-					Name = dumpedDocument.Name,
-					Title = dumpedDocument.Title,
-					TypeTag = dumpedDocument.TypeTag,
-					DateTime = dumpedDocument.DateTime
-				};
-			}
-
-			if(dumpedDocument.TypeTag == PageDocument.StandardTypeTag) {
-				string pageName = PageDocument.GetPageName(dumpedDocument.Name);
-
-				PageContent page = GetPage(pageName);
-
-				if(page == null) return null;
-				else return new PageDocument(page, dumpedDocument, TokenizeContent);
-			}
-			else if(dumpedDocument.TypeTag == MessageDocument.StandardTypeTag) {
-				string pageFullName;
-				int id;
-				MessageDocument.GetMessageDetails(dumpedDocument.Name, out pageFullName, out id);
-
-				PageContent page = GetPage(pageFullName);
-				if(page == null) return null;
-				else return new MessageDocument(page, id, dumpedDocument, TokenizeContent);
-			}
-			else return null;
-		}
-
-		// Extremely dirty way for testing the search engine in combination with alwaysGenerateDocument
-		private class DummyDocument : IDocument {
-
-			public uint ID { get; set; }
-
-			public string Name { get; set; }
-
-			public string Title { get; set; }
-
-			public string TypeTag { get; set; }
-
-			public DateTime DateTime { get; set; }
-
-			public WordInfo[] Tokenize(string content) {
-				return ScrewTurn.Wiki.SearchEngine.Tools.Tokenize(content);
-			}
-
-		}
-
-		/// <summary>
-		/// Gets some statistics about the search engine index.
-		/// </summary>
-		/// <param name="documentCount">The total number of documents.</param>
-		/// <param name="wordCount">The total number of unique words.</param>
-		/// <param name="occurrenceCount">The total number of word-document occurrences.</param>
-		/// <param name="size">The approximated size, in bytes, of the search engine index.</param>
-		public void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size) {
-			documentCount = index.TotalDocuments;
-			wordCount = index.TotalWords;
-			occurrenceCount = index.TotalOccurrences;
-			size = GetSize();
-		}
-
-		/// <summary>
-		/// Gets the approximate size, in bytes, of the search engine index.
-		/// </summary>
-		private long GetSize() {
-			// 1. Size of documents: 8 + 2*20 + 2*30 + 2*1 + 8 = 118 bytes
-			// 2. Size of words: 8 + 2*8 = 24 bytes
-			// 3. Size of mappings: 8 + 8 + 2 + 2 + 1 = 21 bytes
-			// 4. Size = Size * 2
-
-			ICommandBuilder builder = GetCommandBuilder();
-			DbConnection connection = builder.GetConnection(connString);
-
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			long size = 0;
-
-			string query = queryBuilder.SelectCountFrom("IndexDocument");
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			DbCommand command = builder.GetCommand(connection, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			int rows = ExecuteScalar<int>(command, -1, false);
-
-			if(rows == -1) return 0;
-			size += rows * 118;
-
-			query = queryBuilder.SelectCountFrom("IndexWord");
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			command = builder.GetCommand(connection, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			rows = ExecuteScalar<int>(command, -1, false);
-
-			if(rows == -1) return 0;
-			size += rows * 24;
-
-			query = queryBuilder.SelectCountFrom("IndexWordMapping");
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			command = builder.GetCommand(connection, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			rows = ExecuteScalar<int>(command, -1, false);
-
-			if(rows == -1) return 0;
-			size += rows * 21;
-
-			CloseConnection(connection);
-
-			return size * 2;
-		}
-
-		/// <summary>
-		/// Gets the number of elements in the index.
-		/// </summary>
-		/// <param name="element">The type of elements.</param>
-		/// <returns>The number of elements.</returns>
-		private int GetCount(IndexElementType element) {
-			ICommandBuilder builder = GetCommandBuilder();
-			DbConnection connection = builder.GetConnection(connString);
-
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			int count = 0;
-
-			string elemName = "";
-			if(element == IndexElementType.Documents) elemName = "IndexDocument";
-			else if(element == IndexElementType.Words) elemName = "IndexWord";
-			else if(element == IndexElementType.Occurrences) elemName = "IndexWordMapping";
-			else throw new NotSupportedException("Unsupported element type");
-
-			string query = queryBuilder.SelectCountFrom(elemName);
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-
-			DbCommand command = builder.GetCommand(connection, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			count = ExecuteScalar<int>(command, -1, true);
-
-			return count;
-		}
-
-		/// <summary>
-		/// Deletes all data associated to a document.
-		/// </summary>
-		/// <param name="document">The document.</param>
-		/// <param name="state">A state object passed from the index (can be <c>null</c> or a <see cref="T:DbTransaction" />).</param>
-		private void DeleteDataForDocument(IDocument document, object state) {
-			// 1. Delete all data related to a document
-			// 2. Delete all words that have no more mappings
-
-			ICommandBuilder builder = GetCommandBuilder();
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			string query = queryBuilder.DeleteFrom("IndexDocument");
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "DocName");
-			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.String, "DocName", document.Name));
-
-			DbCommand command = null;
-			if(state != null) command = builder.GetCommand((DbTransaction)state, query, parameters);
-			else command = builder.GetCommand(connString, query, parameters);
-
-			ExecuteNonQuery(command, state == null);
-
-			string subQuery = queryBuilder.SelectFrom("IndexWordMapping", new string[] { "Word" });
-			subQuery = queryBuilder.Where(subQuery, "Wiki", WhereOperator.Equals, "Wiki");
-			subQuery = queryBuilder.GroupBy(subQuery, new string[] { "Word" });
-			string query2 = queryBuilder.DeleteFrom("IndexWord");
-			query2 = queryBuilder.WhereNotInSubquery(query2, "IndexWord", "Id", subQuery);
-			query2 = queryBuilder.AndWhere(query2, "Wiki", WhereOperator.Equals, "Wiki");
-
-			//query = queryBuilder.AppendForBatch(query, query2);
-
-			command = null;
-			if(state != null) command = builder.GetCommand((DbTransaction)state, query2, parameters);
-			else command = builder.GetCommand(connString, query2, parameters);
-
-			// Close only if state is null
-			ExecuteNonQuery(command, state == null);
-		}
-
-		/// <summary>
-		/// Saves data for a new document.
-		/// </summary>
-		/// <param name="document">The document.</param>
-		/// <param name="content">The content words.</param>
-		/// <param name="title">The title words.</param>
-		/// <param name="keywords">The keywords.</param>
-		/// <param name="state">A state object passed from the index (can be <c>null</c> or a <see cref="T:DbTransaction" />).</param>
-		/// <returns>The number of stored occurrences.</returns>
-		private int SaveDataForDocument(IDocument document, WordInfo[] content, WordInfo[] title, WordInfo[] keywords, object state) {
-			// 1. Insert document
-			// 2. Insert all new words
-			// 3. Load all word IDs
-			// 4. Insert mappings
-
-			// On error, return without rolling back if state != null, rollback otherwise
-			// On completion, commit if state == null
-
-			ICommandBuilder builder = GetCommandBuilder();
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			DbTransaction transaction = null;
-			if(state != null) transaction = (DbTransaction)state;
-			else {
-				DbConnection connection = builder.GetConnection(connString);
-				transaction = BeginTransaction(connection);
-			}
-
-			uint freeDocumentId = GetFreeElementId(IndexElementType.Documents, transaction);
-			uint freeWordId = GetFreeElementId(IndexElementType.Words, transaction);
-
-			// Insert the document
-			string query = queryBuilder.InsertInto("IndexDocument",
-				new string[] { "Wiki", "Id", "Name", "Title", "TypeTag", "DateTime" },
-				new string[] { "Wiki", "Id", "Name", "Title", "TypeTag", "DateTime" });
-
-			List<Parameter> parameters = new List<Parameter>(6);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.Int32, "Id", (int)freeDocumentId));
-			parameters.Add(new Parameter(ParameterType.String, "Name", document.Name));
-			parameters.Add(new Parameter(ParameterType.String, "Title", document.Title));
-			parameters.Add(new Parameter(ParameterType.String, "TypeTag", document.TypeTag));
-			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", document.DateTime));
-
-			DbCommand command = builder.GetCommand(transaction, query, parameters);
-
-			if(ExecuteNonQuery(command, false) != 1) {
-				if(state == null) RollbackTransaction(transaction);
-				return -1;
-			}
-			document.ID = freeDocumentId;
-
-			List<WordInfo> allWords = new List<WordInfo>(content.Length + title.Length + keywords.Length);
-			allWords.AddRange(content);
-			allWords.AddRange(title);
-			allWords.AddRange(keywords);
-
-			List<WordInfo> existingWords = new List<WordInfo>(allWords.Count / 2);
-
-			Dictionary<string, uint> wordIds = new Dictionary<string, uint>(1024);
-
-			// Try to blindly insert all words (assumed to be lowercase and clean from diacritics)
-
-			query = queryBuilder.InsertInto("IndexWord", new string[] { "Wiki", "Id", "Text" }, new string[] { "Wiki", "Id", "Text" });
-
-			parameters = new List<Parameter>(3);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.Int32, "Id", 0));
-			parameters.Add(new Parameter(ParameterType.String, "Text", ""));
-
-			foreach(WordInfo word in allWords) {
-				parameters[1].Value = (int)freeWordId;
-				parameters[2].Value = word.Text;
-
-				command = builder.GetCommand(transaction, query, parameters);
-
-				if(ExecuteNonQuery(command, false, false) == 1) {
-					wordIds.Add(word.Text, freeWordId);
-					freeWordId++;
-				}
-				else {
-					existingWords.Add(word);
-				}
-			}
-
-			// Load IDs of all existing words
-			query = queryBuilder.SelectFrom("IndexWord", new string[] { "Id" });
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			query = queryBuilder.AndWhere(query, "Text", WhereOperator.Equals, "Text");
-
-			parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.String, "Text", ""));
-
-			foreach(WordInfo word in existingWords) {
-				parameters[1].Value = word.Text;
-
-				command = builder.GetCommand(transaction, query, parameters);
-
-				int id = ExecuteScalar<int>(command, -1, false);
-				if(id == -1) {
-					if(state == null) RollbackTransaction(transaction);
-					return -1;
-				}
-
-				if(!wordIds.ContainsKey(word.Text)) {
-					wordIds.Add(word.Text, (uint)id);
-				}
-				else if(wordIds[word.Text] != (uint)id) throw new InvalidOperationException("Word ID mismatch");
-			}
-
-			// Insert all mappings
-			query = queryBuilder.InsertInto("IndexWordMapping",
-				new string[] { "Wiki", "Word", "Document", "FirstCharIndex", "WordIndex", "Location" },
-				new string[] { "Wiki", "Word", "Document", "FirstCharIndex", "WordIndex", "Location" });
-
-			parameters = new List<Parameter>(6);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.Int32, "Word", 0));
-			parameters.Add(new Parameter(ParameterType.Int32, "Document", (int)freeDocumentId));
-			parameters.Add(new Parameter(ParameterType.Int16, "FirstCharIndex", 0));
-			parameters.Add(new Parameter(ParameterType.Int16, "WordIndex", 0));
-			parameters.Add(new Parameter(ParameterType.Byte, "Location", 0));
-
-			foreach(WordInfo word in allWords) {
-				parameters[1].Value = (int)wordIds[word.Text];
-				parameters[2].Value = (int)freeDocumentId;
-				parameters[3].Value = (short)word.FirstCharIndex;
-				parameters[4].Value = (short)word.WordIndex;
-				parameters[5].Value = word.Location.Location;
-
-				command = builder.GetCommand(transaction, query, parameters);
-
-				if(ExecuteNonQuery(command, false) != 1) {
-					if(state == null) RollbackTransaction(transaction);
-					return -1;
-				}
-			}
-
-			if(state == null) CommitTransaction(transaction);
-
-			return allWords.Count;
-		}
-
-		/// <summary>
-		/// Gets a free element ID from the database.
-		/// </summary>
-		/// <param name="element">The element type.</param>
-		/// <param name="transaction">The current database transaction.</param>
-		/// <returns>The free element ID.</returns>
-		private uint GetFreeElementId(IndexElementType element, DbTransaction transaction) {
-			if(element == IndexElementType.Occurrences) throw new ArgumentException("Element cannot be Occurrences", "element");
-
-			string table = element == IndexElementType.Documents ? "IndexDocument" : "IndexWord";
-
-			ICommandBuilder builder = GetCommandBuilder();
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			string query = queryBuilder.SelectFrom(table, new string[] { "Id" });
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			query = queryBuilder.OrderBy(query, new string[] { "Id" }, new Ordering[] { Ordering.Desc });
-
-			DbCommand command = builder.GetCommand(transaction, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-
-			int id = ExecuteScalar<int>(command, -1, false);
-
-			if(id == -1) return 0;
-			else return (uint)id + 1;
-		}
-
-		/// <summary>
-		/// Tries to load all data related to a word from the database.
-		/// </summary>
-		/// <param name="text">The word text.</param>
-		/// <param name="word">The returned word.</param>
-		/// <param name="connection">An open database connection.</param>
-		/// <returns><c>true</c> if the word is found, <c>false</c> otherwise.</returns>
-		private bool TryFindWord(string text, out Word word, DbConnection connection) {
-			// 1. Find word - if not found, return
-			// 2. Read all raw word mappings
-			// 3. Read all documents (unique)
-			// 4. Build result data structure
-
-			ICommandBuilder builder = GetCommandBuilder();
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			string query = queryBuilder.SelectFrom("IndexWord", new string[] { "Id" });
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			query = queryBuilder.AndWhere(query, "Text", WhereOperator.Equals, "Text");
-
-			List<Parameter> parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.String, "Text", text));
-
-			DbCommand command = builder.GetCommand(connection, query, parameters);
-
-			int wordId = ExecuteScalar<int>(command, -1, false);
-
-			if(wordId == -1) {
-				word = null;
-				return false;
-			}
-
-			// Read all raw mappings
-			query = queryBuilder.SelectFrom("IndexWordMapping");
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			query = queryBuilder.AndWhere(query, "Word", WhereOperator.Equals, "WordId");
-
-			parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.Int32, "WordId", wordId));
-
-			command = builder.GetCommand(connection, query, parameters);
-
-			DbDataReader reader = ExecuteReader(command, false);
-
-			List<DumpedWordMapping> mappings = new List<DumpedWordMapping>(2048);
-			while(reader != null && reader.Read()) {
-				mappings.Add(new DumpedWordMapping((uint)wordId,
-					(uint)(int)reader["Document"],
-					(ushort)(short)reader["FirstCharIndex"], (ushort)(short)reader["WordIndex"],
-					(byte)reader["Location"]));
-			}
-			CloseReader(reader);
-
-			if(mappings.Count == 0) {
-				word = null;
-				return false;
-			}
-
-			// Find all documents
-			query = queryBuilder.SelectFrom("IndexDocument");
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			query = queryBuilder.AndWhere(query, "Id", WhereOperator.Equals, "DocId");
-
-			parameters = new List<Parameter>(2);
-			parameters.Add(new Parameter(ParameterType.String, "Wiki", wiki));
-			parameters.Add(new Parameter(ParameterType.Int32, "DocId", 0));
-
-			Dictionary<uint, IDocument> documents = new Dictionary<uint, IDocument>(64);
-			foreach(DumpedWordMapping map in mappings) {
-				uint docId = map.DocumentID;
-				if(documents.ContainsKey(docId)) continue;
-
-				parameters[1].Value = (int)docId;
-				command = builder.GetCommand(connection, query, parameters);
-
-				reader = ExecuteReader(command, false);
-
-				if(reader != null && reader.Read()) {
-					DumpedDocument dumpedDoc = new DumpedDocument(docId,
-						reader["Name"] as string, reader["Title"] as string,
-						reader["TypeTag"] as string,
-						(DateTime)reader["DateTime"]);
-
-					IDocument document = BuildDocument(dumpedDoc);
-
-					if(document != null) documents.Add(docId, document);
-				}
-				CloseReader(reader);
-			}
-
-			OccurrenceDictionary occurrences = new OccurrenceDictionary(mappings.Count);
-			foreach(DumpedWordMapping map in mappings) {
-				if(!occurrences.ContainsKey(documents[map.DocumentID])) {
-					occurrences.Add(documents[map.DocumentID], new SortedBasicWordInfoSet(2));
-				}
-
-				occurrences[documents[map.DocumentID]].Add(new BasicWordInfo(
-					map.FirstCharIndex, map.WordIndex, WordLocation.GetInstance(map.Location)));
-			}
-
-			word = new Word((uint)wordId, text, occurrences);
-			return true;
-		}
-
-		/// <summary>
-		/// Clears the index.
-		/// </summary>
-		/// <param name="state">A state object passed from the index.</param>
-		private void ClearIndex(object state) {
-			// state can be null, depending on when the method is called
-
-			ICommandBuilder builder = GetCommandBuilder();
-			QueryBuilder queryBuilder = new QueryBuilder(builder);
-
-			string query = queryBuilder.DeleteFrom("IndexWordMapping");
-			query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-			DbCommand command = null;
-			if(state == null) command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			else command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			ExecuteNonQuery(command, state == null);
-
-			query = queryBuilder.DeleteFrom("IndexWord");
-			command = null;
-			if(state == null) command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			else command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			ExecuteNonQuery(command, state == null);
-
-			query = queryBuilder.DeleteFrom("IndexDocument");
-			command = null;
-			if(state == null) command = builder.GetCommand(connString, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			else command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>() { new Parameter(ParameterType.String, "Wiki", wiki) });
-			ExecuteNonQuery(command, state == null);
-		}
-
-		/// <summary>
-		/// Tokenizes page content.
-		/// </summary>
-		/// <param name="content">The content to tokenize.</param>
-		/// <returns>The tokenized words.</returns>
-		private static WordInfo[] TokenizeContent(string content) {
-			WordInfo[] words = SearchEngine.Tools.Tokenize(content);
-			return words;
-		}
-
-		/// <summary>
-		/// Indexes a page.
-		/// </summary>
-		/// <param name="page">The page content.</param>
-		/// <param name="transaction">The current transaction.</param>
-		/// <returns>The number of indexed words, including duplicates.</returns>
-		private int IndexPage(PageContent page, DbTransaction transaction) {
-			try {
-				if(string.IsNullOrEmpty(page.Title) || string.IsNullOrEmpty(page.Content)) return 0;
-
-				string documentName = PageDocument.GetDocumentName(page);
-
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, page.FullName, page.Title),
-					PageDocument.StandardTypeTag, page.LastModified);
-
-				// Store the document
-				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
-				int count = index.StoreDocument(new PageDocument(page, ddoc, TokenizeContent),
-					page.Keywords, host.PrepareContentForIndexing(wiki, page.FullName, page.Content), transaction);
-
-				if(count == 0 && page.Content.Length > 0) {
-					host.LogEntry("Indexed 0 words for page " + page.FullName + ": possible index corruption. Please report this error to the developers",
-						LogEntryType.Warning, null, this, wiki);
-				}
-
-				return count;
-			}
-			catch(Exception ex) {
-				host.LogEntry("Page indexing error for " + page.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this, wiki);
-				return 0;
-			}
-		}
-
-		/// <summary>
-		/// Removes a page from the search engine index.
-		/// </summary>
-		/// <param name="page">The content of the page to remove.</param>
-		/// <param name="transaction">The current transaction.</param>
-		private void UnindexPage(PageContent page, DbTransaction transaction) {
-			string documentName = PageDocument.GetDocumentName(page);
-
-			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, page.FullName, page.Title),
-				PageDocument.StandardTypeTag, page.LastModified);
-			index.RemoveDocument(new PageDocument(page, ddoc, TokenizeContent), transaction);
-		}
-
-		/// <summary>
-		/// Indexes a message tree.
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <param name="root">The root message.</param>
-		/// <param name="transaction">The current transaction.</param>
-		private void IndexMessageTree(PageContent page, Message root, DbTransaction transaction) {
-			IndexMessage(page, root.ID, root.Subject, root.DateTime, root.Body, transaction);
-			foreach(Message reply in root.Replies) {
-				IndexMessageTree(page, reply, transaction);
-			}
-		}
-
-		/// <summary>
-		/// Indexes a message.
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <param name="id">The message ID.</param>
-		/// <param name="subject">The subject.</param>
-		/// <param name="dateTime">The date/time.</param>
-		/// <param name="body">The body.</param>
-		/// <param name="transaction">The current transaction.</param>
-		/// <returns>The number of indexed words, including duplicates.</returns>
-		private int IndexMessage(PageContent page, int id, string subject, DateTime dateTime, string body, DbTransaction transaction) {
-			try {
-				if(string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(body)) return 0;
-
-				// Trim "RE:" to avoid polluting the search engine index
-				if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
-
-				string documentName = MessageDocument.GetDocumentName(page.FullName, id);
-
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, null, subject),
-					MessageDocument.StandardTypeTag, dateTime);
-
-				// Store the document
-				// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
-				int count = index.StoreDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null,
-					host.PrepareContentForIndexing(wiki, null, body), transaction);
-
-				if(count == 0 && body.Length > 0) {
-					host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
-						LogEntryType.Warning, null, this, wiki);
-				}
-
-				return count;
-			}
-			catch(Exception ex) {
-				host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this, wiki);
-				return 0;
-			}
-		}
-
-		/// <summary>
-		/// Removes a message tree from the search engine index.
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <param name="root">The tree root.</param>
-		/// <param name="transaction">The current transaction.</param>
-		private void UnindexMessageTree(PageContent page, Message root, DbTransaction transaction) {
-			UnindexMessage(page, root.ID, root.Subject, root.DateTime, root.Body, transaction);
-			foreach(Message reply in root.Replies) {
-				UnindexMessageTree(page, reply, transaction);
-			}
-		}
-
-		/// <summary>
-		/// Removes a message from the search engine index.
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <param name="id">The message ID.</param>
-		/// <param name="subject">The subject.</param>
-		/// <param name="dateTime">The date/time.</param>
-		/// <param name="body">The body.</param>
-		/// <param name="transaction">The current transaction.</param>
-		/// <returns>The number of indexed words, including duplicates.</returns>
-		private void UnindexMessage(PageContent page, int id, string subject, DateTime dateTime, string body, DbTransaction transaction) {
-			// Trim "RE:" to avoid polluting the search engine index
-			if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
-
-			string documentName = MessageDocument.GetDocumentName(page.FullName, id);
-
-			DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(wiki, null, subject),
-				MessageDocument.StandardTypeTag, DateTime.Now);
-			index.RemoveDocument(new MessageDocument(page, id, ddoc, TokenizeContent), transaction);
-		}
-
-		#endregion
 
 		#region IPagesStorageProvider Members
 
@@ -962,16 +224,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				return null;
 			}
 
-			foreach(PageContent page in GetPages(transaction, nspace)) {
-				UnindexPage(page, transaction);
-				Message[] messages = GetMessages(transaction, page.FullName);
-				if(messages != null) {
-					foreach(Message msg in messages) {
-						UnindexMessageTree(page, msg, transaction);
-					}
-				}
-			}
-
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Namespace", new string[] { "Name" }, new string[] { "NewName" });
@@ -1015,16 +267,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				rows = ExecuteNonQuery(command, false);
 
 				NamespaceInfo result = GetNamespace(transaction, newName);
-
-				foreach(PageContent page in GetPages(transaction, result)) {
-					IndexPage(page, transaction);
-					Message[] messages = GetMessages(transaction, page.FullName);
-					if(messages != null) {
-						foreach(Message msg in messages) {
-							IndexMessageTree(page, msg, transaction);
-						}
-					}
-				}
 
 				CommitTransaction(transaction);
 
@@ -1096,13 +338,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
 			DbTransaction transaction = BeginTransaction(connection);
-
-			foreach(PageContent page in GetPages(transaction, nspace)) {
-				UnindexPage(page, transaction);
-				foreach(Message msg in GetMessages(transaction, page.FullName)) {
-					UnindexMessageTree(page, msg, transaction);
-				}
-			}
 
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
@@ -1178,13 +413,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			}
 
 			PageContent currentContent = GetPage(transaction, pageFullName, CurrentRevision);
-			if(currentContent != null) {
-				UnindexPage(currentContent, transaction);
-				foreach(Message msg in GetMessages(transaction, pageFullName)) {
-					UnindexMessageTree(currentContent, msg, transaction);
-				}
-			}
-
+			
 			CategoryInfo[] currCategories = GetCategories(transaction, sourceName == "" ? null : GetNamespace(transaction, sourceName));
 
 			// Remove bindings
@@ -1276,11 +505,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						RollbackTransaction(transaction);
 						return null;
 					}
-				}
-
-				IndexPage(newContent, transaction);
-				foreach(Message msg in GetMessages(transaction, newContent.FullName)) {
-					IndexMessageTree(newContent, msg, transaction);
 				}
 
 				CommitTransaction(transaction);
@@ -2623,11 +1847,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				return null;
 			}
 
-			UnindexPage(currentPage, transaction);
-			foreach(Message msg in GetMessages(transaction, fullName)) {
-				UnindexMessageTree(currentPage, msg, transaction);
-			}
-
 			string nspace, name;
 			NameTools.ExpandFullName(fullName, out nspace, out name);
 			if(nspace == null) nspace = "";
@@ -2696,11 +1915,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				rows = ExecuteNonQuery(command, false);
 
-				IndexPage(result, transaction);
-				foreach(Message msg in GetMessages(transaction, result.FullName)) {
-					IndexMessageTree(result, msg, transaction);
-				}
-
 				CommitTransaction(transaction);
 
 				return result;
@@ -2752,11 +1966,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			switch(saveMode) {
 				case SaveMode.Backup:
 					// Do backup (if there is something to backup), delete current version (if any), store new version
-					if(currentContent != null) UnindexPage(currentContent, transaction);
 					Backup(transaction, currentContent);
 					DeleteContent(transaction, pageFullName, CurrentRevision);
 					bool done1 = SetContent(transaction, pageContent, CurrentRevision);
-					if(done1) IndexPage(pageContent, transaction);
 
 					if(done1) CommitTransaction(transaction);
 					else RollbackTransaction(transaction);
@@ -2764,10 +1976,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					return pageContent;
 				case SaveMode.Normal:
 					// Delete current version (if any), store new version
-					if(currentContent != null) UnindexPage(currentContent, transaction);
 					DeleteContent(transaction, pageFullName, CurrentRevision);
 					bool done2 = SetContent(transaction, pageContent, CurrentRevision);
-					if(done2) IndexPage(pageContent, transaction);
 
 					if(done2) CommitTransaction(transaction);
 					else RollbackTransaction(transaction);
@@ -2834,8 +2044,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			PageContent currentContent = GetPage(transaction, pageFullName, CurrentRevision);
 
-			UnindexPage(currentContent, transaction);
-
 			bool done = Backup(transaction, currentContent);
 			if(!done) {
 				RollbackTransaction(transaction);
@@ -2853,8 +2061,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				RollbackTransaction(transaction);
 				return false;
 			}
-
-			IndexPage(targetContent, transaction);
 
 			CommitTransaction(transaction);
 
@@ -2973,13 +2179,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			}
 
 			PageContent currentContent = GetPage(transaction, pageFullName, CurrentRevision);
-			if(currentContent != null) {
-				UnindexPage(currentContent, transaction);
-				foreach(Message msg in GetMessages(transaction, pageFullName)) {
-					UnindexMessageTree(currentContent, msg, transaction);
-				}
-			}
-
+			
 			RebindPage(transaction, pageFullName, new string[0]);
 
 			string nspace, name;
@@ -3384,10 +2584,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				return false;
 			}
 
-			foreach(Message msg in GetMessages(transaction, pageFullName)) {
-				UnindexMessageTree(page, msg, transaction);
-			}
-
 			string nspace, name;
 			NameTools.ExpandFullName(pageFullName, out nspace, out name);
 			if(nspace == null) nspace = "";
@@ -3443,9 +2639,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			}
 
 			if(rowsDone == allMessages.Count) {
-				foreach(Message msg in messages) {
-					IndexMessageTree(page, msg, transaction);
-				}
 				CommitTransaction(transaction);
 				return true;
 			}
@@ -3564,8 +2757,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			int rows = ExecuteNonQuery(command, false);
 
 			if(rows == 1) {
-				IndexMessage(GetPage(transaction, pageFullName, CurrentRevision), freeId, subject, dateTime, body, transaction);
-
 				CommitTransaction(transaction);
 				return true;
 			}
@@ -3638,8 +2829,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(message == null) return false;
 			Message parent = FindAnchestor(messages, id);
 			int parentId = parent != null ? parent.ID : -1;
-
-			UnindexMessage(GetPage(transaction, pageFullName, CurrentRevision), message.ID, message.Subject, message.DateTime, message.Body, transaction);
 
 			if(removeReplies) {
 				// Recursively remove all replies BEFORE removing parent (depth-first)
@@ -3768,8 +2957,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			PageContent page = GetPage(transaction, pageFullName, CurrentRevision);
 
-			UnindexMessage(page, oldMessage.ID, oldMessage.Subject, oldMessage.DateTime, oldMessage.Body, transaction);
-
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.Update("Message", new string[] { "Username", "Subject", "DateTime", "Body" }, new string[] { "Username", "Subject", "DateTime", "Body" });
@@ -3793,7 +2980,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			int rows = ExecuteNonQuery(command, false);
 
 			if(rows == 1) {
-				IndexMessage(page, id, subject, dateTime, body, transaction);
 				CommitTransaction(transaction);
 				return true;
 			}

@@ -6,7 +6,6 @@ using System.IO;
 using System.Text;
 using ScrewTurn.Wiki;
 using ScrewTurn.Wiki.PluginFramework;
-using ScrewTurn.Wiki.SearchEngine;
 using Ionic.Zip;
 
 namespace ScrewTurn.Wiki.Plugins.FSProviders {

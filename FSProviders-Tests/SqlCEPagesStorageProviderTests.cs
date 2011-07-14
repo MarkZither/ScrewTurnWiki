@@ -7,7 +7,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using ScrewTurn.Wiki.Tests;
 using ScrewTurn.Wiki.PluginFramework;
-using ScrewTurn.Wiki.SearchEngine;
 using System.Data.SqlServerCe;
 using System.Data.Common;
 

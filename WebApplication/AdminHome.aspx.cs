@@ -100,14 +100,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptIndex_ItemCommand(object sender, CommandEventArgs e) {
-			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
+			//Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
 
-			IPagesStorageProviderV40 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
-			provider.RebuildIndex();
+			//IPagesStorageProviderV40 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
+			//provider.RebuildIndex();
 
-			Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername, currentWiki);
+			//Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername, currentWiki);
 
-			rptIndex.DataBind();
+			//rptIndex.DataBind();
 		}
 
 		protected void cvGroups_ServerValidate(object sender, ServerValidateEventArgs e) {
@@ -228,7 +228,8 @@ namespace ScrewTurn.Wiki {
 			this.provider = provider.Information.Name;
 			providerType = provider.GetType().FullName;
 
-			this.isOk = !provider.IsIndexCorrupted;
+			//this.isOk = !provider.IsIndexCorrupted;
+			this.isOk = true;
 		}
 
 		/// <summary>

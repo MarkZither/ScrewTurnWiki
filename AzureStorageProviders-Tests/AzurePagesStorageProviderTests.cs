@@ -7,7 +7,6 @@ using ScrewTurn.Wiki.PluginFramework;
 using NUnit.Framework;
 using ScrewTurn.Wiki.Tests;
 using System.Configuration;
-using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 

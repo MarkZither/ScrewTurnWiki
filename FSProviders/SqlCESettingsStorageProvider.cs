@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
 		private const int CurrentSchemaVersion = 4000;
 
-		private string connString = null;
+		private string _connString = null;
 
 		private string BuildDbConnectionString(IHostV40 host) {
 			return "Data Source = '" + host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory) + "ScrewTurnWiki.sdf';";
@@ -39,9 +39,9 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
+			_connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
 
-			base.SetUp(host, connString);
+			base.SetUp(host, _connString);
 		}
 
 		/// <summary>
@@ -54,9 +54,9 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
+			_connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
 
-			base.Init(host, connString, wiki);
+			base.Init(host, _connString, wiki);
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Settings'";
 
 			bool exists = false;
@@ -131,7 +131,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Settings'";
 
 			bool exists = false;
@@ -157,7 +157,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// Creates the standard database schema.
 		/// </summary>
 		private void CreateStandardSchema() {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 			try {
 				cmd.CommandText = "create table [Setting] ([Wiki] nvarchar(100) not null, [Name] nvarchar(100) not null, [Value] nvarchar(4000) not null, constraint [PK_Setting] primary key ([Wiki], [Name]))";
 				cmd.ExecuteNonQuery();

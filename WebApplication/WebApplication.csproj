@@ -640,13 +640,6 @@
     <Compile Include="RSS.aspx.designer.cs">
       <DependentUpon>RSS.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-    </Compile>
     <Compile Include="SessionRefresh.aspx.cs">
       <DependentUpon>SessionRefresh.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2754,10 +2747,6 @@
       <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>
       <Name>PluginFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
-      <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
-      <Name>SearchEngine</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SqlServerProviders\SqlServerProviders.csproj">
       <Project>{ECB488D9-C8E9-41E0-BE27-27F41F76F8A0}</Project>
       <Name>SqlServerProviders</Name>
@@ -2787,7 +2776,6 @@
     <Content Include="Images\Filter.png" />
     <Content Include="PageDiscussion.ascx" />
     <Content Include="PermissionsManager.ascx" />
-    <Content Include="Search.aspx" />
     <Content Include="ProviderSelector.ascx" />
     <Content Include="Themes\Default\Images\EmailNotifOff.png" />
     <Content Include="Themes\Default\Images\EmailNotifOn.png" />

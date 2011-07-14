@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
 		private const int CurrentSchemaVersion = 4000;
 
-		private string connString = null;
+		private string _connString = null;
 
 		private string BuildDbConnectionString(IHostV40 host) {
 			return "Data Source = '" + host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory) + "ScrewTurnWiki.sdf';";
@@ -39,9 +39,9 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
+			_connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
 
-			base.SetUp(host, connString);
+			base.SetUp(host, _connString);
 		}
 
 		/// <summary>
@@ -54,9 +54,9 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
 
-			connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
+			_connString = config.Length == 0 ? BuildDbConnectionString(host) : config;
 
-			base.Init(host, connString, wiki);
+			base.Init(host, _connString, wiki);
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
 		private bool SchemaExists() {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Pages'";
 
 			bool exists = false;
@@ -131,7 +131,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// </summary>
 		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
 		private bool SchemaNeedsUpdate() {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Pages'";
 
 			bool exists = false;
@@ -157,7 +157,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		/// Creates the standard database schema.
 		/// </summary>
 		private void CreateStandardSchema() {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 
 			try {
 				cmd.CommandText = "create table [Namespace] ([Wiki] nvarchar(100) not null, [Name] nvarchar(100) not null, [DefaultPage] nvarchar(200), constraint [PK_Namespace] primary key ([Wiki], [Name]))";
@@ -187,15 +187,6 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 				cmd.CommandText = "create table [ContentTemplate] ([Wiki] nvarchar(100) not null, [Name] nvarchar(200) not null, [Content] ntext not null, constraint [PK_ContentTemplate] primary key ([Wiki], [Name]))";
 				cmd.ExecuteNonQuery();
 
-				cmd.CommandText = "create table [IndexDocument] ([Wiki] nvarchar(100) not null, [Id] int not null, [Name] nvarchar(200) not null, [Title] nvarchar(200) not null, [TypeTag] nvarchar(10) not null, [DateTime] datetime not null, constraint [UQ_IndexDocument] unique ([Wiki], [Name]), constraint [PK_IndexDocument] primary key ([Wiki], [Id]))";
-				cmd.ExecuteNonQuery();
-
-				cmd.CommandText = "create table [IndexWord] ([Wiki] nvarchar(100) not null, [Id] int not null, [Text] nvarchar(200) not null, constraint [UQ_IndexWord] unique ([Wiki], [Text]), constraint [PK_IndexWord] primary key ([Wiki], [Id]))";
-				cmd.ExecuteNonQuery();
-
-				cmd.CommandText = "create table [IndexWordMapping] ([Wiki] nvarchar(100) not null, [Word] int not null, [Document] int not null, [FirstCharIndex] smallint not null, [WordIndex] smallint not null, [Location] tinyint not null, constraint [FK_IndexWordMapping_IndexWord] foreign key ([Wiki], [Word]) references [IndexWord]([Wiki], [Id]) on delete cascade on update cascade, constraint [FK_IndexWordMapping_IndexDocument] foreign key ([Wiki], [Document]) references [IndexDocument]([Wiki], [Id]) on delete cascade on update cascade, constraint [PK_IndexWordMapping] primary key ([Wiki], [Word], [Document], [FirstCharIndex], [WordIndex], [Location]))";
-				cmd.ExecuteNonQuery();
-
 				cmd.CommandText = "insert into [Version] ([Component], [Version]) values ('Pages', 4000)";
 				cmd.ExecuteNonQuery();
 			}
@@ -209,7 +200,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		}
 
 		private void InitNamespaceTable(string wikiName) {
-			DbCommand cmd = GetCommand(connString);
+			DbCommand cmd = GetCommand(_connString);
 			try {
 				cmd.CommandText = "insert into [Namespace] ([Wiki], [Name], [DefaultPage]) values (@wiki, '', null)";
 				cmd.Parameters.Add(new SqlCeParameter("Wiki", wikiName));

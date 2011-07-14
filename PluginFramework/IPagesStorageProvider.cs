@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki.PluginFramework {
 
@@ -157,37 +156,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="categories"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		bool RebindPage(string pageFullName, string[] categories);
-
-		#endregion
-
-		#region Index
-
-		/// <summary>
-		/// Performs a search in the index.
-		/// </summary>
-		/// <param name="parameters">The search parameters.</param>
-		/// <returns>The results.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
-		SearchResultCollection PerformSearch(SearchParameters parameters);
-
-		/// <summary>
-		/// Rebuilds the search index.
-		/// </summary>
-		void RebuildIndex();
-
-		/// <summary>
-		/// Gets some statistics about the search engine index.
-		/// </summary>
-		/// <param name="documentCount">The total number of documents.</param>
-		/// <param name="wordCount">The total number of unique words.</param>
-		/// <param name="occurrenceCount">The total number of word-document occurrences.</param>
-		/// <param name="size">The approximated size, in bytes, of the search engine index.</param>
-		void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size);
-
-		/// <summary>
-		/// Gets a value indicating whether the search engine index is corrupted and needs to be rebuilt.
-		/// </summary>
-		bool IsIndexCorrupted { get; }
 
 		#endregion
 

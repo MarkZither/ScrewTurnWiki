@@ -75,12 +75,6 @@
     <Compile Include="..\SqlProvidersCommon\ICommandBuilder.cs">
       <Link>SqlProvidersCommon\ICommandBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\SqlProvidersCommon\IIndexConnector.cs">
-      <Link>SqlProvidersCommon\IIndexConnector.cs</Link>
-    </Compile>
-    <Compile Include="..\SqlProvidersCommon\IndexConnector.cs">
-      <Link>SqlProvidersCommon\IndexConnector.cs</Link>
-    </Compile>
     <Compile Include="..\SqlProvidersCommon\Parameter.cs">
       <Link>SqlProvidersCommon\Parameter.cs</Link>
     </Compile>
@@ -98,9 +92,6 @@
     </Compile>
     <Compile Include="..\SqlProvidersCommon\SqlGlobalSettingsStorageProviderBase.cs">
       <Link>SqlProvidersCommon\SqlGlobalSettingsStorageProviderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\SqlProvidersCommon\SqlIndex.cs">
-      <Link>SqlProvidersCommon\SqlIndex.cs</Link>
     </Compile>
     <Compile Include="..\SqlProvidersCommon\SqlPagesStorageProviderBase.cs">
       <Link>SqlProvidersCommon\SqlPagesStorageProviderBase.cs</Link>
@@ -138,10 +129,6 @@
     <ProjectReference Include="..\PluginFramework\PluginFramework.csproj">
       <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>
       <Name>PluginFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
-      <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
-      <Name>SearchEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

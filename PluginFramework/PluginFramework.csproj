@@ -100,22 +100,18 @@
     <Compile Include="IThemesStorageProvider.cs" />
     <Compile Include="IUsersStorageProvider.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="MessageDocument.cs" />
     <Compile Include="NamespaceActivityEventArgs.cs" />
     <Compile Include="NameTools.cs" />
     <Compile Include="NamespaceInfo.cs" />
     <Compile Include="NavigationPath.cs" />
     <Compile Include="PageActivityEventArgs.cs" />
     <Compile Include="PageContent.cs" />
-    <Compile Include="PageDocument.cs" />
     <Compile Include="RecentChange.cs" />
     <Compile Include="Snippet.cs" />
     <Compile Include="StandardAclManager.cs" />
-    <Compile Include="StandardIndex.cs" />
     <Compile Include="StDirectoryInfo.cs" />
     <Compile Include="StFileInfo.cs" />
     <Compile Include="WikiListHandler.cs" />
-    <Compile Include="Tokenizer.cs" />
     <Compile Include="UserAccountActivityEventArgs.cs" />
     <Compile Include="UserGroup.cs" />
     <Compile Include="UserGroupActivityEventArgs.cs" />
@@ -127,10 +123,6 @@
     <ProjectReference Include="..\AclEngine\AclEngine.csproj">
       <Project>{44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81}</Project>
       <Name>AclEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
-      <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
-      <Name>SearchEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

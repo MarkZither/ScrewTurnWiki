@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Text;
-using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki {
 
@@ -440,55 +439,6 @@ namespace ScrewTurn.Wiki {
 			if(raw == null) throw new ArgumentNullException("raw");
 
 			return Formatter.Format(wiki, raw, false, FormattingContext.Unknown, null);
-		}
-
-		/// <summary>
-		/// Prepares content for indexing in the search engine, performing bare-bones formatting and removing all WikiMarkup and XML-like characters.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="pageFullName">The full name of the page being indexed, if any, <c>null</c> otherwise.</param>
-		/// <param name="content">The string to prepare.</param>
-		/// <returns>The sanitized string.</returns>
-		/// <exception cref="ArgumentNullException">If <b>content</b> is <c>null</c>.</exception>
-		public string PrepareContentForIndexing(string wiki, string pageFullName, string content) {
-			if(content == null) throw new ArgumentNullException("content");
-
-			// TODO: Improve this method - HTML formatting should not be needed
-			return Tools.RemoveHtmlMarkup(FormattingPipeline.FormatWithPhase1And2(wiki, content, true,
-				pageFullName != null ? FormattingContext.PageContent : FormattingContext.Unknown, pageFullName));
-		}
-
-		/// <summary>
-		/// Prepares a title for indexing in the search engine, removing all WikiMarkup and XML-like characters.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="pageFullName">The full name of the page being indexed, if any, <c>null</c> otherwise.</param>
-		/// <param name="title">The title to prepare.</param>
-		/// <returns>The sanitized string.</returns>
-		/// <exception cref="ArgumentNullException">If <b>title</b> is <c>null</c>.</exception>
-		public string PrepareTitleForIndexing(string wiki, string pageFullName, string title) {
-			if(title == null) throw new ArgumentNullException("title");
-
-			return FormattingPipeline.PrepareTitle(wiki, title, true,
-				pageFullName != null ? FormattingContext.PageContent : FormattingContext.Unknown, pageFullName);
-		}
-
-		/// <summary>
-		/// Performs a search.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="query">The search query.</param>
-		/// <param name="fullText">A value indicating whether to perform a full-text search.</param>
-		/// <param name="filesAndAttachments">A value indicating whether to search the names of files and attachments.</param>
-		/// <param name="options">The search options.</param>
-		/// <returns>The search results.</returns>
-		/// <exception cref="ArgumentNullException">If <b>query</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>query</b> is empty.</exception>
-		public SearchResultCollection PerformSearch(string wiki, string query, bool fullText, bool filesAndAttachments, SearchOptions options) {
-			if(query == null) throw new ArgumentNullException("query");
-			if(query.Length == 0) throw new ArgumentException("Query cannot be empty", "query");
-
-			return SearchTools.Search(wiki, query, fullText, filesAndAttachments, options);
 		}
 
 		/// <summary>

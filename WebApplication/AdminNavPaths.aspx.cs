@@ -152,27 +152,27 @@ namespace ScrewTurn.Wiki {
 			rptNavPaths.DataBind();
 		}
 
-		protected void btnSearch_Click(object sender, EventArgs e) {
-			txtPageName.Text = txtPageName.Text.Trim();
+		//protected void btnSearch_Click(object sender, EventArgs e) {
+		//    txtPageName.Text = txtPageName.Text.Trim();
 
-			if(txtPageName.Text.Length == 0) {
-				lstAvailablePage.Items.Clear();
-				btnAdd.Enabled = false;
-				return;
-			}
+		//    if(txtPageName.Text.Length == 0) {
+		//        lstAvailablePage.Items.Clear();
+		//        btnAdd.Enabled = false;
+		//        return;
+		//    }
 
-			string currentWiki = DetectWiki();
+		//    string currentWiki = DetectWiki();
 
-			PageContent[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, lstNamespace.SelectedValue, currentWiki);
+		//    PageContent[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, lstNamespace.SelectedValue, currentWiki);
 
-			lstAvailablePage.Items.Clear();
+		//    lstAvailablePage.Items.Clear();
 
-			foreach(PageContent page in pages) {
-				lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.Other, page.FullName), page.FullName));
-			}
+		//    foreach(PageContent page in pages) {
+		//        lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.Other, page.FullName), page.FullName));
+		//    }
 
-			btnAdd.Enabled = pages.Length > 0;
-		}
+		//    btnAdd.Enabled = pages.Length > 0;
+		//}
 
 		protected void btnAdd_Click(object sender, EventArgs e) {
 			string currentWiki = DetectWiki();

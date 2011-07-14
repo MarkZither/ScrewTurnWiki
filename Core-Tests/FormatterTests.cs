@@ -434,22 +434,6 @@ second line";
 			throw new NotImplementedException();
 		}
 
-		public SearchEngine.SearchResultCollection PerformSearch(SearchEngine.SearchParameters parameters) {
-			throw new NotImplementedException();
-		}
-
-		public void RebuildIndex() {
-			throw new NotImplementedException();
-		}
-
-		public void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size) {
-			throw new NotImplementedException();
-		}
-
-		public bool IsIndexCorrupted {
-			get { throw new NotImplementedException(); }
-		}
-
 		public PageContent GetPage(string fullName) {
 			if(fullName == "page1") {
 				return new PageContent(fullName, this, DateTime.Now, "Page 1", "", DateTime.Now, "", "", new string[] { }, "");

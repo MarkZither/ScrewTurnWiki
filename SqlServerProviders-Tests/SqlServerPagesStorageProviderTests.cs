@@ -8,7 +8,6 @@ using Rhino.Mocks;
 using ScrewTurn.Wiki.Tests;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.Plugins.SqlCommon;
-using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
