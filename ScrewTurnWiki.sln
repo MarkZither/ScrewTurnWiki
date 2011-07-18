@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSProviders", "FSProviders\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSProviders-Tests", "FSProviders-Tests\FSProviders-Tests.csproj", "{9A64022E-93F5-4609-A17C-ECDD553E458E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchEngine", "SearchEngine\SearchEngine.csproj", "{F8697EB9-086F-41DA-BC50-5149C9B453EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -169,6 +171,10 @@ Global
 		{9A64022E-93F5-4609-A17C-ECDD553E458E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A64022E-93F5-4609-A17C-ECDD553E458E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A64022E-93F5-4609-A17C-ECDD553E458E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8697EB9-086F-41DA-BC50-5149C9B453EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8697EB9-086F-41DA-BC50-5149C9B453EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8697EB9-086F-41DA-BC50-5149C9B453EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8697EB9-086F-41DA-BC50-5149C9B453EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

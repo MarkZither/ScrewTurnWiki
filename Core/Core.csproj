@@ -154,6 +154,10 @@
       <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>
       <Name>PluginFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
+      <Project>{F8697EB9-086F-41DA-BC50-5149C9B453EC}</Project>
+      <Name>SearchEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

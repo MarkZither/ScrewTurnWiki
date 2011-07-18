@@ -157,20 +157,18 @@ namespace ScrewTurn.Wiki {
 		/// <param name="fileName">The name of the attachment to be indexed.</param>
 		/// <param name="page">The page the file is attached to.</param>
 		/// <returns><c>true</c> if the message has been indexed succesfully, <c>false</c> otherwise.</returns>
-		public static bool IndexPageAttachment(string fileName, PageContent page) {
+		public static bool IndexPageAttachment(string fileName, Stream streamContent, PageContent page) {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
 
 			Analyzer analyzer = new SimpleAnalyzer();
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
-
-			string content = "";
 
 			Document doc = new Document();
 			doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.NO));
 			doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
 			doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
 			doc.Add(new Field(SearchField.Title.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
-			doc.Add(new Field(SearchField.Content.AsString(), content, Field.Store.YES, Field.Index.ANALYZED));
+			doc.Add(new Field(SearchField.Content.AsString(), ScrewTurn.Wiki.SearchEngine.Parser.Parse(streamContent), Field.Store.YES, Field.Index.ANALYZED));
 			writer.AddDocument(doc);
 			writer.Commit();
 			writer.Close();
