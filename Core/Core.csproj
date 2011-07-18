@@ -95,7 +95,9 @@
     <Compile Include="Content.cs" />
     <Compile Include="Defaults.cs" />
     <Compile Include="DiffTools.cs" />
-    <Compile Include="DocumentPage.cs" />
+    <Compile Include="MessageDocument.cs" />
+    <Compile Include="PageAttachmentDocument.cs" />
+    <Compile Include="PageDocument.cs" />
     <Compile Include="EmailTools.cs" />
     <Compile Include="FilesAndAttachments.cs" />
     <Compile Include="Formatter.cs" />

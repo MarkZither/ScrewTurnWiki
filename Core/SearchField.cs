@@ -23,25 +23,25 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		PageFullName,
 		/// <summary>
-		/// The title of a page.
+		/// The title of a document.
 		/// </summary>
-		PageTitle,
+		Title,
 		/// <summary>
-		/// The content of a page.
+		/// The content of a document.
 		/// </summary>
-		PageContent,
+		Content,
 		/// <summary>
 		/// The id of the message.
 		/// </summary>
 		MessageId,
 		/// <summary>
-		/// The subject of the message.
+		/// The DateTime of the message.
 		/// </summary>
-		MessageSubject,
+		MessageDateTime,
 		/// <summary>
-		/// The body of the message
+		/// The name of a file.
 		/// </summary>
-		MessageBody
+		FileName
 	}
 
 	/// <summary>
@@ -62,16 +62,16 @@ namespace ScrewTurn.Wiki {
 					return "Wiki";
 				case SearchField.PageFullName:
 					return "PageFullName";
-				case SearchField.PageTitle:
+				case SearchField.Title:
 					return "Title";
-				case SearchField.PageContent:
+				case SearchField.Content:
 					return "Content";
 				case SearchField.MessageId:
 					return "MessageId";
-				case SearchField.MessageSubject:
-					return "MessageSubject";
-				case SearchField.MessageBody:
-					return "MessageBody";
+				case SearchField.MessageDateTime:
+					return "MessageDateTime";
+				case SearchField.FileName:
+					return "FileName";
 				default:
 					throw new ArgumentException("The given SearchField is not valid");
 			}

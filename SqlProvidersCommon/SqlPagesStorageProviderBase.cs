@@ -2689,7 +2689,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> or <paramref name="pageFullName"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
-		public bool AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
+		public int AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
 			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(username == null) throw new ArgumentNullException("username");
 			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
@@ -2703,7 +2703,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(nspace == null) nspace = "";
 
 			if(GetPage(pageFullName) == null) {
-				return false;
+				return -1;
 			}
 
 			ICommandBuilder builder = GetCommandBuilder();
@@ -2712,7 +2712,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			if(parent != -1 && FindMessage(GetMessages(transaction, pageFullName), parent) == null) {
 				RollbackTransaction(transaction);
-				return false;
+				return -1;
 			}
 
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -2758,11 +2758,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			if(rows == 1) {
 				CommitTransaction(transaction);
-				return true;
+				return freeId;
 			}
 			else {
 				RollbackTransaction(transaction);
-				return false;
+				return freeId;
 			}
 		}
 

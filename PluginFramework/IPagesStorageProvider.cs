@@ -335,11 +335,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <param name="parent">The Parent Message ID, or -1.</param>
-		/// <returns>True if the Message is added successfully.</returns>
+		/// <returns>The id of the message. Returns -1 in case of errors.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> or <paramref name="pageFullName"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
-		bool AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent);
+		int AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent);
 
 		/// <summary>
 		/// Removes a Message.

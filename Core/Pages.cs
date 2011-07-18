@@ -1400,15 +1400,19 @@ namespace ScrewTurn.Wiki {
 		public static bool AddMessage(PageContent page, string username, string subject, DateTime dateTime, string body, int parent) {
 			if(page.Provider.ReadOnly) return false;
 
-			bool done = page.Provider.AddMessage(page.FullName, username, subject, dateTime, body, parent);
-			if(done) {
+			int messageId = page.Provider.AddMessage(page.FullName, username, subject, dateTime, body, parent);
+			if(messageId != -1) {
 				string wiki = page.Provider.CurrentWiki;
 				SendEmailNotificationForMessage(page, Users.FindUser(wiki, username), Tools.GetMessageIdForAnchor(dateTime), subject, dateTime);
 
 				RecentChanges.AddChange(wiki, page.FullName, page.Title, subject, dateTime, username, Change.MessagePosted, "");
 				Host.Instance.OnPageActivity(page.FullName, null, username, PageActivity.MessagePosted);
+
+				// Index message
+				Message message = new Message(messageId, username, subject, dateTime, body);
+				SearchClass.IndexMessage(message, page);
 			}
-			return done;
+			return messageId != -1;
 		}
 
 		/// <summary>
@@ -1458,6 +1462,9 @@ namespace ScrewTurn.Wiki {
 			if(done) {
 				RecentChanges.AddChange(page.Provider.CurrentWiki, page.FullName, page.Title, msg.Subject, DateTime.Now, msg.Username, Change.MessageDeleted, "");
 				Host.Instance.OnPageActivity(page.FullName, null, null, PageActivity.MessageDeleted);
+
+				// Unindex message
+				SearchClass.UnindexMessage(msg.ID, page);
 			}
 			return done;
 		}
@@ -1474,7 +1481,13 @@ namespace ScrewTurn.Wiki {
 
 			bool done = true;
 			foreach(Message msg in messages) {
-				done &= page.Provider.RemoveMessage(page.FullName, msg.ID, true);
+				bool tempDone = page.Provider.RemoveMessage(page.FullName, msg.ID, true);
+				done &= tempDone;
+
+				// Unindex message
+				if(tempDone) {
+					SearchClass.UnindexMessage(msg.ID, page);
+				}
 			}
 
 			return done;
@@ -1497,6 +1510,11 @@ namespace ScrewTurn.Wiki {
 			if(done) {
 				RecentChanges.AddChange(page.Provider.CurrentWiki, page.FullName, page.Title, subject, dateTime, username, Change.MessageEdited, "");
 				Host.Instance.OnPageActivity(page.FullName, null, username, PageActivity.MessageModified);
+
+				// Unindex old message
+				SearchClass.UnindexMessage(id, page);
+				// Index the new one
+				SearchClass.IndexMessage(new Message(id, username, subject, dateTime, body), page);
 			}
 			return done;
 		}

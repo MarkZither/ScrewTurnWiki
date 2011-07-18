@@ -505,7 +505,7 @@ second line";
 			throw new NotImplementedException();
 		}
 
-		public bool AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
+		public int AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
 			throw new NotImplementedException();
 		}
 

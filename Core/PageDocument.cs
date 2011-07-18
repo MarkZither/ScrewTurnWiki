@@ -9,7 +9,7 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// An implementation of IDocument for a page.
 	/// </summary>
-	public class DocumentPage : IDocument {
+	public class PageDocument : IDocument {
 
 		/// <summary>
 		/// The wiki.

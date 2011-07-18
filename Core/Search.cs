@@ -54,20 +54,45 @@ namespace ScrewTurn.Wiki {
 				result.Relevance = topDocs.scoreDocs[i].score * 100;
 				switch(result.DocumentType) {
 					case DocumentType.Page:
-						DocumentPage document = new DocumentPage();
-						document.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
-						document.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
-						document.Title = doc.GetField(SearchField.PageTitle.AsString()).StringValue();
+						PageDocument page = new PageDocument();
+						page.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
+						page.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
+						page.Title = doc.GetField(SearchField.Title.AsString()).StringValue();
 
-						TokenStream tokenStream = analyzer.TokenStream(SearchField.PageTitle.AsString(), new StringReader(document.Title));
-						document.HighlightedTitle = highlighter.GetBestFragments(tokenStream, document.Title, 3, " [...] ");
+						TokenStream tokenStream1 = analyzer.TokenStream(SearchField.Title.AsString(), new StringReader(page.Title));
+						page.HighlightedTitle = highlighter.GetBestFragments(tokenStream1, page.Title, 3, " [...] ");
 
-						document.Content = doc.GetField(SearchField.PageContent.AsString()).StringValue();
+						page.Content = doc.GetField(SearchField.Content.AsString()).StringValue();
 
-						tokenStream = analyzer.TokenStream(SearchField.PageContent.AsString(), new StringReader(document.Content));
-						document.HighlightedContent = highlighter.GetBestFragments(tokenStream, document.Content, 3, " [...] ");
+						tokenStream1 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(page.Content));
+						page.HighlightedContent = highlighter.GetBestFragments(tokenStream1, page.Content, 3, " [...] ");
 
-						result.Document = document;
+						result.Document = page;
+						break;
+					case DocumentType.Message:
+						MessageDocument message = new MessageDocument();
+						message.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
+						message.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
+						message.DateTime = DateTime.Parse(doc.GetField(SearchField.MessageDateTime.AsString()).StringValue());
+						message.Subject = doc.GetField(SearchField.Title.AsString()).StringValue();
+						message.Body = doc.GetField(SearchField.Content.AsString()).StringValue();
+
+						TokenStream tokenStream2 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(message.Body));
+						message.HighlightedBody = highlighter.GetBestFragments(tokenStream2, message.Body, 3, " [...] ");
+
+						result.Document = message;
+						break;
+					case DocumentType.Attachment:
+						PageAttachmentDocument attachment = new PageAttachmentDocument();
+						attachment.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
+						attachment.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
+						attachment.FileName = doc.GetField(SearchField.Title.AsString()).StringValue();
+						attachment.FileContent = doc.GetField(SearchField.Content.AsString()).StringValue();
+
+						TokenStream tokenStream3 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(attachment.FileContent));
+						attachment.HighlightedFileContent = highlighter.GetBestFragments(tokenStream3, attachment.FileContent, 3, " [...] ");
+
+						result.Document = attachment;
 						break;
 				}
 
@@ -92,8 +117,8 @@ namespace ScrewTurn.Wiki {
 			doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Page), Field.Store.YES, Field.Index.NO));
 			doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
 			doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.PageTitle.AsString(), page.Title, Field.Store.YES, Field.Index.ANALYZED));
-			doc.Add(new Field(SearchField.PageContent.AsString(), page.Content, Field.Store.YES, Field.Index.ANALYZED));
+			doc.Add(new Field(SearchField.Title.AsString(), page.Title, Field.Store.YES, Field.Index.ANALYZED));
+			doc.Add(new Field(SearchField.Content.AsString(), page.Content, Field.Store.YES, Field.Index.ANALYZED));
 			writer.AddDocument(doc);
 			writer.Commit();
 			writer.Close();
@@ -103,11 +128,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Indexes the message.
 		/// </summary>
-		/// <param name="directory">The Lucene.NET directory to be used.</param>
 		/// <param name="message">The message to be indexed.</param>
 		/// <param name="page">The page the message belongs to.</param>
 		/// <returns><c>true</c> if the message has been indexed succesfully, <c>false</c> otherwise.</returns>
-		public static bool IndexMessage(Lucene.Net.Store.Directory directory, Message message, PageContent page) {
+		public static bool IndexMessage(Message message, PageContent page) {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
 
 			Analyzer analyzer = new SimpleAnalyzer();
@@ -118,8 +142,35 @@ namespace ScrewTurn.Wiki {
 			doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
 			doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
 			doc.Add(new Field(SearchField.MessageId.AsString(), message.ID.ToString(), Field.Store.NO, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.MessageSubject.AsString(), message.Subject, Field.Store.YES, Field.Index.ANALYZED));
-			doc.Add(new Field(SearchField.MessageBody.AsString(), message.Body, Field.Store.YES, Field.Index.ANALYZED));
+			doc.Add(new Field(SearchField.Title.AsString(), message.Subject, Field.Store.YES, Field.Index.ANALYZED));
+			doc.Add(new Field(SearchField.Content.AsString(), message.Body, Field.Store.YES, Field.Index.ANALYZED));
+			doc.Add(new Field(SearchField.MessageDateTime.AsString(), message.DateTime.ToString(), Field.Store.YES, Field.Index.NO));
+			writer.AddDocument(doc);
+			writer.Commit();
+			writer.Close();
+			return true;
+		}
+
+		/// <summary>
+		/// Indexes a page attachment.
+		/// </summary>
+		/// <param name="fileName">The name of the attachment to be indexed.</param>
+		/// <param name="page">The page the file is attached to.</param>
+		/// <returns><c>true</c> if the message has been indexed succesfully, <c>false</c> otherwise.</returns>
+		public static bool IndexPageAttachment(string fileName, PageContent page) {
+			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
+
+			Analyzer analyzer = new SimpleAnalyzer();
+			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+
+			string content = "";
+
+			Document doc = new Document();
+			doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.NO));
+			doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
+			doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
+			doc.Add(new Field(SearchField.Title.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
+			doc.Add(new Field(SearchField.Content.AsString(), content, Field.Store.YES, Field.Index.ANALYZED));
 			writer.AddDocument(doc);
 			writer.Commit();
 			writer.Close();
@@ -147,16 +198,34 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Unindexes the message.
 		/// </summary>
-		/// <param name="directory">The Lucene.NET directory to be used.</param>
-		/// <param name="message">The message to be unindexed.</param>
+		/// <param name="messageId">The id of the message to be unindexed.</param>
 		/// <param name="page">The page the message belongs to.</param>
 		/// <returns><c>true</c> if the message has been unindexed succesfully, <c>false</c> otherwise.</returns>
-		public static bool UnindexMessage(Lucene.Net.Store.Directory directory, Message message, PageContent page) {
+		public static bool UnindexMessage(int messageId, PageContent page) {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
 
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
 
-			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { page.FullName, message.ID.ToString() }, new string[] { SearchField.PageFullName.AsString(), SearchField.MessageId.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
+			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { page.FullName, messageId.ToString() }, new string[] { SearchField.PageFullName.AsString(), SearchField.MessageId.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
+
+			writer.DeleteDocuments(query);
+			writer.Commit();
+			writer.Close();
+			return true;
+		}
+
+		/// <summary>
+		/// Unindexes the message.
+		/// </summary>
+		/// <param name="fileName">The name of the attachment.</param>
+		/// <param name="page">The page the message belongs to.</param>
+		/// <returns><c>true</c> if the message has been unindexed succesfully, <c>false</c> otherwise.</returns>
+		public static bool UnindexPageAttachment(string fileName, PageContent page) {
+			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
+
+			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
+
+			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { page.FullName, fileName }, new string[] { SearchField.PageFullName.AsString(), SearchField.FileName.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
 
 			writer.DeleteDocuments(query);
 			writer.Commit();

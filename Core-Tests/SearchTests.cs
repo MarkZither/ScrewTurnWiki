@@ -36,16 +36,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Assert.IsTrue(SearchClass.IndexPage(page));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle }, "page", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
 			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
 
-			DocumentPage documentPage = results[0].Document as DocumentPage;
+			PageDocument documentPage = results[0].Document as PageDocument;
 
-			Assert.AreEqual("This <span class=\"searchResult\">page</span> is the title of the <span class=\"searchResult\">page</span>", documentPage.HighlightedTitle, "Wrong title");
-			Assert.AreEqual("This is the content of the <span class=\"searchResult\">page</span>", documentPage.HighlightedContent, "Wrong content");
+			Assert.AreEqual("This <b class=\"searchkeyword\">page</b> is the title of the <b class=\"searchkeyword\">page</b>", documentPage.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the <b class=\"searchkeyword\">page</b>", documentPage.HighlightedContent, "Wrong content");
 		}
 
 		[Test]
@@ -74,19 +74,19 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsTrue(SearchClass.IndexPage(page1));
 			Assert.IsTrue(SearchClass.IndexPage(page2));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle }, "page", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(2, results.Count, "Wrong result length");
 
 			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
-			DocumentPage doc1 = results[0].Document as DocumentPage;
-			Assert.AreEqual("This is the title of the <span class=\"searchResult\">page</span>", doc1.HighlightedTitle, "Wrong title");
-			Assert.AreEqual("This is the content of the <span class=\"searchResult\">page</span>", doc1.HighlightedContent, "Wrong content");
+			PageDocument doc1 = results[0].Document as PageDocument;
+			Assert.AreEqual("This is the title of the <b class=\"searchkeyword\">page</b>", doc1.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the <b class=\"searchkeyword\">page</b>", doc1.HighlightedContent, "Wrong content");
 
 			Assert.AreEqual(DocumentType.Page, results[1].DocumentType, "Wrong document type");
-			DocumentPage doc2 = results[1].Document as DocumentPage;
-			Assert.AreEqual("This is the title of the second <span class=\"searchResult\">page</span>", doc2.HighlightedTitle, "Wrong title");
-			Assert.AreEqual("This is the content of the second <span class=\"searchResult\">page</span>", doc2.HighlightedContent, "Wrong content");
+			PageDocument doc2 = results[1].Document as PageDocument;
+			Assert.AreEqual("This is the title of the second <b class=\"searchkeyword\">page</b>", doc2.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the second <b class=\"searchkeyword\">page</b>", doc2.HighlightedContent, "Wrong content");
 		}
 
 		[Test]
@@ -115,19 +115,19 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsTrue(SearchClass.IndexPage(page1));
 			Assert.IsTrue(SearchClass.IndexPage(page2));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle, SearchField.PageContent }, "page", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(2, results.Count, "Wrong result length");
 
 			Assert.AreEqual(DocumentType.Page, results[1].DocumentType, "Wrong document type");
-			DocumentPage doc1 = results[1].Document as DocumentPage;
+			PageDocument doc1 = results[1].Document as PageDocument;
 			Assert.AreEqual(string.Empty, doc1.HighlightedTitle, "Wrong title");
-			Assert.AreEqual("This is the content of the <span class=\"searchResult\">page</span>", doc1.HighlightedContent, "Wrong content");
+			Assert.AreEqual("This is the content of the <b class=\"searchkeyword\">page</b>", doc1.HighlightedContent, "Wrong content");
 
 			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
-			DocumentPage doc2 = results[0].Document as DocumentPage;
-			Assert.AreEqual("This is the title of the second <span class=\"searchResult\">page</span>", doc2.HighlightedTitle, "Wrong title");
-			Assert.AreEqual("This is the content of the second <span class=\"searchResult\">page</span>", doc2.HighlightedContent, "Wrong content");
+			PageDocument doc2 = results[0].Document as PageDocument;
+			Assert.AreEqual("This is the title of the second <b class=\"searchkeyword\">page</b>", doc2.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the second <b class=\"searchkeyword\">page</b>", doc2.HighlightedContent, "Wrong content");
 		}
 
 		[Test]
@@ -156,30 +156,94 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsTrue(SearchClass.IndexPage(page1));
 			Assert.IsTrue(SearchClass.IndexPage(page2));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle, SearchField.PageContent }, "page", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(2, results.Count, "Wrong result length");
 
 			Assert.AreEqual(DocumentType.Page, results[1].DocumentType, "Wrong document type");
-			DocumentPage doc1 = results[1].Document as DocumentPage;
+			PageDocument doc1 = results[1].Document as PageDocument;
 			Assert.AreEqual(string.Empty, doc1.HighlightedTitle, "Wrong title");
-			Assert.AreEqual("This is the content of the <span class=\"searchResult\">page</span>", doc1.HighlightedContent, "Wrong content");
+			Assert.AreEqual("This is the content of the <b class=\"searchkeyword\">page</b>", doc1.HighlightedContent, "Wrong content");
 
 			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
-			DocumentPage doc2 = results[0].Document as DocumentPage;
-			Assert.AreEqual("This is the title of the second <span class=\"searchResult\">page</span>", doc2.HighlightedTitle, "Wrong title");
-			Assert.AreEqual("This is the content of the second <span class=\"searchResult\">page</span>", doc2.HighlightedContent, "Wrong content");
+			PageDocument doc2 = results[0].Document as PageDocument;
+			Assert.AreEqual("This is the title of the second <b class=\"searchkeyword\">page</b>", doc2.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the second <b class=\"searchkeyword\">page</b>", doc2.HighlightedContent, "Wrong content");
 
 			Assert.IsTrue(SearchClass.UnindexPage(page1));
 
-			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.PageTitle, SearchField.PageContent }, "page", SearchOptions.AtLeastOneWord);
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "page", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
 			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
-			DocumentPage doc3 = results[0].Document as DocumentPage;
-			Assert.AreEqual("This is the title of the second <span class=\"searchResult\">page</span>", doc3.HighlightedTitle, "Wrong title");
-			Assert.AreEqual("This is the content of the second <span class=\"searchResult\">page</span>", doc3.HighlightedContent, "Wrong content");
+			PageDocument doc3 = results[0].Document as PageDocument;
+			Assert.AreEqual("This is the title of the second <b class=\"searchkeyword\">page</b>", doc3.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the second <b class=\"searchkeyword\">page</b>", doc3.HighlightedContent, "Wrong content");
+		}
+
+		[Test]
+		public void AddMessageTest() {
+			IPagesStorageProviderV40 pagesStorageProvider = mocks.DynamicMock<IPagesStorageProviderV40>();
+			Expect.Call(pagesStorageProvider.CurrentWiki).Return("wiki1").Repeat.Any();
+
+			mocks.ReplayAll();
+
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(DummyIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(DummyIndexDirectoryProvider), "");
+
+			string messageSubject = "This is the subject of the message";
+			string messageBody = "This is the body of the message";
+
+			DateTime dt = DateTime.Now;
+			PageContent page = new PageContent("pagefullname", pagesStorageProvider, dt, "title", "user-test", dt, "", "content", new string[0], "");
+			Message message = new Message(1, "user-test", messageSubject, dt, messageBody);
+
+			Assert.IsTrue(SearchClass.IndexMessage(message, page));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Content }, "message", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.Message, results[0].DocumentType, "Wrong document type");
+
+			MessageDocument documentMessage = results[0].Document as MessageDocument;
+
+			Assert.AreEqual("This is the subject of the message", documentMessage.Subject, "Wrong title");
+			Assert.AreEqual("This is the body of the <b class=\"searchkeyword\">message</b>", documentMessage.HighlightedBody, "Wrong content");
+		}
+
+		[Test]
+		public void AddPageAttachmentTest() {
+			IPagesStorageProviderV40 pagesStorageProvider = mocks.DynamicMock<IPagesStorageProviderV40>();
+			Expect.Call(pagesStorageProvider.CurrentWiki).Return("wiki1").Repeat.Any();
+
+			mocks.ReplayAll();
+
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(DummyIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(DummyIndexDirectoryProvider), "");
+
+			DateTime dt = DateTime.Now;
+			PageContent page = new PageContent("pagefullname", pagesStorageProvider, dt, "title", "user-test", dt, "", "content", new string[0], "");
+			string fileName = "file_name_1";
+			
+			Assert.IsTrue(SearchClass.IndexPageAttachment(fileName, page));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title }, "name", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.Attachment, results[0].DocumentType, "Wrong document type");
+
+			PageAttachmentDocument pageAttachmentDocument = results[0].Document as PageAttachmentDocument;
+
+			Assert.AreEqual(fileName, pageAttachmentDocument.FileName, "Wrong file name");
 		}
 
 		private class DummyIndexDirectoryProvider : IIndexDirectoryProviderV40 {

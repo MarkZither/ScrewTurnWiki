@@ -154,7 +154,7 @@ namespace ScrewTurn.Wiki {
 			List<SearchResult> results = null;
 			DateTime begin = DateTime.Now;
 			try {
-				results = SearchClass.Search(currentWiki, new SearchField[] {SearchField.PageTitle, SearchField.PageContent}, query, mode);
+				results = SearchClass.Search(currentWiki, new SearchField[] {SearchField.Title, SearchField.Content}, query, mode);
 			}
 			catch(ArgumentException ex) {
 				Log.LogEntry("Search threw an exception\n" + ex.ToString(), EntryType.Warning, SessionFacade.CurrentUsername, currentWiki);
@@ -178,7 +178,7 @@ namespace ScrewTurn.Wiki {
 				pageCategories = new CategoryInfo[0];
 
 				if(res.DocumentType == DocumentType.Page) {
-					DocumentPage doc = res.Document as DocumentPage;
+					PageDocument doc = res.Document as PageDocument;
 					currentPage = Pages.FindPage(doc.Wiki, doc.PageFullName);
 					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
@@ -187,24 +187,26 @@ namespace ScrewTurn.Wiki {
 						Actions.ForPages.ReadPage, currentUser, currentGroups);
 					if(!canReadPage) continue; // Skip
 				}
-				//else if(res.DocumentType == DocumentType.Message) {
-				//    currentPage = Pages.FindPage(res.Wiki, res.PageFullName);
-				//    pageCategories = Pages.GetCategoriesForPage(currentPage);
+				else if(res.DocumentType == DocumentType.Message) {
+					MessageDocument doc = res.Document as MessageDocument;
+					currentPage = Pages.FindPage(doc.Wiki, doc.PageFullName);
+					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
-				//    // Verify permissions
-				//    bool canReadDiscussion = authChecker.CheckActionForPage(currentPage.FullName,
-				//        Actions.ForPages.ReadDiscussion, currentUser, currentGroups);
-				//    if(!canReadDiscussion) continue; // Skip
-				//}
-				//else if(res.DocumentType == DocumentType.Attachment) {
-				//    currentPage = Pages.FindPage(res.Wiki, res.PageFullName);
-				//    pageCategories = Pages.GetCategoriesForPage(currentPage);
+					// Verify permissions
+					bool canReadDiscussion = authChecker.CheckActionForPage(currentPage.FullName,
+						Actions.ForPages.ReadDiscussion, currentUser, currentGroups);
+					if(!canReadDiscussion) continue; // Skip
+				}
+				else if(res.DocumentType == DocumentType.Attachment) {
+					PageAttachmentDocument doc = res.Document as PageAttachmentDocument;
+					currentPage = Pages.FindPage(doc.Wiki, doc.PageFullName);
+					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
-				//    // Verify permissions
-				//    bool canDownloadAttn = authChecker.CheckActionForPage(currentPage.FullName,
-				//        Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
-				//    if(!canDownloadAttn) continue; // Skip
-				//}
+					// Verify permissions
+					bool canDownloadAttn = authChecker.CheckActionForPage(currentPage.FullName,
+						Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
+					if(!canDownloadAttn) continue; // Skip
+				}
 				//else if(res.DocumentType == DocumentType.File) {
 				//    string[] fields = res.FileName.Split('|');
 				//    IFilesStorageProviderV40 provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(fields[0], currentWiki);
@@ -356,19 +358,20 @@ namespace ScrewTurn.Wiki {
 			string queryStringKeywords = "HL=";
 
 			if(result.DocumentType == DocumentType.Page) {
-				DocumentPage doc = result.Document as DocumentPage;
+				PageDocument doc = result.Document as PageDocument;
 				return new SearchResultRow(doc.PageFullName + GlobalSettings.PageExtension + "?" + queryStringKeywords, Page,
 					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), doc.Title, false, FormattingContext.PageContent, doc.PageFullName),
 					result.Relevance, string.IsNullOrEmpty(doc.HighlightedContent) ? doc.Content : doc.HighlightedContent);
 			}
-			//else if(result.DocumentType == DocumentType.Message) {
-			//    PageContent content = Pages.FindPage(result.Wiki, result.PageFullName);
+			else if(result.DocumentType == DocumentType.Message) {
+				MessageDocument doc = result.Document as MessageDocument;
+				PageContent content = Pages.FindPage(doc.Wiki, doc.PageFullName);
 
-			//    return new SearchResultRow(result.PageFullName + GlobalSettings.PageExtension + "?" + queryStringKeywords +"&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(result.DateTime), Message,
-			//        FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), result.Title, false, FormattingContext.MessageBody, content.FullName) + " (" +
-			//        FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.MessageBody, content.FullName) +
-			//        ")", result.Relevance.Value, GetExcerpt(content, result.MessageID, result.Matches));
-			//}
+				return new SearchResultRow(content.FullName + GlobalSettings.PageExtension + "?" + queryStringKeywords + "&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(doc.DateTime), Message,
+					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), doc.Subject, false, FormattingContext.MessageBody, content.FullName) + " (" +
+					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.MessageBody, content.FullName) +
+					")", result.Relevance, doc.HighlightedBody);
+			}
 			//else if(result.DocumentType == DocumentType.File) {
 			//    FileDocument fileDoc = result.Document as FileDocument;
 
@@ -376,15 +379,15 @@ namespace ScrewTurn.Wiki {
 			//        "&amp;Provider=" + Tools.UrlEncode(fileDoc.Provider),
 			//        File, fileDoc.Title, result.Relevance.Value, "");
 			//}
-			//else if(result.DocumentType == DocumentType.Attachment) {
-			//    PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
-			//    PageContent content = attnDoc.Page;
+			else if(result.DocumentType == DocumentType.Attachment) {
+				PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
+				PageContent content = Pages.FindPage(attnDoc.Wiki, attnDoc.PageFullName);
 
-			//    return new SearchResultRow(attnDoc.Page.FullName + GlobalSettings.PageExtension, Attachment,
-			//        attnDoc.Title + " (" +
-			//        FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.PageContent, content.FullName) +
-			//        ")", result.Relevance.Value, "");
-			//}
+				return new SearchResultRow(content.FullName + GlobalSettings.PageExtension, Attachment,
+					attnDoc.FileName + " (" +
+					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.PageContent, content.FullName) +
+					")", result.Relevance, "");
+			}
 			else throw new NotSupportedException();
 		}
 

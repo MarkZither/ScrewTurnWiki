@@ -1685,11 +1685,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <param name="parent">The Parent Message ID, or -1.</param>
-		/// <returns>True if the Message is added successfully.</returns>
+		/// <returns>The id of the message. Returns -1 in case of errors.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> or <paramref name="pageFullName"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
-		public bool AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
+		public int AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
 			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(username == null) throw new ArgumentNullException("username");
 			if(subject == null) throw new ArgumentNullException("subject");
@@ -1701,19 +1701,20 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			try {
 				// If page does not exists return false
 				PageContent page = GetPage(pageFullName);
-				if(page == null) return false;
+				if(page == null) return -1;
 
 				if(parent != -1) {
 					// If the given parent message with the given id does not exists return false;
 					var parentMessageEntity = GetMessageEntity(_wiki, pageFullName, parent);
-					if(parentMessageEntity == null) return false;
+					if(parentMessageEntity == null) return -1;
 				}
 
-				var messageEntity = BuildMessageEntity(_wiki, pageFullName, GetNextMessageId(_wiki, pageFullName), username, subject, dateTime, body, parent);
+				int messageId = GetNextMessageId(_wiki, pageFullName);
+				var messageEntity = BuildMessageEntity(_wiki, pageFullName, messageId, username, subject, dateTime, body, parent);
 				_context.AddObject(MessagesTable, messageEntity);
 				_context.SaveChangesStandard();
 
-				return true;
+				return messageId;
 			}
 			catch(Exception ex) {
 				throw ex;
