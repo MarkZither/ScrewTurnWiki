@@ -51,14 +51,6 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders.Tests {
 
 			SqlCECommandBuilder commandBuilder = new SqlCECommandBuilder();
 			DbCommand command = commandBuilder.GetConnection(connString).CreateCommand();
-			command.CommandText = "delete from [IndexWordMapping];";
-			command.ExecuteNonQuery();
-
-			command.CommandText = "delete from [IndexWord];";
-			command.ExecuteNonQuery();
-
-			command.CommandText = "delete from [IndexDocument];";
-			command.ExecuteNonQuery();
 
 			command.CommandText = "delete from [ContentTemplate];";
 			command.ExecuteNonQuery();
