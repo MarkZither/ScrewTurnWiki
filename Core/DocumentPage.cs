@@ -22,6 +22,16 @@ namespace ScrewTurn.Wiki {
 		public string PageFullName;
 
 		/// <summary>
+		/// The title of the page.
+		/// </summary>
+		public string Title;
+
+		/// <summary>
+		/// The content of the page.
+		/// </summary>
+		public string Content;
+
+		/// <summary>
 		/// The title of the page with search query highlighted.
 		/// </summary>
 		public string HighlightedTitle;

@@ -22,24 +22,9 @@ namespace ScrewTurn.Wiki {
 		public IDocument Document;
 
 		/// <summary>
-		/// The wiki to witch belongs the found document.
+		/// The relevance of the search result.
 		/// </summary>
-		public string Wiki;
-
-		/// <summary>
-		/// The full name of the foud document.
-		/// </summary>
-		public string PageFullName;
-
-		/// <summary>
-		/// The title of the found document.
-		/// </summary>
-		public string Title;
-
-		/// <summary>
-		/// The content of the found document.
-		/// </summary>
-		public string Content;
+		public float Relevance;
 
 	}
 }

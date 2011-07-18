@@ -43,7 +43,7 @@ namespace ScrewTurn.Wiki {
 			Query query = queryParser.Parse(phrase);
 			TopDocs topDocs = searcher.Search(query, 100);
 
-			Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<span class=\"searchResult\">", "</span>"), new QueryScorer(query));
+			Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<b class=\"searchkeyword\">", "</b>"), new QueryScorer(query));
 
 			List<SearchResult> searchResults = new List<SearchResult>(topDocs.totalHits);
 			for(int i = 0; i < topDocs.totalHits; i++) {
@@ -51,20 +51,21 @@ namespace ScrewTurn.Wiki {
 
 				SearchResult result = new SearchResult();
 				result.DocumentType = DocumentTypeFromString(doc.GetField(SearchField.DocumentType.AsString()).StringValue());
-
+				result.Relevance = topDocs.scoreDocs[i].score * 100;
 				switch(result.DocumentType) {
 					case DocumentType.Page:
 						DocumentPage document = new DocumentPage();
 						document.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
 						document.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
+						document.Title = doc.GetField(SearchField.PageTitle.AsString()).StringValue();
 
-						string tempPageTitle = doc.GetField(SearchField.PageTitle.AsString()).StringValue();
-						TokenStream tokenStream = analyzer.TokenStream(SearchField.PageTitle.AsString(), new StringReader(tempPageTitle));
-						document.HighlightedTitle = highlighter.GetBestFragments(tokenStream, tempPageTitle, 3, "[...]");
+						TokenStream tokenStream = analyzer.TokenStream(SearchField.PageTitle.AsString(), new StringReader(document.Title));
+						document.HighlightedTitle = highlighter.GetBestFragments(tokenStream, document.Title, 3, " [...] ");
 
-						string tempPageContent = doc.GetField(SearchField.PageContent.AsString()).StringValue();
-						tokenStream = analyzer.TokenStream(SearchField.PageContent.AsString(), new StringReader(tempPageContent));
-						document.HighlightedContent = highlighter.GetBestFragments(tokenStream, tempPageContent, 3, "[...]");
+						document.Content = doc.GetField(SearchField.PageContent.AsString()).StringValue();
+
+						tokenStream = analyzer.TokenStream(SearchField.PageContent.AsString(), new StringReader(document.Content));
+						document.HighlightedContent = highlighter.GetBestFragments(tokenStream, document.Content, 3, " [...] ");
 
 						result.Document = document;
 						break;

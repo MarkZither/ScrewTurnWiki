@@ -178,7 +178,8 @@ namespace ScrewTurn.Wiki {
 				pageCategories = new CategoryInfo[0];
 
 				if(res.DocumentType == DocumentType.Page) {
-					currentPage = Pages.FindPage(res.Wiki, res.PageFullName);
+					DocumentPage doc = res.Document as DocumentPage;
+					currentPage = Pages.FindPage(doc.Wiki, doc.PageFullName);
 					pageCategories = Pages.GetCategoriesForPage(currentPage);
 
 					// Verify permissions
@@ -356,9 +357,9 @@ namespace ScrewTurn.Wiki {
 
 			if(result.DocumentType == DocumentType.Page) {
 				DocumentPage doc = result.Document as DocumentPage;
-				return new SearchResultRow(result.PageFullName + GlobalSettings.PageExtension + "?" + queryStringKeywords, Page,
-					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), result.Title, false, FormattingContext.PageContent, result.PageFullName),
-					1, doc.HighlightedContent);
+				return new SearchResultRow(doc.PageFullName + GlobalSettings.PageExtension + "?" + queryStringKeywords, Page,
+					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), doc.Title, false, FormattingContext.PageContent, doc.PageFullName),
+					result.Relevance, string.IsNullOrEmpty(doc.HighlightedContent) ? doc.Content : doc.HighlightedContent);
 			}
 			//else if(result.DocumentType == DocumentType.Message) {
 			//    PageContent content = Pages.FindPage(result.Wiki, result.PageFullName);

@@ -139,6 +139,11 @@ namespace ScrewTurn.Wiki {
 
 				Host.Instance.OnNamespaceActivity(realNspace, null, NamespaceActivity.NamespaceRemoved);
 
+				// Unindexing all pages
+				foreach(PageContent page in pages) {
+					SearchClass.UnindexPage(page);
+				}
+
 				Log.LogEntry("Namespace " + realNspace.Name + " removed", EntryType.General, Log.SystemUsername, wiki);
 				return true;
 			}
@@ -181,7 +186,6 @@ namespace ScrewTurn.Wiki {
 			List<PageContent> pages = GetPages(wiki, nspace);
 			List<string> pageNames = new List<string>(pages.Count);
 			foreach(PageContent page in pages) pageNames.Add(NameTools.GetLocalName(page.FullName));
-			pages = null;
 
 			string oldName = nspace.Name;
 
@@ -196,6 +200,13 @@ namespace ScrewTurn.Wiki {
 				authWriter.ProcessNamespaceRenaming(oldName, pageNames, newName);
 
 				Host.Instance.OnNamespaceActivity(newNspace, oldName, NamespaceActivity.NamespaceRenamed);
+
+				// Unindex pages with old full name and index new ones.
+				foreach(PageContent page in pages) {
+					SearchClass.UnindexPage(page);
+					page.FullName = NameTools.GetFullName(newNspace.Name, NameTools.GetLocalName(page.FullName));
+					SearchClass.IndexPage(page);
+				}
 
 				Log.LogEntry("Namespace " + nspace.Name + " renamed to " + newName, EntryType.General, Log.SystemUsername, wiki);
 				return true;
@@ -442,19 +453,27 @@ namespace ScrewTurn.Wiki {
 			bool done = page.Provider.RollbackPage(page.FullName, version);
 
 			if(done) {
+				// Unindex old content
+				SearchClass.UnindexPage(page);
+
+				PageContent newPage = page.Provider.GetPage(page.FullName);
+
+				// Index the new content
+				SearchClass.IndexPage(newPage);
+
 				// Update page's outgoing links
 				string[] linkedPages;
-				Formatter.Format(wiki, page.Content, false, FormattingContext.PageContent, page.FullName, out linkedPages);
+				Formatter.Format(wiki, newPage.Content, false, FormattingContext.PageContent, newPage.FullName, out linkedPages);
 				string[] outgoingLinks = new string[linkedPages.Length];
 				for(int i = 0; i < outgoingLinks.Length; i++) {
 					outgoingLinks[i] = linkedPages[i];
 				}
 
-				Settings.GetProvider(wiki).StoreOutgoingLinks(page.FullName, outgoingLinks);
+				Settings.GetProvider(wiki).StoreOutgoingLinks(newPage.FullName, outgoingLinks);
 
-				Log.LogEntry("Rollback executed for " + page.FullName + " at revision " + version.ToString(), EntryType.General, Log.SystemUsername, wiki);
-				RecentChanges.AddChange(wiki, page.FullName, page.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRolledBack, "");
-				Host.Instance.OnPageActivity(page.FullName, null, SessionFacade.GetCurrentUsername(), PageActivity.PageRolledBack);
+				Log.LogEntry("Rollback executed for " + newPage.FullName + " at revision " + version.ToString(), EntryType.General, Log.SystemUsername, wiki);
+				RecentChanges.AddChange(wiki, newPage.FullName, newPage.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRolledBack, "");
+				Host.Instance.OnPageActivity(newPage.FullName, null, SessionFacade.GetCurrentUsername(), PageActivity.PageRolledBack);
 				return true;
 			}
 			else {
@@ -521,6 +540,12 @@ namespace ScrewTurn.Wiki {
 			sb.Replace("~~~~", "§§(" + username + "," + dateTime.ToString("yyyy'/'MM'/'dd' 'HH':'mm':'ss") + ")§§");
 			content = sb.ToString();
 
+			PageContent currentContent = provider.GetPage(NameTools.GetFullName(nspace, name));
+			if(saveMode != SaveMode.Draft && currentContent != null) {
+				// Unindex old current
+				SearchClass.UnindexPage(currentContent);
+			}
+
 			PageContent pageContent = provider.SetPageContent(nspace, name, DateTime.Now, title, username, dateTime, comment, content, keywords, description, saveMode);
 
 			if(pageContent != null) {
@@ -532,6 +557,9 @@ namespace ScrewTurn.Wiki {
 					RecentChanges.AddChange(wiki, pageContent.FullName, title, null, dateTime, username, Change.PageUpdated, comment);
 					Host.Instance.OnPageActivity(pageContent.FullName, null, username, PageActivity.PageModified);
 					SendEmailNotificationForPage(pageContent, Users.FindUser(wiki, username));
+
+					// Index the new content
+					SearchClass.IndexPage(pageContent);
 				}
 				else {
 					Host.Instance.OnPageActivity(pageContent.FullName, null, username, PageActivity.PageDraftSaved);
@@ -578,6 +606,9 @@ namespace ScrewTurn.Wiki {
 				Log.LogEntry("Page " + page.FullName + " deleted", EntryType.General, Log.SystemUsername, wiki);
 				RecentChanges.AddChange(wiki, page.FullName, title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageDeleted, "");
 				Host.Instance.OnPageActivity(page.FullName, null, SessionFacade.GetCurrentUsername(), PageActivity.PageDeleted);
+
+				// Unindex the page
+				SearchClass.UnindexPage(page);
 				return true;
 			}
 			else {
@@ -640,6 +671,9 @@ namespace ScrewTurn.Wiki {
 		public static bool MigratePage(PageContent page, NamespaceInfo targetNamespace, bool copyCategories) {
 			string oldName = page.FullName;
 
+			// Unindex old page
+			SearchClass.UnindexPage(page);
+
 			PageContent result = page.Provider.MovePage(page.FullName, targetNamespace, copyCategories);
 			if(result != null) {
 				string wiki = page.Provider.CurrentWiki;
@@ -650,6 +684,9 @@ namespace ScrewTurn.Wiki {
 				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 					prov.NotifyPageRenaming(oldName, result.FullName);
 				}
+
+				// Index the new page
+				SearchClass.IndexPage(result);
 			}
 			return result != null;
 		}
