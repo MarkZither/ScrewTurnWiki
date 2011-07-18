@@ -10,6 +10,8 @@ using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
 using Lucene.Net.Search;
 using Lucene.Net.QueryParsers;
+using System.IO;
+using Lucene.Net.Highlight;
 
 namespace ScrewTurn.Wiki {
 
@@ -28,27 +30,47 @@ namespace ScrewTurn.Wiki {
 		/// <returns>A list of <see cref="SearchResult"/> items.</returns>
 		public static List<SearchResult> Search(string wiki, SearchField[] searchFields, string phrase, SearchOptions searchOption) {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(wiki);
+			Analyzer analyzer = new SimpleAnalyzer();
 
 			IndexSearcher searcher = new IndexSearcher(indexDirectoryProvider.GetDirectory(), false);
 
 			string[] searchFieldsAsString = (from f in searchFields select f.AsString()).ToArray();
-			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_29, searchFieldsAsString, new SimpleAnalyzer());
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_29, searchFieldsAsString, analyzer);
 			
 			if(searchOption == SearchOptions.AllWords) queryParser.SetDefaultOperator(QueryParser.Operator.AND);
 			if(searchOption == SearchOptions.AtLeastOneWord) queryParser.SetDefaultOperator(QueryParser.Operator.OR);
 			
-			TopDocs topDocs = searcher.Search(queryParser.Parse(phrase), 100);
+			Query query = queryParser.Parse(phrase);
+			TopDocs topDocs = searcher.Search(query, 100);
+
+			Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<span class=\"searchResult\">", "</span>"), new QueryScorer(query));
 
 			List<SearchResult> searchResults = new List<SearchResult>(topDocs.totalHits);
 			for(int i = 0; i < topDocs.totalHits; i++) {
 				Document doc = searcher.Doc(topDocs.scoreDocs[i].doc);
-				searchResults.Add(new SearchResult() {
-					DocumentType = DocumentTypeFromString(doc.GetField(SearchField.DocumentType.AsString()).StringValue()),
-					Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue(),
-					PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue(),
-					Title = doc.GetField(SearchField.PageTitle.AsString()).StringValue(),
-					Content = doc.GetField(SearchField.PageContent.AsString()).StringValue()
-				});
+
+				SearchResult result = new SearchResult();
+				result.DocumentType = DocumentTypeFromString(doc.GetField(SearchField.DocumentType.AsString()).StringValue());
+
+				switch(result.DocumentType) {
+					case DocumentType.Page:
+						DocumentPage document = new DocumentPage();
+						document.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
+						document.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
+
+						string tempPageTitle = doc.GetField(SearchField.PageTitle.AsString()).StringValue();
+						TokenStream tokenStream = analyzer.TokenStream(SearchField.PageTitle.AsString(), new StringReader(tempPageTitle));
+						document.HighlightedTitle = highlighter.GetBestFragments(tokenStream, tempPageTitle, 3, "[...]");
+
+						string tempPageContent = doc.GetField(SearchField.PageContent.AsString()).StringValue();
+						tokenStream = analyzer.TokenStream(SearchField.PageContent.AsString(), new StringReader(tempPageContent));
+						document.HighlightedContent = highlighter.GetBestFragments(tokenStream, tempPageContent, 3, "[...]");
+
+						result.Document = document;
+						break;
+				}
+
+				searchResults.Add(result);
 			}
 			searcher.Close();
 			return searchResults;
@@ -82,8 +104,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="directory">The Lucene.NET directory to be used.</param>
 		/// <param name="message">The message to be indexed.</param>
+		/// <param name="page">The page the message belongs to.</param>
 		/// <returns><c>true</c> if the message has been indexed succesfully, <c>false</c> otherwise.</returns>
-		public static bool IndexMessage(Directory directory, Message message, PageContent page) {
+		public static bool IndexMessage(Lucene.Net.Store.Directory directory, Message message, PageContent page) {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
 
 			Analyzer analyzer = new SimpleAnalyzer();
@@ -93,7 +116,7 @@ namespace ScrewTurn.Wiki {
 			doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Message), Field.Store.YES, Field.Index.NO));
 			doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
 			doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.MessageId.AsString(), message.ID.ToString(), Field.Store.NO, Field.Index.NOT_ANALYZED);
+			doc.Add(new Field(SearchField.MessageId.AsString(), message.ID.ToString(), Field.Store.NO, Field.Index.NOT_ANALYZED));
 			doc.Add(new Field(SearchField.MessageSubject.AsString(), message.Subject, Field.Store.YES, Field.Index.ANALYZED));
 			doc.Add(new Field(SearchField.MessageBody.AsString(), message.Body, Field.Store.YES, Field.Index.ANALYZED));
 			writer.AddDocument(doc);
@@ -125,8 +148,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="directory">The Lucene.NET directory to be used.</param>
 		/// <param name="message">The message to be unindexed.</param>
+		/// <param name="page">The page the message belongs to.</param>
 		/// <returns><c>true</c> if the message has been unindexed succesfully, <c>false</c> otherwise.</returns>
-		public static bool UnindexMessage(Directory directory, Message message, PageContent page) {
+		public static bool UnindexMessage(Lucene.Net.Store.Directory directory, Message message, PageContent page) {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
 
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);

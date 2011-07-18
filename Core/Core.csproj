@@ -65,6 +65,9 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Lucene.Net.Contrib.Highlighter">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.Contrib.Highlighter.dll</HintPath>
+    </Reference>
     <Reference Include="SgmlReaderDll">
       <HintPath>..\References\Lib\MindTouch SGML Reader\SgmlReaderDll.dll</HintPath>
     </Reference>
@@ -92,6 +95,7 @@
     <Compile Include="Content.cs" />
     <Compile Include="Defaults.cs" />
     <Compile Include="DiffTools.cs" />
+    <Compile Include="DocumentPage.cs" />
     <Compile Include="EmailTools.cs" />
     <Compile Include="FilesAndAttachments.cs" />
     <Compile Include="Formatter.cs" />
@@ -100,6 +104,7 @@
     <Compile Include="Hash.cs" />
     <Compile Include="Host.cs" />
     <Compile Include="ICollectorsBox.cs" />
+    <Compile Include="IDocument.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="NavigationPaths.cs" />

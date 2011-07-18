@@ -54,6 +54,7 @@ namespace ScrewTurn.Wiki {
 			ProviderLoader.LoadStorageProviders<IThemesStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/themesProviders"));
 			ProviderLoader.LoadStorageProviders<IUsersStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/usersProviders"));
 			ProviderLoader.LoadStorageProviders<IPagesStorageProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/pagesProviders"));
+			ProviderLoader.LoadStorageProviders<IIndexDirectoryProviderV40>((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/indexDirectoryProviders"));
 
 			ProviderLoader.LoadAllFormatterProviders();
 

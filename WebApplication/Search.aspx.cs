@@ -186,34 +186,34 @@ namespace ScrewTurn.Wiki {
 						Actions.ForPages.ReadPage, currentUser, currentGroups);
 					if(!canReadPage) continue; // Skip
 				}
-				else if(res.DocumentType == DocumentType.Message) {
-					currentPage = Pages.FindPage(res.Wiki, res.PageFullName);
-					pageCategories = Pages.GetCategoriesForPage(currentPage);
+				//else if(res.DocumentType == DocumentType.Message) {
+				//    currentPage = Pages.FindPage(res.Wiki, res.PageFullName);
+				//    pageCategories = Pages.GetCategoriesForPage(currentPage);
 
-					// Verify permissions
-					bool canReadDiscussion = authChecker.CheckActionForPage(currentPage.FullName,
-						Actions.ForPages.ReadDiscussion, currentUser, currentGroups);
-					if(!canReadDiscussion) continue; // Skip
-				}
-				else if(res.DocumentType == DocumentType.Attachment) {
-					currentPage = Pages.FindPage(res.Wiki, res.PageFullName);
-					pageCategories = Pages.GetCategoriesForPage(currentPage);
+				//    // Verify permissions
+				//    bool canReadDiscussion = authChecker.CheckActionForPage(currentPage.FullName,
+				//        Actions.ForPages.ReadDiscussion, currentUser, currentGroups);
+				//    if(!canReadDiscussion) continue; // Skip
+				//}
+				//else if(res.DocumentType == DocumentType.Attachment) {
+				//    currentPage = Pages.FindPage(res.Wiki, res.PageFullName);
+				//    pageCategories = Pages.GetCategoriesForPage(currentPage);
 
-					// Verify permissions
-					bool canDownloadAttn = authChecker.CheckActionForPage(currentPage.FullName,
-						Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
-					if(!canDownloadAttn) continue; // Skip
-				}
-				else if(res.DocumentType == DocumentType.File) {
-					string[] fields = res.FileName.Split('|');
-					IFilesStorageProviderV40 provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(fields[0], currentWiki);
-					string directory = Tools.GetDirectoryName(fields[1]);
+				//    // Verify permissions
+				//    bool canDownloadAttn = authChecker.CheckActionForPage(currentPage.FullName,
+				//        Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
+				//    if(!canDownloadAttn) continue; // Skip
+				//}
+				//else if(res.DocumentType == DocumentType.File) {
+				//    string[] fields = res.FileName.Split('|');
+				//    IFilesStorageProviderV40 provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(fields[0], currentWiki);
+				//    string directory = Tools.GetDirectoryName(fields[1]);
 
-					// Verify permissions
-					bool canDownloadFiles = authChecker.CheckActionForDirectory(provider, directory,
-						Actions.ForDirectories.DownloadFiles, currentUser, currentGroups);
-					if(!canDownloadFiles) continue; // Skip
-				}
+				//    // Verify permissions
+				//    bool canDownloadFiles = authChecker.CheckActionForDirectory(provider, directory,
+				//        Actions.ForDirectories.DownloadFiles, currentUser, currentGroups);
+				//    if(!canDownloadFiles) continue; // Skip
+				//}
 
 				string currentNamespace = DetectNamespace();
 				if(string.IsNullOrEmpty(currentNamespace)) currentNamespace = null;
@@ -351,37 +351,39 @@ namespace ScrewTurn.Wiki {
 		/// <param name="result">The result to use.</param>
 		/// <returns>The instance.</returns>
 		public static SearchResultRow CreateInstance(SearchResult result) {
-			string queryStringKeywords = "HL=" + GetKeywordsForQueryString(result.Matches);
+			//string queryStringKeywords = "HL=" + GetKeywordsForQueryString(result.Matches);
+			string queryStringKeywords = "HL=";
 
 			if(result.DocumentType == DocumentType.Page) {
+				DocumentPage doc = result.Document as DocumentPage;
 				return new SearchResultRow(result.PageFullName + GlobalSettings.PageExtension + "?" + queryStringKeywords, Page,
 					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), result.Title, false, FormattingContext.PageContent, result.PageFullName),
-					result.Relevance.Value, GetExcerpt(pageDoc.Page, result.Matches));
+					1, doc.HighlightedContent);
 			}
-			else if(result.DocumentType == DocumentType.Message) {
-				PageContent content = Pages.FindPage(result.Wiki, result.PageFullName);
+			//else if(result.DocumentType == DocumentType.Message) {
+			//    PageContent content = Pages.FindPage(result.Wiki, result.PageFullName);
 
-				return new SearchResultRow(result.PageFullName + GlobalSettings.PageExtension + "?" + queryStringKeywords +"&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(result.DateTime), Message,
-					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), result.Title, false, FormattingContext.MessageBody, content.FullName) + " (" +
-					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.MessageBody, content.FullName) +
-					")", result.Relevance.Value, GetExcerpt(content, result.MessageID, result.Matches));
-			}
-			else if(result.DocumentType == DocumentType.File) {
-				FileDocument fileDoc = result.Document as FileDocument;
+			//    return new SearchResultRow(result.PageFullName + GlobalSettings.PageExtension + "?" + queryStringKeywords +"&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(result.DateTime), Message,
+			//        FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), result.Title, false, FormattingContext.MessageBody, content.FullName) + " (" +
+			//        FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.MessageBody, content.FullName) +
+			//        ")", result.Relevance.Value, GetExcerpt(content, result.MessageID, result.Matches));
+			//}
+			//else if(result.DocumentType == DocumentType.File) {
+			//    FileDocument fileDoc = result.Document as FileDocument;
 
-				return new SearchResultRow("GetFile.aspx?File=" + Tools.UrlEncode(fileDoc.Name.Substring(fileDoc.Provider.Length + 1)) +
-					"&amp;Provider=" + Tools.UrlEncode(fileDoc.Provider),
-					File, fileDoc.Title, result.Relevance.Value, "");
-			}
-			else if(result.DocumentType == DocumentType.Attachment) {
-				PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
-				PageContent content = attnDoc.Page;
+			//    return new SearchResultRow("GetFile.aspx?File=" + Tools.UrlEncode(fileDoc.Name.Substring(fileDoc.Provider.Length + 1)) +
+			//        "&amp;Provider=" + Tools.UrlEncode(fileDoc.Provider),
+			//        File, fileDoc.Title, result.Relevance.Value, "");
+			//}
+			//else if(result.DocumentType == DocumentType.Attachment) {
+			//    PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
+			//    PageContent content = attnDoc.Page;
 
-				return new SearchResultRow(attnDoc.Page.FullName + GlobalSettings.PageExtension, Attachment,
-					attnDoc.Title + " (" +
-					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.PageContent, content.FullName) +
-					")", result.Relevance.Value, "");
-			}
+			//    return new SearchResultRow(attnDoc.Page.FullName + GlobalSettings.PageExtension, Attachment,
+			//        attnDoc.Title + " (" +
+			//        FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.PageContent, content.FullName) +
+			//        ")", result.Relevance.Value, "");
+			//}
 			else throw new NotSupportedException();
 		}
 
@@ -391,15 +393,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The page.</param>
 		/// <param name="matches">The matches to highlight.</param>
 		/// <returns>The excerpt.</returns>
-		private static string GetExcerpt(PageContent page, WordInfoCollection matches) {
-			string content = page.Content;
+		//private static string GetExcerpt(PageContent page, WordInfoCollection matches) {
+		//    string content = page.Content;
 
-			List<WordInfo> sortedMatches = new List<WordInfo>(matches);
-			sortedMatches.RemoveAll(delegate(WordInfo wi) { return wi.Location != WordLocation.Content; });
-			sortedMatches.Sort(delegate(WordInfo x, WordInfo y) { return x.FirstCharIndex.CompareTo(y.FirstCharIndex); });
+		//    List<WordInfo> sortedMatches = new List<WordInfo>(matches);
+		//    sortedMatches.RemoveAll(delegate(WordInfo wi) { return wi.Location != WordLocation.Content; });
+		//    sortedMatches.Sort(delegate(WordInfo x, WordInfo y) { return x.FirstCharIndex.CompareTo(y.FirstCharIndex); });
 
-			return BuildFormattedExcerpt(sortedMatches, Host.Instance.PrepareContentForIndexing(Tools.DetectCurrentWiki(), page.FullName, content));
-		}
+		//    return BuildFormattedExcerpt(sortedMatches, Host.Instance.PrepareContentForIndexing(Tools.DetectCurrentWiki(), page.FullName, content));
+		//}
 
 		/// <summary>
 		/// Gets the formatted message excerpt.
@@ -408,17 +410,17 @@ namespace ScrewTurn.Wiki {
 		/// <param name="messageID">The message ID.</param>
 		/// <param name="matches">The matches to highlight.</param>
 		/// <returns>The excerpt.</returns>
-		private static string GetExcerpt(PageContent page, int messageID, WordInfoCollection matches) {
-			Message message = Pages.FindMessage(Pages.GetPageMessages(page), messageID);
+		//private static string GetExcerpt(PageContent page, int messageID, WordInfoCollection matches) {
+		//    Message message = Pages.FindMessage(Pages.GetPageMessages(page), messageID);
 
-			string content = message.Body;
+		//    string content = message.Body;
 
-			List<WordInfo> sortedMatches = new List<WordInfo>(matches);
-			sortedMatches.RemoveAll(delegate(WordInfo wi) { return wi.Location != WordLocation.Content; });
-			sortedMatches.Sort(delegate(WordInfo x, WordInfo y) { return x.FirstCharIndex.CompareTo(y.FirstCharIndex); });
+		//    List<WordInfo> sortedMatches = new List<WordInfo>(matches);
+		//    sortedMatches.RemoveAll(delegate(WordInfo wi) { return wi.Location != WordLocation.Content; });
+		//    sortedMatches.Sort(delegate(WordInfo x, WordInfo y) { return x.FirstCharIndex.CompareTo(y.FirstCharIndex); });
 
-			return BuildFormattedExcerpt(sortedMatches, Host.Instance.PrepareContentForIndexing(Tools.DetectCurrentWiki(), null, content));
-		}
+		//    return BuildFormattedExcerpt(sortedMatches, Host.Instance.PrepareContentForIndexing(Tools.DetectCurrentWiki(), null, content));
+		//}
 
 		/// <summary>
 		/// Builds the formatted excerpt for a search match.
@@ -426,97 +428,97 @@ namespace ScrewTurn.Wiki {
 		/// <param name="matches">The regex matches.</param>
 		/// <param name="input">The original input text.</param>
 		/// <returns>The formatted excerpt.</returns>
-		private static string BuildFormattedExcerpt(List<WordInfo> matches, string input) {
-			// Highlight all the matches in the original string, then cut it
+		//private static string BuildFormattedExcerpt(List<WordInfo> matches, string input) {
+		//    // Highlight all the matches in the original string, then cut it
 
-			int shift = 100;
-			int maxLen = 600;
-			string highlightOpen = "<b class=\"searchkeyword\">";
-			string highlightClose = "</b>";
+		//    int shift = 100;
+		//    int maxLen = 600;
+		//    string highlightOpen = "<b class=\"searchkeyword\">";
+		//    string highlightClose = "</b>";
 
-			StringBuilder sb = new StringBuilder(input);
+		//    StringBuilder sb = new StringBuilder(input);
 
-			for(int i = 0; i < matches.Count; i++) {
-				WordInfo match = matches[i];
+		//    for(int i = 0; i < matches.Count; i++) {
+		//        WordInfo match = matches[i];
 
-				int openIndex = match.FirstCharIndex + i * (highlightOpen.Length + highlightClose.Length);
-				bool openIndexOk = openIndex >= 0 && openIndex <= sb.Length;
-				if(openIndexOk) sb.Insert(openIndex, highlightOpen);
+		//        int openIndex = match.FirstCharIndex + i * (highlightOpen.Length + highlightClose.Length);
+		//        bool openIndexOk = openIndex >= 0 && openIndex <= sb.Length;
+		//        if(openIndexOk) sb.Insert(openIndex, highlightOpen);
 
-				int closeIndex = match.FirstCharIndex + match.Text.Length + highlightOpen.Length + i * (highlightOpen.Length + highlightClose.Length);
-				if(openIndexOk && closeIndex >= 0 && closeIndex <= sb.Length) sb.Insert(closeIndex, highlightClose);
-				else if(openIndexOk) sb.Append(highlightClose); // Make sure an open tags is also closed
+		//        int closeIndex = match.FirstCharIndex + match.Text.Length + highlightOpen.Length + i * (highlightOpen.Length + highlightClose.Length);
+		//        if(openIndexOk && closeIndex >= 0 && closeIndex <= sb.Length) sb.Insert(closeIndex, highlightClose);
+		//        else if(openIndexOk) sb.Append(highlightClose); // Make sure an open tags is also closed
 
-			}
+		//    }
 
-			bool startsAtZero = false, endsAtEnd = false;
+		//    bool startsAtZero = false, endsAtEnd = false;
 
-			string result = "";
-			if(matches.Count > 0) {
-				int start = matches[0].FirstCharIndex - shift;
-				if(start < 0) {
-					start = 0;
-					startsAtZero = true;
-				}
-				int len = matches[matches.Count - 1].FirstCharIndex + matches[matches.Count - 1].Text.Length + shift - matches.Count * (highlightOpen.Length + highlightClose.Length) - start;
-				if(start + len >= sb.Length) {
-					len = sb.Length - start;
-					endsAtEnd = true;
-				}
-				if(len <= 0) len = sb.Length; // HACK: This should never occur, but if it does it crashes the wiki, so set it to max len
-				if(len > maxLen) len = maxLen;
+		//    string result = "";
+		//    if(matches.Count > 0) {
+		//        int start = matches[0].FirstCharIndex - shift;
+		//        if(start < 0) {
+		//            start = 0;
+		//            startsAtZero = true;
+		//        }
+		//        int len = matches[matches.Count - 1].FirstCharIndex + matches[matches.Count - 1].Text.Length + shift - matches.Count * (highlightOpen.Length + highlightClose.Length) - start;
+		//        if(start + len >= sb.Length) {
+		//            len = sb.Length - start;
+		//            endsAtEnd = true;
+		//        }
+		//        if(len <= 0) len = sb.Length; // HACK: This should never occur, but if it does it crashes the wiki, so set it to max len
+		//        if(len > maxLen) len = maxLen;
 
-				result = sb.ToString();
+		//        result = sb.ToString();
 
-				// Cut string without breaking words
-				while(start > 0 && result[start] != ' ') {
-					start--;
-					len++;
-				}
-				while(start + len < result.Length && result[start + len] != ' ') len++;
+		//        // Cut string without breaking words
+		//        while(start > 0 && result[start] != ' ') {
+		//            start--;
+		//            len++;
+		//        }
+		//        while(start + len < result.Length && result[start + len] != ' ') len++;
 
-				result = sb.ToString().Substring(start, len);
-			}
-			else {
-				// Extract an initial piece of the content (300 chars)
-				startsAtZero = true;
-				endsAtEnd = true;
-				if(input.Length < 300) result = input;
-				else {
-					endsAtEnd = false;
-					result = input.Substring(0, 300);
-					// Cut string without breaking words (this will require just a few iterations)
-					while(result.Length < input.Length && input[result.Length] != ' ') {
-						result += input[result.Length];
-					}
-				}
-			}
+		//        result = sb.ToString().Substring(start, len);
+		//    }
+		//    else {
+		//        // Extract an initial piece of the content (300 chars)
+		//        startsAtZero = true;
+		//        endsAtEnd = true;
+		//        if(input.Length < 300) result = input;
+		//        else {
+		//            endsAtEnd = false;
+		//            result = input.Substring(0, 300);
+		//            // Cut string without breaking words (this will require just a few iterations)
+		//            while(result.Length < input.Length && input[result.Length] != ' ') {
+		//                result += input[result.Length];
+		//            }
+		//        }
+		//    }
 
-			if(!startsAtZero) result = "[...] " + result;
-			if(!endsAtEnd) result += " [...]";
+		//    if(!startsAtZero) result = "[...] " + result;
+		//    if(!endsAtEnd) result += " [...]";
 
-			return result;
-		}
+		//    return result;
+		//}
 
 		/// <summary>
 		/// Gets a list of keywords formatted for the query string.
 		/// </summary>
 		/// <param name="matches">The search keywords.</param>
 		/// <returns>The formatted list, for example 'word1,word2,word3'.</returns>
-		private static string GetKeywordsForQueryString(WordInfoCollection matches) {
-			StringBuilder buffer = new StringBuilder(100);
-			List<string> added = new List<string>(5);
+		//private static string GetKeywordsForQueryString(WordInfoCollection matches) {
+		//    StringBuilder buffer = new StringBuilder(100);
+		//    List<string> added = new List<string>(5);
 
-			for(int i = 0; i < matches.Count; i++) {
-				if(matches[i].Text.Length > 1 && !added.Contains(matches[i].Text)) {
-					buffer.Append(Tools.UrlEncode(matches[i].Text));
-					if(i != matches.Count - 1) buffer.Append(",");
-					added.Add(matches[i].Text);
-				}
-			}
+		//    for(int i = 0; i < matches.Count; i++) {
+		//        if(matches[i].Text.Length > 1 && !added.Contains(matches[i].Text)) {
+		//            buffer.Append(Tools.UrlEncode(matches[i].Text));
+		//            if(i != matches.Count - 1) buffer.Append(",");
+		//            added.Add(matches[i].Text);
+		//        }
+		//    }
 
-			return buffer.ToString().TrimEnd(',');
-		}
+		//    return buffer.ToString().TrimEnd(',');
+		//}
 
 	}
 

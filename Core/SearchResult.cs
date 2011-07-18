@@ -17,6 +17,11 @@ namespace ScrewTurn.Wiki {
 		public DocumentType DocumentType;
 
 		/// <summary>
+		/// The found document object.
+		/// </summary>
+		public IDocument Document;
+
+		/// <summary>
 		/// The wiki to witch belongs the found document.
 		/// </summary>
 		public string Wiki;

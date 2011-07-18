@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(DummyIndexDirectoryProvider), "");
 
-			string pageTitle = "This is the title of the page";
+			string pageTitle = "This page is the title of the page";
 			string pageContent = "This is the content of the page";
 
 			PageContent page = new PageContent("pagefullname", pagesStorageProvider, DateTime.Now, pageTitle,
@@ -40,8 +40,12 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
-			Assert.AreEqual(pageTitle, results[0].Title, "Wrong title");
-			Assert.AreEqual(pageContent, results[0].Content, "Wrong content");
+			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
+
+			DocumentPage documentPage = results[0].Document as DocumentPage;
+
+			Assert.AreEqual("This <span class=\"searchResult\">page</span> is the title of the <span class=\"searchResult\">page</span>", documentPage.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the <span class=\"searchResult\">page</span>", documentPage.HighlightedContent, "Wrong content");
 		}
 
 		[Test]
@@ -74,11 +78,15 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Assert.AreEqual(2, results.Count, "Wrong result length");
 
-			Assert.AreEqual(pageTitle1, results[0].Title, "Wrong title");
-			Assert.AreEqual(pageContent1, results[0].Content, "Wrong content");
+			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
+			DocumentPage doc1 = results[0].Document as DocumentPage;
+			Assert.AreEqual("This is the title of the <span class=\"searchResult\">page</span>", doc1.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the <span class=\"searchResult\">page</span>", doc1.HighlightedContent, "Wrong content");
 
-			Assert.AreEqual(pageTitle2, results[1].Title, "Wrong title");
-			Assert.AreEqual(pageContent2, results[1].Content, "Wrong content");
+			Assert.AreEqual(DocumentType.Page, results[1].DocumentType, "Wrong document type");
+			DocumentPage doc2 = results[1].Document as DocumentPage;
+			Assert.AreEqual("This is the title of the second <span class=\"searchResult\">page</span>", doc2.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the second <span class=\"searchResult\">page</span>", doc2.HighlightedContent, "Wrong content");
 		}
 
 		[Test]
@@ -111,11 +119,15 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Assert.AreEqual(2, results.Count, "Wrong result length");
 
-			Assert.AreEqual(pageTitle1, results[1].Title, "Wrong title");
-			Assert.AreEqual(pageContent1, results[1].Content, "Wrong content");
+			Assert.AreEqual(DocumentType.Page, results[1].DocumentType, "Wrong document type");
+			DocumentPage doc1 = results[1].Document as DocumentPage;
+			Assert.AreEqual(string.Empty, doc1.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the <span class=\"searchResult\">page</span>", doc1.HighlightedContent, "Wrong content");
 
-			Assert.AreEqual(pageTitle2, results[0].Title, "Wrong title");
-			Assert.AreEqual(pageContent2, results[0].Content, "Wrong content");
+			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
+			DocumentPage doc2 = results[0].Document as DocumentPage;
+			Assert.AreEqual("This is the title of the second <span class=\"searchResult\">page</span>", doc2.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the second <span class=\"searchResult\">page</span>", doc2.HighlightedContent, "Wrong content");
 		}
 
 		[Test]
@@ -148,15 +160,15 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Assert.AreEqual(2, results.Count, "Wrong result length");
 
-			Assert.AreEqual(page1.Provider.CurrentWiki, results[1].Wiki, "Wrong wiki");
-			Assert.AreEqual(page1.FullName, results[1].PageFullName, "Wrong page full name");
-			Assert.AreEqual(pageTitle1, results[1].Title, "Wrong title");
-			Assert.AreEqual(pageContent1, results[1].Content, "Wrong content");
+			Assert.AreEqual(DocumentType.Page, results[1].DocumentType, "Wrong document type");
+			DocumentPage doc1 = results[1].Document as DocumentPage;
+			Assert.AreEqual(string.Empty, doc1.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the <span class=\"searchResult\">page</span>", doc1.HighlightedContent, "Wrong content");
 
-			Assert.AreEqual(page2.Provider.CurrentWiki, results[0].Wiki, "Wrong wiki");
-			Assert.AreEqual(page2.FullName, results[0].PageFullName, "Wrong page full name");
-			Assert.AreEqual(pageTitle2, results[0].Title, "Wrong title");
-			Assert.AreEqual(pageContent2, results[0].Content, "Wrong content");
+			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
+			DocumentPage doc2 = results[0].Document as DocumentPage;
+			Assert.AreEqual("This is the title of the second <span class=\"searchResult\">page</span>", doc2.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the second <span class=\"searchResult\">page</span>", doc2.HighlightedContent, "Wrong content");
 
 			Assert.IsTrue(SearchClass.UnindexPage(page1));
 
@@ -164,8 +176,10 @@ namespace ScrewTurn.Wiki.Tests {
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
-			Assert.AreEqual(pageTitle2, results[0].Title, "Wrong title");
-			Assert.AreEqual(pageContent2, results[0].Content, "Wrong content");
+			Assert.AreEqual(DocumentType.Page, results[0].DocumentType, "Wrong document type");
+			DocumentPage doc3 = results[0].Document as DocumentPage;
+			Assert.AreEqual("This is the title of the second <span class=\"searchResult\">page</span>", doc3.HighlightedTitle, "Wrong title");
+			Assert.AreEqual("This is the content of the second <span class=\"searchResult\">page</span>", doc3.HighlightedContent, "Wrong content");
 		}
 
 		private class DummyIndexDirectoryProvider : IIndexDirectoryProviderV40 {
