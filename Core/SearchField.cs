@@ -37,11 +37,7 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// The DateTime of the message.
 		/// </summary>
-		MessageDateTime,
-		/// <summary>
-		/// The name of a file.
-		/// </summary>
-		FileName
+		MessageDateTime
 	}
 
 	/// <summary>
@@ -70,8 +66,6 @@ namespace ScrewTurn.Wiki {
 					return "MessageId";
 				case SearchField.MessageDateTime:
 					return "MessageDateTime";
-				case SearchField.FileName:
-					return "FileName";
 				default:
 					throw new ArgumentException("The given SearchField is not valid");
 			}

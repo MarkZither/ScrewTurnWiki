@@ -11,14 +11,14 @@ namespace ScrewTurn.Wiki.SearchEngine {
 	public class Parser {
 		[DllImport("ole32.dll", CharSet = CharSet.Unicode)]
 		private static extern void CreateStreamOnHGlobal(IntPtr hGlobal, bool fDeleteOnRelease,
-														 [Out] out UCOMIStream pStream);
+														 [Out] out System.Runtime.InteropServices.ComTypes.IStream pStream);
 
 		[DllImport("query.dll", CharSet = CharSet.Unicode)]
 		private static extern int LoadIFilter(string pwcsPath, [MarshalAs(UnmanagedType.IUnknown)] object pUnkOuter,
 											  ref IFilter ppIUnk);
 
 		[DllImport("query.dll", CharSet = CharSet.Unicode)]
-		private static extern int BindIFilterFromStream(UCOMIStream pStm,
+		private static extern int BindIFilterFromStream(System.Runtime.InteropServices.ComTypes.IStream pStm,
 														[MarshalAs(UnmanagedType.IUnknown)] object pUnkOuter,
 														[Out] out IFilter ppIUnk);
 
@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki.SearchEngine {
 			// copy byte array to native heap
 			Marshal.Copy(b, 0, nativePtr, b.Length);
 			// Create a UCOMIStream from the allocated memory
-			UCOMIStream comStream;
+			System.Runtime.InteropServices.ComTypes.IStream comStream;
 			CreateStreamOnHGlobal(nativePtr, true, out comStream);
 
 			// Try to load the corresponding IFilter 

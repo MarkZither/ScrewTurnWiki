@@ -210,6 +210,14 @@ namespace ScrewTurn.Wiki {
 							if(!done) {
 								lblUploadResult.Text = Properties.Messages.CannotStoreFile;
 								lblUploadResult.CssClass = "resulterror";
+
+								// Index the attached file
+								string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+								string tempFile = Path.Combine(tempDir, fileUpload.FileName);
+								FileStream writer = File.OpenWrite(tempFile);
+								writer.Write(fileUpload.FileBytes, 0, fileUpload.FileBytes.Length);
+								SearchClass.IndexPageAttachment(fileUpload.FileName, tempFile, CurrentPage);
+								Directory.Delete(tempDir, true);
 							}
 							else {
 								Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
@@ -291,6 +299,10 @@ namespace ScrewTurn.Wiki {
 
 					Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 						txtNewName.Text, CurrentPage.FullName, lblItem.Text, FileActivity.AttachmentRenamed);
+
+					// Fix index according to file renaming
+					SearchClass.RenamePageAttachment(CurrentPage, lblItem.Text, txtNewName.Text);
+
 				}
 				else {
 					lblRenameResult.Text = Properties.Messages.CannotRenameItem;
