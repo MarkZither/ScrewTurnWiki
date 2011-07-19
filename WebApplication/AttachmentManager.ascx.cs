@@ -210,18 +210,20 @@ namespace ScrewTurn.Wiki {
 							if(!done) {
 								lblUploadResult.Text = Properties.Messages.CannotStoreFile;
 								lblUploadResult.CssClass = "resulterror";
-
-								// Index the attached file
-								string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
-								string tempFile = Path.Combine(tempDir, fileUpload.FileName);
-								FileStream writer = File.OpenWrite(tempFile);
-								writer.Write(fileUpload.FileBytes, 0, fileUpload.FileBytes.Length);
-								SearchClass.IndexPageAttachment(fileUpload.FileName, tempFile, CurrentPage);
-								Directory.Delete(tempDir, true);
 							}
 							else {
 								Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 									fileUpload.FileName, CurrentPage.FullName, null, FileActivity.AttachmentUploaded);
+
+								// Index the attached file
+								string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+								if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+								string tempFile = Path.Combine(tempDir, fileUpload.FileName);
+								using(FileStream writer = File.Create(tempFile)) {
+									writer.Write(fileUpload.FileBytes, 0, fileUpload.FileBytes.Length);
+								}
+								SearchClass.IndexPageAttachment(fileUpload.FileName, tempFile, CurrentPage);
+								Directory.Delete(tempDir, true);
 							}
 							rptItems.DataBind();
 						}
