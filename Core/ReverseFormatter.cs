@@ -387,8 +387,13 @@ namespace ScrewTurn.Wiki {
 									string[] splittedLink = link.Split('=');
 									link = "c:" + splittedLink[1];
 								}
-								else if(pageLink) link = link.Remove(link.IndexOf(Settings.PageExtension));
-								else link = ProcessLink(link);
+								else if(pageLink) {
+									link = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
+									link = link.Remove(link.IndexOf(Settings.PageExtension));
+								}
+								else {
+									link = ProcessLink(link);
+								}
 								if(!anchor && !isTable && !childImg) {
 									if(title != link) result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
 									else result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
