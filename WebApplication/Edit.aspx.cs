@@ -687,10 +687,14 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The keywords.</returns>
 		private string[] GetKeywords() {
-			string[] keywords = txtKeywords.Text.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-			for(int i = 0; i < keywords.Length; i++) {
-				keywords[i] = keywords[i].Trim();
-			}
+			var keywords = txtKeywords.Text.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+			keywords =
+				(from k in keywords
+				 select k.Trim())
+				 .Distinct(StringComparer.OrdinalIgnoreCase)
+				 .ToArray();
+
 			return keywords;
 		}
 
