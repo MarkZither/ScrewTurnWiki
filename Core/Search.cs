@@ -112,16 +112,20 @@ namespace ScrewTurn.Wiki {
 
 			Analyzer analyzer = new SimpleAnalyzer();
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
-
-			Document doc = new Document();
-			doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Page), Field.Store.YES, Field.Index.NO));
-			doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.Title.AsString(), page.Title, Field.Store.YES, Field.Index.ANALYZED));
-			doc.Add(new Field(SearchField.Content.AsString(), page.Content, Field.Store.YES, Field.Index.ANALYZED));
-			writer.AddDocument(doc);
-			writer.Commit();
-			writer.Close();
+			try {
+				Document doc = new Document();
+				doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Page), Field.Store.YES, Field.Index.NO));
+				doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.Add(new Field(SearchField.Title.AsString(), page.Title, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.Content.AsString(), page.Content, Field.Store.YES, Field.Index.ANALYZED));
+				writer.AddDocument(doc);
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				writer.Close();
+			}
 			return true;
 		}
 
@@ -137,17 +141,22 @@ namespace ScrewTurn.Wiki {
 			Analyzer analyzer = new SimpleAnalyzer();
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 
-			Document doc = new Document();
-			doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Message), Field.Store.YES, Field.Index.NO));
-			doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.MessageId.AsString(), message.ID.ToString(), Field.Store.NO, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.Title.AsString(), message.Subject, Field.Store.YES, Field.Index.ANALYZED));
-			doc.Add(new Field(SearchField.Content.AsString(), message.Body, Field.Store.YES, Field.Index.ANALYZED));
-			doc.Add(new Field(SearchField.MessageDateTime.AsString(), message.DateTime.ToString(), Field.Store.YES, Field.Index.NO));
-			writer.AddDocument(doc);
-			writer.Commit();
-			writer.Close();
+			try {
+				Document doc = new Document();
+				doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Message), Field.Store.YES, Field.Index.NO));
+				doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.Add(new Field(SearchField.MessageId.AsString(), message.ID.ToString(), Field.Store.NO, Field.Index.NOT_ANALYZED));
+				doc.Add(new Field(SearchField.Title.AsString(), message.Subject, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.Content.AsString(), message.Body, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.MessageDateTime.AsString(), message.DateTime.ToString(), Field.Store.YES, Field.Index.NO));
+				writer.AddDocument(doc);
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				writer.Close();
+			}
 			return true;
 		}
 
@@ -163,16 +172,21 @@ namespace ScrewTurn.Wiki {
 
 			Analyzer analyzer = new SimpleAnalyzer();
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
-
-			Document doc = new Document();
-			doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.NO));
-			doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.Title.AsString(), fileName, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			doc.Add(new Field(SearchField.Content.AsString(), ScrewTurn.Wiki.SearchEngine.Parser.Parse(filePath), Field.Store.YES, Field.Index.ANALYZED));
-			writer.AddDocument(doc);
-			writer.Commit();
-			writer.Close();
+			try {
+				Document doc = new Document();
+				doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.NO));
+				doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.Add(new Field(SearchField.Title.AsString(), fileName, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				string fileContent = ScrewTurn.Wiki.SearchEngine.Parser.Parse(filePath);
+				doc.Add(new Field(SearchField.Content.AsString(), fileContent, Field.Store.YES, Field.Index.ANALYZED));
+				writer.AddDocument(doc);
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				writer.Close();
+			}
 			return true;
 		}
 
@@ -186,7 +200,7 @@ namespace ScrewTurn.Wiki {
 
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
 
-			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { page.FullName }, new string[] { SearchField.PageFullName.AsString()}, new BooleanClause.Occur[] { BooleanClause.Occur.MUST }, new KeywordAnalyzer());
+			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { DocumentTypeToString(DocumentType.Page), page.FullName }, new string[] { SearchField.DocumentType.AsString(), SearchField.PageFullName.AsString()}, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
 
 			writer.DeleteDocuments(query);
 			writer.Commit();
@@ -205,7 +219,7 @@ namespace ScrewTurn.Wiki {
 
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
 
-			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { page.FullName, messageId.ToString() }, new string[] { SearchField.PageFullName.AsString(), SearchField.MessageId.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new SimpleAnalyzer());
+			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { DocumentTypeToString(DocumentType.Message), page.FullName, messageId.ToString() }, new string[] { SearchField.DocumentType.AsString(), SearchField.PageFullName.AsString(), SearchField.MessageId.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new SimpleAnalyzer());
 
 			writer.DeleteDocuments(query);
 			writer.Commit();
@@ -224,7 +238,7 @@ namespace ScrewTurn.Wiki {
 
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
 
-			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { page.FullName, fileName }, new string[] { SearchField.PageFullName.AsString(), SearchField.Title.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
+			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { DocumentTypeToString(DocumentType.Attachment), page.FullName, fileName }, new string[] { SearchField.DocumentType.AsString(), SearchField.PageFullName.AsString(), SearchField.Title.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
 
 			writer.DeleteDocuments(query);
 			writer.Commit();
