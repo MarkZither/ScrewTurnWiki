@@ -319,7 +319,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			DateTime dt = DateTime.Now;
 			PageContent page = new PageContent("pagefullname", pagesStorageProvider, dt, "title", "user-test", dt, "", "content", new string[0], "");
-			string fileName = "file_name_1";
+			string fileName = "file name_1";
 
 			string filePath = Path.Combine(testDir, "test.txt");
 			using(StreamWriter writer = File.CreateText(filePath)) {
@@ -361,7 +361,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			DateTime dt = DateTime.Now;
 			PageContent page = new PageContent("pagefullname", pagesStorageProvider, dt, "title", "user-test", dt, "", "content", new string[0], "");
-			string fileName = "file_name_1";
+			string fileName = "file name_1";
 
 			string filePath = Path.Combine(testDir, "test.txt");
 			using(StreamWriter writer = File.CreateText(filePath)) {
@@ -381,7 +381,7 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(fileName, pageAttachmentDocument.FileName, "Wrong file name");
 			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", pageAttachmentDocument.HighlightedFileContent, "Wrong file content");
 
-			Assert.IsTrue(SearchClass.RenamePageAttachment(page, fileName, "file_name_2"));
+			Assert.IsTrue(SearchClass.RenamePageAttachment(page, fileName, "file name_2"));
 
 			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
 
@@ -391,7 +391,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			pageAttachmentDocument = results[0].Document as PageAttachmentDocument;
 
-			Assert.AreEqual("file_name_2", pageAttachmentDocument.FileName, "Wrong file name");
+			Assert.AreEqual("file name_2", pageAttachmentDocument.FileName, "Wrong file name");
 			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", pageAttachmentDocument.HighlightedFileContent, "Wrong file content");
 
 		}

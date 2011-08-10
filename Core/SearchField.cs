@@ -11,6 +11,10 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public enum SearchField {
 		/// <summary>
+		/// A unique key to identify the document.
+		/// </summary>
+		Key,
+		/// <summary>
 		/// The type of the indexed document.
 		/// </summary>
 		DocumentType,
@@ -52,6 +56,8 @@ namespace ScrewTurn.Wiki {
 		/// <returns></returns>
 		public static string AsString(this SearchField field) {
 			switch(field) {
+				case SearchField.Key:
+					return "Key";
 				case SearchField.DocumentType:
 					return "DocumentType";
 				case SearchField.Wiki:

@@ -261,6 +261,9 @@ namespace ScrewTurn.Wiki {
 						if(d) {
 							Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 								(string)e.CommandArgument, CurrentPage.FullName, null, FileActivity.AttachmentDeleted);
+
+							// Remove attachment from index
+							SearchClass.UnindexPageAttachment((string)e.CommandArgument, CurrentPage);
 						}
 
 						rptItems.DataBind();

@@ -174,10 +174,11 @@ namespace ScrewTurn.Wiki {
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 			try {
 				Document doc = new Document();
-				doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.Add(new Field(SearchField.Title.AsString(), fileName, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.Add(new Field(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.Attachment) + "|" + page.Provider.CurrentWiki + "|" + page.FullName + "|" + fileName).Replace(" ", ""), Field.Store.NO, Field.Index.NOT_ANALYZED_NO_NORMS));
+				doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.Title.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
 				string fileContent = ScrewTurn.Wiki.SearchEngine.Parser.Parse(filePath);
 				doc.Add(new Field(SearchField.Content.AsString(), fileContent, Field.Store.YES, Field.Index.ANALYZED));
 				writer.AddDocument(doc);
@@ -200,11 +201,15 @@ namespace ScrewTurn.Wiki {
 
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
 
-			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { DocumentTypeToString(DocumentType.Page), page.FullName }, new string[] { SearchField.DocumentType.AsString(), SearchField.PageFullName.AsString()}, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
-
-			writer.DeleteDocuments(query);
-			writer.Commit();
-			writer.Close();
+			try {
+				Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { DocumentTypeToString(DocumentType.Page), page.FullName }, new string[] { SearchField.DocumentType.AsString(), SearchField.PageFullName.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
+				writer.DeleteDocuments(query);
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				writer.Close();
+			}
 			return true;
 		}
 
@@ -218,12 +223,15 @@ namespace ScrewTurn.Wiki {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
 
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
-
-			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { DocumentTypeToString(DocumentType.Message), page.FullName, messageId.ToString() }, new string[] { SearchField.DocumentType.AsString(), SearchField.PageFullName.AsString(), SearchField.MessageId.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new SimpleAnalyzer());
-
-			writer.DeleteDocuments(query);
-			writer.Commit();
-			writer.Close();
+			try {
+				Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { page.Provider.CurrentWiki, DocumentTypeToString(DocumentType.Message), page.FullName, messageId.ToString() }, new string[] { SearchField.Wiki.AsString(), SearchField.DocumentType.AsString(), SearchField.PageFullName.AsString(), SearchField.MessageId.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST, BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
+				writer.DeleteDocuments(query);
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				writer.Close();
+			}
 			return true;
 		}
 
@@ -236,13 +244,15 @@ namespace ScrewTurn.Wiki {
 		public static bool UnindexPageAttachment(string fileName, PageContent page) {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
 
-			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
-
-			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { DocumentTypeToString(DocumentType.Attachment), page.FullName, fileName }, new string[] { SearchField.DocumentType.AsString(), SearchField.PageFullName.AsString(), SearchField.Title.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
-
-			writer.DeleteDocuments(query);
-			writer.Commit();
-			writer.Close();
+			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new SimpleAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
+			try {
+				writer.DeleteDocuments(new Term(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.Attachment) + "|" + page.Provider.CurrentWiki + "|" + page.FullName + "|" + fileName).Replace(" ", "")));
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				writer.Close();
+			}
 			return true;
 		}
 
@@ -255,31 +265,32 @@ namespace ScrewTurn.Wiki {
 		/// <returns></returns>
 		public static bool RenamePageAttachment(PageContent page, string oldName, string newName) {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(page.Provider.CurrentWiki);
-			Analyzer analyzer = new KeywordAnalyzer();
-
-			IndexSearcher searcher = new IndexSearcher(indexDirectoryProvider.GetDirectory(), false);
-
-			Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { page.FullName, oldName }, new string[] { SearchField.PageFullName.AsString(), SearchField.Title.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, analyzer);
-			TopDocs topDocs = searcher.Search(query, 100);
-
-			Document doc = searcher.Doc(topDocs.scoreDocs[0].doc);
-
-			searcher.Close();
+			
+			Analyzer analyzer = new SimpleAnalyzer();
+			Term term = new Term(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.Attachment) + "|" + page.Provider.CurrentWiki + "|" + page.FullName + "|" + oldName).Replace(" ", ""));
 
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
-			writer.DeleteDocuments(query);
-			writer.Close();
+			IndexSearcher searcher = new IndexSearcher(indexDirectoryProvider.GetDirectory(), false);
+			Query query = new TermQuery(term);
+			try {
+				TopDocs topDocs = searcher.Search(query, 100);
+				Document doc = searcher.Doc(topDocs.scoreDocs[0].doc);
 
-			writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new SimpleAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
-			Document newDoc = new Document();
-			newDoc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.NO));
-			newDoc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			newDoc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			newDoc.Add(new Field(SearchField.Title.AsString(), newName, Field.Store.YES, Field.Index.NOT_ANALYZED));
-			newDoc.Add(new Field(SearchField.Content.AsString(), doc.GetField(SearchField.Content.AsString()).StringValue(), Field.Store.YES, Field.Index.ANALYZED));
-			writer.AddDocument(newDoc);
-			writer.Close();
-
+				Document newDoc = new Document();
+				newDoc.Add(new Field(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.Attachment) + "|" + page.Provider.CurrentWiki + "|" + page.FullName + "|" + newName).Replace(" ", ""), Field.Store.NO, Field.Index.NOT_ANALYZED_NO_NORMS));
+				newDoc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.NO));
+				newDoc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.Title.AsString(), newName, Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.Content.AsString(), doc.GetField(SearchField.Content.AsString()).StringValue(), Field.Store.YES, Field.Index.ANALYZED));
+				writer.UpdateDocument(term, newDoc);
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				searcher.Close();
+				writer.Close();
+			}
 			return true;
 		}
 
