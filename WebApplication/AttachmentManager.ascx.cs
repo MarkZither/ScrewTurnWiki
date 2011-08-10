@@ -215,6 +215,11 @@ namespace ScrewTurn.Wiki {
 								Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 									fileUpload.FileName, CurrentPage.FullName, null, FileActivity.AttachmentUploaded);
 
+								// If overwrite remove old indexed document
+								if(chkOverwrite.Checked) {
+									SearchClass.UnindexPageAttachment(fileUpload.FileName, CurrentPage);
+								}
+
 								// Index the attached file
 								string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
 								if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
