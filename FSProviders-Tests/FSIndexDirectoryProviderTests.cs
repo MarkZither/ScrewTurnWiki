@@ -28,6 +28,11 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders.Tests {
 			return host;
 		}
 
+		[SetUp]
+		public void SetUp() {
+			if(!System.IO.Directory.Exists(testDir)) System.IO.Directory.CreateDirectory(testDir);
+		}
+
 		[TearDown]
 		public void TearDown() {
 			System.IO.Directory.Delete(testDir, true);
@@ -238,6 +243,289 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders.Tests {
 
 			Assert.AreEqual("This is the subject of the message", documentMessage.Subject, "Wrong title");
 			Assert.AreEqual("This is the body of the <b class=\"searchkeyword\">message</b>", documentMessage.HighlightedBody, "Wrong content");
+		}
+
+
+		[Test]
+		public void UnindexMessageTest() {
+			IPagesStorageProviderV40 pagesStorageProvider = mocks.DynamicMock<IPagesStorageProviderV40>();
+			Expect.Call(pagesStorageProvider.CurrentWiki).Return("wiki1").Repeat.Any();
+
+			mocks.ReplayAll();
+
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(FSIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(FSIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+			Host.Instance.OverridePublicDirectory(testDir);
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(FSIndexDirectoryProvider), "");
+
+			string messageSubject = "This is the subject of the message";
+			string messageBody = "This is the body of the message";
+
+			DateTime dt = DateTime.Now;
+			PageContent page = new PageContent("pagefullname", pagesStorageProvider, dt, "title", "user-test", dt, "", "content", new string[0], "");
+			Message message = new Message(1, "user-test", messageSubject, dt, messageBody);
+
+			Assert.IsTrue(SearchClass.IndexMessage(message, page));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Content }, "message", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.Message, results[0].DocumentType, "Wrong document type");
+
+			MessageDocument documentMessage = results[0].Document as MessageDocument;
+
+			Assert.AreEqual("This is the subject of the message", documentMessage.Subject, "Wrong title");
+			Assert.AreEqual("This is the body of the <b class=\"searchkeyword\">message</b>", documentMessage.HighlightedBody, "Wrong content");
+
+			Assert.IsTrue(SearchClass.UnindexMessage(1, page));
+
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Content }, "message", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(0, results.Count, "Wrong result length");
+		}
+
+		[Test]
+		public void AddPageAttachmentTest() {
+			IPagesStorageProviderV40 pagesStorageProvider = mocks.DynamicMock<IPagesStorageProviderV40>();
+			Expect.Call(pagesStorageProvider.CurrentWiki).Return("wiki1").Repeat.Any();
+
+			mocks.ReplayAll();
+
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(FSIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(FSIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+			Host.Instance.OverridePublicDirectory(testDir);
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(FSIndexDirectoryProvider), "");
+
+			DateTime dt = DateTime.Now;
+			PageContent page = new PageContent("pagefullname", pagesStorageProvider, dt, "title", "user-test", dt, "", "content", new string[0], "");
+			string fileName = "file_name_1";
+
+			string filePath = Path.Combine(testDir, "test.txt");
+			using(StreamWriter writer = File.CreateText(filePath)) {
+				writer.Write("This is the content of a file");
+			}
+
+			Assert.IsTrue(SearchClass.IndexPageAttachment(fileName, filePath, page));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.Attachment, results[0].DocumentType, "Wrong document type");
+
+			PageAttachmentDocument pageAttachmentDocument = results[0].Document as PageAttachmentDocument;
+
+			Assert.AreEqual(fileName, pageAttachmentDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", pageAttachmentDocument.HighlightedFileContent, "Wrong file content");
+		}
+
+		[Test]
+		public void UnindexPageAttachmentTest() {
+			IPagesStorageProviderV40 pagesStorageProvider = mocks.DynamicMock<IPagesStorageProviderV40>();
+			Expect.Call(pagesStorageProvider.CurrentWiki).Return("wiki1").Repeat.Any();
+
+			mocks.ReplayAll();
+
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(FSIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(FSIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+			Host.Instance.OverridePublicDirectory(testDir);
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(FSIndexDirectoryProvider), "");
+
+			DateTime dt = DateTime.Now;
+			PageContent page = new PageContent("pagefullname", pagesStorageProvider, dt, "title", "user-test", dt, "", "content", new string[0], "");
+			string fileName = "file name_1";
+
+			string filePath = Path.Combine(testDir, "test.txt");
+			using(StreamWriter writer = File.CreateText(filePath)) {
+				writer.Write("This is the content of a file");
+			}
+
+			Assert.IsTrue(SearchClass.IndexPageAttachment(fileName, filePath, page));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.Attachment, results[0].DocumentType, "Wrong document type");
+
+			PageAttachmentDocument pageAttachmentDocument = results[0].Document as PageAttachmentDocument;
+
+			Assert.AreEqual(fileName, pageAttachmentDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", pageAttachmentDocument.HighlightedFileContent, "Wrong file content");
+
+			Assert.IsTrue(SearchClass.UnindexPageAttachment(fileName, page));
+
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(0, results.Count, "Wrong result length");
+		}
+
+		[Test]
+		public void RenamePageAttachmentTest() {
+			IPagesStorageProviderV40 pagesStorageProvider = mocks.DynamicMock<IPagesStorageProviderV40>();
+			Expect.Call(pagesStorageProvider.CurrentWiki).Return("wiki1").Repeat.Any();
+
+			mocks.ReplayAll();
+
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(FSIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(FSIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+			Host.Instance.OverridePublicDirectory(testDir);
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(FSIndexDirectoryProvider), "");
+
+			DateTime dt = DateTime.Now;
+			PageContent page = new PageContent("pagefullname", pagesStorageProvider, dt, "title", "user-test", dt, "", "content", new string[0], "");
+			string fileName = "file name_1";
+
+			string filePath = Path.Combine(testDir, "test.txt");
+			using(StreamWriter writer = File.CreateText(filePath)) {
+				writer.Write("This is the content of a file");
+			}
+
+			Assert.IsTrue(SearchClass.IndexPageAttachment(fileName, filePath, page));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.Attachment, results[0].DocumentType, "Wrong document type");
+
+			PageAttachmentDocument pageAttachmentDocument = results[0].Document as PageAttachmentDocument;
+
+			Assert.AreEqual(fileName, pageAttachmentDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", pageAttachmentDocument.HighlightedFileContent, "Wrong file content");
+
+			Assert.IsTrue(SearchClass.RenamePageAttachment(page, fileName, "file name_2"));
+
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.Attachment, results[0].DocumentType, "Wrong document type");
+
+			pageAttachmentDocument = results[0].Document as PageAttachmentDocument;
+
+			Assert.AreEqual("file name_2", pageAttachmentDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", pageAttachmentDocument.HighlightedFileContent, "Wrong file content");
+
+		}
+
+		[Test]
+		public void AddFileTest() {
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(FSIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(FSIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+			Host.Instance.OverridePublicDirectory(testDir);
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(FSIndexDirectoryProvider), "");
+
+			string fileName = "file_name_1";
+
+			string filePath = Path.Combine(testDir, "test.txt");
+			using(StreamWriter writer = File.CreateText(filePath)) {
+				writer.Write("This is the content of a file");
+			}
+
+			Assert.IsTrue(SearchClass.IndexFile(fileName, filePath, "wiki1"));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.File, results[0].DocumentType, "Wrong document type");
+
+			FileDocument fileDocument = results[0].Document as FileDocument;
+
+			Assert.AreEqual(fileName, fileDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", fileDocument.HighlightedFileContent, "Wrong file content");
+		}
+
+		[Test]
+		public void UnindexFileTest() {
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(FSIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(FSIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+			Host.Instance.OverridePublicDirectory(testDir);
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(FSIndexDirectoryProvider), "");
+
+			string fileName = "file name_1";
+
+			string filePath = Path.Combine(testDir, "test.txt");
+			using(StreamWriter writer = File.CreateText(filePath)) {
+				writer.Write("This is the content of a file");
+			}
+
+			Assert.IsTrue(SearchClass.IndexFile(fileName, filePath, "wiki1"));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.File, results[0].DocumentType, "Wrong document type");
+
+			FileDocument fileDocument = results[0].Document as FileDocument;
+
+			Assert.AreEqual(fileName, fileDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", fileDocument.HighlightedFileContent, "Wrong file content");
+
+			Assert.IsTrue(SearchClass.UnindexFile(fileName, "wiki1"));
+
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(0, results.Count, "Wrong result length");
+		}
+
+		[Test]
+		public void RenameFileTest() {
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(FSIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(FSIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+			Host.Instance.OverridePublicDirectory(testDir);
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(FSIndexDirectoryProvider), "");
+
+			string fileName = "file name_1";
+
+			string filePath = Path.Combine(testDir, "test.txt");
+			using(StreamWriter writer = File.CreateText(filePath)) {
+				writer.Write("This is the content of a file");
+			}
+
+			Assert.IsTrue(SearchClass.IndexFile(fileName, filePath, "wiki1"));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.File, results[0].DocumentType, "Wrong document type");
+
+			FileDocument fileDocument = results[0].Document as FileDocument;
+
+			Assert.AreEqual(fileName, fileDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", fileDocument.HighlightedFileContent, "Wrong file content");
+
+			Assert.IsTrue(SearchClass.RenameFile("wiki1", fileName, "file name_2"));
+
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.File, results[0].DocumentType, "Wrong document type");
+
+			fileDocument = results[0].Document as FileDocument;
+
+			Assert.AreEqual("file name_2", fileDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", fileDocument.HighlightedFileContent, "Wrong file content");
+
 		}
 
 	}

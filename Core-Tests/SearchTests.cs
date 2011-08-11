@@ -460,6 +460,49 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(0, results.Count, "Wrong result length");
 		}
 
+		[Test]
+		public void RenameFileTest() {
+			Collectors.InitCollectors();
+			Collectors.AddProvider(typeof(DummyIndexDirectoryProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyIndexDirectoryProvider)), "", typeof(IIndexDirectoryProviderV40));
+			Host.Instance = new Host();
+
+			ProviderLoader.SetUp<IIndexDirectoryProviderV40>(typeof(DummyIndexDirectoryProvider), "");
+
+			string fileName = "file name_1";
+
+			string filePath = Path.Combine(testDir, "test.txt");
+			using(StreamWriter writer = File.CreateText(filePath)) {
+				writer.Write("This is the content of a file");
+			}
+
+			Assert.IsTrue(SearchClass.IndexFile(fileName, filePath, "wiki1"));
+
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.File, results[0].DocumentType, "Wrong document type");
+
+			FileDocument fileDocument = results[0].Document as FileDocument;
+
+			Assert.AreEqual(fileName, fileDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", fileDocument.HighlightedFileContent, "Wrong file content");
+
+			Assert.IsTrue(SearchClass.RenameFile("wiki1", fileName, "file name_2"));
+
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+
+			Assert.AreEqual(1, results.Count, "Wrong result length");
+
+			Assert.AreEqual(DocumentType.File, results[0].DocumentType, "Wrong document type");
+
+			fileDocument = results[0].Document as FileDocument;
+
+			Assert.AreEqual("file name_2", fileDocument.FileName, "Wrong file name");
+			Assert.AreEqual("This is the content of a <b class=\"searchkeyword\">file</b>", fileDocument.HighlightedFileContent, "Wrong file content");
+
+		}
+
 		private class DummyIndexDirectoryProvider : IIndexDirectoryProviderV40 {
 
 			#region IIndexDirectoryProviderV40 Members
