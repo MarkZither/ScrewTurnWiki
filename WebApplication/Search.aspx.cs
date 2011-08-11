@@ -207,16 +207,17 @@ namespace ScrewTurn.Wiki {
 						Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
 					if(!canDownloadAttn) continue; // Skip
 				}
-				//else if(res.DocumentType == DocumentType.File) {
-				//    string[] fields = res.FileName.Split('|');
-				//    IFilesStorageProviderV40 provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(fields[0], currentWiki);
-				//    string directory = Tools.GetDirectoryName(fields[1]);
+				else if(res.DocumentType == DocumentType.File) {
+					FileDocument doc = res.Document as FileDocument;
+					string[] fields = doc.FileName.Split('|');
+					IFilesStorageProviderV40 provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(fields[0], currentWiki);
+					string directory = Tools.GetDirectoryName(fields[1]);
 
-				//    // Verify permissions
-				//    bool canDownloadFiles = authChecker.CheckActionForDirectory(provider, directory,
-				//        Actions.ForDirectories.DownloadFiles, currentUser, currentGroups);
-				//    if(!canDownloadFiles) continue; // Skip
-				//}
+					// Verify permissions
+					bool canDownloadFiles = authChecker.CheckActionForDirectory(provider, directory,
+						Actions.ForDirectories.DownloadFiles, currentUser, currentGroups);
+					if(!canDownloadFiles) continue; // Skip
+				}
 
 				string currentNamespace = DetectNamespace();
 				if(string.IsNullOrEmpty(currentNamespace)) currentNamespace = null;
@@ -372,13 +373,15 @@ namespace ScrewTurn.Wiki {
 					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.MessageBody, content.FullName) +
 					")", result.Relevance, doc.HighlightedBody);
 			}
-			//else if(result.DocumentType == DocumentType.File) {
-			//    FileDocument fileDoc = result.Document as FileDocument;
+			else if(result.DocumentType == DocumentType.File) {
+				FileDocument fileDoc = result.Document as FileDocument;
 
-			//    return new SearchResultRow("GetFile.aspx?File=" + Tools.UrlEncode(fileDoc.Name.Substring(fileDoc.Provider.Length + 1)) +
-			//        "&amp;Provider=" + Tools.UrlEncode(fileDoc.Provider),
-			//        File, fileDoc.Title, result.Relevance.Value, "");
-			//}
+				string[] fileParts = fileDoc.FileName.Split(new char[] { '|' });
+
+				return new SearchResultRow("GetFile.aspx?File=" + Tools.UrlEncode(fileDoc.FileName.Substring(fileParts[0].Length + 1)) +
+					"&amp;Provider=" + Tools.UrlEncode(fileParts[0]),
+					File, fileParts[1], result.Relevance, "");
+			}
 			else if(result.DocumentType == DocumentType.Attachment) {
 				PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
 				PageContent content = Pages.FindPage(attnDoc.Wiki, attnDoc.PageFullName);

@@ -39,67 +39,83 @@ namespace ScrewTurn.Wiki {
 			
 			if(searchOption == SearchOptions.AllWords) queryParser.SetDefaultOperator(QueryParser.Operator.AND);
 			if(searchOption == SearchOptions.AtLeastOneWord) queryParser.SetDefaultOperator(QueryParser.Operator.OR);
-			
-			Query query = queryParser.Parse(phrase);
-			TopDocs topDocs = searcher.Search(query, 100);
 
-			Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<b class=\"searchkeyword\">", "</b>"), new QueryScorer(query));
+			try {
+				Query query = queryParser.Parse(phrase);
+				TopDocs topDocs = searcher.Search(query, 100);
 
-			List<SearchResult> searchResults = new List<SearchResult>(topDocs.totalHits);
-			for(int i = 0; i < topDocs.totalHits; i++) {
-				Document doc = searcher.Doc(topDocs.scoreDocs[i].doc);
+				Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<b class=\"searchkeyword\">", "</b>"), new QueryScorer(query));
 
-				SearchResult result = new SearchResult();
-				result.DocumentType = DocumentTypeFromString(doc.GetField(SearchField.DocumentType.AsString()).StringValue());
-				result.Relevance = topDocs.scoreDocs[i].score * 100;
-				switch(result.DocumentType) {
-					case DocumentType.Page:
-						PageDocument page = new PageDocument();
-						page.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
-						page.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
-						page.Title = doc.GetField(SearchField.Title.AsString()).StringValue();
+				List<SearchResult> searchResults = new List<SearchResult>(topDocs.totalHits);
+				for(int i = 0; i < topDocs.totalHits; i++) {
+					Document doc = searcher.Doc(topDocs.scoreDocs[i].doc);
 
-						TokenStream tokenStream1 = analyzer.TokenStream(SearchField.Title.AsString(), new StringReader(page.Title));
-						page.HighlightedTitle = highlighter.GetBestFragments(tokenStream1, page.Title, 3, " [...] ");
+					SearchResult result = new SearchResult();
+					result.DocumentType = DocumentTypeFromString(doc.GetField(SearchField.DocumentType.AsString()).StringValue());
+					result.Relevance = topDocs.scoreDocs[i].score * 100;
+					switch(result.DocumentType) {
+						case DocumentType.Page:
+							PageDocument page = new PageDocument();
+							page.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
+							page.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
+							page.Title = doc.GetField(SearchField.Title.AsString()).StringValue();
 
-						page.Content = doc.GetField(SearchField.Content.AsString()).StringValue();
+							TokenStream tokenStream1 = analyzer.TokenStream(SearchField.Title.AsString(), new StringReader(page.Title));
+							page.HighlightedTitle = highlighter.GetBestFragments(tokenStream1, page.Title, 3, " [...] ");
 
-						tokenStream1 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(page.Content));
-						page.HighlightedContent = highlighter.GetBestFragments(tokenStream1, page.Content, 3, " [...] ");
+							page.Content = doc.GetField(SearchField.Content.AsString()).StringValue();
 
-						result.Document = page;
-						break;
-					case DocumentType.Message:
-						MessageDocument message = new MessageDocument();
-						message.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
-						message.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
-						message.DateTime = DateTime.Parse(doc.GetField(SearchField.MessageDateTime.AsString()).StringValue());
-						message.Subject = doc.GetField(SearchField.Title.AsString()).StringValue();
-						message.Body = doc.GetField(SearchField.Content.AsString()).StringValue();
+							tokenStream1 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(page.Content));
+							page.HighlightedContent = highlighter.GetBestFragments(tokenStream1, page.Content, 3, " [...] ");
 
-						TokenStream tokenStream2 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(message.Body));
-						message.HighlightedBody = highlighter.GetBestFragments(tokenStream2, message.Body, 3, " [...] ");
+							result.Document = page;
+							break;
+						case DocumentType.Message:
+							MessageDocument message = new MessageDocument();
+							message.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
+							message.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
+							message.DateTime = DateTime.Parse(doc.GetField(SearchField.MessageDateTime.AsString()).StringValue());
+							message.Subject = doc.GetField(SearchField.Title.AsString()).StringValue();
+							message.Body = doc.GetField(SearchField.Content.AsString()).StringValue();
 
-						result.Document = message;
-						break;
-					case DocumentType.Attachment:
-						PageAttachmentDocument attachment = new PageAttachmentDocument();
-						attachment.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
-						attachment.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
-						attachment.FileName = doc.GetField(SearchField.Title.AsString()).StringValue();
-						attachment.FileContent = doc.GetField(SearchField.Content.AsString()).StringValue();
+							TokenStream tokenStream2 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(message.Body));
+							message.HighlightedBody = highlighter.GetBestFragments(tokenStream2, message.Body, 3, " [...] ");
 
-						TokenStream tokenStream3 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(attachment.FileContent));
-						attachment.HighlightedFileContent = highlighter.GetBestFragments(tokenStream3, attachment.FileContent, 3, " [...] ");
+							result.Document = message;
+							break;
+						case DocumentType.Attachment:
+							PageAttachmentDocument attachment = new PageAttachmentDocument();
+							attachment.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
+							attachment.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
+							attachment.FileName = doc.GetField(SearchField.Title.AsString()).StringValue();
+							attachment.FileContent = doc.GetField(SearchField.Content.AsString()).StringValue();
 
-						result.Document = attachment;
-						break;
+							TokenStream tokenStream3 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(attachment.FileContent));
+							attachment.HighlightedFileContent = highlighter.GetBestFragments(tokenStream3, attachment.FileContent, 3, " [...] ");
+
+							result.Document = attachment;
+							break;
+						case DocumentType.File:
+							FileDocument file = new FileDocument();
+							file.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
+							file.FileName = doc.GetField(SearchField.Title.AsString()).StringValue();
+							file.FileContent = doc.GetField(SearchField.Content.AsString()).StringValue();
+
+							TokenStream tokenStream4 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(file.FileContent));
+							file.HighlightedFileContent = highlighter.GetBestFragments(tokenStream4, file.FileContent, 3, " [...]");
+
+							result.Document = file;
+							break;
+					}
+
+					searchResults.Add(result);
 				}
-
-				searchResults.Add(result);
+				searcher.Close();
+				return searchResults;
 			}
-			searcher.Close();
-			return searchResults;
+			catch(ParseException) {
+				return new List<SearchResult>(0);
+			}
 		}
 
 		/// <summary>
@@ -192,6 +208,36 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Indexes a file.
+		/// </summary>
+		/// <param name="fileName">The name of the file to be indexed.</param>
+		/// <param name="filePath">The path of the file to be indexed.</param>
+		/// <param name="wiki">The wiki.</param>
+		/// <returns><c>true</c> if the message has been indexed succesfully, <c>false</c> otherwise.</returns>
+		public static bool IndexFile(string fileName, string filePath, string wiki) {
+			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(wiki);
+
+			Analyzer analyzer = new SimpleAnalyzer();
+			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+			try {
+				Document doc = new Document();
+				doc.Add(new Field(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.File) + "|" + wiki + "|" + fileName).Replace(" ", ""), Field.Store.NO, Field.Index.NOT_ANALYZED_NO_NORMS));
+				doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.File), Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.Wiki.AsString(), wiki, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.Title.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
+				string fileContent = ScrewTurn.Wiki.SearchEngine.Parser.Parse(filePath);
+				doc.Add(new Field(SearchField.Content.AsString(), fileContent, Field.Store.YES, Field.Index.ANALYZED));
+				writer.AddDocument(doc);
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				writer.Close();
+			}
+			return true;
+		}
+
+		/// <summary>
 		/// Unindexes the page.
 		/// </summary>
 		/// <param name="page">The page to be unindexed.</param>
@@ -236,7 +282,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Unindexes the message.
+		/// Unindexes the page attachment.
 		/// </summary>
 		/// <param name="fileName">The name of the attachment.</param>
 		/// <param name="page">The page the attachment belongs to.</param>
@@ -281,6 +327,63 @@ namespace ScrewTurn.Wiki {
 				newDoc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.NO));
 				newDoc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.ANALYZED));
 				newDoc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.Title.AsString(), newName, Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.Content.AsString(), doc.GetField(SearchField.Content.AsString()).StringValue(), Field.Store.YES, Field.Index.ANALYZED));
+				writer.UpdateDocument(term, newDoc);
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				searcher.Close();
+				writer.Close();
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Unindexes the file.
+		/// </summary>
+		/// <param name="fileName">The name of the attachment.</param>
+		/// <param name="wiki">The wiki.</param>
+		/// <returns><c>true</c> if the file has been unindexed succesfully, <c>false</c> otherwise.</returns>
+		public static bool UnindexFile(string fileName, string wiki) {
+			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(wiki);
+
+			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new SimpleAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
+			try {
+				writer.DeleteDocuments(new Term(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.File) + "|" + wiki + "|" + fileName).Replace(" ", "")));
+				writer.Commit();
+			}
+			catch { throw; }
+			finally {
+				writer.Close();
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Renames a file in the index.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="oldName">The old attachment name.</param>
+		/// <param name="newName">The new attachment name.</param>
+		public static bool RenameFile(string wiki, string oldName, string newName) {
+			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(wiki);
+
+			Analyzer analyzer = new SimpleAnalyzer();
+			Term term = new Term(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.File) + "|" + wiki + "|" + oldName).Replace(" ", ""));
+
+			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+			IndexSearcher searcher = new IndexSearcher(indexDirectoryProvider.GetDirectory(), false);
+			Query query = new TermQuery(term);
+			try {
+				TopDocs topDocs = searcher.Search(query, 100);
+				Document doc = searcher.Doc(topDocs.scoreDocs[0].doc);
+
+				Document newDoc = new Document();
+				newDoc.Add(new Field(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.File) + "|" + wiki + "|" + newName).Replace(" ", ""), Field.Store.NO, Field.Index.NOT_ANALYZED_NO_NORMS));
+				newDoc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.File), Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.Wiki.AsString(), wiki, Field.Store.YES, Field.Index.ANALYZED));
 				newDoc.Add(new Field(SearchField.Title.AsString(), newName, Field.Store.YES, Field.Index.ANALYZED));
 				newDoc.Add(new Field(SearchField.Content.AsString(), doc.GetField(SearchField.Content.AsString()).StringValue(), Field.Store.YES, Field.Index.ANALYZED));
 				writer.UpdateDocument(term, newDoc);

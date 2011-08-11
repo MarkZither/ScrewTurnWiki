@@ -93,6 +93,7 @@
     <Compile Include="CollectorsBox.cs" />
     <Compile Include="Collisions.cs" />
     <Compile Include="Content.cs" />
+    <Compile Include="FileDocument.cs" />
     <Compile Include="Defaults.cs" />
     <Compile Include="DiffTools.cs" />
     <Compile Include="MessageDocument.cs" />
