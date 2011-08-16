@@ -35,8 +35,14 @@
     <DocumentationFile>bin\Release\AzureStorageProviders.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AzureDirectory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\References\Lib\AzureDirectory.1.0.3\AzureDirectory.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\References\Lib\DotNetZipLib-DevKit-v1.9\Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net, Version=2.9.2.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -62,6 +68,7 @@
     <Compile Include="AzureUsersStorageProvider.cs" />
     <Compile Include="AzureThemesStorageProvider.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="AzureIndexDirectoryProvider.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
