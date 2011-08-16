@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		private Lucene.Net.Store.Directory _directory;
 
 		private string GetFullPath(string wiki) {
-			return Path.Combine(Path.Combine(GetDataDirectory(_host), wiki), "searchIndex");
+			return Path.Combine(Path.Combine(GetDataDirectory(_host), wiki), "SearchIndex");
 		}
 
 		#region IIndexDirectoryProviderV40 Members
