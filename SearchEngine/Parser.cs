@@ -84,6 +84,7 @@ namespace ScrewTurn.Wiki.SearchEngine {
 
 				return ExtractText(filter);
 			}
+			catch { throw; }
 			finally {
 				if(filter != null)
 					Marshal.ReleaseComObject(filter);

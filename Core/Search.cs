@@ -230,6 +230,9 @@ namespace ScrewTurn.Wiki {
 				writer.AddDocument(doc);
 				writer.Commit();
 			}
+			catch(System.Runtime.InteropServices.COMException ex) {
+				Log.LogEntry(ex.Message, EntryType.Error, Log.SystemUsername, wiki);
+			}
 			catch { throw; }
 			finally {
 				writer.Close();
