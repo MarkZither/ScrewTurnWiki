@@ -1,11 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{ADF6EC2E-6C55-4771-AD8C-025CD9CA3A70}"
-	ProjectSection(SolutionItems) = preProject
-		Help\ScrewTurnWiki.shfbproj = Help\ScrewTurnWiki.shfbproj
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{F6E9DB23-D200-4CCE-B42D-7CD1D20FC92D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginFramework", "PluginFramework\PluginFramework.csproj", "{531A83D6-76F9-4014-91C5-295818E2D948}"
