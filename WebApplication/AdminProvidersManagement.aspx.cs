@@ -26,20 +26,11 @@ namespace ScrewTurn.Wiki {
 			if(!Page.IsPostBack) {
 				LoadDlls();
 
-				LoadSourceProviders();
-
 				// Load providers and related data
 				rptProviders.DataBind();
 			}
 		}
 		
-		/// <summary>
-		/// Performs all the actions that are needed after a provider status is changed.
-		/// </summary>
-		private void PerformPostProviderChangeActions() {
-			Content.InvalidateAllPages();
-		}
-
 		#region DLLs
 
 		protected void rptProviders_DataBinding(object sender, EventArgs e) {
@@ -169,139 +160,9 @@ namespace ScrewTurn.Wiki {
 				lblUploadResult.Text = Properties.Messages.LoadedProviders.Replace("###", count.ToString());
 				upDll.Attributes.Add("value", "");
 
-				PerformPostProviderChangeActions();
-
 				LoadDlls();
-				LoadSourceProviders();
 				rptProviders.DataBind();
 			}
-		}
-
-		#endregion
-
-		#region Data Migration
-
-		/// <summary>
-		/// Loads source providers for data migration.
-		/// </summary>
-		private void LoadSourceProviders() {
-			lstPagesSource.Items.Clear();
-			lstPagesSource.Items.Add(new ListItem("", ""));
-			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
-				if(!prov.ReadOnly) {
-					lstPagesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
-				}
-			}
-
-			lstUsersSource.Items.Clear();
-			lstUsersSource.Items.Add(new ListItem("", ""));
-			foreach(IUsersStorageProviderV40 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki)) {
-				if(IsUsersProviderFullWriteEnabled(prov)) {
-					lstUsersSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
-				}
-			}
-
-			lstFilesSource.Items.Clear();
-			lstFilesSource.Items.Add(new ListItem("", ""));
-			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
-				if(!prov.ReadOnly) {
-					lstFilesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
-				}
-			}
-
-			lblSettingsSource.Text = Settings.GetProvider(currentWiki).Information.Name;
-			lstWiki.Items.Clear();
-			lstWiki.Items.Add(new ListItem(Properties.Messages.SelectWiki, ""));
-			lstDestinationWiki.Items.Clear();
-			lstDestinationWiki.Items.Add(new ListItem(Properties.Messages.SelectWiki, ""));
-			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
-				lstWiki.Items.Add(wiki.WikiName);
-				lstDestinationWiki.Items.Add(wiki.WikiName);
-			}
-			lblGlobalSettingsSource.Text = GlobalSettings.Provider.Information.Name;
-		}
-
-		protected void lstPagesSource_SelectedIndexChanged(object sender, EventArgs e) {
-			lstPagesDestination.Items.Clear();
-			if(lstPagesSource.SelectedValue != "") {
-				foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
-					if(!prov.ReadOnly && lstPagesSource.SelectedValue != prov.GetType().ToString()) {
-						lstPagesDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
-					}
-				}
-			}
-			btnMigratePages.Enabled = lstPagesDestination.Items.Count > 0;
-		}
-
-		protected void lstUsersSource_SelectedIndexChanged(object sender, EventArgs e) {
-			lstUsersDestination.Items.Clear();
-			if(lstUsersSource.SelectedValue != "") {
-				foreach(IUsersStorageProviderV40 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(currentWiki)) {
-					if(IsUsersProviderFullWriteEnabled(prov) && lstUsersSource.SelectedValue != prov.GetType().ToString()) {
-						lstUsersDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
-					}
-				}
-			}
-			btnMigrateUsers.Enabled = lstUsersDestination.Items.Count > 0;
-		}
-
-		protected void lstFilesSource_SelectedIndexChanged(object sender, EventArgs e) {
-			lstFilesDestination.Items.Clear();
-			if(lstFilesSource.SelectedValue != "") {
-				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
-					if(!prov.ReadOnly && lstFilesSource.SelectedValue != prov.GetType().ToString()) {
-						lstFilesDestination.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
-					}
-				}
-			}
-			btnMigrateFiles.Enabled = lstFilesDestination.Items.Count > 0;
-		}
-
-		protected void btnMigratePages_Click(object sender, EventArgs e) {
-			Log.LogEntry("Pages data migration requested from " + lstPagesSource.SelectedValue + " to " + lstPagesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, null);
-
-			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
-				IPagesStorageProviderV40 from = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesSource.SelectedValue, wiki.WikiName);
-				IPagesStorageProviderV40 to = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesDestination.SelectedValue, wiki.WikiName);
-
-				Log.LogEntry("Pages data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername, null);	
-
-				DataMigrator.MigratePagesStorageProviderData(from, to);
-			}
-			lblMigratePagesResult.CssClass = "resultok";
-			lblMigratePagesResult.Text = Properties.Messages.DataMigrated;
-		}
-
-		protected void btnMigrateUsers_Click(object sender, EventArgs e) {
-			Log.LogEntry("Users data migration requested from " + lstUsersSource.SelectedValue + " to " + lstUsersDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, null);
-
-			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
-				IUsersStorageProviderV40 from = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersSource.SelectedValue, wiki.WikiName);
-				IUsersStorageProviderV40 to = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersDestination.SelectedValue, wiki.WikiName);
-
-				Log.LogEntry("Users data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername, null);
-
-				DataMigrator.MigrateUsersStorageProviderData(wiki.WikiName, from, to, true);
-			}
-
-			lblMigrateUsersResult.CssClass = "resultok";
-			lblMigrateUsersResult.Text = Properties.Messages.DataMigrated;
-		}
-
-		protected void btnMigrateFiles_Click(object sender, EventArgs e) {
-			Log.LogEntry("Files data migration requested from " + lstFilesSource.SelectedValue + " to " + lstFilesDestination.SelectedValue, EntryType.General, SessionFacade.CurrentUsername, null);
-
-			foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
-				IFilesStorageProviderV40 from = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesSource.SelectedValue, wiki.WikiName);
-				IFilesStorageProviderV40 to = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesDestination.SelectedValue, wiki.WikiName);
-
-				Log.LogEntry("Files data migration started for wiki: " + wiki.WikiName, EntryType.General, SessionFacade.CurrentUsername, null);
-
-				DataMigrator.MigrateFilesStorageProviderData(from, to, Settings.GetProvider(wiki.WikiName));
-			}
-
-			lblMigrateFilesResult.CssClass = "resultok";
-			lblMigrateFilesResult.Text = Properties.Messages.DataMigrated;
 		}
 
 		#endregion

@@ -668,7 +668,7 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Replay(aclManager);
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Grant, NameTools.GetFullName(null, "Page"),
 				Actions.ForPages.ModifyPage, new UserGroup("Group", "Group", null)), "SetPermissionForPage should return true");
 
 			mocks.Verify(prov);
@@ -690,7 +690,7 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Replay(aclManager);
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Deny, new PageInfo("Page", null, DateTime.Now),
+			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Deny, NameTools.GetFullName(null, "Page"),
 				Actions.ForPages.ManageCategories, new UserGroup("Group", "Group", null)), "SetPermissionForPage should return true");
 
 			mocks.Verify(prov);
@@ -712,7 +712,7 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Replay(aclManager);
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Delete, new PageInfo("NS.Page", null, DateTime.Now),
+			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Delete, NameTools.GetFullName(null, "NS.Page"),
 				Actions.ForPages.UploadAttachments, new UserGroup("Group", "Group", null)), "SetPermissionForPage should return true");
 
 			mocks.Verify(prov);
@@ -736,7 +736,7 @@ namespace ScrewTurn.Wiki.Tests {
 			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+			authWriter.SetPermissionForPage(AuthStatus.Grant, NameTools.GetFullName(null, "Page"),
 				a, new UserGroup("Group", "Group", null));
 		}
 
@@ -746,7 +746,7 @@ namespace ScrewTurn.Wiki.Tests {
 			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+			authWriter.SetPermissionForPage(AuthStatus.Grant, NameTools.GetFullName(null, "Page"),
 				Actions.ForPages.ModifyPage, null as UserGroup);
 		}
 
@@ -765,7 +765,7 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Replay(aclManager);
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Grant, NameTools.GetFullName(null, "Page"),
 				Actions.ForPages.ModifyPage, new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null)),
 				"SetPermissionForPage should return true");
 
@@ -788,7 +788,7 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Replay(aclManager);
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Deny, new PageInfo("Page", null, DateTime.Now),
+			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Deny, NameTools.GetFullName(null, "Page"),
 				Actions.ForPages.ManageCategories, new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null)),
 				"SetPermissionForPage should return true");
 
@@ -811,7 +811,7 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Replay(aclManager);
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Delete, new PageInfo("NS.Page", null, DateTime.Now),
+			Assert.IsTrue(authWriter.SetPermissionForPage(AuthStatus.Delete, NameTools.GetFullName(null, "NS.Page"),
 				Actions.ForPages.UploadAttachments, new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null)),
 				"SetPermissionForPage should return true");
 
@@ -837,7 +837,7 @@ namespace ScrewTurn.Wiki.Tests {
 			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+			authWriter.SetPermissionForPage(AuthStatus.Grant, NameTools.GetFullName(null, "Page"),
 				a, new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
 		}
 
@@ -847,7 +847,7 @@ namespace ScrewTurn.Wiki.Tests {
 			ISettingsStorageProviderV40 prov = MockProvider();
 
 			AuthWriter authWriter = new AuthWriter(prov);
-			authWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+			authWriter.SetPermissionForPage(AuthStatus.Grant, NameTools.GetFullName(null, "Page"),
 				Actions.ForPages.ModifyPage, null as UserInfo);
 		}
 
@@ -1084,7 +1084,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			Assert.IsTrue(authWriter.RemoveEntriesForPage(new UserGroup("Group", "Group", null),
-				new PageInfo("Page", null, DateTime.Now)), "RemoveEntriesForPage should return true");
+				NameTools.GetFullName(null, "Page")), "RemoveEntriesForPage should return true");
 
 			mocks.Verify(prov);
 			mocks.Verify(aclManager);
@@ -1094,7 +1094,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveEntriesForPage_Group_NullGroup() {
 			AuthWriter authWriter = new AuthWriter(MockProvider());
-			authWriter.RemoveEntriesForPage(null as UserGroup, new PageInfo("Page", null, DateTime.Now));
+			authWriter.RemoveEntriesForPage(null as UserGroup, NameTools.GetFullName(null, "Page"));
 		}
 
 		[Test]
@@ -1129,7 +1129,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthWriter authWriter = new AuthWriter(prov);
 			Assert.IsTrue(authWriter.RemoveEntriesForPage(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null),
-				new PageInfo("Page", null, DateTime.Now)), "RemoveEntriesForPage should return true");
+				NameTools.GetFullName(null, "Page")), "RemoveEntriesForPage should return true");
 
 			mocks.Verify(prov);
 			mocks.Verify(aclManager);
@@ -1139,7 +1139,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveEntriesForPage_User_NullUser() {
 			AuthWriter authWriter = new AuthWriter(MockProvider());
-			authWriter.RemoveEntriesForPage(null as UserInfo, new PageInfo("Page", null, DateTime.Now));
+			authWriter.RemoveEntriesForPage(null as UserInfo, NameTools.GetFullName(null, "Page"));
 		}
 
 		[Test]

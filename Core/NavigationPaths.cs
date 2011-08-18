@@ -80,10 +80,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Name.</param>
-		/// <param name="pages">The Pages.</param>
+		/// <param name="pages">The full name of the pages.</param>
 		/// <param name="provider">The Provider to use for the new Navigation Path, or <c>null</c> for the default provider.</param>
 		/// <returns>True if the Path is added successfully.</returns>
-		public static bool AddNavigationPath(string wiki, NamespaceInfo nspace, string name, List<PageInfo> pages, IPagesStorageProviderV40 provider) {
+		public static bool AddNavigationPath(string wiki, NamespaceInfo nspace, string name, List<string> pages, IPagesStorageProviderV40 provider) {
 			string namespaceName = nspace != null ? nspace.Name : null;
 			string fullName = NameTools.GetFullName(namespaceName, name);
 
@@ -118,9 +118,9 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullName">The full name of the path to modify.</param>
-		/// <param name="pages">The list of Pages.</param>
+		/// <param name="pages">The list of pages full names.</param>
 		/// <returns><c>true</c> if the path is modified, <c>false</c> otherwise.</returns>
-		public static bool ModifyNavigationPath(string wiki, string fullName, List<PageInfo> pages) {
+		public static bool ModifyNavigationPath(string wiki, string fullName, List<string> pages) {
 			NavigationPath path = Find(wiki, fullName);
 			if(path == null) return false;
 
@@ -134,17 +134,17 @@ namespace ScrewTurn.Wiki {
 		/// Finds all the Navigation Paths that include a Page.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The Page.</param>
+		/// <param name="pageFullName">The full name of the page.</param>
 		/// <returns>The list of Navigation Paths.</returns>
-		public static string[] PathsPerPage(string wiki, PageInfo page) {
-			NamespaceInfo pageNamespace = Pages.FindNamespace(wiki, NameTools.GetNamespace(page.FullName));
+		public static string[] PathsPerPage(string wiki, string pageFullName) {
+			NamespaceInfo pageNamespace = Pages.FindNamespace(wiki, NameTools.GetNamespace(pageFullName));
 
 			List<string> result = new List<string>(10);
 			List<NavigationPath> allPaths = GetNavigationPaths(wiki, pageNamespace);
 
 			for(int i = 0; i < allPaths.Count; i++) {
 				List<string> pages = new List<string>(allPaths[i].Pages);
-				if(pages.Contains(page.FullName)) {
+				if(pages.Contains(pageFullName)) {
 					result.Add(allPaths[i].FullName);
 				}
 			}

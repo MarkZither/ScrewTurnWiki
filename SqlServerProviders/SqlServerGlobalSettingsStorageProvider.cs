@@ -177,6 +177,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			get { return typeof(SqlServerFilesStorageProvider).FullName; }
 		}
 
+		/// <summary>
+		/// Closes the database connection.
+		/// </summary>
+		/// <param name="connection">The connection.</param>
+		protected override void CloseConnection(System.Data.Common.DbConnection connection) {
+			try {
+				connection.Close();
+			}
+			catch { } 
+		}
 	}
 
 }

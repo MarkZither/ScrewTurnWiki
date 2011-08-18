@@ -15,7 +15,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		private string oldFileName;
 		private StDirectoryInfo directory;
 		private string oldDirectoryName;
-		private PageInfo page;
+		private string pageFullName;
 		private FileActivity activity;
 
 		/// <summary>
@@ -25,17 +25,17 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="oldFileName">The old name of the file, if any (full path).</param>
 		/// <param name="directory">The directory that changed, if any (full path).</param>
 		/// <param name="oldDirectoryName">The old name of the directory, if any (full path).</param>
-		/// <param name="page">The page owning the attachment, if any.</param>
+		/// <param name="pageFullName">The page owning the attachment, if any.</param>
 		/// <param name="activity">The activity.</param>
 		public FileActivityEventArgs(StFileInfo file, string oldFileName,
 			StDirectoryInfo directory, string oldDirectoryName,
-			PageInfo page, FileActivity activity) {
+			string pageFullName, FileActivity activity) {
 
 			this.file = file;
 			this.oldFileName = oldFileName;
 			this.directory = directory;
 			this.oldDirectoryName = oldDirectoryName;
-			this.page = page;
+			this.pageFullName = pageFullName;
 			this.activity = activity;
 		}
 
@@ -81,8 +81,8 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets the page owning the attachment, if any.
 		/// </summary>
-		public PageInfo Page {
-			get { return page; }
+		public string Page {
+			get { return pageFullName; }
 		}
 
 		/// <summary>

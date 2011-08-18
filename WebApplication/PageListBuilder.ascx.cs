@@ -73,11 +73,11 @@ namespace ScrewTurn.Wiki {
 
 			if(txtPageName.Text.Length == 0) return;
 
-			PageInfo[] pages = SearchTools.SearchSimilarPages(currentWiki, txtPageName.Text, CurrentNamespace);
+			PageContent[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, CurrentNamespace, currentWiki);
 
 			string cp = CurrentProvider;
 
-			foreach(PageInfo page in
+			foreach(PageContent page in
 				from p in pages
 				where p.Provider.GetType().FullName == cp
 				select p) {
@@ -92,8 +92,7 @@ namespace ScrewTurn.Wiki {
 				}
 
 				if(!found) {
-					PageContent content = Content.GetPageContent(page);
-					lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.Other, page), page.FullName));
+					lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.Other, page.FullName), page.FullName));
 				}
 			}
 
@@ -101,10 +100,9 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnAddPage_Click(object sender, EventArgs e) {
-			PageInfo page = Pages.FindPage(currentWiki, lstAvailablePage.SelectedValue);
-			PageContent content = Content.GetPageContent(page);
+			PageContent page = Pages.FindPage(currentWiki, lstAvailablePage.SelectedValue);
 
-			lstPages.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.Other, page), page.FullName));
+			lstPages.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.Other, page.FullName), page.FullName));
 
 			lstAvailablePage.Items.RemoveAt(lstAvailablePage.SelectedIndex);
 			btnAddPage.Enabled = lstAvailablePage.Items.Count > 0;

@@ -19,20 +19,20 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		protected IPagesStorageProviderV40 provider;
 		/// <summary>
-		/// The default page of the namespace (can be <c>null</c>).
+		/// The full name of the default page of the namespace (can be <c>null</c>).
 		/// </summary>
-		protected PageInfo defaultPage;
+		protected string defaultPageFullName;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:NamespaceInfo" /> class.
 		/// </summary>
 		/// <param name="name">The namespace name.</param>
 		/// <param name="provider">The provider.</param>
-		/// <param name="defaultPage">The default page, or <c>null</c>.</param>
-		public NamespaceInfo(string name, IPagesStorageProviderV40 provider, PageInfo defaultPage) {
+		/// <param name="defaultPageFullName">The full name of the default page, or <c>null</c>.</param>
+		public NamespaceInfo(string name, IPagesStorageProviderV40 provider, string defaultPageFullName) {
 			this.name = name;
 			this.provider = provider;
-			this.defaultPage = defaultPage;
+			this.defaultPageFullName = defaultPageFullName;
 		}
 
 		/// <summary>
@@ -52,11 +52,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		}
 
 		/// <summary>
-		/// Gets or sets the default page, or <c>null</c>.
+		/// Gets or sets the full name of the default page, or <c>null</c>.
 		/// </summary>
-		public PageInfo DefaultPage {
-			get { return defaultPage; }
-			set { defaultPage = value; }
+		public string DefaultPageFullName {
+			get { return defaultPageFullName; }
+			set { defaultPageFullName = value; }
 		}
 
 		/// <summary>

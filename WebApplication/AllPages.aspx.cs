@@ -27,7 +27,7 @@ namespace ScrewTurn.Wiki {
 		private int rangeBegin = 0;
 		private int rangeEnd = 49;
 
-		private IList<PageInfo> currentPages = null;
+		private IList<PageContent> currentPages = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
 			string currentWiki = DetectWiki();
@@ -76,26 +76,26 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		/// <returns>The creator.</returns>
-		private string GetCreator(PageInfo page) {
+		private string GetCreator(PageContent page) {
 			List<int> baks = Pages.GetBackups(page);
 
-			PageContent content = null;
+			PageContent temp = null;
 			if(baks.Count > 0) {
-				content = Pages.GetBackupContent(page, baks[0]);
+				temp = Pages.GetBackupContent(page, baks[0]);
 			}
 			else {
-				content = Content.GetPageContent(page);
+				temp = page;
 			}
 
-			return content.User;
+			return temp.User;
 		}
 
 		/// <summary>
 		/// Gets all the pages in the namespace.
 		/// </summary>
 		/// <returns>The pages.</returns>
-		private IList<PageInfo> GetAllPages() {
-			IList<PageInfo> pages = null;
+		private IList<PageContent> GetAllPages() {
+			IList<PageContent> pages = null;
 
 			string currentWiki = DetectWiki();
 
@@ -107,11 +107,11 @@ namespace ScrewTurn.Wiki {
 				else {
 					CategoryInfo cat = Pages.FindCategory(currentWiki, Request["Cat"]);
 					if(cat != null) {
-						pages = new PageInfo[cat.Pages.Length];
+						pages = new PageContent[cat.Pages.Length];
 						for(int i = 0; i < cat.Pages.Length; i++) {
 							pages[i] = Pages.FindPage(currentWiki, cat.Pages[i]);
 						}
-						Array.Sort(pages as PageInfo[], new PageNameComparer());
+						Array.Sort(pages as PageContent[], new PageNameComparer());
 					}
 				}
 			}
@@ -134,10 +134,8 @@ namespace ScrewTurn.Wiki {
 
 			// Prepare ExtendedPageInfo array
 			ExtendedPageInfo[] tempPageList = new ExtendedPageInfo[rangeEnd - rangeBegin + 1];
-			PageContent cnt;
 			for(int i = 0; i < tempPageList.Length; i++) {
-				cnt = Content.GetPageContent(currentPages[rangeBegin + i]);
-				tempPageList[i] = new ExtendedPageInfo(currentPages[rangeBegin + i], cnt.Title, cnt.LastModified, GetCreator(currentPages[rangeBegin + i]), cnt.User);
+				tempPageList[i] = new ExtendedPageInfo(currentPages[rangeBegin + i], GetCreator(currentPages[rangeBegin + i]), currentPages[rangeBegin + i].User);
 			}
 
 			// Prepare for sorting
@@ -277,7 +275,7 @@ namespace ScrewTurn.Wiki {
 					// Page title
 					sb.Append(@"<td>");
 					sb.Append(@"<a href=""");
-					UrlTools.BuildUrl(currentWiki, sb, Tools.UrlEncode(pageList[i].PageInfo.FullName), GlobalSettings.PageExtension);
+					UrlTools.BuildUrl(currentWiki, sb, Tools.UrlEncode(pageList[i].PageContent.FullName), GlobalSettings.PageExtension);
 					sb.Append(@""">");
 					sb.Append(pageList[i].Title);
 					sb.Append("</a>");
@@ -288,7 +286,7 @@ namespace ScrewTurn.Wiki {
 					int msg = pageList[i].MessageCount;
 					if(msg > 0) {
 						sb.Append(@"<a href=""");
-						UrlTools.BuildUrl(currentWiki, sb, Tools.UrlEncode(pageList[i].PageInfo.FullName), GlobalSettings.PageExtension, "?Discuss=1");
+						UrlTools.BuildUrl(currentWiki, sb, Tools.UrlEncode(pageList[i].PageContent.FullName), GlobalSettings.PageExtension, "?Discuss=1");
 						sb.Append(@""" title=""");
 						sb.Append(Properties.Messages.Discuss);
 						sb.Append(@""">");
@@ -305,7 +303,7 @@ namespace ScrewTurn.Wiki {
 
 					// Mod. date/time
 					sb.Append(@"<td>");
-					sb.Append(Preferences.AlignWithTimezone(currentWiki, pageList[i].ModificationDateTime).ToString(Settings.GetDateTimeFormat(currentWiki)) + "&nbsp;");
+					sb.Append(Preferences.AlignWithTimezone(currentWiki, pageList[i].PageContent.LastModified).ToString(Settings.GetDateTimeFormat(currentWiki)) + "&nbsp;");
 					sb.Append("</td>");
 
 					// Creator
@@ -319,7 +317,7 @@ namespace ScrewTurn.Wiki {
 					sb.Append("</td>");
 
 					// Categories
-					CategoryInfo[] cats = Pages.GetCategoriesForPage(pageList[i].PageInfo);
+					CategoryInfo[] cats = Pages.GetCategoriesForPage(pageList[i].PageContent);
 					sb.Append(@"<td>");
 					if(cats.Length == 0) {
 						sb.Append(@"<a href=""");

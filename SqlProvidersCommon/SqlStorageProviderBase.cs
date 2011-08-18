@@ -44,6 +44,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			catch { }
 		}
 
+		/// <summary>
+		/// Closes a database connection.
+		/// </summary>
+		/// <param name="connection">The connection to close.</param>
+		protected override void CloseConnection(DbConnection connection) { }
+
 		#region IProvider Members
 
 		/// <summary>

@@ -88,21 +88,21 @@ namespace ScrewTurn.Wiki {
 
 			// Load from provider
 			if(string.IsNullOrEmpty(page)) {
-				if(!provider.RetrieveFile(file, ms, false)) {
+				if(!provider.RetrieveFile(file, ms)) {
 					Response.StatusCode = 404;
 					Response.Write("File not found.");
 					return;
 				}
 			}
 			else {
-				PageInfo info = Pages.FindPage(currentWiki, page);
-				if(info == null) {
+				PageContent pageContent = Pages.FindPage(currentWiki, page);
+				if(pageContent == null) {
 					Response.StatusCode = 404;
 					Response.WriteFile("Page not found.");
 					return;
 				}
 
-				if(!provider.RetrievePageAttachment(info, file, ms, false)) {
+				if(!provider.RetrievePageAttachment(pageContent.FullName, file, ms)) {
 					Response.StatusCode = 404;
 					Response.WriteFile("File not found.");
 					return;
@@ -347,7 +347,7 @@ namespace ScrewTurn.Wiki {
 				done = provider.StoreFile(path + targetName, resultMemStream, overwrite);
 			}
 			else {
-				done = provider.StorePageAttachment(Pages.FindPage(currentWiki, page), targetName, resultMemStream, overwrite);
+				done = provider.StorePageAttachment(page, targetName, resultMemStream, overwrite);
 			}
 
 			if(done) {

@@ -16,7 +16,8 @@ namespace ScrewTurn.Wiki {
 		private const string CookieName = "ScrewTurnWikiBreadcrumbs3";
 		private const string CookieValue = "B";
 
-		private List<PageInfo> pages;
+		private List<string> pages;
+		private string wiki;
 
 		/// <summary>
 		/// Gets the cookie.
@@ -35,15 +36,13 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		public BreadcrumbsManager(string wiki) {
-			pages = new List<PageInfo>(MaxPages);
+			this.wiki = wiki;
+			pages = new List<string>(MaxPages);
 
 			HttpCookie cookie = GetCookie();
-			if(cookie != null && !string.IsNullOrEmpty(cookie.Values[CookieValue])) {
+			if(cookie != null && !string.IsNullOrEmpty(cookie.Values[CookieValue + "|" + wiki])) {
 				try {
-					foreach(string p in cookie.Values[CookieValue].Split('|')) {
-						PageInfo page = Pages.FindPage(wiki, p);
-						if(page != null) pages.Add(page);
-					}
+					pages.AddRange(cookie.Values[CookieValue + "|" + wiki].Split('|'));
 				}
 				catch { }
 			}
@@ -60,12 +59,10 @@ namespace ScrewTurn.Wiki {
 			cookie.Path = GlobalSettings.CookiePath;
 
 			StringBuilder sb = new StringBuilder(MaxPages * 20);
-			for(int i = 0; i < pages.Count; i++) {
-				sb.Append(pages[i].FullName);
-				if(i != pages.Count - 1) sb.Append("|");
-			}
 
-			cookie.Values[CookieValue] = sb.ToString();
+			sb.Append(string.Join("|", pages));
+
+			cookie.Values[CookieValue + "|" + wiki] = sb.ToString();
 			if(HttpContext.Current.Response != null) {
 				HttpContext.Current.Response.Cookies.Set(cookie);
 			}
@@ -77,12 +74,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Adds a Page to the Breadcrumbs trail.
 		/// </summary>
-		/// <param name="page">The Page to add.</param>
-		public void AddPage(PageInfo page) {
+		/// <param name="pageFullName">The full name of the page to add.</param>
+		public void AddPage(string pageFullName) {
 			lock(this) {
-				int index = FindPage(page);
+				int index = FindPage(pageFullName);
 				if(index != -1) pages.RemoveAt(index);
-				pages.Add(page);
+				pages.Add(pageFullName);
 				if(pages.Count > MaxPages) pages.RemoveRange(0, pages.Count - MaxPages);
 
 				UpdateCookie();
@@ -92,15 +89,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Finds a page by name.
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The index in the collection.</returns>
-		private int FindPage(PageInfo page) {
+		private int FindPage(string pageFullName) {
 			lock(this) {
 				if(pages == null || pages.Count == 0) return -1;
 
 				PageNameComparer comp = new PageNameComparer();
 				for(int i = 0; i < pages.Count; i++) {
-					if(comp.Compare(pages[i], page) == 0) return i;
+					if(pages[i] == pageFullName) return i;
 				}
 
 				return -1;
@@ -110,10 +107,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Removes a Page from the Breadcrumbs trail.
 		/// </summary>
-		/// <param name="page">The Page to remove.</param>
-		public void RemovePage(PageInfo page) {
+		/// <param name="pageFullName">The full name of the page to remove.</param>
+		public void RemovePage(string pageFullName) {
 			lock(this) {
-				int index = FindPage(page);
+				int index = FindPage(pageFullName);
 				if(index >= 0) pages.RemoveAt(index);
 
 				UpdateCookie();
@@ -134,15 +131,9 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets all the Pages in the trail that still exist.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		public PageInfo[] GetAllPages(string wiki) {
+		public string[] GetAllPages() {
 			lock(this) {
-				List<PageInfo> newPages = new List<PageInfo>(pages.Count);
-				foreach(PageInfo p in pages) {
-					if(Pages.FindPage(wiki, p.FullName) != null) newPages.Add(p);
-				}
-
-				return newPages.ToArray();
+				return pages.ToArray();
 			}
 		}
 

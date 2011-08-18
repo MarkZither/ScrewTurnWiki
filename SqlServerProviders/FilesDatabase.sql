@@ -11,7 +11,6 @@ create table [File] (
 	[Name] nvarchar(200) not null,
 	[Directory] nvarchar(250) not null,
 	[Size] bigint not null,
-	[Downloads] int not null,
 	[LastModified] datetime not null,
 	[Data] varbinary(max) not null,
 	constraint [FK_File_Directory] foreign key ([Wiki], [Directory]) references [Directory]([Wiki], [FullPath])
@@ -24,7 +23,6 @@ create table [Attachment] (
 	[Name] nvarchar(200) not null,
 	[Page] nvarchar(200) not null,
 	[Size] bigint not null,
-	[Downloads] int not null,
 	[LastModified] datetime not null,
 	[Data] varbinary(max) not null,
 	constraint[PK_Attachment] primary key clustered ([Wiki], [Name], [Page])

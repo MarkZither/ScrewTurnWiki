@@ -26,8 +26,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 			base.TearDown();
 
 			TableStorage.DeleteAllBlobs(ConfigurationManager.AppSettings["AzureConnString"]);
-
-			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzureFilesStorageProvider.FileRetrievalStatsTable);
 		}
 
 		[Test]

@@ -378,6 +378,158 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		}
 
 		/// <summary>
+		/// Builds a SELECT query with two JOIN clauses (both on the main table).
+		/// </summary>
+		/// <param name="table">The main table.</param>
+		/// <param name="joinedTable">The joined table.</param>
+		/// <param name="joinTableColumns">The join table columns.</param>
+		/// <param name="joinJoinedTableColumns">The join joined table columns.</param>
+		/// <param name="join">The join.</param>
+		/// <param name="tableColumns">The main table columns to select.</param>
+		/// <param name="joinedTableColumns">The joined table columns to select.</param>
+		/// <param name="otherJoinedTable">The other joined table.</param>
+		/// <param name="otherJoinJoinedTableColumns">The other join joined table columns.</param>
+		/// <param name="otherJoin">The other join.</param>
+		/// <param name="otherJoinedTableColumns">The other joined table columns to select.</param>
+		/// <returns>The SELECT query (returned columns are named like <b>[Table_Column]</b>).</returns>
+		public string SelectFrom(string table, string joinedTable, string[] joinTableColumns, string[] joinJoinedTableColumns, Join join,
+			string[] tableColumns, string[] joinedTableColumns,
+			string otherJoinedTable, string[] otherJoinJoinedTableColumns, Join otherJoin, string[] otherJoinedTableColumns) {
+
+			StringBuilder sb = new StringBuilder(200);
+			sb.Append("select ");
+
+			for(int i = 0; i < tableColumns.Length; i++) {
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(table);
+				sb.Append(builder.ObjectNameSuffix);
+				sb.Append(".");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(tableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				sb.Append(" as ");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(table);
+				sb.Append("_");
+				sb.Append(tableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				sb.Append(", ");
+			}
+
+			for(int i = 0; i < joinedTableColumns.Length; i++) {
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(joinedTable);
+				sb.Append(builder.ObjectNameSuffix);
+				sb.Append(".");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(joinedTableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				sb.Append(" as ");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(joinedTable);
+				sb.Append("_");
+				sb.Append(joinedTableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				sb.Append(", ");
+			}
+
+			for(int i = 0; i < otherJoinedTableColumns.Length; i++) {
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(otherJoinedTable);
+				sb.Append(builder.ObjectNameSuffix);
+				sb.Append(".");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(otherJoinedTableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				sb.Append(" as ");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(otherJoinedTable);
+				sb.Append("_");
+				sb.Append(otherJoinedTableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				if(i != otherJoinedTableColumns.Length - 1) sb.Append(", ");
+			}
+
+			sb.Append(" from ");
+
+			sb.Append(builder.ObjectNamePrefix);
+			sb.Append(table);
+			sb.Append(builder.ObjectNameSuffix);
+
+			sb.Append(" ");
+			sb.Append(JoinToString(join));
+			sb.Append(" ");
+
+			sb.Append(builder.ObjectNamePrefix);
+			sb.Append(joinedTable);
+			sb.Append(builder.ObjectNameSuffix);
+
+			sb.Append(" on ");
+
+			for(int i = 0; i < joinTableColumns.Length; i++) {
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(table);
+				sb.Append(builder.ObjectNameSuffix);
+				sb.Append(".");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(joinTableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				sb.Append(" = ");
+
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(joinedTable);
+				sb.Append(builder.ObjectNameSuffix);
+				sb.Append(".");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(joinJoinedTableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				if(i != joinTableColumns.Length - 1) sb.Append(" and ");
+			}
+
+			sb.Append(" ");
+			sb.Append(JoinToString(otherJoin));
+			sb.Append(" ");
+
+			sb.Append(builder.ObjectNamePrefix);
+			sb.Append(otherJoinedTable);
+			sb.Append(builder.ObjectNameSuffix);
+
+			sb.Append(" on ");
+
+			for(int i = 0; i < joinTableColumns.Length; i++) {
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(table);
+				sb.Append(builder.ObjectNameSuffix);
+				sb.Append(".");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(joinTableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				sb.Append(" = ");
+
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(otherJoinedTable);
+				sb.Append(builder.ObjectNameSuffix);
+				sb.Append(".");
+				sb.Append(builder.ObjectNamePrefix);
+				sb.Append(otherJoinJoinedTableColumns[i]);
+				sb.Append(builder.ObjectNameSuffix);
+
+				if(i != joinTableColumns.Length - 1) sb.Append(" and ");
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
 		/// Converts a Join type to its string representation.
 		/// </summary>
 		/// <param name="join">The join type.</param>

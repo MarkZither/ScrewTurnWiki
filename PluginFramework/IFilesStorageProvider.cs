@@ -50,21 +50,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="fullName">The full name of the File.</param>
 		/// <param name="destinationStream">A Stream object used as <b>destination</b> of a byte stream, 
 		/// i.e. the method writes to the Stream the file content.</param>
-		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the file is retrieved, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="destinationStream"/> does not support writing, or if <paramref name="fullName"/> does not exist.</exception>
-		bool RetrieveFile(string fullName, Stream destinationStream, bool countHit);
-
-		/// <summary>
-		/// Sets the number of times a file was retrieved.
-		/// </summary>
-		/// <param name="fullName">The full name of the file.</param>
-		/// <param name="count">The count to set.</param>
-		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than zero.</exception>
-		void SetFileRetrievalCount(string fullName, int count);
+		bool RetrieveFile(string fullName, Stream destinationStream);
 
 		/// <summary>
 		/// Gets the details of a file.
@@ -126,7 +115,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		bool RenameDirectory(string oldFullPath, string newFullPath);
 
 		/// <summary>
-		/// The the names of the pages with attachments.
+		/// The names of the pages with attachments.
 		/// </summary>
 		/// <returns>The names of the pages with attachments.</returns>
 		string[] GetPagesWithAttachments();
@@ -134,90 +123,79 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Returns the names of the Attachments of a Page.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info object that owns the Attachments.</param>
+		/// <param name="pageFullName">The full name of the page that owns the Attachments.</param>
 		/// <returns>The names, or an empty list.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> is <c>null</c>.</exception>
-		string[] ListPageAttachments(PageInfo pageInfo);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		string[] ListPageAttachments(string pageFullName);
 
 		/// <summary>
 		/// Stores a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
 		/// <param name="name">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <param name="sourceStream">A Stream object used as <b>source</b> of a byte stream, 
 		/// i.e. the method reads from the Stream and stores the content properly.</param>
 		/// <param name="overwrite"><c>true</c> to overwrite an existing Attachment.</param>
 		/// <returns><c>true</c> if the Attachment is stored, <c>false</c> otherwise.</returns>
 		/// <remarks>If <b>overwrite</b> is <c>false</c> and Attachment already exists, the method returns <c>false</c>.</remarks>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="name"/> or <paramref name="sourceStream"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="sourceStream"/> does not support reading.</exception>
-		bool StorePageAttachment(PageInfo pageInfo, string name, Stream sourceStream, bool overwrite);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="name"/> or <paramref name="sourceStream"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/>, <paramref name="name"/> are empty or if <paramref name="sourceStream"/> does not support reading.</exception>
+		bool StorePageAttachment(string pageFullName, string name, Stream sourceStream, bool overwrite);
 
 		/// <summary>
 		/// Retrieves a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
 		/// <param name="name">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <param name="destinationStream">A Stream object used as <b>destination</b> of a byte stream, 
 		/// i.e. the method writes to the Stream the file content.</param>
-		/// <param name="countHit">A value indicating whether or not to count this retrieval in the statistics.</param>
 		/// <returns><c>true</c> if the Attachment is retrieved, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="name"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="destinationStream"/> does not support writing,
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="name"/> or <paramref name="destinationStream"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="name"/> are empty or if <paramref name="destinationStream"/> does not support writing,
 		/// or if the page does not have attachments or if the attachment does not exist.</exception>
-		bool RetrievePageAttachment(PageInfo pageInfo, string name, Stream destinationStream, bool countHit);
-
-		/// <summary>
-		/// Sets the number of times a page attachment was retrieved.
-		/// </summary>
-		/// <param name="pageInfo">The page.</param>
-		/// <param name="name">The name of the attachment.</param>
-		/// <param name="count">The count to set.</param>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than zero.</exception>
-		void SetPageAttachmentRetrievalCount(PageInfo pageInfo, string name, int count);
+		bool RetrievePageAttachment(string pageFullName, string name, Stream destinationStream);
 
 		/// <summary>
 		/// Gets the details of a page attachment.
 		/// </summary>
-		/// <param name="pageInfo">The page that owns the attachment.</param>
-		/// <param name="name">The name of the attachment, for example "myfile.jpg".</param>
+		/// <param name="pageFullName">The full name of the page that owns the attachment.</param>
+		/// <param name="attachmentName">The name of the attachment, for example "myfile.jpg".</param>
 		/// <returns>The details of the attachment, or <c>null</c> if the attachment does not exist.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
-		FileDetails GetPageAttachmentDetails(PageInfo pageInfo, string name);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are empty.</exception>
+		FileDetails GetPageAttachmentDetails(string pageFullName, string attachmentName);
 
 		/// <summary>
 		/// Deletes a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
-		/// <param name="name">The name of the Attachment, for example "myfile.jpg".</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
+		/// <param name="attachmentName">The name of the Attachment, for example "myfile.jpg".</param>
 		/// <returns><c>true</c> if the Attachment is deleted, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if the page or attachment do not exist.</exception>
-		bool DeletePageAttachment(PageInfo pageInfo, string name);
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="attachmentName"/> are empty or if the page or attachment do not exist.</exception>
+		bool DeletePageAttachment(string pageFullName, string attachmentName);
 
 		/// <summary>
 		/// Renames a Page Attachment.
 		/// </summary>
-		/// <param name="pageInfo">The Page Info that owns the Attachment.</param>
+		/// <param name="pageFullName">The Page Info that owns the Attachment.</param>
 		/// <param name="oldName">The old name of the Attachment.</param>
 		/// <param name="newName">The new name of the Attachment.</param>
 		/// <returns><c>true</c> if the Attachment is renamed, false otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="oldName"/> or <paramref name="newName"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="pageInfo"/>, <paramref name="oldName"/> or <paramref name="newName"/> are empty,
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="oldName"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/>, <paramref name="oldName"/> or <paramref name="newName"/> are empty,
 		/// or if the page or old attachment do not exist, or the new attachment name already exists.</exception>
-		bool RenamePageAttachment(PageInfo pageInfo, string oldName, string newName);
+		bool RenamePageAttachment(string pageFullName, string oldName, string newName);
 
 		/// <summary>
 		/// Notifies the Provider that a Page has been renamed.
 		/// </summary>
-		/// <param name="oldPage">The old Page Info object.</param>
-		/// <param name="newPage">The new Page Info object.</param>
-		/// <exception cref="ArgumentNullException">If <paramref name="oldPage"/> or <paramref name="newPage"/> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If the new page is already in use.</exception>
-		void NotifyPageRenaming(PageInfo oldPage, PageInfo newPage);
+		/// <param name="oldPageFullName">The old page full name.</param>
+		/// <param name="newPageFullName">The new page full name.</param>
+		/// <exception cref="ArgumentNullException">If <paramref name="oldPageFullName"/> or <paramref name="newPageFullName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="oldPageFullName"/> or <paramref name="newPageFullName"/> are empty or if the new page full name is already in use.</exception>
+		void NotifyPageRenaming(string oldPageFullName, string newPageFullName);
 
 	}
 

@@ -25,19 +25,6 @@ namespace ScrewTurn.Wiki {
 			PrintSystemStatus();
 		}
 
-		/// <summary>
-		/// Rebuilds the page links for the specified pages.
-		/// </summary>
-		/// <param name="pages">The pages.</param>
-		private void RebuildPageLinks(IList<PageInfo> pages) {
-			string currentWiki = DetectWiki();
-
-			foreach(PageInfo page in pages) {
-				PageContent content = Content.GetPageContent(page);
-				Pages.StorePageOutgoingLinks(currentWiki, page, content.Content);				
-			}
-		}
-
 		protected void btnShutdownConfirm_Click(object sender, EventArgs e) {
 			Log.LogEntry("WebApp shutdown requested", EntryType.General, SessionFacade.CurrentUsername, null);
 			Response.Clear();

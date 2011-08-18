@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ScrewTurn Wiki Download Counter Plugin")]
+[assembly: AssemblyTitle("ScrewTurn Wiki File System Providers")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 
@@ -15,4 +15,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("104c716d-5ab2-45f0-9966-6ba0f2a3ef57")]
+[assembly: Guid("b41ff968-592e-437e-bc43-cd919ca4aec4")]
+

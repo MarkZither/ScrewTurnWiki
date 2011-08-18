@@ -32,10 +32,10 @@ namespace ScrewTurn.Wiki {
 			filename = filename.Replace("..", "");
 
 			string page = Request["Page"];
-			PageInfo pageInfo = Pages.FindPage(currentWiki, page);
+			PageContent pageContent = Pages.FindPage(currentWiki, page);
 			bool isPageAttachment = !string.IsNullOrEmpty(page);
 
-			if(isPageAttachment && pageInfo == null) {
+			if(isPageAttachment && pageContent == null) {
 				Response.StatusCode = 404;
 				Response.Write("File not found.");
 				return;
@@ -45,7 +45,7 @@ namespace ScrewTurn.Wiki {
 
 			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(Request["Provider"], currentWiki);
 			else {
-				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(currentWiki, pageInfo, filename);
+				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(currentWiki, pageContent.FullName, filename);
 				else provider = FilesAndAttachments.FindFileProvider(currentWiki, filename);
 			}
 
@@ -64,8 +64,8 @@ namespace ScrewTurn.Wiki {
 
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
-			if(pageInfo != null) {
-				canDownload = authChecker.CheckActionForPage(pageInfo, Actions.ForPages.DownloadAttachments,
+			if(pageContent != null) {
+				canDownload = authChecker.CheckActionForPage(pageContent.FullName, Actions.ForPages.DownloadAttachments,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			}
 			else {
@@ -86,7 +86,7 @@ namespace ScrewTurn.Wiki {
 			if(string.IsNullOrEmpty(page)) {
 				bool retrieved = false;
 				try {
-					retrieved = provider.RetrieveFile(filename, ms, false);
+					retrieved = provider.RetrieveFile(filename, ms);
 				}
 				catch(ArgumentException ex) {
 					Log.LogEntry("Attempted to create thumb of inexistent file (" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername, currentWiki);
@@ -101,7 +101,7 @@ namespace ScrewTurn.Wiki {
 				fileSize = provider.GetFileDetails(filename).Size;
 			}
 			else {
-				if(pageInfo == null) {
+				if(pageContent == null) {
 					Response.StatusCode = 404;
 					Response.Write("Page not found.");
 					return;
@@ -109,7 +109,7 @@ namespace ScrewTurn.Wiki {
 
 				bool retrieved = false;
 				try {
-					retrieved = provider.RetrievePageAttachment(pageInfo, filename, ms, false);
+					retrieved = provider.RetrievePageAttachment(pageContent.FullName, filename, ms);
 				}
 				catch(ArgumentException ex) {
 					Log.LogEntry("Attempted to create thumb of inexistent attachment (" + page + "/" + filename + ")\n" + ex.ToString(), EntryType.Warning, Log.SystemUsername, currentWiki);
@@ -121,7 +121,7 @@ namespace ScrewTurn.Wiki {
 					return;
 				}
 
-				fileSize = provider.GetPageAttachmentDetails(pageInfo, filename).Size;
+				fileSize = provider.GetPageAttachmentDetails(pageContent.FullName, filename).Size;
 			}
 
 			ms.Seek(0, SeekOrigin.Begin);

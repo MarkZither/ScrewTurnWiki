@@ -11,7 +11,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// </summary>
 	public class PageActivityEventArgs : EventArgs {
 
-		private PageInfo page;
+		private string pageFullName;
 		private string pageOldName;
 		private string author;
 		private PageActivity activity;
@@ -19,12 +19,12 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:PageActivityEventArgs" /> class.
 		/// </summary>
-		/// <param name="page">The page the activity refers to.</param>
+		/// <param name="pageFullName">The full name of the page the activity refers to.</param>
 		/// <param name="pageOldName">The old name of the renamed page, or <c>null</c>.</param>
 		/// <param name="author">The author of the activity, if available, <c>null</c> otherwise.</param>
 		/// <param name="activity">The activity.</param>
-		public PageActivityEventArgs(PageInfo page, string pageOldName, string author, PageActivity activity) {
-			this.page = page;
+		public PageActivityEventArgs(string pageFullName, string pageOldName, string author, PageActivity activity) {
+			this.pageFullName = pageFullName;
 			this.pageOldName = pageOldName;
 			this.author = author;
 			this.activity = activity;
@@ -33,8 +33,8 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Gets the page the activity refers to.
 		/// </summary>
-		public PageInfo Page {
-			get { return page; }
+		public string PageFullName {
+			get { return pageFullName; }
 		}
 
 		/// <summary>

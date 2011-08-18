@@ -79,10 +79,10 @@ namespace ScrewTurn.Wiki {
 		/// Detects the correct <see cref="T:PageInfo" /> object associated to the current page using the <b>Page</b> and <b>NS</b> parameters in the query string.
 		/// </summary>
 		/// <param name="loadDefault"><c>true</c> to load the default page of the specified namespace when <b>Page</b> is not specified, <c>false</c> otherwise.</param>
-		/// <returns>If <b>Page</b> is specified and exists, the correct <see cref="T:PageInfo" />, otherwise <c>null</c> if <b>loadDefault</b> is <c>false</c>,
-		/// or the <see cref="T:PageInfo" /> object representing the default page of the specified namespace if <b>loadDefault</b> is <c>true</c>.</returns>
-		protected PageInfo DetectPageInfo(bool loadDefault) {
-			return Tools.DetectCurrentPageInfo(loadDefault);
+		/// <returns>If <b>Page</b> is specified and exists, the correct <see cref="T:PageContent" />, otherwise <c>null</c> if <b>loadDefault</b> is <c>false</c>,
+		/// or the <see cref="T:PageContent" /> object representing the default page of the specified namespace if <b>loadDefault</b> is <c>true</c>.</returns>
+		protected string DetectPage(bool loadDefault) {
+			return Tools.DetectCurrentPage(loadDefault);
 		}
 
 		/// <summary>

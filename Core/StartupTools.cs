@@ -27,41 +27,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Updates the DLLs into the settings storage provider, if appropriate.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="settingsProviderAsmName">The file name of the assembly that contains the current Settings Storage Provider.</param>
-		private static void UpdateDllsIntoSettingsProvider(IGlobalSettingsStorageProviderV40 provider, string settingsProviderAsmName) {
-			// Look into public\Plugins (hardcoded)
-			string fullPath = Path.Combine(GlobalSettings.PublicDirectory, "Plugins");
-
-			if(!Directory.Exists(fullPath)) return;
-
-			string[] dlls = Directory.GetFiles(fullPath, "*.dll");
-			string[] installedDlls = provider.ListPluginAssemblies();
-
-			foreach(string dll in dlls) {
-				bool found = false;
-				string filename = Path.GetFileName(dll);
-				foreach(string instDll in installedDlls) {
-					if(instDll.ToLowerInvariant() == filename.ToLowerInvariant()) {
-						found = true;
-						break;
-					}
-				}
-
-				if(!found && filename.ToLowerInvariant() == settingsProviderAsmName.ToLowerInvariant()) {
-					found = true;
-				}
-
-				if(found) {
-					// Update DLL
-					provider.StorePluginAssembly(filename, File.ReadAllBytes(dll));
-				}
-			}
-		}
-
-		/// <summary>
 		/// Performs all needed startup operations.
 		/// </summary>
 		public static void Startup() {
@@ -82,11 +47,6 @@ namespace ScrewTurn.Wiki {
 			Collectors.AddGlobalSettingsStorageProvider(globalSettingsStorageProvider.GetType(), Assembly.GetAssembly(globalSettingsStorageProvider.GetType()));
 			globalSettingsStorageProvider.SetUp(Host.Instance, GetGlobalSettingsStorageProviderConfiguration());
 			globalSettingsStorageProvider.Dispose();
-
-			if(!(globalSettingsStorageProvider is GlobalSettingsStorageProvider)) {
-				// Update DLLs from public\Plugins
-				UpdateDllsIntoSettingsProvider(Collectors.CollectorsBox.GlobalSettingsProvider, ProviderLoader.GlobalSettingsStorageProviderAssemblyName);
-			}
 
 			// Add StorageProviders, from WebConfig, to Collectors and Setup them
 			ProviderLoader.LoadStorageProviders<ISettingsStorageProviderV40>(new List<StorageProvider>() { ((List<StorageProvider>)WebConfigurationManager.GetWebApplicationSection("storageProviders/settingsProvider"))[0] });
@@ -140,29 +100,6 @@ namespace ScrewTurn.Wiki {
 				Log.LogEntry("Wiki " + wiki.WikiName + " is ready", EntryType.General, Log.SystemUsername, null);
 			}
 
-			System.Threading.ThreadPool.QueueUserWorkItem(state => {
-				using(((WindowsIdentity)state).Impersonate()) {
-					foreach(Wiki.PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
-						if((DateTime.Now - Settings.GetLastPageIndexing(wiki.WikiName)).TotalDays > 7) {
-							Settings.SetLastPageIndexing(wiki.WikiName, DateTime.Now);
-							System.Threading.Thread.Sleep(10000);
-							using(MemoryStream ms = new MemoryStream()) {
-								using(StreamWriter wr = new System.IO.StreamWriter(ms)) {
-									System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
-									foreach(var provider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki.WikiName)) {
-										if(!provider.ReadOnly) {
-											Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name + " for wiki: " + wiki.WikiName, EntryType.General, Log.SystemUsername, null);
-											provider.RebuildIndex();
-											Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name + " for wiki: " + wiki.WikiName, EntryType.General, Log.SystemUsername, null);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}, WindowsIdentity.GetCurrent());
-
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername, null);
 		}
 
@@ -213,8 +150,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		private static void CreateMainPage(string wiki) {
-			Pages.CreatePage(wiki, null as string, Settings.GetDefaultPage(wiki));
-			Pages.ModifyPage(wiki, Pages.FindPage(wiki, Settings.GetDefaultPage(wiki)), "Main Page", Log.SystemUsername,
+			Pages.SetPageContent(wiki, null as string, Settings.GetDefaultPage(wiki), "Main Page", Log.SystemUsername,
 				DateTime.Now, "", Defaults.MainPageContent, null, null, SaveMode.Normal);
 		}
 

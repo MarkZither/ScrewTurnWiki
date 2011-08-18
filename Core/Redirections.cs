@@ -14,23 +14,23 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Adds a new Redirection.
 		/// </summary>
-		/// <param name="source">The source Page.</param>
-		/// <param name="destination">The destination Page.</param>
+		/// <param name="sourcePageFullName">The source Page full name.</param>
+		/// <param name="destinationPageFullName">The destination Page full name.</param>
 		/// <returns>True if the Redirection is added, false otherwise.</returns>
 		/// <remarks>The method prevents circular and multi-level redirection.</remarks>
-		public static void AddRedirection(PageInfo source, PageInfo destination) {
-			if(source == null) throw new ArgumentNullException("source");
-			if(destination == null) throw new ArgumentNullException("destination");
+		public static void AddRedirection(string sourcePageFullName, string destinationPageFullName) {
+			if(sourcePageFullName == null) throw new ArgumentNullException("source");
+			if(destinationPageFullName == null) throw new ArgumentNullException("destination");
 
 		}
 
 		/// <summary>
 		/// Gets the destination Page.
 		/// </summary>
-		/// <param name="page">The source Page.</param>
+		/// <param name="pageFullName">The source Page full name.</param>
 		/// <returns>The destination Page, or null.</returns>
-		public static PageInfo GetDestination(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		public static PageContent GetDestination(string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 
 			return null;
 		}
@@ -38,10 +38,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Removes any occurrence of a Page from the redirection table, both on sources and destinations.
 		/// </summary>
-		/// <param name="page">The Page to wipe-out.</param>
+		/// <param name="pageFullName">The full name of the page to wipe-out.</param>
 		/// <remarks>This method is useful when removing a Page.</remarks>
-		public static void WipePageOut(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+		public static void WipePageOut(string pageFullName) {
+			if(pageFullName == null) throw new ArgumentNullException("page");
 		}
 
 		/// <summary>

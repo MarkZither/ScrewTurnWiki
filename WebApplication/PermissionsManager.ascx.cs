@@ -69,7 +69,7 @@ namespace ScrewTurn.Wiki {
 				case AclResources.Namespaces:
 					return authReader.RetrieveSubjectsForNamespace(Pages.FindNamespace(currentWiki, CurrentResourceName));
 				case AclResources.Pages:
-					return authReader.RetrieveSubjectsForPage(Pages.FindPage(currentWiki, CurrentResourceName));
+					return authReader.RetrieveSubjectsForPage(CurrentResourceName);
 				case AclResources.Directories:
 					return authReader.RetrieveSubjectsForDirectory(
 						Collectors.CollectorsBox.FilesProviderCollector.GetProvider(CurrentFilesProvider, currentWiki), CurrentResourceName);
@@ -146,18 +146,18 @@ namespace ScrewTurn.Wiki {
 					if(type == SubjectType.Group) {
 						grants = authReader.RetrieveGrantsForPage(
 							Users.FindUserGroup(currentWiki, subject),
-							Pages.FindPage(currentWiki, CurrentResourceName));
+							CurrentResourceName);
 						denials = authReader.RetrieveDenialsForPage(
 							Users.FindUserGroup(currentWiki, subject),
-							Pages.FindPage(currentWiki, CurrentResourceName));
+							CurrentResourceName);
 					}
 					else {
 						grants = authReader.RetrieveGrantsForPage(
 							Users.FindUser(currentWiki, subject),
-							Pages.FindPage(currentWiki, CurrentResourceName));
+							CurrentResourceName);
 						denials = authReader.RetrieveDenialsForPage(
 							Users.FindUser(currentWiki, subject),
-							Pages.FindPage(currentWiki, CurrentResourceName));
+							CurrentResourceName);
 					}
 					break;
 				case AclResources.Directories:
@@ -238,17 +238,15 @@ namespace ScrewTurn.Wiki {
 			bool isGroup = lstSubjects.SelectedValue.StartsWith("G.");
 			subject = subject.Substring(2);
 
-			PageInfo currentPage = Pages.FindPage(currentWiki, page);
-
 			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
 			if(isGroup) {
 				return authWriter.RemoveEntriesForPage(
-					Users.FindUserGroup(currentWiki, subject), currentPage);
+					Users.FindUserGroup(currentWiki, subject), page);
 			}
 			else {
 				return authWriter.RemoveEntriesForPage(
-					Users.FindUser(currentWiki, subject), currentPage);
+					Users.FindUser(currentWiki, subject), page);
 			}
 		}
 
@@ -338,8 +336,6 @@ namespace ScrewTurn.Wiki {
 			bool isGroup = subject.StartsWith("G.");
 			subject = subject.Substring(2);
 
-			PageInfo currentPage = Pages.FindPage(currentWiki, page);
-
 			UserGroup group = null;
 			UserInfo user = null;
 
@@ -352,11 +348,11 @@ namespace ScrewTurn.Wiki {
 				bool done = false;
 				if(isGroup) {
 					done = authWriter.SetPermissionForPage(AuthStatus.Grant,
-						currentPage, action, group);
+						page, action, group);
 				}
 				else {
 					done = authWriter.SetPermissionForPage(AuthStatus.Grant,
-						currentPage, action, user);
+						page, action, user);
 				}
 				if(!done) return false;
 			}
@@ -365,11 +361,11 @@ namespace ScrewTurn.Wiki {
 				bool done = false;
 				if(isGroup) {
 					done = authWriter.SetPermissionForPage(AuthStatus.Deny,
-						currentPage, action, group);
+						page, action, group);
 				}
 				else {
 					done = authWriter.SetPermissionForPage(AuthStatus.Deny,
-						currentPage, action, user);
+						page, action, user);
 				}
 				if(!done) return false;
 			}
@@ -575,14 +571,12 @@ namespace ScrewTurn.Wiki {
 					break;
 				case AclResources.Pages:
 					if(isGroup) {
-						done = authWriter.SetPermissionForPage(AuthStatus.Deny,
-							Pages.FindPage(currentWiki, CurrentResourceName), Actions.FullControl,
-							Users.FindUserGroup(currentWiki, subject));
+						done = authWriter.SetPermissionForPage(AuthStatus.Deny, CurrentResourceName, Actions.FullControl,
+																Users.FindUserGroup(currentWiki, subject));
 					}
 					else {
-						done = authWriter.SetPermissionForPage(AuthStatus.Deny,
-							Pages.FindPage(currentWiki, CurrentResourceName), Actions.FullControl,
-							Users.FindUser(currentWiki, subject));
+						done = authWriter.SetPermissionForPage(AuthStatus.Deny, CurrentResourceName, Actions.FullControl,
+																Users.FindUser(currentWiki, subject));
 					}
 					break;
 				case AclResources.Directories:

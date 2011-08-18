@@ -212,7 +212,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Category rename requested for " + txtCurrentCategory.Value + " to " + txtNewName.Text, EntryType.General, Log.SystemUsername, currentWiki);
 
-			if(Pages.RenameCategory(currentWiki, Pages.FindCategory(currentWiki, txtCurrentCategory.Value), txtNewName.Text)) {
+			if(Pages.RenameCategory(Pages.FindCategory(currentWiki, txtCurrentCategory.Value), txtNewName.Text)) {
 				RefreshList();
 				lblRenameResult.CssClass = "resultok";
 				lblRenameResult.Text = Properties.Messages.CategoryRenamed;
@@ -328,9 +328,9 @@ namespace ScrewTurn.Wiki {
 
 			string currentWiki = DetectWiki();
 
-			List<PageInfo> selectedPages = new List<PageInfo>(20);
+			List<PageContent> selectedPages = new List<PageContent>(20);
 			foreach(string pg in pageListBuilder.SelectedPages) {
-				PageInfo page = Pages.FindPage(currentWiki, pg);
+				PageContent page = Pages.FindPage(currentWiki, pg);
 				if(page != null) selectedPages.Add(page);
 			}
 
@@ -356,7 +356,7 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("Bulk rebind requested", EntryType.General, SessionFacade.CurrentUsername, currentWiki);
 
-			foreach(PageInfo page in selectedPages) {
+			foreach(PageContent page in selectedPages) {
 				CategoryInfo[] cats = null;
 				if(rdoBulkAdd.Checked) {
 					// Merge selected categories with previous ones

@@ -17,17 +17,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private const int MaxParametersInQuery = 50;
 
 		/// <summary>
-		/// Initializes the Storage Provider.
-		/// </summary>
-		/// <param name="host">The Host of the Component.</param>
-		/// <param name="config">The Configuration data, if any.</param>
-		/// <param name="wiki">The wiki.</param>
-		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
-		public new void Init(IHostV40 host, string config, string wiki) {
-			base.Init(host, config, wiki);
-		}
-		
-		/// <summary>
 		/// Gets the default users storage provider, when no value is stored in the database.
 		/// </summary>
 		protected abstract string DefaultUsersStorageProvider { get; }

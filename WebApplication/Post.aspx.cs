@@ -17,8 +17,7 @@ namespace ScrewTurn.Wiki {
 
 	public partial class Post : BasePage {
 
-		private PageInfo page;
-		private PageContent content;
+		private PageContent page;
 		private string currentWiki = null;
 
 		protected void Page_Load(object sender, EventArgs e) {
@@ -33,12 +32,11 @@ namespace ScrewTurn.Wiki {
 
 			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, page.FullName, GlobalSettings.PageExtension));
 
-			content = Content.GetPageContent(page);
-			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(currentWiki, content.Title, false, FormattingContext.MessageBody, page);
+			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.MessageBody, page.FullName);
 
 			// Verify permissions and setup captcha
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
-			bool canPostMessage = authChecker.CheckActionForPage(page, Actions.ForPages.PostDiscussion,
+			bool canPostMessage = authChecker.CheckActionForPage(page.FullName, Actions.ForPages.PostDiscussion,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames(currentWiki));
 			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, Tools.UrlEncode(page.FullName), GlobalSettings.PageExtension));
 			captcha.Visible = SessionFacade.LoginKey == null && !Settings.GetDisableCaptchaControl(currentWiki);
@@ -115,12 +113,12 @@ namespace ScrewTurn.Wiki {
 				}
 				catch { }
 
-				Pages.AddMessage(currentWiki, page, username, txtSubject.Text, DateTime.Now, content, parent);
+				Pages.AddMessage(page, username, txtSubject.Text, DateTime.Now, content, parent);
 			}
 			else {
 				Message[] messages = Pages.GetPageMessages(page);
 				Message msg = Pages.FindMessage(messages, int.Parse(Request["Edit"]));
-				Pages.ModifyMessage(currentWiki, page, int.Parse(Request["Edit"]), msg.Username, txtSubject.Text, DateTime.Now, content);
+				Pages.ModifyMessage(page, int.Parse(Request["Edit"]), msg.Username, txtSubject.Text, DateTime.Now, content);
 			}
 			UrlTools.Redirect(page.FullName + GlobalSettings.PageExtension + "?Discuss=1&NoRedirect=1");
 		}

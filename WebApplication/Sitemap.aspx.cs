@@ -36,17 +36,17 @@ namespace ScrewTurn.Wiki {
 
 				AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 
-				foreach(PageInfo page in Pages.GetPages(currentWiki, null)) {
-					if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
-						WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == rootDefault, writer);
+				foreach(PageContent page in Pages.GetPages(currentWiki, null)) {
+					if(authChecker.CheckActionForPage(page.FullName, Actions.ForPages.ReadPage, user, groups)) {
+						WritePage(mainUrl, page.FullName, page.FullName.ToLowerInvariant() == rootDefault, writer);
 					}
 				}
 				foreach(NamespaceInfo nspace in Pages.GetNamespaces(currentWiki)) {
-					string nspaceDefault = nspace.DefaultPage.FullName.ToLowerInvariant();
+					string nspaceDefault = nspace.DefaultPageFullName.ToLowerInvariant();
 
-					foreach(PageInfo page in Pages.GetPages(currentWiki, nspace)) {
-						if(authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user, groups)) {
-							WritePage(mainUrl, page, page.FullName.ToLowerInvariant() == nspaceDefault, writer);
+					foreach(PageContent page in Pages.GetPages(currentWiki, nspace)) {
+						if(authChecker.CheckActionForPage(page.FullName, Actions.ForPages.ReadPage, user, groups)) {
+							WritePage(mainUrl, page.FullName, page.FullName.ToLowerInvariant() == nspaceDefault, writer);
 						}
 					}
 				}
@@ -60,12 +60,12 @@ namespace ScrewTurn.Wiki {
 		/// Writes a page to the output XML writer.
 		/// </summary>
 		/// <param name="mainUrl">The main wiki URL.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="isDefault">A value indicating whether the page is the default of its namespace.</param>
 		/// <param name="writer">The writer.</param>
-		private void WritePage(string mainUrl, PageInfo page, bool isDefault, XmlWriter writer) {
+		private void WritePage(string mainUrl, string pageFullName, bool isDefault, XmlWriter writer) {
 			writer.WriteStartElement("url");
-			writer.WriteElementString("loc", mainUrl + Tools.UrlEncode(page.FullName) + GlobalSettings.PageExtension);
+			writer.WriteElementString("loc", mainUrl + Tools.UrlEncode(pageFullName) + GlobalSettings.PageExtension);
 			writer.WriteElementString("priority", isDefault ? "0.75" : "0.5");
 			writer.WriteElementString("changefreq", "daily");
 			writer.WriteEndElement();

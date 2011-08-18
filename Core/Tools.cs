@@ -400,7 +400,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="loadDefault"><c>true</c> to load the default page of the specified namespace when <b>Page</b> is not specified, <c>false</c> otherwise.</param>
 		/// <returns>If <b>Page</b> is specified and exists, the correct <see cref="T:PageInfo"/>, otherwise <c>null</c> if <b>loadDefault</b> is <c>false</c>,
 		/// or the <see cref="T:PageInfo"/> object representing the default page of the specified namespace if <b>loadDefault</b> is <c>true</c>.</returns>
-		public static PageInfo DetectCurrentPageInfo(bool loadDefault) {
+		public static string DetectCurrentPage(bool loadDefault) {
 			string wiki = DetectCurrentWiki();
 			string nspace = HttpContext.Current.Request["NS"];
 			NamespaceInfo nsinfo = nspace != null ? Pages.FindNamespace(wiki, nspace) : null;
@@ -409,7 +409,7 @@ namespace ScrewTurn.Wiki {
 			if(string.IsNullOrEmpty(page)) {
 				if(loadDefault) {
 					if(nsinfo == null) page = Settings.GetDefaultPage(wiki);
-					else page = nsinfo.DefaultPage != null ? nsinfo.DefaultPage.FullName : "";
+					else page = nsinfo.DefaultPageFullName != null ? nsinfo.DefaultPageFullName : "";
 				}
 				else return null;
 			}
@@ -420,7 +420,7 @@ namespace ScrewTurn.Wiki {
 
 			fullName = fullName.Trim('.');
 
-			return Pages.FindPage(wiki, fullName);
+			return fullName;
 		}
 
 		/// <summary>

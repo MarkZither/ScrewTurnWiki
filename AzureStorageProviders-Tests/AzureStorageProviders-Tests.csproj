@@ -60,7 +60,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AzureStorageProviders\AzureStorageProviders.csproj">
       <Project>{F38D7FDA-08CA-4FE1-9E0D-F49FFFA12E79}</Project>
-      <Name>AzureTableStorageProviders</Name>
+      <Name>AzureStorageProviders</Name>
     </ProjectReference>
     <ProjectReference Include="..\PluginFramework\PluginFramework.csproj">
       <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>

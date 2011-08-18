@@ -333,7 +333,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultUsersProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultUsersProvider"), typeof(UsersStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultUsersProvider"), null);
 			}
 			set {
 				Provider.SetSetting("DefaultUsersProvider", value);
@@ -345,7 +345,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultPagesProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultPagesProvider"), typeof(PagesStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultPagesProvider"), null);
 			}
 			set {
 				Provider.SetSetting("DefaultPagesProvider", value);
@@ -357,7 +357,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultFilesProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultFilesProvider"), typeof(FilesStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultFilesProvider"), null);
 			}
 			set {
 				Provider.SetSetting("DefaultFilesProvider", value);
@@ -369,7 +369,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string DefaultThemesProvider {
 			get {
-				return SettingsTools.GetString(Provider.GetSetting("DefaultThemesProvider"), typeof(ThemesStorageProvider).ToString());
+				return SettingsTools.GetString(Provider.GetSetting("DefaultThemesProvider"), null);
 			}
 			set {
 				Provider.SetSetting("DefaultThemesProvider", value);

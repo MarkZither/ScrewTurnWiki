@@ -154,7 +154,6 @@ namespace ScrewTurn.Wiki {
 			table.Columns.Add("Link");
 			table.Columns.Add("Editable", typeof(bool));
 			table.Columns.Add("FullPath");
-			table.Columns.Add("Downloads");
 			table.Columns.Add("CanDelete", typeof(bool));
 			table.Columns.Add("CanDownload", typeof(bool));
 
@@ -185,7 +184,6 @@ namespace ScrewTurn.Wiki {
 				row["Link"] = "";
 				row["Editable"] = false;
 				row["FullPath"] = s;
-				row["Downloads"] = "&nbsp;";
 				row["CanDelete"] = canDeleteDirs;
 				row["CanDownload"] = canListThisSubDir;
 				table.Rows.Add(row);
@@ -210,7 +208,6 @@ namespace ScrewTurn.Wiki {
 				}
 				row["Editable"] = canUpload && canDeleteFiles && (ext == ".jpg" || ext == ".jpeg" || ext == ".png");
 				row["FullPath"] = s;
-				row["Downloads"] = details.RetrievalCount.ToString();
 				row["CanDelete"] = canDeleteFiles;
 				row["CanDownload"] = canDownload;
 				table.Rows.Add(row);

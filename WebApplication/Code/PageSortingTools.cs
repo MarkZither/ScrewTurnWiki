@@ -176,8 +176,8 @@ namespace ScrewTurn.Wiki {
 			ExtendedPageInfo[] temp = new ExtendedPageInfo[pages.Length];
 			Array.Copy(pages, temp, pages.Length);
 			Array.Sort(temp, delegate(ExtendedPageInfo p1, ExtendedPageInfo p2) {
-				if(!reverse) return p1.ModificationDateTime.CompareTo(p2.ModificationDateTime);
-				else return p2.ModificationDateTime.CompareTo(p1.ModificationDateTime);
+				if(!reverse) return p1.PageContent.LastModified.CompareTo(p2.PageContent.LastModified);
+				else return p2.PageContent.LastModified.CompareTo(p1.PageContent.LastModified);
 			});
 
 			SortedDictionary<DateTime, List<ExtendedPageInfo>> result =
@@ -187,7 +187,7 @@ namespace ScrewTurn.Wiki {
 
 			foreach(ExtendedPageInfo p in temp) {
 				string label;
-				DateTime marker = GetMarkerDate(p.ModificationDateTime, out label);
+				DateTime marker = GetMarkerDate(p.PageContent.LastModified, out label);
 				if(!result.ContainsKey(marker)) {
 					result.Add(marker, new List<ExtendedPageInfo>(20));
 					labels.Add(marker, label);

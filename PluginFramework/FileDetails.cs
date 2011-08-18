@@ -12,18 +12,15 @@ namespace ScrewTurn.Wiki.PluginFramework {
 
 		private long size;
 		private DateTime lastModified;
-		private int retrievalCount;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:FileDetails" /> class.
 		/// </summary>
 		/// <param name="size">The size of the file in bytes.</param>
 		/// <param name="lastModified">The modification date/time.</param>
-		/// <param name="retrievalCount">The number of times the file was retrieved.</param>
-		public FileDetails(long size, DateTime lastModified, int retrievalCount) {
+		public FileDetails(long size, DateTime lastModified) {
 			this.size = size;
 			this.lastModified = lastModified;
-			this.retrievalCount = retrievalCount;
 		}
 		
 		/// <summary>
@@ -38,13 +35,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public DateTime LastModified {
 			get { return lastModified; }
-		}
-
-		/// <summary>
-		/// Gets the number of times the file was retrieved.
-		/// </summary>
-		public int RetrievalCount {
-			get { return retrievalCount; }
 		}
 
 	}

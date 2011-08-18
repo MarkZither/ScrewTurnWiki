@@ -21,7 +21,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		/// <returns>The document name.</returns>
-		public static string GetDocumentName(PageInfo page) {
+		public static string GetDocumentName(PageContent page) {
 			if(page == null) throw new ArgumentNullException("page");
 			return page.FullName;
 		}
@@ -40,21 +40,21 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		private uint id;
 		private string name, title, typeTag;
 		private DateTime dateTime;
-		private PageInfo pageInfo;
+		private PageContent page;
 
 		private Tokenizer tokenizer;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:PageDocument" /> class.
 		/// </summary>
-		/// <param name="pageInfo">The page.</param>
+		/// <param name="page">The page.</param>
 		/// <param name="dumpedDocument">The dumped document data.</param>
 		/// <param name="tokenizer">The tokenizer.</param>
-		public PageDocument(PageInfo pageInfo, DumpedDocument dumpedDocument, Tokenizer tokenizer) {
+		public PageDocument(PageContent page, DumpedDocument dumpedDocument, Tokenizer tokenizer) {
 			if(dumpedDocument == null) throw new ArgumentNullException("dumpedDocument");
 			if(tokenizer == null) throw new ArgumentNullException("tokenizer");
 
-			this.pageInfo = pageInfo;
+			this.page = page;
 			id = dumpedDocument.ID;
 			name = dumpedDocument.Name;
 			typeTag = dumpedDocument.TypeTag;
@@ -109,10 +109,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		}
 
 		/// <summary>
-		/// Gets the page information.
+		/// Gets the page.
 		/// </summary>
-		public PageInfo PageInfo {
-			get { return pageInfo; }
+		public PageContent Page {
+			get { return page; }
 		}
 
 	}

@@ -9,7 +9,8 @@ using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.SearchEngine;
 using Ionic.Zip;
 
-namespace ScrewTurn.Wiki {
+namespace ScrewTurn.Wiki.Plugins.FSProviders {
+
 	/// <summary>
 	/// Implements the methods to view, add or delete Themes
 	/// </summary>
@@ -22,7 +23,7 @@ namespace ScrewTurn.Wiki {
 		public static readonly string ProviderName = "Local Theme Provider";
 		private const string DefaultTheme = "Default";
 		private readonly ComponentInformation info =
-			new ComponentInformation(ProviderName, "Threeplicate Srl", GlobalSettings.WikiVersion, "http://www.screwturn.eu", null);
+			new ComponentInformation(ProviderName, "Threeplicate Srl", "4.0.2.76", "http://www.screwturn.eu", null);
 		private IHostV40 host;
 		private string wiki;
 

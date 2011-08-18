@@ -293,15 +293,15 @@ namespace ScrewTurn.Wiki {
 
 			authWriter.RemoveEntriesForNamespace(user, null);
 			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
-				foreach(PageInfo page in prov.GetPages(null)) {
-					authWriter.RemoveEntriesForPage(user, page);
+				foreach(PageContent page in prov.GetPages(null)) {
+					authWriter.RemoveEntriesForPage(user, page.FullName);
 				}
 
 				foreach(NamespaceInfo nspace in prov.GetNamespaces()) {
 					authWriter.RemoveEntriesForNamespace(user, nspace);
 
-					foreach(PageInfo page in prov.GetPages(nspace)) {
-						authWriter.RemoveEntriesForPage(user, page);
+					foreach(PageContent page in prov.GetPages(nspace)) {
+						authWriter.RemoveEntriesForPage(user, page.FullName);
 					}
 				}
 			}
@@ -324,15 +324,15 @@ namespace ScrewTurn.Wiki {
 
 			authWriter.RemoveEntriesForNamespace(group, null);
 			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
-				foreach(PageInfo page in prov.GetPages(null)) {
-					authWriter.RemoveEntriesForPage(group, page);
+				foreach(PageContent page in prov.GetPages(null)) {
+					authWriter.RemoveEntriesForPage(group, page.FullName);
 				}
 
 				foreach(NamespaceInfo nspace in prov.GetNamespaces()) {
 					authWriter.RemoveEntriesForNamespace(group, nspace);
 
-					foreach(PageInfo page in prov.GetPages(nspace)) {
-						authWriter.RemoveEntriesForPage(group, page);
+					foreach(PageContent page in prov.GetPages(nspace)) {
+						authWriter.RemoveEntriesForPage(group, page.FullName);
 					}
 				}
 			}
@@ -719,12 +719,12 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="user">The user for which to set the notification status.</param>
-		/// <param name="page">The page subject of the notification.</param>
+		/// <param name="pageFullName">The full name of the page subject of the notification.</param>
 		/// <param name="pageChanges">A value indicating whether page changes should be notified.</param>
 		/// <param name="discussionMessages">A value indicating whether discussion messages should be notified.</param>
 		/// <returns><c>true</c> if the notification is set, <c>false</c> otherwise.</returns>
-		public static bool SetEmailNotification(string wiki, UserInfo user, PageInfo page, bool pageChanges, bool discussionMessages) {
-			if(user == null || page == null) return false;
+		public static bool SetEmailNotification(string wiki, UserInfo user, string pageFullName, bool pageChanges, bool discussionMessages) {
+			if(user == null || pageFullName == null) return false;
 
 			// Get user's data
 			// Depending on the status of pageChanges and discussionMessages,
@@ -746,7 +746,7 @@ namespace ScrewTurn.Wiki {
 			List<string> pageChangesResult = new List<string>(pageChangesEntries.Length + 1);
 			List<string> discussionMessagesResult = new List<string>(discussionMessagesEntries.Length + 1);
 
-			string lowercasePage = page.FullName.ToLowerInvariant();
+			string lowercasePage = pageFullName.ToLowerInvariant();
 
 			bool added = false;
 			foreach(string entry in pageChangesEntries) {
@@ -758,7 +758,7 @@ namespace ScrewTurn.Wiki {
 				}
 				else if(Pages.FindPage(wiki, entry) != null) pageChangesResult.Add(entry);
 			}
-			if(!added && pageChanges) pageChangesResult.Add(page.FullName);
+			if(!added && pageChanges) pageChangesResult.Add(pageFullName);
 
 			added = false;
 			foreach(string entry in discussionMessagesEntries) {
@@ -770,7 +770,7 @@ namespace ScrewTurn.Wiki {
 				}
 				else if(Pages.FindPage(wiki, entry) != null) discussionMessagesResult.Add(entry);
 			}
-			if(!added && discussionMessages) discussionMessagesResult.Add(page.FullName);
+			if(!added && discussionMessages) discussionMessagesResult.Add(pageFullName);
 
 			string newPageChangesData = string.Join(":", pageChangesResult.ToArray());
 			string newDiscussionMessagesData = string.Join(":", discussionMessagesResult.ToArray());
@@ -859,14 +859,14 @@ namespace ScrewTurn.Wiki {
 		/// Gets the email notification status for a page.
 		/// </summary>
 		/// <param name="user">The user for which to get the notification status.</param>
-		/// <param name="page">The page subject of the notification.</param>
+		/// <param name="pageFullName">The full name of the page subject of the notification.</param>
 		/// <param name="pageChanges">A value indicating whether page changes should be notified.</param>
 		/// <param name="discussionMessages">A value indicating whether discussion messages should be notified.</param>
-		public static void GetEmailNotification(UserInfo user, PageInfo page, out bool pageChanges, out bool discussionMessages) {
+		public static void GetEmailNotification(UserInfo user, string pageFullName, out bool pageChanges, out bool discussionMessages) {
 			pageChanges = false;
 			discussionMessages = false;
 
-			if(user == null || page == null) return;
+			if(user == null || pageFullName == null) return;
 
 			string pageChangeData = user.Provider.RetrieveUserData(user, PageChangesKey);
 			string discussionMessagesData = user.Provider.RetrieveUserData(user, DiscussionMessagesKey);
@@ -880,7 +880,7 @@ namespace ScrewTurn.Wiki {
 			string[] pageChangeEntries = pageChangeData.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 			string[] discussionMessagesEntries = discussionMessagesData.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
-			string lowercasePage = page.FullName.ToLowerInvariant();
+			string lowercasePage = pageFullName.ToLowerInvariant();
 
 			// Elements in the array are already lowercase
 			pageChanges = Array.Find(pageChangeEntries, delegate(string elem) { return elem == lowercasePage; }) != null;
@@ -923,13 +923,13 @@ namespace ScrewTurn.Wiki {
 		/// Gets all the users that must be notified of a page change for the given wiki.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The users to be notified.</returns>
-		public static UserInfo[] GetUsersToNotifyForPageChange(string wiki, PageInfo page) {
-			if(page == null) return new UserInfo[0];
+		public static UserInfo[] GetUsersToNotifyForPageChange(string wiki, string pageFullName) {
+			if(pageFullName == null) return new UserInfo[0];
 
-			UserInfo[] specific = GetUsersToNotify(wiki, page, PageChangesKey);
-			UserInfo[] nspace = GetUsersToNotify(wiki, Pages.FindNamespace(wiki, NameTools.GetNamespace(page.FullName)),
+			UserInfo[] specific = GetUsersToNotify(wiki, pageFullName, PageChangesKey);
+			UserInfo[] nspace = GetUsersToNotify(wiki, Pages.FindNamespace(wiki, NameTools.GetNamespace(pageFullName)),
 				NamespacePageChangesKey);
 
 			UserInfo[] temp = MergeArrays(specific, nspace);
@@ -938,7 +938,7 @@ namespace ScrewTurn.Wiki {
 			// Verify read permissions
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 			foreach(UserInfo user in temp) {
-				if(user.Active && authChecker.CheckActionForPage(page, Actions.ForPages.ReadPage, user.Username, user.Groups)) {
+				if(user.Active && authChecker.CheckActionForPage(pageFullName, Actions.ForPages.ReadPage, user.Username, user.Groups)) {
 					result.Add(user);
 				}
 			}
@@ -950,13 +950,13 @@ namespace ScrewTurn.Wiki {
 		/// Gets all the users that must be notified of a discussion message in the given wiki.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The users to be notified.</returns>
-		public static UserInfo[] GetUsersToNotifyForDiscussionMessages(string wiki, PageInfo page) {
-			if(page == null) return new UserInfo[0];
+		public static UserInfo[] GetUsersToNotifyForDiscussionMessages(string wiki, string pageFullName) {
+			if(pageFullName == null) return new UserInfo[0];
 
-			UserInfo[] specific = GetUsersToNotify(wiki, page, DiscussionMessagesKey);
-			UserInfo[] nspace = GetUsersToNotify(wiki, Pages.FindNamespace(wiki, NameTools.GetNamespace(page.FullName)),
+			UserInfo[] specific = GetUsersToNotify(wiki, pageFullName, DiscussionMessagesKey);
+			UserInfo[] nspace = GetUsersToNotify(wiki, Pages.FindNamespace(wiki, NameTools.GetNamespace(pageFullName)),
 				NamespaceDiscussionMessagesKey);
 
 			UserInfo[] temp = MergeArrays(specific, nspace);
@@ -965,7 +965,7 @@ namespace ScrewTurn.Wiki {
 			// Verify read permissions
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 			foreach(UserInfo user in temp) {
-				if(user.Active && authChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion, user.Username, user.Groups)) {
+				if(user.Active && authChecker.CheckActionForPage(pageFullName, Actions.ForPages.ReadDiscussion, user.Username, user.Groups)) {
 					result.Add(user);
 				}
 			}
@@ -1005,13 +1005,13 @@ namespace ScrewTurn.Wiki {
 		/// Gets the users of the given wiki to notify for either a page change or a discussion message.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="page">The page.</param>
+		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="key">The key to look for in the user's data.</param>
 		/// <returns>The users to be notified.</returns>
-		private static UserInfo[] GetUsersToNotify(string wiki, PageInfo page, string key) {
+		private static UserInfo[] GetUsersToNotify(string wiki, string pageFullName, string key) {
 			List<UserInfo> result = new List<UserInfo>(200);
 
-			string lowercasePage = page.FullName.ToLowerInvariant();
+			string lowercasePage = pageFullName.ToLowerInvariant();
 
 			foreach(IUsersStorageProviderV40 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki)) {
 				IDictionary<UserInfo, string> users = prov.GetUsersWithData(key);

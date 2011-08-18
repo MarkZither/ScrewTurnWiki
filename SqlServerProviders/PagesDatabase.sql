@@ -15,14 +15,21 @@ create table [Category](
 	constraint [PK_Category] primary key clustered ([Wiki], [Name], [Namespace])
 )
 
-create table [Page] (
+create table [PageContent] (
 	[Wiki] varchar(100) not null,
 	[Name] nvarchar(200) not null,
-	[Namespace] nvarchar(100) not null,
 	[CreationDateTime] datetime not null,
+	[Namespace] nvarchar(100) not null,
+	[Revision] smallint not null,
+	[Title] nvarchar(200) not null,
+	[User] nvarchar(100) not null,
+	[LastModified] datetime not null,
+	[Comment] nvarchar(300),
+	[Content] nvarchar(max) not null,
+	[Description] nvarchar(200),
 	constraint [FK_Page_Namespace] foreign key ([Wiki], [Namespace]) references [Namespace]([Wiki], [Name])
 		on delete cascade on update cascade,
-	constraint [PK_Page] primary key clustered ([Wiki], [Name], [Namespace])
+	constraint [PK_PageContent] primary key clustered ([Wiki], [Name], [Namespace], [Revision])
 )
 
 -- Deleting/Renaming/Moving a page requires manually updating the binding
@@ -34,25 +41,7 @@ create table [CategoryBinding] (
 		constraint [FK_CategoryBinding_Namespace] foreign key ([Wiki], [Namespace]) references [Namespace]([Wiki], [Name]),
 	constraint [FK_CategoryBinding_Category] foreign key ([Wiki], [Category], [Namespace]) references [Category]([Wiki], [Name], [Namespace])
 		on delete cascade on update cascade,
-	constraint [FK_CategoryBinding_Page] foreign key ([Wiki], [Page], [Namespace]) references [Page]([Wiki], [Name], [Namespace])
-		on delete no action on update no action,
 	constraint [PK_CategoryBinding] primary key clustered ([Wiki], [Namespace], [Page], [Category])
-)
-
-create table [PageContent] (
-	[Wiki] varchar(100) not null,
-	[Page] nvarchar(200) not null,
-	[Namespace] nvarchar(100) not null,
-	[Revision] smallint not null,
-	[Title] nvarchar(200) not null,
-	[User] nvarchar(100) not null,
-	[LastModified] datetime not null,
-	[Comment] nvarchar(300),
-	[Content] nvarchar(max) not null,
-	[Description] nvarchar(200),
-	constraint [FK_PageContent_Page] foreign key ([Wiki], [Page], [Namespace]) references [Page]([Wiki], [Name], [Namespace])
-		on delete cascade on update cascade,
-	constraint [PK_PageContent] primary key clustered ([Wiki], [Page], [Namespace], [Revision])
 )
 
 create table [PageKeyword] (
@@ -61,7 +50,7 @@ create table [PageKeyword] (
 	[Namespace] nvarchar(100) not null,
 	[Revision] smallint not null,
 	[Keyword] nvarchar(50) not null,
-	constraint [FK_PageKeyword_PageContent] foreign key ([Wiki], [Page], [Namespace], [Revision]) references [PageContent]([Wiki], [Page], [Namespace], [Revision])
+	constraint [FK_PageKeyword_PageContent] foreign key ([Wiki], [Page], [Namespace], [Revision]) references [PageContent]([Wiki], [Name], [Namespace], [Revision])
 		on delete cascade on update cascade,
 	constraint [PK_PageKeyword] primary key clustered ([Wiki], [Page], [Namespace], [Revision], [Keyword])
 )
@@ -76,8 +65,6 @@ create table [Message] (
 	[Subject] nvarchar(200) not null,
 	[DateTime] datetime not null,
 	[Body] nvarchar(max) not null,
-	constraint [FK_Message_Page] foreign key ([Wiki], [Page], [Namespace]) references [Page]([Wiki], [Name], [Namespace])
-		on delete cascade on update cascade,
 	constraint [PK_Message] primary key clustered ([Wiki], [Page], [Namespace], [Id])
 )
 
@@ -87,8 +74,6 @@ create table [NavigationPath] (
 	[Namespace] nvarchar(100) not null,
 	[Page] nvarchar(200) not null,
 	[Number] smallint not null,
-	constraint [FK_NavigationPath_Page] foreign key ([Wiki], [Page], [Namespace]) references [Page]([Wiki], [Name], [Namespace])	
-		on delete cascade on update cascade,
 	constraint [PK_NavigationPath] primary key clustered ([Wiki], [Name], [Namespace], [Page])
 )
 

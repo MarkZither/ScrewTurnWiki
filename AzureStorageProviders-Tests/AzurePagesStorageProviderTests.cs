@@ -7,6 +7,7 @@ using ScrewTurn.Wiki.PluginFramework;
 using NUnit.Framework;
 using ScrewTurn.Wiki.Tests;
 using System.Configuration;
+using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
@@ -33,6 +34,8 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.PagesInfoTable);
 			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.SnippetsTable);
 			TableStorage.TruncateTable(ConfigurationManager.AppSettings["AzureConnString"], AzurePagesStorageProvider.IndexWordMappingTable);
+
+			TableStorage.DeleteAllBlobs(ConfigurationManager.AppSettings["AzureConnString"]);
 		}
 
 		[Test]
@@ -41,7 +44,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}
-		
+				
 	}
 
 }

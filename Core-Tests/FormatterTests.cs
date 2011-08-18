@@ -33,10 +33,10 @@ second line";
 		[TestCase(Input,ExpectedOutput)]
 		public void Format(string input, string output) {
 			FormattingContext context = FormattingContext.PageContent;
-			PageInfo currentPage = null;
+			string currentPageFullName = null;
 			string[] linkedPages = null;
 
-			string _input = Formatter.Format(null, input, false, context, currentPage, out linkedPages, false);
+			string _input = Formatter.Format(null, input, false, context, currentPageFullName, out linkedPages, false);
 
 			// Ignore \r characters
 			// Ignore \n characters
@@ -376,6 +376,8 @@ second line";
 
 	public class DummyPagesStorageProvider : IPagesStorageProviderV40 {
 
+		#region IPagesStorageProviderV40 Members
+
 		public NamespaceInfo GetNamespace(string name) {
 			throw new NotImplementedException();
 		}
@@ -392,7 +394,7 @@ second line";
 			throw new NotImplementedException();
 		}
 
-		public NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, PageInfo page) {
+		public NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, string pageFullName) {
 			throw new NotImplementedException();
 		}
 
@@ -400,7 +402,7 @@ second line";
 			throw new NotImplementedException();
 		}
 
-		public PageInfo MovePage(PageInfo page, NamespaceInfo destination, bool copyCategories) {
+		public PageContent MovePage(string pageFullName, NamespaceInfo destination, bool copyCategories) {
 			throw new NotImplementedException();
 		}
 
@@ -412,7 +414,7 @@ second line";
 			throw new NotImplementedException();
 		}
 
-		public CategoryInfo[] GetCategoriesForPage(PageInfo page) {
+		public CategoryInfo[] GetCategoriesForPage(string pageFullName) {
 			throw new NotImplementedException();
 		}
 
@@ -448,41 +450,34 @@ second line";
 			get { throw new NotImplementedException(); }
 		}
 
-		public PageInfo GetPage(string fullName) {
+		public PageContent GetPage(string fullName) {
 			if(fullName == "page1") {
-				return new PageInfo(fullName, this, DateTime.Now);
+				return new PageContent(fullName, this, DateTime.Now, "Page 1", "", DateTime.Now, "", "", new string[] { }, "");
 			}
 			return null;
 		}
 
-		public PageInfo[] GetPages(NamespaceInfo nspace) {
+		public PageContent[] GetPages(NamespaceInfo nspace) {
 			throw new NotImplementedException();
 		}
 
-		public PageInfo[] GetUncategorizedPages(NamespaceInfo nspace) {
+		public PageContent[] GetUncategorizedPages(NamespaceInfo nspace) {
 			throw new NotImplementedException();
 		}
 
-		public PageContent GetContent(PageInfo page) {
-			if(page.FullName == "page1") {
-				return new PageContent(page, "Page 1", "", DateTime.Now, "", "", new string[] { }, "");
-			}
-			else return null;
-		}
-
-		public PageContent GetDraft(PageInfo page) {
+		public PageContent GetDraft(string fullName) {
 			throw new NotImplementedException();
 		}
 
-		public bool DeleteDraft(PageInfo page) {
+		public bool DeleteDraft(string fullName) {
 			throw new NotImplementedException();
 		}
 
-		public int[] GetBackups(PageInfo page) {
+		public int[] GetBackups(string fullName) {
 			throw new NotImplementedException();
 		}
 
-		public PageContent GetBackupContent(PageInfo page, int revision) {
+		public PageContent GetBackupContent(string fullName, int revision) {
 			throw new NotImplementedException();
 		}
 
@@ -490,55 +485,51 @@ second line";
 			throw new NotImplementedException();
 		}
 
-		public PageInfo AddPage(string nspace, string name, DateTime creationDateTime) {
+		public PageContent SetPageContent(string nspace, string pageName, DateTime creationDateTime, string title, string username, DateTime dateTime, string comment, string content, string[] keywords, string description, SaveMode saveMode) {
 			throw new NotImplementedException();
 		}
 
-		public PageInfo RenamePage(PageInfo page, string newName) {
+		public PageContent RenamePage(string fullName, string newName) {
 			throw new NotImplementedException();
 		}
 
-		public bool ModifyPage(PageInfo page, string title, string username, DateTime dateTime, string comment, string content, string[] keywords, string description, SaveMode saveMode) {
+		public bool RollbackPage(string pageFullName, int revision) {
 			throw new NotImplementedException();
 		}
 
-		public bool RollbackPage(PageInfo page, int revision) {
+		public bool DeleteBackups(string pageFullName, int revision) {
 			throw new NotImplementedException();
 		}
 
-		public bool DeleteBackups(PageInfo page, int revision) {
+		public bool RemovePage(string pageFullName) {
 			throw new NotImplementedException();
 		}
 
-		public bool RemovePage(PageInfo page) {
+		public bool RebindPage(string pageFullName, string[] categories) {
 			throw new NotImplementedException();
 		}
 
-		public bool RebindPage(PageInfo page, string[] categories) {
+		public Message[] GetMessages(string pageFullName) {
 			throw new NotImplementedException();
 		}
 
-		public Message[] GetMessages(PageInfo page) {
+		public int GetMessageCount(string pageFullName) {
 			throw new NotImplementedException();
 		}
 
-		public int GetMessageCount(PageInfo page) {
+		public bool BulkStoreMessages(string pageFullName, Message[] messages) {
 			throw new NotImplementedException();
 		}
 
-		public bool BulkStoreMessages(PageInfo page, Message[] messages) {
+		public bool AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
 			throw new NotImplementedException();
 		}
 
-		public bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
+		public bool RemoveMessage(string pageFullName, int id, bool removeReplies) {
 			throw new NotImplementedException();
 		}
 
-		public bool RemoveMessage(PageInfo page, int id, bool removeReplies) {
-			throw new NotImplementedException();
-		}
-
-		public bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
+		public bool ModifyMessage(string pageFullName, int id, string username, string subject, DateTime dateTime, string body) {
 			throw new NotImplementedException();
 		}
 
@@ -546,11 +537,11 @@ second line";
 			throw new NotImplementedException();
 		}
 
-		public NavigationPath AddNavigationPath(string nspace, string name, PageInfo[] pages) {
+		public NavigationPath AddNavigationPath(string nspace, string name, string[] pages) {
 			throw new NotImplementedException();
 		}
 
-		public NavigationPath ModifyNavigationPath(NavigationPath path, PageInfo[] pages) {
+		public NavigationPath ModifyNavigationPath(NavigationPath path, string[] pages) {
 			throw new NotImplementedException();
 		}
 
@@ -590,19 +581,29 @@ second line";
 			throw new NotImplementedException();
 		}
 
+		#endregion
+
+		#region IStorageProviderV40 Members
+
 		public bool ReadOnly {
 			get { return false; }
 		}
+
+		#endregion
+
+		#region IProviderV40 Members
 
 		public string CurrentWiki {
 			get { throw new NotImplementedException(); }
 		}
 
-		public void Init(IHostV40 host, string config, string wiki) { }
+		public void Init(IHostV40 host, string config, string wiki) {
+			// Nothing to do
+		}
 
-		public void SetUp(IHostV40 host, string config) { }
-
-		void IDisposable.Dispose() { }
+		public void SetUp(IHostV40 host, string config) {
+			// Nothing to do
+		}
 
 		public ComponentInformation Information {
 			get {
@@ -614,6 +615,15 @@ second line";
 			get { throw new NotImplementedException(); }
 		}
 
+		#endregion
+
+		#region IDisposable Members
+
+		public void Dispose() {
+			throw new NotImplementedException();
+		}
+
+		#endregion
 	}
 
 }

@@ -584,27 +584,27 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("*", ExpectedException = typeof(ArgumentException))]
 		public void CheckActionForPage_InvalidAction(string a) {
 			AuthChecker authChecker = new AuthChecker(MockProvider());
-			authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), a, "User", new string[0]);
+			authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), a, "User", new string[0]);
 		}
 
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		public void CheckActionForPage_InvalidUser(string u) {
 			AuthChecker authChecker = new AuthChecker(MockProvider());
-			authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments, u, new string[0]);
+			authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments, u, new string[0]);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void CheckActionForPage_NullGroups() {
 			AuthChecker authChecker = new AuthChecker(MockProvider());
-			authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments, "User", null);
+			authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments, "User", null);
 		}
 
 		[Test]
 		public void CheckActionForPage_AdminBypass() {
 			AuthChecker authChecker = new AuthChecker(MockProvider());
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ManagePage, "admin", new string[0]), "Admin account should bypass security");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ManagePage, "admin", new string[0]), "Admin account should bypass security");
 		}
 
 		[Test]
@@ -615,16 +615,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User2", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Inexistent", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Inexistent", null), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -636,16 +636,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User2", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Inexistent", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Inexistent", null), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -657,16 +657,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User2", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Inexistent", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Inexistent", null), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -678,16 +678,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User2", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Inexistent", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Inexistent", null), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -699,16 +699,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group2" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Inexistent", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Inexistent", null), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -720,16 +720,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group2" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Inexistent", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Inexistent", null), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -741,16 +741,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group2" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Inexistent", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Inexistent", null), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -762,16 +762,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.DeleteAttachments,
 				"User", new string[] { "Group2" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Inexistent", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Inexistent", null), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -783,16 +783,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User2", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page2", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("Page2", null), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 		}
 
@@ -804,16 +804,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group2" }), "Permission should be denied");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page2", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("Page2", null), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 		}
 
@@ -825,16 +825,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User2", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page2", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("Page2", null), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 		}
 
@@ -846,15 +846,15 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group2" }), "Permission should be denied");
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page2", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("Page2", null), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 		}
 
@@ -866,16 +866,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User2", new string[] { "Group" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page2", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Page2", null), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 		}
 
@@ -887,16 +887,16 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group2" }), "Permission should be denied");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page2", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Page2", null), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 		}
 
@@ -908,13 +908,13 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User2", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -926,13 +926,13 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be granted");
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group2" }), "Permission should be denied");
 		}
 
@@ -944,7 +944,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -956,7 +956,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -968,7 +968,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -980,7 +980,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -992,7 +992,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -1004,7 +1004,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -1016,7 +1016,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -1028,7 +1028,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ReadPage,
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ReadPage,
 				"User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -1040,7 +1040,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("Sub", "Page"), null, DateTime.Now),
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("Sub", "Page"),
 				Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
@@ -1054,7 +1054,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("Sub", "Page"), null, DateTime.Now),
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Sub", "Page"),
 				Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -1068,7 +1068,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("Sub", "Page"), null, DateTime.Now),
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Sub", "Page"),
 				Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -1082,7 +1082,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("Sub", "Page"), null, DateTime.Now),
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("Sub", "Page"),
 				Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
@@ -1096,7 +1096,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("Sub", "Page"), null, DateTime.Now),
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Sub", "Page"),
 				Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -1110,7 +1110,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("Sub", "Page"), null, DateTime.Now),
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("Sub", "Page"),
 				Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
 		}
 
@@ -1124,7 +1124,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("Sub", "Page"), null, DateTime.Now),
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("Sub", "Page"),
 				Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
@@ -1136,8 +1136,8 @@ namespace ScrewTurn.Wiki.Tests {
 
 			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
 
-			Assert.IsTrue(authChecker.CheckActionForPage(new PageInfo("P.Page", null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[0]), "Permission should be granted");
-			Assert.IsFalse(authChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[0]), "Permission should be denied");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName(null, "P.Page"), Actions.ForPages.ModifyPage, "User", new string[0]), "Permission should be granted");
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName(null, "Page"), Actions.ForPages.ModifyPage, "User", new string[0]), "Permission should be denied");
 		}
 
 		private IFilesStorageProviderV40 MockFilesProvider() {

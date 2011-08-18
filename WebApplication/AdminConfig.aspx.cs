@@ -57,9 +57,9 @@ namespace ScrewTurn.Wiki {
 		private void PopulateMainPages(string current) {
 			current = current.ToLowerInvariant();
 
-			List<PageInfo> pages = Pages.GetPages(currentWiki, null);
+			List<PageContent> pages = Pages.GetPages(currentWiki, null);
 			lstMainPage.Items.Clear();
-			foreach(PageInfo page in pages) {
+			foreach(PageContent page in pages) {
 				lstMainPage.Items.Add(new ListItem(page.FullName, page.FullName));
 				if(page.FullName.ToLowerInvariant() == current) {
 					lstMainPage.SelectedIndex = -1;
@@ -372,8 +372,6 @@ namespace ScrewTurn.Wiki {
 			Settings.SetIpHostFilter(currentWiki, txtIpHostFilter.Text);
 
 			Settings.EndBulkUpdate(currentWiki);
-
-			Content.InvalidateAllPages();
 
 			lblResult.CssClass = "resultok";
 			lblResult.Text = Properties.Messages.ConfigSaved;

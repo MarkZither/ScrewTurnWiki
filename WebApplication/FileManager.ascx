@@ -52,7 +52,6 @@
 					<th>&nbsp;</th>
 					<th><asp:Literal ID="lblName" runat="server" Text="Name" EnableViewState="False" meta:resourcekey="lblNameResource1" /></th>
 					<th><asp:Literal ID="lblSize" runat="server" Text="Size" EnableViewState="False" meta:resourcekey="lblSizeResource1" /></th>
-					<th><asp:Literal ID="lblDownloads" runat="server" Text="Downloads" EnableViewState="False" meta:resourcekey="lblDownloadsResource1" /></th>
 					<th><asp:Literal ID="lblLink" runat="server" Text="Link" EnableViewState="False" meta:resourcekey="lblLinkResource1" /></th>
 					<th>&nbsp;</th>
 				</tr>
@@ -68,7 +67,6 @@
 						runat="server" Text='<%# Eval("Name") %>' style='<%# ((bool)Eval("CanDownload") ? "" : "text-decoration: line-through;") %>'
 						CommandName="Dir" CommandArgument='<%# Eval("Name") %>' meta:resourcekey="lnkDirResource1" /></td>
 				<td><%# Eval("Size") %></td>
-				<td><%# Eval("Downloads") %></td>
 				<td><%# Eval("WikiMarkupLink") %></td>
 				<td>
 					<asp:LinkButton ID="btnRename" runat="server" Visible='<%# (bool)Eval("CanDelete") %>' Text="Rename" CommandName="Rename" ToolTip="Rename this Item" CommandArgument='<%# Eval("FullPath") %>' meta:resourcekey="btnRenameResource2" />
@@ -87,7 +85,6 @@
 						runat="server" Text='<%# Eval("Name") %>' style='<%# ((bool)Eval("CanDownload") ? "" : "text-decoration: line-through;") %>'
 						CommandName="Dir" CommandArgument='<%# Eval("Name") %>' meta:resourcekey="lnkDirResource2" /></td>
 				<td><%# Eval("Size") %></td>
-				<td><%# Eval("Downloads") %></td>
 				<td><%# Eval("WikiMarkupLink") %></td>
 				<td>
 					<asp:LinkButton ID="btnRename" runat="server" Visible='<%# (bool)Eval("CanDelete") %>' Text="Rename" CommandName="Rename" ToolTip="Rename this Item" CommandArgument='<%# Eval("FullPath") %>' meta:resourcekey="btnRenameResource3" />
