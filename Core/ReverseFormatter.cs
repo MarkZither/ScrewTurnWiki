@@ -362,7 +362,7 @@ namespace ScrewTurn.Wiki {
 							string link = "";
 							string target = "";
 							string title = "";
-							bool isInternalLink = false;
+							bool isSystemLink = false;
 							bool childImg = false;
 							bool pageLink = false;
 							if(node.FirstChild != null && node.FirstChild.Name == "img") childImg = true;
@@ -371,11 +371,11 @@ namespace ScrewTurn.Wiki {
 								XmlAttributeCollection attribute = node.Attributes;
 								foreach(XmlAttribute attName in attribute) {
 									if(attName.Name != "id".ToLowerInvariant()) {
-										if(attName.Value == "_blank") target += "^";
-										if(attName.Name == "href") link += attName.Value.ToString();
-										if(attName.Name == "title") title += attName.Value.ToString();
-										if(attName.Value == "SystemLink".ToLowerInvariant()) isInternalLink = true;
-										if(attName.Value.ToLowerInvariant() == "unknownlink" || attName.Value.ToLowerInvariant() == "pagelink") pageLink = true;
+										if(attName.Value.ToLowerInvariant() == "_blank") target += "^";
+										if(attName.Name.ToLowerInvariant() == "href") link += attName.Value.ToString();
+										if(attName.Name.ToLowerInvariant() == "title") title += attName.Value.ToString();
+										if(attName.Name.ToLowerInvariant() == "class" && attName.Value.ToLowerInvariant() == "systemlink") isSystemLink = true;
+										if(attName.Name.ToLowerInvariant() == "class" && (attName.Value.ToLowerInvariant() == "unknownlink" || attName.Value.ToLowerInvariant() == "pagelink")) pageLink = true;
 									}
 									else {
 										anchor = true;
@@ -383,9 +383,10 @@ namespace ScrewTurn.Wiki {
 										break;
 									}
 								}
-								if(isInternalLink) {
+								if(isSystemLink) {
 									string[] splittedLink = link.Split('=');
-									link = "c:" + splittedLink[1];
+									if(splittedLink.Length == 2) link = "c:" + splittedLink[1];
+									else link = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
 								}
 								else if(pageLink) {
 									link = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
