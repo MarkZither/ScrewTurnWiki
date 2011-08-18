@@ -1342,7 +1342,6 @@
     <Content Include="Diff.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="GetFile.aspx" />
-    <Content Include="GPL.txt" />
     <Content Include="History.aspx" />
     <Content Include="Images\Alert.png" />
     <Content Include="Images\Comment.png" />
