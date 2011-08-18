@@ -1116,6 +1116,96 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
+		public void CheckActionForPage_GrantGroupFullControl_DenyGroupExplicitNamespace_ExceptReadPages() {
+			List<AclEntry> entries = new List<AclEntry>();
+			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Grant));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.ForNamespaces.ReadPages, "G.Group", Value.Grant));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.FullControl, "G.Group", Value.Deny));
+
+			Collectors.SettingsProvider = MockProvider(entries);
+			Assert.IsFalse(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+		}
+
+		[Test]
+		public void CheckActionForPage_GrantGroupFullControl_DenyGroupNamespaceEscalator_ExceptReadPages() {
+			List<AclEntry> entries = new List<AclEntry>();
+			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Grant));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.ForNamespaces.ReadPages, "G.Group", Value.Grant));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
+
+			Collectors.SettingsProvider = MockProvider(entries);
+			Assert.IsFalse(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+		}
+
+		[Test]
+		public void CheckActionForPage_DenyGroupFullControl_GrantGroupExplicitNamespace() {
+			List<AclEntry> entries = new List<AclEntry>();
+			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.FullControl, "G.Group", Value.Grant));
+
+			Collectors.SettingsProvider = MockProvider(entries);
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+		}
+
+		[Test]
+		public void CheckActionForPage_DenyGroupFullControl_GrantGroupNamespaceEscalator() {
+			List<AclEntry> entries = new List<AclEntry>();
+			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Grant));
+
+			Collectors.SettingsProvider = MockProvider(entries);
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+		}
+
+		[Test]
+		public void CheckActionForPage_DenyGroupFullControl_GrantGroupReadPagesExplicitNamespace() {
+			List<AclEntry> entries = new List<AclEntry>();
+			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.ForNamespaces.ReadPages, "G.Group", Value.Grant));
+
+			Collectors.SettingsProvider = MockProvider(entries);
+			Assert.IsFalse(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+		}
+
+		[Test]
+		public void CheckActionForPage_DenyGroupFullControl_GrantGroupReadPagesNamespaceEscalator() {
+			List<AclEntry> entries = new List<AclEntry>();
+			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.ForNamespaces.ReadPages, "G.Group", Value.Grant));
+
+			Collectors.SettingsProvider = MockProvider(entries);
+			Assert.IsFalse(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+		}
+
+		[Test]
+		public void CheckActionForPage_DenyGroupFullControl_GrantGroupReadPagesExplicitNamespaceLocalEscalator() {
+			List<AclEntry> entries = new List<AclEntry>();
+			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.ForNamespaces.ManagePages, "G.Group", Value.Grant));
+
+			Collectors.SettingsProvider = MockProvider(entries);
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+		}
+
+		[Test]
+		public void CheckActionForPage_DenyGroupFullControl_GrantGroupReadPagesNamespaceEscalatorLocalEscalator() {
+			List<AclEntry> entries = new List<AclEntry>();
+			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
+			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.ForNamespaces.ManagePages, "G.Group", Value.Grant));
+
+			Collectors.SettingsProvider = MockProvider(entries);
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
+			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+		}
+
+		[Test]
 		public void CheckActionForPage_GrantUserRootEscalator_DenyGroupExplicitPage() {
 			List<AclEntry> entries = new List<AclEntry>();
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix,
