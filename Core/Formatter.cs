@@ -448,6 +448,7 @@ namespace ScrewTurn.Wiki {
 						n = fields[1];
 					}
 					else {
+						done = true;
 						StringBuilder img = new StringBuilder();
 						// Image
 						if(fields[0].ToLowerInvariant().Equals("imageleft") || fields[0].ToLowerInvariant().Equals("imageright") || fields[0].ToLowerInvariant().Equals("imageauto")) {
