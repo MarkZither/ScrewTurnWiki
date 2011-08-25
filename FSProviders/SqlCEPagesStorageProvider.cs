@@ -25,7 +25,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 		private string _connString = null;
 
 		private string BuildDbConnectionString(IHostV40 host) {
-			return "Data Source = '" + host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory) + "ScrewTurnWiki.sdf';";
+			return "Data Source = '" + Path.Combine(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory), "ScrewTurnWiki.sdf") + "';";
 		}
 
 		/// <summary>
