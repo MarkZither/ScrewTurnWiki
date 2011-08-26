@@ -1398,10 +1398,10 @@
     <Content Include="Themes\Elegant\Scripts.js" />
     <Content Include="Themes\Print.css" />
     <Content Include="Upload.aspx" />
-    <Content Include="Web.config">
+    <Content Include="Web.FS.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.SqlServer.config">
+    <Content Include="Web.Sql.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
@@ -2874,7 +2874,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>21870</DevelopmentServerPort>
+          <DevelopmentServerPort>16206</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/WebApplication</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -57,6 +57,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lucene.Net, Version=2.9.2.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -74,6 +77,9 @@
     </Compile>
     <Compile Include="..\SqlProvidersCommon\ICommandBuilder.cs">
       <Link>SqlProvidersCommon\ICommandBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\SqlProvidersCommon\ISqlStorageProviderUtility.cs">
+      <Link>SqlProvidersCommon\ISqlStorageProviderUtility.cs</Link>
     </Compile>
     <Compile Include="..\SqlProvidersCommon\Parameter.cs">
       <Link>SqlProvidersCommon\Parameter.cs</Link>
@@ -93,8 +99,20 @@
     <Compile Include="..\SqlProvidersCommon\SqlGlobalSettingsStorageProviderBase.cs">
       <Link>SqlProvidersCommon\SqlGlobalSettingsStorageProviderBase.cs</Link>
     </Compile>
+    <Compile Include="..\SqlProvidersCommon\SqlIndexInput.cs">
+      <Link>SqlProvidersCommon\SqlIndexInput.cs</Link>
+    </Compile>
+    <Compile Include="..\SqlProvidersCommon\SqlIndexOutput.cs">
+      <Link>SqlProvidersCommon\SqlIndexOutput.cs</Link>
+    </Compile>
+    <Compile Include="..\SqlProvidersCommon\SqlLock.cs">
+      <Link>SqlProvidersCommon\SqlLock.cs</Link>
+    </Compile>
     <Compile Include="..\SqlProvidersCommon\SqlPagesStorageProviderBase.cs">
       <Link>SqlProvidersCommon\SqlPagesStorageProviderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\SqlProvidersCommon\SqlServerDirectory.cs">
+      <Link>SqlProvidersCommon\SqlServerDirectory.cs</Link>
     </Compile>
     <Compile Include="..\SqlProvidersCommon\SqlSettingsStorageProviderBase.cs">
       <Link>SqlProvidersCommon\SqlSettingsStorageProviderBase.cs</Link>
@@ -104,6 +122,12 @@
     </Compile>
     <Compile Include="..\SqlProvidersCommon\SqlUsersStorageProviderBase.cs">
       <Link>SqlProvidersCommon\SqlUsersStorageProviderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\SqlProvidersCommon\StreamInput.cs">
+      <Link>SqlProvidersCommon\StreamInput.cs</Link>
+    </Compile>
+    <Compile Include="..\SqlProvidersCommon\StreamOutput.cs">
+      <Link>SqlProvidersCommon\StreamOutput.cs</Link>
     </Compile>
     <Compile Include="..\SqlProvidersCommon\Tools.cs">
       <Link>SqlProvidersCommon\Tools.cs</Link>
@@ -117,8 +141,10 @@
     </Compile>
     <Compile Include="SqlServerCommandBuilder.cs" />
     <Compile Include="SqlServerFilesStorageProvider.cs" />
+    <Compile Include="SqlServerIndexDirectoryProvider.cs" />
     <Compile Include="SqlServerPagesStorageProvider.cs" />
     <Compile Include="SqlServerSettingsStorageProvider.cs" />
+    <Compile Include="SqlServerStorageProviderUtility.cs" />
     <Compile Include="SqlServerUsersStorageProvider.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +202,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PagesInitNamespaceTableDatabase.sql">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SearchIndexDatabase.sql">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

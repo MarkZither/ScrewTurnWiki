@@ -57,6 +57,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lucene.Net, Version=2.9.2.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -73,7 +76,11 @@
     <Compile Include="SqlAclManager.cs" />
     <Compile Include="SqlClassBase.cs" />
     <Compile Include="SqlFilesStorageProviderBase.cs" />
+    <Compile Include="SqlIndexInput.cs" />
+    <Compile Include="SqlIndexOutput.cs" />
+    <Compile Include="SqlLock.cs" />
     <Compile Include="SqlPagesStorageProviderBase.cs" />
+    <Compile Include="SqlServerDirectory.cs" />
     <Compile Include="SqlSettingsStorageProviderBase.cs" />
     <Compile Include="SqlStorageProviderBase.cs" />
     <Compile Include="Hash.cs" />
@@ -81,7 +88,10 @@
     <Compile Include="ICommandBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilder.cs" />
+    <Compile Include="ISqlStorageProviderUtility.cs" />
     <Compile Include="SqlUsersStorageProviderBase.cs" />
+    <Compile Include="StreamInput.cs" />
+    <Compile Include="StreamOutput.cs" />
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
