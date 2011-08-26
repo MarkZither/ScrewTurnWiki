@@ -234,7 +234,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="name">The name of the file.</param>
 		/// <returns>An implementation of <typeref name="IndexInput"/>.</returns>
 		public override IndexInput OpenInput(string name) {
-			return new SqlIndexInput(this, _sqlStorageProviderUtility, _connString, _wiki, name);
+			try {
+				return new SqlIndexInput(this, _sqlStorageProviderUtility, _connString, _wiki, name);
+			}
+			catch {
+				throw new System.IO.FileNotFoundException(name);
+			}
 		}
 
 		/// <summary>

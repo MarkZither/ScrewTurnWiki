@@ -66,7 +66,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				QueryBuilder queryBuilder = new QueryBuilder(builder);
 
-				bool fileExists = FileExists(transaction, _wiki, _fileName);
+				//bool fileExists = FileExists(transaction, _wiki, _fileName);
 
 				// To achieve decent performance, an UPDATE query is issued if the file exists,
 				// otherwise an INSERT query is issued
@@ -81,22 +81,19 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					throw new ArgumentException("Source Stream contains too much data", "sourceStream");
 				}
 
-				long filemodlong = CacheDirectory.FileModified(fileName);
-				DateTime dt = new DateTime(filemodlong).ToUniversalTime();
+				//if(fileExists) {
+				//    query = queryBuilder.Update("SearchIndex", new string[] { "Size", "LastModified", "Data" }, new string[] { "Size", "LastModified", "Data" });
+				//    query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
+				//    query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
 
-				if(fileExists) {
-					query = queryBuilder.Update("SearchIndex", new string[] { "Size", "LastModified", "Data" }, new string[] { "Size", "LastModified", "Data" });
-					query = queryBuilder.Where(query, "Wiki", WhereOperator.Equals, "Wiki");
-					query = queryBuilder.AndWhere(query, "Name", WhereOperator.Equals, "Name");
-
-					parameters = new List<Parameter>(5);
-					parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
-					parameters.Add(new Parameter(ParameterType.Int64, "Size", (long)originalLength));
-					parameters.Add(new Parameter(ParameterType.DateTime, "LastModified", DateTime.Now.ToUniversalTime()));
-					parameters.Add(new Parameter(ParameterType.ByteArray, "Data", fileData));
-					parameters.Add(new Parameter(ParameterType.String, "Name", _fileName));
-				}
-				else {
+				//    parameters = new List<Parameter>(5);
+				//    parameters.Add(new Parameter(ParameterType.String, "Wiki", _wiki));
+				//    parameters.Add(new Parameter(ParameterType.Int64, "Size", (long)originalLength));
+				//    parameters.Add(new Parameter(ParameterType.DateTime, "LastModified", DateTime.Now.ToUniversalTime()));
+				//    parameters.Add(new Parameter(ParameterType.ByteArray, "Data", fileData));
+				//    parameters.Add(new Parameter(ParameterType.String, "Name", _fileName));
+				//}
+				//else {
 					query = queryBuilder.InsertInto("SearchIndex", new string[] { "Wiki", "Name", "Size", "LastModified", "Data" },
 						new string[] { "Wiki", "Name", "Size", "LastModified", "Data" });
 
@@ -106,7 +103,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					parameters.Add(new Parameter(ParameterType.Int64, "Size", (long)originalLength));
 					parameters.Add(new Parameter(ParameterType.DateTime, "LastModified", DateTime.Now.ToUniversalTime()));
 					parameters.Add(new Parameter(ParameterType.ByteArray, "Data", fileData));
-				}
+				//}
 
 				DbCommand command = builder.GetCommand(transaction, query, parameters);
 

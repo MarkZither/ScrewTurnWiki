@@ -36,6 +36,9 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(!CacheDirectory.FileExists(name)) {
 				fFileNeeded = true;
 			}
+			if(name.Contains("segments")) {
+				fFileNeeded = true;
+			}
 
 			if(fFileNeeded) {
 				StreamOutput fileStream = _sqlServerDirectory.CreateCachedOutputAsStream(name);
@@ -47,7 +50,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				if(!FileExists(transaction, wiki, name)) {
 					_sqlStorageProviderUtility.RollbackTransaction(transaction);
 					_sqlStorageProviderUtility.CloseConnection(connection);
-					throw new ArgumentException("File does not exist", "fullName");
+					throw new FileNotFoundException();
 				}
 
 				QueryBuilder queryBuilder = new QueryBuilder(builder);
