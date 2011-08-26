@@ -62,6 +62,12 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.Highlighter">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.Contrib.Highlighter.dll</HintPath>
+    </Reference>
     <Reference Include="SgmlReaderDll">
       <HintPath>..\References\Lib\MindTouch SGML Reader\SgmlReaderDll.dll</HintPath>
     </Reference>
@@ -87,10 +93,13 @@
     <Compile Include="CollectorsBox.cs" />
     <Compile Include="Collisions.cs" />
     <Compile Include="Content.cs" />
+    <Compile Include="FileDocument.cs" />
     <Compile Include="Defaults.cs" />
     <Compile Include="DiffTools.cs" />
+    <Compile Include="MessageDocument.cs" />
+    <Compile Include="PageAttachmentDocument.cs" />
+    <Compile Include="PageDocument.cs" />
     <Compile Include="EmailTools.cs" />
-    <Compile Include="FileDocument.cs" />
     <Compile Include="FilesAndAttachments.cs" />
     <Compile Include="Formatter.cs" />
     <Compile Include="FormattingPipeline.cs" />
@@ -98,11 +107,10 @@
     <Compile Include="Hash.cs" />
     <Compile Include="Host.cs" />
     <Compile Include="ICollectorsBox.cs" />
-    <Compile Include="IndexStorer.cs" />
+    <Compile Include="IDocument.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="NavigationPaths.cs" />
-    <Compile Include="PageAttachmentDocument.cs" />
     <Compile Include="Pages.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -115,7 +123,9 @@
     <Compile Include="RecentChanges.cs" />
     <Compile Include="Redirections.cs" />
     <Compile Include="ReverseFormatter.cs" />
-    <Compile Include="SearchTools.cs" />
+    <Compile Include="Search.cs" />
+    <Compile Include="SearchField.cs" />
+    <Compile Include="SearchResult.cs" />
     <Compile Include="SessionFacade.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsTools.cs" />
@@ -146,7 +156,7 @@
       <Name>PluginFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
-      <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
+      <Project>{F8697EB9-086F-41DA-BC50-5149C9B453EC}</Project>
       <Name>SearchEngine</Name>
     </ProjectReference>
   </ItemGroup>

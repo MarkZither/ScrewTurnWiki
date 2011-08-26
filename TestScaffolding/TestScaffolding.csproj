@@ -55,6 +55,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lucene.Net, Version=2.9.2.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\References\Lib\Apache Lucene.Net v2.9.2\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.1.9189, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Tools\NUnit\framework\nunit.framework.dll</HintPath>
@@ -93,10 +96,6 @@
     <ProjectReference Include="..\PluginFramework\PluginFramework.csproj">
       <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>
       <Name>PluginFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
-      <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
-      <Name>SearchEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -66,37 +66,37 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnSearch_Click(object sender, EventArgs e) {
-			lstAvailablePage.Items.Clear();
-			btnAddPage.Enabled = false;
+			//lstAvailablePage.Items.Clear();
+			//btnAddPage.Enabled = false;
 
-			txtPageName.Text = txtPageName.Text.Trim();
+			//txtPageName.Text = txtPageName.Text.Trim();
 
-			if(txtPageName.Text.Length == 0) return;
+			//if(txtPageName.Text.Length == 0) return;
 
-			PageContent[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, CurrentNamespace, currentWiki);
+			//PageContent[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, CurrentNamespace, currentWiki);
 
-			string cp = CurrentProvider;
+			//string cp = CurrentProvider;
 
-			foreach(PageContent page in
-				from p in pages
-				where p.Provider.GetType().FullName == cp
-				select p) {
+			//foreach(PageContent page in
+			//    from p in pages
+			//    where p.Provider.GetType().FullName == cp
+			//    select p) {
 
-				// Filter pages already in the list
-				bool found = false;
-				foreach(ListItem item in lstPages.Items) {
-					if(item.Value == page.FullName) {
-						found = true;
-						break;
-					}
-				}
+			//    // Filter pages already in the list
+			//    bool found = false;
+			//    foreach(ListItem item in lstPages.Items) {
+			//        if(item.Value == page.FullName) {
+			//            found = true;
+			//            break;
+			//        }
+			//    }
 
-				if(!found) {
-					lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.Other, page.FullName), page.FullName));
-				}
-			}
+			//    if(!found) {
+			//        lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.Other, page.FullName), page.FullName));
+			//    }
+			//}
 
-			btnAddPage.Enabled = lstAvailablePage.Items.Count > 0;
+			//btnAddPage.Enabled = lstAvailablePage.Items.Count > 0;
 		}
 
 		protected void btnAddPage_Click(object sender, EventArgs e) {

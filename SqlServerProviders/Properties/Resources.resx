@@ -130,6 +130,9 @@
   <data name="PagesInitNamespaceTableDatabase" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\PagesInitNamespaceTableDatabase.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="SearchIndexDatabase" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\SearchIndexDatabase.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="SettingsDatabase" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\SettingsDatabase.sql;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

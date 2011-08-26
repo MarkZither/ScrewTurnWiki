@@ -272,6 +272,9 @@ namespace ScrewTurn.Wiki {
 							if(d) {
 								Host.Instance.OnFileActivity(currentWiki, provider.GetType().FullName,
 									item, null, FileActivity.FileDeleted);
+
+								// Unindex file content
+								SearchClass.UnindexFile(provider.GetType().FullName + "|" + item, currentWiki);
 							}
 						}
 					}
@@ -509,6 +512,8 @@ namespace ScrewTurn.Wiki {
 						if(done) {
 							Host.Instance.OnFileActivity(currentWiki, provider.GetType().FullName,
 								CurrentDirectory + txtNewName.Text, CurrentDirectory + lblItem.Text, FileActivity.FileRenamed);
+
+							SearchClass.RenameFile(currentWiki, provider.GetType().FullName + "|" + CurrentDirectory + lblItem.Text, provider.GetType().FullName + "|" + CurrentDirectory + txtNewName.Text);
 						}
 					}
 				}
@@ -600,6 +605,21 @@ namespace ScrewTurn.Wiki {
 							else {
 								Host.Instance.OnFileActivity(currentWiki, provider.GetType().FullName,
 									CurrentDirectory + fileUpload.FileName, null, FileActivity.FileUploaded);
+
+								// If overwrite remove old indexed document
+								if(chkOverwrite.Checked) {
+									SearchClass.UnindexFile(provider.GetType().FullName + "|" + CurrentDirectory + fileUpload.FileName, currentWiki);
+								}
+
+								// Index the attached file
+								string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+								if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+								string tempFile = Path.Combine(tempDir, fileUpload.FileName);
+								using(FileStream writer = File.Create(tempFile)) {
+									writer.Write(fileUpload.FileBytes, 0, fileUpload.FileBytes.Length);
+								}
+								SearchClass.IndexFile(provider.GetType().FullName + "|" + CurrentDirectory + fileUpload.FileName, tempFile, currentWiki);
+								Directory.Delete(tempDir, true);
 							}
 							rptItems.DataBind();
 						}

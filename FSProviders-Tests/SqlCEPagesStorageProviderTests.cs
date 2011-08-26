@@ -7,7 +7,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using ScrewTurn.Wiki.Tests;
 using ScrewTurn.Wiki.PluginFramework;
-using ScrewTurn.Wiki.SearchEngine;
 using System.Data.SqlServerCe;
 using System.Data.Common;
 
@@ -52,14 +51,6 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders.Tests {
 
 			SqlCECommandBuilder commandBuilder = new SqlCECommandBuilder();
 			DbCommand command = commandBuilder.GetConnection(connString).CreateCommand();
-			command.CommandText = "delete from [IndexWordMapping];";
-			command.ExecuteNonQuery();
-
-			command.CommandText = "delete from [IndexWord];";
-			command.ExecuteNonQuery();
-
-			command.CommandText = "delete from [IndexDocument];";
-			command.ExecuteNonQuery();
 
 			command.CommandText = "delete from [ContentTemplate];";
 			command.ExecuteNonQuery();

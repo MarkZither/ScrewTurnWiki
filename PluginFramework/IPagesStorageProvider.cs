@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki.PluginFramework {
 
@@ -157,37 +156,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="categories"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
 		bool RebindPage(string pageFullName, string[] categories);
-
-		#endregion
-
-		#region Index
-
-		/// <summary>
-		/// Performs a search in the index.
-		/// </summary>
-		/// <param name="parameters">The search parameters.</param>
-		/// <returns>The results.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
-		SearchResultCollection PerformSearch(SearchParameters parameters);
-
-		/// <summary>
-		/// Rebuilds the search index.
-		/// </summary>
-		void RebuildIndex();
-
-		/// <summary>
-		/// Gets some statistics about the search engine index.
-		/// </summary>
-		/// <param name="documentCount">The total number of documents.</param>
-		/// <param name="wordCount">The total number of unique words.</param>
-		/// <param name="occurrenceCount">The total number of word-document occurrences.</param>
-		/// <param name="size">The approximated size, in bytes, of the search engine index.</param>
-		void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size);
-
-		/// <summary>
-		/// Gets a value indicating whether the search engine index is corrupted and needs to be rebuilt.
-		/// </summary>
-		bool IsIndexCorrupted { get; }
 
 		#endregion
 
@@ -367,11 +335,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <param name="parent">The Parent Message ID, or -1.</param>
-		/// <returns>True if the Message is added successfully.</returns>
+		/// <returns>The id of the message. Returns -1 in case of errors.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> or <paramref name="pageFullName"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
-		bool AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent);
+		int AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent);
 
 		/// <summary>
 		/// Removes a Message.

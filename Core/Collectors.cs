@@ -30,6 +30,8 @@ namespace ScrewTurn.Wiki {
 													  _globalSettingsProviderAssembly,
 													  _settingsProvider,
 													  _settingsProviderAssembly,
+													  _indexDirectoryProvider,
+													  _indexDirectoryProviderAssembly,
 													  _usersProviderCollector.Clone(),
 													  _themeProviderCollector.Clone(),
 													  _pagesProviderCollector.Clone(),
@@ -66,6 +68,16 @@ namespace ScrewTurn.Wiki {
 		/// The settings storage provider assembly.
 		/// </summary>
 		private static System.Reflection.Assembly _settingsProviderAssembly;
+
+		/// <summary>
+		/// The index Directory provider.
+		/// </summary>
+		private static Type _indexDirectoryProvider;
+
+		/// <summary>
+		/// The index Directory provider assembly.
+		/// </summary>
+		private static System.Reflection.Assembly _indexDirectoryProviderAssembly;
 
 		/// <summary>
 		/// The global settings storage provider.
@@ -137,6 +149,11 @@ namespace ScrewTurn.Wiki {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);
 				_settingsProvider = provider;
 				_settingsProviderAssembly = assembly;
+			}
+			else if(providerInterface.FullName == typeof(IIndexDirectoryProviderV40).FullName) {
+				StorageProvidersConfigurations.Add(provider.FullName, configuration);
+				_indexDirectoryProvider = provider;
+				_indexDirectoryProviderAssembly = assembly;
 			}
 			else if(providerInterface.FullName == typeof(IPagesStorageProviderV40).FullName) {
 				StorageProvidersConfigurations.Add(provider.FullName, configuration);

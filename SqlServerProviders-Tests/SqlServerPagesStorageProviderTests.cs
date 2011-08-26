@@ -8,7 +8,6 @@ using Rhino.Mocks;
 using ScrewTurn.Wiki.Tests;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.Plugins.SqlCommon;
-using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
@@ -49,7 +48,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 			cn.Open();
 
 			SqlCommand cmd = cn.CreateCommand();
-			cmd.CommandText = "use [ScrewTurnWikiTest]; delete from [IndexWordMapping]; delete from [IndexWord]; delete from [IndexDocument]; delete from [ContentTemplate]; delete from [Snippet]; delete from [NavigationPath]; delete from [Message]; delete from [PageKeyword]; delete from [CategoryBinding]; delete from [PageContent]; delete from [Category]; delete from [Namespace] where [Name] <> '';";
+			cmd.CommandText = "use [ScrewTurnWikiTest]; delete from [ContentTemplate]; delete from [Snippet]; delete from [NavigationPath]; delete from [Message]; delete from [PageKeyword]; delete from [CategoryBinding]; delete from [PageContent]; delete from [Category]; delete from [Namespace] where [Name] <> '';";
 			try {
 				cmd.ExecuteNonQuery();
 			}

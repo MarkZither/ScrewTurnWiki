@@ -214,6 +214,21 @@ namespace ScrewTurn.Wiki {
 							else {
 								Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 									fileUpload.FileName, CurrentPage.FullName, null, FileActivity.AttachmentUploaded);
+
+								// If overwrite remove old indexed document
+								if(chkOverwrite.Checked) {
+									SearchClass.UnindexPageAttachment(fileUpload.FileName, CurrentPage);
+								}
+
+								// Index the attached file
+								string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+								if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+								string tempFile = Path.Combine(tempDir, fileUpload.FileName);
+								using(FileStream writer = File.Create(tempFile)) {
+									writer.Write(fileUpload.FileBytes, 0, fileUpload.FileBytes.Length);
+								}
+								SearchClass.IndexPageAttachment(fileUpload.FileName, tempFile, CurrentPage);
+								Directory.Delete(tempDir, true);
 							}
 							rptItems.DataBind();
 						}
@@ -251,6 +266,9 @@ namespace ScrewTurn.Wiki {
 						if(d) {
 							Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 								(string)e.CommandArgument, CurrentPage.FullName, null, FileActivity.AttachmentDeleted);
+
+							// Remove attachment from index
+							SearchClass.UnindexPageAttachment((string)e.CommandArgument, CurrentPage);
 						}
 
 						rptItems.DataBind();
@@ -291,6 +309,10 @@ namespace ScrewTurn.Wiki {
 
 					Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
 						txtNewName.Text, CurrentPage.FullName, lblItem.Text, FileActivity.AttachmentRenamed);
+
+					// Fix index according to file renaming
+					SearchClass.RenamePageAttachment(CurrentPage, lblItem.Text, txtNewName.Text);
+
 				}
 				else {
 					lblRenameResult.Text = Properties.Messages.CannotRenameItem;

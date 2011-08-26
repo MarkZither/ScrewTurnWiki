@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Net.Mail;
-using ScrewTurn.Wiki.SearchEngine;
 
 namespace ScrewTurn.Wiki.PluginFramework {
 
@@ -227,39 +226,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <returns>The formatted content.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="raw"/> is <c>null</c>.</exception>
 		string Format(string wiki, string raw);
-
-		/// <summary>
-		/// Prepares content for indexing in the search engine, performing bare-bones formatting and removing all WikiMarkup and XML-like characters.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="pageFullName">The full name of the page being indexed, if any, <c>null</c> otherwise.</param>
-		/// <param name="content">The string to prepare.</param>
-		/// <returns>The sanitized string.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="content"/> is <c>null</c>.</exception>
-		string PrepareContentForIndexing(string wiki, string pageFullName, string content);
-
-		/// <summary>
-		/// Prepares a title for indexing in the search engine, removing all WikiMarkup and XML-like characters.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="pageFullName">The full name of the page being indexed, if any, <c>null</c> otherwise.</param>
-		/// <param name="title">The title to prepare.</param>
-		/// <returns>The sanitized string.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="title"/> is <c>null</c>.</exception>
-		string PrepareTitleForIndexing(string wiki, string pageFullName, string title);
-
-		/// <summary>
-		/// Performs a search.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="query">The search query.</param>
-		/// <param name="fullText">A value indicating whether to perform a full-text search.</param>
-		/// <param name="filesAndAttachments">A value indicating whether to search the names of files and attachments.</param>
-		/// <param name="options">The search options.</param>
-		/// <returns>The search results.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="query"/> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="query"/> is empty.</exception>
-		SearchResultCollection PerformSearch(string wiki, string query, bool fullText, bool filesAndAttachments, SearchOptions options);
 
 		/// <summary>
 		/// Lists directories in a directory.
