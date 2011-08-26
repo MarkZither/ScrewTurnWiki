@@ -7,6 +7,13 @@
 	constraint [PK_SearchIndex] primary key clustered ([Wiki], [Name])
 )
 
+create table [SearchIndexLock] (
+    [Wiki] varchar(100) not null,
+	[Name] varchar(200) not null,
+	[Value] varchar(50) not null,
+	constraint [PK_SearchIndexLock] primary key clustered ([Wiki], [Name])
+)
+
 if (select count(*) from sys.tables where [Name] = 'Version') = 0
 begin
 	create table [Version] (

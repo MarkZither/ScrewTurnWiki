@@ -58,7 +58,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 			cn.Open();
 
 			SqlCommand cmd = cn.CreateCommand();
-			cmd.CommandText = "use [ScrewTurnWikiTest]; delete from [SearchIndex];";
+			cmd.CommandText = "use [ScrewTurnWikiTest]; delete from [SearchIndex]; delete from [SearchIndexLock]";
 			try {
 				cmd.ExecuteNonQuery();
 			}

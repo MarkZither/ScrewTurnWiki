@@ -313,8 +313,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <summary>Construct a {@link Lock}.</summary>
 		/// <param name="name">The name of the lock file.</param>
 		public override Lock MakeLock(string name) {
-			return new SqlLock();
-			//return new SqlLock(name, this);
+			return new SqlLock(_sqlStorageProviderUtility, _connString, _wiki, name);
 		}
 
 		/// <summary>
@@ -322,9 +321,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// </summary>
 		/// <param name="name">The name of the lock file.</param>
 		public override void ClearLock(string name) {
-			//AzureLock azureLock = new AzureLock(name, this);
-			//azureLock.Release();
-			SqlLock sqlLock = new SqlLock();
+			SqlLock sqlLock = new SqlLock(_sqlStorageProviderUtility, _connString, _wiki, name);
 			sqlLock.Release();
 		}
 
