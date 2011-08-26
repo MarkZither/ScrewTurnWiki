@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 		private const int MaxFileSize = 52428800; // 50 MB
 
-		private SqlServerDirectory _sqlServerDirectory;
+		private SqlDirectory _sqlServerDirectory;
 		private ISqlStorageProviderUtility _sqlStorageProviderUtility;
 		private IndexOutput _indexOutput;
 		private string _connString;
@@ -33,7 +33,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="connString">The connection string.</param>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="fileName">The name of the file.</param>
-		public SqlIndexOutput(SqlServerDirectory sqlServerDirectory, ISqlStorageProviderUtility sqlStorageProviderUtility, string connString, string wiki, string fileName) {
+		public SqlIndexOutput(SqlDirectory sqlServerDirectory, ISqlStorageProviderUtility sqlStorageProviderUtility, string connString, string wiki, string fileName) {
 			_sqlServerDirectory = sqlServerDirectory;
 			_sqlStorageProviderUtility = sqlStorageProviderUtility;
 			_connString = connString;

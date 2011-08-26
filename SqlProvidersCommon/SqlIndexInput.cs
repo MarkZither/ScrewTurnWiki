@@ -14,7 +14,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 	/// </summary>
 	public class SqlIndexInput : IndexInput {
 
-		private SqlServerDirectory _sqlServerDirectory;
+		private SqlDirectory _sqlServerDirectory;
 		private ISqlStorageProviderUtility _sqlStorageProviderUtility;
 
 		private IndexInput _indexInput;
@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="connString">The connection string.</param>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The name of the file.</param>
-		public SqlIndexInput(SqlServerDirectory sqlServerDirectory, ISqlStorageProviderUtility sqlStorageProviderUtility, string connString, string wiki, string name) {
+		public SqlIndexInput(SqlDirectory sqlServerDirectory, ISqlStorageProviderUtility sqlStorageProviderUtility, string connString, string wiki, string name) {
 			_sqlServerDirectory = sqlServerDirectory;
 			_sqlStorageProviderUtility = sqlStorageProviderUtility;
 

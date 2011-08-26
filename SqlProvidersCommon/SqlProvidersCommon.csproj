@@ -80,7 +80,7 @@
     <Compile Include="SqlIndexOutput.cs" />
     <Compile Include="SqlLock.cs" />
     <Compile Include="SqlPagesStorageProviderBase.cs" />
-    <Compile Include="SqlServerDirectory.cs" />
+    <Compile Include="SqlDirectory.cs" />
     <Compile Include="SqlSettingsStorageProviderBase.cs" />
     <Compile Include="SqlStorageProviderBase.cs" />
     <Compile Include="Hash.cs" />

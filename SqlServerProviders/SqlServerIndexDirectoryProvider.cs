@@ -45,7 +45,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		public new void Init(IHostV40 host, string config, string wiki) {
 			base.Init(host, config, wiki);
 
-			_directory = new SqlServerDirectory(new SqlServerStorageProviderUtility(), config, "searchindex", wiki);
+			_directory = new SqlDirectory(new SqlServerStorageProviderUtility(), config, "searchindex", wiki);
 		}
 
 		/// <summary>

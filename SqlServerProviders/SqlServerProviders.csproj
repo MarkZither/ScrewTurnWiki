@@ -93,6 +93,9 @@
     <Compile Include="..\SqlProvidersCommon\SqlClassBase.cs">
       <Link>SqlProvidersCommon\SqlClassBase.cs</Link>
     </Compile>
+    <Compile Include="..\SqlProvidersCommon\SqlDirectory.cs">
+      <Link>SqlProvidersCommon\SqlDirectory.cs</Link>
+    </Compile>
     <Compile Include="..\SqlProvidersCommon\SqlFilesStorageProviderBase.cs">
       <Link>SqlProvidersCommon\SqlFilesStorageProviderBase.cs</Link>
     </Compile>
@@ -110,9 +113,6 @@
     </Compile>
     <Compile Include="..\SqlProvidersCommon\SqlPagesStorageProviderBase.cs">
       <Link>SqlProvidersCommon\SqlPagesStorageProviderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\SqlProvidersCommon\SqlServerDirectory.cs">
-      <Link>SqlProvidersCommon\SqlServerDirectory.cs</Link>
     </Compile>
     <Compile Include="..\SqlProvidersCommon\SqlSettingsStorageProviderBase.cs">
       <Link>SqlProvidersCommon\SqlSettingsStorageProviderBase.cs</Link>

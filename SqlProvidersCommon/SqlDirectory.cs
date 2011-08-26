@@ -9,9 +9,9 @@ using System.Data.SqlClient;
 namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 	/// <summary>
-	/// Implements a Lucene.NET Directory object for SqlServer.
+	/// Implements a Lucene.NET Directory object for Sql.
 	/// </summary>
-	public class SqlServerDirectory : Directory {
+	public class SqlDirectory : Directory {
 
 		private string _connString;
 		private string _catalog;
@@ -20,13 +20,13 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private Directory _cacheDirectory;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlServerDirectory"/> class.
+		/// Initializes a new instance of the <see cref="SqlDirectory"/> class.
 		/// </summary>
 		/// <param name="sqlStorageProviderUtility">The SQL storage provider utility.</param>
 		/// <param name="connString">The connection string.</param>
 		/// <param name="catalog">The catalog.</param>
 		/// <param name="wiki">The wiki.</param>
-		public SqlServerDirectory(ISqlStorageProviderUtility sqlStorageProviderUtility, string connString, string catalog, string wiki) {
+		public SqlDirectory(ISqlStorageProviderUtility sqlStorageProviderUtility, string connString, string catalog, string wiki) {
 			_sqlStorageProviderUtility = sqlStorageProviderUtility;
 			_catalog = catalog.ToLowerInvariant();
 			_connString = connString;
