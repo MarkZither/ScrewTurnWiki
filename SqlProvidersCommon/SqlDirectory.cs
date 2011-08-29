@@ -30,7 +30,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			_sqlStorageProviderUtility = sqlStorageProviderUtility;
 			_catalog = catalog.ToLowerInvariant();
 			_connString = connString;
-			_wiki = wiki;
+			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 			_initCacheDirectory();
 		}
 

@@ -42,7 +42,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// Closes the connection.
 		/// </summary>
 		/// <param name="connection">The connection.</param>
-		void CloseConnection(DbConnection connection);
+		void CloseDbConnection(DbConnection connection);
 
 		/// <summary>
 		/// Executes a reading operation on db.

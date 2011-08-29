@@ -49,7 +49,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				if(!FileExists(transaction, wiki, name)) {
 					_sqlStorageProviderUtility.RollbackTransaction(transaction);
-					_sqlStorageProviderUtility.CloseConnection(connection);
+					_sqlStorageProviderUtility.CloseDbConnection(connection);
 					throw new FileNotFoundException();
 				}
 

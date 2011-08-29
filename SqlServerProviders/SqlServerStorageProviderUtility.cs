@@ -12,13 +12,22 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 	/// <summary>
 	/// An implementation of ISqlServerStorageProviderUtility for SqlServer.
 	/// </summary>
-	public class SqlServerStorageProviderUtility : SqlStorageProviderBase, ISqlStorageProviderUtility {
-		
-		private readonly ComponentInformation info = new ComponentInformation("SQL Server Files Storage Provider", "Threeplicate Srl", "4.0.1.71", "http://www.screwturn.eu", null);
+	public class SqlServerStorageProviderUtility : SqlClassBase, ISqlStorageProviderUtility {
+
+		private IHostV40 _host;
+		private string _wiki;
 
 		private readonly SqlServerCommandBuilder commandBuilder = new SqlServerCommandBuilder();
 
-		private const int CurrentSchemaVersion = 4000;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SqlServerStorageProviderUtility"/> class.
+		/// </summary>
+		/// <param name="host">The host.</param>
+		/// <param name="wiki">The wiki.</param>
+		public SqlServerStorageProviderUtility(IHostV40 host, string wiki) {
+			_host = host;
+			_wiki = wiki;
+		}
 
 		/// <summary>
 		/// Begins a transaction.
@@ -114,144 +123,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		}
 
 		/// <summary>
-		/// Validates a connection string.
-		/// </summary>
-		/// <param name="connString">The connection string to validate.</param>
-		protected override void ValidateConnectionString(string connString) {
-			SqlCommand cmd = null;
-			try {
-				cmd = GetCommand(connString);
-			}
-			catch(SqlException ex) {
-				throw new InvalidConfigurationException("Provided connection string is not valid", ex);
-			}
-			catch(InvalidOperationException ex) {
-				throw new InvalidConfigurationException("Provided connection string is not valid", ex);
-			}
-			catch(ArgumentException ex) {
-				throw new InvalidConfigurationException("Provided connection string is not valid", ex);
-			}
-			finally {
-				try {
-					cmd.Connection.Close();
-				}
-				catch { }
-			}
-		}
-
-		/// <summary>
-		/// Detects whether the database schema exists.
-		/// </summary>
-		/// <returns><c>true</c> if the schema exists, <c>false</c> otherwise.</returns>
-		private bool SchemaExists() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Files'";
-
-			bool exists = false;
-
-			try {
-				int version = ExecuteScalar<int>(cmd, -1);
-				if(version > CurrentSchemaVersion) throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
-				exists = version != -1;
-			}
-			catch(SqlException) {
-				exists = false;
-			}
-			finally {
-				try {
-					cmd.Connection.Close();
-				}
-				catch { }
-			}
-
-			return exists;
-		}
-
-		/// <summary>
-		/// Detects whether the database schema needs to be updated.
-		/// </summary>
-		/// <returns><c>true</c> if an update is needed, <c>false</c> otherwise.</returns>
-		private bool SchemaNeedsUpdate() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = "select [Version] from [Version] where [Component] = 'Files'";
-
-			bool exists = false;
-
-			try {
-				int version = ExecuteScalar<int>(cmd, -1);
-				exists = version < CurrentSchemaVersion;
-			}
-			catch(SqlException) {
-				exists = false;
-			}
-			finally {
-				try {
-					cmd.Connection.Close();
-				}
-				catch { }
-			}
-
-			return exists;
-		}
-
-		/// <summary>
-		/// Creates the standard database schema.
-		/// </summary>
-		private void CreateStandardSchema() {
-			SqlCommand cmd = GetCommand(connString);
-			cmd.CommandText = Properties.Resources.FilesDatabase;
-
-			cmd.ExecuteNonQuery();
-
-			cmd.Connection.Close();
-		}
-
-		/// <summary>
-		/// Creates or updates the database schema if necessary.
-		/// </summary>
-		protected override void CreateOrUpdateDatabaseIfNecessary() {
-			if(!SchemaExists()) {
-				CreateStandardSchema();
-			}
-			if(SchemaNeedsUpdate()) {
-				// Run minor update batches...
-			}
-		}
-
-		/// <summary>
-		/// Gets the Information about the Provider.
-		/// </summary>
-		public override ComponentInformation Information {
-			get { return info; }
-		}
-
-		/// <summary>
-		/// Gets a brief summary of the configuration string format, in HTML. Returns <c>null</c> if no configuration is needed.
-		/// </summary>
-		public override string ConfigHelpHtml {
-			get { return "Connection string format:<br /><code>Data Source=<i>Database Address and Instance</i>;Initial Catalog=<i>Database name</i>;User ID=<i>login</i>;Password=<i>password</i>;</code>"; }
-		}
-
-		/// <summary>
-		/// Closes the database connection.
-		/// </summary>
-		/// <param name="connection">The connection.</param>
-		public new void CloseConnection(System.Data.Common.DbConnection connection) {
-			try {
-				connection.Close();
-			}
-			catch { }
-		}
-
-		/// <summary>
-		/// Gets the command builder.
-		/// </summary>
-		/// <returns>The command builder.</returns>
-		protected override ICommandBuilder GetCommandBuilder() {
-			return commandBuilder;
-		}
-
-		/// <summary>
 		/// Gets the command builder.
 		/// </summary>
 		/// <returns>The command builder.</returns>
@@ -259,5 +130,34 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 			return commandBuilder;
 		}
 
+		/// <summary>
+		/// Closes the connection.
+		/// </summary>
+		/// <param name="connection">The connection.</param>
+		public void CloseDbConnection(System.Data.Common.DbConnection connection) {
+			try {
+				connection.Close();
+			}
+			catch { }
+		}
+
+		/// <summary>
+		/// Logs an exception.
+		/// </summary>
+		/// <param name="ex">The exception.</param>
+		protected override void LogException(Exception ex) {
+			try {
+				_host.LogEntry(ex.ToString(), LogEntryType.Error, null, this, _wiki);
+			}
+			catch { }
+		}
+
+		/// <summary>
+		/// Closes a connection, swallowing all exceptions.
+		/// </summary>
+		/// <param name="connection">The connection to close.</param>
+		protected override void CloseConnection(System.Data.Common.DbConnection connection) {
+			CloseDbConnection(connection);
+		}
 	}
 }
