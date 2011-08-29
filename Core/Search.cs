@@ -47,7 +47,7 @@ namespace ScrewTurn.Wiki {
 				Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<b class=\"searchkeyword\">", "</b>"), new QueryScorer(query));
 
 				List<SearchResult> searchResults = new List<SearchResult>(topDocs.totalHits);
-				for(int i = 0; i < topDocs.totalHits; i++) {
+				for(int i = 0; i < Math.Min(100, topDocs.totalHits); i++) {
 					Document doc = searcher.Doc(topDocs.scoreDocs[i].doc);
 
 					SearchResult result = new SearchResult();

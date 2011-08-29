@@ -203,6 +203,13 @@
     <Compile Include="CreateMasterPassword.aspx.designer.cs">
       <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
     </Compile>
+    <Compile Include="CreatePagesInBatch.aspx.cs">
+      <DependentUpon>CreatePagesInBatch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CreatePagesInBatch.aspx.designer.cs">
+      <DependentUpon>CreatePagesInBatch.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MasterPageClean.master.cs">
       <DependentUpon>MasterPageClean.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1339,6 +1346,7 @@
     <Content Include="AdminProvidersManagement.aspx" />
     <Content Include="AdminGlobalHome.aspx" />
     <Content Include="CreateMasterPassword.aspx" />
+    <Content Include="CreatePagesInBatch.aspx" />
     <Content Include="Diff.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="GetFile.aspx" />
@@ -2847,8 +2855,10 @@
     <Content Include="Web.Azure.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Web.FS.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.config" />
-    <Content Include="Web.SqlServer.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

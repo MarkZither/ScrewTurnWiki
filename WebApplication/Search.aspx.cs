@@ -24,6 +24,8 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
+			currentWiki = Tools.DetectCurrentWiki();
+
 			Page.Title = Properties.Messages.SearchTitle + " - " + Settings.GetWikiTitle(currentWiki);
 
 			lblStrings.Text = string.Format("<script type=\"text/javascript\"><!--\r\nvar AllNamespacesCheckbox = '{0}';\r\n//-->\r\n</script>", chkAllNamespaces.ClientID);
