@@ -71,13 +71,19 @@ namespace ScrewTurn.Wiki {
 
 		private static string ProcessLink(string link) {
 			string subLink = "";
-			string[] links = link.Split('=');
-			if(links[0] == "GetFile.aspx?File") {
-				subLink += "{UP}";
-				for(int i = 1; i < links.Length - 1; i++) {
-					subLink += links[i] + "=";
+			if(link.ToLowerInvariant().StartsWith("getfile.aspx")) {
+				string[] urlParameters = link.Remove(0, 13).Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+
+				string pageName = urlParameters.FirstOrDefault(p => p.ToLowerInvariant().StartsWith("page"));
+				if(!string.IsNullOrEmpty(pageName)) pageName = Uri.UnescapeDataString(pageName.Split(new char[] { '=' })[1]);
+				string fileName = urlParameters.FirstOrDefault(p => p.ToLowerInvariant().StartsWith("file"));
+				fileName = Uri.UnescapeDataString(fileName.Split(new char[] { '=' })[1]);
+				if(string.IsNullOrEmpty(pageName)) {
+					subLink = "{UP}" + fileName;
 				}
-				subLink += links[links.Length - 1];
+				else {
+					subLink = "{UP(" + pageName + ")}" + fileName;
+				}
 				link = subLink;
 			}
 			return link;
@@ -362,6 +368,7 @@ namespace ScrewTurn.Wiki {
 							string link = "";
 							string target = "";
 							string title = "";
+							string formattedLink = "";
 							bool isSystemLink = false;
 							bool childImg = false;
 							bool pageLink = false;
@@ -385,22 +392,23 @@ namespace ScrewTurn.Wiki {
 								}
 								if(isSystemLink) {
 									string[] splittedLink = link.Split('=');
-									if(splittedLink.Length == 2) link = "c:" + splittedLink[1];
-									else link = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
+									if(splittedLink.Length == 2) formattedLink = "c:" + splittedLink[1];
+									else formattedLink = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
 								}
 								else if(pageLink) {
-									link = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
-									link = link.Remove(link.IndexOf(Settings.PageExtension));
+									formattedLink = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
+									formattedLink = formattedLink.Remove(formattedLink.IndexOf(Settings.PageExtension));
+									formattedLink = Uri.UnescapeDataString(formattedLink);
 								}
 								else {
-									link = ProcessLink(link);
+									formattedLink = ProcessLink(link);
 								}
 								if(!anchor && !isTable && !childImg) {
-									if(title != link) result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
-									else result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
+									if(HttpUtility.HtmlDecode(title) != HttpUtility.HtmlDecode(link)) result += "[" + target + formattedLink + "|" + ProcessChild(node.ChildNodes) + "]";
+									else result += "[" + target + formattedLink + "]";
 								}
-								if(!anchor && !childImg && isTable) result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
-								if(!anchor && childImg && !isTable) result += ProcessChild(node.ChildNodes) + "|" + target + link + "]";
+								if(!anchor && !childImg && isTable) result += "[" + target + formattedLink + "|" + ProcessChild(node.ChildNodes) + "]";
+								if(!anchor && childImg && !isTable) result += ProcessChild(node.ChildNodes) + "|" + target + formattedLink + "]";
 							}
 							break;
 						default:

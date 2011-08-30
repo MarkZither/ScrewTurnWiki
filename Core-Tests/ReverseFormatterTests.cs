@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("<u>text</u>", "__text__")]
 		[TestCase("<s>text</s>", "--text--")]
 		[TestCase("<html><table border=\"1\" bgcolor=\"LightBlue\"><thead><tr><th>Cells x.1</th><th>Cells x.2</th></tr></thead><tbody><tr><td>Cell 1.1</td><td>Cell 1.2</td></tr><tr><td>Cell 2.1</td><td>Cell 2.2</td></tr></tbody></table></html>", "{| border=\"1\" bgcolor=\"LightBlue\" \n|- \n! Cells x.1\n! Cells x.2\n|- \n| Cell 1.1\n| Cell 1.2\n|- \n| Cell 2.1\n| Cell 2.2\n|}\n")]
-		[TestCase("<ol><li><a class=\"internallink\" target=\"_blank\" href=\"www.try.com\" title=\"try\">try</a></li><li><a class=\"internallink\" target=\"_blank\" href=\"www.secondtry.com\" title=\"www.secondtry.com\">www.secondtry.com</a><br></li></ol>","# [^www.try.com|try]\n# [^www.secondtry.com|www.secondtry.com]\n")]
+		[TestCase("<ol><li><a class=\"internallink\" target=\"_blank\" href=\"www.try.com\" title=\"try\">try</a></li><li><a class=\"internallink\" target=\"_blank\" href=\"www.secondtry.com\" title=\"www.secondtry.com\">www.secondtry.com</a><br></li></ol>","# [^www.try.com|try]\n# [^www.secondtry.com]\n")]
 		[TestCase("<table><tbody><tr><td bgcolor=\"Blue\">Styled Cell</td><td>Normal cell</td></tr><tr><td>Normal cell</td><td bgcolor=\"Yellow\">Styled cell</td></tr></tbody></table>", "{| \n|- \n|  bgcolor=\"Blue\"  | Styled Cell\n| Normal cell\n|- \n| Normal cell\n|  bgcolor=\"Yellow\"  | Styled cell\n|}\n")]
 		[TestCase("<h1>text</h1>", "==text==\n")]
 		[TestCase("<h2>text</h2>", "===text===\n")]
