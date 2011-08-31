@@ -80,13 +80,12 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					if(!done) {
 						_sqlStorageProviderUtility.RollbackTransaction(transaction);
 					}
+
+					_sqlStorageProviderUtility.CommitTransaction(transaction);
 				}
 				else {
 					_sqlStorageProviderUtility.RollbackTransaction(transaction);
 				}
-
-				_sqlStorageProviderUtility.CommitTransaction(transaction);
-
 				fileStream.Flush();
 				fileStream.Close();
 
