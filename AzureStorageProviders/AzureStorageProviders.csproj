@@ -35,8 +35,9 @@
     <DocumentationFile>bin\Release\AzureStorageProviders.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AzureDirectory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\References\Lib\AzureDirectory.1.0.3\AzureDirectory.dll</HintPath>
+    <Reference Include="AzureDirectory, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Lib\AzureDirectory.1.0.4\AzureDirectory.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\References\Lib\DotNetZipLib-DevKit-v1.9\Ionic.Zip.Reduced.dll</HintPath>
