@@ -260,19 +260,14 @@ namespace ScrewTurn.Wiki {
 							result += "\n== ==\n" + ProcessChild(node.ChildNodes);
 							break;
 						case "span":
-							if(node.Attributes["style"] != null) {
-								if(node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("font-weight:normal")) {
-									result += ProcessChild(node.ChildNodes);
-								}
-								if(node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("white-space:pre")) {
-									result += ": ";
-								}
+							if(node.Attributes["style"] != null && node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("font-weight:normal")) {
+								result += ProcessChild(node.ChildNodes);
 							}
-							if(node.Attributes.Count > 0) {
-								XmlAttributeCollection attributeCollection = node.Attributes;
-								foreach(XmlAttribute attribute in attributeCollection) {
-									if(attribute.Value == "italic") result += "''" + ProcessChild(node.ChildNodes) + "''";
-								}
+							else if(node.Attributes["style"] != null && node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("white-space:pre")) {
+								result += ": ";
+							}
+							else {
+								result += node.OuterXml;
 							}
 							break;
 						case "br":
@@ -327,12 +322,13 @@ namespace ScrewTurn.Wiki {
 							else result += ProcessChild(node.ChildNodes) + "\n" + (Settings.ProcessSingleLineBreaks ? "" : "\n");
 							break;
 						case "div":
-							if(node.Attributes["class"] != null) {
-								if(node.Attributes["class"].Value.Contains("box")) result += node.HasChildNodes ? "(((" + ProcessChild(node.ChildNodes) + ")))" : "";
-								else if(node.Attributes["class"].Value.Contains("imageleft")) result += "[imageleft" + ProcessChildImage(node.ChildNodes) + "]";
-								else if(node.Attributes["class"].Value.Contains("imageright")) result += "[imageright" + ProcessChildImage(node.ChildNodes) + "]";
-								else if(node.Attributes["class"].Value.Contains("image")) result += "[image" + ProcessChildImage(node.ChildNodes) + "]";
-								else if(node.Attributes["class"].Value.Contains("indent")) result += ": " + ProcessChild(node.ChildNodes) + "\n";
+							if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("box")) result += node.HasChildNodes ? "(((" + ProcessChild(node.ChildNodes) + ")))" : "";
+							else if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("imageleft")) result += "[imageleft" + ProcessChildImage(node.ChildNodes) + "]";
+							else if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("imageright")) result += "[imageright" + ProcessChildImage(node.ChildNodes) + "]";
+							else if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("image")) result += "[image" + ProcessChildImage(node.ChildNodes) + "]";
+							else if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("indent")) result += ": " + ProcessChild(node.ChildNodes) + "\n";
+							else if(node.Attributes.Count > 0) {
+								result += node.OuterXml;
 							}
 							else {
 								result += "\n";
