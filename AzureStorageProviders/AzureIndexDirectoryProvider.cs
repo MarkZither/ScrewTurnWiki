@@ -51,6 +51,9 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
 		public void Init(IHostV40 host, string config, string wiki) {
 			if(host == null) throw new ArgumentNullException("host");
+			if(config == null) throw new ArgumentNullException("config");
+
+			if(config == "") config = Config.GetConnectionString();
 
 			_host = host;
 			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
