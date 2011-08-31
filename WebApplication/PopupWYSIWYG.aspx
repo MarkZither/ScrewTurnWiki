@@ -84,10 +84,10 @@
 			var title = GetValue("txtFileTitle");
 
 			if(title == "") title = GetValue("txtFilePath");
-			title = title.replace('\'', '&#39;');
-			title = title.replace('\'', '&#39;');
-			title = title.replace('\'', '&#39;');
-			title = title.replace('\'', '&#39;');
+			title = title.replace(/\'/g, '&#39;');
+			title = title.replace(/\\/g, '\\\\');
+			name = name.replace(/\'/g, '&#39;');
+			name = name.replace(/\\/g, '\\\\');
 
 			// Sample string: <a class="internallink" [target="_blank" ]href="GetFile.aspx?Provider=PROVIDER&amp;File=FILE" title="TITLE">TITLE</a>
 			// Sample string: <a class="internallink" [target="_blank" ]href="GetFile.aspx?Provider=PROVIDER&amp;IsPageAttachment=1&amp;Page=PAGE&amp;File=FILE" title="TITLE">TITLE</a>

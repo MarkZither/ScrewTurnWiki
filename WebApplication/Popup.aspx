@@ -35,6 +35,7 @@
 		
 		function ProcessFileLink() {
 			var name = GetValue("txtFilePath");
+			name = name.replace(/\\/g, '\\\\');
 			if(name == "") return false;
 			var title = GetValue("txtFileTitle");
 			var c = IsChecked("chkFileNW") ? "^" : "";
