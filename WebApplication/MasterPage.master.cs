@@ -17,7 +17,7 @@ using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki {
 
-    public partial class MasterPage : System.Web.UI.MasterPage {
+	public partial class MasterPage : System.Web.UI.MasterPage {
 
 		private string currentNamespace = null;
 		private PageInfo currentPage = null;
@@ -98,12 +98,12 @@ namespace ScrewTurn.Wiki {
 			Literal c = new Literal();
 			c.Text = h.Replace("######______INCLUDES______######", Tools.GetIncludes(currentNamespace)).Replace("######______NAMESPACE______######", nspace);
 			Page.Header.Controls.Add(c);
-        }
+		}
 
 		/// <summary>
 		/// Prints the header.
 		/// </summary>
-        public void PrintHeader() {
+		public void PrintHeader() {
 			string h = Content.GetPseudoCacheValue(GetPseudoCacheItemName("Header"));
 			if(h == null) {
 				h = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Header, currentNamespace),
@@ -111,12 +111,12 @@ namespace ScrewTurn.Wiki {
 				Content.SetPseudoCacheValue(GetPseudoCacheItemName("Header"), h);
 			}
 			lblHeaderDiv.Text = FormattingPipeline.FormatWithPhase3(h, FormattingContext.Header, currentPage);
-        }
+		}
 
 		/// <summary>
 		/// Prints the sidebar.
 		/// </summary>
-        public void PrintSidebar() {
+		public void PrintSidebar() {
 			string s = Content.GetPseudoCacheValue(GetPseudoCacheItemName("Sidebar"));
 			if(s == null) {
 				s = FormattingPipeline.FormatWithPhase1And2(Settings.Provider.GetMetaDataItem(MetaDataItem.Sidebar, currentNamespace),
@@ -124,7 +124,7 @@ namespace ScrewTurn.Wiki {
 				Content.SetPseudoCacheValue(GetPseudoCacheItemName("Sidebar"), s);
 			}
 			lblSidebarDiv.Text = FormattingPipeline.FormatWithPhase3(s, FormattingContext.Sidebar, currentPage);
-        }
+		}
 
 		/// <summary>
 		/// Prints the footer.

@@ -104,6 +104,24 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Gets the canonical URL tag for a page.
+		/// </summary>
+		/// <param name="requestUrl">The request URL.</param>
+		/// <param name="currentPage">The current page.</param>
+		/// <param name="nspace">The namespace.</param>
+		/// <returns>The canonical URL, or an empty string if <paramref name="requestUrl"/> is already canonical.</returns>
+		public static string GetCanonicalUrlTag(string requestUrl, PageInfo currentPage, NamespaceInfo nspace) {
+			string url = "";
+			if(nspace == null && currentPage.FullName == Settings.DefaultPage) url = Settings.GetMainUrl().ToString();
+			else url = Settings.GetMainUrl() + "/" + currentPage.FullName + Settings.PageExtension;
+			url = url.Replace("//", "/");
+
+			// Case sensitive
+			if(url == requestUrl) return "";
+			else return "<link rel=\"canonical\" href=\"" + url + "\" />";
+		}
+
+		/// <summary>
 		/// Converts a byte number into a string, formatted using KB, MB or GB.
 		/// </summary>
 		/// <param name="bytes">The # of bytes.</param>

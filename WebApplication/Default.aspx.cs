@@ -81,6 +81,12 @@ namespace ScrewTurn.Wiki {
 			SetupEmailNotification();
 
 			SetupPageContent(canPostDiscussion, canManageDiscussion);
+
+			if(currentPage != null) {
+				Literal canonical = new Literal();
+				canonical.Text = Tools.GetCanonicalUrlTag(Request.Url.ToString(), currentPage, Pages.FindNamespace(NameTools.GetNamespace(currentPage.FullName)));
+				Page.Header.Controls.Add(canonical);
+			}
 		}
 
 		/// <summary>

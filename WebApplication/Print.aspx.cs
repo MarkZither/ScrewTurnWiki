@@ -39,9 +39,13 @@ namespace ScrewTurn.Wiki {
 
 			content = Content.GetPageContent(page, true);
 
+			Literal canonical = new Literal();
+			canonical.Text = Tools.GetCanonicalUrlTag(Request.Url.ToString(), page, Pages.FindNamespace(NameTools.GetNamespace(page.FullName)));
+			Page.Header.Controls.Add(canonical);
+
 			Page.Title = FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page) + " - " + Settings.WikiTitle;
 
-            PrintContent();
+			PrintContent();
 		}
 
 		/// <summary>
