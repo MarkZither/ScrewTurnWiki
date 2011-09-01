@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki {
 		private string currentWiki = null;
 
 		private readonly Dictionary<string, SearchOptions> searchModeMap =
-			new Dictionary<string, SearchOptions>() { { "1", SearchOptions.AtLeastOneWord }, { "2", SearchOptions.AllWords } };
+			new Dictionary<string, SearchOptions>() { { "1", SearchOptions.AtLeastOneWord }, { "2", SearchOptions.AllWords }, { "3", SearchOptions.ExactPhrase } };
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if(Request["OpenSearch"] != null) {
@@ -95,14 +95,32 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 
-				if(Request["Query"] != null) txtQuery.Text = Request["Query"];
+				string query = Request["Query"];
+				if(Request["Query"] != null) txtQuery.Text = query;
 
 				// Launch search, if query is specified
 
 				string mode = Request["Mode"];
 				if(string.IsNullOrEmpty(mode)) mode = "1";
-				if(!string.IsNullOrEmpty(Request["Query"])) {
-					PerformSearch(Request["Query"], searchModeMap[mode], selectedCategories,
+
+				if(!string.IsNullOrEmpty(query)) {
+					// If the query string is surraunded by " remove them from the Request["Query"] object
+					// and check the correct CheckBox
+					if(query.StartsWith("\"") && query.EndsWith("\"")) {
+						txtQuery.Text = query.Trim(new char[] { '"' });
+						mode = "3";
+
+						rdoAtLeastOneWord.Checked = false;
+						rdoAllWords.Checked = false;
+						rdoExactPhrase.Checked = true;
+					}
+
+					// If the search mode has been set to 3 (ExactPhrase) the query must be wrapped with "
+					if(mode == "3") {
+						query = "\"" + query.Trim(new char[] { '"' }) + "\"";
+					}
+
+					PerformSearch(query, searchModeMap[mode], selectedCategories,
 						chkUncategorizedPages.Checked, chkAllNamespaces.Checked, chkFilesAndAttachments.Checked);
 				}
 			}
@@ -156,7 +174,9 @@ namespace ScrewTurn.Wiki {
 			List<SearchResult> results = null;
 			DateTime begin = DateTime.Now;
 			try {
-				results = SearchClass.Search(currentWiki, new SearchField[] {SearchField.Title, SearchField.Content}, query, mode);
+				List<SearchField> searchFields = new List<SearchField>(2) { SearchField.Title, SearchField.Content };
+				if(searchFilesAndAttachments) searchFields.AddRange(new SearchField[] { SearchField.FileName, SearchField.FileContent });
+				results = SearchClass.Search(currentWiki, searchFields.ToArray(), query, mode);
 			}
 			catch(ArgumentException ex) {
 				Log.LogEntry("Search threw an exception\n" + ex.ToString(), EntryType.Warning, SessionFacade.CurrentUsername, currentWiki);

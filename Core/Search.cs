@@ -446,7 +446,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Search return results that contains all the given words.
 		/// </summary>
-		AllWords
+		AllWords,
+		/// <summary>
+		/// Search return results that contains the exact given phrase.
+		/// </summary>
+		ExactPhrase
 	}
 
 	/// <summary>
