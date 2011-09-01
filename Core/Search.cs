@@ -87,8 +87,8 @@ namespace ScrewTurn.Wiki {
 							PageAttachmentDocument attachment = new PageAttachmentDocument();
 							attachment.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
 							attachment.PageFullName = doc.GetField(SearchField.PageFullName.AsString()).StringValue();
-							attachment.FileName = doc.GetField(SearchField.Title.AsString()).StringValue();
-							attachment.FileContent = doc.GetField(SearchField.Content.AsString()).StringValue();
+							attachment.FileName = doc.GetField(SearchField.FileName.AsString()).StringValue();
+							attachment.FileContent = doc.GetField(SearchField.FileContent.AsString()).StringValue();
 
 							TokenStream tokenStream3 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(attachment.FileContent));
 							attachment.HighlightedFileContent = highlighter.GetBestFragments(tokenStream3, attachment.FileContent, 3, " [...] ");
@@ -98,8 +98,8 @@ namespace ScrewTurn.Wiki {
 						case DocumentType.File:
 							FileDocument file = new FileDocument();
 							file.Wiki = doc.GetField(SearchField.Wiki.AsString()).StringValue();
-							file.FileName = doc.GetField(SearchField.Title.AsString()).StringValue();
-							file.FileContent = doc.GetField(SearchField.Content.AsString()).StringValue();
+							file.FileName = doc.GetField(SearchField.FileName.AsString()).StringValue();
+							file.FileContent = doc.GetField(SearchField.FileContent.AsString()).StringValue();
 
 							TokenStream tokenStream4 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(file.FileContent));
 							file.HighlightedFileContent = highlighter.GetBestFragments(tokenStream4, file.FileContent, 3, " [...]");
@@ -194,9 +194,9 @@ namespace ScrewTurn.Wiki {
 				doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.ANALYZED));
 				doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.ANALYZED));
 				doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.ANALYZED));
-				doc.Add(new Field(SearchField.Title.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.FileName.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
 				string fileContent = ScrewTurn.Wiki.SearchEngine.Parser.Parse(filePath);
-				doc.Add(new Field(SearchField.Content.AsString(), fileContent, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.FileContent.AsString(), fileContent, Field.Store.YES, Field.Index.ANALYZED));
 				writer.AddDocument(doc);
 				writer.Commit();
 			}
@@ -227,9 +227,9 @@ namespace ScrewTurn.Wiki {
 				doc.Add(new Field(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.File) + "|" + wiki + "|" + fileName).Replace(" ", ""), Field.Store.NO, Field.Index.NOT_ANALYZED_NO_NORMS));
 				doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.File), Field.Store.YES, Field.Index.ANALYZED));
 				doc.Add(new Field(SearchField.Wiki.AsString(), wiki, Field.Store.YES, Field.Index.ANALYZED));
-				doc.Add(new Field(SearchField.Title.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.FileName.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
 				string fileContent = ScrewTurn.Wiki.SearchEngine.Parser.Parse(filePath);
-				doc.Add(new Field(SearchField.Content.AsString(), fileContent, Field.Store.YES, Field.Index.ANALYZED));
+				doc.Add(new Field(SearchField.FileContent.AsString(), fileContent, Field.Store.YES, Field.Index.ANALYZED));
 				writer.AddDocument(doc);
 				writer.Commit();
 			}
@@ -333,8 +333,8 @@ namespace ScrewTurn.Wiki {
 				newDoc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.NO));
 				newDoc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.ANALYZED));
 				newDoc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.ANALYZED));
-				newDoc.Add(new Field(SearchField.Title.AsString(), newName, Field.Store.YES, Field.Index.ANALYZED));
-				newDoc.Add(new Field(SearchField.Content.AsString(), doc.GetField(SearchField.Content.AsString()).StringValue(), Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.FileName.AsString(), newName, Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.FileContent.AsString(), doc.GetField(SearchField.FileContent.AsString()).StringValue(), Field.Store.YES, Field.Index.ANALYZED));
 				writer.UpdateDocument(term, newDoc);
 				writer.Commit();
 			}
@@ -390,8 +390,8 @@ namespace ScrewTurn.Wiki {
 				newDoc.Add(new Field(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.File) + "|" + wiki + "|" + newName).Replace(" ", ""), Field.Store.NO, Field.Index.NOT_ANALYZED_NO_NORMS));
 				newDoc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.File), Field.Store.YES, Field.Index.ANALYZED));
 				newDoc.Add(new Field(SearchField.Wiki.AsString(), wiki, Field.Store.YES, Field.Index.ANALYZED));
-				newDoc.Add(new Field(SearchField.Title.AsString(), newName, Field.Store.YES, Field.Index.ANALYZED));
-				newDoc.Add(new Field(SearchField.Content.AsString(), doc.GetField(SearchField.Content.AsString()).StringValue(), Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.FileName.AsString(), newName, Field.Store.YES, Field.Index.ANALYZED));
+				newDoc.Add(new Field(SearchField.FileContent.AsString(), doc.GetField(SearchField.FileContent.AsString()).StringValue(), Field.Store.YES, Field.Index.ANALYZED));
 				writer.UpdateDocument(term, newDoc);
 				writer.Commit();
 			}
