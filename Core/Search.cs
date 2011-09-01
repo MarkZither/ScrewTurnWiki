@@ -200,6 +200,9 @@ namespace ScrewTurn.Wiki {
 				writer.AddDocument(doc);
 				writer.Commit();
 			}
+			catch(System.Runtime.InteropServices.COMException ex) {
+				Log.LogEntry(ex.Message, EntryType.Warning, Log.SystemUsername, page.Provider.CurrentWiki);
+			}
 			catch { throw; }
 			finally {
 				writer.Close();
@@ -231,7 +234,7 @@ namespace ScrewTurn.Wiki {
 				writer.Commit();
 			}
 			catch(System.Runtime.InteropServices.COMException ex) {
-				Log.LogEntry(ex.Message, EntryType.Error, Log.SystemUsername, wiki);
+				Log.LogEntry(ex.Message, EntryType.Warning, Log.SystemUsername, wiki);
 			}
 			catch { throw; }
 			finally {
