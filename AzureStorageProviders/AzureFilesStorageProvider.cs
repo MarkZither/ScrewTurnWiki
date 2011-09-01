@@ -21,7 +21,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		#region IFilesStorageProviderV40 Members
 
 		private string BuildNameForBlobStorage(string name) {
-			return !string.IsNullOrEmpty(name) ? name.Trim('/') : "";
+			return !string.IsNullOrEmpty(name) ? System.Web.HttpUtility.UrlDecode(name.Trim('/')) : "";
 		}
 
 		/// <summary>
@@ -38,12 +38,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				var blobRef = containerRef.GetBlobReference(blobName);
 				blobRef.FetchAttributes();
 				blobName = blobRef.Uri.PathAndQuery;
-				return blobName.Substring(blobName.IndexOf(blobRef.Container.Name) + blobRef.Container.Name.Length + 1);
+				return System.Web.HttpUtility.UrlDecode(blobName.Substring(blobName.IndexOf(blobRef.Container.Name) + blobRef.Container.Name.Length + 1));
 			}
 			catch(StorageClientException e) {
 				if(e.ErrorCode == StorageErrorCode.ResourceNotFound) {
 					string[] allBlobs = ListFilesForInternalUse(containerName, "", false, true);
-					return allBlobs.FirstOrDefault(b => b.ToLowerInvariant().TrimStart('/') == blobName.ToLowerInvariant());
+					return allBlobs.FirstOrDefault(b => BuildNameForBlobStorage(b).ToLowerInvariant() == blobName.ToLowerInvariant());
 				}
 				else {
 					throw;
@@ -107,7 +107,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					string blobName = blobItem.Uri.PathAndQuery;
 					blobName = blobName.Substring(blobName.IndexOf(blobItem.Container.Name) + blobItem.Container.Name.Length);
 					blobName = blobName.EndsWith(".stw.dat") ? blobName.Remove(blobName.IndexOf(".stw.dat")) : blobName;
-					if(!blobName.EndsWith("/")) files.Add(blobName);
+					if(!blobName.EndsWith("/")) files.Add(System.Web.HttpUtility.UrlDecode(blobName));
 				}
 				return files.ToArray();
 			}
@@ -131,7 +131,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				string[] blobs = ListFilesForInternalUse(_wiki, directoryName, false, false);
 				List<string> directories = new List<string>();
 				foreach(string blob in blobs) {
-					if(blob.EndsWith("/")) directories.Add("/" + blob);
+					if(blob.EndsWith("/")) directories.Add("/" + System.Web.HttpUtility.UrlDecode(blob));
 				}
 				return directories.ToArray();
 			}
@@ -426,12 +426,12 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				if(dirName == null) return new string[0];
 
 				string[] blobs = ListFilesForInternalUse(_wiki + "-attachments", dirName, false, true);
-				List<string> directories = new List<string>();
+				List<string> attachments = new List<string>();
 				foreach(string blob in blobs) {
 					string blobName = blob.Substring(blob.IndexOf(dirName) + dirName.Length);
-					if(blobName != "") directories.Add(blobName.TrimStart('/'));
+					if(blobName != "") attachments.Add(BuildNameForBlobStorage(blobName));
 				}
-				return directories.ToArray();
+				return attachments.ToArray();
 			}
 			catch(Exception ex) {
 				throw ex;
@@ -540,7 +540,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				return new FileDetails(blobRef.Properties.Length, blobRef.Properties.LastModifiedUtc.ToLocalTime());
 			}
 			catch(StorageClientException ex) {
-				if(ex.ErrorCode == StorageErrorCode.BlobNotFound) return null;
+				if(ex.ErrorCode == StorageErrorCode.ResourceNotFound) return null;
 				throw ex;
 			}
 		}
