@@ -58,7 +58,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			_host = host;
 			_wiki = string.IsNullOrEmpty(wiki) ? "root" : wiki;
 
-			_directory = new AzureDirectory(TableStorage.StorageAccount(config), "searchindex");
+			_directory = new AzureDirectory(TableStorage.StorageAccount(config), wiki + "-searchindex");
 		}
 
 		/// <summary>
