@@ -403,6 +403,21 @@ namespace ScrewTurn.Wiki {
 			return true;
 		}
 
+		/// <summary>
+		/// Clears the index.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		public static void ClearIndex(string wiki) {
+			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(wiki);
+
+			Analyzer analyzer = new SimpleAnalyzer();
+
+			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+			writer.DeleteAll();
+			writer.Commit();
+			writer.Close();
+		}
+
 		private static DocumentType DocumentTypeFromString(string documentType) {
 			switch(documentType) {
 				case "page":

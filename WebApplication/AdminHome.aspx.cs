@@ -100,14 +100,54 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptIndex_ItemCommand(object sender, CommandEventArgs e) {
-			//Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
+			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
 
-			//IPagesStorageProviderV40 provider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
-			//provider.RebuildIndex();
+			SearchClass.ClearIndex(currentWiki);
 
-			//Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername, currentWiki);
+			IPagesStorageProviderV40 pagesProvider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
 
-			//rptIndex.DataBind();
+			// Index all pages of the wiki
+			List<NamespaceInfo> namespaces = new List<NamespaceInfo>(pagesProvider.GetNamespaces());
+			namespaces.Add(null);
+			foreach(NamespaceInfo nspace in namespaces) {
+				// Index pages of the namespace
+				PageContent[] pages = pagesProvider.GetPages(nspace);
+				foreach(PageContent page in pages) {
+					// Index page
+					SearchClass.IndexPage(page);
+
+					// Index page messages
+					Message[] messages = pagesProvider.GetMessages(page.FullName);
+					foreach(Message message in messages) {
+						SearchClass.IndexMessage(message, page);
+					}
+
+					// Index page attachments
+					StFileInfo[] attachments = Host.Instance.ListPageAttachments(currentWiki, page.FullName);
+					foreach(StFileInfo attachment in attachments) {
+						byte[] fileContent;
+						using(MemoryStream stream = new MemoryStream()) {
+							attachment.Provider.RetrievePageAttachment(page.FullName, attachment.FullName, stream);
+							fileContent = new byte[stream.Length];
+							stream.Seek(0, SeekOrigin.Begin);
+							stream.Read(fileContent, 0, (int)stream.Length);
+						}
+
+						// Index the attached file
+						string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+						if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+						string tempFile = Path.Combine(tempDir, attachment.FullName);
+						using(FileStream writer = File.Create(tempFile)) {
+							writer.Write(fileContent, 0, fileContent.Length);
+						}
+						SearchClass.IndexPageAttachment(attachment.FullName, tempFile, page);
+						Directory.Delete(tempDir, true);
+					}
+				}
+			}
+
+
+
 		}
 
 		protected void cvGroups_ServerValidate(object sender, ServerValidateEventArgs e) {
