@@ -413,7 +413,6 @@ namespace ScrewTurn.Wiki {
 			Analyzer analyzer = new SimpleAnalyzer();
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 
-			ClearAttachmentsIndex(writer);
 			ClearMessagesIndex(writer);
 			ClearPagesIndex(writer);
 
@@ -444,6 +443,7 @@ namespace ScrewTurn.Wiki {
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 
 			ClearFilesIndex(writer);
+			ClearAttachmentsIndex(writer);
 			
 			writer.Commit();
 			writer.Close();

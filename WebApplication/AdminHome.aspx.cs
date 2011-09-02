@@ -129,28 +129,6 @@ namespace ScrewTurn.Wiki {
 							SearchClass.IndexMessage(reply, page);
 						}
 					}
-
-					// Index page attachments
-					StFileInfo[] attachments = Host.Instance.ListPageAttachments(currentWiki, page.FullName);
-					foreach(StFileInfo attachment in attachments) {
-						byte[] fileContent;
-						using(MemoryStream stream = new MemoryStream()) {
-							attachment.Provider.RetrievePageAttachment(page.FullName, attachment.FullName, stream);
-							fileContent = new byte[stream.Length];
-							stream.Seek(0, SeekOrigin.Begin);
-							stream.Read(fileContent, 0, (int)stream.Length);
-						}
-
-						// Index the attached file
-						string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
-						if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
-						string tempFile = Path.Combine(tempDir, attachment.FullName);
-						using(FileStream writer = File.Create(tempFile)) {
-							writer.Write(fileContent, 0, fileContent.Length);
-						}
-						SearchClass.IndexPageAttachment(attachment.FullName, tempFile, page);
-						Directory.Delete(tempDir, true);
-					}
 				}
 			}
 		}
@@ -198,6 +176,31 @@ namespace ScrewTurn.Wiki {
 						writer.Write(fileContent, 0, fileContent.Length);
 					}
 					SearchClass.IndexFile(filesProvider.GetType().FullName + "|" + file, tempFile, currentWiki);
+					Directory.Delete(tempDir, true);
+				}
+			}
+
+			// Index all attachment of the wiki
+			string[] pagesWithAttachments = filesProvider.GetPagesWithAttachments();
+			foreach(string page in pagesWithAttachments) {
+				string[] attachments = filesProvider.ListPageAttachments(page);
+				foreach(string attachment in attachments) {
+					byte[] fileContent;
+					using(MemoryStream stream = new MemoryStream()) {
+						filesProvider.RetrievePageAttachment(page, attachment, stream);
+						fileContent = new byte[stream.Length];
+						stream.Seek(0, SeekOrigin.Begin);
+						stream.Read(fileContent, 0, (int)stream.Length);
+					}
+
+					// Index the attached file
+					string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+					if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+					string tempFile = Path.Combine(tempDir, attachment);
+					using(FileStream writer = File.Create(tempFile)) {
+						writer.Write(fileContent, 0, fileContent.Length);
+					}
+					SearchClass.IndexPageAttachment(attachment, tempFile, Pages.FindPage(currentWiki, page));
 					Directory.Delete(tempDir, true);
 				}
 			}
