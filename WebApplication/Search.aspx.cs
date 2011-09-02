@@ -317,7 +317,6 @@ namespace ScrewTurn.Wiki {
 		private string link;
 		private string type;
 		private string title;
-		private float relevance;
 		private string formattedExcerpt;
 
 		/// <summary>
@@ -326,13 +325,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="link">The link.</param>
 		/// <param name="type">The result type.</param>
 		/// <param name="title">The title.</param>
-		/// <param name="relevance">The relevance (%).</param>
 		/// <param name="formattedExcerpt">The formatted page excerpt.</param>
-		public SearchResultRow(string link, string type, string title, float relevance, string formattedExcerpt) {
+		public SearchResultRow(string link, string type, string title, string formattedExcerpt) {
 			this.link = link;
 			this.type = type;
 			this.title = title;
-			this.relevance = relevance;
 			this.formattedExcerpt = formattedExcerpt;
 		}
 
@@ -358,13 +355,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the relevance.
-		/// </summary>
-		public float Relevance {
-			get { return relevance; }
-		}
-
-		/// <summary>
 		/// Gets the formatted excerpt.
 		/// </summary>
 		public string FormattedExcerpt {
@@ -384,7 +374,7 @@ namespace ScrewTurn.Wiki {
 				PageDocument doc = result.Document as PageDocument;
 				return new SearchResultRow(doc.PageFullName + GlobalSettings.PageExtension + "?" + queryStringKeywords, Page,
 					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), doc.Title, false, FormattingContext.PageContent, doc.PageFullName),
-					result.Relevance, string.IsNullOrEmpty(doc.HighlightedContent) ? doc.Content : doc.HighlightedContent);
+					string.IsNullOrEmpty(doc.HighlightedContent) ? doc.Content : doc.HighlightedContent);
 			}
 			else if(result.DocumentType == DocumentType.Message) {
 				MessageDocument doc = result.Document as MessageDocument;
@@ -393,7 +383,7 @@ namespace ScrewTurn.Wiki {
 				return new SearchResultRow(content.FullName + GlobalSettings.PageExtension + "?" + queryStringKeywords + "&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(doc.DateTime), Message,
 					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), doc.Subject, false, FormattingContext.MessageBody, content.FullName) + " (" +
 					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.MessageBody, content.FullName) +
-					")", result.Relevance, doc.HighlightedBody);
+					")", doc.HighlightedBody);
 			}
 			else if(result.DocumentType == DocumentType.File) {
 				FileDocument fileDoc = result.Document as FileDocument;
@@ -402,7 +392,7 @@ namespace ScrewTurn.Wiki {
 
 				return new SearchResultRow("GetFile.aspx?File=" + Tools.UrlEncode(fileDoc.FileName.Substring(fileParts[0].Length + 1)) +
 					"&amp;Provider=" + Tools.UrlEncode(fileParts[0]),
-					File, fileParts[1], result.Relevance, fileDoc.HighlightedFileContent);
+					File, fileParts[1], fileDoc.HighlightedFileContent);
 			}
 			else if(result.DocumentType == DocumentType.Attachment) {
 				PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
@@ -411,7 +401,7 @@ namespace ScrewTurn.Wiki {
 				return new SearchResultRow(content.FullName + GlobalSettings.PageExtension, Attachment,
 					attnDoc.FileName + " (" +
 					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.PageContent, content.FullName) +
-					")", result.Relevance, attnDoc.HighlightedFileContent);
+					")", attnDoc.HighlightedFileContent);
 			}
 			else throw new NotSupportedException();
 		}
