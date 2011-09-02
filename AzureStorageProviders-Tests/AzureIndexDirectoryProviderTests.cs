@@ -315,7 +315,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.IndexPageAttachment(fileName, filePath, page));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
@@ -352,7 +352,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.IndexPageAttachment(fileName, filePath, page));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
@@ -365,7 +365,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.UnindexPageAttachment(fileName, page));
 
-			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(0, results.Count, "Wrong result length");
 		}
@@ -395,7 +395,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.IndexPageAttachment(fileName, filePath, page));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
@@ -408,7 +408,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.RenamePageAttachment(page, fileName, "file name_2"));
 
-			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
@@ -439,7 +439,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.IndexFile(fileName, filePath, "wiki1"));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
@@ -469,7 +469,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.IndexFile(fileName, filePath, "wiki1"));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
@@ -482,7 +482,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.UnindexFile(fileName, "wiki1"));
 
-			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(0, results.Count, "Wrong result length");
 		}
@@ -505,7 +505,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.IndexFile(fileName, filePath, "wiki1"));
 
-			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			List<SearchResult> results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
@@ -518,7 +518,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage.Tests {
 
 			Assert.IsTrue(SearchClass.RenameFile("wiki1", fileName, "file name_2"));
 
-			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.Title, SearchField.Content }, "file", SearchOptions.AtLeastOneWord);
+			results = SearchClass.Search("wiki1", new SearchField[] { SearchField.FileName, SearchField.FileContent }, "file", SearchOptions.AtLeastOneWord);
 
 			Assert.AreEqual(1, results.Count, "Wrong result length");
 
