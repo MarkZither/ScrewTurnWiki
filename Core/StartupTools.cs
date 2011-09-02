@@ -99,6 +99,11 @@ namespace ScrewTurn.Wiki {
 				if(Pages.FindPage(wiki.WikiName, Settings.GetDefaultPage(wiki.WikiName)) == null) CreateMainPage(wiki.WikiName);
 
 				Log.LogEntry("Wiki " + wiki.WikiName + " is ready", EntryType.General, Log.SystemUsername, null);
+
+						Pages.RebuildPageLinks(Pages.GetPages(null));
+						foreach(ScrewTurn.Wiki.PluginFramework.NamespaceInfo nspace in Pages.GetNamespaces()) {
+							Pages.RebuildPageLinks(Pages.GetPages(nspace));
+						}
 			}
 
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername, null);

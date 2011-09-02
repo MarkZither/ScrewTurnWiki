@@ -142,10 +142,10 @@
     <value />
   </data>
   <data name="lblByResource1.Text" xml:space="preserve">
-    <value> by </value>
+    <value>por</value>
   </data>
   <data name="lblCategorizedAsResource1.Text" xml:space="preserve">
-    <value>Categorized as </value>
+    <value>Categoria </value>
   </data>
   <data name="lblDiscussedPageResource1.Text" xml:space="preserve">
     <value />
@@ -178,7 +178,7 @@
     <value />
   </data>
   <data name="lblPageDiscussionForResource1.Text" xml:space="preserve">
-    <value>Page discussion for </value>
+    <value>Discussão para a página</value>
   </data>
   <data name="lblPageTitleResource1.Text" xml:space="preserve">
     <value />

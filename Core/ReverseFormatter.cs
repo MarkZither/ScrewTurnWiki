@@ -73,13 +73,19 @@ namespace ScrewTurn.Wiki {
 
 		private string ProcessLink(string link) {
 			string subLink = "";
-			string[] links = link.Split('=');
-			if(links[0] == "GetFile.aspx?File") {
-				subLink += "{UP}";
-				for(int i = 1; i < links.Length - 1; i++) {
-					subLink += links[i] + "=";
+			if(link.ToLowerInvariant().StartsWith("getfile.aspx")) {
+				string[] urlParameters = link.Remove(0, 13).Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+
+				string pageName = urlParameters.FirstOrDefault(p => p.ToLowerInvariant().StartsWith("page"));
+				if(!string.IsNullOrEmpty(pageName)) pageName = Uri.UnescapeDataString(pageName.Split(new char[] { '=' })[1]);
+				string fileName = urlParameters.FirstOrDefault(p => p.ToLowerInvariant().StartsWith("file"));
+				fileName = Uri.UnescapeDataString(fileName.Split(new char[] { '=' })[1]);
+				if(string.IsNullOrEmpty(pageName)) {
+					subLink = "{UP}" + fileName;
 				}
-				subLink += links[links.Length - 1];
+				else {
+					subLink = "{UP(" + pageName + ")}" + fileName;
+				}
 				link = subLink;
 			}
 			return link;
@@ -256,19 +262,14 @@ namespace ScrewTurn.Wiki {
 							result += "\n== ==\n" + ProcessChild(node.ChildNodes);
 							break;
 						case "span":
-							if(node.Attributes["style"] != null) {
-								if(node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("font-weight:normal")) {
-									result += ProcessChild(node.ChildNodes);
-								}
-								if(node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("white-space:pre")) {
-									result += ": ";
-								}
+							if(node.Attributes["style"] != null && node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("font-weight:normal")) {
+								result += ProcessChild(node.ChildNodes);
 							}
-							if(node.Attributes.Count > 0) {
-								XmlAttributeCollection attributeCollection = node.Attributes;
-								foreach(XmlAttribute attribute in attributeCollection) {
-									if(attribute.Value == "italic") result += "''" + ProcessChild(node.ChildNodes) + "''";
-								}
+							else if(node.Attributes["style"] != null && node.Attributes["style"].Value.Replace(" ", "").ToLowerInvariant().Contains("white-space:pre")) {
+								result += ": ";
+							}
+							else {
+								result += node.OuterXml;
 							}
 							break;
 						case "br":
@@ -323,12 +324,13 @@ namespace ScrewTurn.Wiki {
 							else result += ProcessChild(node.ChildNodes) + "\n" + (Settings.GetProcessSingleLineBreaks(_wiki) ? "" : "\n");
 							break;
 						case "div":
-							if(node.Attributes["class"] != null) {
-								if(node.Attributes["class"].Value.Contains("box")) result += node.HasChildNodes ? "(((" + ProcessChild(node.ChildNodes) + ")))" : "";
-								else if(node.Attributes["class"].Value.Contains("imageleft")) result += "[imageleft" + ProcessChildImage(node.ChildNodes) + "]";
-								else if(node.Attributes["class"].Value.Contains("imageright")) result += "[imageright" + ProcessChildImage(node.ChildNodes) + "]";
-								else if(node.Attributes["class"].Value.Contains("image")) result += "[image" + ProcessChildImage(node.ChildNodes) + "]";
-								else if(node.Attributes["class"].Value.Contains("indent")) result += ": " + ProcessChild(node.ChildNodes) + "\n";
+							if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("box")) result += node.HasChildNodes ? "(((" + ProcessChild(node.ChildNodes) + ")))" : "";
+							else if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("imageleft")) result += "[imageleft" + ProcessChildImage(node.ChildNodes) + "]";
+							else if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("imageright")) result += "[imageright" + ProcessChildImage(node.ChildNodes) + "]";
+							else if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("image")) result += "[image" + ProcessChildImage(node.ChildNodes) + "]";
+							else if(node.Attributes["class"] != null && node.Attributes["class"].Value.Contains("indent")) result += ": " + ProcessChild(node.ChildNodes) + "\n";
+							else if(node.Attributes.Count > 0) {
+								result += node.OuterXml;
 							}
 							else {
 								result += "\n";
@@ -364,7 +366,8 @@ namespace ScrewTurn.Wiki {
 							string link = "";
 							string target = "";
 							string title = "";
-							bool isInternalLink = false;
+							string formattedLink = "";
+							bool isSystemLink = false;
 							bool childImg = false;
 							bool pageLink = false;
 							if(node.FirstChild != null && node.FirstChild.Name == "img") childImg = true;
@@ -373,11 +376,11 @@ namespace ScrewTurn.Wiki {
 								XmlAttributeCollection attribute = node.Attributes;
 								foreach(XmlAttribute attName in attribute) {
 									if(attName.Name != "id".ToLowerInvariant()) {
-										if(attName.Value == "_blank") target += "^";
-										if(attName.Name == "href") link += attName.Value.ToString();
-										if(attName.Name == "title") title += attName.Value.ToString();
-										if(attName.Value == "SystemLink".ToLowerInvariant()) isInternalLink = true;
-										if(attName.Value.ToLowerInvariant() == "unknownlink" || attName.Value.ToLowerInvariant() == "pagelink") pageLink = true;
+										if(attName.Value.ToLowerInvariant() == "_blank") target += "^";
+										if(attName.Name.ToLowerInvariant() == "href") link += attName.Value.ToString();
+										if(attName.Name.ToLowerInvariant() == "title") title += attName.Value.ToString();
+										if(attName.Name.ToLowerInvariant() == "class" && attName.Value.ToLowerInvariant() == "systemlink") isSystemLink = true;
+										if(attName.Name.ToLowerInvariant() == "class" && (attName.Value.ToLowerInvariant() == "unknownlink" || attName.Value.ToLowerInvariant() == "pagelink")) pageLink = true;
 									}
 									else {
 										anchor = true;
@@ -385,18 +388,25 @@ namespace ScrewTurn.Wiki {
 										break;
 									}
 								}
-								if(isInternalLink) {
+								if(isSystemLink) {
 									string[] splittedLink = link.Split('=');
-									link = "c:" + splittedLink[1];
+									if(splittedLink.Length == 2) formattedLink = "c:" + splittedLink[1];
+									else formattedLink = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
 								}
-								else if(pageLink) link = link.Remove(link.IndexOf(GlobalSettings.PageExtension));
-								else link = ProcessLink(link);
+								else if(pageLink) {
+									formattedLink = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
+									formattedLink = formattedLink.Remove(formattedLink.IndexOf(Settings.PageExtension));
+									formattedLink = Uri.UnescapeDataString(formattedLink);
+								}
+								else {
+									formattedLink = ProcessLink(link);
+								}
 								if(!anchor && !isTable && !childImg) {
-									if(title != link) result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
-									else result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
+									if(HttpUtility.HtmlDecode(title) != HttpUtility.HtmlDecode(link)) result += "[" + target + formattedLink + "|" + ProcessChild(node.ChildNodes) + "]";
+									else result += "[" + target + formattedLink + "]";
 								}
-								if(!anchor && !childImg && isTable) result += "[" + target + link + "|" + ProcessChild(node.ChildNodes) + "]";
-								if(!anchor && childImg && !isTable) result += ProcessChild(node.ChildNodes) + "|" + target + link + "]";
+								if(!anchor && !childImg && isTable) result += "[" + target + formattedLink + "|" + ProcessChild(node.ChildNodes) + "]";
+								if(!anchor && childImg && !isTable) result += ProcessChild(node.ChildNodes) + "|" + target + formattedLink + "]";
 							}
 							break;
 						default:

@@ -189,8 +189,14 @@ namespace ScrewTurn.Wiki {
 							destination = destination.Substring(1, destination.Length - 2);
 						}
 						while(sb[match.Index] == '\n' && match.Index < sb.Length - 1) sb.Remove(match.Index, 1);
-						if(!string.IsNullOrEmpty(destination)) {
-							Redirections.AddRedirection(currentPageFullName, destination);
+
+						if(!destination.StartsWith("++") && !destination.Contains(".") && current.FullName.Contains(".")) {
+							// Adjust namespace
+							destination = NameTools.GetFullName(NameTools.GetNamespace(current.FullName), destination);
+						}
+
+						destination = destination.Trim('+');
+
 						}
 					}
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
@@ -443,6 +449,7 @@ namespace ScrewTurn.Wiki {
 						n = fields[1];
 					}
 					else {
+						done = true;
 						StringBuilder img = new StringBuilder();
 						// Image
 						if(fields[0].ToLowerInvariant().Equals("imageleft") || fields[0].ToLowerInvariant().Equals("imageright") || fields[0].ToLowerInvariant().Equals("imageauto")) {
@@ -2523,16 +2530,20 @@ namespace ScrewTurn.Wiki {
 			match = SignRegex.Match(sb.ToString());
 			while(match.Success) {
 				sb.Remove(match.Index, match.Length);
-				string txt = match.Value.Substring(3, match.Length - 6);
-				int idx = txt.LastIndexOf(",");
-				string[] fields = new string[] { txt.Substring(0, idx), txt.Substring(idx + 1) };
-				dummy = new StringBuilder();
-				dummy.Append(@"<span class=""signature"">");
-				dummy.Append(Users.UserLink(wiki, fields[0]));
-				dummy.Append(", ");
-				dummy.Append(Preferences.AlignWithTimezone(wiki, DateTime.Parse(fields[1])).ToString(Settings.GetDateTimeFormat(wiki)));
-				dummy.Append("</span>");
-				sb.Insert(match.Index, dummy.ToString());
+				try {
+					// Avoid that malformed tags cause a crash
+					string txt = match.Value.Substring(3, match.Length - 6);
+					int idx = txt.LastIndexOf(",");
+					string[] fields = new string[] { txt.Substring(0, idx), txt.Substring(idx + 1) };
+					dummy = new StringBuilder();
+					dummy.Append(@"<span class=""signature"">");
+					dummy.Append(Users.UserLink(fields[0]));
+					dummy.Append(", ");
+					dummy.Append(Preferences.AlignWithTimezone(DateTime.Parse(fields[1])).ToString(Settings.DateTimeFormat));
+					dummy.Append("</span>");
+					sb.Insert(match.Index, dummy.ToString());
+				}
+				catch { }
 				match = SignRegex.Match(sb.ToString());
 			}
 

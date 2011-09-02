@@ -1,6 +1,6 @@
 User-agent: *
-Disallow: /AllPages.aspx
 Disallow: /Admin.aspx
+Disallow: /AdminHome.aspx
 Disallow: /Login.aspx
 Disallow: /Profile.aspx
 Disallow: /Upload.aspx
@@ -14,3 +14,8 @@ Disallow: /RSS.aspx
 Disallow: /AccessDenied.aspx
 Disallow: /Language.aspx
 Disallow: /GetFile.aspx
+Disallow: /Print.aspx
+Disallow: /NavPath.aspx
+Disallow: /Post.aspx
+Disallow: /Error.aspx
+Disallow: /Diff.aspx
