@@ -104,13 +104,14 @@ namespace ScrewTurn.Wiki {
 		/// Gets the canonical URL tag for a page.
 		/// </summary>
 		/// <param name="requestUrl">The request URL.</param>
-		/// <param name="currentPage">The current page.</param>
+		/// <param name="currentPageFullName">The full name of the current page.</param>
 		/// <param name="nspace">The namespace.</param>
 		/// <returns>The canonical URL, or an empty string if <paramref name="requestUrl"/> is already canonical.</returns>
-		public static string GetCanonicalUrlTag(string requestUrl, PageInfo currentPage, NamespaceInfo nspace) {
+		public static string GetCanonicalUrlTag(string requestUrl, string currentPageFullName, NamespaceInfo nspace) {
 			string url = "";
-			if(nspace == null && currentPage.FullName == Settings.DefaultPage) url = Settings.GetMainUrl().ToString();
-			else url = Settings.GetMainUrl() + "/" + currentPage.FullName + Settings.PageExtension;
+			string currentWiki = DetectCurrentWiki();
+			if(nspace == null && currentPageFullName == Settings.GetDefaultPage(currentWiki)) url = Settings.GetMainUrl(currentWiki).ToString();
+			else url = Settings.GetMainUrl(currentWiki) + "/" + currentPageFullName + GlobalSettings.PageExtension;
 			url = url.Replace("//", "/");
 
 			// Case sensitive

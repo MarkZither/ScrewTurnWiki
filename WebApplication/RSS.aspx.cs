@@ -74,7 +74,7 @@ namespace ScrewTurn.Wiki {
 
 				if(Request["Discuss"] == null) {
 					// Check permission for the page
-					bool canReadPage = authChecker.CheckActionForPage(page.FullName, Actions.ForPages.ReadPage,
+					bool canReadPage = authChecker.CheckActionForPage(page.FullName, Actions.ForPages.ReadPage, currentUsername, currentGroups);
 					if(!canReadPage) {
 						Response.StatusCode = 401;
 						return;
@@ -98,8 +98,8 @@ namespace ScrewTurn.Wiki {
 						rss.WriteEndElement();
 						rss.WriteElementString("link", Settings.GetMainUrl(currentWiki) + page.FullName + GlobalSettings.PageExtension);
 
-						UserInfo user = Users.FindUser(content.User);
-						string username = user != null ? Users.GetDisplayName(user) : content.User;
+						UserInfo user = Users.FindUser(currentWiki, page.User);
+						string username = user != null ? Users.GetDisplayName(user) : page.User;
 
 						// Create the description tag
 						rss.WriteStartElement("description");
@@ -136,7 +136,7 @@ namespace ScrewTurn.Wiki {
 				}
 				else {
 					// Check permission for the discussion
-					bool canReadDiscussion = authChecker.CheckActionForPage(page.FullName, Actions.ForPages.ReadDiscussion,
+					bool canReadDiscussion = authChecker.CheckActionForPage(page.FullName, Actions.ForPages.ReadDiscussion, currentUsername, currentGroups);
 					if(!canReadDiscussion) {
 						Response.StatusCode = 401;
 						return;
@@ -167,7 +167,7 @@ namespace ScrewTurn.Wiki {
 							rss.WriteEndElement();
 							rss.WriteElementString("link", Settings.GetMainUrl(currentWiki) + page.FullName + GlobalSettings.PageExtension + "?Discuss=1");
 
-							UserInfo user = Users.FindUser(messages[i].Username);
+							UserInfo user = Users.FindUser(currentWiki, messages[i].Username);
 							string username = user != null ? Users.GetDisplayName(user) : messages[i].Username;
 
 							// Create the description tag
@@ -247,7 +247,7 @@ namespace ScrewTurn.Wiki {
 							PageContent p = Pages.FindPage(currentWiki, ch[i].Page);
 							if(p != null) {
 								// Check permissions for every page
-								bool canReadThisPage = AuthChecker.CheckActionForPage(p, Actions.ForPages.ReadPage, currentUsername, currentGroups);
+								bool canReadThisPage = authChecker.CheckActionForPage(p.FullName, Actions.ForPages.ReadPage, currentUsername, currentGroups);
 								if(!canReadThisPage) continue;
 
 								if(useCat) {
@@ -279,11 +279,11 @@ namespace ScrewTurn.Wiki {
 							rss.WriteEndElement();
 							if(ch[i].Change != Change.PageDeleted && p != null)
 							if(ch[i].Change != Change.PageDeleted && p != null) {
-								rss.WriteElementString("link", Settings.MainUrl + ch[i].Page + Settings.PageExtension);
+								rss.WriteElementString("link", Settings.GetMainUrl(currentWiki) + ch[i].Page + GlobalSettings.PageExtension);
 							}
-							else rss.WriteElementString("link", Settings.MainUrl);
+							else rss.WriteElementString("link", Settings.GetMainUrl(currentWiki));
 
-							UserInfo user = Users.FindUser(ch[i].User);
+							UserInfo user = Users.FindUser(currentWiki, ch[i].User);
 							string username = user != null ? Users.GetDisplayName(user) : ch[i].User;
 
 							rss.WriteElementString("author", username);
@@ -368,7 +368,7 @@ namespace ScrewTurn.Wiki {
 							PageContent p = Pages.FindPage(currentWiki, ch[i].Page);
 							if(p != null) {
 								// Check permissions for every page
-								bool canReadThisPageDiscussion = AuthChecker.CheckActionForPage(p, Actions.ForPages.ReadDiscussion, currentUsername, currentGroups);
+								bool canReadThisPageDiscussion = authChecker.CheckActionForPage(p.FullName, Actions.ForPages.ReadDiscussion, currentUsername, currentGroups);
 								if(!canReadThisPageDiscussion) continue;
 
 								if(useCat) {
@@ -403,7 +403,7 @@ namespace ScrewTurn.Wiki {
 
 								string messageContent = FindMessageContent(ch[i].Page, id);
 
-								UserInfo user = Users.FindUser(ch[i].User);
+								UserInfo user = Users.FindUser(currentWiki, ch[i].User);
 								string username = user != null ? Users.GetDisplayName(user) : ch[i].User;
 
 								// Create the description tag

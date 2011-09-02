@@ -80,13 +80,16 @@ namespace ScrewTurn.Wiki {
 			DisplayOrphansCount();
 		}
 
-                /// <summary>
+		/// <summary>
 		/// Rebuilds the page links for the specified pages.
 		/// </summary>
 		/// <param name="pages">The pages.</param>
 		private void RebuildPageLinks(IList<PageContent> pages) {
 			foreach(PageContent page in pages) {
-				Pages.StorePageOutgoingLinks(page);				
+				Pages.StorePageOutgoingLinks(page);
+			}
+		}
+
 		protected void rptIndex_DataBinding(object sender, EventArgs e) {
 			List<IndexRow> result = new List<IndexRow>(5);
 

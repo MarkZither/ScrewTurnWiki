@@ -100,9 +100,9 @@ namespace ScrewTurn.Wiki {
 
 				Log.LogEntry("Wiki " + wiki.WikiName + " is ready", EntryType.General, Log.SystemUsername, null);
 
-						Pages.RebuildPageLinks(Pages.GetPages(null));
-						foreach(ScrewTurn.Wiki.PluginFramework.NamespaceInfo nspace in Pages.GetNamespaces()) {
-							Pages.RebuildPageLinks(Pages.GetPages(nspace));
+						Pages.RebuildPageLinks(Pages.GetPages(wiki.WikiName, null));
+						foreach(ScrewTurn.Wiki.PluginFramework.NamespaceInfo nspace in Pages.GetNamespaces(wiki.WikiName)) {
+							Pages.RebuildPageLinks(Pages.GetPages(wiki.WikiName, nspace));
 						}
 			}
 

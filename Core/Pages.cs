@@ -602,10 +602,10 @@ namespace ScrewTurn.Wiki {
 
 				// Remove outgoing links
 				Settings.GetProvider(wiki).DeleteOutgoingLinks(page.FullName);
-                                
-                                RebuildPageLinks(Pages.GetPages(null));
-				foreach(NamespaceInfo nspace in GetNamespaces()) {
-					RebuildPageLinks(GetPages(nspace));
+
+				RebuildPageLinks(Pages.GetPages(wiki, null));
+				foreach(NamespaceInfo nspace in GetNamespaces(wiki)) {
+					RebuildPageLinks(GetPages(wiki, nspace));
 				}
 
 				Log.LogEntry("Page " + page.FullName + " deleted", EntryType.General, Log.SystemUsername, wiki);
@@ -683,7 +683,7 @@ namespace ScrewTurn.Wiki {
 			if(result != null) {
 				string wiki = page.Provider.CurrentWiki;
 				Settings.GetProvider(wiki).StoreOutgoingLinks(page.FullName, new string[0]);
-				
+
 				StorePageOutgoingLinks(result);
 
 				foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
@@ -765,7 +765,7 @@ namespace ScrewTurn.Wiki {
 			if(page == null) return;
 
 			string wiki = page.Provider.CurrentWiki;
-			
+
 			UserInfo[] usersToNotify = Users.GetUsersToNotifyForPageChange(wiki, page.FullName);
 			usersToNotify = RemoveUserFromArray(usersToNotify, author);
 			string[] recipients = EmailTools.GetRecipients(usersToNotify);
@@ -1035,10 +1035,9 @@ namespace ScrewTurn.Wiki {
 		/// Rebuilds the page links for the specified pages.
 		/// </summary>
 		/// <param name="pages">The pages.</param>
-		public static void RebuildPageLinks(IList<PageInfo> pages) {
-			foreach(PageInfo page in pages) {
-				PageContent content = Content.GetPageContent(page, false);
-				StorePageOutgoingLinks(page, content.Content);
+		public static void RebuildPageLinks(IList<PageContent> pages) {
+			foreach(PageContent page in pages) {
+				StorePageOutgoingLinks(page);
 			}
 		}
 
@@ -1443,7 +1442,7 @@ namespace ScrewTurn.Wiki {
 			if(page == null) return;
 
 			string wiki = page.Provider.CurrentWiki;
-			
+
 			UserInfo[] usersToNotify = Users.GetUsersToNotifyForDiscussionMessages(wiki, page.FullName);
 			usersToNotify = RemoveUserFromArray(usersToNotify, author);
 			string[] recipients = EmailTools.GetRecipients(usersToNotify);

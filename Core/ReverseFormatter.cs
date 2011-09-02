@@ -395,7 +395,7 @@ namespace ScrewTurn.Wiki {
 								}
 								else if(pageLink) {
 									formattedLink = link.LastIndexOf('/') > 0 ? link.Substring(link.LastIndexOf('/') + 1) : link;
-									formattedLink = formattedLink.Remove(formattedLink.IndexOf(Settings.PageExtension));
+									formattedLink = formattedLink.Remove(formattedLink.IndexOf(GlobalSettings.PageExtension));
 									formattedLink = Uri.UnescapeDataString(formattedLink);
 								}
 								else {

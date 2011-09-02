@@ -43,7 +43,7 @@ namespace ScrewTurn.Wiki {
 			Page.Title = FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.PageContent, page.FullName) + " - " + Settings.GetWikiTitle(currentWiki);
 
 			Literal canonical = new Literal();
-			canonical.Text = Tools.GetCanonicalUrlTag(Request.Url.ToString(), page, Pages.FindNamespace(NameTools.GetNamespace(page.FullName)));
+			canonical.Text = Tools.GetCanonicalUrlTag(Request.Url.ToString(), page.FullName, Pages.FindNamespace(currentWiki, NameTools.GetNamespace(page.FullName)));
 			Page.Header.Controls.Add(canonical);
 
 			PrintContent();

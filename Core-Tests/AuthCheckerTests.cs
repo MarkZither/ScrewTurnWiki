@@ -1121,9 +1121,10 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.ForNamespaces.ReadPages, "G.Group", Value.Grant));
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.FullControl, "G.Group", Value.Deny));
 
-			Collectors.SettingsProvider = MockProvider(entries);
-			Assert.IsFalse(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
+
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
 		[Test]
@@ -1133,9 +1134,10 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.ForNamespaces.ReadPages, "G.Group", Value.Grant));
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
 
-			Collectors.SettingsProvider = MockProvider(entries);
-			Assert.IsFalse(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+			AuthChecker authChecker = new AuthChecker(MockProvider(entries)); 
+			
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
 		[Test]
@@ -1144,9 +1146,10 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.FullControl, "G.Group", Value.Grant));
 
-			Collectors.SettingsProvider = MockProvider(entries);
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
+
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
 		[Test]
@@ -1155,9 +1158,10 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Grant));
 
-			Collectors.SettingsProvider = MockProvider(entries);
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
+
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
 		[Test]
@@ -1166,9 +1170,10 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.ForNamespaces.ReadPages, "G.Group", Value.Grant));
 
-			Collectors.SettingsProvider = MockProvider(entries);
-			Assert.IsFalse(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
+
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
 		[Test]
@@ -1177,9 +1182,10 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.ForNamespaces.ReadPages, "G.Group", Value.Grant));
 
-			Collectors.SettingsProvider = MockProvider(entries);
-			Assert.IsFalse(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
+			
+			Assert.IsFalse(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be denied");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
 		[Test]
@@ -1188,9 +1194,10 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix + "NS1", Actions.ForNamespaces.ManagePages, "G.Group", Value.Grant));
 
-			Collectors.SettingsProvider = MockProvider(entries);
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
+
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
 		[Test]
@@ -1199,9 +1206,10 @@ namespace ScrewTurn.Wiki.Tests {
 			entries.Add(new AclEntry(Actions.ForGlobals.ResourceMasterPrefix, Actions.FullControl, "G.Group", Value.Deny));
 			entries.Add(new AclEntry(Actions.ForNamespaces.ResourceMasterPrefix, Actions.ForNamespaces.ManagePages, "G.Group", Value.Grant));
 
-			Collectors.SettingsProvider = MockProvider(entries);
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
-			Assert.IsTrue(AuthChecker.CheckActionForPage(new PageInfo(NameTools.GetFullName("NS1", "Page"), null, DateTime.Now), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
+			AuthChecker authChecker = new AuthChecker(MockProvider(entries));
+
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ModifyPage, "User", new string[] { "Group" }), "Permission should be granted");
+			Assert.IsTrue(authChecker.CheckActionForPage(NameTools.GetFullName("NS1", "Page"), Actions.ForPages.ReadPage, "User", new string[] { "Group" }), "Permission should be granted");
 		}
 
 		[Test]

@@ -47,7 +47,8 @@ namespace ScrewTurn.Wiki {
 			return LocalCheckActionForGlobals(action, currentUser, groups) == Authorization.Granted;
 		}
 
-		private static Authorization LocalCheckActionForGlobals(string action, string currentUser, string[] groups) {
+		private Authorization LocalCheckActionForGlobals(string action, string currentUser, string[] groups) {
+			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForGlobals.ResourceMasterPrefix);
 			Authorization auth = AclEvaluator.AuthorizeAction(Actions.ForGlobals.ResourceMasterPrefix, action,
 				AuthTools.PrepareUsername(currentUser), AuthTools.PrepareGroups(groups), entries);
 
@@ -63,7 +64,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups the user is member of.</param>
 		/// <param name="localEscalator"><c>true</c> is the method is called in a local escalator process.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
-		public static bool CheckActionForNamespace(NamespaceInfo nspace, string action, string currentUser, string[] groups, bool localEscalator = false) {
+		public bool CheckActionForNamespace(NamespaceInfo nspace, string action, string currentUser, string[] groups, bool localEscalator = false) {
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
 			if(!AuthTools.IsValidAction(action, Actions.ForNamespaces.All)) throw new ArgumentException("Invalid action", "action");
@@ -78,7 +79,7 @@ namespace ScrewTurn.Wiki {
 			return LocalCheckActionForNamespace(nspace, action, currentUser, groups, localEscalator) == Authorization.Granted;
 		}
 
-		private static Authorization LocalCheckActionForNamespace(NamespaceInfo nspace, string action, string currentUser, string[] groups, bool localEscalator = false) {
+		private Authorization LocalCheckActionForNamespace(NamespaceInfo nspace, string action, string currentUser, string[] groups, bool localEscalator = false) {
 			string namespaceName = nspace != null ? nspace.Name : "";
 
 			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(
@@ -125,7 +126,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups the user is member of.</param>
 		/// <param name="localEscalator"><c>true</c> is the method is called in a local escalator process.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
-		public static bool CheckActionForPage(string pageFullName, string action, string currentUser, string[] groups, bool localEscalator = false) {
+		public bool CheckActionForPage(string pageFullName, string action, string currentUser, string[] groups, bool localEscalator = false) {
 			if(pageFullName == null) throw new ArgumentNullException("page");
 
 			if(action == null) throw new ArgumentNullException("action");
@@ -139,10 +140,12 @@ namespace ScrewTurn.Wiki {
 
 			if(currentUser == "admin") return true;
 
-			return LocalCheckActionForPage(page, action, currentUser, groups, localEscalator) == Authorization.Granted;
+			return LocalCheckActionForPage(pageFullName, action, currentUser, groups, localEscalator) == Authorization.Granted;
 		}
 
-		private static Authorization LocalCheckActionForPage(PageInfo page, string action, string currentUser, string[] groups, bool localEscalator = false) {
+		private Authorization LocalCheckActionForPage(string pageFullName, string action, string currentUser, string[] groups, bool localEscalator = false) {
+			AclEntry[] entries = _settingsProvider.AclManager.RetrieveEntriesForResource(Actions.ForPages.ResourceMasterPrefix + pageFullName);
+			Authorization auth = AclEvaluator.AuthorizeAction(Actions.ForPages.ResourceMasterPrefix + pageFullName, action,
 				AuthTools.PrepareUsername(currentUser), AuthTools.PrepareGroups(groups), entries);
 
 			if(localEscalator || auth != Authorization.Unknown) return auth;
@@ -151,7 +154,7 @@ namespace ScrewTurn.Wiki {
 			string[] localEscalators = null;
 			if(Actions.ForPages.LocalEscalators.TryGetValue(action, out localEscalators)) {
 				foreach(string localAction in localEscalators) {
-					Authorization authorization = LocalCheckActionForPage(page, localAction, currentUser, groups, true);
+					Authorization authorization = LocalCheckActionForPage(pageFullName, localAction, currentUser, groups, true);
 					if(authorization != Authorization.Unknown) return authorization;
 				}
 			}

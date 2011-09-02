@@ -190,17 +190,16 @@ namespace ScrewTurn.Wiki {
 						}
 						while(sb[match.Index] == '\n' && match.Index < sb.Length - 1) sb.Remove(match.Index, 1);
 
-						if(!destination.StartsWith("++") && !destination.Contains(".") && current.FullName.Contains(".")) {
+						if(!destination.StartsWith("++") && !destination.Contains(".") && currentPageFullName.Contains(".")) {
 							// Adjust namespace
-							destination = NameTools.GetFullName(NameTools.GetNamespace(current.FullName), destination);
+							destination = NameTools.GetFullName(NameTools.GetNamespace(currentPageFullName), destination);
 						}
 
 						destination = destination.Trim('+');
 
-						}
 					}
-					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 				}
+				ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 			}
 
 			// No more needed (Striked Regex modified)
@@ -2537,9 +2536,9 @@ namespace ScrewTurn.Wiki {
 					string[] fields = new string[] { txt.Substring(0, idx), txt.Substring(idx + 1) };
 					dummy = new StringBuilder();
 					dummy.Append(@"<span class=""signature"">");
-					dummy.Append(Users.UserLink(fields[0]));
+					dummy.Append(Users.UserLink(wiki, fields[0]));
 					dummy.Append(", ");
-					dummy.Append(Preferences.AlignWithTimezone(DateTime.Parse(fields[1])).ToString(Settings.DateTimeFormat));
+					dummy.Append(Preferences.AlignWithTimezone(wiki, DateTime.Parse(fields[1])).ToString(Settings.GetDateTimeFormat(wiki)));
 					dummy.Append("</span>");
 					sb.Insert(match.Index, dummy.ToString());
 				}

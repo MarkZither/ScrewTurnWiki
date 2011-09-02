@@ -86,7 +86,7 @@ namespace ScrewTurn.Wiki {
 
 			if(currentPage != null) {
 				Literal canonical = new Literal();
-				canonical.Text = Tools.GetCanonicalUrlTag(Request.Url.ToString(), currentPage, Pages.FindNamespace(NameTools.GetNamespace(currentPage.FullName)));
+				canonical.Text = Tools.GetCanonicalUrlTag(Request.Url.ToString(), currentPage.FullName, Pages.FindNamespace(currentWiki, NameTools.GetNamespace(currentPage.FullName)));
 				Page.Header.Controls.Add(canonical);
 			}
 		}

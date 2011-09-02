@@ -150,7 +150,7 @@ namespace ScrewTurn.Wiki {
 			//added for WYSIWYG
 			//lblWYSIWYG.Text = FormattingPipeline.FormatWithPhase1And2(txtMarkup.Text, null);
 			string[] links = null;
-			lblWYSIWYG.Text = Formatter.Format(txtMarkup.Text,
+			lblWYSIWYG.Text = Formatter.Format(currentWiki, txtMarkup.Text,
 				false, FormattingContext.Unknown, null, out links, true);
 			//end
 		}
