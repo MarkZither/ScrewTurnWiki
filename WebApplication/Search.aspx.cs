@@ -402,7 +402,7 @@ namespace ScrewTurn.Wiki {
 
 				return new SearchResultRow("GetFile.aspx?File=" + Tools.UrlEncode(fileDoc.FileName.Substring(fileParts[0].Length + 1)) +
 					"&amp;Provider=" + Tools.UrlEncode(fileParts[0]),
-					File, fileParts[1], result.Relevance, "");
+					File, fileParts[1], result.Relevance, fileDoc.HighlightedFileContent);
 			}
 			else if(result.DocumentType == DocumentType.Attachment) {
 				PageAttachmentDocument attnDoc = result.Document as PageAttachmentDocument;
@@ -411,7 +411,7 @@ namespace ScrewTurn.Wiki {
 				return new SearchResultRow(content.FullName + GlobalSettings.PageExtension, Attachment,
 					attnDoc.FileName + " (" +
 					FormattingPipeline.PrepareTitle(Tools.DetectCurrentWiki(), content.Title, false, FormattingContext.PageContent, content.FullName) +
-					")", result.Relevance, "");
+					")", result.Relevance, attnDoc.HighlightedFileContent);
 			}
 			else throw new NotSupportedException();
 		}
