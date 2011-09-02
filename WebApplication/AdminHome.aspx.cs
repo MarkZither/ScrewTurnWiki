@@ -121,6 +121,13 @@ namespace ScrewTurn.Wiki {
 					Message[] messages = pagesProvider.GetMessages(page.FullName);
 					foreach(Message message in messages) {
 						SearchClass.IndexMessage(message, page);
+
+						// Search for replies
+						Message[] replies = message.Replies;
+						foreach(Message reply in replies) {
+							// Index reply
+							SearchClass.IndexMessage(reply, page);
+						}
 					}
 
 					// Index page attachments
