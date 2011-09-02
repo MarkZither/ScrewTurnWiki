@@ -27,6 +27,7 @@ namespace ScrewTurn.Wiki {
 			if(!Page.IsPostBack) {
 				rptPages.DataBind();
 				rptIndex.DataBind();
+				rptFilesIndex.DataBind();
 
 				DisplayOrphansCount();
 
@@ -145,10 +146,56 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 			}
-
-
-
 		}
+
+
+		protected void rptFilesIndex_DataBinding(object sender, EventArgs e) {
+			List<IndexRow> result = new List<IndexRow>(5);
+
+			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
+				result.Add(new IndexRow(prov));
+			}
+
+			rptFilesIndex.DataSource = result;
+		}
+
+		protected void rptFilesIndex_ItemCommand(object sender, CommandEventArgs e) {
+			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
+
+			SearchClass.ClearFilesIndex(currentWiki);
+
+			IFilesStorageProviderV40 filesProvider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
+
+			// Index all files of the wiki
+			// 1. List all directories (add the root directory: null)
+			// 2. List all files in each directory
+			// 3. Index each file
+			List<string> directories = new List<string>(filesProvider.ListDirectories(null));
+			directories.Add(null);
+			foreach(string directory in directories) {
+				string[] files = filesProvider.ListFiles(directory);
+				foreach(string file in files) {
+					byte[] fileContent;
+					using(MemoryStream stream = new MemoryStream()) {
+						filesProvider.RetrieveFile(file, stream);
+						fileContent = new byte[stream.Length];
+						stream.Seek(0, SeekOrigin.Begin);
+						stream.Read(fileContent, 0, (int)stream.Length);
+					}
+
+					// Index the file
+					string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+					if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+					string tempFile = Path.Combine(tempDir, file.Substring(file.LastIndexOf('/') + 1));
+					using(FileStream writer = File.Create(tempFile)) {
+						writer.Write(fileContent, 0, fileContent.Length);
+					}
+					SearchClass.IndexFile(filesProvider.GetType().FullName + "|" + file, tempFile, currentWiki);
+					Directory.Delete(tempDir, true);
+				}
+			}
+		}
+
 
 		protected void cvGroups_ServerValidate(object sender, ServerValidateEventArgs e) {
 			e.IsValid = false;
@@ -258,18 +305,14 @@ namespace ScrewTurn.Wiki {
 	public class IndexRow {
 
 		private string provider, providerType;
-		private bool isOk;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:IndexRow" /> class.
 		/// </summary>
 		/// <param name="provider">The original provider.</param>
-		public IndexRow(IPagesStorageProviderV40 provider) {
+		public IndexRow(IStorageProviderV40 provider) {
 			this.provider = provider.Information.Name;
 			providerType = provider.GetType().FullName;
-
-			//this.isOk = !provider.IsIndexCorrupted;
-			this.isOk = true;
 		}
 
 		/// <summary>
@@ -284,13 +327,6 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public string ProviderType {
 			get { return providerType; }
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether the index is OK.
-		/// </summary>
-		public bool IsOK {
-			get { return isOk; }
 		}
 
 	}

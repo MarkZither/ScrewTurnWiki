@@ -1509,12 +1509,6 @@
   <data name="PreferencesSaved" xml:space="preserve">
     <value>Preferences saved</value>
   </data>
-  <data name="Corrupted" xml:space="preserve">
-    <value>Corrupted</value>
-  </data>
-  <data name="OK" xml:space="preserve">
-    <value>OK</value>
-  </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>

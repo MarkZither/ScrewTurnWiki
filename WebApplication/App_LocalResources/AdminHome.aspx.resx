@@ -153,9 +153,6 @@
   <data name="lblRebuildIndexInfoResource1.Text" xml:space="preserve">
     <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. After the index is rebuilt, it is recommended to restart the application.</value>
   </data>
-  <data name="lblStatusResource1.Text" xml:space="preserve">
-    <value>Status</value>
-  </data>
   <data name="PageResource2.Title" xml:space="preserve">
     <value>Administration</value>
   </data>
@@ -209,5 +206,8 @@
   </data>
   <data name="rfvSubjectResource1.ErrorMessage" xml:space="preserve">
     <value>Subject is required</value>
+  </data>
+  <data name="lblFilesIndexStatusResource1.Text" xml:space="preserve">
+    <value>Search Index Status</value>
   </data>
 </root>

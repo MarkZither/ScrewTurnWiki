@@ -139,6 +139,33 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblRebuildIndexInfo;
         
         /// <summary>
+        /// lblFilesIndexStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblFilesIndexStatus;
+        
+        /// <summary>
+        /// rptFilesIndex control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptFilesIndex;
+        
+        /// <summary>
+        /// lblRebuildFilesIndexInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblRebuildFilesIndexInfo;
+        
+        /// <summary>
         /// lblBulkEmail control.
         /// </summary>
         /// <remarks>

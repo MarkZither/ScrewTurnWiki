@@ -404,18 +404,53 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Clears the index.
+		/// Clears the index (files excluded).
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		public static void ClearIndex(string wiki) {
 			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(wiki);
 
 			Analyzer analyzer = new SimpleAnalyzer();
-
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
-			writer.DeleteAll();
+
+			ClearAttachmentsIndex(writer);
+			ClearMessagesIndex(writer);
+			ClearPagesIndex(writer);
+
 			writer.Commit();
 			writer.Close();
+		}
+
+		private static void ClearAttachmentsIndex(IndexWriter writer) {
+			writer.DeleteDocuments(new Term(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment)));
+		}
+
+		private static void ClearMessagesIndex(IndexWriter writer) {
+			writer.DeleteDocuments(new Term(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Message)));
+		}
+
+		private static void ClearPagesIndex(IndexWriter writer) {
+			writer.DeleteDocuments(new Term(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Page)));
+		}
+
+		/// <summary>
+		/// Clears the files index.
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		public static void ClearFilesIndex(string wiki) {
+			IIndexDirectoryProviderV40 indexDirectoryProvider = Collectors.CollectorsBox.GetIndexDirectoryProvider(wiki);
+
+			Analyzer analyzer = new SimpleAnalyzer();
+			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+
+			ClearFilesIndex(writer);
+			
+			writer.Commit();
+			writer.Close();
+		}
+
+		private static void ClearFilesIndex(IndexWriter writer) {
+			writer.DeleteDocuments(new Term(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.File)));
 		}
 
 		private static DocumentType DocumentTypeFromString(string documentType) {

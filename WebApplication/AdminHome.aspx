@@ -94,14 +94,12 @@
 	<br /><br />
 	
 	<h2 class="separator"><asp:Literal ID="lblIndexStatus" runat="server" Text="Search Index Status" EnableViewState="False" meta:resourcekey="lblIndexStatusResource1" /></h2>
-	<asp:Repeater ID="rptIndex" runat="server" OnDataBinding="rptIndex_DataBinding" OnItemCommand="rptIndex_ItemCommand" 
-		>
+	<asp:Repeater ID="rptIndex" runat="server" OnDataBinding="rptIndex_DataBinding" OnItemCommand="rptIndex_ItemCommand" >
 		<HeaderTemplate>
 			<table class="generic" cellpadding="0" cellspacing="0">
 				<thead>
 				<tr class="tableheader">
 					<th><asp:Literal ID="lblProvider" runat="server" Text="Provider" EnableViewState="False" meta:resourcekey="lblProviderResource1" /></th>
-					<th><asp:Literal ID="lblStatus" runat="server" Text="Status" EnableViewState="False" meta:resourcekey="lblStatusResource1" /></th>
 					<th>&nbsp;</th>
 				</tr>
 				</thead>
@@ -110,7 +108,6 @@
 		<ItemTemplate>
 			<tr class="tablerow">
 				<td><%# Eval("Provider") %></td>
-				<td><%# ((bool)Eval("IsOK") ? ScrewTurn.Wiki.Properties.Messages.OK : "<span class=\"resulterror\">" + ScrewTurn.Wiki.Properties.Messages.Corrupted + "</span>")%></td>
 				<td><asp:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" CommandName="Rebuild" CommandArgument='<%# Eval("ProviderType") %>'
 					meta:resourcekey="btnRebuildResource1" /></td>
 			</tr>
@@ -118,7 +115,6 @@
 		<AlternatingItemTemplate>
 			<tr class="tablerowalternate">
 				<td><%# Eval("Provider") %></td>
-				<td><%# ((bool)Eval("IsOK") ? ScrewTurn.Wiki.Properties.Messages.OK : "<span class=\"resulterror\">" + ScrewTurn.Wiki.Properties.Messages.Corrupted + "</span>")%></td>
 				<td><asp:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" CommandName="Rebuild" CommandArgument='<%# Eval("ProviderType") %>'
 					meta:resourcekey="btnRebuildResource2" /></td>
 			</tr>
@@ -136,6 +132,51 @@
 	</span>
 	<small>
 		<asp:Literal ID="lblRebuildIndexInfo" runat="server" 
+			Text="<b>Warning</b>: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. After the index is rebuilt, it is recommended to restart the application." 
+			EnableViewState="False" meta:resourcekey="lblRebuildIndexInfoResource1" />
+	</small>
+
+	<br /><br />
+
+	<h2 class="separator"><asp:Literal ID="lblFilesIndexStatus" runat="server" Text="Files Search Index Status" EnableViewState="False" meta:resourcekey="lblFilesIndexStatusResource1" /></h2>
+	<asp:Repeater ID="rptFilesIndex" runat="server" OnDataBinding="rptFilesIndex_DataBinding" OnItemCommand="rptFilesIndex_ItemCommand" >
+		<HeaderTemplate>
+			<table class="generic" cellpadding="0" cellspacing="0">
+				<thead>
+				<tr class="tableheader">
+					<th><asp:Literal ID="lblProvider" runat="server" Text="Provider" EnableViewState="False" meta:resourcekey="lblProviderResource1" /></th>
+					<th>&nbsp;</th>
+				</tr>
+				</thead>
+				<tbody>
+		</HeaderTemplate>
+		<ItemTemplate>
+			<tr class="tablerow">
+				<td><%# Eval("Provider") %></td>
+				<td><asp:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" CommandName="Rebuild" CommandArgument='<%# Eval("ProviderType") %>'
+					meta:resourcekey="btnRebuildResource1" /></td>
+			</tr>
+		</ItemTemplate>
+		<AlternatingItemTemplate>
+			<tr class="tablerowalternate">
+				<td><%# Eval("Provider") %></td>
+				<td><asp:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" CommandName="Rebuild" CommandArgument='<%# Eval("ProviderType") %>'
+					meta:resourcekey="btnRebuildResource2" /></td>
+			</tr>
+		</AlternatingItemTemplate>
+		<FooterTemplate>
+			</tbody>
+			</table>
+		</FooterTemplate>
+	</asp:Repeater>
+	<br />
+	<span id="Span1" style="display: none;">
+		<img src="Images/Wait.gif" alt="Rebuilding..." />
+		<img src="Images/Wait.gif" alt="Rebuilding..." />
+		<img src="Images/Wait.gif" alt="Rebuilding..." />
+	</span>
+	<small>
+		<asp:Literal ID="lblRebuildFilesIndexInfo" runat="server" 
 			Text="<b>Warning</b>: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. After the index is rebuilt, it is recommended to restart the application." 
 			EnableViewState="False" meta:resourcekey="lblRebuildIndexInfoResource1" />
 	</small>
