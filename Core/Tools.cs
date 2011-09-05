@@ -113,8 +113,7 @@ namespace ScrewTurn.Wiki {
 		public static string GetCanonicalUrlTag(string requestUrl, PageInfo currentPage, NamespaceInfo nspace) {
 			string url = "";
 			if(nspace == null && currentPage.FullName == Settings.DefaultPage) url = Settings.GetMainUrl().ToString();
-			else url = Settings.GetMainUrl() + "/" + currentPage.FullName + Settings.PageExtension;
-			url = url.Replace("//", "/");
+			else url = Settings.GetMainUrl().ToString().TrimEnd('/') + "/" + currentPage.FullName + Settings.PageExtension;
 
 			// Case sensitive
 			if(url == requestUrl) return "";
