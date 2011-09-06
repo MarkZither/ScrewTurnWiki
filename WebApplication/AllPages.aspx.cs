@@ -31,17 +31,18 @@ namespace ScrewTurn.Wiki {
 
 		protected void Page_Load(object sender, EventArgs e) {
 			string currentWiki = DetectWiki();
-			Page.Title = Properties.Messages.AllPagesTitle + " - " + Settings.GetWikiTitle(currentWiki);
 			PageSize = Settings.GetListSize(currentWiki);
 			rangeEnd = PageSize - 1;
 
 			LoginTools.VerifyReadPermissionsForCurrentNamespace(currentWiki);
 
 			if(Request["Cat"] != null) {
-				if(Request["Cat"].Equals("-"))
+				if(Request["Cat"].Equals("-")) {
 					lblPages.Text = Properties.Messages.UncategorizedPages;
-				else
+				}
+				else {
 					lblPages.Text = Properties.Messages.PagesOfCategory + " <i>" + Request["Cat"] + "</i>";
+				}
 			}
 
 			if(!Page.IsPostBack) {
@@ -56,6 +57,8 @@ namespace ScrewTurn.Wiki {
 				if(!int.TryParse(p, out selectedPage)) selectedPage = 0;
 				pageSelector.SelectPage(selectedPage);
 			}
+
+			Page.Title = Properties.Messages.AllPagesTitle + " (" + (rangeBegin + 1).ToString() + "-" + (rangeEnd + 1).ToString() + ") - " + Settings.WikiTitle;
 
 			// Important note
 			// This page cannot use a repeater because the page list has particular elements used for grouping pages
@@ -159,7 +162,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append(@"<tr class=""tableheader"">");
 			
 			// Page title
-			sb.Append(@"<th><a href=""");
+			sb.Append(@"<th><a rel=""nofollow"" href=""");
 			UrlTools.BuildUrl(currentWiki, sb, "AllPages.aspx?SortBy=Title",
 				(!reverse && sortBy == SortingMethod.Title ? "&amp;Reverse=1" : ""),
 				(Request["Cat"] != null ? "&amp;Cat=" + Tools.UrlEncode(Request["Cat"]) : ""),
@@ -177,7 +180,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append(@"<th><img src=""Images/Comment.png"" alt=""Comments"" /></th>");
 
 			// Creation date/time
-			sb.Append(@"<th><a href=""");
+			sb.Append(@"<th><a rel=""nofollow"" href=""");
 			UrlTools.BuildUrl(currentWiki, sb, "AllPages.aspx?SortBy=Creation",
 				(!reverse && sortBy == SortingMethod.Creation ? "&amp;Reverse=1" : ""),
 				(Request["Cat"] != null ? "&amp;Cat=" + Tools.UrlEncode(Request["Cat"]) : ""),
@@ -192,7 +195,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append("</a></th>");
 
 			// Mod. date/time
-			sb.Append(@"<th><a href=""");
+			sb.Append(@"<th><a rel=""nofollow"" href=""");
 			UrlTools.BuildUrl(currentWiki, sb, "AllPages.aspx?SortBy=DateTime",
 				(!reverse && sortBy == SortingMethod.DateTime ? "&amp;Reverse=1" : ""),
 				(Request["Cat"] != null ? "&amp;Cat=" + Tools.UrlEncode(Request["Cat"]) : ""),
@@ -207,7 +210,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append("</a></th>");
 
 			// Creator
-			sb.Append(@"<th><a href=""");
+			sb.Append(@"<th><a rel=""nofollow"" href=""");
 			UrlTools.BuildUrl(currentWiki, sb, "AllPages.aspx?SortBy=Creator",
 				(!reverse && sortBy == SortingMethod.Creator ? "&amp;Reverse=1" : ""),
 				(Request["Cat"] != null ? "&amp;Cat=" + Tools.UrlEncode(Request["Cat"]) : ""),
@@ -222,7 +225,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append("</a></th>");
 
 			// Last author
-			sb.Append(@"<th><a href=""");
+			sb.Append(@"<th><a rel=""nofollow"" href=""");
 			UrlTools.BuildUrl(currentWiki, sb, "AllPages.aspx?SortBy=User",
 				(!reverse && sortBy == SortingMethod.User ? "&amp;Reverse=1" : ""),
 				(Request["Cat"] != null ? "&amp;Cat=" + Tools.UrlEncode(Request["Cat"]) : ""),

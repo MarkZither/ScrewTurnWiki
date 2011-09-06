@@ -1,6 +1,8 @@
 User-agent: *
 Disallow: /Admin.aspx
 Disallow: /AdminHome.aspx
+Disallow: /AllPages.aspx
+Disallow: /Category.aspx
 Disallow: /Login.aspx
 Disallow: /Profile.aspx
 Disallow: /Upload.aspx
