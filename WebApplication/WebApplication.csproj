@@ -196,6 +196,13 @@
     </Compile>
     <Compile Include="Code\ExtendedPageInfo.cs" />
     <Compile Include="Code\WebRole.cs" />
+    <Compile Include="AdminImportExport.aspx.cs">
+      <DependentUpon>AdminImportExport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminImportExport.aspx.designer.cs">
+      <DependentUpon>AdminImportExport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CreateMasterPassword.aspx.cs">
       <DependentUpon>CreateMasterPassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1345,6 +1352,7 @@
     <Content Include="AdminGlobalConfig.aspx" />
     <Content Include="AdminProvidersManagement.aspx" />
     <Content Include="AdminGlobalHome.aspx" />
+    <Content Include="AdminImportExport.aspx" />
     <Content Include="CreateMasterPassword.aspx" />
     <Content Include="CreatePagesInBatch.aspx" />
     <Content Include="Diff.aspx" />
@@ -1813,6 +1821,7 @@
     <Content Include="App_LocalResources\User.aspx.vi-VN.resx" />
     <Content Include="App_LocalResources\AdminProvidersManagement.aspx.resx" />
     <Content Include="App_LocalResources\AdminGlobalHome.aspx.resx" />
+    <Content Include="App_LocalResources\AdminImportExport.aspx.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>

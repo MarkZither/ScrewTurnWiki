@@ -25,9 +25,12 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsPostBack) {
 				LoadDlls();
+				LoadWikis();
 
 				// Load providers and related data
 				rptProviders.DataBind();
+
+
 			}
 		}
 		
@@ -169,6 +172,24 @@ namespace ScrewTurn.Wiki {
 
 		#region DataExportImport
 
+		/// <summary>
+		/// Loads all the wikis.
+		/// </summary>
+		private void LoadWikis() {
+			List<PluginFramework.Wiki> wikis = Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis().ToList();
+			lstWiki.Items.Clear();
+			lstWiki.Items.Add(new ListItem("- " + Properties.Messages.SelectWiki + " -", ""));
+			for(int i = 0; i < wikis.Count; i++) {
+				lstWiki.Items.Add(new ListItem(wikis[i].WikiName, wikis[i].WikiName));
+			}
+
+			lstDestinationWiki.Items.Clear();
+			lstDestinationWiki.Items.Add(new ListItem("- " + Properties.Messages.SelectWiki + " -", ""));
+			for(int i = 0; i < wikis.Count; i++) {
+				lstDestinationWiki.Items.Add(new ListItem(wikis[i].WikiName, wikis[i].WikiName));
+			}
+		}
+
 		protected void lstWiki_SelectedIndexChanged(object sender, EventArgs e) {
 			btnExportSettings.Enabled = lstWiki.SelectedIndex > 0;
 		}
@@ -179,7 +200,7 @@ namespace ScrewTurn.Wiki {
 			ISettingsStorageProviderV40 settingsProvider = Settings.GetProvider(lstWiki.SelectedValue);
 
 			// Find namespaces
-			List<string> namespaces = new List<string>(5);
+			List<string> namespaces = new List<string>();
 			foreach(NamespaceInfo ns in Pages.GetNamespaces(currentWiki)) {
 				namespaces.Add(ns.Name);
 			}

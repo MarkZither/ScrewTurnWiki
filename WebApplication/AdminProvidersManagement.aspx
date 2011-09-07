@@ -109,9 +109,7 @@
 		<h2 class="separator"><asp:Literal ID="lblExportImportSettings" runat="server" Text="Export/Import Settings" EnableViewState="False" meta:resourcekey="lblExportImportSettingsResource1" /></h2>
 		<h4><asp:Literal ID="lblExportSettings" runat="server" Text="Export Settings and related data" EnableViewState="False" meta:resourcekey="lblExportSettingsResource1" /></h4>
 		<asp:Label ID="lblSettingsSource" runat="server" meta:resourcekey="lblSettingsSourceResource1"  />
-		<asp:DropDownList ID="lstWiki" runat="server"
-			OnSelectedIndexChanged="lstWiki_SelectedIndexChanged" AutoPostBack="true"
-			meta:resourcekey="lstWikiResource1" />
+		<asp:DropDownList ID="lstWiki" runat="server" OnSelectedIndexChanged="lstWiki_SelectedIndexChanged" AutoPostBack="true" meta:resourcekey="lstWikiResource1" />
 		<asp:Button ID="btnExportSettings" runat="server" Text="Export" Enabled="false" OnClick="btnExportSettings_Click" meta:resourcekey="btnExportSettingsResource1" />
 		<asp:Label ID="lblExportSettingsResult" runat="server" meta:resourcekey="lblExportSettingsResultResource1" />
 		
@@ -124,9 +122,9 @@
 		<br /><br />
 		<h4><asp:Literal ID="lblImportSettings" runat="server" Text="Import Settings" EnableViewState="False" meta:resourcekey="lblImportSettingsResource1" /></h4>
 		<asp:DropDownList ID="lstDestinationWiki" runat="server" meta:resourcekey="lstDestinationWikiResource1"
-			OnSelectedIndexChanged="lstDestinationWiki_SelectedIndexChanged" AutoPostBack="true" Enabled="false"/>
+			OnSelectedIndexChanged="lstDestinationWiki_SelectedIndexChanged" AutoPostBack="true"/>
 		<asp:FileUpload ID="upSettings" runat="server" meta:resourcekey="upSettingsResource1" />
-		<asp:Button ID="btnImportSettings" runat="server" Text="Import" OnClick="btnImportSettings_Click" meta:resourcekey="btnImportSettingsResource1" />
+		<asp:Button ID="btnImportSettings" runat="server" Text="Import" OnClick="btnImportSettings_Click" meta:resourcekey="btnImportSettingsResource1" Enabled="false" />
 		<br />
 		<asp:Label ID="lblImportSettingsResult" runat="server" meta:resourcekey="lblImportSettingsResultResource1" />
 
