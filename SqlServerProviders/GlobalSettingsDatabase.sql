@@ -32,5 +32,5 @@ end
 
 if (select count([Version]) from [Version] where [Component] = 'GlobalSettings') = 0
 begin
-	insert into [Version] ([Component], [Version]) values ('GlobalSettings', 3000)
+	insert into [Version] ([Component], [Version]) values ('GlobalSettings', 4000)
 end

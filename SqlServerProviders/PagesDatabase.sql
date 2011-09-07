@@ -102,5 +102,5 @@ end
 
 if (select count([Version]) from [Version] where [Component] = 'Pages') = 0
 begin
-	insert into [Version] ([Component], [Version]) values ('Pages', 3001)
+	insert into [Version] ([Component], [Version]) values ('Pages', 4000)
 end
