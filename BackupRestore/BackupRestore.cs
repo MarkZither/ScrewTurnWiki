@@ -28,6 +28,84 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		}
 
 		/// <summary>
+		/// Backups the specified global settings storage provider.
+		/// </summary>
+		/// <param name="globalSettingsStorageProvider">The global settings storage provider.</param>
+		/// <returns>The zip backup file.</returns>
+		public static byte[] BackupGlobalSettingsStorageProvider(IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
+			GlobalSettingsBackup globalSettingsBackup = new GlobalSettingsBackup();
+
+			// Settings
+			globalSettingsBackup.Settings = (Dictionary<string, string>)globalSettingsStorageProvider.GetAllSettings();
+
+			List<string> plugins = globalSettingsStorageProvider.ListPluginAssemblies().ToList();
+			ZipFile globalSettingsBackupZipFile = new ZipFile();
+			foreach(string pluginFileName in plugins) {
+				globalSettingsBackupZipFile.AddEntry(pluginFileName, globalSettingsStorageProvider.RetrievePluginAssembly(pluginFileName));
+			}
+
+			JavaScriptSerializer serializer = new JavaScriptSerializer();
+			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
+
+			globalSettingsBackupZipFile.AddEntry("GlobalSettings.json", Encoding.Unicode.GetBytes(serializer.Serialize(globalSettingsBackup)));
+
+			globalSettingsBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(serializer.Serialize(generateVersionFile("GlobalSettings"))));
+
+			byte[] buffer;
+			using(MemoryStream stream = new MemoryStream()) {
+				globalSettingsBackupZipFile.Save(stream);
+				stream.Seek(0, SeekOrigin.Begin);
+				buffer = new byte[stream.Length];
+				stream.Read(buffer, 0, (int)stream.Length);
+			}
+
+			return buffer;
+		}
+
+		/// <summary>
+		/// Restores the global settings from a zip backup file.
+		/// </summary>
+		/// <param name="backupFile">The jason backup file.</param>
+		/// <param name="globalSettingsStorageProvider">The destination global settings storage provider.</param>
+		/// <returns><c>true</c> if the restore is succesfull, <c>false</c> otherwise.</returns>
+		public static bool RestoreGlobalSettingsStorageProvider(byte[] backupFile, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
+			using(ZipFile globalSettingsBackupZipFile = ZipFile.Read(backupFile)) {
+				foreach(ZipEntry zipEntry in globalSettingsBackupZipFile) {
+					if(zipEntry.FileName == "GlobalSettings.json") {
+						using(MemoryStream stream = new MemoryStream()) {
+							zipEntry.Extract(stream);
+							stream.Seek(0, SeekOrigin.Begin);
+							byte[] buffer = new byte[stream.Length];
+							stream.Read(buffer, 0, (int)stream.Length);
+							DeserializeGlobalSettingsBackup(Encoding.Unicode.GetString(buffer), globalSettingsStorageProvider);
+						}
+					}
+					else {
+						using(MemoryStream stream = new MemoryStream()) {
+							zipEntry.Extract(stream);
+							stream.Seek(0, SeekOrigin.Begin);
+							byte[] buffer = new byte[stream.Length];
+							stream.Read(buffer, 0, (int)stream.Length);
+							globalSettingsStorageProvider.StorePluginAssembly(zipEntry.FileName, buffer);
+						}
+					}
+				}
+			}
+			return true;
+		}
+
+		private static void DeserializeGlobalSettingsBackup(string json, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
+			JavaScriptSerializer serializer = new JavaScriptSerializer();
+			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
+
+			GlobalSettingsBackup globalSettingsBackup = serializer.Deserialize<GlobalSettingsBackup>(json);
+
+			foreach(var pair in globalSettingsBackup.Settings) {
+				globalSettingsStorageProvider.SetSetting(pair.Key, pair.Value);
+			}
+		}
+
+		/// <summary>
 		/// Backups the specified settings provider.
 		/// </summary>
 		/// <param name="settingsStorageProvider">The source settings provider.</param>
@@ -112,12 +190,27 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="settingsStorageProvider">The destination settings storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
 		public static bool RestoreSettingsStorageProvider(byte[] backupFile, ISettingsStorageProviderV40 settingsStorageProvider) {
+			using(ZipFile settingsBackupZipFile = ZipFile.Read(backupFile)) {
+				foreach(ZipEntry zipEntry in settingsBackupZipFile) {
+					if(zipEntry.FileName == "Settings.json") {
+						using(MemoryStream stream = new MemoryStream()) {
+							zipEntry.Extract(stream);
+							stream.Seek(0, SeekOrigin.Begin);
+							byte[] buffer = new byte[stream.Length];
+							stream.Read(buffer, 0, (int)stream.Length);
+							DeserializeSettingsBackup(Encoding.Unicode.GetString(buffer), settingsStorageProvider);
+						}
+					}
+				}
+			}
+			return true;
+		}
+
+		private static void DeserializeSettingsBackup(string json, ISettingsStorageProviderV40 settingsStorageProvider) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
-			
-			string temp = Encoding.Unicode.GetString(backupFile);
 
-			SettingsBackup settingsBackup = javascriptSerializer.Deserialize<SettingsBackup>(temp);
+			SettingsBackup settingsBackup = javascriptSerializer.Deserialize<SettingsBackup>(json);
 
 			// Settings
 			settingsStorageProvider.BeginBulkUpdate();
@@ -155,8 +248,6 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			foreach(AclEntry entry in settingsBackup.AclEntries) {
 				settingsStorageProvider.AclManager.StoreEntry(entry.Resource, entry.Action, entry.Subject, entry.Value);
 			}
-
-			return true;
 		}
 
 		/// <summary>
@@ -455,84 +546,6 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <returns>The zip backup file.</returns>
 		public static byte[] BackupThemesStorageProvider(IThemesStorageProviderV40 themesStorageProvider) {
 			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Backups the specified global settings storage provider.
-		/// </summary>
-		/// <param name="globalSettingsStorageProvider">The global settings storage provider.</param>
-		/// <returns>The zip backup file.</returns>
-		public static byte[] BackupGlobalSettingsStorageProvider(IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
-			GlobalSettingsBackup globalSettingsBackup = new GlobalSettingsBackup();
-
-			// Settings
-			globalSettingsBackup.Settings = (Dictionary<string, string>)globalSettingsStorageProvider.GetAllSettings();
-
-			List<string> plugins = globalSettingsStorageProvider.ListPluginAssemblies().ToList();
-			ZipFile globalSettingsBackupZipFile = new ZipFile();
-			foreach(string pluginFileName in plugins) {
-				globalSettingsBackupZipFile.AddEntry(pluginFileName, globalSettingsStorageProvider.RetrievePluginAssembly(pluginFileName));
-			}
-
-			JavaScriptSerializer serializer = new JavaScriptSerializer();
-			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
-
-			globalSettingsBackupZipFile.AddEntry("GlobalSettings.json", Encoding.Unicode.GetBytes(serializer.Serialize(globalSettingsBackup)));
-
-			globalSettingsBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(serializer.Serialize(generateVersionFile("GlobalSettings"))));
-
-			byte[] buffer;
-			using(MemoryStream stream = new MemoryStream()) {
-				globalSettingsBackupZipFile.Save(stream);
-				stream.Seek(0, SeekOrigin.Begin);
-				buffer = new byte[stream.Length];
-				stream.Read(buffer, 0, (int)stream.Length);
-			}
-
-			return buffer;
-		}
-
-		/// <summary>
-		/// Restores the global settings from a zip backup file.
-		/// </summary>
-		/// <param name="backupFile">The jason backup file.</param>
-		/// <param name="globalSettingsStorageProvider">The destination global settings storage provider.</param>
-		/// <returns><c>true</c> if the restore is succesfull, <c>false</c> otherwise.</returns>
-		public static bool RestoreGlobalSettingsStorageProvider(byte[] backupFile, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
-			using(ZipFile globalSettingsBackupZipFile = ZipFile.Read(backupFile)) {
-				foreach(ZipEntry zipEntry in globalSettingsBackupZipFile) {
-					if(zipEntry.FileName == "GlobalSettings.json") {
-						using(MemoryStream stream = new MemoryStream()) {
-							zipEntry.Extract(stream);
-							stream.Seek(0, SeekOrigin.Begin);
-							byte[] buffer = new byte[stream.Length];
-							stream.Read(buffer, 0, (int)stream.Length);
-							DeserializeGlobalSettingsBackup(Encoding.UTF8.GetString(buffer), globalSettingsStorageProvider);
-						}
-					}
-					else {
-						using(MemoryStream stream = new MemoryStream()) {
-							zipEntry.Extract(stream);
-							stream.Seek(0, SeekOrigin.Begin);
-							byte[] buffer = new byte[stream.Length];
-							stream.Read(buffer, 0, (int)stream.Length);
-							globalSettingsStorageProvider.StorePluginAssembly(zipEntry.FileName, buffer);
-						}
-					}
-				}
-			}
-			return true;
-		}
-
-		private static void DeserializeGlobalSettingsBackup(string json, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
-			JavaScriptSerializer serializer = new JavaScriptSerializer();
-			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
-
-			GlobalSettingsBackup globalSettingsBackup = serializer.Deserialize<GlobalSettingsBackup>(json);
-
-			foreach(var pair in globalSettingsBackup.Settings) {
-				globalSettingsStorageProvider.SetSetting(pair.Key, pair.Value);
-			}
 		}
 
 	}
