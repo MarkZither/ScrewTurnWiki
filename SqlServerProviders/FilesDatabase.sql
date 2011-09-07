@@ -39,7 +39,7 @@ end
 
 if (select count([Version]) from [Version] where [Component] = 'Files') = 0
 begin
-	insert into [Version] ([Component], [Version]) values ('Files', 3000)
+	insert into [Version] ([Component], [Version]) values ('Files', 4000)
 end
 
 if (select count([FullPath]) from [Directory] where [FullPath] = '/') = 0

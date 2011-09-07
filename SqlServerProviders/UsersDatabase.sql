@@ -49,5 +49,5 @@ end
 
 if (select count([Version]) from [Version] where [Component] = 'Users') = 0
 begin
-	insert into [Version] ([Component], [Version]) values ('Users', 3000)
+	insert into [Version] ([Component], [Version]) values ('Users', 4000)
 end
