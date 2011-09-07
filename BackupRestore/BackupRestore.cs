@@ -17,6 +17,16 @@ namespace ScrewTurn.Wiki.BackupRestore {
 	/// </summary>
 	public static class BackupRestore {
 
+		private const string BACKUP_RESTORE_UTILITY_VERSION = "1.0";
+
+		private static VersionFile generateVersionFile(string backupName) {
+			return new VersionFile() {
+				BackupRestoreVersion = BACKUP_RESTORE_UTILITY_VERSION,
+				WikiVersion = typeof(BackupRestore).Assembly.GetName().Version.ToString(),
+				BackupName = backupName
+			};
+		}
+
 		/// <summary>
 		/// Backups the specified settings provider.
 		/// </summary>
@@ -81,6 +91,8 @@ namespace ScrewTurn.Wiki.BackupRestore {
 
 			ZipFile settingsBackupZipFile = new ZipFile();
 			settingsBackupZipFile.AddEntry("Settings.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(settingsBackup)));
+
+			settingsBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Settings"))));
 
 			byte[] buffer;
 			using(MemoryStream stream = new MemoryStream()) {
@@ -272,6 +284,8 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 			pagesBackupZipFile.AddEntry("Snippets.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(snippetsBackup)));
 
+			pagesBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Pages"))));
+
 			byte[] buffer;
 			using(MemoryStream stream = new MemoryStream()) {
 				pagesBackupZipFile.Save(stream);
@@ -339,6 +353,8 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 			usersBackupZipFile.AddEntry("Groups.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(userGroupsBackup)));
 
+			usersBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Users"))));
+
 			byte[] buffer;
 			using(MemoryStream stream = new MemoryStream()) {
 				usersBackupZipFile.Save(stream);
@@ -386,6 +402,8 @@ namespace ScrewTurn.Wiki.BackupRestore {
 				}
 				filesBackupZipFile.AddEntry(Path.Combine("__attachments", pageWithAttachment, "attachments.json"), Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(attachmentsBackup)));
 			}
+
+			filesBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Files"))));
 
 			byte[] buffer;
 			using(MemoryStream stream = new MemoryStream()) {
@@ -460,6 +478,8 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
 
 			globalSettingsBackupZipFile.AddEntry("GlobalSettings.json", Encoding.Unicode.GetBytes(serializer.Serialize(globalSettingsBackup)));
+
+			globalSettingsBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(serializer.Serialize(generateVersionFile("GlobalSettings"))));
 
 			byte[] buffer;
 			using(MemoryStream stream = new MemoryStream()) {
@@ -624,5 +644,11 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		public string Name { get; set; }
 		public long Size { get; set; }
 		public DateTime LastModified { get; set; }
+	}
+
+	internal class VersionFile {
+		public string BackupRestoreVersion { get; set; }
+		public string WikiVersion { get; set; }
+		public string BackupName { get; set; }
 	}
 }
