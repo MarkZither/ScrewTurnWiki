@@ -13,6 +13,33 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 	public class BackupRestoreTests {
 
 		[Test]
+		public void Backup_RestoreGlobalSettingsStorageProvider_Test() {
+			DummyGlobalSettingsStorageProvider sourceDummyGlobalSettingsStorageProvider = new DummyGlobalSettingsStorageProvider();
+
+			// Settings key -> value
+			sourceDummyGlobalSettingsStorageProvider.SetSetting("key1", "value1");
+			sourceDummyGlobalSettingsStorageProvider.SetSetting("key2", "value2");
+
+			// PluginAssemblies
+			sourceDummyGlobalSettingsStorageProvider.StorePluginAssembly("plugin1", new byte[] { 1, 2, 3, 1, 2, 3 });
+			sourceDummyGlobalSettingsStorageProvider.StorePluginAssembly("plugin2", new byte[] { 4, 5, 6, 4, 5, 6 });
+
+			byte[] backupFile = BackupRestore.BackupGlobalSettingsStorageProvider(sourceDummyGlobalSettingsStorageProvider);
+
+			DummyGlobalSettingsStorageProvider destinationDummyGlobalSettingsStorageProvider = new DummyGlobalSettingsStorageProvider();
+
+			Assert.IsTrue(BackupRestore.RestoreGlobalSettingsStorageProvider(backupFile, destinationDummyGlobalSettingsStorageProvider));
+
+			// Settings
+			Assert.AreEqual("value1", destinationDummyGlobalSettingsStorageProvider.GetSetting("key1"));
+			Assert.AreEqual("value2", destinationDummyGlobalSettingsStorageProvider.GetSetting("key2"));
+
+			// PluginAssemblies
+			CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 1, 2, 3 }, destinationDummyGlobalSettingsStorageProvider.RetrievePluginAssembly("plugin1"));
+			CollectionAssert.AreEqual(new byte[] { 4, 5, 6, 4, 5, 6 }, destinationDummyGlobalSettingsStorageProvider.RetrievePluginAssembly("plugin2"));
+		}
+
+		[Test]
 		public void Backup_RestoreSettingsStorageProvider_Test() {
 			DummySettingsStorageProvider sourceDummySettingsStorageProvider = new DummySettingsStorageProvider();
 
@@ -109,32 +136,228 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		[Test]
-		public void Backup_RestoreGlobalSettingsStorageProvider_Test() {
-			DummyGlobalSettingsStorageProvider sourceDummyGlobalSettingsStorageProvider = new DummyGlobalSettingsStorageProvider();
+		public void Backup_RestorePagesStorageProvider_Test() {
+			DummyPagesStorageProvider sourceDummyPagesStorageProvider = new DummyPagesStorageProvider();
 
-			// Settings key -> value
-			sourceDummyGlobalSettingsStorageProvider.SetSetting("key1", "value1");
-			sourceDummyGlobalSettingsStorageProvider.SetSetting("key2", "value2");
+			DateTime date = DateTime.Now;
 
-			// PluginAssemblies
-			sourceDummyGlobalSettingsStorageProvider.StorePluginAssembly("plugin1", new byte[] { 1, 2, 3, 1, 2, 3 });
-			sourceDummyGlobalSettingsStorageProvider.StorePluginAssembly("plugin2", new byte[] { 4, 5, 6, 4, 5, 6 });
+			// Namespace
+			NamespaceInfo ns1 = new NamespaceInfo("ns1", sourceDummyPagesStorageProvider, "MainPage");
+			sourceDummyPagesStorageProvider.AddNamespace(ns1.Name);
+			sourceDummyPagesStorageProvider.SetNamespaceDefaultPage(ns1, ns1.DefaultPageFullName);
+			
+			// Categories
+			sourceDummyPagesStorageProvider.AddCategory(ns1.Name, "cat1");
+			sourceDummyPagesStorageProvider.AddCategory(ns1.Name, "cat2");
+			
+			// Navigation Paths
+			sourceDummyPagesStorageProvider.AddNavigationPath(ns1.Name, "np1", new string[] { "MainPage", "Page1" });
 
-			byte[] backupFile = BackupRestore.BackupGlobalSettingsStorageProvider(sourceDummyGlobalSettingsStorageProvider);
+			// Pages with old revision and draft
+			PageContent oldMainPage = sourceDummyPagesStorageProvider.SetPageContent(ns1.Name, "MainPage", date.AddDays(-1), "Old Title of MainPage", "OldTestUser", date.AddDays(-1), "OldComment", "Old Content of MainPage", new string[] { "k1" }, "Old Description", SaveMode.Normal);
+			PageContent mainPage = sourceDummyPagesStorageProvider.SetPageContent(ns1.Name, "MainPage", date, "Title of MainPage", "TestUser", date, "Comment", "Content of MainPage", new string[] { "k1", "k2" }, "Description", SaveMode.Backup);
+			PageContent draftMainPage = sourceDummyPagesStorageProvider.SetPageContent(ns1.Name, "MainPage", date.AddDays(1), "Draft Title of MainPage", "DraftTestUser", date.AddDays(1), "DraftComment", "Draft Content of MainPage", new string[] { "k1", "k2", "k3" }, "Draft Description", SaveMode.Draft);
 
-			DummyGlobalSettingsStorageProvider destinationDummyGlobalSettingsStorageProvider = new DummyGlobalSettingsStorageProvider();
+			// Messages
+			int messageId = sourceDummyPagesStorageProvider.AddMessage("MainPage", "Testuser", "Subject", date, "Body", -1);
+			int replyId = sourceDummyPagesStorageProvider.AddMessage("MainPage", "ReplyTestuser", "RE: Subject", date.AddDays(1), "Reply Body", messageId);
 
-			Assert.IsTrue(BackupRestore.RestoreGlobalSettingsStorageProvider(backupFile, destinationDummyGlobalSettingsStorageProvider));
+			// Content Templates
+			ContentTemplate contentTemplate = sourceDummyPagesStorageProvider.AddContentTemplate("ContentTemplate1", "Content");
 
-			// Settings
-			Assert.AreEqual("value1", destinationDummyGlobalSettingsStorageProvider.GetSetting("key1"));
-			Assert.AreEqual("value2", destinationDummyGlobalSettingsStorageProvider.GetSetting("key2"));
+			// Snippets
+			Snippet snippet = sourceDummyPagesStorageProvider.AddSnippet("Snippet1", "Content");
 
-			// PluginAssemblies
-			CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 1, 2, 3 }, destinationDummyGlobalSettingsStorageProvider.RetrievePluginAssembly("plugin1"));
-			CollectionAssert.AreEqual(new byte[] { 4, 5, 6, 4, 5, 6 }, destinationDummyGlobalSettingsStorageProvider.RetrievePluginAssembly("plugin2"));
+			byte[] backupFile = BackupRestore.BackupPagesStorageProvider(sourceDummyPagesStorageProvider);
+
+			DummyPagesStorageProvider destinationDummyPagesStorageProvider = new DummyPagesStorageProvider();
+
+			Assert.IsTrue(BackupRestore.RestorePagesStorageProvider(backupFile, destinationDummyPagesStorageProvider));
+
+			// Namespaces
+			NamespaceInfo[] namespaces = destinationDummyPagesStorageProvider.GetNamespaces();
+			Assert.AreEqual(1, namespaces.Length);
+			Assert.AreEqual(ns1.Name, namespaces[0].Name);
+			Assert.AreEqual(ns1.DefaultPageFullName, namespaces[0].DefaultPageFullName);
+
+			// Categories
+			CategoryInfo[] categories = destinationDummyPagesStorageProvider.GetCategories(namespaces[0]);
+			Assert.AreEqual(2, categories.Length);
+			Assert.AreEqual("cat1", categories[0]);
+			Assert.AreEqual("cat2", categories[1]);
+
+			// Navigation Paths
+			NavigationPath[] navigationPaths = destinationDummyPagesStorageProvider.GetNavigationPaths(namespaces[0]);
+			Assert.AreEqual(1, navigationPaths.Length);
+			Assert.AreEqual("np1", navigationPaths[0].FullName);
+			CollectionAssert.AreEqual(new string[] { "MainPage", "Page1" }, navigationPaths[0].Pages);
+
+			// Pages
+			PageContent[] pages = destinationDummyPagesStorageProvider.GetPages(ns1);
+			Assert.AreEqual(1, pages.Length);
+			Assert.AreEqual(mainPage.FullName, pages[0].FullName);
+			Assert.AreEqual(mainPage.Comment, pages[0].Comment);
+			Assert.AreEqual(mainPage.Content, pages[0].Content);
+			Assert.AreEqual(mainPage.CreationDateTime, pages[0].CreationDateTime);
+			Assert.AreEqual(mainPage.Description, pages[0].Description);
+			CollectionAssert.AreEqual(mainPage.Keywords, pages[0].Keywords);
+			Assert.AreEqual(mainPage.LastModified, pages[0].LastModified);
+			CollectionAssert.AreEqual(mainPage.LinkedPages, pages[0].LinkedPages);
+			Assert.AreEqual(mainPage.Title, pages[0].Title);
+			Assert.AreEqual(mainPage.User, pages[0].User);
+
+			// PageDraft
+			PageContent draft = destinationDummyPagesStorageProvider.GetDraft(mainPage.FullName);
+			Assert.IsNotNull(draft);
+			Assert.AreEqual(draftMainPage.Comment, draft.Comment);
+			Assert.AreEqual(draftMainPage.Content, draft.Content);
+			Assert.AreEqual(draftMainPage.CreationDateTime, draft.CreationDateTime);
+			Assert.AreEqual(draftMainPage.Description, draft.Description);
+			Assert.AreEqual(draftMainPage.FullName, draft.FullName);
+			CollectionAssert.AreEqual(draftMainPage.Keywords, draft.Keywords);
+			Assert.AreEqual(draftMainPage.LastModified, draft.LastModified);
+			CollectionAssert.AreEqual(draftMainPage.LinkedPages, draft.LinkedPages);
+			Assert.AreEqual(draftMainPage.Title, draft.Title);
+			Assert.AreEqual(draftMainPage.User, draft.User);
+
+			// Page Revisions
+			int[] revs = destinationDummyPagesStorageProvider.GetBackups(mainPage.FullName);
+			Assert.AreEqual(1, revs.Length);
+			PageContent pageBackup = destinationDummyPagesStorageProvider.GetBackupContent(mainPage.FullName, revs[0]);
+			Assert.AreEqual(oldMainPage.Comment, pageBackup.Comment);
+			Assert.AreEqual(oldMainPage.Content, pageBackup.Content);
+			Assert.AreEqual(oldMainPage.CreationDateTime, pageBackup.CreationDateTime);
+			Assert.AreEqual(oldMainPage.Description, pageBackup.Description);
+			Assert.AreEqual(oldMainPage.FullName, pageBackup.FullName);
+			CollectionAssert.AreEqual(oldMainPage.Keywords, pageBackup.Keywords);
+			Assert.AreEqual(oldMainPage.LastModified, pageBackup.LastModified);
+			CollectionAssert.AreEqual(oldMainPage.LinkedPages, pageBackup.LinkedPages);
+			Assert.AreEqual(oldMainPage.Title, pageBackup.Title);
+			Assert.AreEqual(oldMainPage.User, pageBackup.User);
+
+			// Messages
+			Message[] messages = destinationDummyPagesStorageProvider.GetMessages(mainPage.FullName);
+			Assert.AreEqual(1, messages.Length);
+			Assert.AreEqual("Body", messages[0].Body);
+			Assert.AreEqual(date, messages[0].DateTime);
+			Assert.AreEqual(-1, messages[0].ID);
+			Assert.AreEqual("Subject", messages[0].Subject);
+			Assert.AreEqual("Testuser", messages[0].Username);
+			Assert.AreEqual(1, messages[0].Replies.Length);
+			Assert.AreEqual("Reply Body", messages[0].Replies[0].Body);
+			Assert.AreEqual(date.AddDays(1), messages[0].Replies[0].DateTime);
+			Assert.AreEqual(messageId, messages[0].Replies[0].ID);
+			Assert.AreEqual("RE: Subject", messages[0].Replies[0].Subject);
+			Assert.AreEqual("ReplyTestuser", messages[0].Replies[0].Username);
+
+			// ContentTemplates
+			ContentTemplate[] contentTemplates = destinationDummyPagesStorageProvider.GetContentTemplates();
+			Assert.AreEqual(1, contentTemplates.Length);
+			Assert.AreEqual(contentTemplate.Name, contentTemplates[0].Name);
+			Assert.AreEqual(contentTemplate.Content, contentTemplates[0].Content);
+
+			// Snippets
+			Snippet[] snippets = destinationDummyPagesStorageProvider.GetSnippets();
+			Assert.AreEqual(1, snippets.Length);
+			Assert.AreEqual(snippet.Name, snippets[0].Name);
+			Assert.AreEqual(snippet.Content, snippets[0].Content);
+		}
+	}
+
+	internal class DummyGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV40 {
+
+		Dictionary<string, string> settings = new Dictionary<string, string>();
+		Dictionary<string, byte[]> pluginsAssemblies = new Dictionary<string, byte[]>();
+
+		#region IGlobalSettingsStorageProviderV40 Members
+
+		public string GetSetting(string name) {
+			return settings[name];
 		}
 
+		public IDictionary<string, string> GetAllSettings() {
+			return settings;
+		}
+
+		public bool SetSetting(string name, string value) {
+			settings[name] = value;
+			return true;
+		}
+
+		public IList<PluginFramework.Wiki> AllWikis() {
+			throw new NotImplementedException();
+		}
+
+		public string ExtractWikiName(string host) {
+			throw new NotImplementedException();
+		}
+
+		public string[] ListPluginAssemblies() {
+			return (from p in pluginsAssemblies select p.Key).ToArray<string>();
+		}
+
+		public bool StorePluginAssembly(string filename, byte[] assembly) {
+			pluginsAssemblies[filename] = assembly;
+			return true;
+		}
+
+		public byte[] RetrievePluginAssembly(string filename) {
+			return pluginsAssemblies[filename];
+		}
+
+		public bool DeletePluginAssembly(string filename) {
+			throw new NotImplementedException();
+		}
+
+		public void LogEntry(string message, EntryType entryType, string user, string wiki) {
+			throw new NotImplementedException();
+		}
+
+		public LogEntry[] GetLogEntries() {
+			throw new NotImplementedException();
+		}
+
+		public void ClearLog() {
+			throw new NotImplementedException();
+		}
+
+		public int LogSize {
+			get { throw new NotImplementedException(); }
+		}
+
+		#endregion
+
+		#region IProviderV40 Members
+
+		public string CurrentWiki {
+			get { throw new NotImplementedException(); }
+		}
+
+		public void Init(IHostV40 host, string config, string wiki) {
+			throw new NotImplementedException();
+		}
+
+		public void SetUp(IHostV40 host, string config) {
+			throw new NotImplementedException();
+		}
+
+		public ComponentInformation Information {
+			get { throw new NotImplementedException(); }
+		}
+
+		public string ConfigHelpHtml {
+			get { throw new NotImplementedException(); }
+		}
+
+		#endregion
+
+		#region IDisposable Members
+
+		public void Dispose() {
+			throw new NotImplementedException();
+		}
+
+		#endregion
 	}
 
 	internal class DummySettingsStorageProvider : ISettingsStorageProviderV40 {
@@ -353,64 +576,198 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		#endregion
 	}
 
-	internal class DummyGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV40 {
+	internal class DummyPagesStorageProvider :IPagesStorageProviderV40 {
+		#region IPagesStorageProviderV40 Members
 
-		Dictionary<string, string> settings = new Dictionary<string, string>();
-		Dictionary<string, byte[]> pluginsAssemblies = new Dictionary<string, byte[]>();
-
-		#region IGlobalSettingsStorageProviderV40 Members
-
-		public string GetSetting(string name) {
-			return settings[name];
-		}
-
-		public IDictionary<string, string> GetAllSettings() {
-			return settings;
-		}
-
-		public bool SetSetting(string name, string value) {
-			settings[name] = value;
-			return true;
-		}
-
-		public IList<PluginFramework.Wiki> AllWikis() {
+		public NamespaceInfo GetNamespace(string name) {
 			throw new NotImplementedException();
 		}
 
-		public string ExtractWikiName(string host) {
+		public NamespaceInfo[] GetNamespaces() {
 			throw new NotImplementedException();
 		}
 
-		public string[] ListPluginAssemblies() {
-			return (from p in pluginsAssemblies select p.Key).ToArray<string>();
-		}
-
-		public bool StorePluginAssembly(string filename, byte[] assembly) {
-			pluginsAssemblies[filename] = assembly;
-			return true;
-		}
-
-		public byte[] RetrievePluginAssembly(string filename) {
-			return pluginsAssemblies[filename];
-		}
-
-		public bool DeletePluginAssembly(string filename) {
+		public NamespaceInfo AddNamespace(string name) {
 			throw new NotImplementedException();
 		}
 
-		public void LogEntry(string message, EntryType entryType, string user, string wiki) {
+		public NamespaceInfo RenameNamespace(NamespaceInfo nspace, string newName) {
 			throw new NotImplementedException();
 		}
 
-		public LogEntry[] GetLogEntries() {
+		public NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, string pageFullName) {
 			throw new NotImplementedException();
 		}
 
-		public void ClearLog() {
+		public bool RemoveNamespace(NamespaceInfo nspace) {
 			throw new NotImplementedException();
 		}
 
-		public int LogSize {
+		public PageContent MovePage(string pageFullName, NamespaceInfo destination, bool copyCategories) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo GetCategory(string fullName) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo[] GetCategories(NamespaceInfo nspace) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo[] GetCategoriesForPage(string pageFullName) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo AddCategory(string nspace, string name) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo RenameCategory(CategoryInfo category, string newName) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveCategory(CategoryInfo category) {
+			throw new NotImplementedException();
+		}
+
+		public CategoryInfo MergeCategories(CategoryInfo source, CategoryInfo destination) {
+			throw new NotImplementedException();
+		}
+
+		public bool RebindPage(string pageFullName, string[] categories) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent GetPage(string fullName) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent[] GetPages(NamespaceInfo nspace) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent[] GetUncategorizedPages(NamespaceInfo nspace) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent GetDraft(string fullName) {
+			throw new NotImplementedException();
+		}
+
+		public bool DeleteDraft(string fullName) {
+			throw new NotImplementedException();
+		}
+
+		public int[] GetBackups(string fullName) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent GetBackupContent(string fullName, int revision) {
+			throw new NotImplementedException();
+		}
+
+		public bool SetBackupContent(PageContent content, int revision) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent SetPageContent(string nspace, string pageName, DateTime creationDateTime, string title, string username, DateTime dateTime, string comment, string content, string[] keywords, string description, SaveMode saveMode) {
+			throw new NotImplementedException();
+		}
+
+		public PageContent RenamePage(string fullName, string newName) {
+			throw new NotImplementedException();
+		}
+
+		public bool RollbackPage(string pageFullName, int revision) {
+			throw new NotImplementedException();
+		}
+
+		public bool DeleteBackups(string pageFullName, int revision) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemovePage(string pageFullName) {
+			throw new NotImplementedException();
+		}
+
+		public Message[] GetMessages(string pageFullName) {
+			throw new NotImplementedException();
+		}
+
+		public int GetMessageCount(string pageFullName) {
+			throw new NotImplementedException();
+		}
+
+		public bool BulkStoreMessages(string pageFullName, Message[] messages) {
+			throw new NotImplementedException();
+		}
+
+		public int AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveMessage(string pageFullName, int id, bool removeReplies) {
+			throw new NotImplementedException();
+		}
+
+		public bool ModifyMessage(string pageFullName, int id, string username, string subject, DateTime dateTime, string body) {
+			throw new NotImplementedException();
+		}
+
+		public NavigationPath[] GetNavigationPaths(NamespaceInfo nspace) {
+			throw new NotImplementedException();
+		}
+
+		public NavigationPath AddNavigationPath(string nspace, string name, string[] pages) {
+			throw new NotImplementedException();
+		}
+
+		public NavigationPath ModifyNavigationPath(NavigationPath path, string[] pages) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveNavigationPath(NavigationPath path) {
+			throw new NotImplementedException();
+		}
+
+		public Snippet[] GetSnippets() {
+			throw new NotImplementedException();
+		}
+
+		public Snippet AddSnippet(string name, string content) {
+			throw new NotImplementedException();
+		}
+
+		public Snippet ModifySnippet(string name, string content) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveSnippet(string name) {
+			throw new NotImplementedException();
+		}
+
+		public ContentTemplate[] GetContentTemplates() {
+			throw new NotImplementedException();
+		}
+
+		public ContentTemplate AddContentTemplate(string name, string content) {
+			throw new NotImplementedException();
+		}
+
+		public ContentTemplate ModifyContentTemplate(string name, string content) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveContentTemplate(string name) {
+			throw new NotImplementedException();
+		}
+
+		#endregion
+
+		#region IStorageProviderV40 Members
+
+		public bool ReadOnly {
 			get { throw new NotImplementedException(); }
 		}
 

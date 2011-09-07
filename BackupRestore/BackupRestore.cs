@@ -184,9 +184,9 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		}
 
 		/// <summary>
-		/// Restores the settings from a json file.
+		/// Restores the settings from a zip file.
 		/// </summary>
-		/// <param name="backupFile">The json backup file.</param>
+		/// <param name="backupFile">The zip backup file.</param>
 		/// <param name="settingsStorageProvider">The destination settings storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
 		public static bool RestoreSettingsStorageProvider(byte[] backupFile, ISettingsStorageProviderV40 settingsStorageProvider) {
@@ -276,8 +276,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 						Pages = category.Pages
 					});
 				}
-				pagesBackupZipFile.AddEntry("Categories.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(categoriesBackup)));
-				
+
 				// Backup NavigationPaths
 				NavigationPath[] navigationPaths = pagesStorageProvider.GetNavigationPaths(nspace);
 				List<NavigationPathBackup> navigationPathsBackup = new List<NavigationPathBackup>(navigationPaths.Length);
@@ -290,7 +289,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 
 				// Add this namespace to the namespaceBackup list
 				namespaceBackupList.Add(new NamespaceBackup() {
-					Name = nspace == null ? "<root>" : nspace.Name,
+					Name = nspace == null ? "" : nspace.Name,
 					DefaultPageFullName = nspace == null ? "" : nspace.DefaultPageFullName,
 					Categories = categoriesBackup,
 					NavigationPaths = navigationPathsBackup
@@ -317,12 +316,14 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					for(int i = 0; i < Math.Min(revisions.Length, 100); i++) {
 						PageContent pageRevision = pagesStorageProvider.GetBackupContent(page.FullName, revisions[i]);
 						PageRevisionBackup pageContentBackup = new PageRevisionBackup() {
+							Revision = revisions[i],
 							Content = pageRevision.Content,
 							Comment = pageRevision.Comment,
 							Description = pageRevision.Description,
 							Keywords = pageRevision.Keywords,
 							Title = pageRevision.Title,
-							User = pageRevision.User
+							User = pageRevision.User,
+							LastModified = pageRevision.LastModified
 						};
 						pageContentBackupList.Add(pageContentBackup);
 					}
@@ -337,7 +338,8 @@ namespace ScrewTurn.Wiki.BackupRestore {
 							Description = draft.Description,
 							Keywords = draft.Keywords,
 							Title = draft.Title,
-							User = draft.User
+							User = draft.User,
+							LastModified = draft.LastModified
 						};
 					}
 
@@ -403,6 +405,117 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 			messageBackup.Replies = repliesBackup;
 			return messageBackup;
+		}
+
+		/// <summary>
+		/// Restores pages from a zip file.
+		/// </summary>
+		/// <param name="backupFile">The zip backup file.</param>
+		/// <param name="pagesStorageProvider">The destination pages storage provider.</param>
+		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
+		public static bool RestorePagesStorageProvider(byte[] backupFile, IPagesStorageProviderV40 pagesStorageProvider) {
+			using(ZipFile settingsBackupZipFile = ZipFile.Read(backupFile)) {
+				foreach(ZipEntry zipEntry in settingsBackupZipFile) {
+					using(MemoryStream stream = new MemoryStream()) {
+						zipEntry.Extract(stream);
+						stream.Seek(0, SeekOrigin.Begin);
+						byte[] buffer = new byte[stream.Length];
+						stream.Read(buffer, 0, (int)stream.Length);
+
+						switch(zipEntry.FileName) {
+							case "Namespaces.json":
+								DeserializeNamepsacesBackup(Encoding.Unicode.GetString(buffer), pagesStorageProvider);
+								break;
+							case "ContentTemplates.json":
+								DeserializeContentTemplatesBackup(Encoding.Unicode.GetString(buffer), pagesStorageProvider);
+								break;
+							case "Snippet.json":
+								DeserializeSnippetsBackup(Encoding.Unicode.GetString(buffer), pagesStorageProvider);
+								break;
+							case "Version.json":
+								break;
+							default:
+								DeserializePageBackup(Encoding.Unicode.GetString(buffer), pagesStorageProvider);
+								break;
+						}
+					}
+				}
+			}
+			return true;
+		}
+
+		private static void DeserializeNamepsacesBackup(string json, IPagesStorageProviderV40 pagesStorageProvider) {
+			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
+			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
+
+			List<NamespaceBackup> namespacesBackup = javascriptSerializer.Deserialize<List<NamespaceBackup>>(json);
+
+			foreach(NamespaceBackup namespaceBackup in namespacesBackup) {
+				if(namespaceBackup.Name != "") {
+					pagesStorageProvider.AddNamespace(namespaceBackup.Name);
+					pagesStorageProvider.SetNamespaceDefaultPage(new NamespaceInfo(namespaceBackup.Name, pagesStorageProvider, namespaceBackup.DefaultPageFullName), namespaceBackup.DefaultPageFullName);
+				}
+				foreach(CategoryBackup category in namespaceBackup.Categories) {
+					pagesStorageProvider.AddCategory(namespaceBackup.Name, category.FullName);
+				}
+				foreach(NavigationPathBackup navigationPath in namespaceBackup.NavigationPaths) {
+					pagesStorageProvider.AddNavigationPath(namespaceBackup.Name, navigationPath.FullName, navigationPath.Pages);
+				}
+			}
+		}
+
+		private static void DeserializeContentTemplatesBackup(string json, IPagesStorageProviderV40 pagesStorageProvider) {
+			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
+			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
+
+			List<ContentTemplateBackup> contentTemplatesBackup = javascriptSerializer.Deserialize<List<ContentTemplateBackup>>(json);
+			foreach(ContentTemplateBackup contentTemplate in contentTemplatesBackup) {
+				pagesStorageProvider.AddContentTemplate(contentTemplate.Name, contentTemplate.Content);
+			}
+		}
+
+		private static void DeserializeSnippetsBackup(string json, IPagesStorageProviderV40 pagesStorageProvider) {
+			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
+			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
+
+			List<SnippetBackup> snippetsBackup = javascriptSerializer.Deserialize<List<SnippetBackup>>(json);
+			foreach(SnippetBackup snippet in snippetsBackup) {
+				pagesStorageProvider.AddSnippet(snippet.Name, snippet.Content);
+			}
+		}
+
+		private static void DeserializePageBackup(string json, IPagesStorageProviderV40 pagesStorageProvider) {
+			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
+			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
+
+			PageBackup pageBackup = javascriptSerializer.Deserialize<PageBackup>(json);
+
+			// CurrentVersion
+			pagesStorageProvider.SetPageContent(NameTools.GetNamespace(pageBackup.FullName), NameTools.GetLocalName(pageBackup.FullName), pageBackup.CreationDateTime, pageBackup.Title,
+												pageBackup.User, pageBackup.LastModified, pageBackup.Comment, pageBackup.Content, pageBackup.Keywords, pageBackup.Description, SaveMode.Normal);
+
+			// Draft
+			if(pageBackup.Draft != null) {
+				pagesStorageProvider.SetPageContent(NameTools.GetNamespace(pageBackup.FullName), NameTools.GetLocalName(pageBackup.FullName), pageBackup.CreationDateTime, pageBackup.Draft.Title,
+												pageBackup.Draft.User, pageBackup.Draft.LastModified, pageBackup.Draft.Comment, pageBackup.Draft.Content, pageBackup.Draft.Keywords, pageBackup.Draft.Description, SaveMode.Draft);
+			}
+
+			// Revisions
+			List<PageRevisionBackup> revisionsBackup = pageBackup.Revisions;
+			foreach(PageRevisionBackup revision in revisionsBackup) {
+				pagesStorageProvider.SetBackupContent(new PageContent(pageBackup.FullName, pagesStorageProvider, pageBackup.CreationDateTime, revision.Title, revision.User, revision.LastModified, revision.Comment, revision.Content, revision.Keywords, revision.Description), revision.Revision);
+			}
+
+			pagesStorageProvider.BulkStoreMessages(pageBackup.FullName, DeserializeMessages(pageBackup.Messages).ToArray());
+		}
+
+		private static List<Message> DeserializeMessages(List<MessageBackup> messagesBackup) {
+			List<Message> ret = new List<Message>();
+			foreach(MessageBackup messageBackup in messagesBackup) {
+				ret.Add(new Message(messageBackup.Id, messageBackup.Username, messageBackup.Subject, messageBackup.DateTime, messageBackup.Body));
+				ret.AddRange(DeserializeMessages(messageBackup.Replies));
+			}
+			return ret;
 		}
 
 		/// <summary>
@@ -594,6 +707,10 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		public string[] Keywords { get; set; }
 		public string Title { get; set; }
 		public string User { get; set; }
+
+		public DateTime LastModified { get; set; }
+
+		public int Revision { get; set; }
 	}
 
 	internal class NamespaceBackup {
