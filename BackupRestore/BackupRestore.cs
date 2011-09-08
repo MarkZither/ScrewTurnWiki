@@ -414,8 +414,8 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="pagesStorageProvider">The destination pages storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
 		public static bool RestorePagesStorageProvider(byte[] backupFile, IPagesStorageProviderV40 pagesStorageProvider) {
-			using(ZipFile settingsBackupZipFile = ZipFile.Read(backupFile)) {
-				foreach(ZipEntry zipEntry in settingsBackupZipFile) {
+			using(ZipFile pagesBackupZipFile = ZipFile.Read(backupFile)) {
+				foreach(ZipEntry zipEntry in pagesBackupZipFile) {
 					using(MemoryStream stream = new MemoryStream()) {
 						zipEntry.Extract(stream);
 						stream.Seek(0, SeekOrigin.Begin);
@@ -552,8 +552,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			foreach(UserGroup userGroup in userGroups) {
 				userGroupsBackup.Add(new UserGroupBackup() {
 					Name = userGroup.Name,
-					Description = userGroup.Description,
-					Users = userGroup.Users
+					Description = userGroup.Description
 				});
 			}
 			usersBackupZipFile.AddEntry("Groups.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(userGroupsBackup)));
@@ -569,6 +568,67 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 
 			return buffer;
+		}
+
+		/// <summary>
+		/// Restores users from a zip file.
+		/// </summary>
+		/// <param name="backupFile">The zip backup file.</param>
+		/// <param name="usersStorageProvider">The destination users storage provider.</param>
+		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
+		public static bool RestoreUsersStorageProvider(byte[] backupFile, IUsersStorageProviderV40 usersStorageProvider) {
+			using(ZipFile usersBackupZipFile = ZipFile.Read(backupFile)) {
+				foreach(ZipEntry zipEntry in usersBackupZipFile) {
+					using(MemoryStream stream = new MemoryStream()) {
+						zipEntry.Extract(stream);
+						stream.Seek(0, SeekOrigin.Begin);
+						byte[] buffer = new byte[stream.Length];
+						stream.Read(buffer, 0, (int)stream.Length);
+
+						switch(zipEntry.FileName) {
+							case "Groups.json":
+								DeserializeGroupsBackup(Encoding.Unicode.GetString(buffer), usersStorageProvider);
+								break;
+							case "Users.json":
+								DeserializeUsersBackup(Encoding.Unicode.GetString(buffer), usersStorageProvider);
+								break;
+						}
+					}
+				}
+			}
+			return true;
+		}
+
+		private static void DeserializeGroupsBackup(string json, IUsersStorageProviderV40 usersStorageProvider) {
+			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
+			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
+
+			List<UserGroupBackup> userGroupsBackup = javascriptSerializer.Deserialize<List<UserGroupBackup>>(json);
+
+			foreach(UserGroupBackup userGroup in userGroupsBackup) {
+				usersStorageProvider.AddUserGroup(userGroup.Name, userGroup.Description);
+			}
+		}
+
+		private static void DeserializeUsersBackup(string json, IUsersStorageProviderV40 usersStorageProvider) {
+			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
+			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
+
+			List<UserBackup> usersBackup = javascriptSerializer.Deserialize<List<UserBackup>>(json);
+
+			foreach(UserBackup user in usersBackup) {
+				UserInfo userInfo = new UserInfo(user.Username, user.DisplayName, user.Email, user.Active, user.DateTime, usersStorageProvider);
+				
+				usersStorageProvider.AddUser(user.Username, user.DisplayName, "", user.Email, user.Active, user.DateTime);
+				
+				// User group membership
+				usersStorageProvider.SetUserMembership(userInfo, user.Groups);
+
+				// User metadata
+				foreach(var pair in user.UserData) {
+					usersStorageProvider.StoreUserData(userInfo, pair.Key, pair.Value);
+				}
+			}
 		}
 
 		/// <summary>
@@ -763,7 +823,6 @@ namespace ScrewTurn.Wiki.BackupRestore {
 	internal class UserGroupBackup {
 		public string Name { get; set; }
 		public string Description { get; set; }
-		public string[] Users { get; set; }
 	}
 
 	internal class DirectoryBackup {

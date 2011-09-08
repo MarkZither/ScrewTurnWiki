@@ -262,6 +262,45 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			Assert.AreEqual(snippet.Name, snippets[0].Name);
 			Assert.AreEqual(snippet.Content, snippets[0].Content);
 		}
+
+		[Test]
+		public void Backup_RestoreUsersStorageProvider_Test() {
+			DummyUsersStorageProvider sourceDummyUsersStorageProvider = new DummyUsersStorageProvider();
+
+			// Add user group
+			UserGroup group = sourceDummyUsersStorageProvider.AddUserGroup("group1", "description of group 1");
+
+			// Add user
+			UserInfo user = sourceDummyUsersStorageProvider.AddUser("user1", "User 1", "password", "email@email.com", true, DateTime.UtcNow);
+			sourceDummyUsersStorageProvider.SetUserMembership(user, new string[] { group.Name });
+			sourceDummyUsersStorageProvider.StoreUserData(user, "key1", "value1");
+			sourceDummyUsersStorageProvider.StoreUserData(user, "key2", "value2");
+
+			byte[] backupFile = BackupRestore.BackupUsersStorageProvider(sourceDummyUsersStorageProvider);
+
+			DummyUsersStorageProvider destinationDummyUsersStorageProvider = new DummyUsersStorageProvider();
+
+			Assert.IsTrue(BackupRestore.RestoreUsersStorageProvider(backupFile, destinationDummyUsersStorageProvider));
+
+			// Group
+			UserGroup[] groups = destinationDummyUsersStorageProvider.GetUserGroups();
+			Assert.AreEqual(1, groups.Length);
+			Assert.AreEqual(group.Name, groups[0].Name);
+			Assert.AreEqual(group.Description, groups[0].Description);
+
+			// User
+			UserInfo[] users = destinationDummyUsersStorageProvider.GetUsers();
+			Assert.AreEqual(1, users.Length);
+			Assert.AreEqual(user.Active, users[0].Active);
+			Assert.AreEqual(user.DateTime.Hour, users[0].DateTime.Hour);
+			Assert.AreEqual(user.DisplayName, users[0].DisplayName);
+			Assert.AreEqual(user.Email, users[0].Email);
+			Assert.AreEqual(user.Groups, users[0].Groups);
+			Assert.AreEqual(user.Username, users[0].Username);
+
+			// User data
+			CollectionAssert.AreEqual(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, destinationDummyUsersStorageProvider.RetrieveAllUserData(users[0]));
+		}
 	}
 
 	internal class DummyGlobalSettingsStorageProvider : IGlobalSettingsStorageProviderV40 {
@@ -576,7 +615,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		#endregion
 	}
 
-	internal class DummyPagesStorageProvider :IPagesStorageProviderV40 {
+	internal class DummyPagesStorageProvider : IPagesStorageProviderV40 {
 		private List<NamespaceInfo> namespaces;
 		private List<CategoryInfo> categories;
 		private List<NavigationPath> navigationPaths;
@@ -888,6 +927,161 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 
 		public void Dispose() {
 			
+		}
+
+		#endregion
+	}
+
+	internal class DummyUsersStorageProvider : IUsersStorageProviderV40 {
+		private List<UserGroup> userGroups;
+		private List<UserInfo> users;
+		private Dictionary<string, Dictionary<string, string>> usersData;  // <username, <key, value>>
+
+		#region IUsersStorageProviderV40 Members
+
+		public bool TestAccount(UserInfo user, string password) {
+			throw new NotImplementedException();
+		}
+
+		public UserInfo[] GetUsers() {
+			return users.ToArray();
+		}
+
+		public UserInfo AddUser(string username, string displayName, string password, string email, bool active, DateTime dateTime) {
+			if(users == null) {
+				users = new List<UserInfo>();
+			}
+			UserInfo user = new UserInfo(username, displayName, email, active, dateTime, this);
+			users.Add(user);
+			return user;
+		}
+
+		public UserInfo ModifyUser(UserInfo user, string newDisplayName, string newPassword, string newEmail, bool newActive) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveUser(UserInfo user) {
+			throw new NotImplementedException();
+		}
+
+		public UserGroup[] GetUserGroups() {
+			return userGroups.ToArray();
+		}
+
+		public UserGroup AddUserGroup(string name, string description) {
+			if(userGroups == null) {
+				userGroups = new List<UserGroup>();
+			}
+			UserGroup userGroup = new UserGroup(name, description, this);
+			userGroups.Add(userGroup);
+			return userGroup;
+		}
+
+		public UserGroup ModifyUserGroup(UserGroup group, string description) {
+			throw new NotImplementedException();
+		}
+
+		public bool RemoveUserGroup(UserGroup group) {
+			throw new NotImplementedException();
+		}
+
+		public UserInfo SetUserMembership(UserInfo user, string[] groups) {
+			UserInfo userInfo = users.FirstOrDefault(u => u.Username == user.Username);
+			if(userInfo != null) {
+				userInfo.Groups = groups;
+			}
+			return userInfo;
+		}
+
+		public UserInfo TryManualLogin(string username, string password) {
+			throw new NotImplementedException();
+		}
+
+		public UserInfo TryAutoLogin(System.Web.HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		public UserInfo GetUser(string username) {
+			throw new NotImplementedException();
+		}
+
+		public UserInfo GetUserByEmail(string email) {
+			throw new NotImplementedException();
+		}
+
+		public void NotifyCookieLogin(UserInfo user) {
+			throw new NotImplementedException();
+		}
+
+		public void NotifyLogout(UserInfo user) {
+			throw new NotImplementedException();
+		}
+
+		public bool StoreUserData(UserInfo user, string key, string value) {
+			if(usersData == null) usersData = new Dictionary<string, Dictionary<string, string>>();
+			if(!usersData.ContainsKey(user.Username)) usersData[user.Username] = new Dictionary<string, string>();
+			usersData[user.Username][key] = value;
+			return true;
+		}
+
+		public string RetrieveUserData(UserInfo user, string key) {
+			return usersData[user.Username][key];
+		}
+
+		public IDictionary<string, string> RetrieveAllUserData(UserInfo user) {
+			return usersData[user.Username];
+		}
+
+		public IDictionary<UserInfo, string> GetUsersWithData(string key) {
+			throw new NotImplementedException();
+		}
+
+		public bool UserAccountsReadOnly {
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool UserGroupsReadOnly {
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool GroupMembershipReadOnly {
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool UsersDataReadOnly {
+			get { throw new NotImplementedException(); }
+		}
+
+		#endregion
+
+		#region IProviderV40 Members
+
+		public string CurrentWiki {
+			get { throw new NotImplementedException(); }
+		}
+
+		public void Init(IHostV40 host, string config, string wiki) {
+			throw new NotImplementedException();
+		}
+
+		public void SetUp(IHostV40 host, string config) {
+			throw new NotImplementedException();
+		}
+
+		public ComponentInformation Information {
+			get { throw new NotImplementedException(); }
+		}
+
+		public string ConfigHelpHtml {
+			get { throw new NotImplementedException(); }
+		}
+
+		#endregion
+
+		#region IDisposable Members
+
+		public void Dispose() {
+			throw new NotImplementedException();
 		}
 
 		#endregion
