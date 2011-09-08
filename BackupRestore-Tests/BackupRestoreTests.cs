@@ -139,7 +139,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		public void Backup_RestorePagesStorageProvider_Test() {
 			DummyPagesStorageProvider sourceDummyPagesStorageProvider = new DummyPagesStorageProvider();
 
-			DateTime date = DateTime.Now;
+			DateTime date = DateTime.UtcNow;
 
 			// Namespace
 			NamespaceInfo ns1 = new NamespaceInfo("ns1", sourceDummyPagesStorageProvider, "MainPage");
@@ -183,13 +183,13 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			// Categories
 			CategoryInfo[] categories = destinationDummyPagesStorageProvider.GetCategories(namespaces[0]);
 			Assert.AreEqual(2, categories.Length);
-			Assert.AreEqual("cat1", categories[0]);
-			Assert.AreEqual("cat2", categories[1]);
+			Assert.AreEqual("ns1.cat1", categories[0].FullName);
+			Assert.AreEqual("ns1.cat2", categories[1].FullName);
 
 			// Navigation Paths
 			NavigationPath[] navigationPaths = destinationDummyPagesStorageProvider.GetNavigationPaths(namespaces[0]);
 			Assert.AreEqual(1, navigationPaths.Length);
-			Assert.AreEqual("np1", navigationPaths[0].FullName);
+			Assert.AreEqual("ns1.np1", navigationPaths[0].FullName);
 			CollectionAssert.AreEqual(new string[] { "MainPage", "Page1" }, navigationPaths[0].Pages);
 
 			// Pages
@@ -198,10 +198,10 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			Assert.AreEqual(mainPage.FullName, pages[0].FullName);
 			Assert.AreEqual(mainPage.Comment, pages[0].Comment);
 			Assert.AreEqual(mainPage.Content, pages[0].Content);
-			Assert.AreEqual(mainPage.CreationDateTime, pages[0].CreationDateTime);
+			Assert.AreEqual(mainPage.CreationDateTime.Hour, pages[0].CreationDateTime.Hour);
 			Assert.AreEqual(mainPage.Description, pages[0].Description);
 			CollectionAssert.AreEqual(mainPage.Keywords, pages[0].Keywords);
-			Assert.AreEqual(mainPage.LastModified, pages[0].LastModified);
+			Assert.AreEqual(mainPage.LastModified.Hour, pages[0].LastModified.Hour);
 			CollectionAssert.AreEqual(mainPage.LinkedPages, pages[0].LinkedPages);
 			Assert.AreEqual(mainPage.Title, pages[0].Title);
 			Assert.AreEqual(mainPage.User, pages[0].User);
@@ -211,11 +211,11 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			Assert.IsNotNull(draft);
 			Assert.AreEqual(draftMainPage.Comment, draft.Comment);
 			Assert.AreEqual(draftMainPage.Content, draft.Content);
-			Assert.AreEqual(draftMainPage.CreationDateTime, draft.CreationDateTime);
+			Assert.AreEqual(draftMainPage.CreationDateTime.Hour, draft.CreationDateTime.Hour);
 			Assert.AreEqual(draftMainPage.Description, draft.Description);
 			Assert.AreEqual(draftMainPage.FullName, draft.FullName);
 			CollectionAssert.AreEqual(draftMainPage.Keywords, draft.Keywords);
-			Assert.AreEqual(draftMainPage.LastModified, draft.LastModified);
+			Assert.AreEqual(draftMainPage.LastModified.Hour, draft.LastModified.Hour);
 			CollectionAssert.AreEqual(draftMainPage.LinkedPages, draft.LinkedPages);
 			Assert.AreEqual(draftMainPage.Title, draft.Title);
 			Assert.AreEqual(draftMainPage.User, draft.User);
@@ -226,11 +226,11 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			PageContent pageBackup = destinationDummyPagesStorageProvider.GetBackupContent(mainPage.FullName, revs[0]);
 			Assert.AreEqual(oldMainPage.Comment, pageBackup.Comment);
 			Assert.AreEqual(oldMainPage.Content, pageBackup.Content);
-			Assert.AreEqual(oldMainPage.CreationDateTime, pageBackup.CreationDateTime);
+			Assert.AreEqual(oldMainPage.CreationDateTime.Hour, pageBackup.CreationDateTime.Hour);
 			Assert.AreEqual(oldMainPage.Description, pageBackup.Description);
 			Assert.AreEqual(oldMainPage.FullName, pageBackup.FullName);
 			CollectionAssert.AreEqual(oldMainPage.Keywords, pageBackup.Keywords);
-			Assert.AreEqual(oldMainPage.LastModified, pageBackup.LastModified);
+			Assert.AreEqual(oldMainPage.LastModified.Hour, pageBackup.LastModified.Hour);
 			CollectionAssert.AreEqual(oldMainPage.LinkedPages, pageBackup.LinkedPages);
 			Assert.AreEqual(oldMainPage.Title, pageBackup.Title);
 			Assert.AreEqual(oldMainPage.User, pageBackup.User);
@@ -239,14 +239,14 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			Message[] messages = destinationDummyPagesStorageProvider.GetMessages(mainPage.FullName);
 			Assert.AreEqual(1, messages.Length);
 			Assert.AreEqual("Body", messages[0].Body);
-			Assert.AreEqual(date, messages[0].DateTime);
-			Assert.AreEqual(-1, messages[0].ID);
+			Assert.AreEqual(date.Hour, messages[0].DateTime.Hour);
+			Assert.AreEqual(messageId, messages[0].ID);
 			Assert.AreEqual("Subject", messages[0].Subject);
 			Assert.AreEqual("Testuser", messages[0].Username);
 			Assert.AreEqual(1, messages[0].Replies.Length);
 			Assert.AreEqual("Reply Body", messages[0].Replies[0].Body);
-			Assert.AreEqual(date.AddDays(1), messages[0].Replies[0].DateTime);
-			Assert.AreEqual(messageId, messages[0].Replies[0].ID);
+			Assert.AreEqual(date.AddDays(1).Hour, messages[0].Replies[0].DateTime.Hour);
+			Assert.AreEqual(replyId, messages[0].Replies[0].ID);
 			Assert.AreEqual("RE: Subject", messages[0].Replies[0].Subject);
 			Assert.AreEqual("ReplyTestuser", messages[0].Replies[0].Username);
 
@@ -577,18 +577,34 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 	}
 
 	internal class DummyPagesStorageProvider :IPagesStorageProviderV40 {
+		private List<NamespaceInfo> namespaces;
+		private List<CategoryInfo> categories;
+		private List<NavigationPath> navigationPaths;
+		private List<Snippet> snippets;
+		private List<ContentTemplate> contentTemplates;
+		private PageContent page;
+		private PageContent draft;
+		private PageContent backup;
+		private int revision;
+		private List<Message> messages;
+
 		#region IPagesStorageProviderV40 Members
 
 		public NamespaceInfo GetNamespace(string name) {
-			throw new NotImplementedException();
+			return namespaces.FirstOrDefault(n => n.Name == name);
 		}
 
 		public NamespaceInfo[] GetNamespaces() {
-			throw new NotImplementedException();
+			return namespaces.ToArray();
 		}
 
 		public NamespaceInfo AddNamespace(string name) {
-			throw new NotImplementedException();
+			if(namespaces == null) {
+				namespaces = new List<NamespaceInfo>();
+			}
+			NamespaceInfo ns = new NamespaceInfo(name, this, null);
+			namespaces.Add(ns);
+			return ns;
 		}
 
 		public NamespaceInfo RenameNamespace(NamespaceInfo nspace, string newName) {
@@ -596,7 +612,11 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, string pageFullName) {
-			throw new NotImplementedException();
+			NamespaceInfo ns = namespaces.FirstOrDefault(n => n.Name == nspace.Name);
+			if(ns != null) {
+				ns.DefaultPageFullName = pageFullName;
+			}
+			return ns;
 		}
 
 		public bool RemoveNamespace(NamespaceInfo nspace) {
@@ -608,11 +628,14 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public CategoryInfo GetCategory(string fullName) {
-			throw new NotImplementedException();
+			return categories.FirstOrDefault(c => c.FullName == fullName);
 		}
 
 		public CategoryInfo[] GetCategories(NamespaceInfo nspace) {
-			throw new NotImplementedException();
+			if(nspace == null) {
+				return categories.FindAll(c => NameTools.GetNamespace(c.FullName) == null).ToArray();
+			}
+			return categories.FindAll(c => NameTools.GetNamespace(c.FullName) == nspace.Name).ToArray();
 		}
 
 		public CategoryInfo[] GetCategoriesForPage(string pageFullName) {
@@ -620,7 +643,12 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public CategoryInfo AddCategory(string nspace, string name) {
-			throw new NotImplementedException();
+			if(categories == null) {
+				categories = new List<CategoryInfo>();
+			}
+			CategoryInfo cat = new CategoryInfo(NameTools.GetFullName(nspace, name), this);
+			categories.Add(cat);
+			return cat;
 		}
 
 		public CategoryInfo RenameCategory(CategoryInfo category, string newName) {
@@ -640,11 +668,14 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public PageContent GetPage(string fullName) {
-			throw new NotImplementedException();
+			return page;
 		}
 
 		public PageContent[] GetPages(NamespaceInfo nspace) {
-			throw new NotImplementedException();
+			if(nspace != null && nspace.Name == NameTools.GetNamespace(page.FullName)) {
+				return new PageContent[] { page };
+			}
+			return new PageContent[0];
 		}
 
 		public PageContent[] GetUncategorizedPages(NamespaceInfo nspace) {
@@ -652,7 +683,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public PageContent GetDraft(string fullName) {
-			throw new NotImplementedException();
+			return draft;
 		}
 
 		public bool DeleteDraft(string fullName) {
@@ -660,19 +691,39 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public int[] GetBackups(string fullName) {
-			throw new NotImplementedException();
+			return new int[] { revision };
 		}
 
 		public PageContent GetBackupContent(string fullName, int revision) {
-			throw new NotImplementedException();
+			if(revision == this.revision) {
+				return backup;
+			}
+			return null;
 		}
 
 		public bool SetBackupContent(PageContent content, int revision) {
-			throw new NotImplementedException();
+			backup = content;
+			this.revision = revision;
+			return true;
 		}
 
 		public PageContent SetPageContent(string nspace, string pageName, DateTime creationDateTime, string title, string username, DateTime dateTime, string comment, string content, string[] keywords, string description, SaveMode saveMode) {
-			throw new NotImplementedException();
+			PageContent temp = new PageContent(NameTools.GetFullName(nspace, pageName), this, creationDateTime, title, username, dateTime, comment, content, keywords, description);
+			if(saveMode == SaveMode.Normal) {
+				page = temp;
+				return page;
+			}
+			if(saveMode == SaveMode.Draft) {
+				draft = temp;
+				return draft;
+			}
+			if(saveMode == SaveMode.Backup) {
+				revision = 12;
+				backup = page;
+				page = temp;
+				return page;
+			}
+			return null;
 		}
 
 		public PageContent RenamePage(string fullName, string newName) {
@@ -692,7 +743,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public Message[] GetMessages(string pageFullName) {
-			throw new NotImplementedException();
+			return messages.ToArray();
 		}
 
 		public int GetMessageCount(string pageFullName) {
@@ -700,11 +751,28 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public bool BulkStoreMessages(string pageFullName, Message[] messages) {
-			throw new NotImplementedException();
+			this.messages = new List<Message>(messages);
+			return true;
 		}
 
 		public int AddMessage(string pageFullName, string username, string subject, DateTime dateTime, string body, int parent) {
-			throw new NotImplementedException();
+			if(messages == null) {
+				messages = new List<Message>();
+			}
+			if(parent == -1) {
+				int messageId = messages.Count + 1;
+				messages.Add(new Message(messageId, username, subject, dateTime, body));
+				return messageId;
+			}
+			else {
+				int messageId = messages.Count + 1;
+				Message message = messages.FirstOrDefault(m => m.ID == parent);
+				if(message != null) {
+					Message reply = new Message(messageId, username, subject, dateTime, body);
+					message.Replies = new Message[] { reply };
+				}
+				return messageId;
+			}
 		}
 
 		public bool RemoveMessage(string pageFullName, int id, bool removeReplies) {
@@ -716,11 +784,20 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public NavigationPath[] GetNavigationPaths(NamespaceInfo nspace) {
-			throw new NotImplementedException();
+			if(nspace == null) {
+				return navigationPaths.FindAll(np => NameTools.GetNamespace(np.FullName) == null).ToArray();
+			}
+			return navigationPaths.FindAll(np => NameTools.GetNamespace(np.FullName) == nspace.Name).ToArray();
 		}
 
 		public NavigationPath AddNavigationPath(string nspace, string name, string[] pages) {
-			throw new NotImplementedException();
+			if(navigationPaths == null) {
+				navigationPaths = new List<NavigationPath>();
+			}
+			NavigationPath np = new NavigationPath(NameTools.GetFullName(nspace, name), this);
+			np.Pages = pages;
+			navigationPaths.Add(np);
+			return np;
 		}
 
 		public NavigationPath ModifyNavigationPath(NavigationPath path, string[] pages) {
@@ -732,11 +809,16 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public Snippet[] GetSnippets() {
-			throw new NotImplementedException();
+			return snippets.ToArray();
 		}
 
 		public Snippet AddSnippet(string name, string content) {
-			throw new NotImplementedException();
+			if(snippets == null) {
+				snippets = new List<Snippet>();
+			}
+			Snippet snippet = new Snippet(name, content, this);
+			snippets.Add(snippet);
+			return snippet;
 		}
 
 		public Snippet ModifySnippet(string name, string content) {
@@ -748,11 +830,16 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public ContentTemplate[] GetContentTemplates() {
-			throw new NotImplementedException();
+			return contentTemplates.ToArray();
 		}
 
 		public ContentTemplate AddContentTemplate(string name, string content) {
-			throw new NotImplementedException();
+			if(contentTemplates == null) {
+				contentTemplates = new List<ContentTemplate>();
+			}
+			ContentTemplate ct = new ContentTemplate(name, content, this);
+			contentTemplates.Add(ct);
+			return ct;
 		}
 
 		public ContentTemplate ModifyContentTemplate(string name, string content) {
@@ -800,7 +887,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		#region IDisposable Members
 
 		public void Dispose() {
-			throw new NotImplementedException();
+			
 		}
 
 		#endregion

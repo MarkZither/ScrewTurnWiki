@@ -429,7 +429,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 							case "ContentTemplates.json":
 								DeserializeContentTemplatesBackup(Encoding.Unicode.GetString(buffer), pagesStorageProvider);
 								break;
-							case "Snippet.json":
+							case "Snippets.json":
 								DeserializeSnippetsBackup(Encoding.Unicode.GetString(buffer), pagesStorageProvider);
 								break;
 							case "Version.json":
@@ -456,10 +456,10 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					pagesStorageProvider.SetNamespaceDefaultPage(new NamespaceInfo(namespaceBackup.Name, pagesStorageProvider, namespaceBackup.DefaultPageFullName), namespaceBackup.DefaultPageFullName);
 				}
 				foreach(CategoryBackup category in namespaceBackup.Categories) {
-					pagesStorageProvider.AddCategory(namespaceBackup.Name, category.FullName);
+					pagesStorageProvider.AddCategory(namespaceBackup.Name, NameTools.GetLocalName(category.FullName));
 				}
 				foreach(NavigationPathBackup navigationPath in namespaceBackup.NavigationPaths) {
-					pagesStorageProvider.AddNavigationPath(namespaceBackup.Name, navigationPath.FullName, navigationPath.Pages);
+					pagesStorageProvider.AddNavigationPath(namespaceBackup.Name, NameTools.GetLocalName(navigationPath.FullName), navigationPath.Pages);
 				}
 			}
 		}
@@ -512,8 +512,9 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		private static List<Message> DeserializeMessages(List<MessageBackup> messagesBackup) {
 			List<Message> ret = new List<Message>();
 			foreach(MessageBackup messageBackup in messagesBackup) {
-				ret.Add(new Message(messageBackup.Id, messageBackup.Username, messageBackup.Subject, messageBackup.DateTime, messageBackup.Body));
-				ret.AddRange(DeserializeMessages(messageBackup.Replies));
+				Message message = new Message(messageBackup.Id, messageBackup.Username, messageBackup.Subject, messageBackup.DateTime, messageBackup.Body);
+				message.Replies = DeserializeMessages(messageBackup.Replies).ToArray();
+				ret.Add(message);
 			}
 			return ret;
 		}
