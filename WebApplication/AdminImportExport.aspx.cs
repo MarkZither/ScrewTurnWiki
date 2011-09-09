@@ -238,10 +238,21 @@ namespace ScrewTurn.Wiki {
 
 				string[] args = e.CommandArgument.ToString().Split(new char[] { '|' });
 				switch(args[0]) {
+					case SettingsStorageProviderInterfaceName:
+						ISettingsStorageProviderV40 settingsStorageProvider = Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue);
+						BackupRestore.BackupRestore.RestoreSettingsStorageProvider(upBackup.FileBytes, settingsStorageProvider);
+						break;
+					case PagesStorageProviderInterfaceName:
+						IPagesStorageProviderV40 pagesStorageProvider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
+						BackupRestore.BackupRestore.RestorePagesStorageProvider(upBackup.FileBytes, pagesStorageProvider);
+						break;
+					case UsersStorageProviderInterfaceName:
+						IUsersStorageProviderV40 usersStorageProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
+						BackupRestore.BackupRestore.RestoreUsersStorageProvider(upBackup.FileBytes, usersStorageProvider);
+						break;
 					case FilesStorageProviderInterfaceName:
 						IFilesStorageProviderV40 filesStorageProvider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
 						BackupRestore.BackupRestore.RestoreFilesStorageProvider(upBackup.FileBytes, filesStorageProvider);
-
 						break;
 				}
 			}

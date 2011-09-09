@@ -27,6 +27,16 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			};
 		}
 
+		private static byte[] ExtractEntry(ZipEntry zipEntry) {
+			using(MemoryStream stream = new MemoryStream()) {
+				zipEntry.Extract(stream);
+				stream.Seek(0, SeekOrigin.Begin);
+				byte[] buffer = new byte[stream.Length];
+				stream.Read(buffer, 0, (int)stream.Length);
+				return buffer;
+			}
+		}
+
 		/// <summary>
 		/// Backups the specified global settings storage provider.
 		/// </summary>
@@ -191,17 +201,10 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
 		public static bool RestoreSettingsStorageProvider(byte[] backupFile, ISettingsStorageProviderV40 settingsStorageProvider) {
 			using(ZipFile settingsBackupZipFile = ZipFile.Read(backupFile)) {
-				foreach(ZipEntry zipEntry in settingsBackupZipFile) {
-					if(zipEntry.FileName == "Settings.json") {
-						using(MemoryStream stream = new MemoryStream()) {
-							zipEntry.Extract(stream);
-							stream.Seek(0, SeekOrigin.Begin);
-							byte[] buffer = new byte[stream.Length];
-							stream.Read(buffer, 0, (int)stream.Length);
-							DeserializeSettingsBackup(Encoding.Unicode.GetString(buffer), settingsStorageProvider);
-						}
-					}
-				}
+				ZipEntry settingsEntry = (from e in settingsBackupZipFile
+										where e.FileName == "Settings.json"
+										select e).FirstOrDefault();
+				DeserializeSettingsBackup(Encoding.Unicode.GetString(ExtractEntry(settingsEntry)), settingsStorageProvider);
 			}
 			return true;
 		}
@@ -578,23 +581,17 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
 		public static bool RestoreUsersStorageProvider(byte[] backupFile, IUsersStorageProviderV40 usersStorageProvider) {
 			using(ZipFile usersBackupZipFile = ZipFile.Read(backupFile)) {
-				foreach(ZipEntry zipEntry in usersBackupZipFile) {
-					using(MemoryStream stream = new MemoryStream()) {
-						zipEntry.Extract(stream);
-						stream.Seek(0, SeekOrigin.Begin);
-						byte[] buffer = new byte[stream.Length];
-						stream.Read(buffer, 0, (int)stream.Length);
-
-						switch(zipEntry.FileName) {
-							case "Groups.json":
-								DeserializeGroupsBackup(Encoding.Unicode.GetString(buffer), usersStorageProvider);
-								break;
-							case "Users.json":
-								DeserializeUsersBackup(Encoding.Unicode.GetString(buffer), usersStorageProvider);
-								break;
-						}
-					}
-				}
+				// Restore groups
+				ZipEntry groupsEntry = (from e in usersBackupZipFile
+										where e.FileName == "Groups.json"
+										select e).FirstOrDefault();
+				DeserializeGroupsBackup(Encoding.Unicode.GetString(ExtractEntry(groupsEntry)), usersStorageProvider);
+				
+				// Restore Users
+				ZipEntry usersEntry = (from e in usersBackupZipFile
+										where e.FileName == "Users.json"
+										select e).FirstOrDefault();
+				DeserializeUsersBackup(Encoding.Unicode.GetString(ExtractEntry(usersEntry)), usersStorageProvider);
 			}
 			return true;
 		}
@@ -619,7 +616,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			foreach(UserBackup user in usersBackup) {
 				UserInfo userInfo = new UserInfo(user.Username, user.DisplayName, user.Email, user.Active, user.DateTime, usersStorageProvider);
 				
-				usersStorageProvider.AddUser(user.Username, user.DisplayName, "", user.Email, user.Active, user.DateTime);
+				usersStorageProvider.AddUser(user.Username, user.DisplayName, "temppassword", user.Email, user.Active, user.DateTime);
 				
 				// User group membership
 				usersStorageProvider.SetUserMembership(userInfo, user.Groups);
