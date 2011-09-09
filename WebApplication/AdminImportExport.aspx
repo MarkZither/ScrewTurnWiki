@@ -26,6 +26,10 @@
 		<h2 class="separator"><asp:Literal ID="lblStorageProviders" runat="server" Text="Storage Providers" EnableViewState="False" meta:resourcekey="lblStorageProvidersResource1" /></h2>
 		<h4><asp:Literal ID="lblImportExportStorageProviderDescription" runat="server" EnableViewState="False" meta:resourcekey="lblImportExportStorageProviderDescriptionResource1" Text="Select a wiki you want to import/export data" /></h4>
 		<asp:DropDownList ID="lstWiki" runat="server" OnSelectedIndexChanged="lstWiki_SelectedIndexChanged" AutoPostBack="true" meta:resourcekey="lstWikiResource1" />
+
+		<br /><br />
+		<asp:FileUpload ID="upBackup" runat="server" meta:resourcekey="upBackupResource1" />
+
 		<br /><br />
 		<div id="StorageProvidersListContainerDiv">
 			<asp:Repeater ID="rptStorageProviders" runat="server" OnDataBinding="rptStorageProviders_DataBinding" OnItemCommand="rptStorageProviders_ItemCommand" Visible="false" >
@@ -34,6 +38,7 @@
 						<thead>
 						<tr class="tableheader">
 							<th><asp:Literal ID="lblName" runat="server" EnableViewState="False" meta:resourcekey="lblNameResource1" Text="Name" /></th>
+							<th>&nbsp;</th>
 							<th>&nbsp;</th>
 						</tr>
 						</thead>
@@ -44,6 +49,8 @@
 						<td><%# Eval("Provider") %></td>
 						<td><asp:LinkButton ID="btnExport" runat="server" Text="Export" ToolTip="Export data from this storage provider for the selected wiki" CommandName="Export" CommandArgument='<%# Eval("ProviderInterface") + "|" + Eval("ProviderType") %>'
 							meta:resourcekey="btnExportResource1" /></td>
+						<td><asp:LinkButton ID="btnImport" runat="server" Text="Import" ToolTip="Import data into this storage provider for the selected wiki" CommandName="Import" CommandArgument='<%# Eval("ProviderInterface") + "|" + Eval("ProviderType") %>'
+							meta:resourcekey="btnImportResource1" /></td>
 					</tr>
 				</ItemTemplate>
 				<AlternatingItemTemplate>
@@ -51,6 +58,8 @@
 						<td><%# Eval("Provider") %></td>
 						<td><asp:LinkButton ID="btnExport" runat="server" Text="Export" ToolTip="Export data from this storage provider for the selected wiki" CommandName="Export" CommandArgument='<%# Eval("ProviderInterface") + "|" + Eval("ProviderType") %>'
 							meta:resourcekey="btnExportResource1" /></td>
+						<td><asp:LinkButton ID="btnImport" runat="server" Text="Import" ToolTip="Import data into this storage provider for the selected wiki" CommandName="Import" CommandArgument='<%# Eval("ProviderInterface") + "|" + Eval("ProviderType") %>'
+							meta:resourcekey="btnImportResource1" /></td>
 					</tr>
 				</AlternatingItemTemplate>
 				<FooterTemplate>

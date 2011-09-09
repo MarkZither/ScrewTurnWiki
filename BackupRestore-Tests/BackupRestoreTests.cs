@@ -6,6 +6,7 @@ using System.Text;
 using NUnit.Framework;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.AclEngine;
+using System.IO;
 
 namespace ScrewTurn.Wiki.BackupRestore.Tests {
 
@@ -300,6 +301,87 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 
 			// User data
 			CollectionAssert.AreEqual(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, destinationDummyUsersStorageProvider.RetrieveAllUserData(users[0]));
+		}
+
+		[Test]
+		public void Backup_RestoreFilesStorageProvider_Test() {
+			DummyFilesStorageProvider sourceDummyFilesStorageProvider = new DummyFilesStorageProvider();
+			sourceDummyFilesStorageProvider.SetUp(null, Guid.NewGuid().ToString());
+
+			// Add file
+			using(MemoryStream stream = new MemoryStream()) {
+				byte[] buffer = Encoding.Unicode.GetBytes("Test file content");
+				stream.Write(buffer, 0, buffer.Length);
+				stream.Seek(0, SeekOrigin.Begin);
+				Assert.IsTrue(sourceDummyFilesStorageProvider.StoreFile("/file1.txt", stream, true));
+			}
+
+			// Add file inside a directory
+			sourceDummyFilesStorageProvider.CreateDirectory("/", "dir1/");
+			using(MemoryStream stream = new MemoryStream()) {
+				byte[] buffer = Encoding.Unicode.GetBytes("Test file inside a directory content");
+				stream.Write(buffer, 0, buffer.Length);
+				stream.Seek(0, SeekOrigin.Begin);
+				Assert.IsTrue(sourceDummyFilesStorageProvider.StoreFile("/dir1/file1.txt", stream, true));
+			}
+
+			// Add page attachment
+			using(MemoryStream stream = new MemoryStream()) {
+				byte[] buffer = Encoding.Unicode.GetBytes("Test attachment content");
+				stream.Write(buffer, 0, buffer.Length);
+				stream.Seek(0, SeekOrigin.Begin);
+				Assert.IsTrue(sourceDummyFilesStorageProvider.StorePageAttachment("page1", "attachment1", stream, true));
+			}
+
+			byte[] backupFile = BackupRestore.BackupFilesStorageProvider(sourceDummyFilesStorageProvider);
+
+			sourceDummyFilesStorageProvider.Dispose();
+
+			DummyFilesStorageProvider destinationDummyFilesStorageProvider = new DummyFilesStorageProvider();
+			destinationDummyFilesStorageProvider.SetUp(null, Guid.NewGuid().ToString());
+
+			Assert.IsTrue(BackupRestore.RestoreFilesStorageProvider(backupFile, destinationDummyFilesStorageProvider));
+
+			// File
+			string[] files = destinationDummyFilesStorageProvider.ListFiles(null);
+			Assert.AreEqual(1, files.Length);
+			Assert.AreEqual("/file1.txt", files[0]);
+			using(MemoryStream stream = new MemoryStream()) {
+				Assert.IsTrue(destinationDummyFilesStorageProvider.RetrieveFile(files[0], stream));
+				stream.Seek(0, SeekOrigin.Begin);
+				byte[] buffer = new byte[stream.Length];
+				stream.Read(buffer, 0, buffer.Length);
+				Assert.AreEqual("Test file content", Encoding.Unicode.GetString(buffer));
+			}
+
+			// File inside a directory
+			string[] directories = destinationDummyFilesStorageProvider.ListDirectories(null);
+			Assert.AreEqual(1, directories.Length);
+			Assert.AreEqual("/dir1", directories[0]);
+			files = destinationDummyFilesStorageProvider.ListFiles(directories[0]);
+			Assert.AreEqual(1, files.Length);
+			Assert.AreEqual("/dir1/file1.txt", files[0]);
+			using(MemoryStream stream = new MemoryStream()) {
+				Assert.IsTrue(destinationDummyFilesStorageProvider.RetrieveFile(files[0], stream));
+				stream.Seek(0, SeekOrigin.Begin);
+				byte[] buffer = new byte[stream.Length];
+				stream.Read(buffer, 0, buffer.Length);
+				Assert.AreEqual("Test file inside a directory content", Encoding.Unicode.GetString(buffer));
+			}
+
+			// Attachment
+			string[] attachments = destinationDummyFilesStorageProvider.ListPageAttachments("page1");
+			Assert.AreEqual(1, attachments.Length);
+			Assert.AreEqual("attachment1", attachments[0]);
+			using(MemoryStream stream = new MemoryStream()) {
+				Assert.IsTrue(destinationDummyFilesStorageProvider.RetrievePageAttachment("page1", attachments[0], stream));
+				stream.Seek(0, SeekOrigin.Begin);
+				byte[] buffer = new byte[stream.Length];
+				stream.Read(buffer, 0, buffer.Length);
+				Assert.AreEqual("Test attachment content", Encoding.Unicode.GetString(buffer));
+			}
+
+			destinationDummyFilesStorageProvider.Dispose();
 		}
 	}
 
@@ -1082,6 +1164,155 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 
 		public void Dispose() {
 			throw new NotImplementedException();
+		}
+
+		#endregion
+	}
+
+	internal class DummyFilesStorageProvider : IFilesStorageProviderV40 {
+		//private Dictionary<string, Dictionary<string, byte[]>> files;  // <directory, <fileName, byteArray>>
+		private Dictionary<string, Dictionary<string, byte[]>> attachments; // <pageFullName, <fileName, byteArray>>
+
+		#region IFilesStorageProviderV40 Members
+
+		public string[] ListFiles(string directory) {
+			IEnumerable<string> files = Directory.EnumerateFiles(Path.Combine(tempPath, (directory + "").Trim('/').Trim('\\')));
+			return files.Select((f) => { return f.Substring(tempPath.Length).Replace('\\', '/'); }).ToArray();
+		}
+
+		public string[] ListDirectories(string directory) {
+			IEnumerable<string> directories = Directory.EnumerateDirectories(Path.Combine(tempPath, (directory + "").Trim('/').Trim('\\')));
+			return directories.Select((d) => { return d.Substring(tempPath.Length).Replace('\\', '/'); }).ToArray();
+		}
+
+		public bool StoreFile(string fullName, System.IO.Stream sourceStream, bool overwrite) {
+			byte[] buffer = new byte[sourceStream.Length];
+			sourceStream.Read(buffer, 0, buffer.Length);
+			File.WriteAllBytes(Path.Combine(tempPath, fullName.TrimStart('/').TrimStart('\\')), buffer);
+			return true;
+		}
+
+		public bool RetrieveFile(string fullName, System.IO.Stream destinationStream) {
+			byte[] buffer = File.ReadAllBytes(Path.Combine(tempPath, fullName.TrimStart('/').TrimStart('\\')));
+			destinationStream.Write(buffer, 0, buffer.Length);
+			return true;
+		}
+
+		public FileDetails GetFileDetails(string fullName) {
+			FileStream file = File.Open(Path.Combine(tempPath, fullName.TrimStart('/').TrimStart('\\')), FileMode.Open);
+			FileDetails fileDetails = new FileDetails(file.Length, DateTime.UtcNow);
+			file.Close();
+			return fileDetails;
+		}
+
+		public bool DeleteFile(string fullName) {
+			throw new NotImplementedException();
+		}
+
+		public bool RenameFile(string oldFullName, string newFullName) {
+			throw new NotImplementedException();
+		}
+
+		public bool CreateDirectory(string path, string name) {
+			string temp = Path.Combine(tempPath, path.Trim('/').Trim('\\'), name.Trim('/').Trim('\\'));
+			Directory.CreateDirectory(temp);
+			return true;
+		}
+
+		public bool DeleteDirectory(string fullPath) {
+			throw new NotImplementedException();
+		}
+
+		public bool RenameDirectory(string oldFullPath, string newFullPath) {
+			throw new NotImplementedException();
+		}
+
+		public string[] GetPagesWithAttachments() {
+			return attachments.Keys.ToArray<string>();
+		}
+
+		public string[] ListPageAttachments(string pageFullName) {
+			return attachments[pageFullName].Keys.ToArray<string>();
+		}
+
+		public bool StorePageAttachment(string pageFullName, string name, System.IO.Stream sourceStream, bool overwrite) {
+			if(attachments == null) {
+				attachments = new Dictionary<string, Dictionary<string, byte[]>>();
+			}
+			if(!attachments.ContainsKey(pageFullName)) {
+				attachments[pageFullName] = new Dictionary<string, byte[]>();
+			}
+			byte[] buffer = new byte[sourceStream.Length];
+			sourceStream.Read(buffer, 0, buffer.Length);
+			attachments[pageFullName][name] = buffer;
+			return true;
+		}
+
+		public bool RetrievePageAttachment(string pageFullName, string name, System.IO.Stream destinationStream) {
+			if(attachments == null) return false;
+			if(!attachments.ContainsKey(pageFullName)) return false;
+			if(!attachments[pageFullName].ContainsKey(name)) return false;
+			destinationStream.Write(attachments[pageFullName][name], 0, attachments[pageFullName][name].Length);
+			return true;
+		}
+
+		public FileDetails GetPageAttachmentDetails(string pageFullName, string attachmentName) {
+			return new FileDetails(attachments[pageFullName][attachmentName].Length, DateTime.UtcNow);
+		}
+
+		public bool DeletePageAttachment(string pageFullName, string attachmentName) {
+			throw new NotImplementedException();
+		}
+
+		public bool RenamePageAttachment(string pageFullName, string oldName, string newName) {
+			throw new NotImplementedException();
+		}
+
+		public void NotifyPageRenaming(string oldPageFullName, string newPageFullName) {
+			throw new NotImplementedException();
+		}
+
+		#endregion
+
+		#region IStorageProviderV40 Members
+
+		public bool ReadOnly {
+			get { throw new NotImplementedException(); }
+		}
+
+		#endregion
+
+		#region IProviderV40 Members
+
+		private string tempPath;
+
+		public string CurrentWiki {
+			get { throw new NotImplementedException(); }
+		}
+
+		public void Init(IHostV40 host, string config, string wiki) {
+			throw new NotImplementedException();
+		}
+
+		public void SetUp(IHostV40 host, string config) {
+			tempPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), config);
+			Directory.CreateDirectory(tempPath);
+		}
+
+		public ComponentInformation Information {
+			get { throw new NotImplementedException(); }
+		}
+
+		public string ConfigHelpHtml {
+			get { throw new NotImplementedException(); }
+		}
+
+		#endregion
+
+		#region IDisposable Members
+
+		public void Dispose() {
+			Directory.Delete(tempPath, true);
 		}
 
 		#endregion

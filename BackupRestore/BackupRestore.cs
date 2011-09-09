@@ -650,22 +650,24 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			string[] pagesWithAttachment = filesStorageProvider.GetPagesWithAttachments();
 			foreach(string pageWithAttachment in pagesWithAttachment) {
 				string[] attachments = filesStorageProvider.ListPageAttachments(pageWithAttachment);
-				List<FileBackup> attachmentsBackup = new List<FileBackup>(attachments.Length);
+				List<AttachmentBackup> attachmentsBackup = new List<AttachmentBackup>(attachments.Length);
 				foreach(string attachment in attachments) {
 					FileDetails attachmentDetails = filesStorageProvider.GetPageAttachmentDetails(pageWithAttachment, attachment);
-					attachmentsBackup.Add(new FileBackup() {
+					attachmentsBackup.Add(new AttachmentBackup() {
 						Name = attachment,
+						PageFullName = pageWithAttachment,
 						LastModified = attachmentDetails.LastModified,
 						Size = attachmentDetails.Size
 					});
 					using(MemoryStream stream = new MemoryStream()) {
 						filesStorageProvider.RetrievePageAttachment(pageWithAttachment, attachment, stream);
+						stream.Seek(0, SeekOrigin.Begin);
 						byte[] tempBuffer = new byte[stream.Length];
 						stream.Read(tempBuffer, 0, (int)stream.Length);
 						filesBackupZipFile.AddEntry(Path.Combine("__attachments", pageWithAttachment, attachment), tempBuffer);
 					}
 				}
-				filesBackupZipFile.AddEntry(Path.Combine("__attachments", pageWithAttachment, "attachments.json"), Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(attachmentsBackup)));
+				filesBackupZipFile.AddEntry(Path.Combine("__attachments", pageWithAttachment, "Attachments.json"), Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(attachmentsBackup)));
 			}
 
 			filesBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Files"))));
@@ -679,7 +681,6 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 
 			return buffer;
-
 		}
 
 		private static DirectoryBackup BackupDirectory(IFilesStorageProviderV40 filesStorageProvider, ZipFile filesBackupZipFile, string directory) {
@@ -696,11 +697,13 @@ namespace ScrewTurn.Wiki.BackupRestore {
 				});
 				using(MemoryStream stream = new MemoryStream()) {
 					filesStorageProvider.RetrieveFile(file, stream);
+					stream.Seek(0, SeekOrigin.Begin);
 					byte[] buffer = new byte[stream.Length];
 					stream.Read(buffer, 0, (int)stream.Length);
 					filesBackupZipFile.AddEntry(file, buffer);
 				}
 			}
+			directoryBackup.Name = directory;
 			directoryBackup.Files = filesBackup;
 
 			string[] directories = filesStorageProvider.ListDirectories(directory);
@@ -711,6 +714,81 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			directoryBackup.SubDirectories = subdirectoriesBackup;
 
 			return directoryBackup;
+		}
+
+		/// <summary>
+		/// Restores files from a zip file.
+		/// </summary>
+		/// <param name="backupFile">The zip backup file.</param>
+		/// <param name="filesStorageProvider">The destination files storage provider.</param>
+		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
+		public static bool RestoreFilesStorageProvider(byte[] backupFile, IFilesStorageProviderV40 filesStorageProvider) {
+			using(ZipFile filesBackupZipFile = ZipFile.Read(backupFile)) {
+				foreach(ZipEntry zipEntry in filesBackupZipFile) {
+					using(MemoryStream stream = new MemoryStream()) {
+						zipEntry.Extract(stream);
+						stream.Seek(0, SeekOrigin.Begin);
+						byte[] buffer = new byte[stream.Length];
+						stream.Read(buffer, 0, (int)stream.Length);
+
+						if(zipEntry.FileName == "Files.json") {
+							DeserializeFilesBackup(filesBackupZipFile, Encoding.Unicode.GetString(buffer), filesStorageProvider);
+						}
+						else if(zipEntry.FileName.EndsWith("Attachments.json")) {
+							DeserializeAttachmentsBackup(filesBackupZipFile, Encoding.Unicode.GetString(buffer), filesStorageProvider);
+						}
+					}
+				}
+			}
+			return true;
+		}
+
+		private static void DeserializeFilesBackup(ZipFile filesBackupZipFile, string json, IFilesStorageProviderV40 filesStorageProvider) {
+			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
+			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
+
+			DirectoryBackup directoryBackup = javascriptSerializer.Deserialize<DirectoryBackup>(json);
+
+			string path = "";
+			RestoreDirectory(filesStorageProvider, filesBackupZipFile, directoryBackup, path);
+		}
+
+		private static void RestoreDirectory(IFilesStorageProviderV40 filesStorageProvider, ZipFile filesBackupZipFile, DirectoryBackup directoryBackup, string path) {
+			if(!string.IsNullOrEmpty(directoryBackup.Name)) {
+				filesStorageProvider.CreateDirectory("/", directoryBackup.Name);
+				path += "/" + directoryBackup.Name;
+			}
+			foreach(FileBackup file in directoryBackup.Files) {
+				ZipEntry entry = filesBackupZipFile.FirstOrDefault(e => e.FileName == file.Name.TrimStart('/'));
+				if(entry != null) {
+					using(MemoryStream stream = new MemoryStream()) {
+						entry.Extract(stream);
+						stream.Seek(0, SeekOrigin.Begin);
+						filesStorageProvider.StoreFile(file.Name, stream, true);
+					}
+				}
+			}
+			foreach(DirectoryBackup subDirectory in directoryBackup.SubDirectories) {
+				RestoreDirectory(filesStorageProvider, filesBackupZipFile, subDirectory, path);
+			}
+		}
+
+		private static void DeserializeAttachmentsBackup(ZipFile filesBackupZipFile, string json, IFilesStorageProviderV40 filesStorageProvider) {
+			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
+			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
+
+			List<AttachmentBackup> attachmentsBackup = javascriptSerializer.Deserialize<List<AttachmentBackup>>(json);
+
+			foreach(AttachmentBackup attachment in attachmentsBackup) {
+				ZipEntry entry = filesBackupZipFile.FirstOrDefault(e => e.FileName == "__attachments/" + attachment.PageFullName + "/" + attachment.Name);
+				if(entry != null) {
+					using(MemoryStream stream = new MemoryStream()) {
+						entry.Extract(stream);
+						stream.Seek(0, SeekOrigin.Begin);
+						filesStorageProvider.StorePageAttachment(attachment.PageFullName, attachment.Name, stream, true);
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -828,17 +906,28 @@ namespace ScrewTurn.Wiki.BackupRestore {
 	internal class DirectoryBackup {
 		public List<FileBackup> Files { get; set; }
 		public List<DirectoryBackup> SubDirectories { get; set; }
+
+		public string Name { get; set; }
 	}
 
 	internal class FileBackup {
 		public string Name { get; set; }
 		public long Size { get; set; }
 		public DateTime LastModified { get; set; }
+
+		public string DirectoryName { get; set; }
 	}
 
 	internal class VersionFile {
 		public string BackupRestoreVersion { get; set; }
 		public string WikiVersion { get; set; }
 		public string BackupName { get; set; }
+	}
+
+	internal class AttachmentBackup {
+		public string Name { get; set; }
+		public string PageFullName { get; set; }
+		public DateTime LastModified { get; set; }
+		public long Size { get; set; }
 	}
 }
