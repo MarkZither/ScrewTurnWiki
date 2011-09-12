@@ -394,21 +394,27 @@ namespace ScrewTurn.Wiki {
 
 			sb.Append(@"<div id=""BreadcrumbsDiv"">");
 
-			string[] pageTrail = SessionFacade.Breadcrumbs(currentWiki).GetAllPages();
+			string[] pageTrailTemp = SessionFacade.Breadcrumbs(currentWiki).GetAllPages();
+			List<PageContent> pageTrail = new List<PageContent>(pageTrailTemp.Length);
+			// Build a list of pages the are currently available
+			foreach(string pageFullName in pageTrailTemp) {
+				PageContent p = Pages.FindPage(currentWiki, pageFullName);
+				if(p != null) pageTrail.Add(p);
+			}
 			int min = 3;
-			if(pageTrail.Length < 3) min = pageTrail.Length;
+			if(pageTrail.Count < 3) min = pageTrail.Count;
 
 			sb.Append(@"<div id=""BreadcrumbsDivMin"">");
-			if(pageTrail.Length > 3) {
+			if(pageTrail.Count > 3) {
 				// Write hyperLink
 				sb.Append(@"<a href=""#"" onclick=""javascript:return __ShowAllTrail();"" title=""");
 				sb.Append(Properties.Messages.ViewBreadcrumbsTrail);
 				sb.Append(@""">(");
-				sb.Append(pageTrail.Length.ToString());
+				sb.Append(pageTrail.Count.ToString());
 				sb.Append(")</a> ");
 			}
 
-			for(int i = pageTrail.Length - min; i < pageTrail.Length; i++) {
+			for(int i = pageTrail.Count - min; i < pageTrail.Count; i++) {
 				AppendBreadcrumb(sb, pageTrail[i], "s");
 			}
 			sb.Append("</div>");
@@ -418,7 +424,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append(@"<a href=""#"" onclick=""javascript:return __HideTrail();"" title=""");
 			sb.Append(Properties.Messages.HideBreadcrumbsTrail);
 			sb.Append(@""">[X]</a> ");
-			for(int i = 0; i < pageTrail.Length; i++) {
+			for(int i = 0; i < pageTrail.Count; i++) {
 				AppendBreadcrumb(sb, pageTrail[i], "f");
 			}
 			sb.Append("</div>");
@@ -434,22 +440,25 @@ namespace ScrewTurn.Wiki {
 		/// <param name="sb">The destination <see cref="T:StringBuilder" />.</param>
 		/// <param name="pageFullName">The full name of the page to append.</param>
 		/// <param name="dpPrefix">The drop-down menu ID prefix.</param>
-		private void AppendBreadcrumb(StringBuilder sb, string pageFullName, string dpPrefix) {
+		private void AppendBreadcrumb(StringBuilder sb, PageContent page, string dpPrefix) {
 			PageNameComparer comp = new PageNameComparer();
-			PageContent pc = Pages.FindPage(currentWiki, pageFullName);
-			string id = AppendBreadcrumbDropDown(sb, pageFullName, dpPrefix);
+			
+			// If the page does not exists return.
+			if(page == null) return;
+			
+			string id = AppendBreadcrumbDropDown(sb, page.FullName, dpPrefix);
 
-			string nspace = NameTools.GetNamespace(pageFullName);
+			string nspace = NameTools.GetNamespace(page.FullName);
 
 			sb.Append("&raquo; ");
-			if(comp.Compare(pc, currentPage) == 0) sb.Append("<b>");
+			if(comp.Compare(page, currentPage) == 0) sb.Append("<b>");
 			sb.AppendFormat(@"<a href=""{0}"" title=""{1}""{2}{3}{4}>{1}</a>",
-				Tools.UrlEncode(pageFullName) + GlobalSettings.PageExtension,
-				FormattingPipeline.PrepareTitle(currentWiki, pc.Title, false, FormattingContext.PageContent, currentPage.FullName) + (string.IsNullOrEmpty(nspace) ? "" : (" (" + NameTools.GetNamespace(pageFullName) + ")")),
+				Tools.UrlEncode(page.FullName) + GlobalSettings.PageExtension,
+				FormattingPipeline.PrepareTitle(currentWiki, page.Title, false, FormattingContext.PageContent, currentPage.FullName) + (string.IsNullOrEmpty(nspace) ? "" : (" (" + NameTools.GetNamespace(page.FullName) + ")")),
 				(id != null ? @" onmouseover=""javascript:return __ShowDropDown(event, '" + id + @"', this);""" : ""),
 				(id != null ? @" id=""lnk" + id + @"""" : ""),
 				(id != null ? @" onmouseout=""javascript:return __HideDropDown('" + id + @"');""" : ""));
-			if(comp.Compare(pc, currentPage) == 0) sb.Append("</b>");
+			if(comp.Compare(page, currentPage) == 0) sb.Append("</b>");
 			sb.Append(" ");
 		}
 
