@@ -654,8 +654,18 @@ namespace ScrewTurn.Wiki.BackupRestore {
 
 			List<UserGroupBackup> userGroupsBackup = javascriptSerializer.Deserialize<List<UserGroupBackup>>(json);
 
+			UserGroup[] userGroups = usersStorageProvider.GetUserGroups();
+
 			foreach(UserGroupBackup userGroup in userGroupsBackup) {
-				usersStorageProvider.AddUserGroup(userGroup.Name, userGroup.Description);
+				UserGroup existingGroup = (from g in userGroups
+										   where g.Name == userGroup.Name
+										   select g).FirstOrDefault();
+				if(existingGroup != null) {
+					usersStorageProvider.ModifyUserGroup(existingGroup, userGroup.Description);
+				}
+				else {
+					usersStorageProvider.AddUserGroup(userGroup.Name, userGroup.Description);
+				}
 			}
 		}
 

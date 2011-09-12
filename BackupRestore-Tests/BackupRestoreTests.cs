@@ -760,7 +760,9 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public CategoryInfo[] GetCategoriesForPage(string pageFullName) {
-			throw new NotImplementedException();
+			return (from c in categories
+					where c.Pages.Contains(pageFullName)
+					select c).ToArray();
 		}
 
 		public CategoryInfo AddCategory(string nspace, string name) {
@@ -785,7 +787,17 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public bool RebindPage(string pageFullName, string[] categories) {
-			throw new NotImplementedException();
+			foreach(string category in categories) {
+				CategoryInfo cat = (from c in this.categories
+									where c.FullName == category
+									select c).FirstOrDefault();
+				if(cat != null) {
+					List<string> categoryPages = cat.Pages.ToList();
+					categoryPages.Add(cat.FullName);
+					cat.Pages = categoryPages.ToArray();
+				}
+			}
+			return true;
 		}
 
 		public PageContent GetPage(string fullName) {
@@ -1047,6 +1059,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 		}
 
 		public UserGroup[] GetUserGroups() {
+			if(userGroups == null) userGroups = new List<UserGroup>();
 			return userGroups.ToArray();
 		}
 
@@ -1059,8 +1072,14 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			return userGroup;
 		}
 
-		public UserGroup ModifyUserGroup(UserGroup group, string description) {
-			throw new NotImplementedException();
+		public UserGroup ModifyUserGroup(UserGroup userGroup, string description) {
+			UserGroup tempGroup = (from g in userGroups
+								   where g.Name == userGroup.Name
+								   select g).FirstOrDefault();
+			if(tempGroup != null) {
+				tempGroup.Description = description;
+			}
+			return tempGroup;
 		}
 
 		public bool RemoveUserGroup(UserGroup group) {
