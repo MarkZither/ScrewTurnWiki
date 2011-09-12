@@ -256,7 +256,6 @@ namespace ScrewTurn.Wiki {
 						break;
 				}
 			}
-
 		}
 
 		#endregion

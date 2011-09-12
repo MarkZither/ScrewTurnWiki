@@ -10,7 +10,7 @@
 		<asp:Panel ID="pnlList" runat="server"  meta:resourcekey="pnlListResource1" >
 			<div id="NamespaceSelectorDiv">
 				<asp:Literal ID="lblNamespace" runat="server" Text="Namespace" EnableViewState="False" meta:resourcekey="lblNamespaceResource1" /><br />
-				<asp:DropDownList ID="lstNamespace" runat="server" Width="150px" OnSelectedIndexChanged="lstNamespace_SelectedIndexChanged" meta:resourcekey="lstNamespaceResource1" />
+				<asp:DropDownList ID="lstNamespace" runat="server" Width="150px" OnSelectedIndexChanged="lstNamespace_SelectedIndexChanged" meta:resourcekey="lstNamespaceResource1" AutoPostBack="true" />
 			</div>
 			<div id="NavPathsListContainerDiv">
 				<asp:Repeater ID="rptNavPaths" runat="server"
