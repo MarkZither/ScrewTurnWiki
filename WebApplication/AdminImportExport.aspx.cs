@@ -124,138 +124,69 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void lstWiki_SelectedIndexChanged(object sender, EventArgs e) {
-			if(lstWiki.SelectedIndex > 0) {
-				rptStorageProviders.DataBind();
-				rptStorageProviders.Visible = true;
-			}
-			else {
-				rptStorageProviders.Visible = false;
-			}
+		//    if(lstWiki.SelectedIndex > 0) {
+		//        rptStorageProviders.DataBind();
+		//        rptStorageProviders.Visible = true;
+		//    }
+		//    else {
+		//        rptStorageProviders.Visible = false;
+		//    }
 		}
 
-		protected void rptStorageProviders_DataBinding(object sender, EventArgs e) {
-			List<StorageProviderRow> result = new List<StorageProviderRow>();
+		//protected void rptStorageProviders_DataBinding(object sender, EventArgs e) {
+		//    List<StorageProviderRow> result = new List<StorageProviderRow>();
 
-			// Settings
-			result.Add(new StorageProviderRow(Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), typeof(ISettingsStorageProviderV40)));
+		//    // Settings
+		//    result.Add(new StorageProviderRow(Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), typeof(ISettingsStorageProviderV40)));
 
-			// Pages
-			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
-				result.Add(new StorageProviderRow(prov, typeof(IPagesStorageProviderV40)));
-			}
+		//    // Pages
+		//    foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
+		//        result.Add(new StorageProviderRow(prov, typeof(IPagesStorageProviderV40)));
+		//    }
 
-			// Users
-			foreach(IUsersStorageProviderV40 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
-				result.Add(new StorageProviderRow(prov, typeof(IUsersStorageProviderV40)));
-			}
+		//    // Users
+		//    foreach(IUsersStorageProviderV40 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
+		//        result.Add(new StorageProviderRow(prov, typeof(IUsersStorageProviderV40)));
+		//    }
 
-			// Files
-			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
-				result.Add(new StorageProviderRow(prov, typeof(IFilesStorageProviderV40)));
-			}
+		//    // Files
+		//    foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
+		//        result.Add(new StorageProviderRow(prov, typeof(IFilesStorageProviderV40)));
+		//    }
 
-			// Themes
-			foreach(IThemesStorageProviderV40 prov in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
-				result.Add(new StorageProviderRow(prov, typeof(IThemesStorageProviderV40)));
-			}
+		//    // Themes
+		//    foreach(IThemesStorageProviderV40 prov in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
+		//        result.Add(new StorageProviderRow(prov, typeof(IThemesStorageProviderV40)));
+		//    }
 
-			rptStorageProviders.DataSource = result;
+		//    rptStorageProviders.DataSource = result;
+		//}
+
+		protected void btnExportAll_Click(object sender, EventArgs e) {
+			Log.LogEntry("Data export requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+
+			byte[] backupFile = BackupRestore.BackupRestore.BackupAll(lstWiki.SelectedValue, GlobalSettings.Provider.ListPluginAssemblies(),
+				Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue),
+				(from p in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
+					 where !p.ReadOnly select p).ToArray(),
+				(from p in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(lstWiki.SelectedValue)
+					 where IsUsersProviderFullWriteEnabled(p) select p).ToArray(),
+				(from p in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
+					 where !p.ReadOnly select p).ToArray());
+
+			Response.Clear();
+			Response.AddHeader("content-type", "application/zip");
+			Response.AddHeader("content-disposition", "attachment;filename=\"Backup-" + lstWiki.SelectedValue + ".zip\"");
+			Response.AddHeader("content-length", backupFile.Length.ToString());
+
+			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
 		}
 
-		protected void rptStorageProviders_ItemCommand(object sender, CommandEventArgs e) {
-			if(e.CommandName == "Export") {
-				Log.LogEntry("Data export requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+		protected void btnImportBackup_Click(object sender, EventArgs e) {
+			Log.LogEntry("Data Import requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 
-				string[] args = e.CommandArgument.ToString().Split(new char[] { '|' });
-				switch(args[0]) {
-					case SettingsStorageProviderInterfaceName:
-						ISettingsStorageProviderV40 settingsStorageProvider = Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue);
-
-						// Find namespaces
-						List<string> namespaces = new List<string>();
-						foreach(NamespaceInfo ns in Pages.GetNamespaces(currentWiki)) {
-							namespaces.Add(ns.Name);
-						}
-
-						byte[] settingsBackupFile = BackupRestore.BackupRestore.BackupSettingsStorageProvider(settingsStorageProvider, namespaces.ToArray(), GlobalSettings.Provider.ListPluginAssemblies());
-
-						Response.Clear();
-						Response.AddHeader("content-type", "application/zip");
-						Response.AddHeader("content-disposition", "attachment;filename=\"SettingsBackup-" + lstWiki.SelectedValue + ".zip\"");
-						Response.AddHeader("content-length", settingsBackupFile.Length.ToString());
-
-						Response.OutputStream.Write(settingsBackupFile, 0, settingsBackupFile.Length);
-
-						break;
-					case PagesStorageProviderInterfaceName:
-						IPagesStorageProviderV40 pagesStorageProvider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
-						byte[] pagesBackupFile = BackupRestore.BackupRestore.BackupPagesStorageProvider(pagesStorageProvider);
-
-						Response.Clear();
-						Response.AddHeader("content-type", "application/zip");
-						Response.AddHeader("content-disposition", "attachment;filename=\"PagesBackup-" + lstWiki.SelectedValue + ".zip\"");
-						Response.AddHeader("content-length", pagesBackupFile.Length.ToString());
-
-						Response.OutputStream.Write(pagesBackupFile, 0, pagesBackupFile.Length);
-						break;
-					case UsersStorageProviderInterfaceName:
-						IUsersStorageProviderV40 usersStorageProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
-						byte[] usersBackupFile = BackupRestore.BackupRestore.BackupUsersStorageProvider(usersStorageProvider);
-
-						Response.Clear();
-						Response.AddHeader("content-type", "application/zip");
-						Response.AddHeader("content-disposition", "attachment;filename=\"UsersBackup-" + lstWiki.SelectedValue + ".zip\"");
-						Response.AddHeader("content-length", usersBackupFile.Length.ToString());
-
-						Response.OutputStream.Write(usersBackupFile, 0, usersBackupFile.Length);
-						break;
-					case FilesStorageProviderInterfaceName:
-						IFilesStorageProviderV40 filesStorageProvider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
-						byte[] filesBackupFile = BackupRestore.BackupRestore.BackupFilesStorageProvider(filesStorageProvider);
-
-						Response.Clear();
-						Response.AddHeader("content-type", "application/zip");
-						Response.AddHeader("content-disposition", "attachment;filename=\"FilesBackup-" + lstWiki.SelectedValue + ".zip\"");
-						Response.AddHeader("content-length", filesBackupFile.Length.ToString());
-
-						Response.OutputStream.Write(filesBackupFile, 0, filesBackupFile.Length);
-						break;
-					case ThemesStorageProviderInterfaceName:
-						IThemesStorageProviderV40 themesStorageProvider = Collectors.CollectorsBox.ThemesProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
-						byte[] themesBackupFile = BackupRestore.BackupRestore.BackupThemesStorageProvider(themesStorageProvider);
-
-						Response.Clear();
-						Response.AddHeader("content-type", "application/zip");
-						Response.AddHeader("content-disposition", "attachment;filename=\"ThemesBackup-" + lstWiki.SelectedValue + ".zip\"");
-						Response.AddHeader("content-length", themesBackupFile.Length.ToString());
-
-						Response.OutputStream.Write(themesBackupFile, 0, themesBackupFile.Length);
-						break;
-				}
-			}
-			else if(e.CommandName == "Import") {
-				Log.LogEntry("Data Import requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
-
-				string[] args = e.CommandArgument.ToString().Split(new char[] { '|' });
-				switch(args[0]) {
-					case SettingsStorageProviderInterfaceName:
-						ISettingsStorageProviderV40 settingsStorageProvider = Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue);
-						BackupRestore.BackupRestore.RestoreSettingsStorageProvider(upBackup.FileBytes, settingsStorageProvider);
-						break;
-					case PagesStorageProviderInterfaceName:
-						IPagesStorageProviderV40 pagesStorageProvider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
-						BackupRestore.BackupRestore.RestorePagesStorageProvider(upBackup.FileBytes, pagesStorageProvider);
-						break;
-					case UsersStorageProviderInterfaceName:
-						IUsersStorageProviderV40 usersStorageProvider = Collectors.CollectorsBox.UsersProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
-						BackupRestore.BackupRestore.RestoreUsersStorageProvider(upBackup.FileBytes, usersStorageProvider);
-						break;
-					case FilesStorageProviderInterfaceName:
-						IFilesStorageProviderV40 filesStorageProvider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(args[1], lstWiki.SelectedValue);
-						BackupRestore.BackupRestore.RestoreFilesStorageProvider(upBackup.FileBytes, filesStorageProvider);
-						break;
-				}
-			}
+			BackupRestore.BackupRestore.RestoreAll(upBackup.FileBytes, Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, lstWiki.SelectedValue),
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(GlobalSettings.DefaultFilesProvider, lstWiki.SelectedValue));
 		}
 
 		#endregion

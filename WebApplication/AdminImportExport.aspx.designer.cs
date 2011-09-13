@@ -121,6 +121,15 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.DropDownList lstWiki;
         
         /// <summary>
+        /// btnExportAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportAll;
+        
+        /// <summary>
         /// upBackup control.
         /// </summary>
         /// <remarks>
@@ -130,12 +139,12 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.FileUpload upBackup;
         
         /// <summary>
-        /// rptStorageProviders control.
+        /// btnImportBackup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptStorageProviders;
+        protected global::System.Web.UI.WebControls.Button btnImportBackup;
     }
 }

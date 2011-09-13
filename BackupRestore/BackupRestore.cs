@@ -38,6 +38,100 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		}
 
 		/// <summary>
+		/// Backups all the providers (excluded global settings storage provider).
+		/// </summary>
+		/// <param name="wiki">The wiki.</param>
+		/// <param name="plugins">The available plugins.</param>
+		/// <param name="settingsStorageProvider">The settings storage provider.</param>
+		/// <param name="pagesStorageProviders">The pages storage providers.</param>
+		/// <param name="usersStorageProviders">The users storage providers.</param>
+		/// <param name="filesStorageProviders">The files storage providers.</param>
+		/// <returns>The zip backup file.</returns>
+		public static byte[] BackupAll(string wiki, string[] plugins, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40[] pagesStorageProviders, IUsersStorageProviderV40[] usersStorageProviders, IFilesStorageProviderV40[] filesStorageProviders) {
+			ZipFile backupZipFile = new ZipFile();
+
+			// Find all namespaces
+			List<string> namespaces = new List<string>();
+			foreach(IPagesStorageProviderV40 pagesStorageProvider in pagesStorageProviders) {
+				foreach(NamespaceInfo ns in pagesStorageProvider.GetNamespaces()) {
+					namespaces.Add(ns.Name);
+				}
+			}
+
+			// Backup settings storage provider
+			backupZipFile.AddEntry("SettingsBackup-" + settingsStorageProvider.GetType().FullName + "-" + wiki + ".zip", BackupSettingsStorageProvider(settingsStorageProvider, namespaces.ToArray(), plugins));
+
+			// Backup pages storage providers
+			foreach(IPagesStorageProviderV40 pagesStorageProvider in pagesStorageProviders) {
+				backupZipFile.AddEntry("PagesBackup-" + pagesStorageProvider.GetType().FullName + "-" + wiki + ".zip", BackupPagesStorageProvider(pagesStorageProvider));
+			}
+
+			// Backup users storage providers
+			foreach(IUsersStorageProviderV40 usersStorageProvider in usersStorageProviders) {
+				backupZipFile.AddEntry("UsersBackup-" + usersStorageProvider.GetType().FullName + "-" + wiki + ".zip", BackupUsersStorageProvider(usersStorageProvider));
+			}
+
+			// Backup files storage providers
+			foreach(IFilesStorageProviderV40 filesStorageProvider in filesStorageProviders) {
+				backupZipFile.AddEntry("FilesBackup-" + filesStorageProvider.GetType().FullName + "-" + wiki + ".zip", BackupFilesStorageProvider(filesStorageProvider));
+			}
+
+			byte[] buffer;
+			using(MemoryStream stream = new MemoryStream()) {
+				backupZipFile.Save(stream);
+				stream.Seek(0, SeekOrigin.Begin);
+				buffer = new byte[stream.Length];
+				stream.Read(buffer, 0, (int)stream.Length);
+			}
+
+			return buffer;
+		}
+
+		/// <summary>
+		/// Restores all.
+		/// </summary>
+		/// <param name="backupFile">The backup file.</param>
+		/// <param name="settingsStorageProvider">The settings storage provider.</param>
+		/// <param name="pagesStorageProvider">The pages storage provider.</param>
+		/// <param name="usersStorageProvider">The users storage provider.</param>
+		/// <param name="filesStorageProvider">The files storage provider.</param>
+		/// <returns>The zip backup file.</returns>
+		public static bool RestoreAll(byte[] backupFile, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40 pagesStorageProvider, IUsersStorageProviderV40 usersStorageProvider, IFilesStorageProviderV40 filesStorageProvider) {
+			using(ZipFile backupZipFile = ZipFile.Read(backupFile)) {
+				// Restore settings
+				ZipEntry settingsEntry = (from e in backupZipFile
+										  where e.FileName.StartsWith("SettingsBackup-")
+										  select e).FirstOrDefault();
+				RestoreSettingsStorageProvider(ExtractEntry(settingsEntry), settingsStorageProvider);
+
+				// Restore pages
+				ZipEntry[] pagesEntries = (from e in backupZipFile
+										   where e.FileName.StartsWith("PagesBackup-")
+										   select e).ToArray();
+				foreach(ZipEntry pagesEntry in pagesEntries) {
+					RestorePagesStorageProvider(ExtractEntry(pagesEntry), pagesStorageProvider);
+				}
+
+				// Restore users
+				ZipEntry[] usersEntries = (from e in backupZipFile
+										   where e.FileName.StartsWith("UsersBackup-")
+										   select e).ToArray();
+				foreach(ZipEntry usersEntry in usersEntries) {
+					RestoreUsersStorageProvider(ExtractEntry(usersEntry), usersStorageProvider);
+				}
+
+				// Restore files
+				ZipEntry[] filesEntries = (from e in backupZipFile
+										   where e.FileName.StartsWith("FilesBackup-")
+										   select e).ToArray();
+				foreach(ZipEntry filesEntry in filesEntries) {
+					RestoreFilesStorageProvider(ExtractEntry(filesEntry), filesStorageProvider);
+				}
+			}
+			return true;
+		}
+
+		/// <summary>
 		/// Backups the specified global settings storage provider.
 		/// </summary>
 		/// <param name="globalSettingsStorageProvider">The global settings storage provider.</param>

@@ -26,13 +26,16 @@
 		<h2 class="separator"><asp:Literal ID="lblStorageProviders" runat="server" Text="Storage Providers" EnableViewState="False" meta:resourcekey="lblStorageProvidersResource1" /></h2>
 		<h4><asp:Literal ID="lblImportExportStorageProviderDescription" runat="server" EnableViewState="False" meta:resourcekey="lblImportExportStorageProviderDescriptionResource1" Text="Select a wiki you want to import/export data" /></h4>
 		<asp:DropDownList ID="lstWiki" runat="server" OnSelectedIndexChanged="lstWiki_SelectedIndexChanged" AutoPostBack="true" meta:resourcekey="lstWikiResource1" />
+		
+		<br /><br />
+		<asp:Button ID="btnExportAll" runat="server" Text="Export" OnClick="btnExportAll_Click" meta:resourcekey="btnExportAllResource1" />
 
 		<br /><br />
 		<asp:FileUpload ID="upBackup" runat="server" meta:resourcekey="upBackupResource1" />
 
 		<br /><br />
 		<div id="StorageProvidersListContainerDiv">
-			<asp:Repeater ID="rptStorageProviders" runat="server" OnDataBinding="rptStorageProviders_DataBinding" OnItemCommand="rptStorageProviders_ItemCommand" Visible="false" >
+			<%--<asp:Repeater ID="rptStorageProviders" runat="server" OnDataBinding="rptStorageProviders_DataBinding" OnItemCommand="rptStorageProviders_ItemCommand" Visible="false" >
 				<HeaderTemplate>
 					<table cellpadding="0" cellspacing="0" class="generic">
 						<thead>
@@ -66,7 +69,10 @@
 					</tbody>
 					</table>
 				</FooterTemplate>
-			</asp:Repeater>
+			</asp:Repeater>--%>
+
+			
+		<asp:Button ID="btnImportBackup" runat="server" Text="Import" OnClick="btnImportBackup_Click" meta:resourcekey="btnImportBackupResource1" />
 		</div>
 	</div>
 	
