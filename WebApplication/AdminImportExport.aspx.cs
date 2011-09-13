@@ -31,6 +31,7 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsPostBack) {
 				LoadWikis();
+				LoadDestinationStorageProviders();
 			}
 		}
 		
@@ -48,6 +49,41 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
+		private void LoadDestinationStorageProviders() {
+			// Create a list of available (not readonly) pages storage providers
+			IPagesStorageProviderV40[] pagesStorageProviders = (from p in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
+																where !p.ReadOnly select p).ToArray();
+			lstPagesStorageProviders.Items.Clear();
+			foreach(IPagesStorageProviderV40 pagesStorageProvider in pagesStorageProviders) {
+				ListItem lstItem = new ListItem(pagesStorageProvider.Information.Name, pagesStorageProvider.GetType().FullName);
+				lstItem.Selected = false;
+				lstPagesStorageProviders.Items.Add(lstItem);
+			}
+			lstPagesStorageProviders.Items.FindByValue(GlobalSettings.DefaultPagesProvider).Selected = true;
+
+			// Create a list of available (not readonly) users storage providers
+			IUsersStorageProviderV40[] usersStorageProviders = (from p in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(lstWiki.SelectedValue)
+																where IsUsersProviderFullWriteEnabled(p) select p).ToArray();
+			lstUsersStorageProviders.Items.Clear();
+			foreach(IUsersStorageProviderV40 usersStorageProvider in usersStorageProviders) {
+				ListItem lstItem = new ListItem(usersStorageProvider.Information.Name, usersStorageProvider.GetType().FullName);
+				lstItem.Selected = false;
+				lstUsersStorageProviders.Items.Add(lstItem);
+			}
+			lstUsersStorageProviders.Items.FindByValue(GlobalSettings.DefaultUsersProvider).Selected = true;
+
+			// Create a list of available (not readonly) files storage providers
+			IFilesStorageProviderV40[] filesStorageProviders = (from p in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
+																where !p.ReadOnly select p).ToArray();
+			lstFilesStorageProviders.Items.Clear();
+			foreach(IFilesStorageProviderV40 filesStorageProvider in filesStorageProviders) {
+				ListItem lstItem = new ListItem(filesStorageProvider.Information.Name, filesStorageProvider.GetType().FullName);
+				lstItem.Selected = false;
+				lstFilesStorageProviders.Items.Add(lstItem);
+			}
+			lstFilesStorageProviders.Items.FindByValue(GlobalSettings.DefaultFilesProvider).Selected = true;
+		}
+
 		protected void btnExportGlobalSettings_Click(object sender, EventArgs e) {
 			Log.LogEntry("Global Settings data export requested.", EntryType.General, SessionFacade.CurrentUsername, null);
 
@@ -62,39 +98,6 @@ namespace ScrewTurn.Wiki {
 
 			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
 		}
-
-		//protected void lstDestinationWiki_SelectedIndexChanged(object sender, EventArgs e) {
-		//    btnImportSettings.Enabled = lstDestinationWiki.SelectedIndex > 0;
-		//}
-
-		//protected void btnImportSettings_Click(object sender, EventArgs e) {
-		//    string file = upSettings.FileName;
-
-		//    string ext = System.IO.Path.GetExtension(file);
-		//    if(ext != null) ext = ext.ToLowerInvariant();
-		//    if(ext != ".json") {
-		//        lblImportSettingsResult.CssClass = "resulterror";
-		//        lblImportSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
-		//        return;
-		//    }
-
-		//    string selectedWiki = lstDestinationWiki.SelectedValue;
-
-		//    Log.LogEntry("Import Settings requested for wiki: " + selectedWiki, EntryType.General, SessionFacade.CurrentUsername, null);
-		//    ISettingsStorageProviderV40 settingsStorageProvider = Settings.GetProvider(selectedWiki);
-		//    bool result = BackupRestore.BackupRestore.RestoreSettingsStorageProvider(upSettings.FileBytes, settingsStorageProvider);
-
-		//    if(result) {
-		//        lblImportSettingsResult.CssClass = "resultok";
-		//        lblImportSettingsResult.Text = Properties.Messages.ImportedSettings;
-		//        upSettings.Attributes.Add("value", "");
-		//        Log.LogEntry("Import Settings for wiki " + selectedWiki + " completed succesfully.", EntryType.General, SessionFacade.CurrentUsername, null);
-		//    }
-		//    else {
-		//        lblImportSettingsResult.CssClass = "resulterror";
-		//        lblImportSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
-		//    }
-		//}
 
 		protected void btnImportGlobalSettings_Click(object sender, EventArgs e) {
 			string file = upGlobalSettings.FileName;
@@ -124,43 +127,17 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void lstWiki_SelectedIndexChanged(object sender, EventArgs e) {
-		//    if(lstWiki.SelectedIndex > 0) {
-		//        rptStorageProviders.DataBind();
-		//        rptStorageProviders.Visible = true;
-		//    }
-		//    else {
-		//        rptStorageProviders.Visible = false;
-		//    }
+			if(lstWiki.SelectedIndex > 0) {
+				btnExportAll.Enabled = true;
+				upBackup.Enabled = true;
+				btnImportBackup.Enabled = true;
+			}
+			else {
+				btnExportAll.Enabled = false;
+				upBackup.Enabled = false;
+				btnImportBackup.Enabled = false;
+			}
 		}
-
-		//protected void rptStorageProviders_DataBinding(object sender, EventArgs e) {
-		//    List<StorageProviderRow> result = new List<StorageProviderRow>();
-
-		//    // Settings
-		//    result.Add(new StorageProviderRow(Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), typeof(ISettingsStorageProviderV40)));
-
-		//    // Pages
-		//    foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
-		//        result.Add(new StorageProviderRow(prov, typeof(IPagesStorageProviderV40)));
-		//    }
-
-		//    // Users
-		//    foreach(IUsersStorageProviderV40 prov in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
-		//        result.Add(new StorageProviderRow(prov, typeof(IUsersStorageProviderV40)));
-		//    }
-
-		//    // Files
-		//    foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
-		//        result.Add(new StorageProviderRow(prov, typeof(IFilesStorageProviderV40)));
-		//    }
-
-		//    // Themes
-		//    foreach(IThemesStorageProviderV40 prov in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(lstWiki.SelectedValue)) {
-		//        result.Add(new StorageProviderRow(prov, typeof(IThemesStorageProviderV40)));
-		//    }
-
-		//    rptStorageProviders.DataSource = result;
-		//}
 
 		protected void btnExportAll_Click(object sender, EventArgs e) {
 			Log.LogEntry("Data export requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
@@ -180,13 +157,19 @@ namespace ScrewTurn.Wiki {
 			Response.AddHeader("content-length", backupFile.Length.ToString());
 
 			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
+
+			Log.LogEntry("Data export completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 		}
 
 		protected void btnImportBackup_Click(object sender, EventArgs e) {
-			Log.LogEntry("Data Import requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+			if(upBackup.FileBytes.Length > 0) {
+				Log.LogEntry("Data Import requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 
-			BackupRestore.BackupRestore.RestoreAll(upBackup.FileBytes, Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(GlobalSettings.DefaultPagesProvider, lstWiki.SelectedValue),
-				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(GlobalSettings.DefaultUsersProvider, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(GlobalSettings.DefaultFilesProvider, lstWiki.SelectedValue));
+				BackupRestore.BackupRestore.RestoreAll(upBackup.FileBytes, Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesStorageProviders.SelectedValue, lstWiki.SelectedValue),
+					Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersStorageProviders.SelectedValue, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesStorageProviders.SelectedValue, lstWiki.SelectedValue));
+
+				Log.LogEntry("Data Import completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+			}
 		}
 
 		#endregion

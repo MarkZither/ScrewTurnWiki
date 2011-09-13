@@ -27,53 +27,27 @@
 		<h4><asp:Literal ID="lblImportExportStorageProviderDescription" runat="server" EnableViewState="False" meta:resourcekey="lblImportExportStorageProviderDescriptionResource1" Text="Select a wiki you want to import/export data" /></h4>
 		<asp:DropDownList ID="lstWiki" runat="server" OnSelectedIndexChanged="lstWiki_SelectedIndexChanged" AutoPostBack="true" meta:resourcekey="lstWikiResource1" />
 		
-		<br /><br />
-		<asp:Button ID="btnExportAll" runat="server" Text="Export" OnClick="btnExportAll_Click" meta:resourcekey="btnExportAllResource1" />
+		<br /><br /><br />
+		<h4><asp:Literal ID="lblExportAll" runat="server" EnableViewState="False" meta:resourcekey="lblExportAllResource1" Text="Export all data from all installed providers." /></h4>
+		<asp:Button ID="btnExportAll" runat="server" Text="Export" OnClick="btnExportAll_Click" meta:resourcekey="btnExportAllResource1" Enabled="false" />
+
+		<br /><br /><br />
+		<h4><asp:Literal ID="lblImportBackup" runat="server" EnableViewState="False" meta:resourcekey="lblImportBackupResource1" Text="Import data from a backup file into selected storage providers." /></h4>
+
+		<br />
+		<h4><asp:Literal ID="lblUploadBackupFile" runat="server" EnableViewState="False" meta:resourcekey="lblUploadBackupFileResource1" Text="Select a backup file." /></h4>
+		<asp:FileUpload ID="upBackup" runat="server" meta:resourcekey="upBackupResource1" Enabled="false" />
 
 		<br /><br />
-		<asp:FileUpload ID="upBackup" runat="server" meta:resourcekey="upBackupResource1" />
-
+		<h4><asp:Literal ID="lblSelectStorageProviders" runat="server" EnableViewState="False" meta:resourcekey="lblSelectStorageProvidersResource1" Text="Select storage providers where you want to import data." /></h4>
+		<asp:DropDownList ID="lstPagesStorageProviders" runat="server" meta:resourcekey="lstPagesStorageProvidersResource1"></asp:DropDownList>
 		<br /><br />
-		<div id="StorageProvidersListContainerDiv">
-			<%--<asp:Repeater ID="rptStorageProviders" runat="server" OnDataBinding="rptStorageProviders_DataBinding" OnItemCommand="rptStorageProviders_ItemCommand" Visible="false" >
-				<HeaderTemplate>
-					<table cellpadding="0" cellspacing="0" class="generic">
-						<thead>
-						<tr class="tableheader">
-							<th><asp:Literal ID="lblName" runat="server" EnableViewState="False" meta:resourcekey="lblNameResource1" Text="Name" /></th>
-							<th>&nbsp;</th>
-							<th>&nbsp;</th>
-						</tr>
-						</thead>
-						<tbody>
-				</HeaderTemplate>
-				<ItemTemplate>
-					<tr class='tablerow'>
-						<td><%# Eval("Provider") %></td>
-						<td><asp:LinkButton ID="btnExport" runat="server" Text="Export" ToolTip="Export data from this storage provider for the selected wiki" CommandName="Export" CommandArgument='<%# Eval("ProviderInterface") + "|" + Eval("ProviderType") %>'
-							meta:resourcekey="btnExportResource1" /></td>
-						<td><asp:LinkButton ID="btnImport" runat="server" Text="Import" ToolTip="Import data into this storage provider for the selected wiki" CommandName="Import" CommandArgument='<%# Eval("ProviderInterface") + "|" + Eval("ProviderType") %>'
-							meta:resourcekey="btnImportResource1" /></td>
-					</tr>
-				</ItemTemplate>
-				<AlternatingItemTemplate>
-					<tr class='tablerowalternate'>
-						<td><%# Eval("Provider") %></td>
-						<td><asp:LinkButton ID="btnExport" runat="server" Text="Export" ToolTip="Export data from this storage provider for the selected wiki" CommandName="Export" CommandArgument='<%# Eval("ProviderInterface") + "|" + Eval("ProviderType") %>'
-							meta:resourcekey="btnExportResource1" /></td>
-						<td><asp:LinkButton ID="btnImport" runat="server" Text="Import" ToolTip="Import data into this storage provider for the selected wiki" CommandName="Import" CommandArgument='<%# Eval("ProviderInterface") + "|" + Eval("ProviderType") %>'
-							meta:resourcekey="btnImportResource1" /></td>
-					</tr>
-				</AlternatingItemTemplate>
-				<FooterTemplate>
-					</tbody>
-					</table>
-				</FooterTemplate>
-			</asp:Repeater>--%>
-
-			
-		<asp:Button ID="btnImportBackup" runat="server" Text="Import" OnClick="btnImportBackup_Click" meta:resourcekey="btnImportBackupResource1" />
-		</div>
+		<asp:DropDownList ID="lstUsersStorageProviders" runat="server" meta:resourcekey="lstUsersStorageProvidersResource1"></asp:DropDownList>
+		<br /><br />
+		<asp:DropDownList ID="lstFilesStorageProviders" runat="server" meta:resourcekey="lstFilesStorageProvidersResource1"></asp:DropDownList>
+		
+		<br /><br />
+		<asp:Button ID="btnImportBackup" runat="server" Text="Import" OnClick="btnImportBackup_Click" meta:resourcekey="btnImportBackupResource1" Enabled="false" />
 	</div>
 	
 	<div class="clear"></div>

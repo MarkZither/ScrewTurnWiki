@@ -121,6 +121,15 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.DropDownList lstWiki;
         
         /// <summary>
+        /// lblExportAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblExportAll;
+        
+        /// <summary>
         /// btnExportAll control.
         /// </summary>
         /// <remarks>
@@ -130,6 +139,24 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Button btnExportAll;
         
         /// <summary>
+        /// lblImportBackup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblImportBackup;
+        
+        /// <summary>
+        /// lblUploadBackupFile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblUploadBackupFile;
+        
+        /// <summary>
         /// upBackup control.
         /// </summary>
         /// <remarks>
@@ -137,6 +164,42 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.FileUpload upBackup;
+        
+        /// <summary>
+        /// lblSelectStorageProviders control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblSelectStorageProviders;
+        
+        /// <summary>
+        /// lstPagesStorageProviders control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList lstPagesStorageProviders;
+        
+        /// <summary>
+        /// lstUsersStorageProviders control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList lstUsersStorageProviders;
+        
+        /// <summary>
+        /// lstFilesStorageProviders control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList lstFilesStorageProviders;
         
         /// <summary>
         /// btnImportBackup control.
