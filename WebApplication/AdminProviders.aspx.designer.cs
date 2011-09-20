@@ -661,6 +661,24 @@ namespace ScrewTurn.Wiki {
         protected global::Anthem.TextBox txtSettingsDestinationConfig;
         
         /// <summary>
+        /// lblExport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblExport;
+        
+        /// <summary>
+        /// lblExportDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblExportDescription;
+        
+        /// <summary>
         /// btnExport control.
         /// </summary>
         /// <remarks>
