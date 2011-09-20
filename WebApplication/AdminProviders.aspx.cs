@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Net;
+using System.Linq;
+using System.IO;
 
 namespace ScrewTurn.Wiki {
 
@@ -537,6 +539,38 @@ namespace ScrewTurn.Wiki {
 		}
 
 		#endregion
+
+		protected void btnExport_Click(object sender, EventArgs e) {
+			Log.LogEntry("Data export requested.", EntryType.General, SessionFacade.GetCurrentUsername());
+
+			string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempDir);
+			string zipFileName = Path.Combine(tempDir, "Backup.zip");
+
+			bool backupFileSucceded = BackupRestore.BackupRestore.BackupAll(zipFileName, Settings.Provider.ListPluginAssemblies(),
+				Settings.Provider,
+				(from p in Collectors.PagesProviderCollector.AllProviders where !p.ReadOnly select p).ToArray(),
+				(from p in Collectors.UsersProviderCollector.AllProviders where IsUsersProviderFullWriteEnabled(p) select p).ToArray(),
+				(from p in Collectors.FilesProviderCollector.AllProviders where !p.ReadOnly select p).ToArray());
+
+			FileInfo file = new FileInfo(zipFileName);
+			Response.Clear();
+			Response.AddHeader("content-type", GetMimeType(zipFileName));
+			Response.AddHeader("content-disposition", "attachment;filename=Backup.zip");
+			Response.AddHeader("content-length", file.Length.ToString());
+
+			Response.TransmitFile(zipFileName);
+			Response.Flush();
+
+			Directory.Delete(tempDir, true);
+			Log.LogEntry("Data export completed.", EntryType.General, SessionFacade.GetCurrentUsername());
+		}
+
+		private string GetMimeType(string ext) {
+			string mime = "";
+			if(MimeTypes.Types.TryGetValue(ext, out mime)) return mime;
+			else return "application/octet-stream";
+		}
 
 		/// <summary>
 		/// Detects whether a users storage provider fully supports writing to all managed data.

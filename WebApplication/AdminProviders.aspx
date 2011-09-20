@@ -249,6 +249,9 @@
 		<anthem:TextBox ID="txtSettingsDestinationConfig" runat="server" TextMode="MultiLine" CssClass="config" />
 	</div>
 	
+	<br /><br />
+	<asp:Button ID="btnExport" runat="server" Text="Export" OnClick="btnExport_Click" meta:resourcekey="btnExportResource1" />
+
 	<div style="clear: both;"></div>
 	
 </asp:Content>

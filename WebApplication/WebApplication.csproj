@@ -2676,6 +2676,10 @@
       <Project>{44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81}</Project>
       <Name>AclEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BackupRestore\BackupRestore.csproj">
+      <Project>{06320590-F6FC-4F8B-B3A2-2B5991676BE8}</Project>
+      <Name>BackupRestore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{C353A35C-86D0-4154-9500-4F88CAAB29C3}</Project>
       <Name>Core</Name>
@@ -2796,7 +2800,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52149</DevelopmentServerPort>
+          <DevelopmentServerPort>10043</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
