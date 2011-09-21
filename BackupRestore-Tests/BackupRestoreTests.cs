@@ -13,6 +13,19 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 	[TestFixture]
 	public class BackupRestoreTests {
 
+		private string tempPath;
+
+		[SetUp]
+		public void SetUp() {
+			tempPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempPath);
+		}
+
+		[TearDown]
+		public void TearDown() {
+			Directory.Delete(tempPath, true);
+		}
+
 		[Test]
 		public void Backup_RestoreGlobalSettingsStorageProvider_Test() {
 			DummyGlobalSettingsStorageProvider sourceDummyGlobalSettingsStorageProvider = new DummyGlobalSettingsStorageProvider();
@@ -92,12 +105,17 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			sourceDummySettingsStorageProvider.AclManager.StoreEntry("res1", "act1", "sbj2", Value.Deny);
 
 			// Backup DummySettingsStorageProvider
-			byte[] backup = BackupRestore.BackupSettingsStorageProvider(sourceDummySettingsStorageProvider, new string[] { "ns1" }, new string[] { "plugin1", "plugin2" });
+			string zipFileName = Path.Combine(tempPath, "SettingsZipFile.zip");
+			Assert.IsTrue(BackupRestore.BackupSettingsStorageProvider(zipFileName, sourceDummySettingsStorageProvider, new string[] { "ns1" }, new string[] { "plugin1", "plugin2" }));
 
 			DummySettingsStorageProvider destinationDummySettingsStorageProvider = new DummySettingsStorageProvider();
 			
 			// Restore DummySettigsStorageProvider
-			Assert.IsTrue(BackupRestore.RestoreSettingsStorageProvider(backup, destinationDummySettingsStorageProvider));
+			using(Stream stream = File.OpenRead(zipFileName)) {
+				byte[] backup = new byte[stream.Length];
+				stream.Read(backup, 0, backup.Length);
+				Assert.IsTrue(BackupRestore.RestoreSettingsStorageProvider(backup, destinationDummySettingsStorageProvider));
+			}
 
 			// Settings
 			Assert.AreEqual("value1", destinationDummySettingsStorageProvider.GetSetting("key1"));
@@ -169,11 +187,16 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			// Snippets
 			Snippet snippet = sourceDummyPagesStorageProvider.AddSnippet("Snippet1", "Content");
 
-			byte[] backupFile = BackupRestore.BackupPagesStorageProvider(sourceDummyPagesStorageProvider);
+			string zipFileName = Path.Combine(tempPath, "PagesZipFile.zip");
+			Assert.IsTrue(BackupRestore.BackupPagesStorageProvider(zipFileName, sourceDummyPagesStorageProvider));
 
 			DummyPagesStorageProvider destinationDummyPagesStorageProvider = new DummyPagesStorageProvider();
 
-			Assert.IsTrue(BackupRestore.RestorePagesStorageProvider(backupFile, destinationDummyPagesStorageProvider));
+			using(Stream stream = File.OpenRead(zipFileName)) {
+				byte[] backup = new byte[stream.Length];
+				stream.Read(backup, 0, backup.Length);
+				Assert.IsTrue(BackupRestore.RestorePagesStorageProvider(backup, destinationDummyPagesStorageProvider));
+			}
 
 			// Namespaces
 			NamespaceInfo[] namespaces = destinationDummyPagesStorageProvider.GetNamespaces();
@@ -277,11 +300,16 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			sourceDummyUsersStorageProvider.StoreUserData(user, "key1", "value1");
 			sourceDummyUsersStorageProvider.StoreUserData(user, "key2", "value2");
 
-			byte[] backupFile = BackupRestore.BackupUsersStorageProvider(sourceDummyUsersStorageProvider);
+			string zipFileName = Path.Combine(tempPath, "UsersZipFile.zip");
+			Assert.IsTrue(BackupRestore.BackupUsersStorageProvider(zipFileName, sourceDummyUsersStorageProvider));
 
 			DummyUsersStorageProvider destinationDummyUsersStorageProvider = new DummyUsersStorageProvider();
 
-			Assert.IsTrue(BackupRestore.RestoreUsersStorageProvider(backupFile, destinationDummyUsersStorageProvider));
+			using(Stream stream = File.OpenRead(zipFileName)) {
+				byte[] backup = new byte[stream.Length];
+				stream.Read(backup, 0, backup.Length);
+				Assert.IsTrue(BackupRestore.RestoreUsersStorageProvider(backup, destinationDummyUsersStorageProvider));
+			}
 
 			// Group
 			UserGroup[] groups = destinationDummyUsersStorageProvider.GetUserGroups();
@@ -333,14 +361,15 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 				Assert.IsTrue(sourceDummyFilesStorageProvider.StorePageAttachment("page1", "attachment1", stream, true));
 			}
 
-			byte[] backupFile = BackupRestore.BackupFilesStorageProvider(sourceDummyFilesStorageProvider);
+			string zipFileName = Path.Combine(tempPath, "FilesZipFile.zip");
+			Assert.IsTrue(BackupRestore.BackupFilesStorageProvider(zipFileName, sourceDummyFilesStorageProvider));
 
 			sourceDummyFilesStorageProvider.Dispose();
 
 			DummyFilesStorageProvider destinationDummyFilesStorageProvider = new DummyFilesStorageProvider();
 			destinationDummyFilesStorageProvider.SetUp(null, Guid.NewGuid().ToString());
 
-			Assert.IsTrue(BackupRestore.RestoreFilesStorageProvider(backupFile, destinationDummyFilesStorageProvider));
+			Assert.IsTrue(BackupRestore.RestoreFilesStorageProvider(zipFileName, destinationDummyFilesStorageProvider));
 
 			// File
 			string[] files = destinationDummyFilesStorageProvider.ListFiles(null);

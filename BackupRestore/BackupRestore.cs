@@ -9,6 +9,7 @@ using System.Collections;
 using ScrewTurn.Wiki.AclEngine;
 using Ionic.Zip;
 using System.IO;
+using System.Net;
 
 namespace ScrewTurn.Wiki.BackupRestore {
 
@@ -37,67 +38,84 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 		}
 
+		private static void ExtractEntry(ZipEntry zipEntry, string destinationPath) {
+			zipEntry.Extract(destinationPath);
+		}
+
 		/// <summary>
 		/// Backups all the providers (excluded global settings storage provider).
 		/// </summary>
+		/// <param name="backupZipFileName">The name of the zip file where to store the backup file.</param>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="plugins">The available plugins.</param>
 		/// <param name="settingsStorageProvider">The settings storage provider.</param>
 		/// <param name="pagesStorageProviders">The pages storage providers.</param>
 		/// <param name="usersStorageProviders">The users storage providers.</param>
 		/// <param name="filesStorageProviders">The files storage providers.</param>
-		/// <returns>The zip backup file.</returns>
-		public static byte[] BackupAll(string wiki, string[] plugins, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40[] pagesStorageProviders, IUsersStorageProviderV40[] usersStorageProviders, IFilesStorageProviderV40[] filesStorageProviders) {
-			ZipFile backupZipFile = new ZipFile();
+		/// <returns><c>true</c> if the backup has been succesfull.</returns>
+		public static bool BackupAll(string backupZipFileName, string wiki, string[] plugins, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40[] pagesStorageProviders, IUsersStorageProviderV40[] usersStorageProviders, IFilesStorageProviderV40[] filesStorageProviders) {
+			string tempPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempPath);
 
-			// Find all namespaces
-			List<string> namespaces = new List<string>();
-			foreach(IPagesStorageProviderV40 pagesStorageProvider in pagesStorageProviders) {
-				foreach(NamespaceInfo ns in pagesStorageProvider.GetNamespaces()) {
-					namespaces.Add(ns.Name);
+			using(ZipFile backupZipFile = new ZipFile(backupZipFileName)) {
+
+				// Find all namespaces
+				List<string> namespaces = new List<string>();
+				foreach(IPagesStorageProviderV40 pagesStorageProvider in pagesStorageProviders) {
+					foreach(NamespaceInfo ns in pagesStorageProvider.GetNamespaces()) {
+						namespaces.Add(ns.Name);
+					}
 				}
+
+				// Backup settings storage provider
+				string zipSettingsBackup = Path.Combine(tempPath, "SettingsBackup-" + settingsStorageProvider.GetType().FullName + "-" + wiki + ".zip");
+				BackupSettingsStorageProvider(zipSettingsBackup, settingsStorageProvider, namespaces.ToArray(), plugins);
+				backupZipFile.AddFile(zipSettingsBackup, "");
+				
+				// Backup pages storage providers
+				foreach(IPagesStorageProviderV40 pagesStorageProvider in pagesStorageProviders) {
+					string zipPagesBackup = Path.Combine(tempPath, "PagesBackup-" + pagesStorageProvider.GetType().FullName + "-" + wiki + ".zip");
+					BackupPagesStorageProvider(zipPagesBackup, pagesStorageProvider);
+					backupZipFile.AddFile(zipPagesBackup, "");
+				}
+
+				// Backup users storage providers
+				foreach(IUsersStorageProviderV40 usersStorageProvider in usersStorageProviders) {
+					string zipUsersProvidersBackup = Path.Combine(tempPath, "UsersBackup-" + usersStorageProvider.GetType().FullName + "-" + wiki + ".zip");
+					BackupUsersStorageProvider(zipUsersProvidersBackup, usersStorageProvider);
+					backupZipFile.AddFile(zipUsersProvidersBackup, "");
+				}
+
+				// Backup files storage providers
+				foreach(IFilesStorageProviderV40 filesStorageProvider in filesStorageProviders) {
+					string zipFilesProviderBackup = Path.Combine(tempPath, "FilesBackup-" + filesStorageProvider.GetType().FullName + "-" + wiki + ".zip");
+					BackupFilesStorageProvider(zipFilesProviderBackup, filesStorageProvider);
+					backupZipFile.AddFile(zipFilesProviderBackup, "");
+				}
+
+				backupZipFile.Save();
 			}
-
-			// Backup settings storage provider
-			backupZipFile.AddEntry("SettingsBackup-" + settingsStorageProvider.GetType().FullName + "-" + wiki + ".zip", BackupSettingsStorageProvider(settingsStorageProvider, namespaces.ToArray(), plugins));
-
-			// Backup pages storage providers
-			foreach(IPagesStorageProviderV40 pagesStorageProvider in pagesStorageProviders) {
-				backupZipFile.AddEntry("PagesBackup-" + pagesStorageProvider.GetType().FullName + "-" + wiki + ".zip", BackupPagesStorageProvider(pagesStorageProvider));
-			}
-
-			// Backup users storage providers
-			foreach(IUsersStorageProviderV40 usersStorageProvider in usersStorageProviders) {
-				backupZipFile.AddEntry("UsersBackup-" + usersStorageProvider.GetType().FullName + "-" + wiki + ".zip", BackupUsersStorageProvider(usersStorageProvider));
-			}
-
-			// Backup files storage providers
-			foreach(IFilesStorageProviderV40 filesStorageProvider in filesStorageProviders) {
-				backupZipFile.AddEntry("FilesBackup-" + filesStorageProvider.GetType().FullName + "-" + wiki + ".zip", BackupFilesStorageProvider(filesStorageProvider));
-			}
-
-			byte[] buffer;
-			using(MemoryStream stream = new MemoryStream()) {
-				backupZipFile.Save(stream);
-				stream.Seek(0, SeekOrigin.Begin);
-				buffer = new byte[stream.Length];
-				stream.Read(buffer, 0, (int)stream.Length);
-			}
-
-			return buffer;
+			Directory.Delete(tempPath, true);
+			return true;
 		}
 
 		/// <summary>
 		/// Restores all.
 		/// </summary>
-		/// <param name="backupFile">The backup file.</param>
+		/// <param name="backupFileAddress">The backup file address.</param>
 		/// <param name="settingsStorageProvider">The settings storage provider.</param>
 		/// <param name="pagesStorageProvider">The pages storage provider.</param>
 		/// <param name="usersStorageProvider">The users storage provider.</param>
 		/// <param name="filesStorageProvider">The files storage provider.</param>
 		/// <returns>The zip backup file.</returns>
-		public static bool RestoreAll(byte[] backupFile, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40 pagesStorageProvider, IUsersStorageProviderV40 usersStorageProvider, IFilesStorageProviderV40 filesStorageProvider) {
-			using(ZipFile backupZipFile = ZipFile.Read(backupFile)) {
+		public static bool RestoreAll(string backupFileAddress, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40 pagesStorageProvider, IUsersStorageProviderV40 usersStorageProvider, IFilesStorageProviderV40 filesStorageProvider) {
+			string tempPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempPath);
+			
+			WebClient webClient = new WebClient();
+			webClient.DownloadFile(backupFileAddress, Path.Combine(tempPath, "Backup.zip"));
+
+			using(ZipFile backupZipFile = ZipFile.Read(Path.Combine(tempPath, "Backup.zip"))) {
 				// Restore settings
 				ZipEntry settingsEntry = (from e in backupZipFile
 										  where e.FileName.StartsWith("SettingsBackup-")
@@ -125,7 +143,10 @@ namespace ScrewTurn.Wiki.BackupRestore {
 										   where e.FileName.StartsWith("FilesBackup-")
 										   select e).ToArray();
 				foreach(ZipEntry filesEntry in filesEntries) {
-					RestoreFilesStorageProvider(ExtractEntry(filesEntry), filesStorageProvider);
+					string extractedZipFilePath = Path.Combine(tempPath, filesEntry.FileName);
+					ExtractEntry(filesEntry, tempPath);
+					RestoreFilesStorageProvider(extractedZipFilePath, filesStorageProvider);
+					File.Delete(extractedZipFilePath);
 				}
 			}
 			return true;
@@ -212,11 +233,12 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <summary>
 		/// Backups the specified settings provider.
 		/// </summary>
+		/// <param name="zipFileName">The zip file name where to store the backup.</param>
 		/// <param name="settingsStorageProvider">The source settings provider.</param>
 		/// <param name="knownNamespaces">The currently known page namespaces.</param>
-		/// <param name="knownPlugins">The currently known plugins.</param>		
-		/// <returns>The json backup file.</returns>
-		public static byte[] BackupSettingsStorageProvider(ISettingsStorageProviderV40 settingsStorageProvider, string[] knownNamespaces, string[] knownPlugins) {
+		/// <param name="knownPlugins">The currently known plugins.</param>	
+		/// <returns><c>true</c> if the backup file has been succesfully created.</returns>
+		public static bool BackupSettingsStorageProvider(string zipFileName, ISettingsStorageProviderV40 settingsStorageProvider, string[] knownNamespaces, string[] knownPlugins) {
 			SettingsBackup settingsBackup = new SettingsBackup();
 
 			// Settings
@@ -280,20 +302,26 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
-			ZipFile settingsBackupZipFile = new ZipFile();
-			settingsBackupZipFile.AddEntry("Settings.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(settingsBackup)));
+			string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempDir);
 
-			settingsBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Settings"))));
+			FileStream tempFile = File.Create(Path.Combine(tempDir, "Settings.json"));
+			byte[] buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(settingsBackup));
+			tempFile.Write(buffer, 0, buffer.Length);
+			tempFile.Close();
 
-			byte[] buffer;
-			using(MemoryStream stream = new MemoryStream()) {
-				settingsBackupZipFile.Save(stream);
-				stream.Seek(0, SeekOrigin.Begin);
-				buffer = new byte[stream.Length];
-				stream.Read(buffer, 0, (int)stream.Length);
+			tempFile = File.Create(Path.Combine(tempDir, "Version.json"));
+			buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Settings")));
+			tempFile.Write(buffer, 0, buffer.Length);
+			tempFile.Close();
+
+			using(ZipFile zipFile = new ZipFile()) {
+				zipFile.AddDirectory(tempDir, "");
+				zipFile.Save(zipFileName);
 			}
+			Directory.Delete(tempDir, true);
 
-			return buffer;
+			return true;
 		}
 
 		/// <summary>
@@ -321,7 +349,12 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			// Settings
 			settingsStorageProvider.BeginBulkUpdate();
 			foreach(var pair in settingsBackup.Settings) {
-				settingsStorageProvider.SetSetting(pair.Key, pair.Value);
+				if(pair.Key.StartsWith("Theme") && pair.Value.Split(new char[] { '|' }).Length == 1) {
+					settingsStorageProvider.SetSetting(pair.Key, "standard|" + pair.Value);
+				}
+				else {
+					settingsStorageProvider.SetSetting(pair.Key, pair.Value);
+				}
 			}
 			settingsStorageProvider.EndBulkUpdate();
 
@@ -364,13 +397,15 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <summary>
 		/// Backups the pages storage provider.
 		/// </summary>
+		/// <param name="zipFileName">The zip file name where to store the backup.</param>
 		/// <param name="pagesStorageProvider">The pages storage provider.</param>
-		/// <returns>The zip backup file.</returns>
-		public static byte[] BackupPagesStorageProvider(IPagesStorageProviderV40 pagesStorageProvider) {
+		/// <returns><c>true</c> if the backup file has been succesfully created.</returns>
+		public static bool BackupPagesStorageProvider(string zipFileName, IPagesStorageProviderV40 pagesStorageProvider) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
-			ZipFile pagesBackupZipFile = new ZipFile();
+			string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempDir);
 
 			List<NamespaceInfo> nspaces = new List<NamespaceInfo>(pagesStorageProvider.GetNamespaces());
 			nspaces.Add(null);
@@ -463,10 +498,16 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					}
 					pageBackup.Messages = messageBackupList;
 
-					pagesBackupZipFile.AddEntry(page.FullName + ".json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(pageBackup)));
+					FileStream tempFile = File.Create(Path.Combine(tempDir, page.FullName + ".json"));
+					byte[] buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(pageBackup));
+					tempFile.Write(buffer, 0, buffer.Length);
+					tempFile.Close();
 				}
 			}
-			pagesBackupZipFile.AddEntry("Namespaces.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(namespaceBackupList)));
+			FileStream tempNamespacesFile = File.Create(Path.Combine(tempDir, "Namespaces.json"));
+			byte[] namespacesBuffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(namespaceBackupList));
+			tempNamespacesFile.Write(namespacesBuffer, 0, namespacesBuffer.Length);
+			tempNamespacesFile.Close();
 
 			// Backup content templates
 			ContentTemplate[] contentTemplates = pagesStorageProvider.GetContentTemplates();
@@ -477,7 +518,10 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					Content = contentTemplate.Content
 				});
 			}
-			pagesBackupZipFile.AddEntry("ContentTemplates.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(contentTemplatesBackup)));
+			FileStream tempContentTemplatesFile = File.Create(Path.Combine(tempDir, "ContentTemplates.json"));
+			byte[] contentTemplatesBuffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(contentTemplatesBackup));
+			tempContentTemplatesFile.Write(contentTemplatesBuffer, 0, contentTemplatesBuffer.Length);
+			tempContentTemplatesFile.Close();
 
 			// Backup Snippets
 			Snippet[] snippets = pagesStorageProvider.GetSnippets();
@@ -488,19 +532,24 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					Content = snippet.Content
 				});
 			}
-			pagesBackupZipFile.AddEntry("Snippets.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(snippetsBackup)));
+			FileStream tempSnippetsFile = File.Create(Path.Combine(tempDir, "Snippets.json"));
+			byte[] snippetsBuffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(snippetsBackup));
+			tempSnippetsFile.Write(snippetsBuffer, 0, snippetsBuffer.Length);
+			tempSnippetsFile.Close();
 
-			pagesBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Pages"))));
+			FileStream tempVersionFile = File.Create(Path.Combine(tempDir, "Version.json"));
+			byte[] versionBuffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Pages")));
+			tempVersionFile.Write(versionBuffer, 0, versionBuffer.Length);
+			tempVersionFile.Close();
 
-			byte[] buffer;
-			using(MemoryStream stream = new MemoryStream()) {
-				pagesBackupZipFile.Save(stream);
-				stream.Seek(0, SeekOrigin.Begin);
-				buffer = new byte[stream.Length];
-				stream.Read(buffer, 0, (int)stream.Length);
+
+			using(ZipFile zipFile = new ZipFile()) {
+				zipFile.AddDirectory(tempDir, "");
+				zipFile.Save(zipFileName);
 			}
+			Directory.Delete(tempDir, true);
 
-			return buffer;
+			return true;
 		}
 
 		// Backup a message with a recursive function to backup all its replies.
@@ -671,13 +720,15 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <summary>
 		/// Backups the users storage provider.
 		/// </summary>
+		/// <param name="zipFileName">The zip file name where to store the backup.</param>
 		/// <param name="usersStorageProvider">The users storage provider.</param>
-		/// <returns>The zip backup file.</returns>
-		public static byte[] BackupUsersStorageProvider(IUsersStorageProviderV40 usersStorageProvider) {
+		/// <returns><c>true</c> if the backup file has been succesfully created.</returns>
+		public static bool BackupUsersStorageProvider(string zipFileName, IUsersStorageProviderV40 usersStorageProvider) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
-			ZipFile usersBackupZipFile = new ZipFile();
+			string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempDir);
 
 			// Backup users
 			UserInfo[] users = usersStorageProvider.GetUsers();
@@ -693,7 +744,10 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					UserData = usersStorageProvider.RetrieveAllUserData(user)
 				});
 			}
-			usersBackupZipFile.AddEntry("Users.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(usersBackup)));
+			FileStream tempFile = File.Create(Path.Combine(tempDir, "Users.json"));
+			byte[] buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(usersBackup));
+			tempFile.Write(buffer, 0, buffer.Length);
+			tempFile.Close();
 
 			// Backup UserGroups
 			UserGroup[] userGroups = usersStorageProvider.GetUserGroups();
@@ -704,19 +758,24 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					Description = userGroup.Description
 				});
 			}
-			usersBackupZipFile.AddEntry("Groups.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(userGroupsBackup)));
+			tempFile = File.Create(Path.Combine(tempDir, "Groups.json"));
+			buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(userGroupsBackup));
+			tempFile.Write(buffer, 0, buffer.Length);
+			tempFile.Close();
 
-			usersBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Users"))));
+			tempFile = File.Create(Path.Combine(tempDir, "Version.json"));
+			buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Users")));
+			tempFile.Write(buffer, 0, buffer.Length);
+			tempFile.Close();
 
-			byte[] buffer;
-			using(MemoryStream stream = new MemoryStream()) {
-				usersBackupZipFile.Save(stream);
-				stream.Seek(0, SeekOrigin.Begin);
-				buffer = new byte[stream.Length];
-				stream.Read(buffer, 0, (int)stream.Length);
+
+			using(ZipFile zipFile = new ZipFile()) {
+				zipFile.AddDirectory(tempDir, "");
+				zipFile.Save(zipFileName);
 			}
+			Directory.Delete(tempDir, true);
 
-			return buffer;
+			return true;
 		}
 
 		/// <summary>
@@ -787,17 +846,22 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <summary>
 		/// Backups the files storage provider.
 		/// </summary>
+		/// <param name="zipFileName">The zip file name where to store the backup.</param>
 		/// <param name="filesStorageProvider">The files storage provider.</param>
-		/// <returns>The zip backup file.</returns>
-		public static byte[] BackupFilesStorageProvider(IFilesStorageProviderV40 filesStorageProvider) {
+		/// <returns><c>true</c> if the backup file has been succesfully created.</returns>
+		public static bool BackupFilesStorageProvider(string zipFileName, IFilesStorageProviderV40 filesStorageProvider) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
-			ZipFile filesBackupZipFile = new ZipFile();
+			string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempDir);
 
-			DirectoryBackup directoriesBackup = BackupDirectory(filesStorageProvider, filesBackupZipFile, null);
+			DirectoryBackup directoriesBackup = BackupDirectory(filesStorageProvider, tempDir, null);
 
-			filesBackupZipFile.AddEntry("Files.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(directoriesBackup)));
+			FileStream tempFile = File.Create(Path.Combine(tempDir, "Files.json"));
+			byte[] buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(directoriesBackup));
+			tempFile.Write(buffer, 0, buffer.Length);
+			tempFile.Close();
 
 			// Backup Pages Attachments
 			string[] pagesWithAttachment = filesStorageProvider.GetPagesWithAttachments();
@@ -817,26 +881,33 @@ namespace ScrewTurn.Wiki.BackupRestore {
 						stream.Seek(0, SeekOrigin.Begin);
 						byte[] tempBuffer = new byte[stream.Length];
 						stream.Read(tempBuffer, 0, (int)stream.Length);
-						filesBackupZipFile.AddEntry(Path.Combine("__attachments", pageWithAttachment, attachment), tempBuffer);
+
+						DirectoryInfo dir = Directory.CreateDirectory(Path.Combine(tempDir, Path.Combine("__attachments", pageWithAttachment)));
+						tempFile = File.Create(Path.Combine(dir.FullName, attachment));
+						tempFile.Write(tempBuffer, 0, tempBuffer.Length);
+						tempFile.Close();
 					}
 				}
-				filesBackupZipFile.AddEntry(Path.Combine("__attachments", pageWithAttachment, "Attachments.json"), Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(attachmentsBackup)));
+				tempFile = File.Create(Path.Combine(tempDir, Path.Combine("__attachments", Path.Combine(pageWithAttachment, "Attachments.json"))));
+				buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(attachmentsBackup));
+				tempFile.Write(buffer, 0, buffer.Length);
+				tempFile.Close();
 			}
+			tempFile = File.Create(Path.Combine(tempDir, "Version.json"));
+			buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Files")));
+			tempFile.Write(buffer, 0, buffer.Length);
+			tempFile.Close();
 
-			filesBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("Files"))));
-
-			byte[] buffer;
-			using(MemoryStream stream = new MemoryStream()) {
-				filesBackupZipFile.Save(stream);
-				stream.Seek(0, SeekOrigin.Begin);
-				buffer = new byte[stream.Length];
-				stream.Read(buffer, 0, (int)stream.Length);
+			using(ZipFile zipFile = new ZipFile()) {
+				zipFile.AddDirectory(tempDir, "");
+				zipFile.Save(zipFileName);
 			}
+			Directory.Delete(tempDir, true);
 
-			return buffer;
+			return true;
 		}
 
-		private static DirectoryBackup BackupDirectory(IFilesStorageProviderV40 filesStorageProvider, ZipFile filesBackupZipFile, string directory) {
+		private static DirectoryBackup BackupDirectory(IFilesStorageProviderV40 filesStorageProvider, string zipTempDir, string directory) {
 			DirectoryBackup directoryBackup = new DirectoryBackup();
 
 			string[] files = filesStorageProvider.ListFiles(directory);
@@ -848,12 +919,15 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					Size = fileDetails.Size,
 					LastModified = fileDetails.LastModified
 				});
+
+				FileStream tempFile = File.Create(Path.Combine(zipTempDir.Trim('/').Trim('\\'), file.Trim('/').Trim('\\')));
 				using(MemoryStream stream = new MemoryStream()) {
 					filesStorageProvider.RetrieveFile(file, stream);
 					stream.Seek(0, SeekOrigin.Begin);
 					byte[] buffer = new byte[stream.Length];
 					stream.Read(buffer, 0, (int)stream.Length);
-					filesBackupZipFile.AddEntry(file, buffer);
+					tempFile.Write(buffer, 0, buffer.Length);
+					tempFile.Close();
 				}
 			}
 			directoryBackup.Name = directory;
@@ -862,7 +936,8 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			string[] directories = filesStorageProvider.ListDirectories(directory);
 			List<DirectoryBackup> subdirectoriesBackup = new List<DirectoryBackup>(directories.Length);
 			foreach(string d in directories) {
-				subdirectoriesBackup.Add(BackupDirectory(filesStorageProvider, filesBackupZipFile, d));
+				Directory.CreateDirectory(Path.Combine(zipTempDir.Trim('/').Trim('\\'), d.Trim('/').Trim('\\')));
+				subdirectoriesBackup.Add(BackupDirectory(filesStorageProvider, zipTempDir, d));
 			}
 			directoryBackup.SubDirectories = subdirectoriesBackup;
 
@@ -872,11 +947,11 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <summary>
 		/// Restores files from a zip file.
 		/// </summary>
-		/// <param name="backupFile">The zip backup file.</param>
+		/// <param name="backupFileName">The zip backup file.</param>
 		/// <param name="filesStorageProvider">The destination files storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
-		public static bool RestoreFilesStorageProvider(byte[] backupFile, IFilesStorageProviderV40 filesStorageProvider) {
-			using(ZipFile filesBackupZipFile = ZipFile.Read(backupFile)) {
+		public static bool RestoreFilesStorageProvider(string backupFileName, IFilesStorageProviderV40 filesStorageProvider) {
+			using(ZipFile filesBackupZipFile = ZipFile.Read(backupFileName)) {
 				foreach(ZipEntry zipEntry in filesBackupZipFile) {
 					using(MemoryStream stream = new MemoryStream()) {
 						zipEntry.Extract(stream);

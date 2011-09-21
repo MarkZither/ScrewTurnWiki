@@ -9,6 +9,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Security.Cryptography;
+using System.IO;
 
 namespace ScrewTurn.Wiki {
 
@@ -142,7 +143,11 @@ namespace ScrewTurn.Wiki {
 		protected void btnExportAll_Click(object sender, EventArgs e) {
 			Log.LogEntry("Data export requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 
-			byte[] backupFile = BackupRestore.BackupRestore.BackupAll(lstWiki.SelectedValue, GlobalSettings.Provider.ListPluginAssemblies(),
+			string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempDir);
+			string zipFileName = Path.Combine(tempDir, "Backup.zip");
+
+			bool backupFileSucceded = BackupRestore.BackupRestore.BackupAll(zipFileName, lstWiki.SelectedValue, GlobalSettings.Provider.ListPluginAssemblies(),
 				Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue),
 				(from p in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
 					 where !p.ReadOnly select p).ToArray(),
@@ -151,25 +156,32 @@ namespace ScrewTurn.Wiki {
 				(from p in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
 					 where !p.ReadOnly select p).ToArray());
 
+			FileInfo file = new FileInfo(zipFileName);
 			Response.Clear();
-			Response.AddHeader("content-type", "application/zip");
+			Response.AddHeader("content-type", GetMimeType(zipFileName));
 			Response.AddHeader("content-disposition", "attachment;filename=\"Backup-" + lstWiki.SelectedValue + ".zip\"");
-			Response.AddHeader("content-length", backupFile.Length.ToString());
+			Response.AddHeader("content-length", file.Length.ToString());
 
-			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
+			Response.TransmitFile(zipFileName);
+			Response.Flush();
 
+			Directory.Delete(tempDir, true);
 			Log.LogEntry("Data export completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 		}
 
+		private string GetMimeType(string ext) {
+			string mime = "";
+			if(MimeTypes.Types.TryGetValue(ext, out mime)) return mime;
+			else return "application/octet-stream";
+		}
+
 		protected void btnImportBackup_Click(object sender, EventArgs e) {
-			if(upBackup.FileBytes.Length > 0) {
-				Log.LogEntry("Data Import requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+			Log.LogEntry("Data Import requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 
-				BackupRestore.BackupRestore.RestoreAll(upBackup.FileBytes, Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesStorageProviders.SelectedValue, lstWiki.SelectedValue),
-					Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersStorageProviders.SelectedValue, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesStorageProviders.SelectedValue, lstWiki.SelectedValue));
+			BackupRestore.BackupRestore.RestoreAll("file:\\\\\\d:\\Backup.zip", Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesStorageProviders.SelectedValue, lstWiki.SelectedValue),
+				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersStorageProviders.SelectedValue, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesStorageProviders.SelectedValue, lstWiki.SelectedValue));
 
-				Log.LogEntry("Data Import completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
-			}
+			Log.LogEntry("Data Import completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 		}
 
 		#endregion
