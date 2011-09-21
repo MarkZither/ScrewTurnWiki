@@ -25,12 +25,9 @@ namespace ScrewTurn.Wiki {
 
 			if(!Page.IsPostBack) {
 				LoadDlls();
-				LoadWikis();
 
 				// Load providers and related data
 				rptProviders.DataBind();
-
-
 			}
 		}
 		
@@ -165,128 +162,6 @@ namespace ScrewTurn.Wiki {
 
 				LoadDlls();
 				rptProviders.DataBind();
-			}
-		}
-
-		#endregion
-
-		#region DataExportImport
-
-		/// <summary>
-		/// Loads all the wikis.
-		/// </summary>
-		private void LoadWikis() {
-			List<PluginFramework.Wiki> wikis = Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis().ToList();
-			lstWiki.Items.Clear();
-			lstWiki.Items.Add(new ListItem("- " + Properties.Messages.SelectWiki + " -", ""));
-			for(int i = 0; i < wikis.Count; i++) {
-				lstWiki.Items.Add(new ListItem(wikis[i].WikiName, wikis[i].WikiName));
-			}
-
-			lstDestinationWiki.Items.Clear();
-			lstDestinationWiki.Items.Add(new ListItem("- " + Properties.Messages.SelectWiki + " -", ""));
-			for(int i = 0; i < wikis.Count; i++) {
-				lstDestinationWiki.Items.Add(new ListItem(wikis[i].WikiName, wikis[i].WikiName));
-			}
-		}
-
-		protected void lstWiki_SelectedIndexChanged(object sender, EventArgs e) {
-			btnExportSettings.Enabled = lstWiki.SelectedIndex > 0;
-		}
-
-		protected void btnExportSettings_Click(object sender, EventArgs e) {
-			Log.LogEntry("Settings data export requested.", EntryType.General, SessionFacade.CurrentUsername, null);
-
-			ISettingsStorageProviderV40 settingsProvider = Settings.GetProvider(lstWiki.SelectedValue);
-
-			// Find namespaces
-			List<string> namespaces = new List<string>();
-			foreach(NamespaceInfo ns in Pages.GetNamespaces(currentWiki)) {
-				namespaces.Add(ns.Name);
-			}
-
-			byte[] backupFile = BackupRestore.BackupRestore.BackupSettingsStorageProvider(settingsProvider, namespaces.ToArray(), GlobalSettings.Provider.ListPluginAssemblies());
-
-			Response.Clear();
-			Response.AddHeader("content-type", "application/json");
-			Response.AddHeader("content-disposition", "attachment;filename=\"SettingsBackup-" + lstWiki.SelectedValue + ".json\"");
-			Response.AddHeader("content-length", backupFile.Length.ToString());
-
-			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
-		}
-
-		protected void btnExportGlobalSettings_Click(object sender, EventArgs e) {
-			Log.LogEntry("Global Settings data export requested.", EntryType.General, SessionFacade.CurrentUsername, null);
-
-			IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = GlobalSettings.Provider;
-
-			byte[] backupFile = BackupRestore.BackupRestore.BackupGlobalSettingsStorageProvider(globalSettingsStorageProvider);
-
-			Response.Clear();
-			Response.AddHeader("content-type", "application/zip");
-			Response.AddHeader("content-disposition", "attachment;filename=\"GlobalSettingsBackup.zip\"");
-			Response.AddHeader("content-length", backupFile.Length.ToString());
-
-			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
-		}
-
-		protected void lstDestinationWiki_SelectedIndexChanged(object sender, EventArgs e) {
-			btnImportSettings.Enabled = lstDestinationWiki.SelectedIndex > 0;
-		}
-
-		protected void btnImportSettings_Click(object sender, EventArgs e) {
-			string file = upSettings.FileName;
-
-			string ext = System.IO.Path.GetExtension(file);
-			if(ext != null) ext = ext.ToLowerInvariant();
-			if(ext != ".json") {
-				lblImportSettingsResult.CssClass = "resulterror";
-				lblImportSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
-				return;
-			}
-
-			string selectedWiki = lstDestinationWiki.SelectedValue;
-
-			Log.LogEntry("Import Settings requested for wiki: " + selectedWiki, EntryType.General, SessionFacade.CurrentUsername, null);
-			ISettingsStorageProviderV40 settingsStorageProvider = Settings.GetProvider(selectedWiki);
-			bool result = BackupRestore.BackupRestore.RestoreSettingsStorageProvider(upSettings.FileBytes, settingsStorageProvider);
-
-			if(result) {
-				lblImportSettingsResult.CssClass = "resultok";
-				lblImportSettingsResult.Text = Properties.Messages.ImportedSettings;
-				upSettings.Attributes.Add("value", "");
-				Log.LogEntry("Import Settings for wiki " + selectedWiki + " completed succesfully.", EntryType.General, SessionFacade.CurrentUsername, null);
-			}
-			else {
-				lblImportSettingsResult.CssClass = "resulterror";
-				lblImportSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
-			}
-		}
-
-		protected void btnImportGlobalSettings_Click(object sender, EventArgs e) {
-			string file = upGlobalSettings.FileName;
-
-			string ext = System.IO.Path.GetExtension(file);
-			if(ext != null) ext = ext.ToLowerInvariant();
-			if(ext != ".zip") {
-				lblImportGlobalSettingsResult.CssClass = "resulterror";
-				lblImportGlobalSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
-				return;
-			}
-
-			Log.LogEntry("Import Global Settings requested.", EntryType.General, SessionFacade.CurrentUsername, null);
-			IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = GlobalSettings.Provider;
-			bool result = BackupRestore.BackupRestore.RestoreGlobalSettingsStorageProvider(upGlobalSettings.FileBytes, globalSettingsStorageProvider);
-
-			if(result) {
-				lblImportGlobalSettingsResult.CssClass = "resultok";
-				lblImportGlobalSettingsResult.Text = Properties.Messages.ImportedSettings;
-				upSettings.Attributes.Add("value", "");
-				Log.LogEntry("Import Global Settings completed succesfully.", EntryType.General, SessionFacade.CurrentUsername, null);
-			}
-			else {
-				lblImportGlobalSettingsResult.CssClass = "resulterror";
-				lblImportGlobalSettingsResult.Text = Properties.Messages.VoidOrInvalidFile;
 			}
 		}
 
