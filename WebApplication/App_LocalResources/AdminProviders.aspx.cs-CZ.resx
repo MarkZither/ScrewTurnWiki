@@ -429,4 +429,13 @@
   <data name="rdoUsersResource1.Text" xml:space="preserve">
     <value>Poskytovatelé uživatelů</value>
   </data>
+  <data name="btnExportResource1" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="lblExportDescriptionResource1" xml:space="preserve">
+    <value>Export all data. (Experimental)</value>
+  </data>
+  <data name="lblExportResource1" xml:space="preserve">
+    <value>Export All Data</value>
+  </data>
 </root>
