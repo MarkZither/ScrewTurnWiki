@@ -208,23 +208,22 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="globalSettingsStorageProvider">The destination global settings storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesfull, <c>false</c> otherwise.</returns>
 		public static bool RestoreGlobalSettingsStorageProvider(byte[] backupFile, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
+			VersionFile versionFile;
+
 			using(ZipFile globalSettingsBackupZipFile = ZipFile.Read(backupFile)) {
-				foreach(ZipEntry zipEntry in globalSettingsBackupZipFile) {
-					if(zipEntry.FileName == "GlobalSettings.json") {
-						using(MemoryStream stream = new MemoryStream()) {
-							zipEntry.Extract(stream);
-							stream.Seek(0, SeekOrigin.Begin);
-							byte[] buffer = new byte[stream.Length];
-							stream.Read(buffer, 0, (int)stream.Length);
-							DeserializeGlobalSettingsBackup(Encoding.Unicode.GetString(buffer), globalSettingsStorageProvider);
-						}
-					}
-				}
+				ZipEntry versionEntry = (from e in globalSettingsBackupZipFile
+										 where e.FileName == "Version.json"
+										 select e).FirstOrDefault();
+				versionFile = DeserializeVersionFile(Encoding.Unicode.GetString(ExtractEntry(versionEntry)));
+				ZipEntry globalSettingsEntry = (from e in globalSettingsBackupZipFile
+												where e.FileName == "GlobalSettings.json"
+												select e).FirstOrDefault();
+				DeserializeGlobalSettingsBackup(Encoding.Unicode.GetString(ExtractEntry(globalSettingsEntry)), globalSettingsStorageProvider, versionFile);
 			}
 			return true;
 		}
 
-		private static void DeserializeGlobalSettingsBackup(string json, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
+		private static void DeserializeGlobalSettingsBackup(string json, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider, VersionFile versionFile) {
 			JavaScriptSerializer serializer = new JavaScriptSerializer();
 			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
 
@@ -601,13 +600,19 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="pagesStorageProvider">The destination pages storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
 		public static bool RestorePagesStorageProvider(string backupFile, IPagesStorageProviderV40 pagesStorageProvider) {
+			VersionFile versionFile;
 			using(ZipFile pagesBackupZipFile = ZipFile.Read(backupFile)) {
+				ZipEntry versionEntry = (from e in pagesBackupZipFile
+										 where e.FileName == "Version.json"
+										 select e).FirstOrDefault();
+				versionFile = DeserializeVersionFile(Encoding.Unicode.GetString(ExtractEntry(versionEntry)));
+
 				// Restore namespaces
 				ZipEntry namespacesEntry = (from e in pagesBackupZipFile
 											where e.FileName == "Namespaces.json"
 											select e).FirstOrDefault();
 				if(namespacesEntry != null) {
-					DeserializeNamepsacesBackupStep1(Encoding.Unicode.GetString(ExtractEntry(namespacesEntry)), pagesStorageProvider);
+					DeserializeNamepsacesBackupStep1(Encoding.Unicode.GetString(ExtractEntry(namespacesEntry)), pagesStorageProvider, versionFile);
 				}
 
 				// Restore pages
@@ -618,7 +623,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 													e.FileName != "Version.json"
 											  select e).ToList();
 				foreach(ZipEntry pageEntry in pageEntries) {
-					DeserializePageBackup(Encoding.Unicode.GetString(ExtractEntry(pageEntry)), pagesStorageProvider);
+					DeserializePageBackup(Encoding.Unicode.GetString(ExtractEntry(pageEntry)), pagesStorageProvider, versionFile);
 				}
 
 				// Restore content templates
@@ -626,7 +631,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 											where e.FileName == "ContentTemplates.json"
 											select e).FirstOrDefault();
 				if(contentTemplatesEntry != null) {
-					DeserializeContentTemplatesBackup(Encoding.Unicode.GetString(ExtractEntry(contentTemplatesEntry)), pagesStorageProvider);
+					DeserializeContentTemplatesBackup(Encoding.Unicode.GetString(ExtractEntry(contentTemplatesEntry)), pagesStorageProvider, versionFile);
 				}
 
 				// Restore snippets
@@ -634,18 +639,18 @@ namespace ScrewTurn.Wiki.BackupRestore {
 											where e.FileName == "Snippets.json"
 											select e).FirstOrDefault();
 				if(snippetsEntry != null) {
-					DeserializeSnippetsBackup(Encoding.Unicode.GetString(ExtractEntry(snippetsEntry)), pagesStorageProvider);
+					DeserializeSnippetsBackup(Encoding.Unicode.GetString(ExtractEntry(snippetsEntry)), pagesStorageProvider, versionFile);
 				}
 
 				// Restore namespaces a second time to correctly set default pages.
 				if(namespacesEntry != null) {
-					DeserializeNamepsacesBackupStep2(Encoding.Unicode.GetString(ExtractEntry(namespacesEntry)), pagesStorageProvider);
+					DeserializeNamepsacesBackupStep2(Encoding.Unicode.GetString(ExtractEntry(namespacesEntry)), pagesStorageProvider, versionFile);
 				}
 			}
 			return true;
 		}
 
-		private static void DeserializeNamepsacesBackupStep1(string json, IPagesStorageProviderV40 pagesStorageProvider) {
+		private static void DeserializeNamepsacesBackupStep1(string json, IPagesStorageProviderV40 pagesStorageProvider, VersionFile versionFile) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
@@ -664,7 +669,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 		}
 
-		private static void DeserializeNamepsacesBackupStep2(string json, IPagesStorageProviderV40 pagesStorageProvider) {
+		private static void DeserializeNamepsacesBackupStep2(string json, IPagesStorageProviderV40 pagesStorageProvider, VersionFile versionFile) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
@@ -683,7 +688,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 		}
 
-		private static void DeserializeContentTemplatesBackup(string json, IPagesStorageProviderV40 pagesStorageProvider) {
+		private static void DeserializeContentTemplatesBackup(string json, IPagesStorageProviderV40 pagesStorageProvider, VersionFile versionFile) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
@@ -693,7 +698,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 		}
 
-		private static void DeserializeSnippetsBackup(string json, IPagesStorageProviderV40 pagesStorageProvider) {
+		private static void DeserializeSnippetsBackup(string json, IPagesStorageProviderV40 pagesStorageProvider, VersionFile versionFile) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
@@ -703,7 +708,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 		}
 
-		private static void DeserializePageBackup(string json, IPagesStorageProviderV40 pagesStorageProvider) {
+		private static void DeserializePageBackup(string json, IPagesStorageProviderV40 pagesStorageProvider, VersionFile versionFile) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
@@ -810,23 +815,29 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="usersStorageProvider">The destination users storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
 		public static bool RestoreUsersStorageProvider(string backupFile, IUsersStorageProviderV40 usersStorageProvider) {
+			VersionFile versionFile;
+
 			using(ZipFile usersBackupZipFile = ZipFile.Read(backupFile)) {
+				ZipEntry versionEntry = (from e in usersBackupZipFile
+										 where e.FileName == "Version.json"
+										 select e).FirstOrDefault();
+				versionFile = DeserializeVersionFile(Encoding.Unicode.GetString(ExtractEntry(versionEntry)));
 				// Restore groups
 				ZipEntry groupsEntry = (from e in usersBackupZipFile
 										where e.FileName == "Groups.json"
 										select e).FirstOrDefault();
-				DeserializeGroupsBackup(Encoding.Unicode.GetString(ExtractEntry(groupsEntry)), usersStorageProvider);
+				DeserializeGroupsBackup(Encoding.Unicode.GetString(ExtractEntry(groupsEntry)), usersStorageProvider, versionFile);
 				
 				// Restore Users
 				ZipEntry usersEntry = (from e in usersBackupZipFile
 										where e.FileName == "Users.json"
 										select e).FirstOrDefault();
-				DeserializeUsersBackup(Encoding.Unicode.GetString(ExtractEntry(usersEntry)), usersStorageProvider);
+				DeserializeUsersBackup(Encoding.Unicode.GetString(ExtractEntry(usersEntry)), usersStorageProvider, versionFile);
 			}
 			return true;
 		}
 
-		private static void DeserializeGroupsBackup(string json, IUsersStorageProviderV40 usersStorageProvider) {
+		private static void DeserializeGroupsBackup(string json, IUsersStorageProviderV40 usersStorageProvider, VersionFile versionFile) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
@@ -847,7 +858,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			}
 		}
 
-		private static void DeserializeUsersBackup(string json, IUsersStorageProviderV40 usersStorageProvider) {
+		private static void DeserializeUsersBackup(string json, IUsersStorageProviderV40 usersStorageProvider, VersionFile versionFile) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
@@ -976,19 +987,28 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="filesStorageProvider">The destination files storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
 		public static bool RestoreFilesStorageProvider(string backupFileName, IFilesStorageProviderV40 filesStorageProvider) {
+			VersionFile versionFile;
+			
 			using(ZipFile filesBackupZipFile = ZipFile.Read(backupFileName)) {
+				ZipEntry versionEntry = (from e in filesBackupZipFile
+										 where e.FileName == "Version.json"
+										 select e).FirstOrDefault();
+				versionFile = DeserializeVersionFile(Encoding.Unicode.GetString(ExtractEntry(versionEntry)));
+				
 				foreach(ZipEntry zipEntry in filesBackupZipFile) {
-					using(MemoryStream stream = new MemoryStream()) {
-						zipEntry.Extract(stream);
-						stream.Seek(0, SeekOrigin.Begin);
-						byte[] buffer = new byte[stream.Length];
-						stream.Read(buffer, 0, (int)stream.Length);
+					if(zipEntry.FileName != "Version.json") {
+						using(MemoryStream stream = new MemoryStream()) {
+							zipEntry.Extract(stream);
+							stream.Seek(0, SeekOrigin.Begin);
+							byte[] buffer = new byte[stream.Length];
+							stream.Read(buffer, 0, (int)stream.Length);
 
-						if(zipEntry.FileName == "Files.json") {
-							DeserializeFilesBackup(filesBackupZipFile, Encoding.Unicode.GetString(buffer), filesStorageProvider);
-						}
-						else if(zipEntry.FileName.EndsWith("Attachments.json")) {
-							DeserializeAttachmentsBackup(filesBackupZipFile, Encoding.Unicode.GetString(buffer), filesStorageProvider);
+							if(zipEntry.FileName == "Files.json") {
+								DeserializeFilesBackup(filesBackupZipFile, Encoding.Unicode.GetString(buffer), filesStorageProvider);
+							}
+							else if(zipEntry.FileName.EndsWith("Attachments.json")) {
+								DeserializeAttachmentsBackup(filesBackupZipFile, Encoding.Unicode.GetString(buffer), filesStorageProvider);
+							}
 						}
 					}
 				}
