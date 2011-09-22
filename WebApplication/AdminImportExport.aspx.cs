@@ -179,8 +179,9 @@ namespace ScrewTurn.Wiki {
 			if(!string.IsNullOrEmpty(txtBackupFileURL.Text)) {
 				Log.LogEntry("Data Import requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 
-				BackupRestore.BackupRestore.RestoreAll(txtBackupFileURL.Text, Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesStorageProviders.SelectedValue, lstWiki.SelectedValue),
-					Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersStorageProviders.SelectedValue, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesStorageProviders.SelectedValue, lstWiki.SelectedValue));
+				BackupRestore.BackupRestore.RestoreAll(txtBackupFileURL.Text, Collectors.CollectorsBox.GlobalSettingsProvider, Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesStorageProviders.SelectedValue, lstWiki.SelectedValue),
+					Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersStorageProviders.SelectedValue, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesStorageProviders.SelectedValue, lstWiki.SelectedValue),
+					settingName => GlobalSettings.AllSettingsNames.Any(s => StringComparer.OrdinalIgnoreCase.Compare(s, settingName) == 0));
 
 				Log.LogEntry("Data Import completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 			}

@@ -28,6 +28,13 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			};
 		}
 
+		private static VersionFile DeserializeVersionFile(string json) {
+			JavaScriptSerializer serializer = new JavaScriptSerializer();
+			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
+
+			return serializer.Deserialize<VersionFile>(json);
+		}
+
 		private static byte[] ExtractEntry(ZipEntry zipEntry) {
 			using(MemoryStream stream = new MemoryStream()) {
 				zipEntry.Extract(stream);
@@ -103,12 +110,14 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// Restores all.
 		/// </summary>
 		/// <param name="backupFileAddress">The backup file address.</param>
+		/// <param name="globalSettingsStorageProvider">The global settings storage provider.</param>
 		/// <param name="settingsStorageProvider">The settings storage provider.</param>
 		/// <param name="pagesStorageProvider">The pages storage provider.</param>
 		/// <param name="usersStorageProvider">The users storage provider.</param>
 		/// <param name="filesStorageProvider">The files storage provider.</param>
-		/// <returns>The zip backup file.</returns>
-		public static bool RestoreAll(string backupFileAddress, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40 pagesStorageProvider, IUsersStorageProviderV40 usersStorageProvider, IFilesStorageProviderV40 filesStorageProvider) {
+		/// <param name="isSettingGlobal">A function to check if a setting is global or not.</param>
+		/// <returns><c>true</c> if the restore has been succesfull.</returns>
+		public static bool RestoreAll(string backupFileAddress, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40 pagesStorageProvider, IUsersStorageProviderV40 usersStorageProvider, IFilesStorageProviderV40 filesStorageProvider, Func<string, bool> isSettingGlobal) {
 			string tempPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
 			Directory.CreateDirectory(tempPath);
 			
@@ -120,7 +129,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 				ZipEntry settingsEntry = (from e in backupZipFile
 										  where e.FileName.StartsWith("SettingsBackup-")
 										  select e).FirstOrDefault();
-				RestoreSettingsStorageProvider(ExtractEntry(settingsEntry), settingsStorageProvider);
+				RestoreSettingsStorageProvider(ExtractEntry(settingsEntry), globalSettingsStorageProvider, settingsStorageProvider, isSettingGlobal);
 
 				// Restore pages
 				ZipEntry[] pagesEntries = (from e in backupZipFile
@@ -160,15 +169,11 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		public static byte[] BackupGlobalSettingsStorageProvider(IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
 			GlobalSettingsBackup globalSettingsBackup = new GlobalSettingsBackup();
 
-			// Settings
+			// Global Settings
 			globalSettingsBackup.Settings = (Dictionary<string, string>)globalSettingsStorageProvider.GetAllSettings();
 
-			List<string> plugins = globalSettingsStorageProvider.ListPluginAssemblies().ToList();
 			ZipFile globalSettingsBackupZipFile = new ZipFile();
-			foreach(string pluginFileName in plugins) {
-				globalSettingsBackupZipFile.AddEntry(pluginFileName, globalSettingsStorageProvider.RetrievePluginAssembly(pluginFileName));
-			}
-
+			
 			JavaScriptSerializer serializer = new JavaScriptSerializer();
 			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
 
@@ -205,15 +210,6 @@ namespace ScrewTurn.Wiki.BackupRestore {
 							DeserializeGlobalSettingsBackup(Encoding.Unicode.GetString(buffer), globalSettingsStorageProvider);
 						}
 					}
-					else {
-						using(MemoryStream stream = new MemoryStream()) {
-							zipEntry.Extract(stream);
-							stream.Seek(0, SeekOrigin.Begin);
-							byte[] buffer = new byte[stream.Length];
-							stream.Read(buffer, 0, (int)stream.Length);
-							globalSettingsStorageProvider.StorePluginAssembly(zipEntry.FileName, buffer);
-						}
-					}
 				}
 			}
 			return true;
@@ -245,6 +241,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 			settingsBackup.Settings = (Dictionary<string, string>)settingsStorageProvider.GetAllSettings();
 
 			// Plugins Status and Configuration
+			settingsBackup.PluginsFileNames = knownPlugins.ToList();
 			Dictionary<string, bool> pluginsStatus = new Dictionary<string, bool>();
 			Dictionary<string, string> pluginsConfiguration = new Dictionary<string, string>();
 			foreach(string plugin in knownPlugins) {
@@ -328,19 +325,26 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// Restores the settings from a zip file.
 		/// </summary>
 		/// <param name="backupFile">The zip backup file.</param>
+		/// <param name="globalSettingsStorageProvider">The destination global settings storage provider.</param>
 		/// <param name="settingsStorageProvider">The destination settings storage provider.</param>
+		/// <param name="isSettingGlobal">A function to check if the settings is global or not.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
-		public static bool RestoreSettingsStorageProvider(byte[] backupFile, ISettingsStorageProviderV40 settingsStorageProvider) {
+		public static bool RestoreSettingsStorageProvider(byte[] backupFile, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider, ISettingsStorageProviderV40 settingsStorageProvider, Func<string, bool> isSettingGlobal) {
+			VersionFile versionFile;
 			using(ZipFile settingsBackupZipFile = ZipFile.Read(backupFile)) {
+				ZipEntry versionEntry = (from e in settingsBackupZipFile
+										  where e.FileName == "Version.json"
+										  select e).FirstOrDefault();
+				versionFile = DeserializeVersionFile(Encoding.Unicode.GetString(ExtractEntry(versionEntry)));
 				ZipEntry settingsEntry = (from e in settingsBackupZipFile
 										where e.FileName == "Settings.json"
 										select e).FirstOrDefault();
-				DeserializeSettingsBackup(Encoding.Unicode.GetString(ExtractEntry(settingsEntry)), settingsStorageProvider);
+				DeserializeSettingsBackup(Encoding.Unicode.GetString(ExtractEntry(settingsEntry)), globalSettingsStorageProvider, settingsStorageProvider, versionFile, isSettingGlobal);
 			}
 			return true;
 		}
 
-		private static void DeserializeSettingsBackup(string json, ISettingsStorageProviderV40 settingsStorageProvider) {
+		private static void DeserializeSettingsBackup(string json, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider, ISettingsStorageProviderV40 settingsStorageProvider, VersionFile versionFile, Func<string, bool> isSettingGlobal) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
@@ -348,11 +352,23 @@ namespace ScrewTurn.Wiki.BackupRestore {
 
 			// Settings
 			settingsStorageProvider.BeginBulkUpdate();
-			foreach(var pair in settingsBackup.Settings) {
-				if(pair.Key.StartsWith("Theme") && pair.Value.Split(new char[] { '|' }).Length == 1) {
-					settingsStorageProvider.SetSetting(pair.Key, "standard|" + pair.Value);
+			// Wiki version 3.0
+			if(versionFile.WikiVersion.StartsWith("3.")) {
+				foreach(var pair in settingsBackup.Settings) {
+					if(pair.Key.StartsWith("Theme") && pair.Value.Split(new char[] { '|' }).Length == 1) {
+						settingsStorageProvider.SetSetting(pair.Key, "standard|" + pair.Value);
+					}
+					else if(isSettingGlobal(pair.Key)) {
+						globalSettingsStorageProvider.SetSetting(pair.Key, pair.Value);
+					}
+					else {
+						settingsStorageProvider.SetSetting(pair.Key, pair.Value);
+					}
 				}
-				else {
+			}
+			// Wiki version 4.0+
+			else {
+				foreach(var pair in settingsBackup.Settings) {
 					settingsStorageProvider.SetSetting(pair.Key, pair.Value);
 				}
 			}
@@ -1030,8 +1046,14 @@ namespace ScrewTurn.Wiki.BackupRestore {
 
 	}
 
+	internal class GlobalSettingsBackup {
+		public Dictionary<string, string> Settings { get; set; }
+		public List<string> PluginsFileNames { get; set; }
+	}
+
 	internal class SettingsBackup {
 		public Dictionary<string, string> Settings { get; set; }
+		public List<string> PluginsFileNames { get; set; }
 		public Dictionary<string, bool> PluginsStatus { get; set; }
 		public Dictionary<string, string> PluginsConfiguration { get; set; }
 		public List<MetaData> Metadata { get; set; }
@@ -1051,11 +1073,6 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		public MetaDataItem Item {get; set;}
 		public string Tag {get; set;}
 		public string Content {get; set;}
-	}
-
-	internal class GlobalSettingsBackup {
-		public Dictionary<string, string> Settings { get; set; }
-		public List<string> pluginsFileNames { get; set; }
 	}
 
 	internal class PageBackup {

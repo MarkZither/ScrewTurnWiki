@@ -109,12 +109,13 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			Assert.IsTrue(BackupRestore.BackupSettingsStorageProvider(zipFileName, sourceDummySettingsStorageProvider, new string[] { "ns1" }, new string[] { "plugin1", "plugin2" }));
 
 			DummySettingsStorageProvider destinationDummySettingsStorageProvider = new DummySettingsStorageProvider();
+			DummyGlobalSettingsStorageProvider destinationDummyGlobalSettingsStorageProvider = new DummyGlobalSettingsStorageProvider();
 			
 			// Restore DummySettigsStorageProvider
 			using(Stream stream = File.OpenRead(zipFileName)) {
 				byte[] backup = new byte[stream.Length];
 				stream.Read(backup, 0, backup.Length);
-				Assert.IsTrue(BackupRestore.RestoreSettingsStorageProvider(backup, destinationDummySettingsStorageProvider));
+				Assert.IsTrue(BackupRestore.RestoreSettingsStorageProvider(backup, destinationDummyGlobalSettingsStorageProvider, destinationDummySettingsStorageProvider, s => false));
 			}
 
 			// Settings
