@@ -35,8 +35,8 @@
 		<h4><asp:Literal ID="lblImportBackup" runat="server" EnableViewState="False" meta:resourcekey="lblImportBackupResource1" Text="Import data from a backup file into selected storage providers." /></h4>
 
 		<br />
-		<h4><asp:Literal ID="lblUploadBackupFile" runat="server" EnableViewState="False" meta:resourcekey="lblUploadBackupFileResource1" Text="Select a backup file." /></h4>
-		<asp:FileUpload ID="upBackup" runat="server" meta:resourcekey="upBackupResource1" Enabled="false" />
+		<h4><asp:Literal ID="lblUploadBackupFile" runat="server" EnableViewState="False" meta:resourcekey="lblUploadBackupFileResource1" Text="Write a URL of the backup file. It can also be a file on local machine (e.g. file:///D:/Backup.zip)." /></h4>
+		<asp:TextBox ID="txtBackupFileURL" runat="server" EnableViewState="false" meta:resourcekey="txtBackupFileURLResource1" Enabled="false" ></asp:TextBox>
 
 		<br /><br />
 		<h4><asp:Literal ID="lblSelectStorageProviders" runat="server" EnableViewState="False" meta:resourcekey="lblSelectStorageProvidersResource1" Text="Select storage providers where you want to import data." /></h4>

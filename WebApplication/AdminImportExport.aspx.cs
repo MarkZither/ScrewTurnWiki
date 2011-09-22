@@ -130,12 +130,12 @@ namespace ScrewTurn.Wiki {
 		protected void lstWiki_SelectedIndexChanged(object sender, EventArgs e) {
 			if(lstWiki.SelectedIndex > 0) {
 				btnExportAll.Enabled = true;
-				upBackup.Enabled = true;
+				txtBackupFileURL.Enabled = true;
 				btnImportBackup.Enabled = true;
 			}
 			else {
 				btnExportAll.Enabled = false;
-				upBackup.Enabled = false;
+				txtBackupFileURL.Enabled = false;
 				btnImportBackup.Enabled = false;
 			}
 		}
@@ -176,12 +176,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnImportBackup_Click(object sender, EventArgs e) {
-			Log.LogEntry("Data Import requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+			if(!string.IsNullOrEmpty(txtBackupFileURL.Text)) {
+				Log.LogEntry("Data Import requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 
-			BackupRestore.BackupRestore.RestoreAll("file:\\\\\\d:\\Backup.zip", Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesStorageProviders.SelectedValue, lstWiki.SelectedValue),
-				Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersStorageProviders.SelectedValue, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesStorageProviders.SelectedValue, lstWiki.SelectedValue));
+				BackupRestore.BackupRestore.RestoreAll(txtBackupFileURL.Text, Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesStorageProviders.SelectedValue, lstWiki.SelectedValue),
+					Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersStorageProviders.SelectedValue, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesStorageProviders.SelectedValue, lstWiki.SelectedValue));
 
-			Log.LogEntry("Data Import completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+				Log.LogEntry("Data Import completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+			}
 		}
 
 		#endregion
