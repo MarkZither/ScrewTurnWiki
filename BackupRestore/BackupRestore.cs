@@ -173,38 +173,44 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <summary>
 		/// Backups the specified global settings storage provider.
 		/// </summary>
+		/// <param name="zipFileName">The zip file name where to store the backup.</param>
 		/// <param name="globalSettingsStorageProvider">The global settings storage provider.</param>
-		/// <returns>The zip backup file.</returns>
-		public static byte[] BackupGlobalSettingsStorageProvider(IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
+		/// <returns><c>true</c> if the backup has been succesfull.</returns>
+		public static bool BackupGlobalSettingsStorageProvider(string zipFileName, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
 			GlobalSettingsBackup globalSettingsBackup = new GlobalSettingsBackup();
 
 			// Global Settings
 			globalSettingsBackup.Settings = (Dictionary<string, string>)globalSettingsStorageProvider.GetAllSettings();
 
-			ZipFile globalSettingsBackupZipFile = new ZipFile();
-			
-			JavaScriptSerializer serializer = new JavaScriptSerializer();
-			serializer.MaxJsonLength = serializer.MaxJsonLength * 10;
+			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
+			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
-			globalSettingsBackupZipFile.AddEntry("GlobalSettings.json", Encoding.Unicode.GetBytes(serializer.Serialize(globalSettingsBackup)));
+			string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempDir);
 
-			globalSettingsBackupZipFile.AddEntry("Version.json", Encoding.Unicode.GetBytes(serializer.Serialize(generateVersionFile("GlobalSettings"))));
+			FileStream tempFile = File.Create(Path.Combine(tempDir, "GlobalSettings.json"));
+			byte[] buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(globalSettingsBackup));
+			tempFile.Write(buffer, 0, buffer.Length);
+			tempFile.Close();
 
-			byte[] buffer;
-			using(MemoryStream stream = new MemoryStream()) {
-				globalSettingsBackupZipFile.Save(stream);
-				stream.Seek(0, SeekOrigin.Begin);
-				buffer = new byte[stream.Length];
-				stream.Read(buffer, 0, (int)stream.Length);
+			tempFile = File.Create(Path.Combine(tempDir, "Version.json"));
+			buffer = Encoding.Unicode.GetBytes(javascriptSerializer.Serialize(generateVersionFile("GlobalSettings")));
+			tempFile.Write(buffer, 0, buffer.Length);
+			tempFile.Close();
+
+			using(ZipFile zipFile = new ZipFile()) {
+				zipFile.AddDirectory(tempDir, "");
+				zipFile.Save(zipFileName);
 			}
+			Directory.Delete(tempDir, true);
 
-			return buffer;
+			return true;
 		}
 
 		/// <summary>
 		/// Restores the global settings from a zip backup file.
 		/// </summary>
-		/// <param name="backupFile">The jason backup file.</param>
+		/// <param name="backupFile">The global settings backup file.</param>
 		/// <param name="globalSettingsStorageProvider">The destination global settings storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesfull, <c>false</c> otherwise.</returns>
 		public static bool RestoreGlobalSettingsStorageProvider(byte[] backupFile, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {

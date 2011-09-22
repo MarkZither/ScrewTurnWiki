@@ -96,14 +96,23 @@ namespace ScrewTurn.Wiki {
 
 			IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = GlobalSettings.Provider;
 
-			byte[] backupFile = BackupRestore.BackupRestore.BackupGlobalSettingsStorageProvider(globalSettingsStorageProvider);
+			string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+			Directory.CreateDirectory(tempDir);
+			string zipFileName = Path.Combine(tempDir, "GlobalSettingsBackup.zip");
 
+			BackupRestore.BackupRestore.BackupGlobalSettingsStorageProvider(zipFileName, globalSettingsStorageProvider);
+
+			FileInfo file = new FileInfo(zipFileName);
 			Response.Clear();
 			Response.AddHeader("content-type", "application/zip");
 			Response.AddHeader("content-disposition", "attachment;filename=\"GlobalSettingsBackup.zip\"");
-			Response.AddHeader("content-length", backupFile.Length.ToString());
+			Response.AddHeader("content-length", file.Length.ToString());
 
-			Response.OutputStream.Write(backupFile, 0, backupFile.Length);
+
+			Response.TransmitFile(zipFileName);
+			Response.Flush();
+
+			Directory.Delete(tempDir, true);
 		}
 
 		protected void btnImportGlobalSettings_Click(object sender, EventArgs e) {

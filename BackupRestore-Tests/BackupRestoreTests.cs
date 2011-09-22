@@ -33,12 +33,17 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			// Settings key -> value
 			sourceDummyGlobalSettingsStorageProvider.SetSetting("key1", "value1");
 			sourceDummyGlobalSettingsStorageProvider.SetSetting("key2", "value2");
-			
-			byte[] backupFile = BackupRestore.BackupGlobalSettingsStorageProvider(sourceDummyGlobalSettingsStorageProvider);
+
+			string zipFileName = Path.Combine(tempPath, "GlobalSettingsZipFile.zip");
+			Assert.IsTrue(BackupRestore.BackupGlobalSettingsStorageProvider(zipFileName, sourceDummyGlobalSettingsStorageProvider));
 
 			DummyGlobalSettingsStorageProvider destinationDummyGlobalSettingsStorageProvider = new DummyGlobalSettingsStorageProvider();
 
-			Assert.IsTrue(BackupRestore.RestoreGlobalSettingsStorageProvider(backupFile, destinationDummyGlobalSettingsStorageProvider));
+			using(Stream stream = File.OpenRead(zipFileName)) {
+				byte[] buffer = new byte[stream.Length];
+				stream.Read(buffer, 0, buffer.Length);
+				Assert.IsTrue(BackupRestore.RestoreGlobalSettingsStorageProvider(buffer, destinationDummyGlobalSettingsStorageProvider));
+			}
 
 			// Settings
 			Assert.AreEqual("value1", destinationDummyGlobalSettingsStorageProvider.GetSetting("key1"));
