@@ -430,12 +430,12 @@
     <value />
   </data>
   <data name="btnExportResource1" xml:space="preserve">
-    <value>Export</value>
+    <value>Eksporter</value>
   </data>
   <data name="lblExportDescriptionResource1" xml:space="preserve">
-    <value>Export all data. (Experimental)</value>
+    <value>Eksporter alle data. (Eksperimentel)</value>
   </data>
   <data name="lblExportResource1" xml:space="preserve">
-    <value>Export All Data</value>
+    <value>Eksporter alle data</value>
   </data>
 </root>
