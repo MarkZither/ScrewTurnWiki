@@ -429,4 +429,13 @@
   <data name="upDllResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
+  <data name="btnExportResource1" xml:space="preserve">
+    <value>Eksporter</value>
+  </data>
+  <data name="lblExportDescriptionResource1" xml:space="preserve">
+    <value>Eksporter alle data. (Eksperimentel)</value>
+  </data>
+  <data name="lblExportResource1" xml:space="preserve">
+    <value>Eksporter alle data</value>
+  </data>
 </root>
