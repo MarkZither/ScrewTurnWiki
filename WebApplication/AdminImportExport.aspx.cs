@@ -56,9 +56,11 @@ namespace ScrewTurn.Wiki {
 																where !p.ReadOnly select p).ToArray();
 			lstPagesStorageProviders.Items.Clear();
 			foreach(IPagesStorageProviderV40 pagesStorageProvider in pagesStorageProviders) {
-				ListItem lstItem = new ListItem(pagesStorageProvider.Information.Name, pagesStorageProvider.GetType().FullName);
-				lstItem.Selected = false;
-				lstPagesStorageProviders.Items.Add(lstItem);
+				if(!pagesStorageProvider.ReadOnly) {
+					ListItem lstItem = new ListItem(pagesStorageProvider.Information.Name, pagesStorageProvider.GetType().FullName);
+					lstItem.Selected = false;
+					lstPagesStorageProviders.Items.Add(lstItem);
+				}
 			}
 			lstPagesStorageProviders.Items.FindByValue(GlobalSettings.DefaultPagesProvider).Selected = true;
 
@@ -67,9 +69,11 @@ namespace ScrewTurn.Wiki {
 																where IsUsersProviderFullWriteEnabled(p) select p).ToArray();
 			lstUsersStorageProviders.Items.Clear();
 			foreach(IUsersStorageProviderV40 usersStorageProvider in usersStorageProviders) {
-				ListItem lstItem = new ListItem(usersStorageProvider.Information.Name, usersStorageProvider.GetType().FullName);
-				lstItem.Selected = false;
-				lstUsersStorageProviders.Items.Add(lstItem);
+				if(IsUsersProviderFullWriteEnabled(usersStorageProvider)) {
+					ListItem lstItem = new ListItem(usersStorageProvider.Information.Name, usersStorageProvider.GetType().FullName);
+					lstItem.Selected = false;
+					lstUsersStorageProviders.Items.Add(lstItem);
+				}
 			}
 			lstUsersStorageProviders.Items.FindByValue(GlobalSettings.DefaultUsersProvider).Selected = true;
 
@@ -78,9 +82,11 @@ namespace ScrewTurn.Wiki {
 																where !p.ReadOnly select p).ToArray();
 			lstFilesStorageProviders.Items.Clear();
 			foreach(IFilesStorageProviderV40 filesStorageProvider in filesStorageProviders) {
-				ListItem lstItem = new ListItem(filesStorageProvider.Information.Name, filesStorageProvider.GetType().FullName);
-				lstItem.Selected = false;
-				lstFilesStorageProviders.Items.Add(lstItem);
+				if(!filesStorageProvider.ReadOnly) {
+					ListItem lstItem = new ListItem(filesStorageProvider.Information.Name, filesStorageProvider.GetType().FullName);
+					lstItem.Selected = false;
+					lstFilesStorageProviders.Items.Add(lstItem);
+				}
 			}
 			lstFilesStorageProviders.Items.FindByValue(GlobalSettings.DefaultFilesProvider).Selected = true;
 		}
