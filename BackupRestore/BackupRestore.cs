@@ -129,14 +129,20 @@ namespace ScrewTurn.Wiki.BackupRestore {
 				ZipEntry settingsEntry = (from e in backupZipFile
 										  where e.FileName.StartsWith("SettingsBackup-")
 										  select e).FirstOrDefault();
-				RestoreSettingsStorageProvider(ExtractEntry(settingsEntry), globalSettingsStorageProvider, settingsStorageProvider, isSettingGlobal);
+				string extractedGlobalSettingsZipFilePath = Path.Combine(tempPath, settingsEntry.FileName);
+				ExtractEntry(settingsEntry, tempPath);
+				RestoreSettingsStorageProvider(extractedGlobalSettingsZipFilePath, globalSettingsStorageProvider, settingsStorageProvider, isSettingGlobal);
+				File.Delete(extractedGlobalSettingsZipFilePath);
 
 				// Restore pages
 				ZipEntry[] pagesEntries = (from e in backupZipFile
 										   where e.FileName.StartsWith("PagesBackup-")
 										   select e).ToArray();
 				foreach(ZipEntry pagesEntry in pagesEntries) {
-					RestorePagesStorageProvider(ExtractEntry(pagesEntry), pagesStorageProvider);
+					string extractedZipFilePath = Path.Combine(tempPath, pagesEntry.FileName);
+					ExtractEntry(pagesEntry, tempPath);
+					RestorePagesStorageProvider(extractedZipFilePath, pagesStorageProvider);
+					File.Delete(extractedZipFilePath);
 				}
 
 				// Restore users
@@ -144,7 +150,10 @@ namespace ScrewTurn.Wiki.BackupRestore {
 										   where e.FileName.StartsWith("UsersBackup-")
 										   select e).ToArray();
 				foreach(ZipEntry usersEntry in usersEntries) {
-					RestoreUsersStorageProvider(ExtractEntry(usersEntry), usersStorageProvider);
+					string extractedZipFilePath = Path.Combine(tempPath, usersEntry.FileName);
+					ExtractEntry(usersEntry, tempPath);
+					RestoreUsersStorageProvider(extractedZipFilePath, usersStorageProvider);
+					File.Delete(extractedZipFilePath);
 				}
 
 				// Restore files
@@ -329,7 +338,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="settingsStorageProvider">The destination settings storage provider.</param>
 		/// <param name="isSettingGlobal">A function to check if the settings is global or not.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
-		public static bool RestoreSettingsStorageProvider(byte[] backupFile, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider, ISettingsStorageProviderV40 settingsStorageProvider, Func<string, bool> isSettingGlobal) {
+		public static bool RestoreSettingsStorageProvider(string backupFile, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider, ISettingsStorageProviderV40 settingsStorageProvider, Func<string, bool> isSettingGlobal) {
 			VersionFile versionFile;
 			using(ZipFile settingsBackupZipFile = ZipFile.Read(backupFile)) {
 				ZipEntry versionEntry = (from e in settingsBackupZipFile
@@ -591,7 +600,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="backupFile">The zip backup file.</param>
 		/// <param name="pagesStorageProvider">The destination pages storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
-		public static bool RestorePagesStorageProvider(byte[] backupFile, IPagesStorageProviderV40 pagesStorageProvider) {
+		public static bool RestorePagesStorageProvider(string backupFile, IPagesStorageProviderV40 pagesStorageProvider) {
 			using(ZipFile pagesBackupZipFile = ZipFile.Read(backupFile)) {
 				// Restore namespaces
 				ZipEntry namespacesEntry = (from e in pagesBackupZipFile
@@ -800,7 +809,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="backupFile">The zip backup file.</param>
 		/// <param name="usersStorageProvider">The destination users storage provider.</param>
 		/// <returns><c>true</c> if the restore is succesful <c>false</c> otherwise.</returns>
-		public static bool RestoreUsersStorageProvider(byte[] backupFile, IUsersStorageProviderV40 usersStorageProvider) {
+		public static bool RestoreUsersStorageProvider(string backupFile, IUsersStorageProviderV40 usersStorageProvider) {
 			using(ZipFile usersBackupZipFile = ZipFile.Read(backupFile)) {
 				// Restore groups
 				ZipEntry groupsEntry = (from e in usersBackupZipFile

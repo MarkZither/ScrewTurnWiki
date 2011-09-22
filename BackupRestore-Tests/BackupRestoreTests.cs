@@ -104,11 +104,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			DummyGlobalSettingsStorageProvider destinationDummyGlobalSettingsStorageProvider = new DummyGlobalSettingsStorageProvider();
 			
 			// Restore DummySettigsStorageProvider
-			using(Stream stream = File.OpenRead(zipFileName)) {
-				byte[] backup = new byte[stream.Length];
-				stream.Read(backup, 0, backup.Length);
-				Assert.IsTrue(BackupRestore.RestoreSettingsStorageProvider(backup, destinationDummyGlobalSettingsStorageProvider, destinationDummySettingsStorageProvider, s => false));
-			}
+			Assert.IsTrue(BackupRestore.RestoreSettingsStorageProvider(zipFileName, destinationDummyGlobalSettingsStorageProvider, destinationDummySettingsStorageProvider, s => false));
 
 			// Settings
 			Assert.AreEqual("value1", destinationDummySettingsStorageProvider.GetSetting("key1"));
@@ -185,11 +181,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 
 			DummyPagesStorageProvider destinationDummyPagesStorageProvider = new DummyPagesStorageProvider();
 
-			using(Stream stream = File.OpenRead(zipFileName)) {
-				byte[] backup = new byte[stream.Length];
-				stream.Read(backup, 0, backup.Length);
-				Assert.IsTrue(BackupRestore.RestorePagesStorageProvider(backup, destinationDummyPagesStorageProvider));
-			}
+			Assert.IsTrue(BackupRestore.RestorePagesStorageProvider(zipFileName, destinationDummyPagesStorageProvider));
 
 			// Namespaces
 			NamespaceInfo[] namespaces = destinationDummyPagesStorageProvider.GetNamespaces();
@@ -298,11 +290,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 
 			DummyUsersStorageProvider destinationDummyUsersStorageProvider = new DummyUsersStorageProvider();
 
-			using(Stream stream = File.OpenRead(zipFileName)) {
-				byte[] backup = new byte[stream.Length];
-				stream.Read(backup, 0, backup.Length);
-				Assert.IsTrue(BackupRestore.RestoreUsersStorageProvider(backup, destinationDummyUsersStorageProvider));
-			}
+			Assert.IsTrue(BackupRestore.RestoreUsersStorageProvider(zipFileName, destinationDummyUsersStorageProvider));
 
 			// Group
 			UserGroup[] groups = destinationDummyUsersStorageProvider.GetUserGroups();
