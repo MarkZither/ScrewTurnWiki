@@ -33,11 +33,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			// Settings key -> value
 			sourceDummyGlobalSettingsStorageProvider.SetSetting("key1", "value1");
 			sourceDummyGlobalSettingsStorageProvider.SetSetting("key2", "value2");
-
-			// PluginAssemblies
-			sourceDummyGlobalSettingsStorageProvider.StorePluginAssembly("plugin1", new byte[] { 1, 2, 3, 1, 2, 3 });
-			sourceDummyGlobalSettingsStorageProvider.StorePluginAssembly("plugin2", new byte[] { 4, 5, 6, 4, 5, 6 });
-
+			
 			byte[] backupFile = BackupRestore.BackupGlobalSettingsStorageProvider(sourceDummyGlobalSettingsStorageProvider);
 
 			DummyGlobalSettingsStorageProvider destinationDummyGlobalSettingsStorageProvider = new DummyGlobalSettingsStorageProvider();
@@ -47,10 +43,6 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			// Settings
 			Assert.AreEqual("value1", destinationDummyGlobalSettingsStorageProvider.GetSetting("key1"));
 			Assert.AreEqual("value2", destinationDummyGlobalSettingsStorageProvider.GetSetting("key2"));
-
-			// PluginAssemblies
-			CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 1, 2, 3 }, destinationDummyGlobalSettingsStorageProvider.RetrievePluginAssembly("plugin1"));
-			CollectionAssert.AreEqual(new byte[] { 4, 5, 6, 4, 5, 6 }, destinationDummyGlobalSettingsStorageProvider.RetrievePluginAssembly("plugin2"));
 		}
 
 		[Test]
