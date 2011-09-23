@@ -50,7 +50,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -60,6 +60,7 @@
     <DocumentationFile>bin\Release\ScrewTurn.Wiki.PluginFramework.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Lucene.Net">

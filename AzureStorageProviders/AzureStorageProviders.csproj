@@ -25,7 +25,7 @@
     <DocumentationFile>bin\Debug\AzureStorageProviders.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Release\AzureStorageProviders.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AzureDirectory, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">

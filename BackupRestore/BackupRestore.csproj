@@ -25,7 +25,7 @@
     <DocumentationFile>bin\Debug\ScrewTurn.Wiki.BackupRestore.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Release\ScrewTurn.Wiki.BackupRestore.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip.Reduced">

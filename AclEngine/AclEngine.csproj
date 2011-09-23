@@ -46,7 +46,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -55,6 +55,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Release\ScrewTurn.Wiki.AclEngine.xml</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
