@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="section">Section XML node.</param>
 		/// <returns>The created section handler object.</returns>
 		public object Create(object parent, object configContext, XmlNode section) {
-			List<Wiki> storageProviders = new List<Wiki>();
+			List<Wiki> wikis = new List<Wiki>();
 
 			foreach(XmlNode provider in section) {
 				XmlAttributeCollection attributeCollection = provider.Attributes;
@@ -30,9 +30,9 @@ namespace ScrewTurn.Wiki.PluginFramework {
 
 				string wikiName = attributeCollection["name"].Value;
 				string hostList = attributeCollection["host"].Value;
-				storageProviders.Add(new PluginFramework.Wiki(wikiName,	hostList.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList<string>()));
+				wikis.Add(new PluginFramework.Wiki(wikiName,	hostList.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList<string>()));
 			}
-			return storageProviders;
+			return wikis;
 		}
 
 	}

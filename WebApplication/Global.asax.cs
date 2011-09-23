@@ -11,6 +11,9 @@ namespace ScrewTurn.Wiki {
 
 	public class Global : System.Web.HttpApplication {
 
+		private const string StartupOK = "StartupOK";
+		private const string MasterPasswordOk = "MasterPasswordOk";
+
 		protected void Application_Start(object sender, EventArgs e) {
 			// Nothing to do (see Application_BeginRequest).
 		}
@@ -18,15 +21,15 @@ namespace ScrewTurn.Wiki {
 		protected void Session_Start(object sender, EventArgs e) { }
 
 		protected void Application_BeginRequest(object sender, EventArgs e) {
-			if(Application["StartupOK"] == null) {
+			if(Application[StartupOK] == null) {
 				Application.Lock();
-				if(Application["StartupOK"] == null) {
+				if(Application[StartupOK] == null) {
 					// Setup Resource Exchanger
 					ScrewTurn.Wiki.Exchanger.ResourceExchanger = new ScrewTurn.Wiki.ResourceExchanger();
 					ScrewTurn.Wiki.StartupTools.Startup();
 
 					// All is OK, proceed with normal startup operations
-					Application["StartupOK"] = "OK";
+					Application[StartupOK] = "OK";
 				}
 				Application.UnLock();
 			}
@@ -53,19 +56,19 @@ namespace ScrewTurn.Wiki {
 			// All non-interesting files are not processed, such as GIF, CSS, etc.
 			if(ext == "ashx" || ext == "aspx") {
 				if(!Request.PhysicalPath.ToLowerInvariant().Contains("createmasterpassword.aspx")) {
-					if(Application["MasterPasswordOk"] == null) {
+					if(Application[MasterPasswordOk] == null) {
 						Application.Lock();
-						if(Application["MasterPasswordOk"] == null) {
+						if(Application[MasterPasswordOk] == null) {
 							//Setup Master Password
 							if(!String.IsNullOrEmpty(GlobalSettings.GetMasterPassword())) {
-								Application["MasterPasswordOk"] = "OK";
+								Application[MasterPasswordOk] = "OK";
 							}
 						}
 						Application.UnLock();
 					}
 
-					if(Application["MasterPasswordOk"] == null) {
-						ScrewTurn.Wiki.UrlTools.Redirect("CreateMasterPassword.aspx");
+					if(Application[MasterPasswordOk] == null) {
+						ScrewTurn.Wiki.UrlTools.Redirect("~/CreateMasterPassword.aspx");
 					}
 				}
 				else if(!string.IsNullOrEmpty(GlobalSettings.GetMasterPassword())) {

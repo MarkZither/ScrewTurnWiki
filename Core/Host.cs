@@ -302,6 +302,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Gets all the wikis in the system.
+		/// </summary>
+		/// <returns>The wikis.</returns>
+		public ScrewTurn.Wiki.PluginFramework.Wiki[] GetWikis() {
+			return GlobalSettings.Provider.GetAllWikis();
+		}
+
+		/// <summary>
 		/// Gets the list of the namespaces.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
@@ -800,55 +808,6 @@ namespace ScrewTurn.Wiki {
 			ProviderLoader.SavePluginConfiguration(wiki, provider.GetType().FullName, configuration);
 
 			return true;
-		}
-		
-		/// <summary>
-		/// Upgrades the old Page Status to use the new ACL facilities.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="pageFullName">The full name of the page of which to upgrade the status.</param>
-		/// <param name="oldStatus">The old status ('L' = Locked, 'P' = Public).</param>
-		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="oldStatus"/> is invalid.</exception>
-		public bool UpgradePageStatusToAcl(string wiki, string pageFullName, char oldStatus) {
-			if(pageFullName == null) throw new ArgumentNullException("page");
-			if(pageFullName.Length == 0) throw new ArgumentException("page");
-
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(wiki));
-
-			switch(oldStatus) {
-				case 'L':
-					// Locked: only administrators can edit this page
-					return authWriter.SetPermissionForPage(AuthStatus.Deny, pageFullName, Actions.ForPages.ModifyPage,
-						Users.FindUserGroup(wiki, Settings.GetUsersGroup(wiki)));
-				case 'P':
-					// Public: anonymous users can edit this page
-					return authWriter.SetPermissionForPage(AuthStatus.Grant, pageFullName, Actions.ForPages.ModifyPage,
-						Users.FindUserGroup(wiki, Settings.GetAnonymousGroup(wiki)));
-				default:
-					throw new ArgumentOutOfRangeException("oldStatus", "Invalid old status code");
-			}
-		}
-
-		/// <summary>
-		/// Upgrades the old security flags to use the new ACL facilities and user groups support.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="administrators">The administrators group.</param>
-		/// <param name="users">The users group.</param>
-		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>administrators</b> or <b>users</b> are <c>null</c>.</exception>
-		public bool UpgradeSecurityFlagsToGroupsAcl(string wiki, UserGroup administrators, UserGroup users) {
-			if(administrators == null) throw new ArgumentNullException("administrators");
-			if(users == null) throw new ArgumentNullException("users");
-
-			bool done = true;
-			done &= StartupTools.SetAdministratorsGroupDefaultPermissions(wiki, administrators);
-			done &= StartupTools.SetUsersGroupDefaultPermissions(wiki, users);
-
-			return done;
 		}
 
 		/// <summary>

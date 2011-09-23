@@ -187,7 +187,7 @@ namespace ScrewTurn.Wiki {
 			// Setup and add to the Collectors
 			for(int i = 0; i < forms.Length; i++) {
 				Collectors.AddPlugin(forms[i], Assembly.GetAssembly(forms[i]));
-				foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
+				foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.GetAllWikis()) {
 					try {
 						SetUp<IFormatterProviderV40>(forms[i], Settings.GetProvider(wiki.WikiName).GetPluginConfiguration(forms[i].FullName));
 						SavePluginStatus(wiki.WikiName, forms[i].FullName, true);
@@ -414,7 +414,7 @@ namespace ScrewTurn.Wiki {
 			// Add to the Collectors and Setup
 			for(int i = 0; i < forms.Count; i++) {
 				Collectors.AddPlugin(forms[i], Assembly.GetAssembly(forms[i]));
-				foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.AllWikis()) {
+				foreach(PluginFramework.Wiki wiki in GlobalSettings.Provider.GetAllWikis()) {
 					try {
 						SetUp<IFormatterProviderV40>(forms[i], Settings.GetProvider(wiki.WikiName).GetPluginConfiguration(forms[i].FullName));
 						SavePluginStatus(wiki.WikiName, forms[i].FullName, true);

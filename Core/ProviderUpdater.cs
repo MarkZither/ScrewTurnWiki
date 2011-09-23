@@ -76,7 +76,7 @@ namespace ScrewTurn.Wiki {
 						if(DownloadAndUpdateDll(plugin, newDllUrl, dllName)) {
 							visitedUrls.Add(newDllUrl.ToLowerInvariant());
 							updatedDlls++;
-							foreach(PluginFramework.Wiki wiki in globalSettingsProvider.AllWikis()) {
+							foreach(PluginFramework.Wiki wiki in globalSettingsProvider.GetAllWikis()) {
 								ProviderLoader.SetUp<IFormatterProviderV40>(plugin.GetType(), Settings.GetProvider(wiki.WikiName).GetPluginConfiguration(plugin.GetType().FullName));
 							}
 						}

@@ -420,7 +420,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			return true;
 		}
 
-		public IList<PluginFramework.Wiki> AllWikis() {
+		public PluginFramework.Wiki[] GetAllWikis() {
 			throw new NotImplementedException();
 		}
 

@@ -145,11 +145,11 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		}
 
 		/// <summary>
-		/// Alls the wikis.
+		/// Gets alls the wikis.
 		/// </summary>
-		/// <returns>A list of wiki identifiers.</returns>
-		public IList<PluginFramework.Wiki> AllWikis() {
-			return GetWikiList();
+		/// <returns>A collection of wiki identifiers.</returns>
+		public ScrewTurn.Wiki.PluginFramework.Wiki[] GetAllWikis() {
+			return GetWikiList().ToArray();
 		}
 
 		/// <summary>

@@ -1,9 +1,10 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.AclEngine;
+using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki.Tests {
 
@@ -24,7 +25,7 @@ namespace ScrewTurn.Wiki.Tests {
 			throw new NotImplementedException();
 		}
 
-		public IList<PluginFramework.Wiki> AllWikis() {
+		public PluginFramework.Wiki[] GetAllWikis() {
 			throw new NotImplementedException();
 		}
 

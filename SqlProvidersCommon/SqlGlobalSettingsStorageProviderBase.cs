@@ -1,9 +1,10 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
 using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
-using System.Data.Common;
 
 namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
@@ -594,8 +595,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// Alls the wikis.
 		/// </summary>
 		/// <returns>A list of wiki identifiers.</returns>
-		public IList<PluginFramework.Wiki> AllWikis() {
-			return GetWikiList();
+		public PluginFramework.Wiki[] GetAllWikis() {
+			return GetWikiList().ToArray();
 		}
 
 		/// <summary>
