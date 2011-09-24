@@ -130,9 +130,10 @@ namespace ScrewTurn.Wiki {
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 			try {
 				Document doc = new Document();
+				doc.Add(new Field(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.Page) + "|" + page.Provider.CurrentWiki + "|" + page.FullName).Replace(" ", ""), Field.Store.NO, Field.Index.NOT_ANALYZED_NO_NORMS));
 				doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Page), Field.Store.YES, Field.Index.NOT_ANALYZED));
 				doc.Add(new Field(SearchField.Wiki.AsString(), page.Provider.CurrentWiki, Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.NOT_ANALYZED));
+				doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.ANALYZED));
 				doc.Add(new Field(SearchField.Title.AsString(), page.Title, Field.Store.YES, Field.Index.ANALYZED));
 				doc.Add(new Field(SearchField.Content.AsString(), page.Content, Field.Store.YES, Field.Index.ANALYZED));
 				writer.AddDocument(doc);
@@ -254,8 +255,7 @@ namespace ScrewTurn.Wiki {
 			IndexWriter writer = new IndexWriter(indexDirectoryProvider.GetDirectory(), new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
 
 			try {
-				Query query = MultiFieldQueryParser.Parse(Lucene.Net.Util.Version.LUCENE_29, new string[] { DocumentTypeToString(DocumentType.Page), page.FullName }, new string[] { SearchField.DocumentType.AsString(), SearchField.PageFullName.AsString() }, new BooleanClause.Occur[] { BooleanClause.Occur.MUST, BooleanClause.Occur.MUST }, new KeywordAnalyzer());
-				writer.DeleteDocuments(query);
+				writer.DeleteDocuments(new Term(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.Page) + "|" + page.Provider.CurrentWiki + "|" + page.FullName).Replace(" ", "")));
 				writer.Commit();
 			}
 			catch { throw; }

@@ -65,8 +65,10 @@
 				CssClass="tab red" NavigateUrl="~/AdminGlobalConfig.aspx" meta:resourcekey="lnkSelectGlobalConfigResource1" />
 			<asp:HyperLink ID="lnkSelectPluginsManagement" runat="server" Text="Plugins Management"
 				CssClass="tab red" NavigateUrl="~/AdminProvidersManagement.aspx" meta:resourcekey="lnkSelectPluginsManagementResource1" />
+			<asp:HyperLink ID="lnkSelectImportExport" runat="server" Text="Import/Export" 
+				CssClass="tab red" NavigateUrl="~/AdminImportExport.aspx" meta:resourcekey="lnkSelectImportExportResource1" />
 			<asp:HyperLink ID="lnkSelectLog" runat="server" Text="System Log" 
-				CssClass="tab" NavigateUrl="~/AdminLog.aspx" meta:resourcekey="lnkSelectLogResource1" />
+				CssClass="tab red" NavigateUrl="~/AdminLog.aspx" meta:resourcekey="lnkSelectLogResource1" />
 		</div>
 	
 		<div id="ContentDiv">

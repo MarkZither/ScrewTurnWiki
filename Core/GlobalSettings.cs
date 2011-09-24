@@ -16,6 +16,8 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public static class GlobalSettings {
 
+		private static List<string> _allKeys;
+
 		private static string version = null;
 
 		/// <summary>
@@ -23,6 +25,21 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		internal static bool CanOverridePublicDirectory = true;
 		private static string _overriddenPublicDirectory = null;
+
+		/// <summary>
+		/// Initializes the <see cref="GlobalSettings"/> class.
+		/// </summary>
+		static GlobalSettings() {
+			var properties = typeof(GlobalSettings).GetProperties();
+			_allKeys = new List<string>((from p in properties where p.CanRead && p.CanWrite select p.Name).ToList());
+		}
+
+		/// <summary>
+		/// Gets all global settings names.
+		/// </summary>
+		public static List<string> AllSettingsNames {
+			get { return _allKeys; }
+		}
 
 		/// <summary>
 		/// Gets the global settings storage provider.

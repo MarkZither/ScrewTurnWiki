@@ -126,6 +126,12 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		string GetTheme(string wiki, NamespaceInfo nspace);
 
 		/// <summary>
+		/// Gets all the wikis in the system.
+		/// </summary>
+		/// <returns>The wikis.</returns>
+		Wiki[] GetWikis();
+
+		/// <summary>
 		/// Gets the list of the namespaces.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
@@ -393,28 +399,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <returns><c>true</c> if the configuration is set, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="provider"/> is <c>null</c>.</exception>
 		bool SetPluginConfiguration(string wiki, IProviderV40 provider, string configuration);
-
-		/// <summary>
-		/// Upgrades the old Page Status to use the new ACL facilities.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="pageFullName">The full name of the page of which to upgrade the status.</param>
-		/// <param name="oldStatus">The old status ('L' = Locked, 'P' = Public).</param>
-		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="oldStatus"/> is invalid.</exception>
-		bool UpgradePageStatusToAcl(string wiki, string pageFullName, char oldStatus);
-
-		/// <summary>
-		/// Upgrades the old security flags to use the new ACL facilities and user groups support.
-		/// </summary>
-		/// <param name="wiki">The wiki.</param>
-		/// <param name="administrators">The administrators group.</param>
-		/// <param name="users">The users group.</param>
-		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
-		/// <exception cref="ArgumentNullException">If <b>administrators</b> or <b>users</b> are <c>null</c>.</exception>
-		bool UpgradeSecurityFlagsToGroupsAcl(string wiki, UserGroup administrators, UserGroup users);
 
 		/// <summary>
 		/// Overrides the public directory.

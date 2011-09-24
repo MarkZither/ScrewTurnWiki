@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="btnExportSettingsResource1.Text" xml:space="preserve">
-    <value>Export</value>
-  </data>
-  <data name="btnExportSettingsResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="btnDeleteDllResource1.Text" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -135,25 +129,10 @@
   <data name="btnUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="lblExportSettingsResource1.Text" xml:space="preserve">
-    <value>Export Settings and related data</value>
-  </data>
-  <data name="lblExportSettingsResultResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblExportSettingsResultResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="lblDllResultResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblDllResultResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblSettingsSourceResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblSettingsSourceResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="lblUploadInfoResource1.Text" xml:space="preserve">
@@ -185,69 +164,6 @@
   </data>
   <data name="lblUploadProvidersResource1.Text" xml:space="preserve">
     <value>Providers DLLs Management</value>
-  </data>
-  <data name="btnExportGlobalSettingsResource1.Text" xml:space="preserve">
-    <value>Export</value>
-  </data>
-  <data name="btnExportGlobalSettingsResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblExportGlobalSettingsResource1.Text" xml:space="preserve">
-    <value>Export Global Settings and related data</value>
-  </data>
-  <data name="lblExportGlobalSettingsResultResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblExportGlobalSettingsResultResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblExportImportSettingsResource1.Text" xml:space="preserve">
-    <value>Export/Import Settings</value>
-  </data>
-  <data name="lblGlobalSettingsSourceResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblGlobalSettingsSourceResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lstWikiResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="btnImportSettingsResource1.Text" xml:space="preserve">
-    <value>Import</value>
-  </data>
-  <data name="btnImportSettingsResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblImportSettingsResource1.Text" xml:space="preserve">
-    <value>Import Settings</value>
-  </data>
-  <data name="lblImportSettingsResultResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblImportSettingsResultResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lstDestinationWikiResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="upSettingsResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="btnImportGlobalSettingsResource1.Text" xml:space="preserve">
-    <value>Import</value>
-  </data>
-  <data name="btnImportGlobalSettingsResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblImportGlobalSettingsResource1.Text" xml:space="preserve">
-    <value>Import Global Settings</value>
-  </data>
-  <data name="lblImportGlobalSettingsResultResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblImportGlobalSettingsResultResource1.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="btnAutoUpdateProvidersResource1.Text" xml:space="preserve">
     <value>Auto-update Providers</value>

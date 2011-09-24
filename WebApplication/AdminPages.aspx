@@ -24,7 +24,7 @@
 		<asp:Panel ID="pnlList" runat="server" meta:resourcekey="pnlListResource1" >
 			<div id="NamespaceSelectorDiv">
 				<asp:Literal ID="lblNamespace" runat="server" Text="Namespace" EnableViewState="False" meta:resourcekey="lblNamespaceResource1" /><br />
-				<asp:DropDownList ID="lstNamespace" runat="server"  OnSelectedIndexChanged="lstNamespace_SelectedIndexChanged" Width="150px" meta:resourcekey="lstNamespaceResource1" />
+				<asp:DropDownList ID="lstNamespace" runat="server"  OnSelectedIndexChanged="lstNamespace_SelectedIndexChanged" Width="150px" meta:resourcekey="lstNamespaceResource1" AutoPostBack="true"/>
 			</div>
 			<div id="FilterDiv">
 				<asp:CheckBox ID="chkOrphansOnly" runat="server" Text="Display orphan pages only"  

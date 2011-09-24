@@ -62,5 +62,5 @@ end
 
 if (select count([Version]) from [Version] where [Component] = 'Settings') = 0
 begin
-	insert into [Version] ([Component], [Version]) values ('Settings', 3000)
+	insert into [Version] ([Component], [Version]) values ('Settings', 4000)
 end

@@ -11,35 +11,24 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	/// </summary>
 	public class Wiki {
 
-		private string _wikiName;
-		private List<string> _wikiHosts;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Wiki"/> class.
 		/// </summary>
 		/// <param name="wikiName">The name of the wiki.</param>
 		/// <param name="wikiHosts">The hosts associated with the wiki name.</param>
 		public Wiki(string wikiName, List<string> wikiHosts) {
-			_wikiName = wikiName;
-			_wikiHosts = wikiHosts;
+			WikiName = wikiName;
+			Hosts = wikiHosts;
 		}
 
 		/// <summary>
 		/// Gets the name of the wiki.
 		/// </summary>
-		public string WikiName {
-			get {
-				return _wikiName;
-			}
-		}
+		public string WikiName { get; private set; }
 
 		/// <summary>
 		/// Gets the hosts.
 		/// </summary>
-		public List<string> Hosts {
-			get {
-				return _wikiHosts;
-			}
-		}
+		public List<string> Hosts { get; private set; }
 	}
 }

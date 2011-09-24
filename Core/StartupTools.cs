@@ -58,7 +58,7 @@ namespace ScrewTurn.Wiki {
 
 			ProviderLoader.LoadAllFormatterProviders();
 
-			foreach(Wiki.PluginFramework.Wiki wiki in Collectors.CollectorsBox.GlobalSettingsProvider.AllWikis()) {
+			foreach(Wiki.PluginFramework.Wiki wiki in Collectors.CollectorsBox.GlobalSettingsProvider.GetAllWikis()) {
 				ISettingsStorageProviderV40 ssp = Collectors.CollectorsBox.GetSettingsProvider(wiki.WikiName);
 				if(ssp.IsFirstApplicationStart()) {
 					if(ssp.GetMetaDataItem(MetaDataItem.AccountActivationMessage, null) == "")

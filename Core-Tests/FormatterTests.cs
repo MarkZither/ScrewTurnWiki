@@ -87,7 +87,7 @@ second line";
 				throw new NotImplementedException();
 			}
 
-			public IList<Wiki.PluginFramework.Wiki> AllWikis() {
+			public Wiki.PluginFramework.Wiki[] GetAllWikis() {
 				throw new NotImplementedException();
 			}
 

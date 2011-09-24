@@ -38,10 +38,10 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		bool SetSetting(string name, string value);
 
 		/// <summary>
-		/// Alls the wikis.
+		/// Gets alls the wikis.
 		/// </summary>
-		/// <returns>A list of wiki identifiers.</returns>
-		IList<Wiki> AllWikis();
+		/// <returns>A collection of wiki identifiers.</returns>
+		Wiki[] GetAllWikis();
 
 		/// <summary>
 		/// Extracts the name of the wiki from the given host.

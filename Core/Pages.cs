@@ -1016,19 +1016,21 @@ namespace ScrewTurn.Wiki {
 			string[] knownPages = new string[allLinks.Count];
 			allLinks.Keys.CopyTo(knownPages, 0);
 
-			Dictionary<string, bool> result = new Dictionary<string, bool>(pages.Count);
+			Dictionary<PageContent, bool> result = new Dictionary<PageContent, bool>(pages.Count);
 
 			foreach(PageContent page in pages) {
-				result.Add(page.FullName, false);
+				result.Add(page, false);
 				foreach(string key in knownPages) {
 					if(Contains(allLinks[key], page.FullName)) {
 						// page has incoming links
-						result[page.FullName] = true;
+						result[page] = true;
 					}
 				}
 			}
 
-			return ExtractNegativeKeys(result);
+			List<PageContent> pagesResult = new List<PageContent>(ExtractNegativeKeys(result));
+
+			return pagesResult.ConvertAll<string>((p) => { return p.FullName; }).ToArray();
 		}
 
 		/// <summary>

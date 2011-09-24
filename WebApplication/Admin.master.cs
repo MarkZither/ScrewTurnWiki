@@ -53,6 +53,7 @@ namespace ScrewTurn.Wiki {
 			{ "adminglobalhome", "lnkSelectAdminGlobalHome" },
 			{ "adminglobalconfig", "lnkSelectGlobalConfig" },
 			{ "adminprovidersmanagement", "lnkSelectPluginsManagement" },
+			{ "adminimportexport", "lnkSelectImportExport"},
 			{ "adminlog", "lnkSelectLog" },
 		};
 
@@ -79,12 +80,14 @@ namespace ScrewTurn.Wiki {
 			lnkSelectAdminGlobalHome.CssClass = "tab red";
 			lnkSelectGlobalConfig.CssClass = "tab red";
 			lnkSelectPluginsManagement.CssClass = "tab red";
+			lnkSelectImportExport.CssClass = "tab red";
 			lnkSelectLog.CssClass = "tab red";
 
 			hyperLink.CssClass = "tabselected";
 			if(hyperLink.ID == "lnkSelectAdminGlobalHome" ||
 			   hyperLink.ID == "lnkSelectGlobalConfig" ||
 			   hyperLink.ID == "lnkSelectPluginsManagement" ||
+			   hyperLink.ID == "lnkSelectImportExport" ||
 			   hyperLink.ID == "lnkSelectLog") {
 						hyperLink.CssClass += " red selected";
 			}
@@ -142,6 +145,10 @@ namespace ScrewTurn.Wiki {
 
 			// Providers Management (can manage global config)
 			lnkSelectPluginsManagement.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
+
+			// Import export (can manage global config)
+			lnkSelectImportExport.Visible = CanManageGlobalConfiguration(currentUser, currentGroups);
+
 		}
 
 		/// <summary>

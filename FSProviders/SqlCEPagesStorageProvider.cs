@@ -223,7 +223,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 			if(SchemaNeedsUpdate()) {
 				// Run Update
 			}
-			foreach(PluginFramework.Wiki wiki in host.GetGlobalSettingsStorageProvider().AllWikis()) {
+			foreach(PluginFramework.Wiki wiki in host.GetGlobalSettingsStorageProvider().GetAllWikis()) {
 				InitNamespaceTable(wiki.WikiName);
 			}
 		}

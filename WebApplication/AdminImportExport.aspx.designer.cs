@@ -10,222 +10,204 @@
 namespace ScrewTurn.Wiki {
     
     
-    public partial class AdminMaster {
+    public partial class AdminImportExport {
         
         /// <summary>
-        /// lblJS control.
+        /// lblImportExportTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblJS;
+        protected global::System.Web.UI.WebControls.Literal lblImportExportTitle;
         
         /// <summary>
-        /// head control.
+        /// lblGlobalSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
+        protected global::System.Web.UI.WebControls.Literal lblGlobalSettings;
         
         /// <summary>
-        /// frmAdmin control.
+        /// lblExportGlobalSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm frmAdmin;
+        protected global::System.Web.UI.WebControls.Literal lblExportGlobalSettings;
         
         /// <summary>
-        /// lblStrings control.
+        /// btnExportGlobalSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblStrings;
+        protected global::System.Web.UI.WebControls.Button btnExportGlobalSettings;
         
         /// <summary>
-        /// lblAdminTitle control.
+        /// lblExportGlobalSettingsResult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblAdminTitle;
+        protected global::System.Web.UI.WebControls.Label lblExportGlobalSettingsResult;
         
         /// <summary>
-        /// lblHomeLink control.
+        /// lblImportGlobalSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblHomeLink;
+        protected global::System.Web.UI.WebControls.Literal lblImportGlobalSettings;
         
         /// <summary>
-        /// lnkSelectAdminHome control.
+        /// upGlobalSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectAdminHome;
+        protected global::System.Web.UI.WebControls.FileUpload upGlobalSettings;
         
         /// <summary>
-        /// lnkSelectGroups control.
+        /// btnImportGlobalSettings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectGroups;
+        protected global::System.Web.UI.WebControls.Button btnImportGlobalSettings;
         
         /// <summary>
-        /// lnkSelectAccounts control.
+        /// lblImportGlobalSettingsResult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectAccounts;
+        protected global::System.Web.UI.WebControls.Label lblImportGlobalSettingsResult;
         
         /// <summary>
-        /// lnkSelectNamespaces control.
+        /// lblStorageProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectNamespaces;
+        protected global::System.Web.UI.WebControls.Literal lblStorageProviders;
         
         /// <summary>
-        /// lnkSelectPages control.
+        /// lblImportExportStorageProviderDescription control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectPages;
+        protected global::System.Web.UI.WebControls.Literal lblImportExportStorageProviderDescription;
         
         /// <summary>
-        /// lnkSelectCategories control.
+        /// lstWiki control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectCategories;
+        protected global::System.Web.UI.WebControls.DropDownList lstWiki;
         
         /// <summary>
-        /// lnkSelectSnippets control.
+        /// lblExportAll control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectSnippets;
+        protected global::System.Web.UI.WebControls.Literal lblExportAll;
         
         /// <summary>
-        /// lnkSelectNavPaths control.
+        /// btnExportAll control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectNavPaths;
+        protected global::System.Web.UI.WebControls.Button btnExportAll;
         
         /// <summary>
-        /// lnkSelectContent control.
+        /// lblImportBackup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectContent;
+        protected global::System.Web.UI.WebControls.Literal lblImportBackup;
         
         /// <summary>
-        /// lnkSelectPluginsConfiguration control.
+        /// lblUploadBackupFile control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectPluginsConfiguration;
+        protected global::System.Web.UI.WebControls.Literal lblUploadBackupFile;
         
         /// <summary>
-        /// lnkSelectConfig control.
+        /// txtBackupFileURL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectConfig;
+        protected global::System.Web.UI.WebControls.TextBox txtBackupFileURL;
         
         /// <summary>
-        /// lnkSelectTheme control.
+        /// lblSelectStorageProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectTheme;
+        protected global::System.Web.UI.WebControls.Literal lblSelectStorageProviders;
         
         /// <summary>
-        /// lnkSelectAdminGlobalHome control.
+        /// lstPagesStorageProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectAdminGlobalHome;
+        protected global::System.Web.UI.WebControls.DropDownList lstPagesStorageProviders;
         
         /// <summary>
-        /// lnkSelectGlobalConfig control.
+        /// lstUsersStorageProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectGlobalConfig;
+        protected global::System.Web.UI.WebControls.DropDownList lstUsersStorageProviders;
         
         /// <summary>
-        /// lnkSelectPluginsManagement control.
+        /// lstFilesStorageProviders control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectPluginsManagement;
+        protected global::System.Web.UI.WebControls.DropDownList lstFilesStorageProviders;
         
         /// <summary>
-        /// lnkSelectImportExport control.
+        /// btnImportBackup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectImportExport;
-        
-        /// <summary>
-        /// lnkSelectLog control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectLog;
-        
-        /// <summary>
-        /// cphAdmin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder cphAdmin;
+        protected global::System.Web.UI.WebControls.Button btnImportBackup;
     }
 }

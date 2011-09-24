@@ -35,7 +35,7 @@ namespace ScrewTurn.Wiki.Tests {
 			Expect.Call(settingsStorageProvider.GetMetaDataItem(MetaDataItem.PageChangeMessage, null)).Return("").Repeat.Any();
 			Expect.Call(host.GetGlobalSettingValue(GlobalSettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
 			Expect.Call(host.GetGlobalSettingsStorageProvider()).Return(globalSettingsStorageProvider).Repeat.Any();
-			Expect.Call(globalSettingsStorageProvider.AllWikis()).Return(new List<PluginFramework.Wiki>() { new PluginFramework.Wiki("root", new List<string>() { "localhost" }) });
+			Expect.Call(globalSettingsStorageProvider.GetAllWikis()).Return(new[] { new PluginFramework.Wiki("root", new List<string>() { "localhost" }) });
 			Expect.Call(globalSettingsStorageProvider.GetSetting("DefaultUsersProvider")).Return(typeof(DummyUsersStorageProvider).FullName).Repeat.Any();
 			ProviderCollector<IUsersStorageProviderV40> usersProvidersCollector = new ProviderCollector<IUsersStorageProviderV40>();
 			usersProvidersCollector.AddProvider(typeof(DummyUsersStorageProvider), System.Reflection.Assembly.GetAssembly(typeof(DummyUsersStorageProvider)));

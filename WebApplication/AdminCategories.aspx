@@ -13,7 +13,7 @@
 		<asp:Panel ID="pnlList" runat="server" meta:resourcekey="pnlListResource1" CssClass="leftaligned">
 			<div id="NamespaceSelectorDiv">
 				<asp:Literal ID="lblNamespace" runat="server" Text="Namespace" EnableViewState="False" meta:resourcekey="lblNamespaceResource1" /><br />
-				<asp:DropDownList ID="lstNamespace" runat="server" OnSelectedIndexChanged="lstNamespace_SelectedIndexChanged" Width="150px" meta:resourcekey="lstNamespaceResource1" />
+				<asp:DropDownList ID="lstNamespace" runat="server" OnSelectedIndexChanged="lstNamespace_SelectedIndexChanged" Width="150px" meta:resourcekey="lstNamespaceResource1" AutoPostBack="true" />
 			</div>
 
 			<div id="CategoriesListContainerDiv">
