@@ -174,26 +174,10 @@ $('#staticStar" + numRatings + @"').html(GenerateStaticStars(" + average + @", '
 									<option value=""4"">Above average</option>
 									<option value=""5"">Awesome</option>
 								</select>
-								<span id=""staticStar" + numRatings + @""" style=""vertical-align: middle;""></span> <span id=""average" + numRatings + @""" class=""ui-rating-side-message""></span>";
+								<span id=""staticStar" + numRatings + @""" style=""vertical-align: middle;""></span> <span id=""average" + numRatings + @""" class=""ui-rating-side-message"">&nbsp;</span>";
 
 					result += @"<script type=""text/javascript""> <!--
-$(document).ready(function(){
-var voting = true;
-//Show that we can bind on the select box  
-$('#serialStar" + numRatings + @"').bind(""change"", function(){
-if(voting){
-voting = false;
-var vote = $('#serialStar" + numRatings + @"').val();
-$.ajax({ type: 'POST', url: '_setrating.ashx?vote=' + vote + '&page=' + encodeURIComponent('" + fullPageName + @"') });
-$('#serialStar" + numRatings + @"').remove();
-$('.ui-rating').remove();
-$('#staticStar" + numRatings + @"').html(GenerateStaticStars(vote, 'ui-rating-hover'));
-$('#average" + numRatings + @"').html('Thanks!');
-}
-});
-//Set the initial value
-$('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + average + @"});
-});
+$(document).ready(function() { SetupVoteTool(" + numRatings + @", '" + fullPageName + @"', " + average + @"); });
 //--> </script>";
 
 				}
