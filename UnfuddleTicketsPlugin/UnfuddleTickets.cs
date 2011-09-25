@@ -137,7 +137,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			return title;
 		}
 
-		void IDisposable.Dispose() {
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose() {
 			// Nothing to do
 		}
 
@@ -293,6 +296,19 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="message">The message.</param>
 		private void LogWarning(string message) {
 			_host.LogEntry(message, LogEntryType.Warning, null, this, _wiki);
+		}
+
+		/// <summary>
+		/// Method called when the plugin must handle a HTTP request.
+		/// </summary>
+		/// <param name="context">The HTTP context.</param>
+		/// <param name="urlMatch">The URL match.</param>
+		/// <returns><c>true</c> if the request was handled, <c>false</c> otherwise.</returns>
+		/// <remarks>This method is called only when a request matches the 
+		/// parameters configured by calling <see cref="IHostV40.RegisterRequestHandler"/> during <see cref="IProviderV40.SetUp"/>. 
+		/// If the plugin <b>did not</b> call <see cref="IHostV40.RegisterRequestHandler"/>, this method is never called.</remarks>
+		public bool HandleRequest(HttpContext context, Match urlMatch) {
+			return false;
 		}
 
 	}

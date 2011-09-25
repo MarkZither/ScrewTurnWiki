@@ -228,7 +228,7 @@ namespace ScrewTurn.Wiki {
 			}
 			catch(ReflectionTypeLoadException) {
 				formatters = new Type[0];
-				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername, null);
+				Log.LogEntry("Unable to load providers from (probably v2/v3) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername, null);
 				return;
 			}
 

@@ -1,11 +1,13 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ScrewTurn.Wiki.PluginFramework;
-using System.Text.RegularExpressions;
-using System.Reflection;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Web;
+using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 
@@ -14,32 +16,52 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 	/// </summary>
 	public class RatingManager : IFormatterProviderV40 {
 
-		const string _defaultDirectoryName = "/__RatingManagerPlugin/";
-		const string cssFileName = "RatingManagerPluginCss.css";
-		const string jsFileName = "RatingManagerPluginJs.js";
-		const string starImageFileName = "RatingManagerPluginStarImage.gif";
-		const string ratingFileName = "RatingManagerPluginRatingFile.dat";
+		private const string _defaultDirectoryName = "/__RatingManagerPlugin/";
+		private const string ratingFileName = "RatingManagerPluginRatingFile.dat";
+		private const string CookieNamePrefix = "RatingManagerPlugin_";
+
+		private static byte[] JsContent = null;
+		private static byte[] Js2Content = null;
+		private static byte[] CssContent = null;
+		private static byte[] GifContent = null;
 
 		private IHostV40 _host;
 		private string _wiki;
 		private bool _enableLogging = true;
-		private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "4.0.1.71", "http://www.screwturn.eu", "http://www.screwturn.eu/Version4.0/PluginPack/RatingManager.txt");
-
-		private bool foundRatings = false;
+		private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "4.0.4.122", "http://www.screwturn.eu", "http://www.screwturn.eu/Version4.0/PluginPack/RatingManager.txt");
 
 		private string DefaultDirectoryName() {
 			return Path.Combine(_wiki, _defaultDirectoryName);
 		}
 
-		private static readonly Regex VotesRegex = new Regex(@"{rating(\|(.+?))?}",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		private static readonly Regex VotesRegex = new Regex(@"{rating(\|(.+?))?}", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+		static RatingManager() {
+			Func<Stream, byte[]> readStream = s => {
+				List<byte> result = new List<byte>(65536);
+
+				byte[] buffer = new byte[65536];
+				int read = 0;
+				do {
+					read = s.Read(buffer, 0, buffer.Length);
+					if(read > 0) {
+						result.AddRange(buffer.Take(read));
+					}
+				} while(read > 0);
+
+				return result.ToArray();
+			};
+
+			CssContent = readStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.jquery.rating.css"));
+			JsContent = readStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.jquery.rating.pack.js"));
+			Js2Content = readStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.rating.js"));
+			GifContent = readStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.star.gif"));
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RatingManager"/> class.
 		/// </summary>
-		public RatingManager() {
-			
-		}
+		public RatingManager() { }
 
 		/// <summary>
 		/// Specifies whether or not to execute Phase 1.
@@ -82,15 +104,6 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 
 			StringBuilder buffer = new StringBuilder(raw);
 			try {
-				if(context.Context == FormattingContext.PageContent && context.Page != null) {
-					if(context.HttpContext.Request["vote"] != null) {
-						AddRating(context.Page, int.Parse(context.HttpContext.Request["vote"]));
-						System.Web.HttpCookie cookie = new System.Web.HttpCookie("RatingManagerPlugin_" + context.Page, context.HttpContext.Request["vote"]);
-						cookie.Expires = DateTime.Now.AddYears(10);
-						context.HttpContext.Response.Cookies.Add(cookie);
-						return "";
-					}
-				}
 				if(context.Page != null) {
 					ComputeRating(context, buffer, context.Page);
 				}
@@ -99,26 +112,9 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 				}
 			}
 			catch(Exception ex) {
-				LogWarning(string.Format("Exception occurred: {0}", ex.StackTrace));
+				LogWarning(string.Format("Exception occurred: {0}", ex.ToString()));
 			}
-			if(foundRatings) {
-				buffer.Append(@"<script type=""text/javascript"" src=""GetFile.aspx?file=" + DefaultDirectoryName() + jsFileName + @"""></script>");
-				buffer.Append(@"<link rel=""StyleSheet"" href=""GetFile.aspx?file=" + DefaultDirectoryName() + cssFileName + @""" type=""text/css"" />");
-				buffer.Append(@"<script type=""text/javascript""> <!--
-function GenerateStaticStars(rate, cssClass) {
-var string = '';
-var i = 0;
-for (i=0; i<rate; i++) {
-string +='<span class=""static-rating ' + cssClass + '""></span>';
-}
-for(i=rate; i<5; i++) {
-string +='<span class=""static-rating ui-rating-empty""></span>';
-}
-return string;
-}
-//--> </script>");
-				foundRatings = false;
-			}
+
 			return buffer.ToString();
 		}
 
@@ -132,15 +128,23 @@ return string;
 			KeyValuePair<int, Match> block = FindAndRemoveFirstOccurrence(buffer);
 			int numRatings = 0;
 			while(block.Key != -1) {
-				foundRatings = true;
 				numRatings++;
 
-				string result = null;
+				string currentVote = null;
+				if(context.HttpContext.Request.Cookies[CookieNamePrefix + fullPageName] != null) {
+					currentVote = context.HttpContext.Request.Cookies[CookieNamePrefix + fullPageName].Value;
+				}
+
+				string result = "";
 
 				if(block.Value.Groups[2].Value != "") {
 					int average = (int)Math.Round((decimal)GetCurrentAverage(block.Value.Groups[2].Value), 0, MidpointRounding.AwayFromZero);
 
 					result += @"<span id=""staticStar" + numRatings + @""" class=""rating""></span>";
+
+					if(currentVote != null) {
+						result += @"<span id=""average" + numRatings + @""" class=""ui-rating-side-message"">You voted " + currentVote + "</span>";
+					}
 
 					result += @"<script type=""text/javascript""> <!--
 $(document).ready(function() {
@@ -148,10 +152,11 @@ $('#staticStar" + numRatings + @"').html(GenerateStaticStars(" + average + @", '
 });
 //--> </script>";
 				}
-				else if(context.HttpContext.Request.Cookies.Get("RatingManagerPlugin_" + fullPageName) != null) {
+				else if(currentVote != null) {
 					int average = (int)Math.Round((decimal)GetCurrentAverage(fullPageName), 0, MidpointRounding.AwayFromZero);
 
 					result += @"<span id=""staticStar" + numRatings + @""" class=""rating""></span>";
+					result += @"<span id=""average" + numRatings + @""" class=""ui-rating-side-message"">You voted " + currentVote + "</span>";
 
 					result += @"<script type=""text/javascript""> <!--
 $(document).ready(function() {
@@ -163,13 +168,13 @@ $('#staticStar" + numRatings + @"').html(GenerateStaticStars(" + average + @", '
 					int average = (int)Math.Round((decimal)GetCurrentAverage(fullPageName), 0, MidpointRounding.AwayFromZero);
 
 					result += @"<select name=""myRating"" class=""rating"" id=""serialStar" + numRatings + @""">  
-									<option value=""1"">Alright</option>  
-									<option value=""2"">Ok</option>  
-									<option value=""3"">Getting Better</option>  
-									<option value=""4"">Pretty Good</option>  
-									<option value=""5"">Awesome</option>  
+									<option value=""1"">Awful</option>
+									<option value=""2"">Below average</option>
+									<option value=""3"">Good</option>
+									<option value=""4"">Above average</option>
+									<option value=""5"">Awesome</option>
 								</select>
-								<span id=""staticStar" + numRatings + @""" style=""vertical-align: middle;""></span> <span id=""average" + numRatings + @""" style=""margin-left: 5px; font-weight: bold;""></span>";
+								<span id=""staticStar" + numRatings + @""" style=""vertical-align: middle;""></span> <span id=""average" + numRatings + @""" class=""ui-rating-side-message""></span>";
 
 					result += @"<script type=""text/javascript""> <!--
 $(document).ready(function(){
@@ -179,7 +184,7 @@ $('#serialStar" + numRatings + @"').bind(""change"", function(){
 if(voting){
 voting = false;
 var vote = $('#serialStar" + numRatings + @"').val();
-$.ajax({ url: '?vote=' + vote });
+$.ajax({ type: 'POST', url: '_setrating.ashx?vote=' + vote + '&page=' + encodeURIComponent('" + fullPageName + @"') });
 $('#serialStar" + numRatings + @"').remove();
 $('.ui-rating').remove();
 $('#staticStar" + numRatings + @"').html(GenerateStaticStars(vote, 'ui-rating-hover'));
@@ -193,14 +198,11 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 
 				}
 
-				result += @"";
-
 				buffer.Insert(block.Key, result);
 
 				block = FindAndRemoveFirstOccurrence(buffer);
 			}
 		}
-
 		
 		private float GetCurrentAverage(string fullPageName) {
 			float average = 0;
@@ -227,11 +229,10 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 				}
 			}
 			catch(Exception ex) {
-				LogWarning(String.Format("Exception occurred {0}", ex.StackTrace));
+				LogWarning(String.Format("Exception occurred {0}", ex.ToString()));
 			}
 			return average;
 		}
-
 
 		private void AddRating(string fullPageName, int rate) {
 			IFilesStorageProviderV40 filesStorageProvider = GetDefaultFilesStorageProvider();
@@ -271,8 +272,6 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 			stream = new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
 
 			filesStorageProvider.StoreFile(DefaultDirectoryName() + ratingFileName, stream, true);
-
-			//statisticsPage.Provider.ModifyPage(statisticsPage, statisticsPageContent.Title, statisticsPageContent.User, DateTime.Now, statisticsPageContent.Comment, sb.ToString(), statisticsPageContent.Keywords, statisticsPageContent.Description, SaveMode.Normal);
 		}
 
 		/// <summary>
@@ -285,8 +284,9 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		/// </returns>
 		private int SearchPlugin(string[] plugins, string currentPlugin) {
 			for(int i = 0; i < plugins.Length; i++) {
-				if(plugins[i].Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries)[0] == currentPlugin)
+				if(plugins[i].Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries)[0] == currentPlugin) {
 					return i;
+				}
 			}
 			return -1;
 		}
@@ -354,15 +354,6 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 			if(!DirectoryExists(filesStorageProvider, DefaultDirectoryName())) {
 				filesStorageProvider.CreateDirectory("/", DefaultDirectoryName().Trim('/'));
 			}
-			if(!FileExists(filesStorageProvider, DefaultDirectoryName(), cssFileName)) {
-				filesStorageProvider.StoreFile(DefaultDirectoryName() + cssFileName, Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.jquery.rating.css"), true);
-			}
-			if(!FileExists(filesStorageProvider, DefaultDirectoryName(), jsFileName)) {
-				filesStorageProvider.StoreFile(DefaultDirectoryName() + jsFileName, Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.jquery.rating.pack.js"), true);
-			}
-			if(!FileExists(filesStorageProvider, DefaultDirectoryName(), starImageFileName)) {
-				filesStorageProvider.StoreFile(DefaultDirectoryName() + starImageFileName, Assembly.GetExecutingAssembly().GetManifestResourceStream("ScrewTurn.Wiki.Plugins.RatingManagerPlugin.Resources.star.gif"), true);
-			}
 
 			string[] configEntries = config.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 			for(int i = 0; i < configEntries.Length; i++) {
@@ -373,7 +364,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 							_enableLogging = false;
 						}
 						else {
-							LogWarning(@"Unknown value in ""logOptions"" configuration string: " + configEntries[i] + "Supported values are: nolog.");
+							LogWarning("Unknown value in 'logOptions' configuration string: " + configEntries[i] + "; supported values are: 'nolog'.");
 						}
 						break;
 					default:
@@ -382,7 +373,6 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 				}
 			}
 		}
-
 
 		private IFilesStorageProviderV40 GetDefaultFilesStorageProvider() {
 			string defaultFilesStorageProviderName = _host.GetGlobalSettingValue(GlobalSettingName.DefaultFilesStorageProvider);
@@ -405,6 +395,65 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 			return false;
 		}
 
+		/// <summary>
+		/// Method called when the plugin must handle a HTTP request.
+		/// </summary>
+		/// <param name="context">The HTTP context.</param>
+		/// <param name="urlMatch">The URL match.</param>
+		/// <returns><c>true</c> if the request was handled, <c>false</c> otherwise.</returns>
+		/// <remarks>This method is called only when a request matches the 
+		/// parameters configured by calling <see cref="IHostV40.RegisterRequestHandler"/> during <see cref="IProviderV40.SetUp"/>. 
+		/// If the plugin <b>did not</b> call <see cref="IHostV40.RegisterRequestHandler"/>, this method is never called.</remarks>
+		public bool HandleRequest(HttpContext context, Match urlMatch) {
+			if(urlMatch.Value == "_setrating.ashx") {
+				string vote = context.Request["vote"];
+				string page = context.Request["page"];
+
+				if(!string.IsNullOrEmpty(vote) && !string.IsNullOrEmpty(page)) {
+					AddRating(page, int.Parse(vote));
+					System.Web.HttpCookie cookie = new System.Web.HttpCookie(CookieNamePrefix + page, vote);
+					cookie.Expires = DateTime.Now.AddYears(10);
+
+					context.Response.Clear();
+					context.Response.Cookies.Add(cookie);
+					return true;
+				}
+				else return false;
+			}
+			else {
+				string mime = null;
+				byte[] content = null;
+
+				switch(urlMatch.Value) {
+					case "star.gif.ashx":
+						mime = "image/gif";
+						content = GifContent;
+						break;
+					case "javascript.js.ashx":
+						mime = "application/javascript";
+						content = JsContent;
+						break;
+					case "styles.css.ashx":
+						mime = "text/css";
+						content = CssContent;
+						break;
+					case "rating.js.ashx":
+						mime = "application/javascript";
+						content = Js2Content;
+						break;
+					default:
+						return false;
+				}
+
+				context.Response.Clear();
+				context.Response.ContentType = mime;
+				context.Response.ContentEncoding = Encoding.UTF8;
+				context.Response.OutputStream.Write(content, 0, content.Length);
+				context.Response.CacheControl = "private";
+
+				return true;
+			}
+		}
 
 		/// <summary>
 		/// Sets up the Storage Provider.
@@ -416,9 +465,23 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		public void SetUp(IHostV40 host, string config) {
 			if(host == null) throw new ArgumentNullException("host");
 			if(config == null) throw new ArgumentNullException("config");
+
+			// Setup request handlers
+
+			host.RegisterRequestHandler(this, @"(star\.gif\.ashx)|(javascript\.js\.ashx)|(styles\.css\.ashx)|(rating\.js\.ashx)", new[] { "GET", "HEAD" });
+
+			host.RegisterRequestHandler(this, @"_setrating\.ashx", new[] { "POST" });
+
+			host.AddHtmlHeadContent(this,
+@"<script type=""text/javascript"" src=""javascript.js.ashx""></script>
+<link rel=""StyleSheet"" href=""styles.css.ashx"" type=""text/css"" />
+<script type=""text/javascript"" src=""rating.js.ashx""></script>");
 		}
 
-		void IDisposable.Dispose() {
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose() {
 			// Nothing to do
 		}
 
@@ -435,5 +498,7 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		public string ConfigHelpHtml {
 			get { return "Specify <i>logooptions=nolog</i> for disabling warning log messages for exceptions."; }
 		}
+
 	}
+
 }

@@ -1,8 +1,10 @@
 
 using System;
 using System.Collections.Generic;
-using ScrewTurn.Wiki.PluginFramework;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki {
 
@@ -24,24 +26,75 @@ namespace ScrewTurn.Wiki {
 			set { instance = value; }
 		}
 
-		private Dictionary<string, CustomToolbarItem> customSpecialTags;
+		private Dictionary<string, CustomToolbarItem> _customSpecialTags;
+		private Dictionary<string, RequestHandlerRegistryEntry> _requestHandlers;
+		private Dictionary<string, HtmlHeadContentItem> _htmlHeadContent;
 
 		/// <summary>
 		/// Initializes a new instance of the <b>PluginHost</b> class.
 		/// </summary>
 		public Host() {
-			customSpecialTags = new Dictionary<string, CustomToolbarItem>(5);
+			_customSpecialTags = new Dictionary<string, CustomToolbarItem>(5);
+			_requestHandlers = new Dictionary<string, RequestHandlerRegistryEntry>(5);
+			_htmlHeadContent = new Dictionary<string, HtmlHeadContentItem>(5);
 		}
 
 		/// <summary>
-		/// Gets the Special Tags added by providers.
+		/// Gets the special tags added by providers.
 		/// </summary>
-		public Dictionary<string, CustomToolbarItem> CustomSpecialTags {
-			get {
-				lock(customSpecialTags) {
-					return customSpecialTags;
+		/// <param name="wiki">The current wiki.</param>
+		/// <returns>The special tags.</returns>
+		public Dictionary<string, CustomToolbarItem> GetCustomSpecialTags(string wiki) {
+			lock(_customSpecialTags) {
+				Dictionary<string, CustomToolbarItem> result = new Dictionary<string, CustomToolbarItem>(_customSpecialTags.Count);
+
+				foreach(var pair in _customSpecialTags) {
+					// Storage Providers are now allowed to inject custom buttons in the editor
+					if(Settings.GetProvider(wiki).GetPluginStatus(pair.Value.CallerType.FullName)) {
+						result.Add(pair.Key, pair.Value);
+					}
+				}
+
+				return result;
+			}
+		}
+
+		/// <summary>
+		/// Gets the request handlers added by providers.
+		/// </summary>
+		/// <param name="wiki">The current wiki.</param>
+		/// <returns>The request handlers.</returns>
+		public Dictionary<string, RequestHandlerRegistryEntry> GetRequestHandlers(string wiki) {
+			lock(_requestHandlers) {
+				Dictionary<string, RequestHandlerRegistryEntry> result = new Dictionary<string, RequestHandlerRegistryEntry>(_requestHandlers.Count);
+
+				foreach(var pair in _requestHandlers) {
+					if(Settings.GetProvider(wiki).GetPluginStatus(pair.Value.CallerType.FullName)) {
+						result.Add(pair.Key, pair.Value);
+					}
+				}
+
+				return result;
+			}
+		}
+
+		/// <summary>
+		/// Gets all the HTML head content.
+		/// </summary>
+		/// <param name="wiki">The current wiki.</param>
+		/// <returns>The content.</returns>
+		public string GetAllHtmlHeadContent(string wiki) {
+			StringBuilder buffer = new StringBuilder(1024);
+			
+			lock(_htmlHeadContent) {
+				foreach(HtmlHeadContentItem s in _htmlHeadContent.Values) {
+					if(Settings.GetProvider(wiki).GetPluginStatus(s.CallerType.FullName)) {
+						buffer.AppendLine(s.Content);
+					}
 				}
 			}
+
+			return buffer.ToString();
 		}
 
 		/// <summary>
@@ -625,17 +678,20 @@ namespace ScrewTurn.Wiki {
 		public DateTime AlignDateTimeWithPreferences(string wiki, DateTime dt) {
 			return Preferences.AlignWithTimezone(wiki, dt);
 		}
-		
+
 		/// <summary>
 		/// Adds an item in the Editing Toolbar.
 		/// </summary>
+		/// <param name="caller">The caller.</param>
 		/// <param name="item">The item to add.</param>
-		/// <param name="text">The text of the item.</param>
-		/// <param name="value">The value of the item.</param>
-		/// <exception cref="ArgumentNullException">If <b>text</b> or <b>value</b> are <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>text</b> or <b>value</b> are empty, or if they contain single or double quotes, 
-		/// or if <b>value</b> does not contain a pipe when <b>item</b> is <b>SpecialTagWrap</b>.</exception>
-		public void AddToolbarItem(ToolbarItem item, string text, string value) {
+		/// <param name="text">The text of the item showed in the toolbar.</param>
+		/// <param name="value">The value of the item, placed in the content: if <b>item</b> is <b>ToolbarItem.SpecialTagWrap</b>, separate start and end tag with a pipe.</param>
+		/// <returns>A token to use to remove the toolbar item with <see cref="RemoveToolbarItem"/>.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="text"/> or <paramref name="value"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="text"/> or <paramref name="value"/> are empty, or if they contain single or double quotes,
+		/// or if <paramref name="value"/> does not contain a pipe when <paramref name="item"/> is <b>SpecialTagWrap</b>.</exception>
+		public string AddToolbarItem(IProviderV40 caller, ToolbarItem item, string text, string value) {
+			if(caller == null) throw new ArgumentNullException("caller");
 			if(text == null) throw new ArgumentNullException("text");
 			if(text.Length == 0) throw new ArgumentException("Text cannot be empty", "text");
 			if(text.Contains("\"") || text.Contains("'")) throw new ArgumentException("Text cannot contain single or double quotes", "text");
@@ -645,12 +701,39 @@ namespace ScrewTurn.Wiki {
 
 			if(item == ToolbarItem.SpecialTagWrap && !value.Contains("|")) throw new ArgumentException("Invalid value for a SpecialTagWrap (pipe not found)", "value");
 
-			lock(customSpecialTags) {
-				if(customSpecialTags.ContainsKey(text)) {
-					customSpecialTags[text].Value = value;
-					customSpecialTags[text].Item = item;
+			string token = Guid.NewGuid().ToString("N");
+
+			lock(_customSpecialTags) {
+				_customSpecialTags.Add(text, new CustomToolbarItem() {
+					CallerType = caller.GetType(),
+					Item = item,
+					Text = text,
+					Token = token,
+					Value = value
+				});
+			}
+
+			return token;
+		}
+
+		/// <summary>
+		/// Removes a toolbar item.
+		/// </summary>
+		/// <param name="token">The token returned by <see cref="AddToolbarItem"/>.</param>
+		public void RemoveToolbarItem(string token) {
+			if(token == null) throw new ArgumentNullException("token");
+			if(token.Length == 0) throw new ArgumentException("Token cannot be empty", "token");
+
+			lock(_customSpecialTags) {
+				string toRemove = null;
+				foreach(var pair in _customSpecialTags) {
+					if(pair.Value.Token == token) {
+						toRemove = pair.Key;
+						break;
+					}
 				}
-				else customSpecialTags.Add(text, new CustomToolbarItem(item, text, value));
+
+				if(toRemove != null) _customSpecialTags.Remove(toRemove);
 			}
 		}
 
@@ -948,6 +1031,134 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
+		/// <summary>
+		/// Registers a HTTP request handler (typically during the SetUp phase of a provider).
+		/// </summary>
+		/// <param name="caller">The caller.</param>
+		/// <param name="urlRegex">The regular expression used to filter URLs to decide whether or not a request must be handled.</param>
+		/// <param name="methods">The HTTP request methods to consider, such as GET and POST.</param>
+		/// <returns>A token to use to unregister the handler (<see cref="UnregisterRequestHandler"/>).</returns>
+		/// <remarks>The <paramref name="urlRegex"/> will be treated as culture-invariant and case-insensitive.</remarks>
+		public string RegisterRequestHandler(IProviderV40 caller, string urlRegex, string[] methods) {
+			if(caller == null) throw new ArgumentNullException("caller");
+			if(urlRegex == null) throw new ArgumentNullException("urlRegex");
+			if(urlRegex.Length == 0) throw new ArgumentException("Regex cannot be empty", "urlRegex");
+			if(methods == null) throw new ArgumentNullException("methods");
+			if(methods.Length == 0) throw new ArgumentException("At least one method is required", "methods");
+
+			string token = Guid.NewGuid().ToString("N");
+
+			lock(_requestHandlers) {
+				_requestHandlers.Add(token, new RequestHandlerRegistryEntry() {
+					CallerType = caller.GetType(),
+					Token = token,
+					UrlRegex = new Regex(urlRegex, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase),
+					Methods = methods
+				});
+			}
+
+			return token;
+		}
+
+		/// <summary>
+		/// Unregisters a request handler.
+		/// </summary>
+		/// <param name="token">The token returned by <see cref="RegisterRequestHandler"/>.</param>
+		public void UnregisterRequestHandler(string token) {
+			if(token == null) throw new ArgumentNullException("token");
+			if(token.Length == 0) throw new ArgumentException("Token cannot be empty", "token");
+
+			lock(_requestHandlers) {
+				_requestHandlers.Remove(token);
+			}
+		}
+
+		/// <summary>
+		/// Allows to inject content into the HTML head, like scripts and css (typically during the SetUp phase of a provider).
+		/// </summary>
+		/// <param name="caller">The caller.</param>
+		/// <param name="content">The content to inject.</param>
+		/// <returns>A token to use to remove the injected content.</returns>
+		public string AddHtmlHeadContent(IProviderV40 caller, string content) {
+			if(caller == null) throw new ArgumentNullException("caller");
+			if(content == null) throw new ArgumentNullException("content");
+			if(content.Length == 0) throw new ArgumentException("Content cannot be empty", "content");
+
+			string token = Guid.NewGuid().ToString("N");
+
+			lock(_htmlHeadContent) {
+				_htmlHeadContent.Add(token, new HtmlHeadContentItem() {
+					CallerType = caller.GetType(),
+					Token = token,
+					Content = content
+				});
+			}
+
+			return token;
+		}
+
+		/// <summary>
+		/// Removes injected HTML head content.
+		/// </summary>
+		/// <param name="token">The token returned by <see cref="AddHtmlHeadContent"/>.</param>
+		public void RemoveHtmlHeadContent(string token) {
+			if(token == null) throw new ArgumentNullException("token");
+			if(token.Length == 0) throw new ArgumentException("Token cannot be empty", "token");
+
+			lock(_htmlHeadContent) {
+				_htmlHeadContent.Remove(token);
+			}
+		}
+
+	}
+
+	/// <summary>
+	/// Represents a request handler.
+	/// </summary>
+	public class RequestHandlerRegistryEntry {
+
+		/// <summary>
+		/// Gets or sets the caller type.
+		/// </summary>
+		public Type CallerType { get; set; }
+
+		/// <summary>
+		/// Get or sets the unique token assigned to the handler.
+		/// </summary>
+		public string Token { get; set; }
+
+		/// <summary>
+		/// Gets or sets the URL regex.
+		/// </summary>
+		public Regex UrlRegex { get; set; }
+
+		/// <summary>
+		/// Gets or sets the methods.
+		/// </summary>
+		public string[] Methods { get; set; }
+
+	}
+
+	/// <summary>
+	/// Represents custom content to be injected in the HTML head.
+	/// </summary>
+	public class HtmlHeadContentItem {
+
+		/// <summary>
+		/// Gets or sets the caller type.
+		/// </summary>
+		public Type CallerType { get; set; }
+
+		/// <summary>
+		/// Gets or sets the unique token assigned to the content.
+		/// </summary>
+		public string Token { get; set; }
+
+		/// <summary>
+		/// Gets or sets the content.
+		/// </summary>
+		public string Content { get; set; }
+
 	}
 
 	/// <summary>
@@ -955,43 +1166,30 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public class CustomToolbarItem {
 
-		private ToolbarItem item;
-		private string text, value;
+		/// <summary>
+		/// Gets or sets the caller type.
+		/// </summary>
+		public Type CallerType { get; set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <b>ToolbarItem</b> class.
+		/// Gets or sets the unique token assigned to the content.
 		/// </summary>
-		/// <param name="item">The item.</param>
-		/// <param name="text">The text.</param>
-		/// <param name="value">The value.</param>
-		public CustomToolbarItem(ToolbarItem item, string text, string value) {
-			this.item = item;
-			this.text = text;
-			this.value = value;
-		}
+		public string Token { get; set; }
 
 		/// <summary>
 		/// Gets or sets the item.
 		/// </summary>
-		public ToolbarItem Item {
-			get { return item; }
-			set { item = value; }
-		}
+		public ToolbarItem Item { get; set; }
 
 		/// <summary>
 		/// Gets the text.
 		/// </summary>
-		public string Text {
-			get { return text; }
-		}
+		public string Text { get; set; }
 
 		/// <summary>
 		/// Gets or sets the value.
 		/// </summary>
-		public string Value {
-			get { return value; }
-			set { this.value = value; }
-		}
+		public string Value { get; set; }
 
 	}
 

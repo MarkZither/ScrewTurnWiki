@@ -184,7 +184,7 @@ namespace ScrewTurn.Wiki {
 		/// Prints the custom special tags.
 		/// </summary>
 		private void PrintCustomSpecialTags() {
-			Dictionary<string, CustomToolbarItem> tags = Host.Instance.CustomSpecialTags;
+			Dictionary<string, CustomToolbarItem> tags = Host.Instance.GetCustomSpecialTags(currentWiki);
 			StringBuilder sb = new StringBuilder(100);
 			foreach(string key in tags.Keys) {
 				switch(tags[key].Item) {

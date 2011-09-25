@@ -71,6 +71,7 @@ namespace ScrewTurn.Wiki {
 
 			sb.Append("######______INCLUDES______######");
 
+			sb.AppendLine(Host.Instance.GetAllHtmlHeadContent(currentWiki));
 
 			// Use a Control to allow 3rd party plugins to programmatically access the Page header
 			string nspace = currentNamespace;

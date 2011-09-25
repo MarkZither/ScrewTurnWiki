@@ -1,12 +1,13 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Xml;
 using ScrewTurn.Wiki.PluginFramework;
-using System.Net;
-using System.IO;
 
 namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
@@ -307,7 +308,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
 		public void SetUp(IHostV40 host, string config) { }
 
-		void IDisposable.Dispose() {
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose() {
 			// Nothing to do
 		}
 
@@ -325,6 +329,19 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			get { return "Specify <i>nolog</i> for disabling warning log messages."; }
 		}
 
+		/// <summary>
+		/// Method called when the plugin must handle a HTTP request.
+		/// </summary>
+		/// <param name="context">The HTTP context.</param>
+		/// <param name="urlMatch">The URL match.</param>
+		/// <returns><c>true</c> if the request was handled, <c>false</c> otherwise.</returns>
+		/// <remarks>This method is called only when a request matches the 
+		/// parameters configured by calling <see cref="IHostV40.RegisterRequestHandler"/> during <see cref="IProviderV40.SetUp"/>. 
+		/// If the plugin <b>did not</b> call <see cref="IHostV40.RegisterRequestHandler"/>, this method is never called.</remarks>
+		public bool HandleRequest(HttpContext context, Match urlMatch) {
+			return false;
+		}
+		
 	}
 
 }

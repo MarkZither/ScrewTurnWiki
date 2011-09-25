@@ -46,7 +46,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public void PrintHtmlHead() {
 			Literal c = new Literal();
-			c.Text = Tools.GetIncludes(currentWiki, Tools.DetectCurrentNamespace());
+			c.Text = Tools.GetIncludes(currentWiki, Tools.DetectCurrentNamespace()) + "\r\n" + Host.Instance.GetAllHtmlHeadContent(currentWiki);
 			Page.Header.Controls.Add(c);
 		}
 		

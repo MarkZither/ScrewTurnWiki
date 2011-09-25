@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki.Plugins.PluginPack {
@@ -154,6 +155,19 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// </summary>
 		public string ConfigHelpHtml {
 			get { return "Specify 'display warning' to notify the user of the available content languages."; }
+		}
+
+		/// <summary>
+		/// Method called when the plugin must handle a HTTP request.
+		/// </summary>
+		/// <param name="context">The HTTP context.</param>
+		/// <param name="urlMatch">The URL match.</param>
+		/// <returns><c>true</c> if the request was handled, <c>false</c> otherwise.</returns>
+		/// <remarks>This method is called only when a request matches the 
+		/// parameters configured by calling <see cref="IHostV40.RegisterRequestHandler"/> during <see cref="IProviderV40.SetUp"/>. 
+		/// If the plugin <b>did not</b> call <see cref="IHostV40.RegisterRequestHandler"/>, this method is never called.</remarks>
+		public bool HandleRequest(HttpContext context, Match urlMatch) {
+			return false;
 		}
 
 	}

@@ -1,8 +1,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Net.Mail;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Web;
 
 namespace ScrewTurn.Wiki.PluginFramework {
 
@@ -303,13 +305,21 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <summary>
 		/// Adds an item in the Editing Toolbar.
 		/// </summary>
+		/// <param name="caller">The caller.</param>
 		/// <param name="item">The item to add.</param>
 		/// <param name="text">The text of the item showed in the toolbar.</param>
 		/// <param name="value">The value of the item, placed in the content: if <b>item</b> is <b>ToolbarItem.SpecialTagWrap</b>, separate start and end tag with a pipe.</param>
+		/// <returns>A token to use to remove the toolbar item with <see cref="RemoveToolbarItem"/>.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="text"/> or <paramref name="value"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="text"/> or <paramref name="value"/> are empty, or if they contain single or double quotes, 
 		/// or if <paramref name="value"/> does not contain a pipe when <paramref name="item"/> is <b>SpecialTagWrap</b>.</exception>
-		void AddToolbarItem(ToolbarItem item, string text, string value);
+		string AddToolbarItem(IProviderV40 caller, ToolbarItem item, string text, string value);
+
+		/// <summary>
+		/// Removes a toolbar item.
+		/// </summary>
+		/// <param name="token">The token returned by <see cref="AddToolbarItem"/>.</param>
+		void RemoveToolbarItem(string token);
 
 		/// <summary>
 		/// Gets the default provider of the specified type.
@@ -434,7 +444,45 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		event EventHandler<FileActivityEventArgs> FileActivity;
 
+		/// <summary>
+		/// Registers a HTTP request handler (typically during the SetUp phase of a provider).
+		/// </summary>
+		/// <param name="caller">The caller.</param>
+		/// <param name="urlRegex">The regular expression used to filter URLs to decide whether or not a request must be handled.</param>
+		/// <param name="methods">The HTTP request methods to consider, such as GET and POST.</param>
+		/// <returns>A token to use to unregister the handler (<see cref="UnregisterRequestHandler"/>).</returns>
+		/// <remarks>The <paramref name="urlRegex"/> will be treated as culture-invariant and case-insensitive.</remarks>
+		string RegisterRequestHandler(IProviderV40 caller, string urlRegex, string[] methods);
+
+		/// <summary>
+		/// Unregisters a request handler.
+		/// </summary>
+		/// <param name="token">The token returned by <see cref="RegisterRequestHandler"/>.</param>
+		void UnregisterRequestHandler(string token);
+
+		/// <summary>
+		/// Allows to inject content into the HTML head, like scripts and css (typically during the SetUp phase of a provider).
+		/// </summary>
+		/// <param name="caller">The caller.</param>
+		/// <param name="content">The content to inject.</param>
+		/// <returns>A token to use to remove the injected content.</returns>
+		string AddHtmlHeadContent(IProviderV40 caller, string content);
+
+		/// <summary>
+		/// Removes injected HTML head content.
+		/// </summary>
+		/// <param name="token">The token returned by <see cref="AddHtmlHeadContent"/>.</param>
+		void RemoveHtmlHeadContent(string token);
+
 	}
+
+	/// <summary>
+	/// Defines a delegate for handling HTTP requests.
+	/// </summary>
+	/// <param name="context">The HTTP context.</param>
+	/// <param name="match">The regular expression match.</param>
+	/// <returns><c>true</c> if the request was handled, <c>false</c> otherwise.</returns>
+	public delegate bool RequestHandler(HttpContext context, Match match);
 
 	/// <summary>
 	/// Enumerates the Types of Log Entries.

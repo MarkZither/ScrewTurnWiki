@@ -1,11 +1,14 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
-using System.Text;
-using System.IO;
 
 namespace ScrewTurn.Wiki {
 
@@ -45,6 +48,31 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
+			string currentWiki = Tools.DetectCurrentWiki();
+
+			string url = HttpContext.Current.Request.Url.ToString();
+
+			foreach(RequestHandlerRegistryEntry handler in Host.Instance.GetRequestHandlers(currentWiki).Values) {
+				if(handler.Methods.Any(m => StringComparer.OrdinalIgnoreCase.Compare(m, HttpContext.Current.Request.HttpMethod) == 0)) {
+					Match match = handler.UrlRegex.Match(url);
+					if(match.Success) {
+						try {
+							var plugin = Collectors.CollectorsBox.FormatterProviderCollector.GetProvider(handler.CallerType.FullName, currentWiki);
+							if(plugin != null && plugin.HandleRequest(HttpContext.Current, match)) {
+								HttpContext.Current.Response.End();
+								return;
+							}
+						}
+						catch(Exception ex) {
+							if(ex is ThreadAbortException) continue;
+							if(ex.InnerException != null && ex.InnerException is ThreadAbortException) continue;
+
+							LogError(ex);
+						}
+					}
+				}
+			}
+
 			// Extract the physical page name, e.g. MainPage, Edit or Category
 			string pageName = Path.GetFileNameWithoutExtension(physicalPath);
 			// Exctract the extension, e.g. .ashx or .aspx
@@ -59,7 +87,7 @@ namespace ScrewTurn.Wiki {
 					if(Application[MasterPasswordOk] == null) {
 						Application.Lock();
 						if(Application[MasterPasswordOk] == null) {
-							//Setup Master Password
+							// Setup Master Password
 							if(!String.IsNullOrEmpty(GlobalSettings.GetMasterPassword())) {
 								Application[MasterPasswordOk] = "OK";
 							}
@@ -72,7 +100,7 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 				else if(!string.IsNullOrEmpty(GlobalSettings.GetMasterPassword())) {
-					ScrewTurn.Wiki.UrlTools.RedirectHome(Tools.DetectCurrentWiki());
+					ScrewTurn.Wiki.UrlTools.RedirectHome(currentWiki);
 				}
 			}
 			ScrewTurn.Wiki.UrlTools.RouteCurrentRequest();
@@ -115,6 +143,9 @@ namespace ScrewTurn.Wiki {
 			// Retrieve last error and log it, redirecting to Error.aspx (avoiding infinite loops)
 
 			Exception ex = Server.GetLastError();
+
+			if(ex is ThreadAbortException) return;
+			if(ex.InnerException != null && ex.InnerException is ThreadAbortException) return;
 
 			HttpException httpEx = ex as HttpException;
 			if(httpEx != null) {
