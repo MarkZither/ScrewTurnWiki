@@ -27,7 +27,6 @@ namespace ScrewTurn.Wiki {
 			if(!Page.IsPostBack) {
 				rptPages.DataBind();
 				rptIndex.DataBind();
-				rptFilesIndex.DataBind();
 
 				DisplayOrphansCount();
 
@@ -94,7 +93,11 @@ namespace ScrewTurn.Wiki {
 			List<IndexRow> result = new List<IndexRow>(5);
 
 			foreach(IPagesStorageProviderV40 prov in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(currentWiki)) {
-				result.Add(new IndexRow(prov));
+				result.Add(new IndexRow("PagesRebuild", prov));
+			}
+
+			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
+				result.Add(new IndexRow("FilesRebuild", prov));
 			}
 
 			rptIndex.DataSource = result;
@@ -103,109 +106,102 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_ItemCommand(object sender, CommandEventArgs e) {
 			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
 
-			SearchClass.ClearIndex(currentWiki);
+			if(e.CommandName == "PagesRebuild") {
 
-			IPagesStorageProviderV40 pagesProvider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
+				// Clear the pages search index for the current wiki
+				SearchClass.ClearIndex(currentWiki);
 
-			// Index all pages of the wiki
-			List<NamespaceInfo> namespaces = new List<NamespaceInfo>(pagesProvider.GetNamespaces());
-			namespaces.Add(null);
-			foreach(NamespaceInfo nspace in namespaces) {
-				// Index pages of the namespace
-				PageContent[] pages = pagesProvider.GetPages(nspace);
-				foreach(PageContent page in pages) {
-					// Index page
-					SearchClass.IndexPage(page);
+				IPagesStorageProviderV40 pagesProvider = Collectors.CollectorsBox.PagesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
 
-					// Index page messages
-					Message[] messages = pagesProvider.GetMessages(page.FullName);
-					foreach(Message message in messages) {
-						SearchClass.IndexMessage(message, page);
+				// Index all pages of the wiki
+				List<NamespaceInfo> namespaces = new List<NamespaceInfo>(pagesProvider.GetNamespaces());
+				namespaces.Add(null);
+				foreach(NamespaceInfo nspace in namespaces) {
+					// Index pages of the namespace
+					PageContent[] pages = pagesProvider.GetPages(nspace);
+					foreach(PageContent page in pages) {
+						// Index page
+						SearchClass.IndexPage(page);
 
-						// Search for replies
-						Message[] replies = message.Replies;
-						foreach(Message reply in replies) {
-							// Index reply
-							SearchClass.IndexMessage(reply, page);
+						// Index page messages
+						Message[] messages = pagesProvider.GetMessages(page.FullName);
+						foreach(Message message in messages) {
+							SearchClass.IndexMessage(message, page);
+
+							// Search for replies
+							Message[] replies = message.Replies;
+							foreach(Message reply in replies) {
+								// Index reply
+								SearchClass.IndexMessage(reply, page);
+							}
 						}
 					}
 				}
 			}
-		}
 
+			else if(e.CommandName == "FilesRebuild") {
+				// Clear the files search index for the current wiki
+				SearchClass.ClearFilesIndex(currentWiki);
 
-		protected void rptFilesIndex_DataBinding(object sender, EventArgs e) {
-			List<IndexRow> result = new List<IndexRow>(5);
+				IFilesStorageProviderV40 filesProvider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
 
-			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(currentWiki)) {
-				result.Add(new IndexRow(prov));
-			}
+				// Index all files of the wiki
+				// 1. List all directories (add the root directory: null)
+				// 2. List all files in each directory
+				// 3. Index each file
+				List<string> directories = new List<string>(filesProvider.ListDirectories(null));
+				directories.Add(null);
+				foreach(string directory in directories) {
+					string[] files = filesProvider.ListFiles(directory);
+					foreach(string file in files) {
+						byte[] fileContent;
+						using(MemoryStream stream = new MemoryStream()) {
+							filesProvider.RetrieveFile(file, stream);
+							fileContent = new byte[stream.Length];
+							stream.Seek(0, SeekOrigin.Begin);
+							stream.Read(fileContent, 0, (int)stream.Length);
+						}
 
-			rptFilesIndex.DataSource = result;
-		}
-
-		protected void rptFilesIndex_ItemCommand(object sender, CommandEventArgs e) {
-			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
-
-			SearchClass.ClearFilesIndex(currentWiki);
-
-			IFilesStorageProviderV40 filesProvider = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(e.CommandArgument as string, currentWiki);
-
-			// Index all files of the wiki
-			// 1. List all directories (add the root directory: null)
-			// 2. List all files in each directory
-			// 3. Index each file
-			List<string> directories = new List<string>(filesProvider.ListDirectories(null));
-			directories.Add(null);
-			foreach(string directory in directories) {
-				string[] files = filesProvider.ListFiles(directory);
-				foreach(string file in files) {
-					byte[] fileContent;
-					using(MemoryStream stream = new MemoryStream()) {
-						filesProvider.RetrieveFile(file, stream);
-						fileContent = new byte[stream.Length];
-						stream.Seek(0, SeekOrigin.Begin);
-						stream.Read(fileContent, 0, (int)stream.Length);
+						// Index the file
+						string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+						if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+						string tempFile = Path.Combine(tempDir, file.Substring(file.LastIndexOf('/') + 1));
+						using(FileStream writer = File.Create(tempFile)) {
+							writer.Write(fileContent, 0, fileContent.Length);
+						}
+						SearchClass.IndexFile(filesProvider.GetType().FullName + "|" + file, tempFile, currentWiki);
+						Directory.Delete(tempDir, true);
 					}
+				}
 
-					// Index the file
-					string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
-					if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
-					string tempFile = Path.Combine(tempDir, file.Substring(file.LastIndexOf('/') + 1));
-					using(FileStream writer = File.Create(tempFile)) {
-						writer.Write(fileContent, 0, fileContent.Length);
+				// Index all attachment of the wiki
+				string[] pagesWithAttachments = filesProvider.GetPagesWithAttachments();
+				foreach(string page in pagesWithAttachments) {
+					string[] attachments = filesProvider.ListPageAttachments(page);
+					foreach(string attachment in attachments) {
+						byte[] fileContent;
+						using(MemoryStream stream = new MemoryStream()) {
+							filesProvider.RetrievePageAttachment(page, attachment, stream);
+							fileContent = new byte[stream.Length];
+							stream.Seek(0, SeekOrigin.Begin);
+							stream.Read(fileContent, 0, (int)stream.Length);
+						}
+
+						// Index the attached file
+						string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+						if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+						string tempFile = Path.Combine(tempDir, attachment);
+						using(FileStream writer = File.Create(tempFile)) {
+							writer.Write(fileContent, 0, fileContent.Length);
+						}
+						SearchClass.IndexPageAttachment(attachment, tempFile, Pages.FindPage(currentWiki, page));
+						Directory.Delete(tempDir, true);
 					}
-					SearchClass.IndexFile(filesProvider.GetType().FullName + "|" + file, tempFile, currentWiki);
-					Directory.Delete(tempDir, true);
 				}
 			}
 
-			// Index all attachment of the wiki
-			string[] pagesWithAttachments = filesProvider.GetPagesWithAttachments();
-			foreach(string page in pagesWithAttachments) {
-				string[] attachments = filesProvider.ListPageAttachments(page);
-				foreach(string attachment in attachments) {
-					byte[] fileContent;
-					using(MemoryStream stream = new MemoryStream()) {
-						filesProvider.RetrievePageAttachment(page, attachment, stream);
-						fileContent = new byte[stream.Length];
-						stream.Seek(0, SeekOrigin.Begin);
-						stream.Read(fileContent, 0, (int)stream.Length);
-					}
-
-					// Index the attached file
-					string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
-					if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
-					string tempFile = Path.Combine(tempDir, attachment);
-					using(FileStream writer = File.Create(tempFile)) {
-						writer.Write(fileContent, 0, fileContent.Length);
-					}
-					SearchClass.IndexPageAttachment(attachment, tempFile, Pages.FindPage(currentWiki, page));
-					Directory.Delete(tempDir, true);
-				}
-			}
+			Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername(), currentWiki);
 		}
-
 
 		protected void cvGroups_ServerValidate(object sender, ServerValidateEventArgs e) {
 			e.IsValid = false;
@@ -314,15 +310,20 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public class IndexRow {
 
-		private string provider, providerType;
+		private string command, provider, providerType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:IndexRow" /> class.
 		/// </summary>
 		/// <param name="provider">The original provider.</param>
-		public IndexRow(IStorageProviderV40 provider) {
+		public IndexRow(string command, IStorageProviderV40 provider) {
+			this.command = command;
 			this.provider = provider.Information.Name;
 			providerType = provider.GetType().FullName;
+		}
+
+		public string Command {
+			get { return command; }
 		}
 
 		/// <summary>

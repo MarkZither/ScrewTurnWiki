@@ -123,12 +123,6 @@
   <data name="btnRebuildResource1.ToolTip" xml:space="preserve">
     <value>Rebuild this index</value>
   </data>
-  <data name="btnRebuildResource2.Text" xml:space="preserve">
-    <value>Rebuild</value>
-  </data>
-  <data name="btnRebuildResource2.ToolTip" xml:space="preserve">
-    <value>Rebuild this index</value>
-  </data>
   <data name="lblAdminHomeResource1.Text" xml:space="preserve">
     <value>Administration Home</value>
   </data>
@@ -207,7 +201,10 @@
   <data name="rfvSubjectResource1.ErrorMessage" xml:space="preserve">
     <value>Subject is required</value>
   </data>
-  <data name="lblFilesIndexStatusResource1.Text" xml:space="preserve">
-    <value>Search Index Status</value>
+  <data name="btnRebuildResource2.Text" xml:space="preserve">
+    <value>Rebuild</value>
+  </data>
+  <data name="btnRebuildResource2.ToolTip" xml:space="preserve">
+    <value>Rebuild this index</value>
   </data>
 </root>
