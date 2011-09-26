@@ -52,6 +52,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <summary>
 		/// Backups all the providers (excluded global settings storage provider).
 		/// </summary>
+		/// <param name="numberOfRevisions">The number of revisions to backup for each page.</param>
 		/// <param name="backupZipFileName">The name of the zip file where to store the backup file.</param>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="plugins">The available plugins.</param>
@@ -60,7 +61,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <param name="usersStorageProviders">The users storage providers.</param>
 		/// <param name="filesStorageProviders">The files storage providers.</param>
 		/// <returns><c>true</c> if the backup has been succesfull.</returns>
-		public static bool BackupAll(string backupZipFileName, string wiki, string[] plugins, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40[] pagesStorageProviders, IUsersStorageProviderV40[] usersStorageProviders, IFilesStorageProviderV40[] filesStorageProviders) {
+		public static bool BackupAll(int numberOfRevisions, string backupZipFileName, string wiki, string[] plugins, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40[] pagesStorageProviders, IUsersStorageProviderV40[] usersStorageProviders, IFilesStorageProviderV40[] filesStorageProviders) {
 			string tempPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
 			Directory.CreateDirectory(tempPath);
 
@@ -82,7 +83,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 				// Backup pages storage providers
 				foreach(IPagesStorageProviderV40 pagesStorageProvider in pagesStorageProviders) {
 					string zipPagesBackup = Path.Combine(tempPath, "PagesBackup-" + pagesStorageProvider.GetType().FullName + "-" + wiki + ".zip");
-					BackupPagesStorageProvider(zipPagesBackup, pagesStorageProvider);
+					BackupPagesStorageProvider(numberOfRevisions, zipPagesBackup, pagesStorageProvider);
 					backupZipFile.AddFile(zipPagesBackup, "");
 				}
 
@@ -120,10 +121,14 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		public static bool RestoreAll(string backupFileAddress, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider, ISettingsStorageProviderV40 settingsStorageProvider, IPagesStorageProviderV40 pagesStorageProvider, IUsersStorageProviderV40 usersStorageProvider, IFilesStorageProviderV40 filesStorageProvider, Func<string, bool> isSettingGlobal) {
 			string tempPath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
 			Directory.CreateDirectory(tempPath);
-			
-			WebClient webClient = new WebClient();
-			webClient.DownloadFile(backupFileAddress, Path.Combine(tempPath, "Backup.zip"));
 
+			try {
+				WebClient webClient = new WebClient();
+				webClient.DownloadFile(backupFileAddress, Path.Combine(tempPath, "Backup.zip"));
+			}
+			catch(WebException ex) {
+				throw ex;
+			}
 			using(ZipFile backupZipFile = ZipFile.Read(Path.Combine(tempPath, "Backup.zip"))) {
 				// Restore settings
 				ZipEntry settingsEntry = (from e in backupZipFile
@@ -427,10 +432,11 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		/// <summary>
 		/// Backups the pages storage provider.
 		/// </summary>
+		/// <param name="numberOfRevisions">The number of revisions to backup for each page.</param>
 		/// <param name="zipFileName">The zip file name where to store the backup.</param>
 		/// <param name="pagesStorageProvider">The pages storage provider.</param>
 		/// <returns><c>true</c> if the backup file has been succesfully created.</returns>
-		public static bool BackupPagesStorageProvider(string zipFileName, IPagesStorageProviderV40 pagesStorageProvider) {
+		public static bool BackupPagesStorageProvider(int numberOfRevisions, string zipFileName, IPagesStorageProviderV40 pagesStorageProvider) {
 			JavaScriptSerializer javascriptSerializer = new JavaScriptSerializer();
 			javascriptSerializer.MaxJsonLength = javascriptSerializer.MaxJsonLength * 10;
 
@@ -491,7 +497,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					// Backup the 100 most recent versions of the page
 					List<PageRevisionBackup> pageContentBackupList = new List<PageRevisionBackup>();
 					int[] revisions = pagesStorageProvider.GetBackups(page.FullName);
-					for(int i = revisions.Length-1; i > revisions.Length - 100 && i >= 0; i--) {
+					for(int i = revisions.Length-1; i > revisions.Length - numberOfRevisions && i >= 0; i--) {
 						PageContent pageRevision = pagesStorageProvider.GetBackupContent(page.FullName, revisions[i]);
 						PageRevisionBackup pageContentBackup = new PageRevisionBackup() {
 							Revision = revisions[i],

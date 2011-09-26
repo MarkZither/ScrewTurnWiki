@@ -36,7 +36,7 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 		
-		#region DataExportImport
+		#region DataImportExport
 
 		/// <summary>
 		/// Loads all the wikis.
@@ -127,6 +127,7 @@ namespace ScrewTurn.Wiki {
 			}
 
 			Log.LogEntry("Import Global Settings requested.", EntryType.General, SessionFacade.CurrentUsername, null);
+
 			IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider = GlobalSettings.Provider;
 			bool result = BackupRestore.BackupRestore.RestoreGlobalSettingsStorageProvider(upGlobalSettings.FileBytes, globalSettingsStorageProvider);
 
@@ -146,11 +147,13 @@ namespace ScrewTurn.Wiki {
 			if(lstWiki.SelectedIndex > 0) {
 				btnExportAll.Enabled = true;
 				txtBackupFileURL.Enabled = true;
+				txtRevisions.Enabled = true;
 				btnImportBackup.Enabled = true;
 			}
 			else {
 				btnExportAll.Enabled = false;
 				txtBackupFileURL.Enabled = false;
+				txtRevisions.Enabled = false;
 				btnImportBackup.Enabled = false;
 			}
 		}
@@ -162,26 +165,36 @@ namespace ScrewTurn.Wiki {
 			Directory.CreateDirectory(tempDir);
 			string zipFileName = Path.Combine(tempDir, "Backup.zip");
 
-			bool backupFileSucceded = BackupRestore.BackupRestore.BackupAll(zipFileName, lstWiki.SelectedValue, GlobalSettings.Provider.ListPluginAssemblies(),
-				Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue),
-				(from p in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
+
+			int numberOfRevisions = -1;
+			int.TryParse(txtRevisions.Text, out numberOfRevisions);
+
+			if(numberOfRevisions > 0) {
+				bool backupFileSucceded = BackupRestore.BackupRestore.BackupAll(numberOfRevisions, zipFileName, lstWiki.SelectedValue, GlobalSettings.Provider.ListPluginAssemblies(),
+					Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue),
+					(from p in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
 					 where !p.ReadOnly select p).ToArray(),
-				(from p in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(lstWiki.SelectedValue)
+					(from p in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(lstWiki.SelectedValue)
 					 where IsUsersProviderFullWriteEnabled(p) select p).ToArray(),
-				(from p in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
+					(from p in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(lstWiki.SelectedValue)
 					 where !p.ReadOnly select p).ToArray());
 
-			FileInfo file = new FileInfo(zipFileName);
-			Response.Clear();
-			Response.AddHeader("content-type", GetMimeType(zipFileName));
-			Response.AddHeader("content-disposition", "attachment;filename=\"Backup-" + lstWiki.SelectedValue + ".zip\"");
-			Response.AddHeader("content-length", file.Length.ToString());
+				FileInfo file = new FileInfo(zipFileName);
+				Response.Clear();
+				Response.AddHeader("content-type", GetMimeType(zipFileName));
+				Response.AddHeader("content-disposition", "attachment;filename=\"Backup-" + lstWiki.SelectedValue + ".zip\"");
+				Response.AddHeader("content-length", file.Length.ToString());
 
-			Response.TransmitFile(zipFileName);
-			Response.Flush();
+				Response.TransmitFile(zipFileName);
+				Response.Flush();
 
-			Directory.Delete(tempDir, true);
-			Log.LogEntry("Data export completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+				Directory.Delete(tempDir, true);
+				Log.LogEntry("Data export completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+			}
+			else {
+				lblImportBackupResult.CssClass = "resulterror";
+				lblImportBackupResult.Text = Properties.Messages.VoidOrInvalidFile;
+			}
 		}
 
 		private string GetMimeType(string ext) {
@@ -194,11 +207,32 @@ namespace ScrewTurn.Wiki {
 			if(!string.IsNullOrEmpty(txtBackupFileURL.Text)) {
 				Log.LogEntry("Data Import requested.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
 
-				BackupRestore.BackupRestore.RestoreAll(txtBackupFileURL.Text, Collectors.CollectorsBox.GlobalSettingsProvider, Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesStorageProviders.SelectedValue, lstWiki.SelectedValue),
-					Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersStorageProviders.SelectedValue, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesStorageProviders.SelectedValue, lstWiki.SelectedValue),
-					settingName => GlobalSettings.AllSettingsNames.Any(s => StringComparer.OrdinalIgnoreCase.Compare(s, settingName) == 0));
+				try {
+					if(!string.IsNullOrEmpty(txtBackupFileURL.Text)) {
+						bool importSuccessful = BackupRestore.BackupRestore.RestoreAll(txtBackupFileURL.Text, Collectors.CollectorsBox.GlobalSettingsProvider, Collectors.CollectorsBox.GetSettingsProvider(lstWiki.SelectedValue), Collectors.CollectorsBox.PagesProviderCollector.GetProvider(lstPagesStorageProviders.SelectedValue, lstWiki.SelectedValue),
+							Collectors.CollectorsBox.UsersProviderCollector.GetProvider(lstUsersStorageProviders.SelectedValue, lstWiki.SelectedValue), Collectors.CollectorsBox.FilesProviderCollector.GetProvider(lstFilesStorageProviders.SelectedValue, lstWiki.SelectedValue),
+							settingName => GlobalSettings.AllSettingsNames.Any(s => StringComparer.OrdinalIgnoreCase.Compare(s, settingName) == 0));
 
-				Log.LogEntry("Data Import completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+						if(importSuccessful) {
+							lblImportBackupResult.CssClass = "resultok";
+							lblImportBackupResult.Text = Properties.Messages.ImportedSettings;
+							Log.LogEntry("Data Import completed.", EntryType.General, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+						}
+						else {
+							lblImportBackupResult.CssClass = "resulterror";
+							lblImportBackupResult.Text = Properties.Messages.VoidOrInvalidFile;
+						}
+					}
+					else {
+						lblImportBackupResult.CssClass = "resulterror";
+						lblImportBackupResult.Text = Properties.Messages.VoidOrInvalidFile;
+					}
+				}
+				catch(System.Net.WebException ex) {
+					lblImportBackupResult.CssClass = "resulterror";
+					lblImportBackupResult.Text = Properties.Messages.VoidOrInvalidFile;
+					Log.LogEntry(ex.Message, EntryType.Error, SessionFacade.GetCurrentUsername(), lstWiki.SelectedValue);
+				}
 			}
 		}
 

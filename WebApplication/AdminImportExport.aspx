@@ -29,6 +29,11 @@
 		
 		<br /><br /><br />
 		<h4><asp:Literal ID="lblExportAll" runat="server" EnableViewState="False" meta:resourcekey="lblExportAllResource1" Text="Export all data from all installed providers." /></h4>
+		
+		<br />
+		<h4><asp:Literal ID="lblRevisions" runat="server" EnableViewState="False" meta:resourcekey="lblRevisionsResource1" Text="The number of revision of each page you want to backup." /></h4>
+		<asp:TextBox ID="txtRevisions" runat="server" EnableViewState="false" meta:resourcekey="txtRevisionsResource1" Enabled="false" ></asp:TextBox>
+		<br />
 		<asp:Button ID="btnExportAll" runat="server" Text="Export" OnClick="btnExportAll_Click" meta:resourcekey="btnExportAllResource1" Enabled="false" />
 
 		<br /><br /><br />
@@ -48,6 +53,8 @@
 		
 		<br /><br />
 		<asp:Button ID="btnImportBackup" runat="server" Text="Import" OnClick="btnImportBackup_Click" meta:resourcekey="btnImportBackupResource1" Enabled="false" />
+		<br />
+		<asp:Label ID="lblImportBackupResult" runat="server" meta:resourcekey="lblImportBackupResultResource1" />
 	</div>
 	
 	<div class="clear"></div>

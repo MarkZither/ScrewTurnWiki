@@ -182,7 +182,7 @@ namespace ScrewTurn.Wiki.BackupRestore.Tests {
 			Snippet snippet = sourceDummyPagesStorageProvider.AddSnippet("Snippet1", "Content");
 
 			string zipFileName = Path.Combine(tempPath, "PagesZipFile.zip");
-			Assert.IsTrue(BackupRestore.BackupPagesStorageProvider(zipFileName, sourceDummyPagesStorageProvider));
+			Assert.IsTrue(BackupRestore.BackupPagesStorageProvider(100, zipFileName, sourceDummyPagesStorageProvider));
 
 			DummyPagesStorageProvider destinationDummyPagesStorageProvider = new DummyPagesStorageProvider();
 

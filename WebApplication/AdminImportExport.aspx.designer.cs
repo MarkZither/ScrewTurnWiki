@@ -130,6 +130,24 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblExportAll;
         
         /// <summary>
+        /// lblRevisions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblRevisions;
+        
+        /// <summary>
+        /// txtRevisions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtRevisions;
+        
+        /// <summary>
         /// btnExportAll control.
         /// </summary>
         /// <remarks>
@@ -209,5 +227,14 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnImportBackup;
+        
+        /// <summary>
+        /// lblImportBackupResult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblImportBackupResult;
     }
 }
