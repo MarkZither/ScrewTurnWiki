@@ -246,7 +246,7 @@ namespace ScrewTurn.Wiki.BackupRestore {
 					// Backup the 100 most recent versions of the page
 					List<PageRevisionBackup> pageContentBackupList = new List<PageRevisionBackup>();
 					int[] revisions = pagesStorageProvider.GetBackups(page);
-					for(int i = 0; i < Math.Min(revisions.Length, 100); i++) {
+					for(int i = revisions.Length - 1; i > revisions.Length - 100 && i >= 0; i--) {
 						PageContent pageRevision = pagesStorageProvider.GetBackupContent(page, revisions[i]);
 						PageRevisionBackup pageContentBackup = new PageRevisionBackup() {
 							Revision = revisions[i],
