@@ -247,7 +247,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				new string[] { "DateTime", "EntryType", "User", "Message", "Wiki" }, new string[] { "DateTime", "EntryType", "User", "Message", "Wiki" });
 
 			List<Parameter> parameters = new List<Parameter>(5);
-			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", DateTime.Now));
+			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", DateTime.UtcNow));
 			parameters.Add(new Parameter(ParameterType.Char, "EntryType", EntryTypeToChar(entryType)));
 			parameters.Add(new Parameter(ParameterType.String, "User", Sanitize(user)));
 			parameters.Add(new Parameter(ParameterType.String, "Message", Sanitize(message)));
@@ -371,7 +371,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				while(reader.Read()) {
 					result.Add(new LogEntry(EntryTypeFromChar((reader["EntryType"] as string)[0]),
-						(DateTime)reader["DateTime"], reader["Message"] as string, reader["User"] as string, reader["Wiki"] as string));
+						new DateTime(((DateTime)reader["DateTime"]).Ticks, DateTimeKind.Utc), reader["Message"] as string, reader["User"] as string, reader["Wiki"] as string));
 				}
 
 				CloseReader(command, reader);

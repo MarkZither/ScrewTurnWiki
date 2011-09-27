@@ -663,9 +663,9 @@ namespace ScrewTurn.Wiki {
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="language">The language code.</param>
 		public void ChangeCurrentUserLanguage(string wiki, string language) {
-			int timezone = Preferences.LoadTimezoneFromCookie() ?? Settings.GetDefaultTimezone(wiki);
-			if(SessionFacade.LoginKey == null || SessionFacade.CurrentUsername == "admin") Preferences.SavePreferencesInCookie(language, timezone);
-			else Preferences.SavePreferencesInUserData(wiki, language, timezone);
+			string timezoneId = Preferences.LoadTimezoneFromCookie() ?? Settings.GetDefaultTimezone(wiki);
+			if(SessionFacade.LoginKey == null || SessionFacade.CurrentUsername == "admin") Preferences.SavePreferencesInCookie(language, timezoneId);
+			else Preferences.SavePreferencesInUserData(wiki, language, timezoneId);
 		}
 
 		/// <summary>

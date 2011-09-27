@@ -45,12 +45,10 @@ namespace ScrewTurn.Wiki {
 		/// Loads the timezone from a cookie.
 		/// </summary>
 		/// <returns>The timezone, or <c>null</c>.</returns>
-		public static int? LoadTimezoneFromCookie() {
+		public static string LoadTimezoneFromCookie() {
 			HttpCookie cookie = HttpContext.Current.Request.Cookies[GlobalSettings.CultureCookieName];
 			if(cookie != null) {
-				string timezone = cookie["T"];
-				int res = 0;
-				if(int.TryParse(timezone, NumberStyles.Any, CultureInfo.InvariantCulture, out res)) return res;
+				return cookie["T"];
 			}
 			
 			return null;
@@ -61,14 +59,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <returns>The timezone, or <c>null</c>.</returns>
-		public static int? LoadTimezoneFromUserData(string wiki) {
+		public static string LoadTimezoneFromUserData(string wiki) {
 			UserInfo currentUser = SessionFacade.GetCurrentUser(wiki);
 			if(currentUser != null) {
-				string timezone = Users.GetUserData(currentUser, "Timezone");
-				if(timezone != null) {
-					int res = 0;
-					if(int.TryParse(timezone, NumberStyles.Any, CultureInfo.InvariantCulture, out res)) return res;
-				}
+				return Users.GetUserData(currentUser, "Timezone");
 			}
 			
 			return null;
@@ -79,12 +73,12 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="culture">The culture.</param>
 		/// <param name="timezone">The timezone.</param>
-		public static void SavePreferencesInCookie(string culture, int timezone) {
+		public static void SavePreferencesInCookie(string culture, string timezone) {
 			HttpCookie cookie = new HttpCookie(GlobalSettings.CultureCookieName);
 			cookie.Expires = DateTime.Now.AddYears(10);
 			cookie.Path = GlobalSettings.CookiePath;
 			cookie.Values.Add("C", culture);
-			cookie.Values.Add("T", timezone.ToString(CultureInfo.InvariantCulture));
+			cookie.Values.Add("T", timezone);
 			HttpContext.Current.Response.Cookies.Add(cookie);
 		}
 
@@ -105,13 +99,13 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
 		/// <param name="culture">The culture.</param>
-		/// <param name="timezone">The timezone.</param>
+		/// <param name="timezoneId">The timezone.</param>
 		/// <returns><c>true</c> if the data is stored, <c>false</c> otherwise.</returns>
-		public static bool SavePreferencesInUserData(string wiki, string culture, int timezone) {
+		public static bool SavePreferencesInUserData(string wiki, string culture, string timezoneId) {
 			UserInfo user = SessionFacade.GetCurrentUser(wiki);
 			if(user != null && !user.Provider.UsersDataReadOnly) {
 				Users.SetUserData(user, "Culture", culture);
-				Users.SetUserData(user, "Timezone", timezone.ToString(CultureInfo.InvariantCulture));
+				Users.SetUserData(user, "Timezone", timezoneId);
 
 				return true;
 			}
@@ -133,11 +127,15 @@ namespace ScrewTurn.Wiki {
 			// First, look for hard-stored user's preferences
 			// If they are not available, look at the cookie
 
-			int? tempShift = LoadTimezoneFromUserData(wiki);
-			if(!tempShift.HasValue) tempShift = LoadTimezoneFromCookie();
+			string timeZoneId = LoadTimezoneFromUserData(wiki);
+			if(string.IsNullOrEmpty(timeZoneId)) timeZoneId = LoadTimezoneFromCookie();
 
-			int shift = tempShift.HasValue ? tempShift.Value : Settings.GetDefaultTimezone(wiki);
-			return dateTime.ToUniversalTime().AddMinutes(shift + (dateTime.IsDaylightSavingTime() ? 60 : 0));
+			if(string.IsNullOrEmpty(timeZoneId)) timeZoneId = Settings.GetDefaultTimezone(wiki);
+
+			TimeZoneInfo timeZone = FindTimeZoneOrUtc(timeZoneId);
+			dateTime = TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZone);
+
+			return dateTime;
 		}
 
 		/// <summary>
@@ -147,7 +145,25 @@ namespace ScrewTurn.Wiki {
 		/// <param name="dateTime">The date/time to align.</param>
 		/// <returns>The aligned date/time.</returns>
 		public static DateTime AlignWithServerTimezone(string wiki, DateTime dateTime) {
-			return dateTime.ToUniversalTime().AddMinutes(Settings.GetDefaultTimezone(wiki) + (dateTime.IsDaylightSavingTime() ? 60 : 0));
+			string timeZoneId = Settings.GetDefaultTimezone(wiki);
+			TimeZoneInfo timeZone = FindTimeZoneOrUtc(timeZoneId);
+			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZone);
+		}
+
+		/// <summary>
+		/// Finds a time zone by ID, or loads the default UTC.
+		/// </summary>
+		/// <param name="id">The ID.</param>
+		/// <returns>The time zone.</returns>
+		private static TimeZoneInfo FindTimeZoneOrUtc(string id) {
+			TimeZoneInfo timeZone = null;
+			try {
+				timeZone = TimeZoneInfo.FindSystemTimeZoneById(id);
+			}
+			catch {
+				timeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+			}
+			return timeZone;
 		}
 
 	}

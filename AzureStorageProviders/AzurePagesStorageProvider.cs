@@ -833,13 +833,6 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			allVersionRetrieved = new List<string>();
 		}
 
-		private void BuildPageContentEntity(PagesContentsEntity entity, string pageFullName, string revision, DateTime creationLocalDateTime, string title,
-			string username, DateTime lastModificationLocalDateTime, string comment, string content, string[] keywords, string description) {
-
-			BuildPageContentEntity(entity, pageFullName, revision, creationLocalDateTime.ToUniversalTime(), title, username, lastModificationLocalDateTime.ToUniversalTime(),
-				comment, content, keywords != null ? string.Join("|", keywords) : null, description);
-		}
-
 		private void BuildPageContentEntity(PagesContentsEntity entity, string pageFullname, string revision, DateTime creationUniversalDateTime, string title,
 			string username, DateTime lastModificationUniversalDateTime, string comment, string content, string keywords, string description) {
 
@@ -880,10 +873,10 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			PageContent page = new PageContent(
 				entity.PageFullName,
 				this,
-				entity.CreationDateTime.ToLocalTime(),
+				new DateTime(entity.CreationDateTime.Ticks, DateTimeKind.Utc),
 				entity.Title,
 				entity.User,
-				entity.LastModified.ToLocalTime(),
+				new DateTime(entity.LastModified.Ticks, DateTimeKind.Utc),
 				string.IsNullOrEmpty(entity.Comment) ? "" : entity.Comment,
 				entity.BlobReference != null ? entity.BigContent : entity.Content,
 				entity.Keywords == null ? new string[0] : entity.Keywords.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries),
@@ -1100,7 +1093,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					pageContentEntity = new PagesContentsEntity();
 					_context.AddObject(PagesContentsTable, pageContentEntity);
 				}
-				BuildPageContentEntity(pageContentEntity, content.FullName, revision.ToString(), content.CreationDateTime, content.Title, content.User, content.LastModified, content.Comment, content.Content, content.Keywords, content.Description);
+				BuildPageContentEntity(pageContentEntity, content.FullName, revision.ToString(), content.CreationDateTime, content.Title, content.User, content.LastModified, content.Comment, content.Content, string.Join("|", content.Keywords), content.Description);
 				
 				_context.SaveChangesStandard();
 
@@ -1295,7 +1288,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 								DeleteOldBlobReference(draftPageContentEntity.BlobReference);
 							}
 						}
-						BuildPageContentEntity(draftPageContentEntity, NameTools.GetFullName(nspace, pageName), Draft, creationDateTime, title, username, dateTime, comment, content, keywords, description);
+						BuildPageContentEntity(draftPageContentEntity, NameTools.GetFullName(nspace, pageName), Draft, creationDateTime, title, username, dateTime, comment, content, string.Join("|", keywords), description);
 
 						_context.SaveChangesStandard();
 
@@ -1329,7 +1322,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 							currentPageContentEntity = new PagesContentsEntity();
 							_context.AddObject(PagesContentsTable, currentPageContentEntity);
 						}
-						BuildPageContentEntity(currentPageContentEntity, NameTools.GetFullName(nspace, pageName), CurrentRevision, creationDateTime, title, username, dateTime, comment, content, keywords, description);
+						BuildPageContentEntity(currentPageContentEntity, NameTools.GetFullName(nspace, pageName), CurrentRevision, creationDateTime, title, username, dateTime, comment, content, string.Join("|", keywords), description);
 
 						_context.SaveChangesStandard();
 
@@ -1555,7 +1548,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				RowKey = messageId.ToString(),
 				Username = username,
 				Subject = subject,
-				DateTime = dateTime.ToUniversalTime(),
+				DateTime = dateTime,
 				Body = body,
 				ParetnId = parent.ToString()
 			};
@@ -1583,14 +1576,14 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				List<Message> messages = new List<Message>(messagesEntities.Count);
 				foreach(MessageEntity messageEntity in messagesEntities) {
 					if(messageEntity.ParetnId == "-1") {
-						messages.Add(new Message(int.Parse(messageEntity.RowKey), messageEntity.Username, messageEntity.Subject, messageEntity.DateTime.ToLocalTime(), messageEntity.Body));
+						messages.Add(new Message(int.Parse(messageEntity.RowKey), messageEntity.Username, messageEntity.Subject, new DateTime(messageEntity.DateTime.Ticks, DateTimeKind.Utc), messageEntity.Body));
 					}
 				}
 				foreach(MessageEntity messageEntity in messagesEntities) {
 					if(messageEntity.ParetnId != "-1") {
 						Message parentMessage = messages.Find(m => m.ID.ToString() == messageEntity.ParetnId);
 						List<Message> replies = parentMessage.Replies.ToList();
-						replies.Add(new Message(int.Parse(messageEntity.RowKey), messageEntity.Username, messageEntity.Subject, messageEntity.DateTime.ToLocalTime(), messageEntity.Body));
+						replies.Add(new Message(int.Parse(messageEntity.RowKey), messageEntity.Username, messageEntity.Subject, new DateTime(messageEntity.DateTime.Ticks, DateTimeKind.Utc), messageEntity.Body));
 						parentMessage.Replies = replies.ToArray();
 					}
 				}
@@ -1798,7 +1791,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				messageEntity.Username = username;
 				messageEntity.Subject = subject;
-				messageEntity.DateTime = dateTime.ToUniversalTime();
+				messageEntity.DateTime = dateTime;
 				messageEntity.Body = body;
 
 				_context.UpdateObject(messageEntity);

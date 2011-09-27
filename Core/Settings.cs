@@ -447,21 +447,20 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the Default Timezone (time delta in minutes) for the given wiki.
+		/// Gets the Default Timezone Id for the given wiki.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		public static int GetDefaultTimezone(string wiki) {
-			string value = SettingsTools.GetString(GetProvider(wiki).GetSetting("DefaultTimezone"), "0");
-			return int.Parse(value);
+		public static string GetDefaultTimezone(string wiki) {
+			return SettingsTools.GetString(GetProvider(wiki).GetSetting("DefaultTimezone"), null);
 		}
 			
 		/// <summary>
 		/// Sets the Default Timezone (time delta in minutes) for the given wiki.
 		/// </summary>
 		/// <param name="wiki">The wiki.</param>
-		/// <param name="timeDelta">The delta in minutes.</param>
-		public static void SetDefaultTimezone(string wiki, int timeDelta) {
-			GetProvider(wiki).SetSetting("DefaultTimezone", timeDelta.ToString());
+		/// <param name="timeZoneId">The time zone id.</param>
+		public static void SetDefaultTimezone(string wiki, string timeZoneId) {
+			GetProvider(wiki).SetSetting("DefaultTimezone", timeZoneId);
 		}
 
 		/// <summary>

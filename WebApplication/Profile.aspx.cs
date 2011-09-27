@@ -49,6 +49,7 @@ namespace ScrewTurn.Wiki {
 				pnlNoChanges.Visible = !usersDataSupported && !accountDetailsSupported;
 
 				languageSelector.LoadLanguages();
+				languageSelector.LoadTimezones();
 
 				string name = string.IsNullOrEmpty(currentUser.DisplayName) ? currentUser.Username : currentUser.DisplayName;
 				lblUsername.Text = name;
@@ -110,12 +111,12 @@ namespace ScrewTurn.Wiki {
 			if(culture == null) culture = Preferences.LoadLanguageFromCookie();
 			if(culture == null) culture = Settings.GetDefaultLanguage(currentWiki);
 
-			int? tempTimezone = Preferences.LoadTimezoneFromUserData(currentWiki);
-			if(!tempTimezone.HasValue) tempTimezone = Preferences.LoadTimezoneFromCookie();
-			if(!tempTimezone.HasValue) tempTimezone = Settings.GetDefaultTimezone(currentWiki);
+			string tempTimezone = Preferences.LoadTimezoneFromUserData(currentWiki);
+			if(string.IsNullOrEmpty(tempTimezone)) tempTimezone = Preferences.LoadTimezoneFromCookie();
+			if(string.IsNullOrEmpty(tempTimezone)) tempTimezone = Settings.GetDefaultTimezone(currentWiki);
 
 			languageSelector.SelectedLanguage = culture;
-			languageSelector.SelectedTimezone = tempTimezone.ToString();
+			languageSelector.SelectedTimezone = tempTimezone;
 		}
 
 		protected void btnSaveNotifications_Click(object sender, EventArgs e) {
@@ -135,14 +136,11 @@ namespace ScrewTurn.Wiki {
 		protected void btnSaveLanguage_Click(object sender, EventArgs e) {
 			// Hard store settings
 			// Delete cookie
-			if(Preferences.SavePreferencesInUserData(currentWiki, languageSelector.SelectedLanguage,
-				int.Parse(languageSelector.SelectedTimezone, CultureInfo.InvariantCulture))) {
-
+			if(Preferences.SavePreferencesInUserData(currentWiki, languageSelector.SelectedLanguage, languageSelector.SelectedTimezone)) {
 				Preferences.DeletePreferencesCookie();
 			}
 			else {
-				Preferences.SavePreferencesInCookie(languageSelector.SelectedLanguage,
-					int.Parse(languageSelector.SelectedTimezone, CultureInfo.InvariantCulture));
+				Preferences.SavePreferencesInCookie(languageSelector.SelectedLanguage, languageSelector.SelectedTimezone);
 			}
 			lblLanguageResult.CssClass = "resultok";
 			lblLanguageResult.Text = Properties.Messages.PreferencesSaved;

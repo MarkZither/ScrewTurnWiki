@@ -335,7 +335,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				while(reader.Read()) {
 					result.Add(new RecentChange(reader["Page"] as string, reader["Title"] as string,
 						GetNullableColumn<string>(reader, "MessageSubject", ""),
-						(DateTime)reader["DateTime"], reader["User"] as string, RecentChangeFromChar(((string)reader["Change"])[0]),
+						new DateTime(((DateTime)reader["DateTime"]).Ticks, DateTimeKind.Utc), reader["User"] as string, RecentChangeFromChar(((string)reader["Change"])[0]),
 						GetNullableColumn<string>(reader, "Description", "")));
 				}
 

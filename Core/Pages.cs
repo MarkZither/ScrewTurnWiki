@@ -472,7 +472,7 @@ namespace ScrewTurn.Wiki {
 				Settings.GetProvider(wiki).StoreOutgoingLinks(newPage.FullName, outgoingLinks);
 
 				Log.LogEntry("Rollback executed for " + newPage.FullName + " at revision " + version.ToString(), EntryType.General, Log.SystemUsername, wiki);
-				RecentChanges.AddChange(wiki, newPage.FullName, newPage.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRolledBack, "");
+				RecentChanges.AddChange(wiki, newPage.FullName, newPage.Title, null, DateTime.UtcNow, SessionFacade.GetCurrentUsername(), Change.PageRolledBack, "");
 				Host.Instance.OnPageActivity(newPage.FullName, null, SessionFacade.GetCurrentUsername(), PageActivity.PageRolledBack);
 				return true;
 			}
@@ -546,7 +546,7 @@ namespace ScrewTurn.Wiki {
 				SearchClass.UnindexPage(currentContent);
 			}
 
-			PageContent pageContent = provider.SetPageContent(nspace, name, DateTime.Now, title, username, dateTime, comment, content, keywords, description, saveMode);
+			PageContent pageContent = provider.SetPageContent(nspace, name, currentContent != null ? currentContent.CreationDateTime : DateTime.UtcNow, title, username, dateTime, comment, content, keywords, description, saveMode);
 
 			if(pageContent != null) {
 				Log.LogEntry("Page Content updated for " + pageContent.FullName, EntryType.General, Log.SystemUsername, wiki);
@@ -609,7 +609,7 @@ namespace ScrewTurn.Wiki {
 				}
 
 				Log.LogEntry("Page " + page.FullName + " deleted", EntryType.General, Log.SystemUsername, wiki);
-				RecentChanges.AddChange(wiki, page.FullName, title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageDeleted, "");
+				RecentChanges.AddChange(wiki, page.FullName, title, null, DateTime.UtcNow, SessionFacade.GetCurrentUsername(), Change.PageDeleted, "");
 				Host.Instance.OnPageActivity(page.FullName, null, SessionFacade.GetCurrentUsername(), PageActivity.PageDeleted);
 
 				// Unindex the page
@@ -656,7 +656,7 @@ namespace ScrewTurn.Wiki {
 				// Page redirect is implemented directly in AdminPages.aspx.cs
 
 				Log.LogEntry("Page " + oldName + " renamed to " + newName, EntryType.General, Log.SystemUsername, wiki);
-				RecentChanges.AddChange(wiki, originalPageContent.FullName, originalPageContent.Title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageRenamed, "");
+				RecentChanges.AddChange(wiki, originalPageContent.FullName, originalPageContent.Title, null, DateTime.UtcNow, SessionFacade.GetCurrentUsername(), Change.PageRenamed, "");
 				Host.Instance.OnPageActivity(originalPageContent.FullName, oldName, SessionFacade.GetCurrentUsername(), PageActivity.PageRenamed);
 				return true;
 			}
@@ -916,7 +916,7 @@ namespace ScrewTurn.Wiki {
 			string subject = Settings.GetWikiTitle(wiki) + " - " + Exchanger.ResourceExchanger.GetResource("ApproveRejectDraft") + ": " + title;
 			string body = Settings.GetProvider(wiki).GetMetaDataItem(MetaDataItem.ApproveDraftMessage, null);
 			body = body.Replace("##PAGE##", title).Replace("##USER##", displayName).Replace("##DATETIME##",
-				Preferences.AlignWithServerTimezone(wiki, DateTime.Now).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##COMMENT##",
+				Preferences.AlignWithServerTimezone(wiki, DateTime.UtcNow).ToString(Settings.GetDateTimeFormat(wiki))).Replace("##COMMENT##",
 				string.IsNullOrEmpty(comment) ? Exchanger.ResourceExchanger.GetResource("None") : comment).Replace("##LINK##",
 				Settings.GetMainUrl(wiki) + UrlTools.BuildUrl(wiki, "Edit.aspx?Page=", Tools.UrlEncode(currentPageFullName))).Replace("##LINK2##",
 				Settings.GetMainUrl(wiki) + "AdminPages.aspx?Admin=" + Tools.UrlEncode(currentPageFullName)).Replace("##WIKITITLE##",
@@ -1477,7 +1477,7 @@ namespace ScrewTurn.Wiki {
 
 			bool done = page.Provider.RemoveMessage(page.FullName, id, removeReplies);
 			if(done) {
-				RecentChanges.AddChange(page.Provider.CurrentWiki, page.FullName, page.Title, msg.Subject, DateTime.Now, msg.Username, Change.MessageDeleted, "");
+				RecentChanges.AddChange(page.Provider.CurrentWiki, page.FullName, page.Title, msg.Subject, DateTime.UtcNow, msg.Username, Change.MessageDeleted, "");
 				Host.Instance.OnPageActivity(page.FullName, null, null, PageActivity.MessageDeleted);
 
 				// Unindex message

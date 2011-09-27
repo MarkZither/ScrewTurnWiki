@@ -398,7 +398,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				List<RecentChange> recentChanges = new List<RecentChange>(recentChangesEntities.Count);
 				foreach(RecentChangesEntity entity in recentChangesEntities) {
-					recentChanges.Add(new RecentChange(entity.Page, entity.Title, entity.MessageSubject + "", entity.DateTime.ToLocalTime(), entity.User, GetChange(entity.Change), entity.Description + ""));
+					recentChanges.Add(new RecentChange(entity.Page, entity.Title, entity.MessageSubject + "", new DateTime(entity.DateTime.Ticks, DateTimeKind.Utc), entity.User, GetChange(entity.Change), entity.Description + ""));
 				}
 				return recentChanges.ToArray();
 			}
@@ -435,7 +435,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					Page = page,
 					Title = title,
 					MessageSubject = messageSubject,
-					DateTime = dateTime.ToUniversalTime(),
+					DateTime = dateTime,
 					User = user,
 					Change = GetChangeString(change),
 					Description = descr

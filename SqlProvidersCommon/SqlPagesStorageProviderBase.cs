@@ -1178,10 +1178,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				while(reader.Read()) {
 					name = reader["PageContent_Name"] as string;
-					creationDateTime = (DateTime)reader["PageContent_CreationDateTime"];
+					creationDateTime = new DateTime(((DateTime)reader["PageContent_CreationDateTime"]).Ticks, DateTimeKind.Utc);
 					title = reader["PageContent_Title"] as string;
 					user = reader["PageContent_User"] as string;
-					dateTime = (DateTime)reader["PageContent_LastModified"];
+					dateTime = new DateTime(((DateTime)reader["PageContent_LastModified"]).Ticks, DateTimeKind.Utc);
 					comment = GetNullableColumn<string>(reader, "PageContent_Comment", "");
 					content = reader["PageContent_Content"] as string;
 					description = GetNullableColumn<string>(reader, "PageContent_Description", null);
@@ -1236,10 +1236,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				while(reader.Read()) {
 					name = reader["PageContent_Name"] as string;
-					creationDateTime = (DateTime)reader["PageContent_CreationDateTime"];
+					creationDateTime = new DateTime(((DateTime)reader["PageContent_CreationDateTime"]).Ticks, DateTimeKind.Utc);
 					title = reader["PageContent_Title"] as string;
 					user = reader["PageContent_User"] as string;
-					dateTime = (DateTime)reader["PageContent_LastModified"];
+					dateTime = new DateTime(((DateTime)reader["PageContent_LastModified"]).Ticks, DateTimeKind.Utc);
 					comment = GetNullableColumn<string>(reader, "PageContent_Comment", "");
 					content = reader["PageContent_Content"] as string;
 					description = GetNullableColumn<string>(reader, "PageContent_Description", null);
@@ -1303,7 +1303,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				while(reader.Read()) {
 					result.Add(new PageContent(NameTools.GetFullName(reader["PageContent_Namespace"] as string, reader["PageContent_Name"] as string),
-						this, (DateTime)reader["PageContent_CreationDateTime"], reader["PageContent_Title"] as string, reader["PageContent_User"] as string, (DateTime)reader["PageContent_LastModified"], 
+						this, new DateTime(((DateTime)reader["PageContent_CreationDateTime"]).Ticks, DateTimeKind.Utc), reader["PageContent_Title"] as string, reader["PageContent_User"] as string, new DateTime(((DateTime)reader["PageContent_LastModified"]).Ticks, DateTimeKind.Utc), 
 						GetNullableColumn<string>(reader, "PageContent_Comment", ""), reader["PageContent_Content"] as string, new string[0], 
 						GetNullableColumn<string>(reader, "PageContent_Description", null)));
 				}
@@ -1358,10 +1358,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				while(reader.Read()) {
 					if(title == null) {
-						creationDateTime = (DateTime)reader["PageContent_CreationDateTime"];
+						creationDateTime = new DateTime(((DateTime)reader["PageContent_CreationDateTime"]).Ticks, DateTimeKind.Utc);
 						title = reader["PageContent_Title"] as string;
 						user = reader["PageContent_User"] as string;
-						dateTime = (DateTime)reader["PageContent_LastModified"];
+						dateTime = new DateTime(((DateTime)reader["PageContent_LastModified"]).Ticks, DateTimeKind.Utc);
 						comment = GetNullableColumn<string>(reader, "PageContent_Comment", "");
 						content = reader["PageContent_Content"] as string;
 						description = GetNullableColumn<string>(reader, "PageContent_Description", null);
@@ -1426,10 +1426,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				while(reader.Read()) {
 					if(title == null) {
-						creationDateTime = (DateTime)reader["PageContent_CreationDateTime"];
+						creationDateTime = new DateTime(((DateTime)reader["PageContent_CreationDateTime"]).Ticks, DateTimeKind.Utc);
 						title = reader["PageContent_Title"] as string;
 						user = reader["PageContent_User"] as string;
-						dateTime = (DateTime)reader["PageContent_LastModified"];
+						dateTime = new DateTime(((DateTime)reader["PageContent_LastModified"]).Ticks, DateTimeKind.Utc);
 						comment = GetNullableColumn<string>(reader, "PageContent_Comment", "");
 						content = reader["PageContent_Content"] as string;
 						description = GetNullableColumn<string>(reader, "PageContent_Description", null);
@@ -2386,7 +2386,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				while(reader.Read()) {
 					Message msg = new Message((short)reader["Id"], reader["Username"] as string, reader["Subject"] as string,
-						(DateTime)reader["DateTime"], reader["Body"] as string);
+						new DateTime(((DateTime)reader["DateTime"]).Ticks, DateTimeKind.Utc), reader["Body"] as string);
 
 					ids.Add((short)msg.ID);
 
@@ -2464,7 +2464,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				while(reader.Read()) {
 					Message msg = new Message((short)reader["Id"], reader["Username"] as string, reader["Subject"] as string,
-						(DateTime)reader["DateTime"], reader["Body"] as string);
+						new DateTime(((DateTime)reader["DateTime"]).Ticks, DateTimeKind.Utc), reader["Body"] as string);
 
 					ids.Add((short)msg.ID);
 

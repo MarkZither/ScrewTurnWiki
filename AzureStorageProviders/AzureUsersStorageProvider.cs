@@ -83,7 +83,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 				List<UserInfo> users = new List<UserInfo>(usersEntities != null ? usersEntities.Count : 0);
 				foreach(UserEntity userEntity in usersEntities) {
-					users.Add(new UserInfo(userEntity.RowKey, userEntity.DisplayName, userEntity.Email, userEntity.Active, userEntity.CreationDateTime.ToLocalTime(), this) {
+					users.Add(new UserInfo(userEntity.RowKey, userEntity.DisplayName, userEntity.Email, userEntity.Active, new DateTime(userEntity.CreationDateTime.Ticks, DateTimeKind.Utc), this) {
 						Groups = userEntity.Groups != null ? userEntity.Groups.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries) : new string[0]
 					});
 				}
@@ -128,7 +128,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 					Password = Hash.Compute(password),
 					Email = email,
 					Active = active,
-					CreationDateTime = dateTime.ToUniversalTime()
+					CreationDateTime = dateTime
 				};
 				_context.AddObject(UsersTable, userEntity);
 				_context.SaveChangesStandard();
@@ -429,7 +429,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				// If the user is NOT active return null
 				if(!userEntity.Active) return null;
 
-				if(userEntity.Password == Hash.Compute(password)) return new UserInfo(userEntity.RowKey, userEntity.DisplayName, userEntity.Email, userEntity.Active, userEntity.CreationDateTime.ToLocalTime(), this) {
+				if(userEntity.Password == Hash.Compute(password)) return new UserInfo(userEntity.RowKey, userEntity.DisplayName, userEntity.Email, userEntity.Active, new DateTime(userEntity.CreationDateTime.Ticks, DateTimeKind.Utc), this) {
 					Groups = userEntity.Groups != null ? userEntity.Groups.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries) : new string[0]
 				};
 
@@ -470,7 +470,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				// If the user does not exists return null
 				if(userEntity == null) return null;
 
-				return new UserInfo(userEntity.RowKey, userEntity.DisplayName, userEntity.Email, userEntity.Active, userEntity.CreationDateTime.ToLocalTime(), this) {
+				return new UserInfo(userEntity.RowKey, userEntity.DisplayName, userEntity.Email, userEntity.Active, new DateTime(userEntity.CreationDateTime.Ticks, DateTimeKind.Utc), this) {
 					Groups = userEntity.Groups != null ? userEntity.Groups.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries) : new string[0]
 				};
 			}
@@ -499,7 +499,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 				// if the user does not exists return null
 				if(userEntity == null) return null;
 
-				return new UserInfo(userEntity.RowKey, userEntity.DisplayName, userEntity.Email, userEntity.Active, userEntity.CreationDateTime.ToLocalTime(), this) {
+				return new UserInfo(userEntity.RowKey, userEntity.DisplayName, userEntity.Email, userEntity.Active, new DateTime(userEntity.CreationDateTime.Ticks, DateTimeKind.Utc), this) {
 					Groups = userEntity.Groups != null ? userEntity.Groups.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries) : new string[0]
 				};
 			}

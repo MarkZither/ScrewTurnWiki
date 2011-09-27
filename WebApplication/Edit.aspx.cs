@@ -596,12 +596,12 @@ namespace ScrewTurn.Wiki {
 				PageContent pg = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text), provider);
 				if(pg == null) {
 					saveMode = SaveMode.Normal;
-					pg = Pages.SetPageContent(currentWiki, nspace, txtName.Text, provider, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+					pg = Pages.SetPageContent(currentWiki, nspace, txtName.Text, provider, txtTitle.Text, username, DateTime.UtcNow, txtComment.Text, editor.GetContent(),
 					GetKeywords(), txtDescription.Text, saveMode);
 					attachmentManager.CurrentPage = pg;
 				}
 				else {
-					Pages.SetPageContent(currentWiki, nspace, txtName.Text, provider, txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+					Pages.SetPageContent(currentWiki, nspace, txtName.Text, provider, txtTitle.Text, username, DateTime.UtcNow, txtComment.Text, editor.GetContent(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				// Save categories binding
@@ -647,11 +647,11 @@ namespace ScrewTurn.Wiki {
 					if(start > 0) sb.Append(currentPage.Content.Substring(0, start));
 					sb.Append(editor.GetContent());
 					if(start + len < currentPage.Content.Length - 1) sb.Append(currentPage.Content.Substring(start + len));
-					Pages.SetPageContent(currentPage.Provider.CurrentWiki, NameTools.GetNamespace(currentPage.FullName), NameTools.GetLocalName(currentPage.FullName), txtTitle.Text, username, DateTime.Now, txtComment.Text, sb.ToString(),
+					Pages.SetPageContent(currentPage.Provider.CurrentWiki, NameTools.GetNamespace(currentPage.FullName), NameTools.GetLocalName(currentPage.FullName), txtTitle.Text, username, DateTime.UtcNow, txtComment.Text, sb.ToString(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				else {
-					Pages.SetPageContent(currentPage.Provider.CurrentWiki, NameTools.GetNamespace(currentPage.FullName), NameTools.GetLocalName(currentPage.FullName), txtTitle.Text, username, DateTime.Now, txtComment.Text, editor.GetContent(),
+					Pages.SetPageContent(currentPage.Provider.CurrentWiki, NameTools.GetNamespace(currentPage.FullName), NameTools.GetLocalName(currentPage.FullName), txtTitle.Text, username, DateTime.UtcNow, txtComment.Text, editor.GetContent(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
 				

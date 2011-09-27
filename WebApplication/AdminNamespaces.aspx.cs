@@ -234,7 +234,7 @@ namespace ScrewTurn.Wiki {
 			if(done) {
 				NamespaceInfo nspace = Pages.FindNamespace(currentWiki, txtName.Text);
 				PageContent page = Pages.SetPageContent(currentWiki, nspace.Name, "MainPage", "Main Page", Log.SystemUsername,
-														DateTime.Now, "", Defaults.MainPageContentForSubNamespace, new string[0], "", SaveMode.Normal);
+														DateTime.UtcNow, "", Defaults.MainPageContentForSubNamespace, new string[0], "", SaveMode.Normal);
 
 				if(page != null) {
 					done = Pages.SetNamespaceDefaultPage(currentWiki, nspace, page);

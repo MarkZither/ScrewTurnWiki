@@ -72,7 +72,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						displayName = GetNullableColumn<string>(reader, "User_DisplayName", null);
 						email = reader["User_Email"] as string;
 						active = (bool)reader["User_Active"];
-						dateTime = (DateTime)reader["User_DateTime"];
+						dateTime = new DateTime(((DateTime)reader["User_DateTime"]).Ticks, DateTimeKind.Utc);
 
 						// Append new user
 						result.Add(new UserInfo(username, displayName, email, active, dateTime, this));
@@ -726,7 +726,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						displayName = GetNullableColumn<string>(reader, "User_DisplayName", null);
 						email = reader["User_Email"] as string;
 						active = (bool)reader["User_Active"];
-						dateTime = (DateTime)reader["User_DateTime"];
+						dateTime = new DateTime(((DateTime)reader["User_DateTime"]).Ticks, DateTimeKind.Utc);
 
 						// Create user
 						result = new UserInfo(realUsername, displayName, email, active, dateTime, this);
@@ -816,7 +816,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						displayName = GetNullableColumn<string>(reader, "User_DisplayName", null);
 						email = reader["User_Email"] as string;
 						active = (bool)reader["User_Active"];
-						dateTime = (DateTime)reader["User_DateTime"];
+						dateTime =  new DateTime(((DateTime)reader["User_DateTime"]).Ticks, DateTimeKind.Utc);
 
 						// Create user
 						result = new UserInfo(realUsername, displayName, email, active, dateTime, this);
@@ -886,7 +886,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						displayName = GetNullableColumn<string>(reader, "User_DisplayName", null);
 						realEmail = reader["User_Email"] as string;
 						active = (bool)reader["User_Active"];
-						dateTime = (DateTime)reader["User_DateTime"];
+						dateTime = new DateTime(((DateTime)reader["User_DateTime"]).Ticks, DateTimeKind.Utc);
 
 						// Create user
 						result = new UserInfo(username, displayName, realEmail, active, dateTime, this);
@@ -1149,7 +1149,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						displayName = GetNullableColumn<string>(reader, "User_DisplayName", null);
 						email = reader["User_Email"] as string;
 						active = (bool)reader["User_Active"];
-						dateTime = (DateTime)reader["User_DateTime"];
+						dateTime = new DateTime(((DateTime)reader["User_DateTime"]).Ticks, DateTimeKind.Utc);
 						data = reader["UserData_Data"] as string;
 
 						// Append new user

@@ -2974,7 +2974,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void RemoveMessage_KeepReplies_PerformSearch() {
 			IPagesStorageProviderV40 prov = GetProvider();
 
-			PageContent page = Pages.SetPageWithEmptyContent(null, "Page", prov, DateTime.Now);
+			PageContent page = Pages.SetPageWithEmptyContent(null, "Page", prov, DateTime.UtcNow);
 			prov.AddMessage(page.FullName, "NUnit", "Test", DateTime.Now, "Blah", -1);
 			prov.AddMessage(page.FullName, "NUnit", "RE: Test2", DateTime.Now, "Blah2", prov.GetMessages(page.FullName)[0].ID);
 

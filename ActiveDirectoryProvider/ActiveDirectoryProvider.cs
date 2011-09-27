@@ -529,7 +529,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 						return null;
 					}
 
-					user = StorageProvider.AddUser(username, userProperties.DisplayName, GeneratePassword(), userProperties.Mail, true, DateTime.Now);
+					user = StorageProvider.AddUser(username, userProperties.DisplayName, GeneratePassword(), userProperties.Mail, true, DateTime.UtcNow);
 
 					if(user == null) {
 						LogEntry(LogEntryType.Error, "Failed to create user \"{0}\" using provider \"{1}\", but no error was given by the provider.", username, StorageProvider.GetType());

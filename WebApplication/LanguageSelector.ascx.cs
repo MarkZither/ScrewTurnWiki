@@ -12,6 +12,18 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			if(!Page.IsPostBack && lstLanguages.Items.Count == 0) {
 				LoadLanguages();
+				LoadTimezones();
+			}
+		}
+
+		/// <summary>
+		/// Loads the timezones.
+		/// </summary>
+		public void LoadTimezones() {
+			lstTimezones.Items.Clear();
+			foreach(var zone in TimeZoneInfo.GetSystemTimeZones()) {
+				lstTimezones.Items.Add(new ListItem(zone.DisplayName, zone.Id));
+				//<option value="<%= zone.Id %>"><%= zone.ToString() %></option>
 			}
 		}
 

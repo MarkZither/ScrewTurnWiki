@@ -130,78 +130,7 @@
 			<asp:Literal ID="lblDefaultTimeZone" runat="server" Text="Default time zone" 
 				EnableViewState="False" meta:resourcekey="lblDefaultTimeZoneResource1" /><br />
 			<asp:DropDownList ID="lstDefaultTimeZone" runat="server" 
-				CssClass="configlarge" meta:resourcekey="lstDefaultTimeZoneResource1">
-				<asp:ListItem Value="-720" Text="(GMT-12:00) International Date Line West" 
-					meta:resourcekey="ListItemResource1" />
-				<asp:ListItem Value="-660" Text="(GMT-11:00) Midway Island, Samoa" 
-					meta:resourcekey="ListItemResource2" />
-				<asp:ListItem Value="-600" Text="(GMT-10:00) Hawaii" 
-					meta:resourcekey="ListItemResource3" />
-				<asp:ListItem Value="-540" Text="(GMT-09:00) Alaska" 
-					meta:resourcekey="ListItemResource4" />
-				<asp:ListItem Value="-480" Text="(GMT-08:00) Pacific" 
-					meta:resourcekey="ListItemResource5" />
-				<asp:ListItem Value="-420" Text="(GMT-07:00) Mountain" 
-					meta:resourcekey="ListItemResource6" />
-				<asp:ListItem Value="-360" Text="(GMT-06:00) Central" 
-					meta:resourcekey="ListItemResource7" />
-				<asp:ListItem Value="-300" Text="(GMT-05:00) Eastern" 
-					meta:resourcekey="ListItemResource8" />
-				<asp:ListItem Value="-240" Text="(GMT-04:00) Atlantic" 
-					meta:resourcekey="ListItemResource9" />
-				<asp:ListItem Value="-210" Text="(GMT-03:30) Newfoundland" 
-					meta:resourcekey="ListItemResource10" />
-				<asp:ListItem Value="-180" Text="(GMT-03:00) Greenland" 
-					meta:resourcekey="ListItemResource11" />
-				<asp:ListItem Value="-120" Text="(GMT-02:00) Mid-Atlantic" 
-					meta:resourcekey="ListItemResource12" />
-				<asp:ListItem Value="-60" Text="(GMT-01:00) Azores" 
-					meta:resourcekey="ListItemResource13" />
-				<asp:ListItem Value="0" Text="(GMT) Greenwich" Selected="True" 
-					meta:resourcekey="ListItemResource14" />
-				<asp:ListItem Value="60" Text="(GMT+01:00) Central European" 
-					meta:resourcekey="ListItemResource15" />
-				<asp:ListItem Value="120" Text="(GMT+02:00) Eastern European" 
-					meta:resourcekey="ListItemResource16" />
-				<asp:ListItem Value="180" Text="(GMT+03:00) Moscow, Baghdad" 
-					meta:resourcekey="ListItemResource17" />
-				<asp:ListItem Value="210" Text="(GMT+03:30) Iran" 
-					meta:resourcekey="ListItemResource18" />
-				<asp:ListItem Value="240" Text="(GMT+04:00) Abu Dhabi, Dubai" 
-					meta:resourcekey="ListItemResource19" />
-				<asp:ListItem Value="270" Text="(GMT+04:30) Kabul" 
-					meta:resourcekey="ListItemResource20" />
-				<asp:ListItem Value="300" Text="(GMT+05:00) Islamabad, Karachi" 
-					meta:resourcekey="ListItemResource21" />
-				<asp:ListItem Value="330" Text="(GMT+05:30) India" 
-					meta:resourcekey="ListItemResource22" />
-				<asp:ListItem Value="345" Text="(GMT+05:45) Kathmandu" 
-					meta:resourcekey="ListItemResource23" />
-				<asp:ListItem Value="360" Text="(GMT+06:00) Astana, Dhaka" 
-					meta:resourcekey="ListItemResource24" />
-				<asp:ListItem Value="390" Text="(GMT+06:30) Rangoon" 
-					meta:resourcekey="ListItemResource25" />
-				<asp:ListItem Value="420" Text="(GMT+07:00) Bangkok, Jakarta" 
-					meta:resourcekey="ListItemResource26" />
-				<asp:ListItem Value="480" Text="(GMT+08:00) China Coast, Western Australia" 
-					meta:resourcekey="ListItemResource27" />
-				<asp:ListItem Value="540" Text="(GMT+09:00) Japan, Korea" 
-					meta:resourcekey="ListItemResource28" />
-				<asp:ListItem Value="570" Text="(GMT+09:30) Central Australia" 
-					meta:resourcekey="ListItemResource29" />
-				<asp:ListItem Value="600" Text="(GMT+10:00) Eastern Australia" 
-					meta:resourcekey="ListItemResource30" />
-				<asp:ListItem Value="660" Text="(GMT+11:00) Magadan, Solomon Island" 
-					meta:resourcekey="ListItemResource31" />
-				<asp:ListItem Value="720" Text="(GMT+12:00) New Zealand, Fiji" 
-					meta:resourcekey="ListItemResource32" />
-				<asp:ListItem Value="765" Text="(GMT+12:45) Chatham Island NZ" 
-					meta:resourcekey="ListItemResource33" />
-				<asp:ListItem Value="780" Text="(GMT+13:00) Tonga, Phoenix Islands" 
-					meta:resourcekey="ListItemResource34" />
-				<asp:ListItem Value="840" Text="(GMT+14:00) Christmas Islands" 
-					meta:resourcekey="ListItemResource35" />
-			</asp:DropDownList>
+				CssClass="configlarge" meta:resourcekey="lstDefaultTimeZoneResource1" />
 		</div>
 		
 		<div class="featurecontainer">

@@ -81,6 +81,11 @@ namespace ScrewTurn.Wiki {
 				allUsers.Sort(new UsernameComparer());
 			}
 
+			// Adjust DateTime according to user preferences
+			foreach(UserInfo user in allUsers) {
+				user.DateTime = Preferences.AlignWithTimezone(wiki, user.DateTime);
+			}
+
 			return allUsers;
 		}
 
@@ -190,7 +195,7 @@ namespace ScrewTurn.Wiki {
 
 			if(provider.UserAccountsReadOnly) return false;
 
-			UserInfo u = provider.AddUser(username, displayName, password, email, active, DateTime.Now);
+			UserInfo u = provider.AddUser(username, displayName, password, email, active, DateTime.UtcNow);
 			if(u == null) {
 				Log.LogEntry("User creation failed for " + username, EntryType.Error, Log.SystemUsername, wiki);
 				return false;

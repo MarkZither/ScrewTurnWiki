@@ -28,6 +28,7 @@ namespace ScrewTurn.Wiki {
 				HttpCookie cookie = Request.Cookies[GlobalSettings.CultureCookieName];
 
 				languageSelector.LoadLanguages();
+				languageSelector.LoadTimezones();
 
 				string culture = null;
 				if(cookie != null) culture = cookie["C"];
@@ -64,7 +65,7 @@ namespace ScrewTurn.Wiki {
 		/// <param name="culture">The culture.</param>
 		/// <param name="timezone">The timezone.</param>
 		private void SavePreferences(string culture, string timezone) {
-			Preferences.SavePreferencesInCookie(culture, int.Parse(timezone));
+			Preferences.SavePreferencesInCookie(culture, timezone);
 			Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
 			Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
 		}

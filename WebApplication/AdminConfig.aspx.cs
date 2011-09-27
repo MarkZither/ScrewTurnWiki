@@ -89,6 +89,10 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="current">The current time zone.</param>
 		private void PopulateTimeZones(string current) {
+			lstDefaultTimeZone.Items.Clear();
+			foreach(var zone in TimeZoneInfo.GetSystemTimeZones()) {
+				lstDefaultTimeZone.Items.Add(new ListItem(zone.DisplayName, zone.Id));
+			}
 			for(int i = 0; i < lstDefaultTimeZone.Items.Count; i++) {
 				if(lstDefaultTimeZone.Items[i].Value == current) lstDefaultTimeZone.Items[i].Selected = true;
 				else lstDefaultTimeZone.Items[i].Selected = false;
@@ -128,7 +132,7 @@ namespace ScrewTurn.Wiki {
 			txtDateTimeFormat.Text = Settings.GetDateTimeFormat(currentWiki);
 			PopulateDateTimeFormats();
 			PopulateLanguages(Settings.GetDefaultLanguage(currentWiki));
-			PopulateTimeZones(Settings.GetDefaultLanguage(currentWiki).ToString());
+			PopulateTimeZones(Settings.GetDefaultTimezone(currentWiki));
 			txtMaxRecentChangesToDisplay.Text = Settings.GetMaxRecentChangesToDisplay(currentWiki).ToString();
 
 			lstRssFeedsMode.SelectedIndex = -1;
@@ -320,7 +324,7 @@ namespace ScrewTurn.Wiki {
 			Settings.SetDefaultPage(currentWiki, lstMainPage.SelectedValue);
 			Settings.SetDateTimeFormat(currentWiki, txtDateTimeFormat.Text);
 			Settings.SetDefaultLanguage(currentWiki, lstDefaultLanguage.SelectedValue);
-			Settings.SetDefaultTimezone(currentWiki, int.Parse(lstDefaultTimeZone.SelectedValue));
+			Settings.SetDefaultTimezone(currentWiki, lstDefaultTimeZone.SelectedValue);
 			Settings.SetMaxRecentChangesToDisplay(currentWiki, int.Parse(txtMaxRecentChangesToDisplay.Text));
 			Settings.SetRssFeedsMode(currentWiki, (RssFeedsMode)Enum.Parse(typeof(RssFeedsMode), lstRssFeedsMode.SelectedValue));
 			Settings.SetEnableDoubleClickEditing(currentWiki, chkEnableDoubleClickEditing.Checked);

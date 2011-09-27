@@ -367,7 +367,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 
 			List<LogEntry> logEntries = new List<LogEntry>();
 			foreach(LogEntity entity in logEntities) {
-				logEntries.Add(new LogEntry(EntryTypeParse(entity.Type), entity.DateTime.ToLocalTime(), entity.Message, entity.User, entity.Wiki));
+				logEntries.Add(new LogEntry(EntryTypeParse(entity.Type), new DateTime(entity.DateTime.Ticks, DateTimeKind.Utc), entity.Message, entity.User, entity.Wiki));
 			}
 			return logEntries.ToArray();
 		}
