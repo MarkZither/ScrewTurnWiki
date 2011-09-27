@@ -1288,7 +1288,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 								DeleteOldBlobReference(draftPageContentEntity.BlobReference);
 							}
 						}
-						BuildPageContentEntity(draftPageContentEntity, NameTools.GetFullName(nspace, pageName), Draft, creationDateTime, title, username, dateTime, comment, content, string.Join("|", keywords), description);
+						BuildPageContentEntity(draftPageContentEntity, NameTools.GetFullName(nspace, pageName), Draft, creationDateTime, title, username, dateTime, comment, content, keywords == null ? "" : string.Join("|", keywords), description);
 
 						_context.SaveChangesStandard();
 
@@ -1322,7 +1322,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 							currentPageContentEntity = new PagesContentsEntity();
 							_context.AddObject(PagesContentsTable, currentPageContentEntity);
 						}
-						BuildPageContentEntity(currentPageContentEntity, NameTools.GetFullName(nspace, pageName), CurrentRevision, creationDateTime, title, username, dateTime, comment, content, string.Join("|", keywords), description);
+						BuildPageContentEntity(currentPageContentEntity, NameTools.GetFullName(nspace, pageName), CurrentRevision, creationDateTime, title, username, dateTime, comment, content, keywords == null ? "" : string.Join("|", keywords), description);
 
 						_context.SaveChangesStandard();
 
