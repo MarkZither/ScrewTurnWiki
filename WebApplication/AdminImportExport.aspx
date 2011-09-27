@@ -32,7 +32,7 @@
 		
 		<br />
 		<h4><asp:Literal ID="lblRevisions" runat="server" EnableViewState="False" meta:resourcekey="lblRevisionsResource1" Text="The number of revision of each page you want to backup." /></h4>
-		<asp:TextBox ID="txtRevisions" runat="server" EnableViewState="false" meta:resourcekey="txtRevisionsResource1" Enabled="false" ></asp:TextBox>
+		<asp:TextBox ID="txtRevisions" runat="server" EnableViewState="false" meta:resourcekey="txtRevisionsResource1" Enabled="false" Text="100" ></asp:TextBox>
 		<br />
 		<asp:Button ID="btnExportAll" runat="server" Text="Export" OnClick="btnExportAll_Click" meta:resourcekey="btnExportAllResource1" Enabled="false" />
 

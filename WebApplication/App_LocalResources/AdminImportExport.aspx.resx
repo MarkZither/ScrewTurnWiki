@@ -174,4 +174,49 @@
   <data name="lblImportGlobalSettingsResultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
+  <data name="btnExportAllResource1.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="btnImportBackupResource1.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="lblExportAllResource1.Text" xml:space="preserve">
+    <value>Export all data from all installed providers.</value>
+  </data>
+  <data name="lblImportBackupResource1.Text" xml:space="preserve">
+    <value>Import data from a backup file into selected storage providers.</value>
+  </data>
+  <data name="lblImportBackupResultResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblRevisionsResource1.Text" xml:space="preserve">
+    <value>The number of revision of each page you want to backup.</value>
+  </data>
+  <data name="lblSelectStorageProvidersResource1.Text" xml:space="preserve">
+    <value>Select storage providers where you want to import data.</value>
+  </data>
+  <data name="lblUploadBackupFileResource1.Text" xml:space="preserve">
+    <value>Write a URL of the backup file. It can also be a file on local machine (e.g. file:///D:/Backup.zip).</value>
+  </data>
+  <data name="lstFilesStorageProvidersResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lstPagesStorageProvidersResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lstUsersStorageProvidersResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtBackupFileURLResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtBackupFileURLResource1.ToolTip" xml:space="preserve">
+    <value>Write a URL of the backup file. It can also be a file on local machine (e.g. file:///D:/Backup.zip).</value>
+  </data>
+  <data name="txtRevisionsResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtRevisionsResource1.ToolTip" xml:space="preserve">
+    <value>The number of revision of each page you want to backup.</value>
+  </data>
 </root>
