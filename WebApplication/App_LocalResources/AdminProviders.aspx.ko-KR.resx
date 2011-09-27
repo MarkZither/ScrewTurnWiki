@@ -429,4 +429,13 @@
   <data name="btnAutoUpdateProvidersResource1.ToolTip" xml:space="preserve">
     <value>설치된 모든 프로바이더, 모든 타입 자동업데이트</value>
   </data>
+  <data name="btnExportResource1" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="lblExportDescriptionResource1" xml:space="preserve">
+    <value>Export all data. (Experimental)</value>
+  </data>
+  <data name="lblExportResource1" xml:space="preserve">
+    <value>Export All Data</value>
+  </data>
 </root>
