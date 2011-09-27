@@ -107,9 +107,11 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 
 			Directory.CreateDirectory(targetPath);
 			try {
-				using(ZipFile zip1 = ZipFile.Read(zipFile)) {
-					foreach(ZipEntry e in zip1) {
-						e.Extract(targetPath, ExtractExistingFileAction.OverwriteSilently);
+				using(MemoryStream stream = new MemoryStream(zipFile)) {
+					using(ZipFile zip1 = ZipFile.Read(stream)) {
+						foreach(ZipEntry e in zip1) {
+							e.Extract(targetPath, ExtractExistingFileAction.OverwriteSilently);
+						}
 					}
 				}
 			}

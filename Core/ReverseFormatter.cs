@@ -16,8 +16,8 @@ namespace ScrewTurn.Wiki {
 	public class ReverseFormatter {
 
 		private string _wiki;
-		private static void ProcessList(XmlNodeList nodes, string marker, StringBuilder sb) {
 
+		private void ProcessList(XmlNodeList nodes, string marker, StringBuilder sb) {
 			string ul = "*";
 			string ol = "#";
 			foreach(XmlNode node in nodes) {
@@ -91,7 +91,7 @@ namespace ScrewTurn.Wiki {
 			return link;
 		}
 
-		private static void ProcessChildImage(XmlNodeList nodes, StringBuilder sb) {
+		private void ProcessChildImage(XmlNodeList nodes, StringBuilder sb) {
 			string image = "";
 			string p = "";
 			string url = "";
@@ -123,7 +123,7 @@ namespace ScrewTurn.Wiki {
 			sb.Append(p + image + url);
 		}
 		
-		private static void ProcessTableImage(XmlNodeList nodes, StringBuilder sb) {
+		private void ProcessTableImage(XmlNodeList nodes, StringBuilder sb) {
 			foreach(XmlNode node in nodes) {
 				switch(node.Name.ToLowerInvariant()) {
 					case "tbody":
@@ -177,7 +177,7 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		private static void ProcessTable(XmlNodeList nodes, StringBuilder sb) {
+		private void ProcessTable(XmlNodeList nodes, StringBuilder sb) {
 			foreach(XmlNode node in nodes) {
 				switch(node.Name.ToLowerInvariant()) {
 					case "thead":
@@ -224,7 +224,7 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		private static void ProcessChild(XmlNodeList nodes, StringBuilder sb) {
+		private void ProcessChild(XmlNodeList nodes, StringBuilder sb) {
 			foreach(XmlNode node in nodes) {
 				bool anchor = false;
 				if(node.NodeType == XmlNodeType.Text) sb.Append(node.Value.TrimStart('\n'));
@@ -328,7 +328,7 @@ namespace ScrewTurn.Wiki {
 								sb.Append("\n");
 							}
 							else {
-								if(Settings.ProcessSingleLineBreaks) sb.Append("\n");
+								if(Settings.GetProcessSingleLineBreaks(_wiki)) sb.Append("\n");
 								else sb.Append("\n\n");
 							}
 							break;
@@ -386,7 +386,7 @@ namespace ScrewTurn.Wiki {
 							else {
 								ProcessChild(node.ChildNodes, sb);
 								sb.Append("\n");
-								if(!Settings.ProcessSingleLineBreaks) sb.Append("\n");
+								if(!Settings.GetProcessSingleLineBreaks(_wiki)) sb.Append("\n");
 							}
 							break;
 						case "div":
@@ -423,14 +423,14 @@ namespace ScrewTurn.Wiki {
 							else {
 								sb.Append("\n");
 								if(node.PreviousSibling != null && node.PreviousSibling.Name != "div") {
-									if(!Settings.ProcessSingleLineBreaks) sb.Append("\n");
+									if(!Settings.GetProcessSingleLineBreaks(_wiki)) sb.Append("\n");
 								}
 								if(node.FirstChild != null && node.FirstChild.Name == "br") {
 									node.RemoveChild(node.FirstChild);
 								}
 								if(node.HasChildNodes) {
 									ProcessChild(node.ChildNodes, sb);
-									if(Settings.ProcessSingleLineBreaks) sb.Append("\n");
+									if(Settings.GetProcessSingleLineBreaks(_wiki)) sb.Append("\n");
 									else sb.Append("\n\n");
 								}
 							}

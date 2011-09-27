@@ -106,19 +106,21 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			var directoryRef = containerRef.GetDirectoryReference(themeName);
 
 			try {
-				using(ZipFile zip = ZipFile.Read(zipFile)) {
-					foreach(ZipEntry e in zip) {
-						using(MemoryStream stream = new MemoryStream()) {
-							e.Extract(stream);
-							stream.Seek(0, SeekOrigin.Begin);
-							var blob = directoryRef.GetBlobReference(e.FileName);
-							BlobRequestOptions options = new BlobRequestOptions();
-							MimeTypes.Init();
-							string extension = Path.GetExtension(e.FileName).Trim('.');
-							if(MimeTypes.Types.ContainsKey(extension)) {
-								blob.Properties.ContentType = MimeTypes.Types[extension];
+				using(MemoryStream zipFileStream = new MemoryStream(zipFile)) {
+					using(ZipFile zip = ZipFile.Read(zipFileStream)) {
+						foreach(ZipEntry e in zip) {
+							using(MemoryStream stream = new MemoryStream()) {
+								e.Extract(stream);
+								stream.Seek(0, SeekOrigin.Begin);
+								var blob = directoryRef.GetBlobReference(e.FileName);
+								BlobRequestOptions options = new BlobRequestOptions();
+								MimeTypes.Init();
+								string extension = Path.GetExtension(e.FileName).Trim('.');
+								if(MimeTypes.Types.ContainsKey(extension)) {
+									blob.Properties.ContentType = MimeTypes.Types[extension];
+								}
+								blob.UploadFromStream(stream);
 							}
-							blob.UploadFromStream(stream);
 						}
 					}
 				}

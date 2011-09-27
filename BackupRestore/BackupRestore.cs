@@ -221,15 +221,17 @@ namespace ScrewTurn.Wiki.BackupRestore {
 		public static bool RestoreGlobalSettingsStorageProvider(byte[] backupFile, IGlobalSettingsStorageProviderV40 globalSettingsStorageProvider) {
 			VersionFile versionFile;
 
-			using(ZipFile globalSettingsBackupZipFile = ZipFile.Read(backupFile)) {
-				ZipEntry versionEntry = (from e in globalSettingsBackupZipFile
-										 where e.FileName == "Version.json"
-										 select e).FirstOrDefault();
-				versionFile = DeserializeVersionFile(Encoding.Unicode.GetString(ExtractEntry(versionEntry)));
-				ZipEntry globalSettingsEntry = (from e in globalSettingsBackupZipFile
-												where e.FileName == "GlobalSettings.json"
-												select e).FirstOrDefault();
-				DeserializeGlobalSettingsBackup(Encoding.Unicode.GetString(ExtractEntry(globalSettingsEntry)), globalSettingsStorageProvider, versionFile);
+			using(MemoryStream stream = new MemoryStream(backupFile)) {
+				using(ZipFile globalSettingsBackupZipFile = ZipFile.Read(stream)) {
+					ZipEntry versionEntry = (from e in globalSettingsBackupZipFile
+											 where e.FileName == "Version.json"
+											 select e).FirstOrDefault();
+					versionFile = DeserializeVersionFile(Encoding.Unicode.GetString(ExtractEntry(versionEntry)));
+					ZipEntry globalSettingsEntry = (from e in globalSettingsBackupZipFile
+													where e.FileName == "GlobalSettings.json"
+													select e).FirstOrDefault();
+					DeserializeGlobalSettingsBackup(Encoding.Unicode.GetString(ExtractEntry(globalSettingsEntry)), globalSettingsStorageProvider, versionFile);
+				}
 			}
 			return true;
 		}

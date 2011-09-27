@@ -105,10 +105,4 @@
 	</div>
 
 	<div class="clear"></div>
-	<h2 class="separator"><asp:Literal ID="lblExport" runat="server" Text="Export All Data" EnableViewState="False" meta:resourcekey="lblExportResource1" /></h2>
-	<h4><asp:Literal ID="lblExportDescription" runat="server" Text="Export all data. (Experimental)" EnableViewState="False" meta:resourcekey="lblExportDescriptionResource1" /></h4>
-	<br />
-	<asp:Button ID="btnExport" runat="server" Text="Export" OnClick="btnExport_Click" meta:resourcekey="btnExportResource1" />
-
-	
 </asp:Content>
