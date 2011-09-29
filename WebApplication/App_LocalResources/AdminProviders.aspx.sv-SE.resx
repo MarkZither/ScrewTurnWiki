@@ -430,12 +430,12 @@
     <value>Uppdatera leverantörer av alla typer automatiskt</value>
   </data>
   <data name="btnExportResource1" xml:space="preserve">
-    <value>Export</value>
+    <value>Exportera</value>
   </data>
   <data name="lblExportDescriptionResource1" xml:space="preserve">
-    <value>Export all data. (Experimental)</value>
+    <value>Exportera alla data. (Experimentell)</value>
   </data>
   <data name="lblExportResource1" xml:space="preserve">
-    <value>Export All Data</value>
+    <value>Exportera alla data</value>
   </data>
 </root>
