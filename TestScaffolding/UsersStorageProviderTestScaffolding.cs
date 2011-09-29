@@ -54,8 +54,8 @@ namespace ScrewTurn.Wiki.Tests {
 		public void AddUser_GetUsers() {
 			IUsersStorageProviderV40 prov = GetProvider();
 
-			UserInfo u1 = new UserInfo("user", "User", "email@server.com", true, DateTime.Now.AddDays(-1), prov);
-			UserInfo u2 = new UserInfo("john", null, "john@john.com", false, DateTime.Now, prov);
+			UserInfo u1 = new UserInfo("user", "User", "email@server.com", true, DateTime.UtcNow.AddDays(-1), prov);
+			UserInfo u2 = new UserInfo("john", null, "john@john.com", false, DateTime.UtcNow, prov);
 
 			UserInfo u1Out = prov.AddUser(u1.Username, u1.DisplayName, "password", u1.Email, u1.Active, u1.DateTime);
 			Assert.IsNotNull(u1Out, "AddUser should return something");
@@ -65,7 +65,7 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsNotNull(u2Out, "AddUser should return something");
 			AssertUserInfosAreEqual(u2, u2Out, true);
 			
-			Assert.IsNull(prov.AddUser("user", null, "pwd999", "dummy@server.com", false, DateTime.Now), "AddUser should return false");
+			Assert.IsNull(prov.AddUser("user", null, "pwd999", "dummy@server.com", false, DateTime.UtcNow), "AddUser should return false");
 
 			UserInfo[] users = prov.GetUsers();
 			Array.Sort(users, delegate(UserInfo x, UserInfo y) { return x.Username.CompareTo(y.Username); });
@@ -137,16 +137,16 @@ namespace ScrewTurn.Wiki.Tests {
 		public void TestAccount_NullPassword() {
 			IUsersStorageProviderV40 prov = GetProvider();
 
-			prov.TestAccount(new UserInfo("blah", null, "email30@server.com", true, DateTime.Now, prov), null);
+			prov.TestAccount(new UserInfo("blah", null, "email30@server.com", true, DateTime.UtcNow, prov), null);
 		}
 
 		[Test]
 		public void ModifyUser() {
 			IUsersStorageProviderV40 prov = GetProvider();
 
-			UserInfo user = new UserInfo("username", null, "email@server.com", false, DateTime.Now, prov);
+			UserInfo user = new UserInfo("username", null, "email@server.com", false, DateTime.UtcNow, prov);
 			prov.AddUser(user.Username, user.DisplayName, "password", user.Email, user.Active, user.DateTime);
-			prov.AddUser("zzzz", null, "password2", "email@server2.com", false, DateTime.Now);
+			prov.AddUser("zzzz", null, "password2", "email@server2.com", false, DateTime.UtcNow);
 
 			// Set new password
 			UserInfo expected = new UserInfo(user.Username, "New Display", "new@server.com", true, user.DateTime, prov);
@@ -413,8 +413,8 @@ namespace ScrewTurn.Wiki.Tests {
 		public void TryManualLogin() {
 			IUsersStorageProviderV40 prov = GetProvider();
 
-			UserInfo user = prov.AddUser("user", null, "password", "email@server.com", true, DateTime.Now);
-			prov.AddUser("user2", null, "password", "email2@server.com", false, DateTime.Now);
+			UserInfo user = prov.AddUser("user", null, "password", "email@server.com", true, DateTime.UtcNow);
+			prov.AddUser("user2", null, "password", "email2@server.com", false, DateTime.UtcNow);
 
 			UserInfo output = prov.TryManualLogin("inexistent", "password");
 			Assert.IsNull(output, "TryManualLogin should return null");
@@ -461,7 +461,7 @@ namespace ScrewTurn.Wiki.Tests {
 		public void GetUser() {
 			IUsersStorageProviderV40 prov = GetProvider();
 
-			UserInfo user = prov.AddUser("user", null, "password", "email@server.com", true, DateTime.Now);
+			UserInfo user = prov.AddUser("user", null, "password", "email@server.com", true, DateTime.UtcNow);
 
 			Assert.IsNull(prov.GetUser("inexistent"), "TryGetUser should return null");
 
@@ -482,8 +482,8 @@ namespace ScrewTurn.Wiki.Tests {
 		public void GetUserByEmail() {
 			IUsersStorageProviderV40 prov = GetProvider();
 
-			UserInfo user1 = prov.AddUser("user1", null, "password", "email1@server.com", true, DateTime.Now);
-			UserInfo user2 = prov.AddUser("user2", null, "password", "email2@server.com", true, DateTime.Now);
+			UserInfo user1 = prov.AddUser("user1", null, "password", "email1@server.com", true, DateTime.UtcNow);
+			UserInfo user2 = prov.AddUser("user2", null, "password", "email2@server.com", true, DateTime.UtcNow);
 
 			Assert.IsNull(prov.GetUserByEmail("inexistent@server.com"), "TryGetUserByEmail should return null");
 
@@ -647,10 +647,10 @@ namespace ScrewTurn.Wiki.Tests {
 		public void GetUsersWithData() {
 			IUsersStorageProviderV40 prov = GetProvider();
 
-			UserInfo user1 = prov.AddUser("user1", "User1", "password", "user1@users.com", true, DateTime.Now);
-			UserInfo user2 = prov.AddUser("user2", "User2", "password", "user2@users.com", true, DateTime.Now);
-			UserInfo user3 = prov.AddUser("user3", "User3", "password", "user3@users.com", true, DateTime.Now);
-			UserInfo user4 = prov.AddUser("user4", "User4", "password", "user4@users.com", true, DateTime.Now);
+			UserInfo user1 = prov.AddUser("user1", "User1", "password", "user1@users.com", true, DateTime.UtcNow);
+			UserInfo user2 = prov.AddUser("user2", "User2", "password", "user2@users.com", true, DateTime.UtcNow);
+			UserInfo user3 = prov.AddUser("user3", "User3", "password", "user3@users.com", true, DateTime.UtcNow);
+			UserInfo user4 = prov.AddUser("user4", "User4", "password", "user4@users.com", true, DateTime.UtcNow);
 
 			Assert.AreEqual(0, prov.GetUsersWithData("Key").Count, "Wrong user count");
 

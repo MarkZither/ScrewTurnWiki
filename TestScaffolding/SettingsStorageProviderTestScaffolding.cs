@@ -160,7 +160,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			//Collectors.SettingsProvider = prov;
 
-			DateTime dt = DateTime.Now;
+			DateTime dt = DateTime.UtcNow;
 			Assert.IsTrue(prov.AddRecentChange("MainPage", "Main Page", null, dt, Log.SystemUsername, ScrewTurn.Wiki.PluginFramework.Change.PageUpdated, ""), "AddRecentChange should return true");
 			Assert.IsTrue(prov.AddRecentChange("MainPage", "Home Page", null, dt.AddHours(1), "admin", ScrewTurn.Wiki.PluginFramework.Change.PageUpdated, "Added info"), "AddRecentChange should return true");
 
@@ -277,7 +277,7 @@ namespace ScrewTurn.Wiki.Tests {
 
 			//Collectors.SettingsProvider = prov;
 
-			DateTime dt = DateTime.Now;
+			DateTime dt = DateTime.UtcNow;
 			Assert.IsTrue(prov.AddRecentChange("Page", "Title", null, dt, "User", ScrewTurn.Wiki.PluginFramework.Change.PageUpdated, null), "AddRecentChange should return true");
 
 			RecentChange c = prov.GetRecentChanges()[0];
