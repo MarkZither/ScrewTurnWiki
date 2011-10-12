@@ -20,11 +20,6 @@ namespace ScrewTurn.Wiki {
 
 			Page.Title = Properties.Messages.AdminTitle + " - " + Settings.WikiTitle;
 
-			if(!string.IsNullOrEmpty(Request.UserAgent) && Request.UserAgent.ToLowerInvariant().Contains("konqueror") ||
-				Request.UserAgent.ToLowerInvariant().Contains("safari")) {
-				lblBrowserSupport.Visible = true;
-			}
-
 			lblJS.Text = Tools.GetJavaScriptIncludes();
 
 			SetupButtons();
