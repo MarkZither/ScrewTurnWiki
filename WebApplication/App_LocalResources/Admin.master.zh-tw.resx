@@ -120,12 +120,6 @@
   <data name="lblAdminTitleResource1.Text" xml:space="preserve">
     <value>管理</value>
   </data>
-  <data name="lblBrowserSupportResource1.Text" xml:space="preserve">
-    <value>您的瀏覽器可能無法正常顯示本頁( 建議使用 Internet Explorer 7+ 或 Firefox 3+）。 </value>
-  </data>
-  <data name="lblBrowserSupportResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="lblHomeLinkResource1.Text" xml:space="preserve">
     <value>首頁</value>
   </data>
