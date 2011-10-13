@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblBrowserSupportResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="lblStringsResource1.Text" xml:space="preserve">
     <value />
   </data>
@@ -161,9 +158,6 @@
   </data>
   <data name="lblAdminTitleResource1.Text" xml:space="preserve">
     <value>Administrace</value>
-  </data>
-  <data name="lblBrowserSupportResource1.Text" xml:space="preserve">
-    <value>Váš prohlížeč může mít problémy se zobrazením této stránky (Internet Explorer 7+ a Firefox 3+ je doporučen).</value>
   </data>
   <data name="lblHomeLinkResource1.Text" xml:space="preserve">
     <value>Hlavní stránka</value>
