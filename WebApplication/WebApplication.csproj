@@ -1399,19 +1399,6 @@
     <Content Include="SessionRefresh.aspx" />
     <Content Include="ThemesProviderSelector.ascx" />
     <Content Include="Themes\Admin.css" />
-    <Content Include="Themes\Elegant\Icon.ico" />
-    <Content Include="Themes\Elegant\Images\Attachment.png" />
-    <Content Include="Themes\Elegant\Images\Background.gif" />
-    <Content Include="Themes\Elegant\Images\ExternalLink.gif" />
-    <Content Include="Themes\Elegant\Images\MessageDelete.png" />
-    <Content Include="Themes\Elegant\Images\MessageEdit.png" />
-    <Content Include="Themes\Elegant\Images\MessageReply.png" />
-    <Content Include="Themes\Elegant\Images\Print.png" />
-    <Content Include="Themes\Elegant\Images\RSS.png" />
-    <Content Include="Themes\Elegant\Images\Search.png" />
-    <Content Include="Themes\Elegant\Print_Styles.css" />
-    <Content Include="Themes\Elegant\Screen_Styles.css" />
-    <Content Include="Themes\Elegant\Scripts.js" />
     <Content Include="Themes\Print.css" />
     <Content Include="Upload.aspx" />
   </ItemGroup>
@@ -2802,12 +2789,6 @@
     <Content Include="Themes\Default\Images\Message.png" />
     <Content Include="Themes\Default\Images\Page.png" />
     <Content Include="Themes\Default\Images\Redirect.png" />
-    <Content Include="Themes\Elegant\Images\EmailNotifOff.png" />
-    <Content Include="Themes\Elegant\Images\EmailNotifOn.png" />
-    <Content Include="Themes\Elegant\Images\File.png" />
-    <Content Include="Themes\Elegant\Images\Message.png" />
-    <Content Include="Themes\Elegant\Images\Page.png" />
-    <Content Include="Themes\Elegant\Images\Redirect.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app_online.htm" />
@@ -2817,7 +2798,6 @@
     <Content Include="MasterPageSA.Master" />
     <Content Include="PageSelector.ascx" />
     <Content Include="Themes\Default\Images\DropDown.png" />
-    <Content Include="Themes\Elegant\Images\DropDown.png" />
     <Content Include="User.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -2854,9 +2834,6 @@
     <Content Include="Themes\Default\Images\EmailNotifOn-Discussion.png" />
     <Content Include="Themes\Default\Images\MainBackground.gif" />
     <Content Include="Themes\Default\Images\RSS-Discussion.png" />
-    <Content Include="Themes\Elegant\Images\EmailNotifOff-Discussion.png" />
-    <Content Include="Themes\Elegant\Images\EmailNotifOn-Discussion.png" />
-    <Content Include="Themes\Elegant\Images\RSS-Discussion.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPageClean.master" />
