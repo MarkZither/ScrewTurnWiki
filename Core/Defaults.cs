@@ -83,7 +83,7 @@ The ##WIKITITLE## Team.";
 		public const string SidebarContent = @"<div style=""float: right;"">
 <a href=""RSS.aspx"" title=""Update notifications for {WIKITITLE} (RSS 2.0)""><img src=""{THEMEPATH}Images/RSS.png"" alt=""RSS"" /></a>
 <a href=""RSS.aspx?Discuss=1"" title=""Update notifications for {WIKITITLE} Discussions (RSS 2.0)""><img src=""{THEMEPATH}Images/RSS-Discussion.png"" alt=""RSS"" /></a></div>
-====Navigation====
+
 * '''[MainPage|Main Page]'''
 
 * [RandPage.aspx|Random Page]
@@ -108,7 +108,7 @@ The ##WIKITITLE## Team.";
 		public const string SidebarContentForSubNamespace = @"<div style=""float: right;"">
 <a href=""{NAMESPACE}.RSS.aspx"" title=""Update notifications for {WIKITITLE} ({NAMESPACE}) (RSS 2.0)""><img src=""{THEMEPATH}Images/RSS.png"" alt=""RSS"" /></a>
 <a href=""{NAMESPACE}.RSS.aspx?Discuss=1"" title=""Update notifications for {WIKITITLE} Discussions ({NAMESPACE}) (RSS 2.0)""><img src=""{THEMEPATH}Images/RSS-Discussion.png"" alt=""RSS"" /></a></div>
-====Navigation ({NAMESPACE})====
+
 * '''[MainPage|Main Page]'''
 * [++MainPage|Main Page (root)]
 
