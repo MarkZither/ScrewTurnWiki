@@ -66,9 +66,7 @@
 	
 	<div id="ConfigContentDiv">
 		<div class="featurecontainer">
-			<h3 class="separator"><asp:Literal ID="lblContentConfig" runat="server" 
-					Text="Content Configuration" EnableViewState="False" 
-					meta:resourcekey="lblContentConfigResource1" /></h3>
+			<h3 class="separator"><asp:Literal ID="lblContentConfig" runat="server" Text="Content Configuration" EnableViewState="False" meta:resourcekey="lblContentConfigResource1" /></h3>
 		</div>
 		
 		<div class="featurecontainer">
@@ -80,7 +78,7 @@
 			<a href="AdminNamespaces.aspx" class="smalllabel">
 			<asp:Literal ID="lblNamespaces1" runat="server" Text="Namespaces" 
 				EnableViewState="False" meta:resourcekey="lblNamespaces1Resource1" /></a>)</span><br />
-			<st:ThemesProviderSelector ID="ThemeRootSelector" runat="server" /><br />
+			<st:ThemesProviderSelector ID="ThemeRootSelector" runat="server" />
 		</div>
 		
 		<div class="featurecontainer">

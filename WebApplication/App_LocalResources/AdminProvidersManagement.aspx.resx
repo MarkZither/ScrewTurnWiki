@@ -136,7 +136,7 @@
     <value />
   </data>
   <data name="lblUploadInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Note&lt;/b&gt;: removing a DLL won't disable the Providers it contains until the next wiki restart,&lt;br /&gt;but uploading a new DLL will automatically load the Providers it contains.</value>
+    <value>&lt;b&gt;Note&lt;/b&gt;: removing a DLL won't disable the plugins it contains until the application is restarted. Uploading a new DLL will automatically load the plugins is contains.</value>
   </data>
   <data name="lblUploadNewDllResource1.Text" xml:space="preserve">
     <value>Upload new DLL</value>

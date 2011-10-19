@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" CodeBehind="Edit.aspx.cs" Inherits="ScrewTurn.Wiki.Edit" ValidateRequest="false" culture="auto" meta:resourcekey="PageResource2" uiculture="auto" %>
 
+<%@ Register TagPrefix="st" TagName="KeepAlive" Src="~/KeepAlive.ascx" %>
 <%@ Register TagPrefix="st" TagName="Editor" Src="~/Editor.ascx" %>
 <%@ Register TagPrefix="st" TagName="Captcha" Src="~/Captcha.ascx" %>
 <%@ Register TagPrefix="st" TagName="AttachmentManager" Src="~/AttachmentManager.ascx" %>
@@ -206,5 +207,7 @@
 	<asp:Literal ID="lblUnloadPage" runat="server" meta:resourcekey="lblUnloadPageResource1" />
 	
 	<div class="cleanup"></div>
+
+	<st:KeepAlive runat="server" ID="keepAlive" />
 
 </asp:Content>

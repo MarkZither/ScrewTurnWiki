@@ -124,7 +124,7 @@
     <value>Rebuild this index</value>
   </data>
   <data name="lblAdminHomeResource1.Text" xml:space="preserve">
-    <value>Administration Home</value>
+    <value>Administration</value>
   </data>
   <data name="lblIndexStatusResource1.Text" xml:space="preserve">
     <value>Search Index Status</value>
@@ -145,7 +145,7 @@
     <value>Provider</value>
   </data>
   <data name="lblRebuildIndexInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. After the index is rebuilt, it is recommended to restart the application.</value>
+    <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. If you experience timeouts, increase the request execution timeout in the web.config.</value>
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
     <value>Administration</value>
@@ -169,7 +169,7 @@
     <value>Orphan Pages</value>
   </data>
   <data name="lblRebuildPageLinksInfoResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding page links might take some time. Please do not close this screen while the links are being rebuilt.</value>
+    <value>&lt;b&gt;Warning&lt;/b&gt;: rebuilding page links might take some time. Please do not close this screen while the links are being rebuilt. If you experience timeouts, increase the request execution timeout in the web.config.</value>
   </data>
   <data name="lnkPagesResource1.Text" xml:space="preserve">
     <value>see Pages</value>

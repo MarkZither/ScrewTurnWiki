@@ -117,56 +117,53 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblImportExportTitleResource1.Text" xml:space="preserve">
-    <value>Import/Export</value>
+  <data name="btnExportAllResource1.Text" xml:space="preserve">
+    <value>Export Data</value>
+  </data>
+  <data name="btnExportAllResource1.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="btnExportGlobalSettingsResource1.Text" xml:space="preserve">
-    <value>Export</value>
+    <value>Export Global Settings</value>
   </data>
   <data name="btnExportGlobalSettingsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="btnExportResource1.Text" xml:space="preserve">
-    <value>Export</value>
+  <data name="btnImportBackupResource1.Text" xml:space="preserve">
+    <value>Import Data</value>
   </data>
-  <data name="btnExportResource1.ToolTip" xml:space="preserve">
-    <value>Export data from this storage provider for the selected wiki</value>
+  <data name="btnImportBackupResource1.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="btnImportGlobalSettingsResource1.Text" xml:space="preserve">
-    <value>Import</value>
+    <value>Import Global Settings</value>
   </data>
   <data name="btnImportGlobalSettingsResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="lblExportGlobalSettingsResource1.Text" xml:space="preserve">
-    <value>Export Global Settings and related data</value>
+  <data name="lblExportAllResource1.Text" xml:space="preserve">
+    <value>Export All Data From All Providers</value>
   </data>
-  <data name="lblExportGlobalSettingsResultResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblExportGlobalSettingsResultResource1.ToolTip" xml:space="preserve">
-    <value />
+  <data name="lblFilesStorageProviderResource1.Text" xml:space="preserve">
+    <value>Destination files storage provider</value>
   </data>
   <data name="lblGlobalSettingsResource1.Text" xml:space="preserve">
-    <value>Global Settings</value>
+    <value>Import and Export Global Settings</value>
+  </data>
+  <data name="lblImportBackupResource1.Text" xml:space="preserve">
+    <value>Import Data Into Selected Providers</value>
+  </data>
+  <data name="lblImportBackupResultResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblImportBackupResultResource1.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="lblImportExportStorageProviderDescriptionResource1.Text" xml:space="preserve">
-    <value>Select a wiki you want to import/export data</value>
+    <value>Select the wiki you want to work with (import or export)</value>
   </data>
-  <data name="lblImportGlobalSettingsResource1.Text" xml:space="preserve">
-    <value>Import Global Settings and relaated data</value>
-  </data>
-  <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="lblStorageProvidersResource1.Text" xml:space="preserve">
-    <value>Storage Providers</value>
-  </data>
-  <data name="lstWikiResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="upGlobalSettingsResource1.ToolTip" xml:space="preserve">
-    <value />
+  <data name="lblImportExportTitleResource1.Text" xml:space="preserve">
+    <value>Import/Export</value>
   </data>
   <data name="lblImportGlobalSettingsResultResource1.Text" xml:space="preserve">
     <value />
@@ -174,29 +171,20 @@
   <data name="lblImportGlobalSettingsResultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="btnExportAllResource1.Text" xml:space="preserve">
-    <value>Export</value>
+  <data name="lblMainDataResource1.Text" xml:space="preserve">
+    <value>Import and Export Wiki-specific Data</value>
   </data>
-  <data name="btnImportBackupResource1.Text" xml:space="preserve">
-    <value>Import</value>
-  </data>
-  <data name="lblExportAllResource1.Text" xml:space="preserve">
-    <value>Export all data from all installed providers.</value>
-  </data>
-  <data name="lblImportBackupResource1.Text" xml:space="preserve">
-    <value>Import data from a backup file into selected storage providers.</value>
-  </data>
-  <data name="lblImportBackupResultResource1.Text" xml:space="preserve">
-    <value />
+  <data name="lblPagesStorageProviderResource1.Text" xml:space="preserve">
+    <value>Destination pages storage provider</value>
   </data>
   <data name="lblRevisionsResource1.Text" xml:space="preserve">
-    <value>The number of revision of each page you want to backup.</value>
-  </data>
-  <data name="lblSelectStorageProvidersResource1.Text" xml:space="preserve">
-    <value>Select storage providers where you want to import data.</value>
+    <value>Max number of page revisions to export</value>
   </data>
   <data name="lblUploadBackupFileResource1.Text" xml:space="preserve">
-    <value>Write a URL of the backup file. It can also be a file on local machine (e.g. file:///D:/Backup.zip).</value>
+    <value>URL of the backup file (examples: 'http://server/data/wiki.zip' or 'file:///D:/Backup.zip')</value>
+  </data>
+  <data name="lblUsersStorageProviderResource1.Text" xml:space="preserve">
+    <value>Destination users storage provider</value>
   </data>
   <data name="lstFilesStorageProvidersResource1.ToolTip" xml:space="preserve">
     <value />
@@ -207,16 +195,25 @@
   <data name="lstUsersStorageProvidersResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
+  <data name="lstWikiResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PageResource1.Title" xml:space="preserve">
+    <value>Administration</value>
+  </data>
   <data name="txtBackupFileURLResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="txtBackupFileURLResource1.ToolTip" xml:space="preserve">
-    <value>Write a URL of the backup file. It can also be a file on local machine (e.g. file:///D:/Backup.zip).</value>
-  </data>
-  <data name="txtRevisionsResource1.Text" xml:space="preserve">
     <value />
   </data>
+  <data name="txtRevisionsResource1.Text" xml:space="preserve">
+    <value>100</value>
+  </data>
   <data name="txtRevisionsResource1.ToolTip" xml:space="preserve">
-    <value>The number of revision of each page you want to backup.</value>
+    <value />
+  </data>
+  <data name="upGlobalSettingsResource1.ToolTip" xml:space="preserve">
+    <value />
   </data>
 </root>

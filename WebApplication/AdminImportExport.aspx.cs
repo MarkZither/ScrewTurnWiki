@@ -44,7 +44,7 @@ namespace ScrewTurn.Wiki {
 		private void LoadWikis() {
 			List<PluginFramework.Wiki> wikis = Collectors.CollectorsBox.GlobalSettingsProvider.GetAllWikis().ToList();
 			lstWiki.Items.Clear();
-			lstWiki.Items.Add(new ListItem("- " + Properties.Messages.SelectWiki + " -", ""));
+			lstWiki.Items.Add(new ListItem(Properties.Messages.SelectWiki, ""));
 			for(int i = 0; i < wikis.Count; i++) {
 				lstWiki.Items.Add(new ListItem(wikis[i].WikiName, wikis[i].WikiName));
 			}

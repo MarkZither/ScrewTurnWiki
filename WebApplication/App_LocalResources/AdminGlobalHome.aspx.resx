@@ -124,7 +124,7 @@
     <value />
   </data>
   <data name="lblAdminHomeResource1.Text" xml:space="preserve">
-    <value>Administration Home</value>
+    <value>Global Administration</value>
   </data>
   <data name="lblAppShutdownInfoResource1.Text" xml:space="preserve">
     <value>You can force a shutdown-and-restart cycle of the Web Application. You will be asked to confirm the restart twice, then the Web Application will restart at the first subsequent request.&lt;br /&gt;&lt;b&gt;Warning&lt;/b&gt;: all the open sessions will be lost, and users may experience errors.&lt;br /&gt;&lt;b&gt;Note&lt;/b&gt;: the restart will affect only this Web Application.</value>
@@ -137,11 +137,5 @@
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
     <value>Administration</value>
-  </data>
-  <data name="lnkPagesResource1.Text" xml:space="preserve">
-    <value>see Pages</value>
-  </data>
-  <data name="lnkPagesResource1.ToolTip" xml:space="preserve">
-    <value>Go to the Pages administration tab</value>
   </data>
 </root>

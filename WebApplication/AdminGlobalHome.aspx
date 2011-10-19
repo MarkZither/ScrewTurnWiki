@@ -5,35 +5,7 @@
 
 <asp:Content ID="ctnAdminHome" ContentPlaceHolderID="cphAdmin" runat="server">
 <div class="leftaligned">
-		<script type="text/javascript">
-		<!--
-			function PreIndexRebuild() {
-				if(RequestConfirm()) {
-					document.getElementById("ProgressSpan").style["display"] = "";
-					return true;
-				}
-				else return false;
-			}
-
-			function PostIndexRebuild() {
-				document.getElementById("ProgressSpan").style["display"] = "none";
-			}
-
-			function PreLinksRebuild() {
-				if(RequestConfirm()) {
-					document.getElementById("OrphansProgressSpan").style["display"] = "";
-					return true;
-				}
-				else return false;
-			}
-
-			function PostLinksRebuild() {
-				document.getElementById("OrphansProgressSpan").style["display"] = "none";
-			}
-		// -->
-		</script>
-
-		<h2 class="sectiontitle"><asp:Literal ID="lblAdminHome" runat="server" Text="Administration Home" EnableViewState="False" meta:resourcekey="lblAdminHomeResource1" /></h2>
+		<h2 class="sectiontitle"><asp:Literal ID="lblAdminHome" runat="server" Text="Global Administration" EnableViewState="False" meta:resourcekey="lblAdminHomeResource1" /></h2>
 	
 		<p>
 			<asp:Literal ID="lblSystemStatusContent" runat="server" meta:resourcekey="lblSystemStatusContentResource1" />

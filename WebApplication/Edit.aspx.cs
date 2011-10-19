@@ -110,6 +110,8 @@ namespace ScrewTurn.Wiki {
 				// If page already exists, load the content and disable page name,
 				// otherwise pre-fill page name
 				if(currentPage != null) {
+					keepAlive.CurrentPage = currentPage.FullName;
+
 					// Look for a draft
 					PageContent draftContent = Pages.GetDraft(currentPage);
 
@@ -230,9 +232,6 @@ namespace ScrewTurn.Wiki {
 				// Display draft status
 				ManageDraft();
 			}
-
-			// Setup session refresh iframe
-			PrintSessionRefresh();
 		}
 
 		/// <summary>
@@ -268,19 +267,6 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnAutoTemplateOK_Click(object sender, EventArgs e) {
 			pnlAutoTemplate.Visible = false;
-		}
-
-		/// <summary>
-		/// Prints the session refresh code in the page.
-		/// </summary>
-		public void PrintSessionRefresh() {
-			StringBuilder sb = new StringBuilder(50);
-			sb.Append(@"<iframe src=""");
-			if(currentPage != null) sb.AppendFormat("SessionRefresh.aspx?Page={0}", Tools.UrlEncode(currentPage.FullName));
-			else sb.Append("SessionRefresh.aspx");
-			sb.Append(@""" style=""width: 1px; height: 1px; border: none;"" scrolling=""no""></iframe>");
-
-			lblSessionRefresh.Text = sb.ToString();
 		}
 
 		/// <summary>

@@ -77,7 +77,7 @@
 
 		<h2 class="separator"><asp:Literal ID="lblUploadProviders" runat="server" Text="Providers DLLs Management" EnableViewState="False" meta:resourcekey="lblUploadProvidersResource1" /></h2>
 		<div id="DllUploadContainerDiv">
-			<h4><asp:Literal ID="lblUploadNewDll" runat="server" Text="Upload new DLL" EnableViewState="False" meta:resourcekey="lblUploadNewDllResource1" /></h4>
+			<asp:Literal ID="lblUploadNewDll" runat="server" Text="Upload new DLL" EnableViewState="False" meta:resourcekey="lblUploadNewDllResource1" /><br />
 			<asp:FileUpload ID="upDll" runat="server" meta:resourcekey="upDllResource1" />
 			<asp:Button ID="btnUpload" runat="server" Text="Upload" OnClick="btnUpload_Click"
 				meta:resourcekey="btnUploadResource1" />
@@ -85,7 +85,7 @@
 			<asp:Label ID="lblUploadResult" runat="server" meta:resourcekey="lblUploadResultResource1" />
 		</div>
 		<div id="DllsListContainerDiv">
-			<h4><asp:Literal ID="lblRemoveDll" runat="server" Text="Remove DLL" EnableViewState="False" meta:resourcekey="lblRemoveDllResource1" /></h4>
+			<asp:Literal ID="lblRemoveDll" runat="server" Text="Remove DLL" EnableViewState="False" meta:resourcekey="lblRemoveDllResource1" /><br />
 			<asp:DropDownList ID="lstDlls" runat="server" 
 				OnSelectedIndexChanged="lstDlls_SelectedIndexChanged" 
 				meta:resourcekey="lstDllsResource1" AutoPostBack="True" />
@@ -96,9 +96,7 @@
 	
 		<div id="DllNoticeDiv">
 			<small>
-				<asp:Literal ID="lblUploadInfo" runat="server" EnableViewState="False"
-					Text="<b>Note</b>: removing a DLL won't disable the Providers it contains until the next wiki restart,<br />but uploading a new DLL will automatically load the Providers it contains." 
-					meta:resourcekey="lblUploadInfoResource1" />
+				<asp:Literal ID="lblUploadInfo" runat="server" EnableViewState="False" Text="<b>Note</b>: removing a DLL won't disable the plugins it contains until the application is restarted. Uploading a new DLL will automatically load the plugins is contains." meta:resourcekey="lblUploadInfoResource1" />
 			</small>
 		</div>
 	

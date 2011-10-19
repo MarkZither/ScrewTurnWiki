@@ -527,10 +527,6 @@ input.searchtextbox {
 	padding-left: 10px;
 }
 
-.ButtonsDiv.log {
-	float: right;
-}
-
 .injectedmessage {
 	display: block;
 	margin: 0px 0px 10px 0px;

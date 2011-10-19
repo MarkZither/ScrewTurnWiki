@@ -1,5 +1,6 @@
 <%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.Upload" Title="Untitled Page" Culture="auto" meta:resourcekey="PageResource1" UICulture="auto" Codebehind="Upload.aspx.cs" %>
 <%@ Register TagPrefix="st" TagName="FileManager" Src="~/FileManager.ascx" %>
+<%@ Register TagPrefix="st" TagName="KeepAlive" Src="~/KeepAlive.ascx" %>
 
 <asp:Content ID="CtnUpload" ContentPlaceHolderID="CphMasterSA" Runat="Server">
 	<h1 class="pagetitlesystem"><asp:Literal ID="lblManagementTitle" runat="server" Text="File Management" meta:resourcekey="lblManagementTitleResource1" /></h1>
@@ -8,6 +9,6 @@
 
 	<st:FileManager runat="server" ID="fileManager" />
 	
-	<iframe src="SessionRefresh.aspx" style="width: 1px; height: 1px; border: none;" scrolling="no"></iframe>
+	<st:KeepAlive runat="server" ID="keepAlive" />
 
 </asp:Content>

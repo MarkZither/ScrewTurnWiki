@@ -426,10 +426,6 @@
   <data name="ImageUrl" xml:space="preserve">
     <value>Image URL</value>
   </data>
-  <data name="InactiveUsers" xml:space="preserve">
-    <value>Inactive</value>
-    <comment>Referred to the count of inactive users, for example Users: 8 (3 inactive)</comment>
-  </data>
   <data name="InsertSnippet" xml:space="preserve">
     <value>Insert a Snippet</value>
   </data>
@@ -917,9 +913,6 @@
   </data>
   <data name="UserActivated" xml:space="preserve">
     <value>User activated</value>
-  </data>
-  <data name="UserCount" xml:space="preserve">
-    <value>User Count</value>
   </data>
   <data name="UserDeactivated" xml:space="preserve">
     <value>User deactivated</value>
@@ -1489,7 +1482,7 @@
     <value>Template saved</value>
   </data>
   <data name="SelectTemplate" xml:space="preserve">
-    <value>Select Template...</value>
+    <value>Select template...</value>
   </data>
   <data name="CouldNotRenameNamespace" xml:space="preserve">
     <value>Could not rename Namespace</value>
@@ -1739,10 +1732,10 @@
     <value>Theme Deleted</value>
   </data>
   <data name="SelectTheme" xml:space="preserve">
-    <value>Select theme</value>
+    <value>Select theme...</value>
   </data>
   <data name="SelectWiki" xml:space="preserve">
-    <value>Select a wiki</value>
+    <value>Select wiki...</value>
   </data>
   <data name="ImportedSettings" xml:space="preserve">
     <value>Settings imported succesfully</value>

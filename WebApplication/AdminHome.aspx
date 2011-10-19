@@ -4,35 +4,7 @@
 </asp:Content>
 
 <asp:Content ID="ctnAdminHome" ContentPlaceHolderID="cphAdmin" runat="server">
-	<script type="text/javascript">
-	<!--
-		function PreIndexRebuild() {
-			if(RequestConfirm()) {
-				document.getElementById("ProgressSpan").style["display"] = "";
-				return true;
-			}
-			else return false;
-		}
-
-		function PostIndexRebuild() {
-			document.getElementById("ProgressSpan").style["display"] = "none";
-		}
-
-		function PreLinksRebuild() {
-			if(RequestConfirm()) {
-				document.getElementById("OrphansProgressSpan").style["display"] = "";
-				return true;
-			}
-			else return false;
-		}
-
-		function PostLinksRebuild() {
-			document.getElementById("OrphansProgressSpan").style["display"] = "none";
-		}
-	// -->
-	</script>
-
-	<h2 class="sectiontitle"><asp:Literal ID="lblAdminHome" runat="server" Text="Administration Home" EnableViewState="False" meta:resourcekey="lblAdminHomeResource1" /></h2>
+	<h2 class="sectiontitle"><asp:Literal ID="lblAdminHome" runat="server" Text="Administration" EnableViewState="False" meta:resourcekey="lblAdminHomeResource1" /></h2>
 	
 	<h2 class="separator"><asp:Literal ID="lblMissingPages" runat="server" Text="Missing Pages" EnableViewState="False" meta:resourcekey="lblMissingPagesResource1" /></h2>
 	<asp:Repeater ID="rptPages" runat="server" OnDataBinding="rptPages_DataBinding">
@@ -89,7 +61,7 @@
 	<br /><br />
 	
 	<small><asp:Literal ID="lblRebuildPageLinksInfo" runat="server" meta:resourcekey="lblRebuildPageLinksInfoResource1"
-		Text="<b>Warning</b>: rebuilding page links might take some time. Please do not close this screen while the links are being rebuilt." 
+		Text="<b>Warning</b>: rebuilding page links might take some time. Please do not close this screen while the links are being rebuilt. If you experience timeouts, increase the request execution timeout in the web.config." 
 		EnableViewState="False" /></small>
 	<br /><br />
 	
@@ -132,7 +104,7 @@
 	</span>
 	<small>
 		<asp:Literal ID="lblRebuildIndexInfo" runat="server" 
-			Text="<b>Warning</b>: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. After the index is rebuilt, it is recommended to restart the application." 
+			Text="<b>Warning</b>: rebuilding a search index might take some time. Please do not close this screen while the index is being rebuilt. If you experience timeouts, increase the request execution timeout in the web.config." 
 			EnableViewState="False" meta:resourcekey="lblRebuildIndexInfoResource1" />
 	</small>
 

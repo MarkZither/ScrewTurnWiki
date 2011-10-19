@@ -37,13 +37,7 @@ namespace ScrewTurn.Wiki {
 
 		public void PrintSystemStatus() {
 			StringBuilder sb = new StringBuilder(500);
-			int inactive = 0;
-
-			List<UserInfo> users = Users.GetUsers(DetectWiki());
-			for(int i = 0; i < users.Count; i++) {
-				if(!users[i].Active) inactive++;
-			}
-			sb.Append(Properties.Messages.UserCount + ": <b>" + users.Count.ToString() + "</b> (" + inactive.ToString() + " " + Properties.Messages.InactiveUsers + ")<br />" + "\n");
+			
 			sb.Append(Properties.Messages.WikiVersion + ": <b>" + GlobalSettings.WikiVersion + "</b>" + "\n");
 			if(!Page.IsPostBack) {
 				sb.Append(CheckVersion());

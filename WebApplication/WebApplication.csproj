@@ -218,6 +218,13 @@
     <Compile Include="CreatePagesInBatch.aspx.designer.cs">
       <DependentUpon>CreatePagesInBatch.aspx</DependentUpon>
     </Compile>
+    <Compile Include="KeepAlive.ascx.cs">
+      <DependentUpon>KeepAlive.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="KeepAlive.ascx.designer.cs">
+      <DependentUpon>KeepAlive.ascx</DependentUpon>
+    </Compile>
     <Compile Include="MasterPageClean.master.cs">
       <DependentUpon>MasterPageClean.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1382,6 +1389,7 @@
     <Content Include="Images\Wait.gif" />
     <Content Include="JS\Readme.txt" />
     <Content Include="JS\Scripts.js" />
+    <Content Include="KeepAlive.ascx" />
     <Content Include="Language.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="NavPath.aspx" />

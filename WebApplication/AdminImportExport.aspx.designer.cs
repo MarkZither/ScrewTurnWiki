@@ -31,15 +31,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblGlobalSettings;
         
         /// <summary>
-        /// lblExportGlobalSettings control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblExportGlobalSettings;
-        
-        /// <summary>
         /// btnExportGlobalSettings control.
         /// </summary>
         /// <remarks>
@@ -47,24 +38,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnExportGlobalSettings;
-        
-        /// <summary>
-        /// lblExportGlobalSettingsResult control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblExportGlobalSettingsResult;
-        
-        /// <summary>
-        /// lblImportGlobalSettings control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblImportGlobalSettings;
         
         /// <summary>
         /// upGlobalSettings control.
@@ -94,13 +67,13 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Label lblImportGlobalSettingsResult;
         
         /// <summary>
-        /// lblStorageProviders control.
+        /// lblMainData control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblStorageProviders;
+        protected global::System.Web.UI.WebControls.Literal lblMainData;
         
         /// <summary>
         /// lblImportExportStorageProviderDescription control.
@@ -184,13 +157,13 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.TextBox txtBackupFileURL;
         
         /// <summary>
-        /// lblSelectStorageProviders control.
+        /// lblPagesStorageProvider control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblSelectStorageProviders;
+        protected global::System.Web.UI.WebControls.Literal lblPagesStorageProvider;
         
         /// <summary>
         /// lstPagesStorageProviders control.
@@ -202,6 +175,15 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.DropDownList lstPagesStorageProviders;
         
         /// <summary>
+        /// lblUsersStorageProvider control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblUsersStorageProvider;
+        
+        /// <summary>
         /// lstUsersStorageProviders control.
         /// </summary>
         /// <remarks>
@@ -209,6 +191,15 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList lstUsersStorageProviders;
+        
+        /// <summary>
+        /// lblFilesStorageProvider control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblFilesStorageProvider;
         
         /// <summary>
         /// lstFilesStorageProviders control.

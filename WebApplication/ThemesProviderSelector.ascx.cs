@@ -8,6 +8,7 @@ using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki;
 
 namespace ScrewTurn.Wiki {
+
 	public partial class ThemesProviderSelector : System.Web.UI.UserControl {
 
 		private ProviderType providerType = ProviderType.Themes;

@@ -7,7 +7,7 @@
 
 	<div id="newAdminPassForm" runat="server">
 		<asp:Literal ID="lblDescriptionPwd" runat="server" meta:resourcekey="lblDescriptionPwdResource1"
-			Text="This is the first time you access your wiki. You must configure the password for the built-in admin account. Make sure you use very strong password as the built-in admin account can perform any operation in the wiki.">
+			Text="This is the first time you access your wiki. You must configure the password for the built-in 'admin' account. Make sure you use a very strong password as the built-in 'admin' account can perform any operation in the wiki.">
 		</asp:Literal>
 		<br /><br />
 		<table id="tbAdminPass" runat="server">
