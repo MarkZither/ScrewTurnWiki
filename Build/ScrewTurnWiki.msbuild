@@ -51,9 +51,9 @@
 		<Delete Files=".\Artifacts\WebApplication\Web.SqlServer.config" />
 		
 		<!-- Release Web.config, SQL Server -->
-		<Copy Condition="'$(Configuration)' == 'Release'"
-			SourceFiles=".\Artifacts\WebApplication-SqlServer\Web.SqlServer.config" DestinationFiles=".\Artifacts\WebApplication-SqlServer\Web.config" />
+		<Copy SourceFiles=".\Artifacts\WebApplication-SqlServer\Web.SqlServer.config" DestinationFiles=".\Artifacts\WebApplication-SqlServer\Web.config" />
 		<Delete Files=".\Artifacts\WebApplication-SqlServer\Web.Azure.config" />
+		<Delete Files=".\Artifacts\WebApplication-SqlServer\Web.SqlServer.config" />
 		
 		<!-- Windows Azure Package -->
 		<Copy SourceFiles="..\WebApplication\Web.config" DestinationFiles="..\WebApplication\Web.config.bak" />
