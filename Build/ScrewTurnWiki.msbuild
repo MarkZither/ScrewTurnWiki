@@ -3,15 +3,16 @@
 
 	<PropertyGroup>
 		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+
+		<SolutionRoot>$([System.IO.Path]::GetFullPath('..\'))</SolutionRoot>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<SolutionRoot Include=".." />
 		<SolutionFile Include="..\ScrewTurnWiki.sln" />
 		<AzureProjectFile Include="..\Azure\Azure.ccproj" />
 		
 		<BuildTemp Include=".\Temp\" />
-		
+
 		<Artifacts Include=".\Artifacts\" />
 		<WebAppOutput Include=".\Artifacts\WebApplication\" />
 		<WebAppOutput_PublicDirectory Include=".\Artifacts\WebApplication\public\" />
@@ -34,7 +35,7 @@
 	</Target>
 
 	<Target Name="Compile" DependsOnTargets="Init">
-		<MSBuild Projects="@(SolutionFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration)" />
+		<MSBuild Projects="@(SolutionFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration);SolutionDir=$(SolutionRoot)" />
 		
 		<!-- Web Application -->
 		<CreateItem Include="Temp\_PublishedWebsites\WebApplication\**\*.*" Exclude="**\*.xml">
@@ -45,6 +46,13 @@
 		
 		<!-- Web Application, SQL Server -->
 		<Copy SourceFiles="@(BuiltWebApp)" DestinationFolder=".\Artifacts\WebApplication-SqlServer\%(RecursiveDir)" />
+
+		<!-- SQL Server CE Native Assemblies (not needed on Azure) -->
+		<CreateItem Include="..\References\Lib\SqlServerCe\**\*.*">
+			<Output ItemName="SqlCeAssemblies" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(SqlCeAssemblies)" DestinationFolder=".\Artifacts\WebApplication\bin\%(RecursiveDir)" />
+		<Copy SourceFiles="@(SqlCeAssemblies)" DestinationFolder=".\Artifacts\WebApplication-SqlServer\bin\%(RecursiveDir)" />
 		
 		<!-- Release Web.config, files -->
 		<Delete Files=".\Artifacts\WebApplication\Web.Azure.config" />
@@ -58,7 +66,7 @@
 		<!-- Windows Azure Package -->
 		<Copy SourceFiles="..\WebApplication\Web.config" DestinationFiles="..\WebApplication\Web.config.bak" />
 		<Copy SourceFiles="..\WebApplication\Web.Azure.config" DestinationFiles="..\WebApplication\Web.config" />
-		<MSBuild Projects="@(AzureProjectFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration)" Targets="Publish" />
+		<MSBuild Projects="@(AzureProjectFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration);SolutionDir=$(SolutionRoot)" Targets="Publish" />
 		<Copy SourceFiles="..\WebApplication\Web.config.bak" DestinationFiles="..\WebApplication\Web.config" />
 		<CreateItem Include="Temp\Publish\*">
 			<Output ItemName="BuiltAzurePackage" TaskParameter="Include" />
