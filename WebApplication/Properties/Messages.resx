@@ -1572,7 +1572,7 @@
     <value>Up-to-date</value>
   </data>
   <data name="SelectAndDelete" xml:space="preserve">
-    <value>Select and delete</value>
+    <value>Select and delete...</value>
   </data>
   <data name="NoBr" xml:space="preserve">
     <value>NoBR tag</value>

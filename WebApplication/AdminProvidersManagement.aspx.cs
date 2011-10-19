@@ -30,8 +30,6 @@ namespace ScrewTurn.Wiki {
 				rptProviders.DataBind();
 			}
 		}
-		
-		#region DLLs
 
 		protected void rptProviders_DataBinding(object sender, EventArgs e) {
 			IFormatterProviderV40[] plugins = Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(currentWiki);
@@ -105,7 +103,7 @@ namespace ScrewTurn.Wiki {
 		private void LoadDlls() {
 			string[] files = GlobalSettings.Provider.ListPluginAssemblies();
 			lstDlls.Items.Clear();
-			lstDlls.Items.Add(new ListItem("- " + Properties.Messages.SelectAndDelete + " -", ""));
+			lstDlls.Items.Add(new ListItem(Properties.Messages.SelectAndDelete, ""));
 			for(int i = 0; i < files.Length; i++) {
 				lstDlls.Items.Add(new ListItem(files[i], files[i]));
 			}
@@ -164,8 +162,6 @@ namespace ScrewTurn.Wiki {
 				rptProviders.DataBind();
 			}
 		}
-
-		#endregion
 
 		/// <summary>
 		/// Detects whether a users storage provider fully supports writing to all managed data.

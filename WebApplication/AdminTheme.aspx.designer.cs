@@ -40,15 +40,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblSelectProvider;
         
         /// <summary>
-        /// lblUploadNewTheme control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblUploadNewTheme;
-        
-        /// <summary>
         /// lstProvThemeSelectorUpload control.
         /// </summary>
         /// <remarks>
@@ -56,6 +47,15 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList lstProvThemeSelectorUpload;
+        
+        /// <summary>
+        /// lblThemeZip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblThemeZip;
         
         /// <summary>
         /// upTheme control.
@@ -101,15 +101,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal lblSelectProvider2;
-        
-        /// <summary>
-        /// lblDeleteTheme control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lblDeleteTheme;
         
         /// <summary>
         /// provThemeSelector control.

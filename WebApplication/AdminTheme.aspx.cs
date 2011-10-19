@@ -33,10 +33,9 @@ namespace ScrewTurn.Wiki {
 
 		protected void providerThemeSelector_SelectedIndexChanged(object sender, EventArgs e) {
 			if(SelectedProviderThemesChanged != null) SelectedProviderThemesChanged(sender, e);
-			else fillThemeList(SelectedProviderThemeDelete);
+			else FillThemeList(SelectedProviderThemeDelete);
 		}
 
-		# region Themes
 		private void LoadThemes() {
 			lstProvThemeSelectorUpload.Items.Clear();
 			foreach(IProviderV40 themesProv in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(currentWiki)) {
@@ -47,11 +46,11 @@ namespace ScrewTurn.Wiki {
 			foreach(IProviderV40 themesProvider in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(currentWiki)) {
 				provThemeSelector.Items.Add(new ListItem(themesProvider.Information.Name, themesProvider.ToString()));
 			}
-			fillThemeList(SelectedProviderThemeDelete);
+			FillThemeList(SelectedProviderThemeDelete);
 
 		}
 
-		private void fillThemeList(string provider) {
+		private void FillThemeList(string provider) {
 			lstThemes.Enabled = true;
 			lstThemes.Items.Clear();
 			if(provThemeSelector.SelectedIndex != -1) {
@@ -132,7 +131,6 @@ namespace ScrewTurn.Wiki {
 			List<string> themes = Themes.ListThemes(currentWiki, SelectedProviderUpload);
 			bool exist = false;
 			foreach(string th in themes) {
-
 				if(th.Replace(".zip", "") == file.Replace(".zip", "")) exist = true;
 			}
 			if(exist) {
@@ -152,10 +150,6 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-
-		protected void lstThemes_SelectedIndexChanged(object sender, EventArgs e) {
-		}
-
 		protected void btnDeleteTheme_Click(object sender, EventArgs e) {
 			if(lstThemes.SelectedIndex != 0) {
 				if(Themes.DeleteTheme(currentWiki, provThemeSelector.SelectedValue + "|" + lstThemes.SelectedValue)) {
@@ -173,6 +167,7 @@ namespace ScrewTurn.Wiki {
 				lblThemeResult.Text = Properties.Messages.CouldNotDeleteTheme;
 			}
 		}
-		#endregion;
+
 	}
+
 }

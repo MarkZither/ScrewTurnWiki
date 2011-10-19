@@ -3931,7 +3931,7 @@ namespace ScrewTurn.Wiki.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select and delete.
+        ///   Looks up a localized string similar to Select and delete....
         /// </summary>
         public static string SelectAndDelete {
             get {

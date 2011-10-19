@@ -11,7 +11,7 @@
 		<br />
 		
 		<div id="ProvidersListContainerDiv">
-			<asp:Repeater ID="rptProviders" runat="server" OnDataBinding="rptProviders_DataBinding" >
+			<asp:Repeater ID="rptProviders" runat="server" OnDataBinding="rptProviders_DataBinding">
 				<HeaderTemplate>
 					<table cellpadding="0" cellspacing="0" class="generic">
 						<thead>
