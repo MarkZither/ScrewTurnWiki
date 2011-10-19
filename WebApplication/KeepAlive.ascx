@@ -1,3 +1,20 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="KeepAlive.ascx.cs" Inherits="ScrewTurn.Wiki.KeepAlive" %>
 
-<iframe src="SessionRefresh.aspx?Page=<%= CurrentPage %>" style="width: 1px; height: 1px; border: none;" scrolling="no"></iframe>
+<script type="text/javascript">
+// <![CDATA[
+
+	function Refresh() {
+		$.ajax({
+			url: 'SessionRefresh.aspx?Page=' + encodeURIComponent('<%= CurrentPage != null ? CurrentPage : "" %>'),
+			success: function () {
+				setTimeout('Refresh()', <%= ScrewTurn.Wiki.Collisions.EditingSessionTimeout * 1000 %>);
+			}
+		});
+	}
+
+	$(function () {
+		Refresh();
+	});
+
+// ]]>
+</script>
