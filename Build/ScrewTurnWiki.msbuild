@@ -3,8 +3,7 @@
 
 	<PropertyGroup>
 		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
-
-		<SolutionRoot>$([System.IO.Path]::GetFullPath('..\'))</SolutionRoot>
+		<PostBuildEvent></PostBuildEvent>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -35,7 +34,7 @@
 	</Target>
 
 	<Target Name="Compile" DependsOnTargets="Init">
-		<MSBuild Projects="@(SolutionFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration);SolutionDir=$(SolutionRoot)" />
+		<MSBuild Projects="@(SolutionFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration);PostBuildEvent=$(PostBuildEvent)" />
 		
 		<!-- Web Application -->
 		<CreateItem Include="Temp\_PublishedWebsites\WebApplication\**\*.*" Exclude="**\*.xml">
@@ -66,7 +65,7 @@
 		<!-- Windows Azure Package -->
 		<Copy SourceFiles="..\WebApplication\Web.config" DestinationFiles="..\WebApplication\Web.config.bak" />
 		<Copy SourceFiles="..\WebApplication\Web.Azure.config" DestinationFiles="..\WebApplication\Web.config" />
-		<MSBuild Projects="@(AzureProjectFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration);SolutionDir=$(SolutionRoot)" Targets="Publish" />
+		<MSBuild Projects="@(AzureProjectFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration);PostBuildEvent=$(PostBuildEvent)" Targets="Publish" />
 		<Copy SourceFiles="..\WebApplication\Web.config.bak" DestinationFiles="..\WebApplication\Web.config" />
 		<CreateItem Include="Temp\Publish\*">
 			<Output ItemName="BuiltAzurePackage" TaskParameter="Include" />
