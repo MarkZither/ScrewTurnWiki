@@ -29,7 +29,7 @@
 			
 			var html = "<a class=\"pagelink\" ";
 			if(IsChecked("chkPageNW")) html += "target=\"_blank\" ";
-			html += "href=\"" + name + ".ashx\" ";
+			html += "href=\"" + name + PageExtension + "\" ";
 			html += "title=\"" + title + "\">" + title + "</a>";
 			
 			Execute("insertHTML('" + html + "');");

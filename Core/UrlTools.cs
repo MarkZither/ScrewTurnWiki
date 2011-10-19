@@ -31,13 +31,13 @@ namespace ScrewTurn.Wiki {
 			// Extract the physical page name, e.g. MainPage, Edit or Category
 			string pageName = Path.GetFileNameWithoutExtension(physicalPath);
 			// Exctract the extension, e.g. .ashx or .aspx
-			string ext = Path.GetExtension(HttpContext.Current.Request.PhysicalPath).ToLowerInvariant();
+			string ext = (Path.GetExtension(HttpContext.Current.Request.PhysicalPath) + "").ToLowerInvariant();
 			// Remove trailing dot, .ashx -> ashx
 			if(ext.Length > 0) ext = ext.Substring(1);
 
 			// IIS7+Integrated Pipeline handles all requests through the ASP.NET engine
 			// All non-interesting files are not processed, such as GIF, CSS, etc.
-			if(ext != "ashx" && ext != "aspx") return;
+			if(ext.Length > 0 && ext != "ashx" && ext != "aspx") return;
 
 			// Extract the current namespace, if any
 			string nspace = GetCurrentNamespace() + "";
@@ -147,7 +147,7 @@ namespace ScrewTurn.Wiki {
 
 			if(nspace != null) {
 				string tempStringLower = tempString.ToLowerInvariant();
-				if((tempStringLower.Contains(".ashx") || tempStringLower.Contains(".aspx")) && !tempString.StartsWith(Tools.UrlEncode(nspace) + ".")) temp.Insert(0, nspace + ".");
+				if((tempStringLower.Contains(GlobalSettings.PageExtension) || tempStringLower.Contains(".aspx")) && !tempString.StartsWith(Tools.UrlEncode(nspace) + ".")) temp.Insert(0, nspace + ".");
 			}
 
 			return temp.ToString();

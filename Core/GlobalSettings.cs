@@ -1,13 +1,14 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Web;
 using System.Web.Configuration;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.Plugins.AzureStorage;
-using System.Security.Cryptography;
 
 namespace ScrewTurn.Wiki {
 
@@ -26,12 +27,20 @@ namespace ScrewTurn.Wiki {
 		internal static bool CanOverridePublicDirectory = true;
 		private static string _overriddenPublicDirectory = null;
 
+		private static string _pageExtension = ".ashx";
+
 		/// <summary>
 		/// Initializes the <see cref="GlobalSettings"/> class.
 		/// </summary>
 		static GlobalSettings() {
 			var properties = typeof(GlobalSettings).GetProperties();
 			_allKeys = new List<string>((from p in properties where p.CanRead && p.CanWrite select p.Name).ToList());
+
+			try {
+				// try/catch for execution outside web runtime
+				if(HttpRuntime.UsingIntegratedPipeline) _pageExtension = "";
+			}
+			catch { }
 		}
 
 		/// <summary>
@@ -122,7 +131,7 @@ namespace ScrewTurn.Wiki {
 		/// Gets the extension used for Pages, including the dot.
 		/// </summary>
 		public static string PageExtension {
-			get { return ".ashx"; }
+			get { return _pageExtension; }
 		}
 
 		/// <summary>

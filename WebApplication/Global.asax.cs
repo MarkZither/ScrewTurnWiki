@@ -76,13 +76,13 @@ namespace ScrewTurn.Wiki {
 			// Extract the physical page name, e.g. MainPage, Edit or Category
 			string pageName = Path.GetFileNameWithoutExtension(physicalPath);
 			// Exctract the extension, e.g. .ashx or .aspx
-			string ext = Path.GetExtension(HttpContext.Current.Request.PhysicalPath).ToLowerInvariant();
+			string ext = (Path.GetExtension(HttpContext.Current.Request.PhysicalPath) + "").ToLowerInvariant();
 			// Remove trailing dot, .ashx -> ashx
 			if(ext.Length > 0) ext = ext.Substring(1);
 
 			// IIS7+Integrated Pipeline handles all requests through the ASP.NET engine
 			// All non-interesting files are not processed, such as GIF, CSS, etc.
-			if(ext == "ashx" || ext == "aspx") {
+			if(ext.Length == 0 || ext == "ashx" || ext == "aspx") {
 				if(!Request.PhysicalPath.ToLowerInvariant().Contains("createmasterpassword.aspx")) {
 					if(Application[MasterPasswordOk] == null) {
 						Application.Lock();

@@ -27,6 +27,10 @@ namespace ScrewTurn.Wiki {
 			l.Text = Tools.GetIncludes(currentWiki, DetectNamespace());
 			Page.Header.Controls.AddAt(0, l);
 
+			l = new Literal();
+			l.Text = string.Format("<script type=\"text/javascript\"><!--\nvar PageExtension = \"{0}\";\n// --></script>", GlobalSettings.PageExtension);
+			Page.Header.Controls.AddAt(1, l);
+
 			if(string.IsNullOrEmpty(Request["Feature"])) return;
 
 			// Get instance of Current Page, if any
