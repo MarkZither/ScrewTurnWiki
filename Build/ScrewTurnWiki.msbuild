@@ -90,6 +90,7 @@
 		<Copy SourceFiles="@(BuiltTests)" DestinationFolder=".\Artifacts\Tests\" />
 		<Copy Condition="'$(AzureTestConfig)' == ''" SourceFiles="..\AzureStorageProviders-Tests\App.config" DestinationFiles=".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll.config" />
 		<Copy Condition="'$(AzureTestConfig)' != ''" SourceFiles="$(AzureTestConfig)" DestinationFiles=".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.AzureStorage.Tests.dll.config" />
+		<Copy SourceFiles="@(SqlCeAssemblies)" DestinationFolder=".\Artifacts\Tests\%(RecursiveDir)" />
 		
 		<!-- Delete Temp directory -->
 		<RemoveDir Directories="@(BuildTemp)" />

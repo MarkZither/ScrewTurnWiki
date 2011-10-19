@@ -2887,6 +2887,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /S /R "$(SolutionDir)References\Lib\SqlServerCe\*.*" "$(TargetDir)\*.*"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /S /R "$(SolutionDir)References\Lib\SqlServerCe\*.*" "$(TargetDir)\*.*" 2&gt;nul 1&gt;nul
+exit 0</PostBuildEvent>
   </PropertyGroup>
 </Project>
