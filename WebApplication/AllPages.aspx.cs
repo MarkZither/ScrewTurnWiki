@@ -116,6 +116,9 @@ namespace ScrewTurn.Wiki {
 						}
 						Array.Sort(pages as PageContent[], new PageNameComparer());
 					}
+					else {
+						pages = new PageInfo[0];
+					}
 				}
 			}
 			else {

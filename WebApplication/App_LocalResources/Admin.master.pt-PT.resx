@@ -120,12 +120,6 @@
   <data name="lblAdminTitleResource1.Text" xml:space="preserve">
     <value>Administração</value>
   </data>
-  <data name="lblBrowserSupportResource1.Text" xml:space="preserve">
-    <value>O Browser pode apresentar problemas com esta Página (sugere-se o Internet Explorer 7+ e Firefox 3+).</value>
-  </data>
-  <data name="lblBrowserSupportResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="lblHomeLinkResource1.Text" xml:space="preserve">
     <value>Página Principal</value>
   </data>
