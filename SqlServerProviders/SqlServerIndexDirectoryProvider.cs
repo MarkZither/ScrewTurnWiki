@@ -63,7 +63,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 		/// Gets the Information about the Provider.
 		/// </summary>
 		public override ComponentInformation Information {
-			get { return new ComponentInformation("Sql Server IndexDirectory Provider", "Threeplicate Srl", "", "", ""); }
+			get { return new ComponentInformation("Sql Server IndexDirectory Provider", "Threeplicate Srl", "4.0.5.143", "http://www.screwturn.eu", null); }
 		}
 
 		/// <summary>

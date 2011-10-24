@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 	/// </summary>
 	public class SqlServerGlobalSettingsStorageProvider : SqlGlobalSettingsStorageProviderBase {
 
-		private readonly ComponentInformation info = new ComponentInformation("SQL Server Global Settings Storage Provider", "Threeplicate Srl", "4.0.1.71", "http://www.screwturn.eu", null);
+		private readonly ComponentInformation info = new ComponentInformation("SQL Server Global Settings Storage Provider", "Threeplicate Srl", "4.0.5.143", "http://www.screwturn.eu", null);
 
 		private readonly SqlServerCommandBuilder commandBuilder = new SqlServerCommandBuilder();
 

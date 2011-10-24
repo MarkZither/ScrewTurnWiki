@@ -12,8 +12,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 	/// </summary>
 	public class FilesStorageProvider : ProviderBase, IFilesStorageProviderV40 {
 
-		private readonly ComponentInformation info = new ComponentInformation("Local Files Provider",
-			"Threeplicate Srl", "4.0.2.76", "http://www.screwturn.eu", null);
+		private readonly ComponentInformation info = new ComponentInformation("Local Files Provider", "Threeplicate Srl", "4.0.5.143", "http://www.screwturn.eu", null);
 
 		// The following strings MUST terminate with DirectorySeparatorPath in order to properly work
 		// in BuildFullPath method

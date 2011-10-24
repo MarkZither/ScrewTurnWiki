@@ -409,7 +409,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteScalar<int>(command, -1, false);
 
-			int maxChanges = int.Parse(host.GetSettingValue(wiki, SettingName.MaxRecentChanges));
+			int maxChanges = int.Parse(host.GetSettingValue(SettingName.MaxRecentChanges));
 
 			if(rows > maxChanges) {
 				// Remove 10% of old changes to avoid 1-by-1 deletion every time a change is made

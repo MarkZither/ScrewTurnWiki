@@ -259,7 +259,7 @@ namespace ScrewTurn.Wiki {
 							bool d = provider.DeleteDirectory(item);
 
 							if(d) {
-								Host.Instance.OnDirectoryActivity(currentWiki, provider.GetType().FullName,
+								Host.Instance.OnDirectoryActivity(provider.GetType().FullName,
 									item, null, FileActivity.DirectoryDeleted);
 							}
 						}
@@ -270,7 +270,7 @@ namespace ScrewTurn.Wiki {
 							bool d = provider.DeleteFile(item);
 
 							if(d) {
-								Host.Instance.OnFileActivity(currentWiki, provider.GetType().FullName,
+								Host.Instance.OnFileActivity(provider.GetType().FullName,
 									item, null, FileActivity.FileDeleted);
 
 								// Unindex file content
@@ -484,7 +484,7 @@ namespace ScrewTurn.Wiki {
 					done = provider.RenameDirectory(CurrentDirectory + lblItem.Text, CurrentDirectory + txtNewName.Text);
 
 					if(done) {
-						Host.Instance.OnDirectoryActivity(currentWiki, provider.GetType().FullName,
+						Host.Instance.OnDirectoryActivity(provider.GetType().FullName,
 							CurrentDirectory + txtNewName.Text, CurrentDirectory + lblItem.Text, FileActivity.DirectoryRenamed);
 					}
 				}
@@ -510,7 +510,7 @@ namespace ScrewTurn.Wiki {
 						done = provider.RenameFile(CurrentDirectory + lblItem.Text, CurrentDirectory + txtNewName.Text);
 
 						if(done) {
-							Host.Instance.OnFileActivity(currentWiki, provider.GetType().FullName,
+							Host.Instance.OnFileActivity(provider.GetType().FullName,
 								CurrentDirectory + txtNewName.Text, CurrentDirectory + lblItem.Text, FileActivity.FileRenamed);
 
 							SearchClass.RenameFile(currentWiki, provider.GetType().FullName + "|" + CurrentDirectory + lblItem.Text, provider.GetType().FullName + "|" + CurrentDirectory + txtNewName.Text);
@@ -558,7 +558,7 @@ namespace ScrewTurn.Wiki {
 				else {
 					txtNewDirectoryName.Text = "";
 
-					Host.Instance.OnDirectoryActivity(currentWiki, provider.GetType().FullName,
+					Host.Instance.OnDirectoryActivity(provider.GetType().FullName,
 						CurrentDirectory + txtNewDirectoryName.Text + "/", null, FileActivity.DirectoryCreated);
 				}
 				rptItems.DataBind();
@@ -603,7 +603,7 @@ namespace ScrewTurn.Wiki {
 								lblUploadResult.CssClass = "resulterror";
 							}
 							else {
-								Host.Instance.OnFileActivity(currentWiki, provider.GetType().FullName,
+								Host.Instance.OnFileActivity(provider.GetType().FullName,
 									CurrentDirectory + fileUpload.FileName, null, FileActivity.FileUploaded);
 
 								// If overwrite remove old indexed document

@@ -58,7 +58,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders.Tests {
 			command.CommandText = "delete from [OutgoingLink];";
 			command.ExecuteNonQuery();
 
-			command.CommandText = "delete from [PLuginStatus];";
+			command.CommandText = "delete from [PluginStatus];";
 			command.ExecuteNonQuery();
 
 			command.CommandText = "delete from [RecentChange];";

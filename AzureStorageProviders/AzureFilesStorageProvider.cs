@@ -716,7 +716,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// Gets the Information about the Provider.
 		/// </summary>
 		public ComponentInformation Information {
-			get { return new ComponentInformation("Azure Blob Storage Files Storage Provider", "Threeplicate Srl", "4.0.1.71", "http://www.screwturn.eu", null); }
+			get { return new ComponentInformation("Azure Blob Storage Files Storage Provider", "Threeplicate Srl", "4.0.5.143", "http://www.screwturn.eu", null); }
 		}
 
 		/// <summary>

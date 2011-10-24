@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders {
 	/// </summary>
 	public class SqlCEPagesStorageProvider : SqlPagesStorageProviderBase, IPagesStorageProviderV40 {
 
-		private readonly ComponentInformation info = new ComponentInformation("SQL CE Pages Storage Provider", "Threeplicate Srl", "4.0.2.76", "http://www.screwturn.eu", null);
+		private readonly ComponentInformation info = new ComponentInformation("SQL CE Pages Storage Provider", "Threeplicate Srl", "4.0.5.143", "http://www.screwturn.eu", null);
 
 		private readonly SqlCECommandBuilder commandBuilder = new SqlCECommandBuilder();
 

@@ -393,7 +393,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 			try {
 				var query = (from e in _context.CreateQuery<RecentChangesEntity>(RecentChangesTable).AsTableServiceQuery()
 							 where e.PartitionKey.Equals(_wiki)
-							 select e).Take((int)(int.Parse(_host.GetSettingValue(_wiki, SettingName.MaxRecentChanges)) * 0.90)).AsTableServiceQuery();
+							 select e).Take((int)(int.Parse(_host.GetSettingValue(SettingName.MaxRecentChanges)) * 0.90)).AsTableServiceQuery();
 				IList<RecentChangesEntity> recentChangesEntities = QueryHelper<RecentChangesEntity>.All(query);
 
 				List<RecentChange> recentChanges = new List<RecentChange>(recentChangesEntities.Count);
@@ -723,7 +723,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// Gets the Information about the Provider.
 		/// </summary>
 		public ComponentInformation Information {
-			get { return new ComponentInformation("AzureTableStorage Settings Provider", "Threeplicate Srl","4.0.1.71", "http://www.screwturn.eu", null); }
+			get { return new ComponentInformation("AzureTableStorage Settings Provider", "Threeplicate Srl","4.0.5.143", "http://www.screwturn.eu", null); }
 		}
 
 		/// <summary>

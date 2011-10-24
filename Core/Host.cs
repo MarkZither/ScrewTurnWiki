@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki {
 		private static Host instance;
 
 		/// <summary>
-		/// Gets or sets the singleton instance of the <b>Host</b> object.
+		/// Gets or sets the singleton instance of the <see cref="Host"/> object.
 		/// </summary>
 		public static Host Instance {
 			get {
@@ -31,12 +31,20 @@ namespace ScrewTurn.Wiki {
 		private Dictionary<string, HtmlHeadContentItem> _htmlHeadContent;
 
 		/// <summary>
-		/// Initializes a new instance of the <b>PluginHost</b> class.
+		/// Initializes a new instance of the <see cref="Host"/> class.
 		/// </summary>
 		public Host() {
 			_customSpecialTags = new Dictionary<string, CustomToolbarItem>(5);
 			_requestHandlers = new Dictionary<string, RequestHandlerRegistryEntry>(5);
 			_htmlHeadContent = new Dictionary<string, HtmlHeadContentItem>(5);
+		}
+
+		/// <summary>
+		/// Gets the current wiki.
+		/// </summary>
+		/// <returns>The current wiki.</returns>
+		public string GetCurrentWiki() {
+			return Tools.DetectCurrentWiki();
 		}
 
 		/// <summary>
@@ -147,10 +155,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the values of the Settings in the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The Setting's Name.</param>
 		/// <returns>The Setting's value.</returns>
-		public string GetSettingValue(string wiki, SettingName name) {
+		public string GetSettingValue(SettingName name) {
+			string wiki = GetCurrentWiki();
+
 			switch(name) {
 				case SettingName.MainUrl:
 					return Settings.GetMainUrl(wiki);
@@ -207,23 +216,25 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the list of the Users.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The users.</returns>
-		public UserInfo[] GetUsers(string wiki) {
+		public UserInfo[] GetUsers() {
+			string wiki = GetCurrentWiki();
+
 			return Users.GetUsers(wiki).ToArray();
 		}
 
 		/// <summary>
 		/// Finds a user by username, properly handling Users Storage Providers.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="username">The username.</param>
 		/// <returns>The <see cref="T:UserInfo"/>, or <c>null</c> if no users are found.</returns>
 		/// <exception cref="ArgumentNullException">If <b>username</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>username</b> is empty.</exception>
-		public UserInfo FindUser(string wiki, string username) {
+		public UserInfo FindUser(string username) {
 			if(username == null) throw new ArgumentNullException("username");
 			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
+
+			string wiki = GetCurrentWiki();
 
 			return Users.FindUser(wiki, username);
 		}
@@ -231,34 +242,37 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the authenticated user in the current session, if any.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The authenticated user, or <c>null</c> if no user is authenticated.</returns>
 		/// <remarks>If the built-it <i>admin</i> user is authenticated, the returned user 
 		/// has <i>admin</i> as Username.</remarks>
-		public UserInfo GetCurrentUser(string wiki) {
+		public UserInfo GetCurrentUser() {
+			string wiki = GetCurrentWiki();
+
 			return SessionFacade.GetCurrentUser(wiki);
 		}
 
 		/// <summary>
 		/// Gets the list of the user groups.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The groups.</returns>
-		public UserGroup[] GetUserGroups(string wiki) {
+		public UserGroup[] GetUserGroups() {
+			string wiki = GetCurrentWiki();
+
 			return Users.GetUserGroups(wiki).ToArray();
 		}
 
 		/// <summary>
 		/// Finds a user group by name.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The name.</param>
 		/// <returns>The <see cref="T:UserGroup "/>, or <c>null</c> if no groups are found.</returns>
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
-		public UserGroup FindUserGroup(string wiki, string name) {
+		public UserGroup FindUserGroup(string name) {
 			if(name == null) throw new ArgumentNullException("name");
 			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+
+			string wiki = GetCurrentWiki();
 
 			return Users.FindUserGroup(wiki, name);
 		}
@@ -266,16 +280,18 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Checks whether an action is allowed for a global resource in the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="action">The action (see <see cref="Actions.ForGlobals"/> class)</param>
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
-		public bool CheckActionForGlobals(string wiki, string action, UserInfo user) {
+		public bool CheckActionForGlobals(string action, UserInfo user) {
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-						var temp = user != null ? user : Users.GetAnonymousAccount(wiki);
+
+			string wiki = GetCurrentWiki();
+
+			var temp = user != null ? user : Users.GetAnonymousAccount(wiki);
 			
 			AuthChecker authChecker = new AuthChecker(Collectors.CollectorsBox.GetSettingsProvider(wiki));
 			return authChecker.CheckActionForGlobals(action, temp.Username, temp.Groups);
@@ -284,16 +300,17 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Checks whether an action is allowed for a namespace in the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <param name="action">The action (see <see cref="Actions.ForNamespaces"/> class)</param>
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
-		public bool CheckActionForNamespace(string wiki, NamespaceInfo nspace, string action, UserInfo user) {
+		public bool CheckActionForNamespace(NamespaceInfo nspace, string action, UserInfo user) {
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
+
+			string wiki = GetCurrentWiki();
 
 			var temp = user != null ? user : Users.GetAnonymousAccount(wiki);
 			
@@ -304,18 +321,19 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Checks whether an action is allowed for a page in the given page.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="pageFullName">The page full name.</param>
 		/// <param name="action">The action (see <see cref="Actions.ForPages"/> class)</param>
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b>, <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
-		public bool CheckActionForPage(string wiki, string pageFullName, string action, UserInfo user) {
+		public bool CheckActionForPage(string pageFullName, string action, UserInfo user) {
 			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(pageFullName.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
+
+			string wiki = GetCurrentWiki();
 
 			var temp = user != null ? user : Users.GetAnonymousAccount(wiki);
 			
@@ -326,17 +344,18 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Checks whether an action is allowed for a directory in the given wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="directory">The directory.</param>
 		/// <param name="action">The action (see <see cref="Actions.ForDirectories"/>).</param>
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the action is allowed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>directory</b>, <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
-		public bool CheckActionForDirectory(string wiki, StDirectoryInfo directory, string action, UserInfo user) {
+		public bool CheckActionForDirectory(StDirectoryInfo directory, string action, UserInfo user) {
 			if(directory == null) throw new ArgumentNullException("directory");
 			if(action == null) throw new ArgumentNullException("action");
 			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
+
+			string wiki = GetCurrentWiki();
 
 			var temp = user != null ? user : Users.GetAnonymousAccount(wiki);
 			
@@ -347,76 +366,75 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the theme in use for a namespace in a wiki.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The theme.</returns>
-		public string GetTheme(string wiki, NamespaceInfo nspace) {
-			return Settings.GetTheme(wiki, nspace != null ? nspace.Name : null);
-		}
+		public string GetTheme(NamespaceInfo nspace) {
+			string wiki = GetCurrentWiki();
 
-		/// <summary>
-		/// Gets all the wikis in the system.
-		/// </summary>
-		/// <returns>The wikis.</returns>
-		public ScrewTurn.Wiki.PluginFramework.Wiki[] GetWikis() {
-			return GlobalSettings.Provider.GetAllWikis();
+			return Settings.GetTheme(wiki, nspace != null ? nspace.Name : null);
 		}
 
 		/// <summary>
 		/// Gets the list of the namespaces.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The namespaces.</returns>
-		public NamespaceInfo[] GetNamespaces(string wiki) {
+		public NamespaceInfo[] GetNamespaces() {
+			string wiki = GetCurrentWiki();
+
 			return Pages.GetNamespaces(wiki).ToArray();
 		}
 
 		/// <summary>
 		/// Finds a namespace by name.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="name">The name.</param>
 		/// <returns>The <see cref="T:NamespaceInfo"/>, or <c>null</c> if no namespaces are found.</returns>
-		public NamespaceInfo FindNamespace(string wiki, string name) {
+		public NamespaceInfo FindNamespace(string name) {
+			string wiki = GetCurrentWiki();
+
 			return Pages.FindNamespace(wiki, name);
 		}
 
 		/// <summary>
 		/// Gets the list of the Wiki Pages in a namespace.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The pages.</returns>
-		public PageContent[] GetPages(string wiki, NamespaceInfo nspace) {
+		public PageContent[] GetPages(NamespaceInfo nspace) {
+			string wiki = GetCurrentWiki();
+
 			return Pages.GetPages(wiki, nspace).ToArray();
 		}
 
 		/// <summary>
 		/// Gets the List of Categories in a namespace.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The categories.</returns>
-		public CategoryInfo[] GetCategories(string wiki, NamespaceInfo nspace) {
+		public CategoryInfo[] GetCategories(NamespaceInfo nspace) {
+			string wiki = GetCurrentWiki();
+
 			return Pages.GetCategories(wiki, nspace).ToArray();
 		}
 
 		/// <summary>
 		/// Gets the list of Snippets.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The snippets.</returns>
-		public Snippet[] GetSnippets(string wiki) {
+		public Snippet[] GetSnippets() {
+			string wiki = GetCurrentWiki();
+
 			return Snippets.GetSnippets(wiki).ToArray();
 		}
 
 		/// <summary>
 		/// Gets the list of Navigation Paths in a namespace.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The navigation paths.</returns>
-		public NavigationPath[] GetNavigationPaths(string wiki, NamespaceInfo nspace) {
+		public NavigationPath[] GetNavigationPaths(NamespaceInfo nspace) {
+			string wiki = GetCurrentWiki();
+
 			return NavigationPaths.GetNavigationPaths(wiki, nspace).ToArray();
 		}
 
@@ -435,14 +453,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets a Wiki Page.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="fullName">The full Name of the Page.</param>
 		/// <returns>The Wiki Page or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>fullName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>fullName</b> is empty.</exception>
-		public PageContent FindPage(string wiki, string fullName) {
+		public PageContent FindPage(string fullName) {
 			if(fullName == null) throw new ArgumentNullException("fullName");
 			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty");
+
+			string wiki = GetCurrentWiki();
 
 			return Pages.FindPage(wiki, fullName);
 		}
@@ -477,12 +496,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the formatted content of a Wiki Page.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The formatted content.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
-		public string GetFormattedContent(string wiki, string pageFullName) {
+		public string GetFormattedContent(string pageFullName) {
 			if(pageFullName == null) throw new ArgumentNullException("page");
+
+			string wiki = GetCurrentWiki();
 
 			PageContent pageContent = Pages.FindPage(wiki, pageFullName);
 			if(pageContent == null) return null;
@@ -492,12 +512,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Formats a block of WikiMarkup, using the built-in formatter only.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="raw">The block of WikiMarkup.</param>
 		/// <returns>The formatted content.</returns>
 		/// <exception cref="ArgumentNullException">If <b>raw</b> is <c>null</c>.</exception>
-		public string Format(string wiki, string raw) {
+		public string Format(string raw) {
 			if(raw == null) throw new ArgumentNullException("raw");
+
+			string wiki = GetCurrentWiki();
 
 			return Formatter.Format(wiki, raw, false, FormattingContext.Unknown, null);
 		}
@@ -505,10 +526,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Lists directories in a directory.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="directory">The directory (<c>null</c> for the root, first invocation).</param>
 		/// <returns>The directories.</returns>
-		public StDirectoryInfo[] ListDirectories(string wiki, StDirectoryInfo directory) {
+		public StDirectoryInfo[] ListDirectories(StDirectoryInfo directory) {
+			string wiki = GetCurrentWiki();
+
 			List<StDirectoryInfo> result = new List<StDirectoryInfo>(20);
 
 			if(directory == null) {
@@ -534,10 +556,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Lists files in a directory.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="directory">The directory (<c>null</c> for the root, first invocation).</param>
 		/// <returns>The files.</returns>
-		public StFileInfo[] ListFiles(string wiki, StDirectoryInfo directory) {
+		public StFileInfo[] ListFiles(StDirectoryInfo directory) {
+			string wiki = GetCurrentWiki();
+
 			List<StFileInfo> result = new List<StFileInfo>(20);
 
 			if(directory == null) {
@@ -565,13 +588,14 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Lists page attachments.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="pageFullName">The page full name.</param>
 		/// <returns>The attachments.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
-		public StFileInfo[] ListPageAttachments(string wiki, string pageFullName) {
+		public StFileInfo[] ListPageAttachments(string pageFullName) {
 			if(pageFullName == null) throw new ArgumentNullException("page");
 			if(pageFullName.Length == 0) throw new ArgumentException("page");
+
+			string wiki = GetCurrentWiki();
 
 			List<StFileInfo> result = new List<StFileInfo>(10);
 			foreach(IFilesStorageProviderV40 prov in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
@@ -623,13 +647,17 @@ namespace ScrewTurn.Wiki {
 		/// <param name="entryType">The Entry Type.</param>
 		/// <param name="user">The user, or <c>null</c>. If <c>null</c>, the system will log "PluginName+System".</param>
 		/// <param name="caller">The Component that calls the method. The caller cannot be null.</param>
-		/// <param name="wiki">The wiki, <c>null</c> if is an application level log.</param>
+		/// <param name="wiki">The wiki or <c>null</c> for application-wide events.</param>
 		/// <exception cref="ArgumentNullException">If <b>message</b> or <b>caller</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>message is empty.</b></exception>
-		public void LogEntry(string message, LogEntryType entryType, string user, object caller, string wiki) {
+		public void LogEntry(string message, LogEntryType entryType, string user, object caller, string wiki = null) {
 			if(message == null) throw new ArgumentNullException("message");
 			if(message.Length == 0) throw new ArgumentException("Message cannot be empty");
 			if(caller == null) throw new ArgumentNullException("caller");
+
+			// Prevent spoofing
+			string currentWiki = GetCurrentWiki();
+			if(wiki != null && wiki != currentWiki) wiki = currentWiki;
 
 			EntryType t = EntryType.General;
 			switch(entryType) {
@@ -658,11 +686,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Changes the language of the current user for the fiven wiki.
+		/// Changes the language of the current user.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="language">The language code.</param>
-		public void ChangeCurrentUserLanguage(string wiki, string language) {
+		public void ChangeCurrentUserLanguage(string language) {
+			string wiki = GetCurrentWiki();
+
 			string timezoneId = Preferences.LoadTimezoneFromCookie() ?? Settings.GetDefaultTimezone(wiki);
 			if(SessionFacade.LoginKey == null || SessionFacade.CurrentUsername == "admin") Preferences.SavePreferencesInCookie(language, timezoneId);
 			else Preferences.SavePreferencesInUserData(wiki, language, timezoneId);
@@ -671,11 +700,12 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Aligns a Date and Time object to the User's Time Zone preferences.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="dt">The Date/Time to align.</param>
 		/// <returns>The aligned Date/Time.</returns>
 		/// <remarks>The method takes care of daylight saving settings.</remarks>
-		public DateTime AlignDateTimeWithPreferences(string wiki, DateTime dt) {
+		public DateTime AlignDateTimeWithPreferences(DateTime dt) {
+			string wiki = GetCurrentWiki();
+
 			return Preferences.AlignWithTimezone(wiki, dt);
 		}
 
@@ -764,9 +794,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the pages storage providers.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		public IPagesStorageProviderV40[] GetPagesStorageProviders(string wiki) {
+		public IPagesStorageProviderV40[] GetPagesStorageProviders() {
+			string wiki = GetCurrentWiki();
+
 			List<IPagesStorageProviderV40> pagesStorageProviders = new List<IPagesStorageProviderV40>();
 			foreach(IPagesStorageProviderV40 pagesStorageProvider in Collectors.CollectorsBox.PagesProviderCollector.GetAllProviders(wiki)) {
 				pagesStorageProviders.Add(pagesStorageProvider);
@@ -777,9 +808,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the users storage providers.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		public IUsersStorageProviderV40[] GetUsersStorageProviders(string wiki) {
+		public IUsersStorageProviderV40[] GetUsersStorageProviders() {
+			string wiki = GetCurrentWiki();
+
 			List<IUsersStorageProviderV40> usersStorageProviders = new List<IUsersStorageProviderV40>();
 			foreach(IUsersStorageProviderV40 userStorageProvider in Collectors.CollectorsBox.UsersProviderCollector.GetAllProviders(wiki)) {
 				usersStorageProviders.Add(userStorageProvider);
@@ -790,9 +822,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the files storage providers.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		public IFilesStorageProviderV40[] GetFilesStorageProviders(string wiki) {
+		public IFilesStorageProviderV40[] GetFilesStorageProviders() {
+			string wiki = GetCurrentWiki();
+
 			List<IFilesStorageProviderV40> filesStorageProviders = new List<IFilesStorageProviderV40>();
 			foreach(IFilesStorageProviderV40 filesStorageProvider in Collectors.CollectorsBox.FilesProviderCollector.GetAllProviders(wiki)) {
 				filesStorageProviders.Add(filesStorageProvider);
@@ -803,9 +836,10 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the theme providers.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The providers.</returns>
-		public IThemesStorageProviderV40[] GetThemesProviders(string wiki) {
+		public IThemesStorageProviderV40[] GetThemesProviders() {
+			string wiki = GetCurrentWiki();
+
 			List<IThemesStorageProviderV40> themesStorageProviders = new List<IThemesStorageProviderV40>();
 			foreach(IThemesStorageProviderV40 themesStorageProvider in Collectors.CollectorsBox.ThemesProviderCollector.GetAllProviders(wiki)) {
 				themesStorageProviders.Add(themesStorageProvider);
@@ -816,10 +850,11 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the formatter providers, either enabled or disabled.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
-		public IFormatterProviderV40[] GetFormatterProviders(string wiki, bool enabled) {
+		public IFormatterProviderV40[] GetFormatterProviders(bool enabled) {
+			string wiki = GetCurrentWiki();
+
 			List<IFormatterProviderV40> formatterProviders = new List<IFormatterProviderV40>();
 			foreach(IFormatterProviderV40 formatterProvider in Collectors.CollectorsBox.FormatterProviderCollector.GetAllProviders(wiki)) {
 				if(enabled == Settings.GetProvider(wiki).GetPluginStatus(formatterProvider.GetType().FullName)) {
@@ -830,11 +865,12 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Gets the current settings storage provider initialized for the given wiki.
+		/// Gets the current settings storage provider.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <returns>The global settings storage provider.</returns>
-		public ISettingsStorageProviderV40 GetSettingsStorageProvider(string wiki) {
+		public ISettingsStorageProviderV40 GetSettingsStorageProvider() {
+			string wiki = GetCurrentWiki();
+
 			return Collectors.CollectorsBox.GetSettingsProvider(wiki);
 		}
 
@@ -863,14 +899,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Gets the configuration of a plugin (formatter provider).
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="providerTypeName">The type name of the provider, such as 'Vendor.Namespace.Provider'.</param>
 		/// <returns>The configuration (can be empty or <c>null</c>).</returns>
 		/// <exception cref="ArgumentNullException">If <b>providerTypeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>providerTypeName</b> is empty.</exception>
-		public string GetPluginConfiguration(string wiki, string providerTypeName) {
+		public string GetPluginConfiguration(string providerTypeName) {
 			if(providerTypeName == null) throw new ArgumentNullException("providerTypeName");
 			if(providerTypeName.Length == 0) throw new ArgumentException("Provider Type Name cannot be empty", "providerTypeName");
+
+			string wiki = GetCurrentWiki();
 
 			return ProviderLoader.LoadPluginConfiguration(wiki, providerTypeName);
 		}
@@ -878,15 +915,15 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Sets the configuration of a provider.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="provider">The provider of which to set the configuration.</param>
 		/// <param name="configuration">The configuration to set.</param>
 		/// <returns><c>true</c> if the configuration is set, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>provider</b> is <c>null</c>.</exception>
-		public bool SetPluginConfiguration(string wiki, IProviderV40 provider, string configuration) {
+		public bool SetPluginConfiguration(IProviderV40 provider, string configuration) {
 			if(provider == null) throw new ArgumentNullException("provider");
-
 			if(configuration == null) configuration = "";
+
+			string wiki = GetCurrentWiki();
 
 			ProviderLoader.SavePluginConfiguration(wiki, provider.GetType().FullName, configuration);
 
@@ -982,12 +1019,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Fires the FileActivity event.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="provider">The provider that handles the file.</param>
 		/// <param name="file">The name of the file that changed.</param>
 		/// <param name="oldFileName">The old name of the renamed file, if any.</param>
 		/// <param name="activity">The activity.</param>
-		public void OnFileActivity(string wiki, string provider, string file, string oldFileName, FileActivity activity) {
+		public void OnFileActivity(string provider, string file, string oldFileName, FileActivity activity) {
+			string wiki = GetCurrentWiki();
+
 			if(FileActivity != null) {
 				IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
 
@@ -999,13 +1037,14 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Fires the FileActivity event.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="provider">The provider that handles the attachment.</param>
 		/// <param name="attachment">The old name of the renamed attachment, if any.</param>
 		/// <param name="page">The page that owns the attachment.</param>
 		/// <param name="oldAttachmentName">The old name of the renamed attachment, if any.</param>
 		/// <param name="activity">The activity.</param>
-		public void OnAttachmentActivity(string wiki, string provider, string attachment, string page, string oldAttachmentName, FileActivity activity) {
+		public void OnAttachmentActivity(string provider, string attachment, string page, string oldAttachmentName, FileActivity activity) {
+			string wiki = GetCurrentWiki();
+
 			if(FileActivity != null) {
 				IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
 				
@@ -1017,12 +1056,13 @@ namespace ScrewTurn.Wiki {
 		/// <summary>
 		/// Fires the FileActivity event.
 		/// </summary>
-		/// <param name="wiki">The wiki.</param>
 		/// <param name="provider">The provider that handles the directory.</param>
 		/// <param name="directory">The directory that changed.</param>
 		/// <param name="oldDirectoryName">The old name of the renamed directory, if any.</param>
 		/// <param name="activity">The activity.</param>
-		public void OnDirectoryActivity(string wiki, string provider, string directory, string oldDirectoryName, FileActivity activity) {
+		public void OnDirectoryActivity(string provider, string directory, string oldDirectoryName, FileActivity activity) {
+			string wiki = GetCurrentWiki();
+
 			if(FileActivity != null) {
 				IFilesStorageProviderV40 prov = Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki);
 

@@ -76,7 +76,7 @@ namespace ScrewTurn.Wiki.Plugins.AzureStorage {
 		/// Gets the Information about the Provider.
 		/// </summary>
 		public ComponentInformation Information {
-			get { return new ComponentInformation("File System IndexDirectory Provider", "Threeplicate Srl", "", "", ""); }
+			get { return new ComponentInformation("File System IndexDirectory Provider", "Threeplicate Srl", "4.0.5.143", "http://www.screwturn.eu", null); }
 		}
 
 		/// <summary>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
 using System.Linq;
@@ -8,10 +9,12 @@ using System.Text;
 using System.DirectoryServices.ActiveDirectory;
 
 namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
+
 	/// <summary>
 	/// Implements a Users Storage Provider for Active Directory.
 	/// </summary>
 	public class ActiveDirectoryProvider : IUsersStorageProviderV40 {
+
 		private const string HELP_HELP =
 			"<b>Configuration Settings:</b><br/>" +
 			"Map one or more domain groups to wiki groups (Users, Administrators, etc.):" +
@@ -745,7 +748,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 				if(m_StorageProvider == null) {
 					lock(m_Host) {
 						if(m_StorageProvider == null) {
-							m_StorageProvider = (from a in m_Host.GetUsersStorageProviders(m_wiki)
+							m_StorageProvider = (from a in m_Host.GetUsersStorageProviders()
 												 where a.Information.Name != this.Information.Name
 												 select a).FirstOrDefault();
 
@@ -772,7 +775,7 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		/// </summary>
 		/// <value>The information</value>
 		public ComponentInformation Information {
-			get { return new ComponentInformation("Active Directory Provider", "Threeplicate Srl", "4.0.1.71", "http://www.screwturn.eu", null); }
+			get { return new ComponentInformation("Active Directory Provider", "Threeplicate Srl", "4.0.5.143", "http://www.screwturn.eu", null); }
 		}
 
 

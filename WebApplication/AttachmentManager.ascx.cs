@@ -212,7 +212,7 @@ namespace ScrewTurn.Wiki {
 								lblUploadResult.CssClass = "resulterror";
 							}
 							else {
-								Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
+								Host.Instance.OnAttachmentActivity(provider.GetType().FullName,
 									fileUpload.FileName, CurrentPage.FullName, null, FileActivity.AttachmentUploaded);
 
 								// If overwrite remove old indexed document
@@ -264,7 +264,7 @@ namespace ScrewTurn.Wiki {
 						bool d = provider.DeletePageAttachment(CurrentPage.FullName, (string)e.CommandArgument);
 
 						if(d) {
-							Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
+							Host.Instance.OnAttachmentActivity(provider.GetType().FullName,
 								(string)e.CommandArgument, CurrentPage.FullName, null, FileActivity.AttachmentDeleted);
 
 							// Remove attachment from index
@@ -307,7 +307,7 @@ namespace ScrewTurn.Wiki {
 					rptItems.Visible = true;
 					rptItems.DataBind();
 
-					Host.Instance.OnAttachmentActivity(Tools.DetectCurrentWiki(), provider.GetType().FullName,
+					Host.Instance.OnAttachmentActivity(provider.GetType().FullName,
 						txtNewName.Text, CurrentPage.FullName, lblItem.Text, FileActivity.AttachmentRenamed);
 
 					// Fix index according to file renaming
