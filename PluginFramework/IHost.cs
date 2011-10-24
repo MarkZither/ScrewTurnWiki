@@ -72,7 +72,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		UserGroup FindUserGroup(string name);
 
 		/// <summary>
-		/// Checks whether an action is allowed for a global resource in the given wiki.
+		/// Checks whether an action is allowed for a global resource.
 		/// </summary>
 		/// <param name="action">The action (see <see cref="Actions.ForGlobals"/> class)</param>
 		/// <param name="user">The user.</param>
@@ -82,7 +82,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		bool CheckActionForGlobals(string action, UserInfo user);
 
 		/// <summary>
-		/// Checks whether an action is allowed for a namespace in the given wiki.
+		/// Checks whether an action is allowed for a namespace.
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <param name="action">The action (see <see cref="Actions.ForNamespaces"/> class)</param>
@@ -105,7 +105,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		bool CheckActionForPage(string pageFullName, string action, UserInfo user);
 
 		/// <summary>
-		/// Checks whether an action is allowed for a directory in the given wiki.
+		/// Checks whether an action is allowed for a directory.
 		/// </summary>
 		/// <param name="directory">The directory.</param>
 		/// <param name="action">The action (see <see cref="Actions.ForDirectories"/>).</param>
@@ -116,7 +116,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		bool CheckActionForDirectory(StDirectoryInfo directory, string action, UserInfo user);
 
 		/// <summary>
-		/// Gets the theme in use for a namespace in a wiki.
+		/// Gets the theme in use for a namespace.
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The theme.</returns>
@@ -172,7 +172,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		CategoryInfo[] GetCategoriesPerPage(PageContent page);
 
 		/// <summary>
-		/// Gets the WikiPage with the specified full Name.
+		/// Gets the Wiki Page with the specified full Name.
 		/// </summary>
 		/// <param name="fullName">The full Name of the Page.</param>
 		/// <returns>The Wiki Page, or <c>null</c> if no pages are found.</returns>
@@ -264,7 +264,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		void LogEntry(string message, LogEntryType entryType, string user, object caller, string wiki = null);
 
 		/// <summary>
-		/// Changes the language of the current user for the fiven wiki.
+		/// Changes the language of the current user.
 		/// </summary>
 		/// <param name="language">The language code.</param>
 		void ChangeCurrentUserLanguage(string language);
@@ -339,7 +339,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		IFormatterProviderV40[] GetFormatterProviders(bool enabled);
 
 		/// <summary>
-		/// Gets the current settings storage provider initialized for the given wiki.
+		/// Gets the current settings storage provider.
 		/// </summary>
 		/// <returns>The global settings storage provider.</returns>
 		ISettingsStorageProviderV40 GetSettingsStorageProvider();
