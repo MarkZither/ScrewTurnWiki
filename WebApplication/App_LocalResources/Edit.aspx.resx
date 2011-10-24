@@ -244,7 +244,7 @@
     <value>Meta Description</value>
   </data>
   <data name="lblDraftInfo2Resource1.Text" xml:space="preserve">
-    <value>If you think this content is ready for display, simply unckeck the 'Save as Draft' checkbox near the 'Save' button. Note: drafts are not versioned.</value>
+    <value>If you think this content is ready for display, simply uncheck the 'Save as Draft' checkbox near the 'Save' button. Note: drafts are not versioned.</value>
   </data>
   <data name="lblDraftInfoResource1.Text" xml:space="preserve">
     <value>You are currently editing a previously saved &lt;b&gt;draft&lt;/b&gt; of this page, edited by &lt;b&gt;##USER##&lt;/b&gt; on &lt;b&gt;##DATETIME##&lt;/b&gt; (##VIEWCHANGES##).</value>
