@@ -1,17 +1,17 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using ScrewTurn.Wiki.PluginFramework;
-using Lucene.Net.Index;
-using Lucene.Net.Store;
 using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
-using Lucene.Net.Search;
-using Lucene.Net.QueryParsers;
-using System.IO;
 using Lucene.Net.Highlight;
+using Lucene.Net.Index;
+using Lucene.Net.QueryParsers;
+using Lucene.Net.Search;
+using Lucene.Net.Store;
+using ScrewTurn.Wiki.PluginFramework;
 
 namespace ScrewTurn.Wiki {
 
@@ -139,7 +139,6 @@ namespace ScrewTurn.Wiki {
 				writer.AddDocument(doc);
 				writer.Commit();
 			}
-			catch { throw; }
 			finally {
 				writer.Close();
 			}
@@ -170,7 +169,6 @@ namespace ScrewTurn.Wiki {
 				writer.AddDocument(doc);
 				writer.Commit();
 			}
-			catch { throw; }
 			finally {
 				writer.Close();
 			}
@@ -204,7 +202,6 @@ namespace ScrewTurn.Wiki {
 			catch(System.Runtime.InteropServices.COMException ex) {
 				Log.LogEntry(ex.Message, EntryType.Warning, Log.SystemUsername, page.Provider.CurrentWiki);
 			}
-			catch { throw; }
 			finally {
 				writer.Close();
 			}
@@ -237,7 +234,6 @@ namespace ScrewTurn.Wiki {
 			catch(System.Runtime.InteropServices.COMException ex) {
 				Log.LogEntry(ex.Message, EntryType.Warning, Log.SystemUsername, wiki);
 			}
-			catch { throw; }
 			finally {
 				writer.Close();
 			}
@@ -258,7 +254,6 @@ namespace ScrewTurn.Wiki {
 				writer.DeleteDocuments(new Term(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.Page) + "|" + page.Provider.CurrentWiki + "|" + page.FullName).Replace(" ", "")));
 				writer.Commit();
 			}
-			catch { throw; }
 			finally {
 				writer.Close();
 			}
@@ -280,7 +275,6 @@ namespace ScrewTurn.Wiki {
 				writer.DeleteDocuments(query);
 				writer.Commit();
 			}
-			catch { throw; }
 			finally {
 				writer.Close();
 			}
@@ -301,7 +295,6 @@ namespace ScrewTurn.Wiki {
 				writer.DeleteDocuments(new Term(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.Attachment) + "|" + page.Provider.CurrentWiki + "|" + page.FullName + "|" + fileName).Replace(" ", "")));
 				writer.Commit();
 			}
-			catch { throw; }
 			finally {
 				writer.Close();
 			}
@@ -326,6 +319,8 @@ namespace ScrewTurn.Wiki {
 			Query query = new TermQuery(term);
 			try {
 				TopDocs topDocs = searcher.Search(query, 100);
+				if(topDocs.scoreDocs.Length == 0) return true;
+
 				Document doc = searcher.Doc(topDocs.scoreDocs[0].doc);
 
 				Document newDoc = new Document();
@@ -338,7 +333,6 @@ namespace ScrewTurn.Wiki {
 				writer.UpdateDocument(term, newDoc);
 				writer.Commit();
 			}
-			catch { throw; }
 			finally {
 				searcher.Close();
 				writer.Close();
@@ -360,7 +354,6 @@ namespace ScrewTurn.Wiki {
 				writer.DeleteDocuments(new Term(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.File) + "|" + wiki + "|" + fileName).Replace(" ", "")));
 				writer.Commit();
 			}
-			catch { throw; }
 			finally {
 				writer.Close();
 			}
@@ -384,6 +377,8 @@ namespace ScrewTurn.Wiki {
 			Query query = new TermQuery(term);
 			try {
 				TopDocs topDocs = searcher.Search(query, 100);
+				if(topDocs.scoreDocs.Length == 0) return true;
+
 				Document doc = searcher.Doc(topDocs.scoreDocs[0].doc);
 
 				Document newDoc = new Document();
@@ -395,7 +390,6 @@ namespace ScrewTurn.Wiki {
 				writer.UpdateDocument(term, newDoc);
 				writer.Commit();
 			}
-			catch { throw; }
 			finally {
 				searcher.Close();
 				writer.Close();
@@ -524,4 +518,5 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		File
 	}
+
 }

@@ -216,22 +216,6 @@ namespace ScrewTurn.Wiki {
 			rptItems.DataSource = table;
 		}
 
-		/// <summary>
-		/// Deletes the permissions of a directory.
-		/// </summary>
-		/// <param name="directory">The directory.</param>
-		private void DeletePermissions(string directory) {
-			if(!directory.StartsWith("/")) directory = "/" + directory;
-			if(!directory.EndsWith("/")) directory = directory + "/";
-
-			foreach(string sub in provider.ListDirectories(directory)) {
-				DeletePermissions(sub);
-			}
-
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
-			authWriter.ClearEntriesForDirectory(provider, directory);
-		}
-
 		protected void rptItems_ItemCommand(object sender, RepeaterCommandEventArgs e) {
 			string item = (string)e.CommandArgument;
 
@@ -253,30 +237,10 @@ namespace ScrewTurn.Wiki {
 					break;
 				case "Delete":
 					if(item.EndsWith("/")) {
-						if(canDeleteDirs) {
-							// Delete Directory
-							DeletePermissions(item);
-							bool d = provider.DeleteDirectory(item);
-
-							if(d) {
-								Host.Instance.OnDirectoryActivity(provider.GetType().FullName,
-									item, null, FileActivity.DirectoryDeleted);
-							}
-						}
+						if(canDeleteDirs) FilesAndAttachments.DeleteDirectory(provider, item);
 					}
 					else {
-						if(canDeleteFiles) {
-							// Delete File
-							bool d = provider.DeleteFile(item);
-
-							if(d) {
-								Host.Instance.OnFileActivity(provider.GetType().FullName,
-									item, null, FileActivity.FileDeleted);
-
-								// Unindex file content
-								SearchClass.UnindexFile(provider.GetType().FullName + "|" + item, currentWiki);
-							}
-						}
+						if(canDeleteFiles) FilesAndAttachments.DeleteFile(provider, item);
 					}
 					rptItems.DataBind();
 					break;
@@ -451,26 +415,6 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		/// <summary>
-		/// Recursively moves permissions from the old (renamed) directory to the new one.
-		/// </summary>
-		/// <param name="oldDirectory">The old directory name.</param>
-		/// <param name="newDirectory">The new directory name.</param>
-		private void MovePermissions(string oldDirectory, string newDirectory) {
-			if(!oldDirectory.StartsWith("/")) oldDirectory = "/" + oldDirectory;
-			if(!oldDirectory.EndsWith("/")) oldDirectory = oldDirectory + "/";
-			if(!newDirectory.StartsWith("/")) newDirectory = "/" + newDirectory;
-			if(!newDirectory.EndsWith("/")) newDirectory = newDirectory + "/";
-
-			foreach(string sub in provider.ListDirectories(oldDirectory)) {
-				string subNew = newDirectory + sub.Substring(oldDirectory.Length);
-				MovePermissions(sub, subNew);
-			}
-			AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
-			authWriter.ClearEntriesForDirectory(provider, newDirectory);
-			authWriter.ProcessDirectoryRenaming(provider, oldDirectory, newDirectory);
-		}
-
 		protected void btnRename_Click(object sender, EventArgs e) {
 			lblRenameResult.Text = "";
 			bool done = false;
@@ -478,16 +422,7 @@ namespace ScrewTurn.Wiki {
 			txtNewName.Text = txtNewName.Text.Trim();
 
 			if(lblItem.Text.EndsWith("/")) {
-				if(canDeleteDirs) {
-					MovePermissions(CurrentDirectory + lblItem.Text, CurrentDirectory + txtNewName.Text);
-
-					done = provider.RenameDirectory(CurrentDirectory + lblItem.Text, CurrentDirectory + txtNewName.Text);
-
-					if(done) {
-						Host.Instance.OnDirectoryActivity(provider.GetType().FullName,
-							CurrentDirectory + txtNewName.Text, CurrentDirectory + lblItem.Text, FileActivity.DirectoryRenamed);
-					}
-				}
+				if(canDeleteDirs) done = FilesAndAttachments.RenameDirectory(provider, CurrentDirectory + lblItem.Text, txtNewName.Text);
 			}
 			else {
 				if(canDeleteFiles) {
@@ -505,17 +440,7 @@ namespace ScrewTurn.Wiki {
 
 					txtNewName.Text = txtNewName.Text.Trim();
 
-					done = true;
-					if(txtNewName.Text.ToLowerInvariant() != lblItem.Text.ToLowerInvariant()) {
-						done = provider.RenameFile(CurrentDirectory + lblItem.Text, CurrentDirectory + txtNewName.Text);
-
-						if(done) {
-							Host.Instance.OnFileActivity(provider.GetType().FullName,
-								CurrentDirectory + txtNewName.Text, CurrentDirectory + lblItem.Text, FileActivity.FileRenamed);
-
-							SearchClass.RenameFile(currentWiki, provider.GetType().FullName + "|" + CurrentDirectory + lblItem.Text, provider.GetType().FullName + "|" + CurrentDirectory + txtNewName.Text);
-						}
-					}
+					done = FilesAndAttachments.RenameFile(provider, CurrentDirectory + lblItem.Text, txtNewName.Text);
 				}
 			}
 			if(done) {
@@ -545,21 +470,14 @@ namespace ScrewTurn.Wiki {
 				txtNewDirectoryName.Text = txtNewDirectoryName.Text.Trim('/');
 				AuthWriter authWriter = new AuthWriter(Collectors.CollectorsBox.GetSettingsProvider(currentWiki));
 				authWriter.ClearEntriesForDirectory(provider, CurrentDirectory + txtNewDirectoryName.Text + "/");
-				bool done = false;
-				try {
-					done = provider.CreateDirectory(CurrentDirectory, txtNewDirectoryName.Text);
-				}
-				catch(ArgumentNullException) { }
-				catch(ArgumentException) { }
+				
+				bool done = FilesAndAttachments.CreateDirectory(provider, CurrentDirectory, txtNewDirectoryName.Text);
 				if(!done) {
 					lblNewDirectoryResult.CssClass = "resulterror";
 					lblNewDirectoryResult.Text = Properties.Messages.CannotCreateNewDirectory;
 				}
 				else {
 					txtNewDirectoryName.Text = "";
-
-					Host.Instance.OnDirectoryActivity(provider.GetType().FullName,
-						CurrentDirectory + txtNewDirectoryName.Text + "/", null, FileActivity.DirectoryCreated);
 				}
 				rptItems.DataBind();
 			}
@@ -596,30 +514,11 @@ namespace ScrewTurn.Wiki {
 							lblUploadResult.CssClass = "resulterror";
 						}
 						else {
-							// Store file
-							bool done = provider.StoreFile(CurrentDirectory + fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
+							bool done = FilesAndAttachments.StoreFile(provider, CurrentDirectory + fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
+
 							if(!done) {
 								lblUploadResult.Text = Properties.Messages.CannotStoreFile;
 								lblUploadResult.CssClass = "resulterror";
-							}
-							else {
-								Host.Instance.OnFileActivity(provider.GetType().FullName,
-									CurrentDirectory + fileUpload.FileName, null, FileActivity.FileUploaded);
-
-								// If overwrite remove old indexed document
-								if(chkOverwrite.Checked) {
-									SearchClass.UnindexFile(provider.GetType().FullName + "|" + CurrentDirectory + fileUpload.FileName, currentWiki);
-								}
-
-								// Index the attached file
-								string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
-								if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
-								string tempFile = Path.Combine(tempDir, fileUpload.FileName);
-								using(FileStream writer = File.Create(tempFile)) {
-									writer.Write(fileUpload.FileBytes, 0, fileUpload.FileBytes.Length);
-								}
-								SearchClass.IndexFile(provider.GetType().FullName + "|" + CurrentDirectory + fileUpload.FileName, tempFile, currentWiki);
-								Directory.Delete(tempDir, true);
 							}
 							rptItems.DataBind();
 						}

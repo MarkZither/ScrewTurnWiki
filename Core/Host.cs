@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -418,6 +419,57 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Creates a new category.
+		/// </summary>
+		/// <param name="nspace">The destination namespace (<c>null</c> for the root).</param>
+		/// <param name="name">The name of the category (without namespace).</param>
+		/// <returns><c>true</c> if the category was created, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if it is invalid.</exception>
+		public bool CreateCategory(NamespaceInfo nspace, string name) {
+			if(name == null) throw new ArgumentNullException("name");
+			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(!Pages.IsValidName(name)) throw new ArgumentException("Name is invalid", "name");
+
+			string wiki = GetCurrentWiki();
+
+			return Pages.CreateCategory(wiki, nspace, name);
+		}
+
+		/// <summary>
+		/// Renames a category.
+		/// </summary>
+		/// <param name="category">The category to rename.</param>
+		/// <param name="newName">The new name of the category (without namespace).</param>
+		/// <returns><c>true</c> if the category was renamed, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="category"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty or if it is invalid.</exception>
+		public bool RenameCategory(CategoryInfo category, string newName) {
+			if(category == null) throw new ArgumentNullException("category");
+			if(newName == null) throw new ArgumentNullException("newName");
+			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(!Pages.IsValidName(newName)) throw new ArgumentException("New Name is invalid", "newName");
+
+			string wiki = GetCurrentWiki();
+
+			return Pages.RenameCategory(category, newName);
+		}
+
+		/// <summary>
+		/// Deletes a category.
+		/// </summary>
+		/// <param name="category">The category to delete.</param>
+		/// <returns><c>true</c> if the category was deleted, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="category"/> is <c>null</c>.</exception>
+		public bool RemoveCategory(CategoryInfo category) {
+			if(category == null) throw new ArgumentNullException("category");
+
+			string wiki = GetCurrentWiki();
+
+			return Pages.RemoveCategory(category);
+		}
+
+		/// <summary>
 		/// Gets the list of Snippets.
 		/// </summary>
 		/// <returns>The snippets.</returns>
@@ -510,6 +562,115 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Creates a new page.
+		/// </summary>
+		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
+		/// <param name="name">The page name (without namespace)</param>
+		/// <param name="title">The page title.</param>
+		/// <param name="username">The username of the user who created the page.</param>
+		/// <param name="dateTime">The creation date/time.</param>
+		/// <param name="comment">The comment (or <c>null</c>).</param>
+		/// <param name="content">The page content.</param>
+		/// <param name="keywords">The page keywords.</param>
+		/// <param name="description">The page description.</param>
+		/// <returns><c>true</c> if the page was created, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="name"/>, <paramref name="title"/>, <paramref name="username"/> or <paramref name="content"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="name"/>, <paramref name="title"/> or <paramref name="username"/> are empty or if <paramref name="name"/> is invalid.</exception>
+		public bool CreatePage(NamespaceInfo nspace, string name, string title, string username, DateTime dateTime, string comment, string content, string[] keywords, string description) {
+			if(name == null) throw new ArgumentNullException("name");
+			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(!Pages.IsValidName(name)) throw new ArgumentException("Name is invalid", "name");
+			if(title == null) throw new ArgumentNullException("title");
+			if(title.Length == 0) throw new ArgumentException("Title cannot be empty", "title");
+			if(username == null) throw new ArgumentNullException("username");
+			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
+			if(keywords == null) keywords = new string[0];
+
+			string wiki = GetCurrentWiki();
+
+			return Pages.SetPageContent(wiki, nspace == null ? null : nspace.Name, name, title, username, dateTime, comment, content, keywords, description, SaveMode.Normal) != null;
+		}
+
+		/// <summary>
+		/// Updates a page.
+		/// </summary>
+		/// <param name="page">The page.</param>
+		/// <param name="title">The page title.</param>
+		/// <param name="username">The username of the user who created the page.</param>
+		/// <param name="dateTime">The creation date/time.</param>
+		/// <param name="comment">The comment (or <c>null</c>).</param>
+		/// <param name="content">The page content.</param>
+		/// <param name="keywords">The page keywords.</param>
+		/// <param name="description">The page description.</param>
+		/// <param name="saveMode">The saving mode.</param>
+		/// <returns><c>true</c> if the page was created, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="title"/>, <paramref name="username"/> or <paramref name="content"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="title"/> or <paramref name="username"/> are <c>null</c>.</exception>
+		public bool UpdatePage(PageContent page, string title, string username, DateTime dateTime, string comment, string content, string[] keywords, string description, SaveMode saveMode) {
+			if(page == null) throw new ArgumentNullException("page");
+			if(title == null) throw new ArgumentNullException("title");
+			if(title.Length == 0) throw new ArgumentException("Title cannot be empty", "title");
+			if(username == null) throw new ArgumentNullException("username");
+			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
+			if(keywords == null) keywords = new string[0];
+
+			string wiki = GetCurrentWiki();
+
+			string nspace, name;
+			NameTools.ExpandFullName(page.FullName, out nspace, out name);
+
+			return Pages.SetPageContent(wiki, nspace, name, title, username, dateTime, comment, content, keywords, description, saveMode) != null;
+		}
+
+		/// <summary>
+		/// Rebinds a page to zero or more categories, completely removing existing bindings.
+		/// </summary>
+		/// <param name="page">The page to rebind.</param>
+		/// <param name="categories">The categories to rebind to (must be in the same namespace).</param>
+		/// <returns><c>true</c> if the page was rebound, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="categories"/> are <c>null</c>.</exception>
+		public bool RebindPage(PageContent page, string[] categories) {
+			if(page == null) throw new ArgumentNullException("page");
+			if(categories == null) throw new ArgumentNullException("categories");
+
+			string wiki = GetCurrentWiki();
+			string nspace = NameTools.GetNamespace(page.FullName);
+
+			return Pages.Rebind(page,
+				(from c in categories
+				 select Pages.FindCategory(wiki, NameTools.GetFullName(nspace, c))).ToArray());
+		}
+
+		/// <summary>
+		/// Renames a page.
+		/// </summary>
+		/// <param name="page">The page to rename.</param>
+		/// <param name="newName">The new name (without the namespace)</param>
+		/// <returns><c>true</c> if the page was renamed, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty or if it is invalid.</exception>
+		public bool RenamePage(PageContent page, string newName) {
+			if(page == null) throw new ArgumentNullException("page");
+			if(newName == null) throw new ArgumentNullException("newName");
+			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(!Pages.IsValidName(newName)) throw new ArgumentException("New Name is invalid", "newName");
+
+			return RenamePage(page, newName);
+		}
+
+		/// <summary>
+		/// Removes a page and all its related data.
+		/// </summary>
+		/// <param name="page">The page to remove.</param>
+		/// <returns><c>true</c> if the page was removed, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
+		public bool RemovePage(PageContent page) {
+			if(page == null) throw new ArgumentNullException("page");
+
+			return Pages.DeletePage(page);
+		}
+
+		/// <summary>
 		/// Formats a block of WikiMarkup, using the built-in formatter only.
 		/// </summary>
 		/// <param name="raw">The block of WikiMarkup.</param>
@@ -586,6 +747,116 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
+		/// Stores a file.
+		/// </summary>
+		/// <param name="fullName">The file full path and name, for example '/directory/sub/file.jpg'.</param>
+		/// <param name="source">The source stream.</param>
+		/// <param name="overwrite">A value indicating whether to overwrite an existing file.</param>
+		/// <returns>The created file, or <c>null</c> if no file was created.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> or <paramref name="source"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
+		public bool StoreFile(string fullName, Stream source, bool overwrite) {
+			if(fullName == null) throw new ArgumentNullException("fullName");
+			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(source == null) throw new ArgumentNullException("source");
+
+			string wiki = GetCurrentWiki();
+			string provider = GetDefaultProvider(typeof(IFilesStorageProviderV40));
+
+			return FilesAndAttachments.StoreFile(Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki), fullName, source, overwrite);
+		}
+
+		/// <summary>
+		/// Retrieves a file.
+		/// </summary>
+		/// <param name="file">The file to retrieve.</param>
+		/// <param name="destination">The destination stream.</param>
+		/// <returns><c>true</c> if the file was retrieved, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="file"/> or <paramref name="destination"/> are <c>null</c>.</exception>
+		public bool RetrieveFile(StFileInfo file, Stream destination) {
+			if(file == null) throw new ArgumentNullException("file");
+			if(destination == null) throw new ArgumentNullException("destination");
+
+			return file.Provider.RetrieveFile(file.FullName, destination);
+		}
+
+		/// <summary>
+		/// Renames a file.
+		/// </summary>
+		/// <param name="file">The file to rename.</param>
+		/// <param name="newName">The new name (in the same folder).</param>
+		/// <returns><c>true</c> if the file was renamed, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="file"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty.</exception>
+		public bool RenameFile(StFileInfo file, string newName) {
+			if(file == null) throw new ArgumentNullException("file");
+			if(newName == null) throw new ArgumentNullException("newName");
+			if(newName.Length == 0) throw new ArgumentNullException("New Name cannot be empty", "newName");
+
+			return FilesAndAttachments.RenameFile(file.Provider, file.FullName, newName);
+		}
+
+		/// <summary>
+		/// Deletes a file.
+		/// </summary>
+		/// <param name="file">The file to delete.</param>
+		/// <returns><c>true</c> if the file was deleted, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="file"/> was <c>null</c>.</exception>
+		public bool DeleteFile(StFileInfo file) {
+			if(file == null) throw new ArgumentNullException("file");
+
+			return FilesAndAttachments.DeleteFile(file.Provider, file.FullName);
+		}
+
+		/// <summary>
+		/// Creates a new directory.
+		/// </summary>
+		/// <param name="path">The path of the container directory (the new directory will be created here).</param>
+		/// <param name="name">The name of the new directory.</param>
+		/// <returns><c>true</c> if the directory was created, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="path"/> or <paramref name="name"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
+		public bool CreateDirectory(string path, string name) {
+			if(path == null) throw new ArgumentNullException("path");
+			if(path.Length == 0) path = "/";
+			if(name == null) throw new ArgumentNullException("name");
+			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+
+			string wiki = GetCurrentWiki();
+			string provider = GetDefaultProvider(typeof(IFilesStorageProviderV40));
+
+			return FilesAndAttachments.CreateDirectory(Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki), path, name);
+		}
+
+		/// <summary>
+		/// Renames a directory.
+		/// </summary>
+		/// <param name="directory">The directory to rename.</param>
+		/// <param name="newName">The new directory name (without path).</param>
+		/// <returns><c>true</c> if the directory was renamed, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="directory"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty.</exception>
+		public bool RenameDirectory(StDirectoryInfo directory, string newName) {
+			if(directory == null) throw new ArgumentNullException("directory");
+			if(newName == null) throw new ArgumentNullException("newName");
+			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+
+			return FilesAndAttachments.RenameDirectory(directory.Provider, directory.FullPath, newName);
+		}
+
+		/// <summary>
+		/// Deletes a directroy.
+		/// </summary>
+		/// <param name="directory">The directory to delete.</param>
+		/// <returns><c>true</c> if the directory was deleted, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="directory"/> is <c>null</c>.</exception>
+		public bool DeleteDirectory(StDirectoryInfo directory) {
+			if(directory == null) throw new ArgumentNullException("directory");
+
+			return FilesAndAttachments.DeleteDirectory(directory.Provider, directory.FullPath);
+		}
+
+		/// <summary>
 		/// Lists page attachments.
 		/// </summary>
 		/// <param name="pageFullName">The page full name.</param>
@@ -608,6 +879,82 @@ namespace ScrewTurn.Wiki {
 			}
 
 			return result.ToArray();
+		}
+
+		/// <summary>
+		/// Stores a page attachment.
+		/// </summary>
+		/// <param name="pageFullName">The page full name.</param>
+		/// <param name="name">The name of the attachment.</param>
+		/// <param name="source">The source stream.</param>
+		/// <param name="overwrite"><c>true</c> to overwrite an existing attachment with the same name, <c>false</c> otherwise.</param>
+		/// <returns><c>true</c> if the attachment was stored, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="name"/> or <paramref name="source"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="name"/> are empty.</exception>
+		public bool StorePageAttachment(string pageFullName, string name, Stream source, bool overwrite) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("Page Full Name cannot be empty", "pageFullName");
+			if(name == null) throw new ArgumentNullException("name");
+			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(source == null) throw new ArgumentNullException("source");
+
+			string wiki = GetCurrentWiki();
+			string provider = GetDefaultProvider(typeof(IFilesStorageProviderV40));
+
+			return FilesAndAttachments.StorePageAttachment(Collectors.CollectorsBox.FilesProviderCollector.GetProvider(provider, wiki), pageFullName, name, source, overwrite);
+		}
+
+		/// <summary>
+		/// Retrieves a page attachment.
+		/// </summary>
+		/// <param name="pageFullName">The page full name.</param>
+		/// <param name="file">The attachment to retrieve.</param>
+		/// <param name="destination">The destination stream.</param>
+		/// <returns><c>true</c> if the file was retrieved, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="file"/> or <paramref name="destination"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public bool RetrievePageAttachment(string pageFullName, StFileInfo file, Stream destination) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("Page Full Name cannot be empty", "pageFullName");
+			if(file == null) throw new ArgumentNullException("file");
+			if(destination == null) throw new ArgumentNullException("destination");
+
+			return file.Provider.RetrievePageAttachment(pageFullName, file.FullName, destination);
+		}
+
+		/// <summary>
+		/// Renames a page attachment.
+		/// </summary>
+		/// <param name="pageFullName">The full page name.</param>
+		/// <param name="file">The attachment to rename.</param>
+		/// <param name="newName">The new name of the attachment.</param>
+		/// <returns><c>true</c> if the attachment was renamed, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/>, <paramref name="file"/> or <paramref name="newName"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> or <paramref name="newName"/> are empty.</exception>
+		public bool RenamePageAttachment(string pageFullName, StFileInfo file, string newName) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("Page Full Name cannot be empty", "pageFullName");
+			if(file == null) throw new ArgumentNullException("file");
+			if(newName == null) throw new ArgumentNullException("newName");
+			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+
+			return FilesAndAttachments.RenamePageAttachment(file.Provider, pageFullName, file.FullName, newName);
+		}
+
+		/// <summary>
+		/// Deletes a page attachment.
+		/// </summary>
+		/// <param name="pageFullName">The page full name.</param>
+		/// <param name="file">The attachment to delete.</param>
+		/// <returns><c>true</c> if the attachment was deleted, <c>false</c> otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="pageFullName"/> or <paramref name="file"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="pageFullName"/> is empty.</exception>
+		public bool DeletePageAttachment(string pageFullName, StFileInfo file) {
+			if(pageFullName == null) throw new ArgumentNullException("pageFullName");
+			if(pageFullName.Length == 0) throw new ArgumentException("Page Full Name cannot be empty", "pageFullName");
+			if(file == null) throw new ArgumentNullException("file");
+
+			return FilesAndAttachments.DeletePageAttachment(file.Provider, pageFullName, file.FullName);
 		}
 
 		/// <summary>

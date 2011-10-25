@@ -205,30 +205,11 @@ namespace ScrewTurn.Wiki {
 							lblUploadResult.CssClass = "resulterror";
 						}
 						else {
-							// Store attachment
-							bool done = provider.StorePageAttachment(CurrentPage.FullName, fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
+							bool done = FilesAndAttachments.StorePageAttachment(provider, CurrentPage.FullName, fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
+							
 							if(!done) {
 								lblUploadResult.Text = Properties.Messages.CannotStoreFile;
 								lblUploadResult.CssClass = "resulterror";
-							}
-							else {
-								Host.Instance.OnAttachmentActivity(provider.GetType().FullName,
-									fileUpload.FileName, CurrentPage.FullName, null, FileActivity.AttachmentUploaded);
-
-								// If overwrite remove old indexed document
-								if(chkOverwrite.Checked) {
-									SearchClass.UnindexPageAttachment(fileUpload.FileName, CurrentPage);
-								}
-
-								// Index the attached file
-								string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
-								if(!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
-								string tempFile = Path.Combine(tempDir, fileUpload.FileName);
-								using(FileStream writer = File.Create(tempFile)) {
-									writer.Write(fileUpload.FileBytes, 0, fileUpload.FileBytes.Length);
-								}
-								SearchClass.IndexPageAttachment(fileUpload.FileName, tempFile, CurrentPage);
-								Directory.Delete(tempDir, true);
 							}
 							rptItems.DataBind();
 						}
@@ -260,17 +241,7 @@ namespace ScrewTurn.Wiki {
 					break;
 				case "Delete":
 					if(canDelete) {
-						// Delete Attachment
-						bool d = provider.DeletePageAttachment(CurrentPage.FullName, (string)e.CommandArgument);
-
-						if(d) {
-							Host.Instance.OnAttachmentActivity(provider.GetType().FullName,
-								(string)e.CommandArgument, CurrentPage.FullName, null, FileActivity.AttachmentDeleted);
-
-							// Remove attachment from index
-							SearchClass.UnindexPageAttachment((string)e.CommandArgument, CurrentPage);
-						}
-
+						FilesAndAttachments.DeletePageAttachment(provider, CurrentPage.FullName, (string)e.CommandArgument);
 						rptItems.DataBind();
 					}
 					break;
@@ -297,22 +268,12 @@ namespace ScrewTurn.Wiki {
 
 				txtNewName.Text = txtNewName.Text.Trim();
 
-				bool done = true;
-				if(txtNewName.Text.ToLowerInvariant() != lblItem.Text.ToLowerInvariant()) {
-					done = provider.RenamePageAttachment(CurrentPage.FullName, lblItem.Text, txtNewName.Text);
-				}
+				bool done = FilesAndAttachments.RenamePageAttachment(provider, CurrentPage.FullName, lblItem.Text, txtNewName.Text);
 
 				if(done) {
 					pnlRename.Visible = false;
 					rptItems.Visible = true;
 					rptItems.DataBind();
-
-					Host.Instance.OnAttachmentActivity(provider.GetType().FullName,
-						txtNewName.Text, CurrentPage.FullName, lblItem.Text, FileActivity.AttachmentRenamed);
-
-					// Fix index according to file renaming
-					SearchClass.RenamePageAttachment(CurrentPage, lblItem.Text, txtNewName.Text);
-
 				}
 				else {
 					lblRenameResult.Text = Properties.Messages.CannotRenameItem;
