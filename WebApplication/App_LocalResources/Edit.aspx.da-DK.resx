@@ -286,7 +286,7 @@
     <value>Metabeskrivelse</value>
   </data>
   <data name="lblDraftInfo2Resource1.Text" xml:space="preserve">
-    <value>Hvis du synes dette indhold er klar til visning, så fjern krydset i 'Gem som udkast' boksen tæt ved 'Gem' knappen. Bemærk: Udkast bliver ikke gemt i flere versioner.</value>
+    <value>Hvis du synes dette indhold er klar til visning, så fjern krydset i 'Gem som udkast' boksen tæt ved 'Gem' knappen. Bemærk: Udkast bliver ikke gemt i historikken.</value>
   </data>
   <data name="lblDraftInfoResource1.Text" xml:space="preserve">
     <value>Du redigerer i et tidligere gemt &lt;b&gt;udkast&lt;/b&gt; af denne side, gemt af &lt;b&gt;##USER##&lt;/b&gt; d. &lt;b&gt;##DATETIME##&lt;/b&gt; (##VIEWCHANGES##).</value>
