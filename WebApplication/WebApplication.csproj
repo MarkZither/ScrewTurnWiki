@@ -494,6 +494,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.fr-FR.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Messages.hi-IN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.hi-IN.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Messages.hu-HU.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1759,6 +1764,48 @@
     <Content Include="App_LocalResources\Upload.aspx.vi-VN.resx" />
     <Content Include="App_LocalResources\User.aspx.pt-BR.resx" />
     <Content Include="App_LocalResources\User.aspx.vi-VN.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Admin.master.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminCategories.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminConfig.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminContent.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminGroups.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminHome.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminLog.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminNamespaces.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminNavPaths.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminPages.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminProviders.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminSnippets.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AdminUsers.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AllPages.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AttachmentManager.ascx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AttachmentViewer.ascx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Captcha.ascx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Category.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Default.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Edit.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Editor.ascx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Error.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\FileManager.ascx.hi-IN.resx" />
+    <Content Include="App_LocalResources\History.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\ImageEditor.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Login.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\MasterPageSA.Master.hi-IN.resx" />
+    <Content Include="App_LocalResources\NavPath.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Operation.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\PageListBuilder.ascx.hi-IN.resx" />
+    <Content Include="App_LocalResources\PageNotFound.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\PermissionsManager.ascx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Popup.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\PopupWYSIWYG.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Post.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Profile.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Register.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Search.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Upload.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\User.aspx.hi-IN.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>
@@ -1790,6 +1837,10 @@
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.fr-FR.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Messages.hi-IN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.hi-IN.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Messages.hu-HU.resx">
       <SubType>Designer</SubType>
