@@ -43,8 +43,10 @@ namespace ScrewTurn.Wiki {
 					chkUncategorizedPages.Checked = Request["SearchUncategorized"] == "1";
 				}
 
-				chkAllNamespaces.Checked = Request["AllNamespaces"] == "1";
-				chkFilesAndAttachments.Checked = Request["FilesAndAttachments"] == "1";
+				if(Request["Query"] != null) {
+					chkAllNamespaces.Checked = Request["AllNamespaces"] == "1";
+					chkFilesAndAttachments.Checked = Request["FilesAndAttachments"] == "1";
+				}
 
 				if(chkAllNamespaces.Checked) {
 					lblHideCategoriesScript.Text = "<script type=\"text/javascript\"><!--\r\ndocument.getElementById('CategoryFilterDiv').style['display'] = 'none';\r\n//-->\r\n</script>";
@@ -93,44 +95,43 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 
-				if(Request["Query"] != null) txtQuery.Text = Request["Query"];
+				if(Request["Query"] != null) {
+					txtQuery.Text = Request["Query"];
 
-				// Launch search, if query is specified
-
-				string mode = Request["Mode"];
-				if(string.IsNullOrEmpty(mode)) mode = "1";
-				if(!string.IsNullOrEmpty(Request["Query"])) {
-					PerformSearch(Request["Query"], searchModeMap[mode], selectedCategories,
-						chkUncategorizedPages.Checked, chkAllNamespaces.Checked, chkFilesAndAttachments.Checked);
+					btnGo_Click(sender, e);
 				}
 			}
 		}
 
 		protected void btnGo_Click(object sender, EventArgs e) {
 			// Redirect firing the search
+
+			//UrlTools.Redirect(UrlTools.BuildUrl("Search.aspx?Query=", Tools.UrlEncode(txtQuery.Text),
+			//    "&SearchUncategorized=", chkUncategorizedPages.Checked ? "1" : "0",
+			//    "&Categories=", GetCategories(),
+			//    "&Mode=", GetMode(),
+			//    chkAllNamespaces.Checked ? "&AllNamespaces=1" : "",
+			//    chkFilesAndAttachments.Checked ? "&FilesAndAttachments=1" : ""));
+
+			//if(Request["Query"] != null) txtQuery.Text = Request["Query"];
+
 			string query = ScrewTurn.Wiki.SearchEngine.Tools.RemoveDiacriticsAndPunctuation(txtQuery.Text, false);
 
-			UrlTools.Redirect(UrlTools.BuildUrl("Search.aspx?Query=", Tools.UrlEncode(txtQuery.Text),
-				"&SearchUncategorized=", chkUncategorizedPages.Checked ? "1" : "0",
-				"&Categories=", GetCategories(),
-				"&Mode=", GetMode(),
-				chkAllNamespaces.Checked ? "&AllNamespaces=1" : "",
-				chkFilesAndAttachments.Checked ? "&FilesAndAttachments=1" : ""));
+			PerformSearch(query, searchModeMap[GetMode()], GetSelectedCategories(), chkUncategorizedPages.Checked, chkAllNamespaces.Checked, chkFilesAndAttachments.Checked);
 		}
 
 		/// <summary>
 		/// Gets the selected categories.
 		/// </summary>
 		/// <returns>The selected categories.</returns>
-		private string GetCategories() {
-			StringBuilder sb = new StringBuilder(50);
+		private List<string> GetSelectedCategories() {
+			List<string> categories = new List<string>();
 			foreach(ListItem item in lstCategories.Items) {
 				if(item.Selected) {
-					sb.Append(item.Value);
-					sb.Append(",");
+					categories.Add(item.Value);
 				}
 			}
-			return sb.ToString();
+			return categories;
 		}
 
 		/// <summary>
@@ -280,12 +281,12 @@ namespace ScrewTurn.Wiki {
 		private void GenerateOpenSearchDescription() {
 			string xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>
 <OpenSearchDescription xmlns=""http://a9.com/-/spec/opensearch/1.1/"">
-    <ShortName>{0}</ShortName>
-    <Description>{1}</Description>
-    <Url type=""text/html"" method=""get"" template=""{2}Search.aspx?AllNamespaces=1&amp;FilesAndAttachments=1&amp;Query={3}""/>
-    <Image width=""16"" height=""16"" type=""image/x-icon"">{2}{4}</Image>
-    <InputEncoding>UTF-8</InputEncoding>
-    <SearchForm>{2}Search.aspx</SearchForm>
+	<ShortName>{0}</ShortName>
+	<Description>{1}</Description>
+	<Url type=""text/html"" method=""get"" template=""{2}Search.aspx?AllNamespaces=1&amp;FilesAndAttachments=1&amp;Query={3}""/>
+	<Image width=""16"" height=""16"" type=""image/x-icon"">{2}{4}</Image>
+	<InputEncoding>UTF-8</InputEncoding>
+	<SearchForm>{2}Search.aspx</SearchForm>
 </OpenSearchDescription>";
 
 			Response.Clear();
