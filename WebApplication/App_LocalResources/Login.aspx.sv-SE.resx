@@ -157,7 +157,7 @@
     <value />
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Här kan du logga in till wikin. Om du inte har ett konto kan du skapa &lt;a href="Register.aspx" title="Skapa nytt konto"&gt;ett bytt&lt;/a&gt;.</value>
+    <value>Här kan du logga in till wikin. Om du inte har ett konto kan du skapa &lt;a href="Register.aspx" title="Skapa nytt konto"&gt;ett nytt&lt;/a&gt;.</value>
   </data>
   <data name="lblEmailResetResource1.Text" xml:space="preserve">
     <value>E-postadress</value>
