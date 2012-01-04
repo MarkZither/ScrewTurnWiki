@@ -112,174 +112,123 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="btnLoginResource1.Text" xml:space="preserve">
-    <value>Logga in</value>
+  <data name="btnCancelResource1.Text" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="btnLoginResource1.ToolTip" xml:space="preserve">
-    <value>Klicka för att logga in</value>
-  </data>
-  <data name="btnLogoutResource1.Text" xml:space="preserve">
-    <value>Logga ut</value>
-  </data>
-  <data name="btnLogoutResource1.ToolTip" xml:space="preserve">
-    <value>Klicka för att logga ut</value>
-  </data>
-  <data name="btnResetPasswordResource1.Text" xml:space="preserve">
-    <value>Återställ lösenord</value>
-  </data>
-  <data name="btnResetPasswordResource1.ToolTip" xml:space="preserve">
+  <data name="btnCancelResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="btnSaveNewPasswordResource1.Text" xml:space="preserve">
-    <value>Spara nytt lösenord</value>
+  <data name="btnDeleteResource1.Text" xml:space="preserve">
+    <value>Delete</value>
   </data>
-  <data name="btnSaveNewPasswordResource1.ToolTip" xml:space="preserve">
+  <data name="btnDeleteResource1.ToolTip" xml:space="preserve">
+    <value>Delete this Attachment</value>
+  </data>
+  <data name="btnDeleteResource2.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="btnDeleteResource2.ToolTip" xml:space="preserve">
+    <value>Delete this Attachment</value>
+  </data>
+  <data name="btnRefreshResource1.Text" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="btnRefreshResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="chkRememberResource1.Text" xml:space="preserve">
-    <value>Kom ihåg mig</value>
+  <data name="btnRenameResource1.Text" xml:space="preserve">
+    <value>Rename</value>
   </data>
-  <data name="chkRememberResource1.ToolTip" xml:space="preserve">
-    <value>Markera denna kryssruta om du vill bli automatiskt inloggad nästa gång</value>
-  </data>
-  <data name="cvNewPasswordsResource1.ErrorMessage" xml:space="preserve">
-    <value>Lösenorden är inte identiska</value>
-  </data>
-  <data name="cvNewPasswordsResource1.Text" xml:space="preserve">
+  <data name="btnRenameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="cvNewPasswordsResource1.ToolTip" xml:space="preserve">
+  <data name="btnRenameResource2.Text" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="btnRenameResource2.ToolTip" xml:space="preserve">
+    <value>Rename this Attachment</value>
+  </data>
+  <data name="btnRenameResource3.Text" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="btnRenameResource3.ToolTip" xml:space="preserve">
+    <value>Rename this Attachment</value>
+  </data>
+  <data name="btnUploadResource1.Text" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="btnUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Här kan du logga in till wikin. Om du inte har ett konto kan du skapa &lt;a href="Register.aspx" title="Skapa nytt konto"&gt;ett nytt&lt;/a&gt;.</value>
+  <data name="chkOverwriteResource1.Text" xml:space="preserve">
+    <value>Overwrite existing attachment</value>
   </data>
-  <data name="lblEmailResetResource1.Text" xml:space="preserve">
-    <value>E-postadress</value>
-  </data>
-  <data name="lblLogoutResource1.Text" xml:space="preserve">
-    <value>du är inloggad. För att logga ut, klicka på knappen Logga ut.</value>
-  </data>
-  <data name="lblLostPasswordResource1.Text" xml:space="preserve">
+  <data name="chkOverwriteResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="lblNewPassword1Resource1.Text" xml:space="preserve">
-    <value>Lösenord</value>
-  </data>
-  <data name="lblNewPassword2Resource1.Text" xml:space="preserve">
-    <value>Lösenord (bekräfta)</value>
-  </data>
-  <data name="lblOrResource1.Text" xml:space="preserve">
-    <value>eller</value>
-  </data>
-  <data name="lblPasswordResource1.Text" xml:space="preserve">
-    <value>Lösenord</value>
-  </data>
-  <data name="lblResetPassword2InfoResource1.Text" xml:space="preserve">
-    <value>Ange ditt lösenord två gånger.</value>
-  </data>
-  <data name="lblResetPassword2Resource1.Text" xml:space="preserve">
-    <value>Återställ lösenord</value>
-  </data>
-  <data name="lblResetPasswordInformationResource1.Text" xml:space="preserve">
-    <value>Om du glömt ditt lösenord, ange ditt användarnamn &lt;b&gt;eller&lt;/b&gt; din e-postadress och klicka på Återställ lösenord.&lt;br /&gt;Ett e-postmeddelande kommer att skickas till dig med en länk för att återställa ditt lösenord.</value>
-  </data>
-  <data name="lblResetPasswordResource1.Text" xml:space="preserve">
-    <value>Återställ lösenord</value>
-  </data>
-  <data name="lblResultResource1.Text" xml:space="preserve">
+  <data name="fileUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="lblResultResource1.ToolTip" xml:space="preserve">
+  <data name="lblDownloadsResource1.Text" xml:space="preserve">
+    <value>Downloads</value>
+  </data>
+  <data name="lblItemResource1.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Logga in</value>
-  </data>
-  <data name="lblUsernameResetResource1.Text" xml:space="preserve">
-    <value>Användarnamn</value>
-  </data>
-  <data name="lblUsernameResource1.Text" xml:space="preserve">
-    <value>Användarnamn</value>
-  </data>
-  <data name="PageResource1.Title" xml:space="preserve">
-    <value>Untitled Page</value>
-  </data>
-  <data name="rfvNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Lösenord måste anges</value>
-  </data>
-  <data name="rfvNewPassword1Resource1.Text" xml:space="preserve">
+  <data name="lblItemResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rfvNewPassword1Resource1.ToolTip" xml:space="preserve">
+  <data name="lblNameResource1.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="lblNoUploadResource1.Text" xml:space="preserve">
+    <value>&lt;br /&gt;Save the page before uploading</value>
+  </data>
+  <data name="lblNoUploadResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rfvNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Lösenord måste anges</value>
+  <data name="lblRenameResource1.Text" xml:space="preserve">
+    <value>Rename file/directory</value>
   </data>
-  <data name="rfvNewPassword2Resource1.Text" xml:space="preserve">
+  <data name="lblRenameResultResource1.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="rfvNewPassword2Resource1.ToolTip" xml:space="preserve">
+  <data name="lblRenameResultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rxNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Ogiltigt lösenord</value>
+  <data name="lblSizeResource1.Text" xml:space="preserve">
+    <value>Size</value>
   </data>
-  <data name="rxNewPassword1Resource1.Text" xml:space="preserve">
+  <data name="lblStringsResource1.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="rxNewPassword1Resource1.ToolTip" xml:space="preserve">
+  <data name="lblUploadFilesInfoResource1.Text" xml:space="preserve">
+    <value>You can upload attachments for the current Page up to $1. Allowed file types are: $2.</value>
+  </data>
+  <data name="lblUploadResultResource1.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="rxNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Ogiltigt lösenord</value>
-  </data>
-  <data name="rxNewPassword2Resource1.Text" xml:space="preserve">
+  <data name="lblUploadResultResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rxNewPassword2Resource1.ToolTip" xml:space="preserve">
+  <data name="lstProvidersResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="txtEmailResetResource1.Text" xml:space="preserve">
+  <data name="pnlRenameResource1.GroupingText" xml:space="preserve">
     <value />
   </data>
-  <data name="txtEmailResetResource1.ToolTip" xml:space="preserve">
+  <data name="pnlRenameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="txtNewPassword1Resource1.Text" xml:space="preserve">
+  <data name="txtNewNameResource1.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="txtNewPassword1Resource1.ToolTip" xml:space="preserve">
+  <data name="txtNewNameResource1.ToolTip" xml:space="preserve">
     <value />
-  </data>
-  <data name="txtNewPassword2Resource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtNewPassword2Resource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtPasswordResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtPasswordResource1.ToolTip" xml:space="preserve">
-    <value>Ange ditt lösenord här</value>
-  </data>
-  <data name="txtUsernameResetResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtUsernameResetResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtUsernameResource1.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtUsernameResource1.ToolTip" xml:space="preserve">
-    <value>Ange ditt användarnamn här</value>
   </data>
 </root>

@@ -62,9 +62,9 @@ namespace ScrewTurn.Wiki {
 			if(node.Attributes.Count != 0) {
 				foreach(XmlAttribute attName in node.Attributes) {
 					if(attName.Name == "src") {
-						string[] path = attName.Value.ToString().Split('=');
-						if(path.Length > 2) result += "{" + "UP(" + path[1].Split('&')[0] + ")}" + path[2];
-						else result += "{UP}" + path[path.Length - 1];
+						string[] path = attName.Value.Split('=');
+						if(path.Length > 2) result += "{" + "UP(" + path[1].Split('&')[0].Replace("%20", " ") + ")}" + path[2].Replace("%20", " ");
+						else result += "{UP}" + path[path.Length - 1].Replace("%20", " ");
 					}
 				}
 			}
@@ -72,6 +72,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private string ProcessLink(string link) {
+			link = link.Replace("%20", " ");
 			string subLink = "";
 			if(link.ToLowerInvariant().StartsWith("getfile.aspx")) {
 				string[] urlParameters = link.Remove(0, 13).Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
@@ -110,8 +111,8 @@ namespace ScrewTurn.Wiki {
 					if(node.Attributes.Count != 0) {
 						XmlAttributeCollection attribute = node.Attributes;
 						foreach(XmlAttribute attName in attribute) {
-							if(attName.Value.ToString() == "_blank") target += "^";
-							if(attName.Name.ToString() == "href") link += attName.Value.ToString();
+							if(attName.Value == "_blank") target += "^";
+							if(attName.Name == "href") link += attName.Value;
 						}
 					}
 					link = ProcessLink(link);
@@ -148,7 +149,7 @@ namespace ScrewTurn.Wiki {
 							ProcessTableImage(node.ChildNodes, tempSb);
 							aref += tempSb.ToString();
 						}
-						if(node.LastChild.Name.ToLowerInvariant() == "p") p += node.LastChild.InnerText.ToString();
+						if(node.LastChild.Name.ToLowerInvariant() == "p") p += node.LastChild.InnerText;
 						if(!hasLink) sb.Append(p + image);
 						else sb.Append(p + aref);
 						break;
@@ -162,10 +163,10 @@ namespace ScrewTurn.Wiki {
 						if(node.Attributes.Count != 0) {
 							XmlAttributeCollection attribute = node.Attributes;
 							foreach(XmlAttribute attName in attribute) {
-								if(attName.Name.ToString() != "id".ToLowerInvariant()) {
-									if(attName.Value.ToString() == "_blank") target += "^";
-									if(attName.Name.ToString() == "href") link += attName.Value.ToString();
-									if(attName.Name.ToString() == "title") title += attName.Value.ToString();
+								if(attName.Name != "id".ToLowerInvariant()) {
+									if(attName.Value == "_blank") target += "^";
+									if(attName.Name == "href") link += attName.Value;
+									if(attName.Name == "title") title += attName.Value;
 								}
 								link = ProcessLink(link);
 							}
@@ -199,7 +200,7 @@ namespace ScrewTurn.Wiki {
 					case "tr":
 						string style = "";
 						foreach(XmlAttribute attr in node.Attributes) {
-							if(attr.Name.ToLowerInvariant() == "style") style += "style=\"" + attr.Value.ToString() + "\" ";
+							if(attr.Name.ToLowerInvariant() == "style") style += "style=\"" + attr.Value + "\" ";
 						}
 						sb.Append("|- " + style + "\n");
 						ProcessTable(node.ChildNodes, sb);
@@ -208,7 +209,7 @@ namespace ScrewTurn.Wiki {
 						string styleTd = "";
 						if(node.Attributes.Count != 0) {
 							foreach(XmlAttribute attr in node.Attributes) {
-								styleTd += " " + attr.Name + "=\"" + attr.Value.ToString() + "\" ";
+								styleTd += " " + attr.Name + "=\"" + attr.Value + "\" ";
 							}
 							sb.Append("| " + styleTd + " | ");
 							ProcessChild(node.ChildNodes, sb);
@@ -298,7 +299,7 @@ namespace ScrewTurn.Wiki {
 							sb.Append("=====\n");
 							break;
 						case "pre":
-							if(node.HasChildNodes) sb.Append("@@" + node.InnerText.ToString() + "@@");
+							if(node.HasChildNodes) sb.Append("@@" + node.InnerText + "@@");
 							break;
 						case "code":
 							if(node.HasChildNodes) {
@@ -355,7 +356,7 @@ namespace ScrewTurn.Wiki {
 							}
 							if(node.ParentNode != null) {
 								if(node.ParentNode.Name != "td") ProcessList(node.ChildNodes, "#", sb);
-								else sb.Append(node.OuterXml.ToString());
+								else sb.Append(node.OuterXml);
 							}
 							else ProcessList(node.ChildNodes, "#", sb);
 							break;
@@ -365,7 +366,7 @@ namespace ScrewTurn.Wiki {
 							}
 							if(node.ParentNode != null) {
 								if(node.ParentNode.Name != "td") ProcessList(node.ChildNodes, "*", sb);
-								else sb.Append(node.OuterXml.ToString());
+								else sb.Append(node.OuterXml);
 							}
 							else ProcessList(node.ChildNodes, "*", sb);
 							break;
@@ -439,11 +440,11 @@ namespace ScrewTurn.Wiki {
 							string description = "";
 							bool hasClass = false;
 							bool isLink = false;
-							if(node.ParentNode != null && node.ParentNode.Name.ToLowerInvariant().ToString() == "a") isLink = true;
+							if(node.ParentNode != null && node.ParentNode.Name.ToLowerInvariant() == "a") isLink = true;
 							if(node.Attributes.Count != 0) {
 								foreach(XmlAttribute attName in node.Attributes) {
-									if(attName.Name.ToString() == "alt") description = attName.Value.ToString();
-									if(attName.Name.ToString() == "class") hasClass = true;
+									if(attName.Name == "alt") description = attName.Value;
+									if(attName.Name == "class") hasClass = true;
 								}
 							}
 							if(!hasClass && !isLink) sb.Append("[image|" + description + "|" + ProcessImage(node) + "]\n");
@@ -466,8 +467,8 @@ namespace ScrewTurn.Wiki {
 								foreach(XmlAttribute attName in attribute) {
 									if(attName.Name != "id".ToLowerInvariant()) {
 										if(attName.Value.ToLowerInvariant() == "_blank") target += "^";
-										if(attName.Name.ToLowerInvariant() == "href") link += attName.Value.ToString();
-										if(attName.Name.ToLowerInvariant() == "title") title += attName.Value.ToString();
+										if(attName.Name.ToLowerInvariant() == "href") link += attName.Value.Replace("%20", " ");
+										if(attName.Name.ToLowerInvariant() == "title") title += attName.Value;
 										if(attName.Name.ToLowerInvariant() == "class" && attName.Value.ToLowerInvariant() == "systemlink") isSystemLink = true;
 										if(attName.Name.ToLowerInvariant() == "class" && (attName.Value.ToLowerInvariant() == "unknownlink" || attName.Value.ToLowerInvariant() == "pagelink")) pageLink = true;
 									}

@@ -117,110 +117,68 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="btnManualNameResource1.Text" xml:space="preserve">
-    <value>Udfyld sidenavn manuelt...</value>
-  </data>
-  <data name="btnManualNameResource1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtCategoryResource2.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtCategoryResource2.ToolTip" xml:space="preserve">
-    <value>Indtast kategorinavnet her</value>
-  </data>
-  <data name="txtCommentResource2.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtCommentResource2.ToolTip" xml:space="preserve">
-    <value>Indtast en kommentar for denne ændring her (valgfri)</value>
-  </data>
-  <data name="txtDescriptionResource2.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtDescriptionResource2.ToolTip" xml:space="preserve">
-    <value>Indtast en beskrivelse for denne side her (valgfri)</value>
-  </data>
-  <data name="txtKeywordsResource2.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtKeywordsResource2.ToolTip" xml:space="preserve">
-    <value>Indtast nøgleord for denne side her, adskilt med kommaer (valgfri)</value>
-  </data>
-  <data name="txtNameResource2.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtNameResource2.ToolTip" xml:space="preserve">
-    <value>Indtast sidenavnet her</value>
-  </data>
-  <data name="txtTitleResource2.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="txtTitleResource2.ToolTip" xml:space="preserve">
-    <value>Indtast sidetitlen her</value>
-  </data>
   <data name="btnAutoTemplateOKResource1.Text" xml:space="preserve">
-    <value>Luk</value>
+    <value>Close</value>
   </data>
   <data name="btnAutoTemplateOKResource1.ToolTip" xml:space="preserve">
-    <value>Luk denne besked</value>
+    <value>Close this message</value>
   </data>
   <data name="btnCancelResource1.Text" xml:space="preserve">
-    <value>Annuller</value>
+    <value>Cancel</value>
   </data>
   <data name="btnCancelResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnCancelTemplateResource1.Text" xml:space="preserve">
-    <value>Annuller</value>
+    <value>Cancel</value>
   </data>
   <data name="btnCancelTemplateResource1.ToolTip" xml:space="preserve">
-    <value>Luk skabelonbjælken</value>
+    <value>Close the Templates toolbar</value>
   </data>
   <data name="btnCreateCategoryResource1.Text" xml:space="preserve">
-    <value>Opret</value>
+    <value>Create</value>
   </data>
   <data name="btnCreateCategoryResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveAndContinueResource1.Text" xml:space="preserve">
-    <value>Gem &amp; fortsæt</value>
+    <value>Save &amp; Continue</value>
   </data>
   <data name="btnSaveAndContinueResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveResource1.Text" xml:space="preserve">
-    <value>Gem</value>
+    <value>Save</value>
   </data>
   <data name="btnSaveResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnTemplatesResource1.Text" xml:space="preserve">
-    <value>Indholdsskabeloner...</value>
+    <value>Content Templates...</value>
   </data>
   <data name="btnTemplatesResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnUseTemplateResource1.Text" xml:space="preserve">
-    <value>Brug skabelon</value>
+    <value>Use Template</value>
   </data>
   <data name="btnUseTemplateResource1.ToolTip" xml:space="preserve">
-    <value>Brug denne skabelon (erstat nuværende sideindhold)</value>
+    <value>Use this Template (replace current content)</value>
   </data>
   <data name="chkMinorChangeResource1.Text" xml:space="preserve">
-    <value>Mindre ændring (ingen backup)</value>
+    <value>Minor Change (no backup)</value>
   </data>
   <data name="chkMinorChangeResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkSaveAsDraftResource1.Text" xml:space="preserve">
-    <value>Gem som udkast</value>
+    <value>Save as Draft</value>
   </data>
   <data name="chkSaveAsDraftResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="cvCategory1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Ugyldigt navn</value>
+    <value>Invalid Name</value>
   </data>
   <data name="cvCategory1Resource1.Text" xml:space="preserve">
     <value />
@@ -229,7 +187,7 @@
     <value />
   </data>
   <data name="cvCategory2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Kategori eksisterer allerede</value>
+    <value>Category already exists</value>
   </data>
   <data name="cvCategory2Resource1.Text" xml:space="preserve">
     <value />
@@ -238,7 +196,7 @@
     <value />
   </data>
   <data name="cvName1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Ugyldigt sidenavn</value>
+    <value>Invalid Page Name</value>
   </data>
   <data name="cvName1Resource1.Text" xml:space="preserve">
     <value />
@@ -247,7 +205,7 @@
     <value />
   </data>
   <data name="cvName2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Side eksisterer allerede</value>
+    <value>Page already exists</value>
   </data>
   <data name="cvName2Resource1.Text" xml:space="preserve">
     <value />
@@ -256,16 +214,16 @@
     <value />
   </data>
   <data name="lblApprovalRequiredInfoResource1.Text" xml:space="preserve">
-    <value>Dine ændringer til denne side vil blive gemt som et udkast og vil ikke blive offentliggjort før en redaktør eller administrator godkender dem.</value>
+    <value>Your changes to this page will be saved in a draft and they will not be published until an editor or administrator approves them.</value>
   </data>
   <data name="lblAttachmentManagerResource1.Text" xml:space="preserve">
-    <value>Administration af sidevedhæftninger</value>
+    <value>Page Attachments Management</value>
   </data>
   <data name="lblAutoTemplateResource1.Text" xml:space="preserve">
-    <value>Indholdsskabelonen "##TEMPLATE##" blev automatisk valgt. Du kan kassere indholdet og/eller vælge en anden skabelon ved at bruge linket herover.</value>
+    <value>The Content Template "##TEMPLATE##" was selected automatically. You can discard the content as well as select another Template using the link above.</value>
   </data>
   <data name="lblCategoriesResource1.Text" xml:space="preserve">
-    <value>Sidekategorier</value>
+    <value>Page Categories</value>
   </data>
   <data name="lblCategoryResultResource1.Text" xml:space="preserve">
     <value />
@@ -274,40 +232,40 @@
     <value />
   </data>
   <data name="lblCommentResource1.Text" xml:space="preserve">
-    <value>Kommentar for denne ændring</value>
+    <value>Comment for this change</value>
   </data>
   <data name="lblConcurrentEditingResource1.Text" xml:space="preserve">
-    <value>&lt;b&gt;Advarsel&lt;/b&gt;: Denne side er ved at blive redigeret af en anden bruger</value>
+    <value>&lt;b&gt;Warning&lt;/b&gt;: this Page is being edited by another user</value>
   </data>
   <data name="lblConcurrentEditingUsernameResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Metabeskrivelse</value>
+    <value>Meta Description</value>
   </data>
   <data name="lblDraftInfo2Resource1.Text" xml:space="preserve">
-    <value>Hvis du synes dette indhold er klar til visning, så fjern krydset i 'Gem som udkast' boksen tæt ved 'Gem' knappen. Bemærk: Udkast bliver ikke gemt i historikken.</value>
+    <value>If you think this content is ready for display, simply uncheck the 'Save as Draft' checkbox near the 'Save' button. Note: drafts are not versioned.</value>
   </data>
   <data name="lblDraftInfoResource1.Text" xml:space="preserve">
-    <value>Du redigerer i et tidligere gemt &lt;b&gt;udkast&lt;/b&gt; af denne side, gemt af &lt;b&gt;##USER##&lt;/b&gt; d. &lt;b&gt;##DATETIME##&lt;/b&gt; (##VIEWCHANGES##).</value>
+    <value>You are currently editing a previously saved &lt;b&gt;draft&lt;/b&gt; of this page, edited by &lt;b&gt;##USER##&lt;/b&gt; on &lt;b&gt;##DATETIME##&lt;/b&gt; (##VIEWCHANGES##).</value>
   </data>
   <data name="lblEditNoticeResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblIpLoggedResource1.Text" xml:space="preserve">
-    <value>Siden du ikke er logget ind, vil din IP adresse blive brugt som brugernavn.</value>
+    <value>Since you are not logged in, your IP Address will be used as Username.</value>
   </data>
   <data name="lblKeywordsResource1.Text" xml:space="preserve">
-    <value>Metanøgleord (adskil med kommaer)</value>
+    <value>Meta Keywords (separate with commas)</value>
   </data>
   <data name="lblMetaResource1.Text" xml:space="preserve">
-    <value>Metainformation</value>
+    <value>Meta Information</value>
   </data>
   <data name="lblNameResource1.Text" xml:space="preserve">
-    <value>Sidenavn (brugt til at linke sider)</value>
+    <value>Page Name (used for linking pages)</value>
   </data>
   <data name="lblNewCategoryResource1.Text" xml:space="preserve">
-    <value>Ny kategori</value>
+    <value>New Category</value>
   </data>
   <data name="lblRefreshLinkResource1.Text" xml:space="preserve">
     <value />
@@ -319,10 +277,10 @@
     <value />
   </data>
   <data name="lblSaveDangerousResource1.Text" xml:space="preserve">
-    <value>Gemning af denne side kan resultere i &lt;b&gt;datatab&lt;/b&gt;.</value>
+    <value>Saving this Page might result in a &lt;b&gt;data-loss&lt;/b&gt;.</value>
   </data>
   <data name="lblSaveDisabledResource1.Text" xml:space="preserve">
-    <value>Administratorerne tillader ikke at denne side gemmes.</value>
+    <value>The Administrators don't allow to save this Page.</value>
   </data>
   <data name="lblSessionRefreshResource1.Text" xml:space="preserve">
     <value />
@@ -334,7 +292,7 @@
     <value />
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Sidetitel</value>
+    <value>Page Title</value>
   </data>
   <data name="lblUnloadPageResource1.Text" xml:space="preserve">
     <value />
@@ -346,7 +304,7 @@
     <value />
   </data>
   <data name="PageResource2.Title" xml:space="preserve">
-    <value>Titel</value>
+    <value>Title</value>
   </data>
   <data name="pnlAnonymousResource1.GroupingText" xml:space="preserve">
     <value />
@@ -397,7 +355,7 @@
     <value />
   </data>
   <data name="rfvCategoryResource1.ErrorMessage" xml:space="preserve">
-    <value>Navn er påkrævet</value>
+    <value>Name is required</value>
   </data>
   <data name="rfvCategoryResource1.Text" xml:space="preserve">
     <value />
@@ -406,7 +364,7 @@
     <value />
   </data>
   <data name="rfvNameResource1.ErrorMessage" xml:space="preserve">
-    <value>Navn er påkrævet</value>
+    <value>Name is required</value>
   </data>
   <data name="rfvNameResource1.Text" xml:space="preserve">
     <value />
@@ -415,12 +373,54 @@
     <value />
   </data>
   <data name="rfvTitleResource1.ErrorMessage" xml:space="preserve">
-    <value>Titel er påkrævet</value>
+    <value>Title is required</value>
   </data>
   <data name="rfvTitleResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="rfvTitleResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtCategoryResource2.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtCategoryResource2.ToolTip" xml:space="preserve">
+    <value>Type the name of the category here</value>
+  </data>
+  <data name="txtCommentResource2.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtCommentResource2.ToolTip" xml:space="preserve">
+    <value>Type a comment for this change here (optional)</value>
+  </data>
+  <data name="txtDescriptionResource2.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDescriptionResource2.ToolTip" xml:space="preserve">
+    <value>Type the description for this page here (optional)</value>
+  </data>
+  <data name="txtKeywordsResource2.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtKeywordsResource2.ToolTip" xml:space="preserve">
+    <value>Type the keywords for this page here, separated with commas (optional)</value>
+  </data>
+  <data name="txtNameResource2.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNameResource2.ToolTip" xml:space="preserve">
+    <value>Type the name of the page here</value>
+  </data>
+  <data name="txtTitleResource2.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtTitleResource2.ToolTip" xml:space="preserve">
+    <value>Type the title of the page here</value>
+  </data>
+  <data name="btnManualNameResource1.Text" xml:space="preserve">
+    <value>Specify page name manually...</value>
+  </data>
+  <data name="btnManualNameResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
 </root>

@@ -45,8 +45,10 @@ namespace ScrewTurn.Wiki {
 					chkUncategorizedPages.Checked = Request["SearchUncategorized"] == "1";
 				}
 
-				chkAllNamespaces.Checked = Request["AllNamespaces"] == "1";
-				chkFilesAndAttachments.Checked = Request["FilesAndAttachments"] == "1";
+				if(Request["Query"] != null) {
+					chkAllNamespaces.Checked = Request["AllNamespaces"] == "1";
+					chkFilesAndAttachments.Checked = Request["FilesAndAttachments"] == "1";
+				}
 
 				if(chkAllNamespaces.Checked) {
 					lblHideCategoriesScript.Text = "<script type=\"text/javascript\"><!--\r\ndocument.getElementById('CategoryFilterDiv').style['display'] = 'none';\r\n//-->\r\n</script>";
@@ -95,60 +97,43 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 
-				string query = Request["Query"];
-				if(Request["Query"] != null) txtQuery.Text = query;
+				if(Request["Query"] != null) {
+					txtQuery.Text = Request["Query"];
 
-				// Launch search, if query is specified
-
-				string mode = Request["Mode"];
-				if(string.IsNullOrEmpty(mode)) mode = "1";
-
-				if(!string.IsNullOrEmpty(query)) {
-					// If the query string is surraunded by " remove them from the Request["Query"] object
-					// and check the correct CheckBox
-					if(query.StartsWith("\"") && query.EndsWith("\"")) {
-						txtQuery.Text = query.Trim(new char[] { '"' });
-						mode = "3";
-
-						rdoAtLeastOneWord.Checked = false;
-						rdoAllWords.Checked = false;
-						rdoExactPhrase.Checked = true;
-					}
-
-					// If the search mode has been set to 3 (ExactPhrase) the query must be wrapped with "
-					if(mode == "3") {
-						query = "\"" + query.Trim(new char[] { '"' }) + "\"";
-					}
-
-					PerformSearch(query, searchModeMap[mode], selectedCategories,
-						chkUncategorizedPages.Checked, chkAllNamespaces.Checked, chkFilesAndAttachments.Checked);
+					btnGo_Click(sender, e);
 				}
 			}
 		}
 
 		protected void btnGo_Click(object sender, EventArgs e) {
 			// Redirect firing the search
-			UrlTools.Redirect(UrlTools.BuildUrl(currentWiki, "Search.aspx?Query=", Tools.UrlEncode(txtQuery.Text),
-				"&SearchUncategorized=", chkUncategorizedPages.Checked ? "1" : "0",
-				"&Categories=", GetCategories(),
-				"&Mode=", GetMode(),
-				chkAllNamespaces.Checked ? "&AllNamespaces=1" : "",
-				chkFilesAndAttachments.Checked ? "&FilesAndAttachments=1" : ""));
+
+			//UrlTools.Redirect(UrlTools.BuildUrl("Search.aspx?Query=", Tools.UrlEncode(txtQuery.Text),
+			//    "&SearchUncategorized=", chkUncategorizedPages.Checked ? "1" : "0",
+			//    "&Categories=", GetCategories(),
+			//    "&Mode=", GetMode(),
+			//    chkAllNamespaces.Checked ? "&AllNamespaces=1" : "",
+			//    chkFilesAndAttachments.Checked ? "&FilesAndAttachments=1" : ""));
+
+			//if(Request["Query"] != null) txtQuery.Text = Request["Query"];
+
+			string query = txtQuery.Text;
+
+			PerformSearch(query, searchModeMap[GetMode()], GetSelectedCategories(), chkUncategorizedPages.Checked, chkAllNamespaces.Checked, chkFilesAndAttachments.Checked);
 		}
 
 		/// <summary>
 		/// Gets the selected categories.
 		/// </summary>
 		/// <returns>The selected categories.</returns>
-		private string GetCategories() {
-			StringBuilder sb = new StringBuilder(50);
+		private List<string> GetSelectedCategories() {
+			List<string> categories = new List<string>();
 			foreach(ListItem item in lstCategories.Items) {
 				if(item.Selected) {
-					sb.Append(item.Value);
-					sb.Append(",");
+					categories.Add(item.Value);
 				}
 			}
-			return sb.ToString();
+			return categories;
 		}
 
 		/// <summary>

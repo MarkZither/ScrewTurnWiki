@@ -112,43 +112,43 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnLoginResource1.Text" xml:space="preserve">
-    <value>Logga in</value>
+    <value>Login</value>
   </data>
   <data name="btnLoginResource1.ToolTip" xml:space="preserve">
-    <value>Klicka för att logga in</value>
+    <value>Click to Login</value>
   </data>
   <data name="btnLogoutResource1.Text" xml:space="preserve">
-    <value>Logga ut</value>
+    <value>Logout</value>
   </data>
   <data name="btnLogoutResource1.ToolTip" xml:space="preserve">
-    <value>Klicka för att logga ut</value>
+    <value>Click to Logout</value>
   </data>
   <data name="btnResetPasswordResource1.Text" xml:space="preserve">
-    <value>Återställ lösenord</value>
+    <value>Reset Password</value>
   </data>
   <data name="btnResetPasswordResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="btnSaveNewPasswordResource1.Text" xml:space="preserve">
-    <value>Spara nytt lösenord</value>
+    <value>Save New Password</value>
   </data>
   <data name="btnSaveNewPasswordResource1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="chkRememberResource1.Text" xml:space="preserve">
-    <value>Kom ihåg mig</value>
+    <value>Remember me</value>
   </data>
   <data name="chkRememberResource1.ToolTip" xml:space="preserve">
-    <value>Markera denna kryssruta om du vill bli automatiskt inloggad nästa gång</value>
+    <value>Check this if you want the system to remember you next time</value>
   </data>
   <data name="cvNewPasswordsResource1.ErrorMessage" xml:space="preserve">
-    <value>Lösenorden är inte identiska</value>
+    <value>Passwords are not equal</value>
   </data>
   <data name="cvNewPasswordsResource1.Text" xml:space="preserve">
     <value />
@@ -157,40 +157,40 @@
     <value />
   </data>
   <data name="lblDescriptionResource1.Text" xml:space="preserve">
-    <value>Här kan du logga in till wikin. Om du inte har ett konto kan du skapa &lt;a href="Register.aspx" title="Skapa nytt konto"&gt;ett nytt&lt;/a&gt;.</value>
+    <value>Here you can login to the wiki. Don't you have an account? You can &lt;a href="Register.aspx" title="Create a new Account"&gt;create one&lt;/a&gt;.</value>
   </data>
   <data name="lblEmailResetResource1.Text" xml:space="preserve">
-    <value>E-postadress</value>
+    <value>Email</value>
   </data>
   <data name="lblLogoutResource1.Text" xml:space="preserve">
-    <value>du är inloggad. För att logga ut, klicka på knappen Logga ut.</value>
+    <value>you are currently logged in. To logout, please click on the Logout button.</value>
   </data>
   <data name="lblLostPasswordResource1.Text" xml:space="preserve">
     <value />
   </data>
   <data name="lblNewPassword1Resource1.Text" xml:space="preserve">
-    <value>Lösenord</value>
+    <value>Password</value>
   </data>
   <data name="lblNewPassword2Resource1.Text" xml:space="preserve">
-    <value>Lösenord (bekräfta)</value>
+    <value>Password (repeat)</value>
   </data>
   <data name="lblOrResource1.Text" xml:space="preserve">
-    <value>eller</value>
+    <value>or</value>
   </data>
   <data name="lblPasswordResource1.Text" xml:space="preserve">
-    <value>Lösenord</value>
+    <value>Password</value>
   </data>
   <data name="lblResetPassword2InfoResource1.Text" xml:space="preserve">
-    <value>Ange ditt lösenord två gånger.</value>
+    <value>Please enter your new password twice.</value>
   </data>
   <data name="lblResetPassword2Resource1.Text" xml:space="preserve">
-    <value>Återställ lösenord</value>
+    <value>Reset Password</value>
   </data>
   <data name="lblResetPasswordInformationResource1.Text" xml:space="preserve">
-    <value>Om du glömt ditt lösenord, ange ditt användarnamn &lt;b&gt;eller&lt;/b&gt; din e-postadress och klicka på Återställ lösenord.&lt;br /&gt;Ett e-postmeddelande kommer att skickas till dig med en länk för att återställa ditt lösenord.</value>
+    <value>If you forgot your Password, please insert your Username &lt;b&gt;or&lt;/b&gt; Email address, then click on the Reset Password button.&lt;br /&gt;You will receive an email with a link to reset your password.</value>
   </data>
   <data name="lblResetPasswordResource1.Text" xml:space="preserve">
-    <value>Återställ lösenord</value>
+    <value>Reset Password</value>
   </data>
   <data name="lblResultResource1.Text" xml:space="preserve">
     <value />
@@ -199,19 +199,19 @@
     <value />
   </data>
   <data name="lblTitleResource1.Text" xml:space="preserve">
-    <value>Logga in</value>
+    <value>Login</value>
   </data>
   <data name="lblUsernameResetResource1.Text" xml:space="preserve">
-    <value>Användarnamn</value>
+    <value>Username</value>
   </data>
   <data name="lblUsernameResource1.Text" xml:space="preserve">
-    <value>Användarnamn</value>
+    <value>Username</value>
   </data>
   <data name="PageResource1.Title" xml:space="preserve">
     <value>Untitled Page</value>
   </data>
   <data name="rfvNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Lösenord måste anges</value>
+    <value>Password is required</value>
   </data>
   <data name="rfvNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -220,7 +220,7 @@
     <value />
   </data>
   <data name="rfvNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Lösenord måste anges</value>
+    <value>Password is required</value>
   </data>
   <data name="rfvNewPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -229,7 +229,7 @@
     <value />
   </data>
   <data name="rxNewPassword1Resource1.ErrorMessage" xml:space="preserve">
-    <value>Ogiltigt lösenord</value>
+    <value>Invalid Password</value>
   </data>
   <data name="rxNewPassword1Resource1.Text" xml:space="preserve">
     <value />
@@ -238,7 +238,7 @@
     <value />
   </data>
   <data name="rxNewPassword2Resource1.ErrorMessage" xml:space="preserve">
-    <value>Ogiltigt lösenord</value>
+    <value>Invalid Password</value>
   </data>
   <data name="rxNewPassword2Resource1.Text" xml:space="preserve">
     <value />
@@ -268,7 +268,7 @@
     <value />
   </data>
   <data name="txtPasswordResource1.ToolTip" xml:space="preserve">
-    <value>Ange ditt lösenord här</value>
+    <value>Type here your Password</value>
   </data>
   <data name="txtUsernameResetResource1.Text" xml:space="preserve">
     <value />
@@ -280,6 +280,6 @@
     <value />
   </data>
   <data name="txtUsernameResource1.ToolTip" xml:space="preserve">
-    <value>Ange ditt användarnamn här</value>
+    <value>Type here your Username</value>
   </data>
 </root>

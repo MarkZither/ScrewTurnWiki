@@ -2594,7 +2594,6 @@ namespace ScrewTurn.Wiki {
 				else {
 					string formatterErrorString = @"<b style=""color: #FF0000;"">FORMATTER ERROR (Transcluded inexistent page or this same page)</b>";
 					sb.Insert(match.Index, formatterErrorString);
-					sb.Insert(match.Index, match);
 
 				}
 
