@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Compile" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<SolutionRoot Include=".." />
+		<SolutionFile Include="..\ScrewTurnWiki.sln" />
+		
+		<BuildTemp Include=".\Temp\" />
+		
+		<Artifacts										Include=".\Artifacts\" />
+		<WebAppOutput									Include=".\Artifacts\WebApplication\" />
+		<WebAppOutput_PublicDirectory					Include=".\Artifacts\WebApplication\public\" />
+		<WebAppOutput_SqlServer							Include=".\Artifacts\WebApplication-SqlServer\" />
+		<WebAppOutput_SqlServer_PublicDirectory			Include=".\Artifacts\WebApplication-SqlServer\public\" />
+		<WebAppOutput_SqlServer_PublicDirectory_Plugins	Include=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
+		<PluginsOutput									Include=".\Artifacts\Plugins\" />
+		<TestsOutput									Include=".\Artifacts\Tests\" />
+	</ItemGroup>
+
+	<Target Name="Clean">
+		<RemoveDir Directories="@(Artifacts)" />
+		<RemoveDir Directories="@(Temp)" />
+	</Target>
+
+	<Target Name="Init" DependsOnTargets="Clean">
+		<MakeDir Directories="@(Artifacts)" />
+		<MakeDir Directories="@(BuildTemp)" />
+		<MakeDir Directories="@(WebAppOutput)" />
+		<MakeDir Directories="@(PluginsOutput)" />
+		<MakeDir Directories="@(TestsOutput)" />
+	</Target>
+
+	<Target Name="Compile" DependsOnTargets="Init">
+		<MSBuild Projects="@(SolutionFile)" Properties="OutDir=%(BuildTemp.FullPath);Configuration=$(Configuration)" />
+		
+		<!-- Web Application -->
+		<CreateItem Include="Temp\_PublishedWebsites\WebApplication\**\*.*" Exclude="**\*.xml">
+			<Output ItemName="BuiltWebApp" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(BuiltWebApp)" DestinationFolder=".\Artifacts\WebApplication\%(RecursiveDir)" />
+		
+		<!-- Web Application, SQL Server -->
+		<Copy SourceFiles="@(BuiltWebApp)" DestinationFolder=".\Artifacts\WebApplication-SqlServer\%(RecursiveDir)" />
+		
+		<!-- Release Web.config -->
+		<Copy Condition="'$(Configuration)' == 'Release'"
+			SourceFiles=".\Artifacts\WebApplication\Web.Release.config" DestinationFiles=".\Artifacts\WebApplication\Web.config" />
+		<Delete Files=".\Artifacts\WebApplication\Web.Release.config" />
+		<Delete Files=".\Artifacts\WebApplication\Web.SqlServer.Release.config" />
+		
+		<!-- Release Web.config, SQL Server -->
+		<Copy Condition="'$(Configuration)' == 'Release'"
+			SourceFiles=".\Artifacts\WebApplication-SqlServer\Web.SqlServer.Release.config" DestinationFiles=".\Artifacts\WebApplication-SqlServer\Web.config" />
+		<Delete Files=".\Artifacts\WebApplication-SqlServer\Web.Release.config" />
+		<Delete Files=".\Artifacts\WebApplication-SqlServer\Web.SqlServer.Release.config" />
+		
+		<!-- Web Application Public Directory -->
+		<MakeDir Directories="@(WebAppOutput_PublicDirectory)" />
+		
+		<!-- Web Application Public Directory and Plugins Directory, SQL Server -->
+		<MakeDir Directories="@(WebAppOutput_SqlServer_PublicDirectory)" />
+		<MakeDir Directories="@(WebAppOutput_SqlServer_PublicDirectory_Plugins)" />
+		
+		<!-- Plugins Assemblies -->
+		<CreateItem Include="Temp\SqlServerProviders.dll;Temp\ActiveDirectoryProvider.dll;Temp\*Plugin.dll">
+			<Output ItemName="BuiltPlugins" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(BuiltPlugins)" DestinationFolder=".\Artifacts\Plugins\" />
+		
+		<!-- SqlServerProviders.dll for SQL Server -->
+		<Copy SourceFiles=".\Artifacts\Plugins\SqlServerProviders.dll" DestinationFolder=".\Artifacts\WebApplication-SqlServer\public\Plugins\" />
+		
+		<!-- Install.txt, Install-SqlServer.txt -->
+		<Copy SourceFiles=".\Install.txt" DestinationFolder=".\Artifacts\" />
+		<Copy SourceFiles=".\Install-SqlServer.txt" DestinationFolder=".\Artifacts\" />
+		
+		<!-- Tests Assemblies -->
+		<CreateItem Include="Temp\*.dll;Temp\*.pdb">
+			<Output ItemName="BuiltTests" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(BuiltTests)" DestinationFolder=".\Artifacts\Tests\" />
+		
+		<!-- Delete Temp directory -->
+		<RemoveDir Directories="@(BuildTemp)" />
+	</Target>
+	
+	<Target Name="Test" DependsOnTargets="Compile">
+		<!-- Requires SQL Server 2005/2008 installed on the system, and it must grant the necessary rights to the current Windows user -->
+		
+		<Exec Command='..\References\Tools\NUnit\nunit-console.exe ".\Artifacts\Tests\ScrewTurn.Wiki.AclEngine.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Core.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.PluginPack.DownloadCounterPlugin.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.SqlCommon.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.Plugins.SqlServer.Tests.dll" ".\Artifacts\Tests\ScrewTurn.Wiki.SearchEngine.Tests.dll" /xml=".\Artifacts\TestResult.xml" /labels' />
+	</Target>
+	
+	<Target Name="Package" DependsOnTargets="Compile">
+		<!-- Requires 7-Zip installed on the system in the location %PROGRAMFILES% points to - use a symlink alternatively -->
+		
+		<GetAssemblyIdentity AssemblyFiles=".\Artifacts\WebApplication\bin\ScrewTurn.Wiki.Core.dll">
+			<Output TaskParameter="Assemblies" ItemName="MyAsm" />
+		</GetAssemblyIdentity>
+		
+		<CreateItem Include="..\**\*.*" Exclude="..\.hg\**\*.*;..\Build\Artifacts\**\*.*;..\**\bin\**\*.*;..\**\obj\**\*.*;..\.hgignore">
+			<Output ItemName="SourceCode" TaskParameter="Include" />
+		</CreateItem>
+		<Copy SourceFiles="@(SourceCode)" DestinationFolder=".\Artifacts\Source\%(RecursiveDir)" />
+		
+		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-%(MyAsm.Version).zip" ".\Artifacts\WebApplication\" ".\Artifacts\Plugins\" ".\Artifacts\Install.txt"' />
+		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-SqlServer-%(MyAsm.Version).zip" ".\Artifacts\WebApplication-SqlServer\" ".\Artifacts\Plugins\" ".\Artifacts\Install-SqlServer.txt"' />
+		<Exec Command='"$(ProgramFiles)\7-Zip\7z.exe" a -tzip -mx=7 ".\Artifacts\ScrewTurnWiki-%(MyAsm.Version)-Source.zip" ".\Artifacts\Source\*"' />
+	</Target>
+	
+</Project>
