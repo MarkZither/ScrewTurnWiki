@@ -1863,6 +1863,9 @@
     <Content Include="App_LocalResources\Search.aspx.hi-IN.resx" />
     <Content Include="App_LocalResources\Upload.aspx.hi-IN.resx" />
     <Content Include="App_LocalResources\User.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AccessDenied.aspx.hi-IN.resx" />
+    <Content Include="App_LocalResources\AclActionsSelector.ascx.hi-IN.resx" />
+    <Content Include="App_LocalResources\Admin.master.hi-IN.resx" />
     <EmbeddedResource Include="Properties\Messages.af-ZA.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.af-ZA.Designer.cs</LastGenOutput>
