@@ -1,0 +1,8 @@
+﻿.diagramBox{
+    position: relative; 
+    overflow: auto; 
+    width: 821px; 
+    height: 641px; 
+    background-image:url('GetFile.aspx?file=/__DiagramPlugin/grid.gif');
+    cursor: default;
+}
