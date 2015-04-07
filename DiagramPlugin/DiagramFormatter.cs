@@ -6,6 +6,7 @@ using ScrewTurn.Wiki.PluginFramework;
 using System.IO.Compression;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace ScrewTurn.Wiki.Plugins.Diagram
 {
@@ -233,24 +234,50 @@ namespace ScrewTurn.Wiki.Plugins.Diagram
 			return buffer.ToString();
 		}
 
-	    private static bool ReplaceTags(ContextInformation context, StringBuilder buffer, string fullName)
+	    private bool	ReplaceTags(ContextInformation context, StringBuilder buffer, string fullName)
 	    {
 			bool anyReplaced = false;
 			int index;
 			Match match;
 		    while (FindAndRemoveFirstOccurrence(buffer, out index, out match))
 		    {
-				buffer.Insert(index, CreateContent());
+				buffer.Insert(index, CreateContent(match.Groups[2].Value, context.Page));
 			    anyReplaced = true;
 		    }
 		    return anyReplaced;
 	    }
 
-	    private static string CreateContent()
+	    private static string StreamToString(Stream stream)
+		{
+			stream.Position = 0;
+			using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+			{
+				return reader.ReadToEnd();
+			}
+		}
+	    private string CreateContent(string name, PageInfo currentPage)
 	    {
+			var format = new FileFormat(ReadAttachment(name, currentPage));
+		    if (format.State == FormatState.Error)
+		    {
+			    return "Error parsing content: " + format.Error;
+		    }
+			
 		    var builder = new StringBuilder();
-		    builder.AppendLine(@"<div id=""diagram"" class=""diagramBox""></div>");
+		    builder.AppendLine(string.Format(@"<div id=""diagram-{0}"" class=""diagramBox"" init=""{1}""></div>", name, HttpUtility.HtmlEncode(format.FileContent)));
      	    return builder.ToString();
+	    }
+
+	    private string ReadAttachment(string name, PageInfo currentPage)
+	    {
+		    IFilesStorageProviderV30 filesStorageProvider = GetDefaultFilesStorageProvider();
+		    string content;
+		    using (var stream = new MemoryStream())
+		    {
+			    filesStorageProvider.RetrievePageAttachment(currentPage, name + ".htm", stream, false);
+			    content = StreamToString(stream);
+		    }
+		    return content;
 	    }
 
 	    private static bool FindAndRemoveFirstOccurrence(StringBuilder buffer, out int index, out Match match)
@@ -267,35 +294,30 @@ namespace ScrewTurn.Wiki.Plugins.Diagram
 
 	    private static void InjectStyleAndScript(StringBuilder buffer)
 	    {
-				buffer.Append(@"<script type=""text/javascript"" src=""GetFile.aspx?file=" + defaultDirectoryName + jsFileName + @"""></script>");
-				buffer.Append(@"<link rel=""StyleSheet"" href=""GetFile.aspx?file=" + defaultDirectoryName + cssFileName + @""" type=""text/css"" />");
-				buffer.Append(@"<script type=""text/javascript""> <!--
-var MindMapDemo = (function () {
-    function MindMapDemo() {
-    }
-    MindMapDemo.main = function (container) {
-        var graph = new Five.Graph(container);
-        var model = graph.getModel();
-        var mm = this.mactoModel();
-        model.beginUpdate();
-        try {
-            new Five.Mindmap.Adaptor(graph, mm).render();
-        }
-        finally {
-            // Updates the display
-            model.endUpdate();
-        }
-    };
-    MindMapDemo.mactoModel = function () {
-        var mm = new Five.Mindmap.Model();
-        var root = mm.createRoot('Macto');
-        var acceptingInmates = root.addChild('Accepting inmates', true);
-        return mm;
-    };
-    return MindMapDemo;
-})();
+		    buffer.Append(@"<script type=""text/javascript"" src=""GetFile.aspx?file=" + defaultDirectoryName + jsFileName +
+		                  @"""></script>");
+		    buffer.Append(@"<link rel=""StyleSheet"" href=""GetFile.aspx?file=" + defaultDirectoryName + cssFileName +
+		                  @""" type=""text/css"" />");
+		    buffer.Append(@"<script type=""text/javascript""> <!--
 window.onload = function () {
-    MindMapDemo.main(document.getElementById('diagram'));
+	var divs = document.getElementsByClassName('diagramBox');
+	for(i =0; i < divs.length; i++) {
+		var div = divs[i];
+		var graph = new Five.Graph(div);
+		var model = graph.getModel();
+		var decoded = div.getAttribute('init');
+		var mm = Five.Mindmap.MmFileReader.read(decoded);
+		model.beginUpdate();
+		try
+		{
+			new Five.Mindmap.Adaptor(graph, mm).render();
+		}
+		finally
+		{
+			// Updates the display
+			model.endUpdate();
+		}
+	}
 };
 //--> </script>");
 	    }

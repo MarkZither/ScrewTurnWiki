@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiagramFormatter.cs" />
+    <Compile Include="FileFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -53,7 +55,7 @@
     <EmbeddedResource Include="Resources\diagram.css" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\diagram.js.zip" />
+    <EmbeddedResource Include="Resources\diagram.js.zip" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\grid.gif" />
