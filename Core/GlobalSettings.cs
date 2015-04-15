@@ -8,7 +8,6 @@ using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using ScrewTurn.Wiki.PluginFramework;
-using ScrewTurn.Wiki.Plugins.AzureStorage;
 
 namespace ScrewTurn.Wiki {
 
