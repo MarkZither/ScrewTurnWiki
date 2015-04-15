@@ -2898,17 +2898,15 @@
     <Content Include="MasterPageClean.master" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.Azure.config">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.SqlServer.config">
+    <None Include="Web.SqlServer.config">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\fisdo.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
