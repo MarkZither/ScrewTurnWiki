@@ -1,0 +1,6 @@
+
+The files contained in this folder ARE NOT included in ScrewTurn Wiki's GPLv2 license, but
+they are here for your convenience only.
+
+To use this files, you must obtain and install your own copy of SQL Server CE 4 from this address:
+http://www.microsoft.com/download/en/details.aspx?id=17876
