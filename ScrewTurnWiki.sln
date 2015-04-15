@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StorageProviders", "Storage
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4C65D95F-D0B1-4EDA-937F-FCAFF822E1DF}"
 	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
 		Build\ScrewTurnWiki.msbuild = Build\ScrewTurnWiki.msbuild
 	EndProjectSection
 EndProject
