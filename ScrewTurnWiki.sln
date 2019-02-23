@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{ADF6EC2E-6C55-4771-AD8C-025CD9CA3A70}"
 	ProjectSection(SolutionItems) = preProject
@@ -68,10 +68,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnfuddleTicketsPlugin", "UnfuddleTicketsPlugin\UnfuddleTicketsPlugin.csproj", "{62EC7498-D82C-40FD-B153-5FC2F2FA6D72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingManagerPlugin", "RatingManagerPlugin\RatingManagerPlugin.csproj", "{B65C793F-62C4-4B81-95C4-3E4805E80411}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagramPlugin", "DiagramPlugin\DiagramPlugin.csproj", "{61A1FFA5-CCD5-41C7-9C1C-382AA2CC6F0C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagramPlugin-Tests", "DiagramPlugin-Tests\DiagramPlugin-Tests.csproj", "{4544F830-75CE-4325-8710-B2AD69E0BA6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,14 +163,6 @@ Global
 		{B65C793F-62C4-4B81-95C4-3E4805E80411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B65C793F-62C4-4B81-95C4-3E4805E80411}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B65C793F-62C4-4B81-95C4-3E4805E80411}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61A1FFA5-CCD5-41C7-9C1C-382AA2CC6F0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61A1FFA5-CCD5-41C7-9C1C-382AA2CC6F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61A1FFA5-CCD5-41C7-9C1C-382AA2CC6F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61A1FFA5-CCD5-41C7-9C1C-382AA2CC6F0C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4544F830-75CE-4325-8710-B2AD69E0BA6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4544F830-75CE-4325-8710-B2AD69E0BA6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4544F830-75CE-4325-8710-B2AD69E0BA6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4544F830-75CE-4325-8710-B2AD69E0BA6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,7 +181,8 @@ Global
 		{83363183-7B84-43BF-885F-C728A721140B} = {F6E9DB23-D200-4CCE-B42D-7CD1D20FC92D}
 		{62EC7498-D82C-40FD-B153-5FC2F2FA6D72} = {F6E9DB23-D200-4CCE-B42D-7CD1D20FC92D}
 		{B65C793F-62C4-4B81-95C4-3E4805E80411} = {F6E9DB23-D200-4CCE-B42D-7CD1D20FC92D}
-		{61A1FFA5-CCD5-41C7-9C1C-382AA2CC6F0C} = {F6E9DB23-D200-4CCE-B42D-7CD1D20FC92D}
-		{4544F830-75CE-4325-8710-B2AD69E0BA6F} = {F6E9DB23-D200-4CCE-B42D-7CD1D20FC92D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {979264D1-113A-40B6-93AC-A3684B47413F}
 	EndGlobalSection
 EndGlobal

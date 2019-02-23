@@ -56,12 +56,6 @@
     <Compile Include="FileFormatTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DiagramPlugin\DiagramPlugin.csproj">
-      <Project>{61a1ffa5-ccd5-41c7-9c1c-382aa2cc6f0c}</Project>
-      <Name>DiagramPlugin</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

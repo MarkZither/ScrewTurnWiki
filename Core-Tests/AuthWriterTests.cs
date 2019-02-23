@@ -35,7 +35,10 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		protected IHostV30 MockHost() {
-			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
+            if (!Directory.Exists(testDir))
+            {
+                Directory.CreateDirectory(testDir);
+            }
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
 			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.Any();
