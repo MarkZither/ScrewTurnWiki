@@ -27,7 +27,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		public void FixtureSetUp() {
 			bool.TryParse(Environment.GetEnvironmentVariable("APPVEYOR"), out bool isAppveyor);
 			if(isAppveyor){
-				ConnString = "Server=(local)\\SQL2016;User ID=sa;Password=Password12!";
+				ConnString = "Server=(local)\\SQL2016;Integrated Security=SSPI;";
 			}
 			Console.WriteLine($"isAppveyor is {isAppveyor.ToString()}");
 			Console.WriteLine($"ConnString is {ConnString}");
