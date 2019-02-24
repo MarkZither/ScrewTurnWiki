@@ -14,7 +14,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 	public class SqlServerUsersStorageProviderTests : UsersStorageProviderTestScaffolding {
 
 		//private const string ConnString = "Data Source=(local)\\SQLExpress;User ID=sa;Password=password;";
-		private const string ConnString = "Data Source=(local)\\MSSQLSERVER2016;Integrated Security=SSPI;";
+		private string ConnString = "Data Source=(local)\\MSSQLSERVER2016;Integrated Security=SSPI;";
 		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
 
 		public override IUsersStorageProviderV30 GetProvider() {
