@@ -29,6 +29,8 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 			if(isAppveyor){
 				ConnString = "Server=(local)\\SQL2016;User ID=sa;Password=Password12!";
 			}
+			Console.WriteLine($"isAppveyor is {isAppveyor.ToString()}");
+			Console.WriteLine($"ConnString is {ConnString}");
 			// Create database with no tables
 			SqlConnection cn = new SqlConnection(ConnString);
 			cn.Open();
@@ -100,13 +102,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;")]
 		public void Init_InvalidConnString(string c)
 		{
+			bool.TryParse(Environment.GetEnvironmentVariable("APPVEYOR"), out bool isAppveyor);
+			Console.WriteLine($"isAppveyor is {isAppveyor.ToString()}");
+			Console.WriteLine($"ConnString is {ConnString}");
 			Assert.Throws<InvalidConfigurationException>(() =>
 			{
 				IFilesStorageProviderV30 prov = GetProvider();
 				prov.Init(MockHost(), c);
 			});
 		}
-
 	}
-
 }
