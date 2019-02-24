@@ -25,6 +25,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		[OneTimeSetUp]
 		public void FixtureSetUp() {
+			bool.TryParse(Environment.GetEnvironmentVariable("APPVEYOR"), out bool isAppveyor);
+			if(isAppveyor)
+			{
+				ConnString = "Server=(local)\\SQL2016;Integrated Security=SSPI;";
+			}
 			// Create database with no tables
 			SqlConnection cn = new SqlConnection(ConnString);
 			cn.Open();
