@@ -13,7 +13,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			if(!Page.IsPostBack) {
 				// Load namespaces
@@ -74,10 +77,17 @@ namespace ScrewTurn.Wiki {
 			// Load namespaces for content copying
 			lstCopyFromNamespace.Items.Clear();
 			string currentNamespace = lstNamespace.SelectedValue;
-			if(!string.IsNullOrEmpty(currentNamespace)) lstCopyFromNamespace.Items.Add(new ListItem("<root>", ""));
+			if(!string.IsNullOrEmpty(currentNamespace))
+			{
+				lstCopyFromNamespace.Items.Add(new ListItem("<root>", ""));
+			}
+
 			List<NamespaceInfo> namespaces = Pages.GetNamespaces();
 			foreach(NamespaceInfo ns in namespaces) {
-				if(currentNamespace != ns.Name) lstCopyFromNamespace.Items.Add(new ListItem(ns.Name, ns.Name));
+				if(currentNamespace != ns.Name)
+				{
+					lstCopyFromNamespace.Items.Add(new ListItem(ns.Name, ns.Name));
+				}
 			}
 			pnlInlineTools.Visible = lstCopyFromNamespace.Items.Count > 0 && !Settings.IsMetaDataItemGlobal(item);
 		}
@@ -85,7 +95,10 @@ namespace ScrewTurn.Wiki {
 		protected void btnCopyFrom_Click(object sender, EventArgs e) {
 			MetaDataItem item = ButtonMetaDataItemMapping[txtCurrentButton.Value];
 
-			if(Settings.IsMetaDataItemGlobal(item)) return;
+			if(Settings.IsMetaDataItemGlobal(item))
+			{
+				return;
+			}
 
 			string newValue = Settings.Provider.GetMetaDataItem(item, lstCopyFromNamespace.SelectedValue);
 

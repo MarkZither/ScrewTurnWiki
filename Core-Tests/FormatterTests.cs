@@ -129,7 +129,7 @@ second line</pre><br /><table><tr><td>cell</td><td>other cell</td></tr></table>
 		}
 
 		public override string GetRawUrl() {
-			return "http://localhost/Default.aspx";
+			return new Uri("http://localhost/Default.aspx", UriKind.RelativeOrAbsolute).AbsolutePath;
 		}
 
 		public override string GetRemoteAddress() {

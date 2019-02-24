@@ -45,11 +45,20 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="filePath">The full file path, such as '/file.txt' or '/directory/sub/file.txt'.</param>
 		/// <returns>The directory, such as '/' or '/directory/sub/'.</returns>
 		public static string GetDirectory(string filePath) {
-			if(!filePath.StartsWith("/")) filePath = "/" + filePath;
+			if(!filePath.StartsWith("/"))
+			{
+				filePath = "/" + filePath;
+			}
 
 			int lastIndex = filePath.LastIndexOf("/");
-			if(lastIndex == 0) return "/";
-			else return filePath.Substring(0, lastIndex + 1);
+			if(lastIndex == 0)
+			{
+				return "/";
+			}
+			else
+			{
+				return filePath.Substring(0, lastIndex + 1);
+			}
 		}
 
 	}

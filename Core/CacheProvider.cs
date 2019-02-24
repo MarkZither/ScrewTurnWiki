@@ -44,8 +44,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
 		public void Init(IHostV30 host, string config) {
-			if(host == null) throw new ArgumentNullException("host");
-			if(config == null) throw new ArgumentNullException("config");
+			if(host == null)
+			{
+				throw new ArgumentNullException("host");
+			}
+
+			if(config == null)
+			{
+				throw new ArgumentNullException("config");
+			}
 
 			_host = host;
 
@@ -113,8 +120,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public string GetPseudoCacheValue(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			string value = null;
 			lock(_pseudoCache) {
@@ -131,12 +145,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public void SetPseudoCacheValue(string name, string value) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			lock(_pseudoCache) {
-				if(value == null) _pseudoCache.Remove(name);
-				else _pseudoCache[name] = value;
+				if(value == null)
+				{
+					_pseudoCache.Remove(name);
+				}
+				else
+				{
+					_pseudoCache[name] = value;
+				}
 			}
 		}
 
@@ -147,7 +174,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Page Content object, or <c>null</c> if the item is not found.</returns>
 		/// <exception cref="ArgumentNullException">If <b>pageInfo</b> is <c>null</c>.</exception>
 		public PageContent GetPageContent(PageInfo pageInfo) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
 
 			PageContent value = null;
 			lock(_pageContentCache) {
@@ -165,8 +195,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="content">The Content of the Page.</param>
 		/// <exception cref="ArgumentNullException">If <b>pageInfo</b> or <b>content</b> are <c>null</c>.</exception>
 		public void SetPageContent(PageInfo pageInfo, PageContent content) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(content == null) throw new ArgumentNullException("content");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
 
 			lock(_pageContentCache) {
 				_pageContentCache[pageInfo] = content;
@@ -183,7 +220,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The partially-formatted content, or <c>null</c> if the item is not found.</returns>
 		/// <exception cref="ArgumentNullException">If <b>pageInfo</b> is <c>null</c>.</exception>
 		public string GetFormattedPageContent(PageInfo pageInfo) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
 
 			string value = null;
 			lock(_formattedContentCache) {
@@ -199,8 +239,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="content">The partially-preformatted content.</param>
 		/// <exception cref="ArgumentNullException">If <b>pageInfo</b> or <b>content</b> are <c>null</c>.</exception>
 		public void SetFormattedPageContent(PageInfo pageInfo, string content) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(content == null) throw new ArgumentNullException("content");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
 
 			lock(_formattedContentCache) {
 				_formattedContentCache[pageInfo] = content;
@@ -213,7 +260,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="pageInfo">The Page Info object related to the Page that has to be removed.</param>
 		/// <exception cref="ArgumentNullException">If <b>pageInfo</b> is <c>null</c>.</exception>
 		public void RemovePage(PageInfo pageInfo) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
 
 			// In this order
 			lock(_formattedContentCache) {
@@ -258,7 +308,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="cutSize">The number of Pages to remove.</param>
 		/// <exception cref="ArgumentOutOfRangeException">If <b>cutSize</b> is less than or equal to zero.</exception>
 		public void CutCache(int cutSize) {
-			if(cutSize <= 0) throw new ArgumentOutOfRangeException("cutSize", "Cut Size should be greater than zero");
+			if(cutSize <= 0)
+			{
+				throw new ArgumentOutOfRangeException("cutSize", "Cut Size should be greater than zero");
+			}
 
 			lock(_pageContentCache) {
 
@@ -315,10 +368,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> or <b>user</b> are empty.</exception>
 		public void RenewEditingSession(string page, string user) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
-			if(user == null) throw new ArgumentNullException("user");
-			if(user.Length == 0) throw new ArgumentException("User cannot be empty", "user");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(user.Length == 0)
+			{
+				throw new ArgumentException("User cannot be empty", "user");
+			}
 
 			lock(this) {
 				bool found = false;
@@ -329,7 +397,10 @@ namespace ScrewTurn.Wiki {
 						break;
 					}
 				}
-				if(!found) _sessions.Add(new EditingSession(page, user));
+				if(!found)
+				{
+					_sessions.Add(new EditingSession(page, user));
+				}
 			}
 		}
 
@@ -341,10 +412,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> or <b>user</b> are empty.</exception>
 		public void CancelEditingSession(string page, string user) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
-			if(user == null) throw new ArgumentNullException("user");
-			if(user.Length == 0) throw new ArgumentException("User cannot be empty", "user");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(user.Length == 0)
+			{
+				throw new ArgumentException("User cannot be empty", "user");
+			}
 
 			lock(this) {
 				for(int i = 0; i < _sessions.Count; i++) {
@@ -365,10 +451,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b> or <b>currentUser</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> or <b>currentUser</b> are empty.</exception>
 		public bool IsPageBeingEdited(string page, string currentUser) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
-			if(currentUser == null) throw new ArgumentNullException("currentUser");
-			if(currentUser.Length == 0) throw new ArgumentException("Current User cannot be empty", "currentUser");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
+
+			if(currentUser == null)
+			{
+				throw new ArgumentNullException("currentUser");
+			}
+
+			if(currentUser.Length == 0)
+			{
+				throw new ArgumentException("Current User cannot be empty", "currentUser");
+			}
 
 			lock(this) {
 				int timeout = int.Parse(_host.GetSettingValue(SettingName.EditingSessionTimeout));
@@ -399,12 +500,22 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> is empty.</exception>
 		public string WhosEditing(string page) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
 
 			lock(this) {
 				foreach(EditingSession s in _sessions) {
-					if(s.Page == page) return s.User;
+					if(s.Page == page)
+					{
+						return s.User;
+					}
 				}
 			}
 			return "";
@@ -418,10 +529,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>source</b> or <b>destination</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>source</b> or <b>destination</b> are empty.</exception>
 		public void AddRedirection(string source, string destination) {
-			if(source == null) throw new ArgumentNullException("source");
-			if(source.Length == 0) throw new ArgumentException("Source cannot be empty", "source");
-			if(destination == null) throw new ArgumentNullException("destination");
-			if(destination.Length == 0) throw new ArgumentException("Destination cannot be empty", "destination");
+			if(source == null)
+			{
+				throw new ArgumentNullException("source");
+			}
+
+			if(source.Length == 0)
+			{
+				throw new ArgumentException("Source cannot be empty", "source");
+			}
+
+			if(destination == null)
+			{
+				throw new ArgumentNullException("destination");
+			}
+
+			if(destination.Length == 0)
+			{
+				throw new ArgumentException("Destination cannot be empty", "destination");
+			}
 
 			lock(_redirections) {
 				_redirections[source.ToLowerInvariant()] = destination;
@@ -436,8 +562,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>source</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>source</b> is empty.</exception>
 		public string GetRedirectionDestination(string source) {
-			if(source == null) throw new ArgumentNullException("source");
-			if(source.Length == 0) throw new ArgumentException("Source cannot be empty", "source");
+			if(source == null)
+			{
+				throw new ArgumentNullException("source");
+			}
+
+			if(source.Length == 0)
+			{
+				throw new ArgumentException("Source cannot be empty", "source");
+			}
 
 			string dest = null;
 
@@ -455,8 +588,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public void RemovePageFromRedirections(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			name = name.ToLowerInvariant();
 
@@ -466,7 +606,10 @@ namespace ScrewTurn.Wiki {
 				List<string> keysToRemove = new List<string>(10);
 
 				foreach(KeyValuePair<string, string> pair in _redirections) {
-					if(pair.Value.ToLowerInvariant() == name) keysToRemove.Add(pair.Key);
+					if(pair.Value.ToLowerInvariant() == name)
+					{
+						keysToRemove.Add(pair.Key);
+					}
 				}
 
 				foreach(string key in keysToRemove) {

@@ -32,7 +32,11 @@ namespace ScrewTurn.Wiki {
 			if(Request["ForceLogout"] != null) {
 				Logout();
 				Session[LoginTools.Logout] = true;
-				if(Request["Redirect"] != null) Response.Redirect(Request["Redirect"]);
+				if(Request["Redirect"] != null)
+				{
+					Response.Redirect(Request["Redirect"]);
+				}
+
 				return;
 			}
 
@@ -40,23 +44,35 @@ namespace ScrewTurn.Wiki {
 			// without applying a "filter" because the provider might keep logging her in.
 			// When she clicks Logout and redirects to Login.aspx?Logout=1 a flag is set,
 			// avoiding autologin for the current session - see LoginTools class
-			if(Request["Logout"] != null) Session[LoginTools.Logout] = true;
+			if(Request["Logout"] != null)
+			{
+				Session[LoginTools.Logout] = true;
+			}
 
 			// All the following logic must be executed only on first page request
-			if(Page.IsPostBack) return;
+			if(Page.IsPostBack)
+			{
+				return;
+			}
 
 			if(SessionFacade.LoginKey != null) {
 				mlvLogin.ActiveViewIndex = 0;
 				lblLogout.Text = "<b>" + SessionFacade.CurrentUsername + "</b>, " + lblLogout.Text;
 			}
 			else {
-				if(Request["PasswordReset"] != null) mlvLogin.ActiveViewIndex = 2;
+				if(Request["PasswordReset"] != null)
+				{
+					mlvLogin.ActiveViewIndex = 2;
+				}
 				else if(Request["ResetCode"] != null && Request["Username"] != null) {
 					if(LoadUserForPasswordReset() != null) {
 						mlvLogin.ActiveViewIndex = 3;
 					}
 				}
-				else mlvLogin.ActiveViewIndex = 1;
+				else
+				{
+					mlvLogin.ActiveViewIndex = 1;
+				}
 			}
 
             if(Request["Activate"] != null && Request["Username"] != null && !Page.IsPostBack) {
@@ -97,7 +113,10 @@ namespace ScrewTurn.Wiki {
 			if(user != null && Request["ResetCode"] == Tools.ComputeSecurityHash(user.Username, user.Email, user.DateTime)) {
 				return user;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -112,7 +131,10 @@ namespace ScrewTurn.Wiki {
 					Content.SetPseudoCacheValue("LoginNotice", n);
 				}
 			}
-			if(!string.IsNullOrEmpty(n)) lblDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
+			if(!string.IsNullOrEmpty(n))
+			{
+				lblDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
+			}
 		}
 
         protected void btnLogin_Click(object sender, EventArgs e) {
@@ -178,7 +200,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnSaveNewPassword_Click(object sender, EventArgs e) {
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			UserInfo user = LoadUserForPasswordReset();
 			if(user != null) {

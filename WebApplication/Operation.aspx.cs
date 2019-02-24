@@ -22,7 +22,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			Page.Title = Properties.Messages.OperationTitle + " - " + Settings.WikiTitle;
 
-			if(Request["Operation"] == null) UrlTools.RedirectHome();
+			if(Request["Operation"] == null)
+			{
+				UrlTools.RedirectHome();
+			}
 
 			op = Request["Operation"].ToLowerInvariant();
 
@@ -44,15 +47,28 @@ namespace ScrewTurn.Wiki {
 		private void PrepareDeleteMessage() {
 			string ms = Request["Message"];
 			string pg = Request["Page"];
-			if(ms == null || ms.Length == 0 || pg == null || pg.Length == 0) UrlTools.RedirectHome();
+			if(ms == null || ms.Length == 0 || pg == null || pg.Length == 0)
+			{
+				UrlTools.RedirectHome();
+			}
 
 			PageInfo page = Pages.FindPage(pg);
-			if(page == null) UrlTools.RedirectHome();
-			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension));
+			if(page == null)
+			{
+				UrlTools.RedirectHome();
+			}
+
+			if(page.Provider.ReadOnly)
+			{
+				UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension));
+			}
 
 			bool canManageDiscussion = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
-			if(!canManageDiscussion) UrlTools.Redirect("AccessDenied.aspx");
+			if(!canManageDiscussion)
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			int id = -1;
 			try {
@@ -63,7 +79,10 @@ namespace ScrewTurn.Wiki {
 			}
 
 			Message message = Pages.FindMessage(Pages.GetPageMessages(page), id);
-			if(message == null) UrlTools.RedirectHome();
+			if(message == null)
+			{
+				UrlTools.RedirectHome();
+			}
 
 			StringBuilder sb = new StringBuilder(500);
 			sb.Append("<b>");

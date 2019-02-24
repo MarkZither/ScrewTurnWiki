@@ -43,13 +43,35 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/>, <paramref name="title"/> or <paramref name="typeTag"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/>, <paramref name="title"/> or <paramref name="typeTag"/> are empty.</exception>
 		public DumpedDocument(uint id, string name, string title, string typeTag, DateTime dateTime) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(title == null) throw new ArgumentNullException("title");
-			if(typeTag == null) throw new ArgumentNullException("typeTag");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
 
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(title.Length == 0) throw new ArgumentException("Title cannot be empty", "title");
-			if(typeTag.Length == 0) throw new ArgumentException("Type Tag cannot be empty", "typeTag");
+			if(title == null)
+			{
+				throw new ArgumentNullException("title");
+			}
+
+			if(typeTag == null)
+			{
+				throw new ArgumentNullException("typeTag");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(title.Length == 0)
+			{
+				throw new ArgumentException("Title cannot be empty", "title");
+			}
+
+			if(typeTag.Length == 0)
+			{
+				throw new ArgumentException("Type Tag cannot be empty", "typeTag");
+			}
 
 			this.id = id;
 			this.name = name;
@@ -64,7 +86,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="document">The document do wrap for dumping.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="document"/> is <c>null</c>.</exception>
 		public DumpedDocument(IDocument document) {
-			if(document == null) throw new ArgumentNullException("document");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
 
 			id = document.ID;
 			name = document.Name;

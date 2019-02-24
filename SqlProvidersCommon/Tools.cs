@@ -28,8 +28,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				read = stream.Read(temp, total, temp.Length - total);
 				total += read;
 
-				if(total > maxSize) return -maxSize;
-
+				if(total > maxSize)
+				{
+					return -maxSize;
+				}
 			} while(read > 0);
 
 			buffer = new byte[total];

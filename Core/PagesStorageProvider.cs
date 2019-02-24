@@ -75,8 +75,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace, or <c>null</c>.</param>
 		/// <returns>The correct partial path, such as 'Namespace\' or ''.</returns>
 		private string GetNamespacePartialPathForPageContent(string nspace) {
-			if(nspace == null || nspace.Length == 0) return "";
-			else return nspace + Path.DirectorySeparatorChar;
+			if(nspace == null || nspace.Length == 0)
+			{
+				return "";
+			}
+			else
+			{
+				return nspace + Path.DirectorySeparatorChar;
+			}
 		}
 
 		/// <summary>
@@ -87,8 +93,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
 		public void Init(IHostV30 host, string config) {
-			if(host == null) throw new ArgumentNullException("host");
-			if(config == null) throw new ArgumentNullException("config");
+			if(host == null)
+			{
+				throw new ArgumentNullException("host");
+			}
+
+			if(config == null)
+			{
+				throw new ArgumentNullException("config");
+			}
 
 			this.host = host;
 
@@ -196,7 +209,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns></returns>
 		private bool VerifyIfPagesFileNeedsAnUpgrade() {
 			string file = GetFullPath(PagesFile);
-			if(!File.Exists(file)) return false;
+			if(!File.Exists(file))
+			{
+				return false;
+			}
 
 			string[] lines = File.ReadAllText(file).Replace("\r", "").Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 			string[] fields;
@@ -204,12 +220,21 @@ namespace ScrewTurn.Wiki {
 				fields = line.Split('|');
 
 				// Field count has never been 3 except in version 3.0
-				if(fields.Length == 3) return false;
+				if(fields.Length == 3)
+				{
+					return false;
+				}
 
 				// Version 1.0
-				if(fields.Length == 2) return true;
+				if(fields.Length == 2)
+				{
+					return true;
+				}
 				// Version 2.0
-				if(fields.Length == 4) return true;
+				if(fields.Length == 4)
+				{
+					return true;
+				}
 			}
 
 			return false;
@@ -380,7 +405,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="pages">The pages array.</param>
 		/// <returns>The found page, or <c>null</c>.</returns>
 		private PageInfo FindPage(string nspace, string name, PageInfo[] pages) {
-			if(name == null) return null;
+			if(name == null)
+			{
+				return null;
+			}
 
 			PageNameComparer comp = new PageNameComparer();
 			PageInfo target = new PageInfo(NameTools.GetFullName(nspace, name), this, DateTime.Now);
@@ -398,8 +426,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public NamespaceInfo GetNamespace(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			lock(this) {
 				return FindNamespace(name, GetNamespaces());
@@ -435,7 +470,11 @@ namespace ScrewTurn.Wiki {
 						if(fields.Length >= 1) {
 							name = fields[0];
 						}
-						else continue; // Skip entry
+						else
+						{
+							continue; // Skip entry
+						}
+
 						if(fields.Length == 2) {
 							defaultPage = fields[1];
 						}
@@ -459,7 +498,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="namespaces">The namespaces array.</param>
 		/// <returns>The found namespace, or <c>null</c>.</returns>
 		private NamespaceInfo FindNamespace(string name, NamespaceInfo[] namespaces) {
-			if(name == null) return null;
+			if(name == null)
+			{
+				return null;
+			}
 
 			NamespaceInfo target = new NamespaceInfo(name, this, null);
 			NamespaceComparer comp = new NamespaceComparer();
@@ -475,11 +517,21 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The name to check.</param>
 		/// <returns><c>true</c> if the namespace exists or <b>name</b> is <c>null</c> (indicating the root), <c>false</c> otherwise.</returns>
 		private bool NamespaceExists(string name) {
-			if(name == null) return true;
+			if(name == null)
+			{
+				return true;
+			}
+
 			NamespaceInfo[] allNamespaces = GetNamespaces();
 			Array.Sort(allNamespaces, new NamespaceComparer());
-			if(FindNamespace(name, allNamespaces) != null) return true;
-			else return false;
+			if(FindNamespace(name, allNamespaces) != null)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -490,11 +542,21 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public NamespaceInfo AddNamespace(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			lock(this) {
-				if(NamespaceExists(name)) return null;
+				if(NamespaceExists(name))
+				{
+					return null;
+				}
 
 				// Append a line to the namespaces file
 				File.AppendAllText(GetFullPath(NamespacesFile), name + "\r\n");
@@ -534,12 +596,26 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>nspace</b> or <b>newName</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>newName</b> is empty.</exception>
 		public NamespaceInfo RenameNamespace(NamespaceInfo nspace, string newName) {
-			if(nspace == null) throw new ArgumentNullException("nspace");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(nspace == null)
+			{
+				throw new ArgumentNullException("nspace");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			lock(this) {
-				if(NamespaceExists(newName)) return null;
+				if(NamespaceExists(newName))
+				{
+					return null;
+				}
 
 				string oldName = nspace.Name;
 
@@ -558,7 +634,11 @@ namespace ScrewTurn.Wiki {
 				NamespaceInfo[] allNamespaces = GetNamespaces();
 				NamespaceComparer comp = new NamespaceComparer();
 				NamespaceInfo result = FindNamespace(nspace.Name, allNamespaces);
-				if(result == null) return null;
+				if(result == null)
+				{
+					return null;
+				}
+
 				result.Name = newName;
 				// Change default page full name
 				if(result.DefaultPage != null) {
@@ -638,19 +718,28 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The correct <see cref="T:NamespaceInfo" /> object.</returns>
 		/// <exception cref="ArgumentNullException">If <b>nspace</b> is <c>null</c>.</exception>
 		public NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, PageInfo page) {
-			if(nspace == null) throw new ArgumentNullException("nspace");
+			if(nspace == null)
+			{
+				throw new ArgumentNullException("nspace");
+			}
 
 			lock(this) {
 				// Find requested namespace and page: if they don't exist, return null
 				NamespaceInfo[] allNamespaces = GetNamespaces();
 				NamespaceInfo targetNamespace = FindNamespace(nspace.Name, allNamespaces);
-				if(targetNamespace == null) return null;
+				if(targetNamespace == null)
+				{
+					return null;
+				}
 
 				LocalPageInfo localPage = null;
 
 				if(page != null) {
 					localPage = LoadLocalPageInfo(page);
-					if(localPage == null) return null;
+					if(localPage == null)
+					{
+						return null;
+					}
 				}
 
 				targetNamespace.DefaultPage = localPage;
@@ -668,7 +757,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the namespace is removed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>nspace</b> is <c>null</c>.</exception>
 		public bool RemoveNamespace(NamespaceInfo nspace) {
-			if(nspace == null) throw new ArgumentNullException("nspace");
+			if(nspace == null)
+			{
+				throw new ArgumentNullException("nspace");
+			}
 
 			lock(this) {
 				// Load all namespaces and remove the one to remove
@@ -710,7 +802,10 @@ namespace ScrewTurn.Wiki {
 
 					return true;
 				}
-				else return false;
+				else
+				{
+					return false;
+				}
 			}
 		}
 
@@ -724,20 +819,36 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The correct instance of <see cref="T:PageInfo" />.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		public PageInfo MovePage(PageInfo page, NamespaceInfo destination, bool copyCategories) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			string destinationName = destination != null ? destination.Name : null;
 
 			NamespaceInfo currentNs = FindNamespace(NameTools.GetNamespace(page.FullName), GetNamespaces());
 			NamespaceComparer nsComp = new NamespaceComparer();
-			if((currentNs == null && destination == null) || nsComp.Compare(currentNs, destination) == 0) return null;
+			if((currentNs == null && destination == null) || nsComp.Compare(currentNs, destination) == 0)
+			{
+				return null;
+			}
 
-			if(PageExists(new PageInfo(NameTools.GetFullName(destinationName, NameTools.GetLocalName(page.FullName)), this, page.CreationDateTime))) return null;
-			if(!NamespaceExists(destinationName)) return null;
+			if(PageExists(new PageInfo(NameTools.GetFullName(destinationName, NameTools.GetLocalName(page.FullName)), this, page.CreationDateTime)))
+			{
+				return null;
+			}
+
+			if(!NamespaceExists(destinationName))
+			{
+				return null;
+			}
 
 			if(currentNs != null && currentNs.DefaultPage != null) {
 				// Cannot move the default page
-				if(new PageNameComparer().Compare(currentNs.DefaultPage, page) == 0) return null;
+				if(new PageNameComparer().Compare(currentNs.DefaultPage, page) == 0)
+				{
+					return null;
+				}
 			}
 
 			// Store categories for copying them, if needed
@@ -843,7 +954,10 @@ namespace ScrewTurn.Wiki {
 		private void MoveBackups(PageInfo page, NamespaceInfo destination) {
 			lock(this) {
 				int[] backups = GetBackups(page);
-				if(backups == null) return; // Page does not exist
+				if(backups == null)
+				{
+					return; // Page does not exist
+				}
 
 				LocalPageInfo local = (LocalPageInfo)page;
 				string extension = Path.GetExtension(local.File);
@@ -895,8 +1009,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName" /> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName" /> is empty.</exception>
 		public CategoryInfo GetCategory(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
 
 			lock(this) {
 				CategoryInfo[] categories = GetAllCategories();
@@ -904,7 +1025,10 @@ namespace ScrewTurn.Wiki {
 				StringComparer comp = StringComparer.OrdinalIgnoreCase;
 
 				foreach(CategoryInfo cat in categories) {
-					if(comp.Compare(cat.FullName, fullName) == 0) return cat;
+					if(comp.Compare(cat.FullName, fullName) == 0)
+					{
+						return cat;
+					}
 				}
 
 				return null;
@@ -928,8 +1052,14 @@ namespace ScrewTurn.Wiki {
 				// either null-null or same name
 				foreach(CategoryInfo cat in allCategories) {
 					string catNamespace = NameTools.GetNamespace(cat.FullName);
-					if(nspace == null && catNamespace == null) selectedCategories.Add(cat);
-					else if(nspace != null && catNamespace != null && StringComparer.OrdinalIgnoreCase.Compare(nspace.Name, catNamespace) == 0) selectedCategories.Add(cat);
+					if(nspace == null && catNamespace == null)
+					{
+						selectedCategories.Add(cat);
+					}
+					else if(nspace != null && catNamespace != null && StringComparer.OrdinalIgnoreCase.Compare(nspace.Name, catNamespace) == 0)
+					{
+						selectedCategories.Add(cat);
+					}
 				}
 
 				return selectedCategories.ToArray();
@@ -968,7 +1098,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The categories, sorted by name.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public CategoryInfo[] GetCategoriesForPage(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			string pageNamespace = NameTools.GetNamespace(page.FullName);
 			CategoryInfo[] categories = GetCategories(FindNamespace(pageNamespace, GetNamespaces())); // Sorted
@@ -998,7 +1131,10 @@ namespace ScrewTurn.Wiki {
 				CategoryInfo[] cats = GetCategories(FindNamespace(NameTools.GetNamespace(category.FullName), GetNamespaces()));
 				CategoryNameComparer comp = new CategoryNameComparer();
 				for(int i = 0; i < cats.Length; i++) {
-					if(comp.Compare(cats[i], category) == 0) return true;
+					if(comp.Compare(cats[i], category) == 0)
+					{
+						return true;
+					}
 				}
 			}
 			return false;
@@ -1013,13 +1149,23 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		public CategoryInfo AddCategory(string nspace, string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			lock(this) {
 				CategoryInfo result = new CategoryInfo(NameTools.GetFullName(nspace, name), this);
 
-				if(CategoryExists(result)) return null;
+				if(CategoryExists(result))
+				{
+					return null;
+				}
 
 				// Structure
 				// Namespace.Category|Page1|Page2|...
@@ -1039,13 +1185,27 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="category"/> or <paramref name="newName"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty.</exception>
 		public CategoryInfo RenameCategory(CategoryInfo category, string newName) {
-			if(category == null) throw new ArgumentNullException("category");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(category == null)
+			{
+				throw new ArgumentNullException("category");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			lock(this) {
 				CategoryInfo result = new CategoryInfo(NameTools.GetFullName(NameTools.GetNamespace(category.FullName), newName), this);
-				if(CategoryExists(result)) return null;
+				if(CategoryExists(result))
+				{
+					return null;
+				}
 
 				CategoryInfo[] cats = GetAllCategories();
 
@@ -1070,7 +1230,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>True if the Category has been removed successfully.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="category"/> is <c>null</c>.</exception>
 		public bool RemoveCategory(CategoryInfo category) {
-			if(category == null) throw new ArgumentNullException("category");
+			if(category == null)
+			{
+				throw new ArgumentNullException("category");
+			}
 
 			lock(this) {
 				CategoryInfo[] cats = GetAllCategories();
@@ -1097,8 +1260,15 @@ namespace ScrewTurn.Wiki {
 		/// <remarks>The destination Category remains, while the source Category is deleted, and all its Pages re-bound in the destination Category.</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="source"/> or <paramref name="destination"/> are <c>null</c>.</exception>
 		public CategoryInfo MergeCategories(CategoryInfo source, CategoryInfo destination) {
-			if(source == null) throw new ArgumentNullException("source");
-			if(destination == null) throw new ArgumentNullException("destination");
+			if(source == null)
+			{
+				throw new ArgumentNullException("source");
+			}
+
+			if(destination == null)
+			{
+				throw new ArgumentNullException("destination");
+			}
 
 			lock(this) {
 				NamespaceInfo[] allNamespaces = GetNamespaces();
@@ -1114,11 +1284,25 @@ namespace ScrewTurn.Wiki {
 				int idxSource = -1, idxDest = -1;
 				CategoryNameComparer comp = new CategoryNameComparer();
 				for(int i = 0; i < cats.Length; i++) {
-					if(comp.Compare(cats[i], source) == 0) idxSource = i;
-					if(comp.Compare(cats[i], destination) == 0) idxDest = i;
-					if(idxSource != -1 && idxDest != -1) break;
+					if(comp.Compare(cats[i], source) == 0)
+					{
+						idxSource = i;
+					}
+
+					if(comp.Compare(cats[i], destination) == 0)
+					{
+						idxDest = i;
+					}
+
+					if(idxSource != -1 && idxDest != -1)
+					{
+						break;
+					}
 				}
-				if(idxSource == -1 || idxDest == -1) return null;
+				if(idxSource == -1 || idxDest == -1)
+				{
+					return null;
+				}
 
 				List<CategoryInfo> tmp = new List<CategoryInfo>(cats);
 				List<string> newPages = new List<string>(cats[idxDest].Pages);
@@ -1156,8 +1340,14 @@ namespace ScrewTurn.Wiki {
 				PageInfo page = FindPage(NameTools.GetNamespace(pageName), NameTools.GetLocalName(pageName),
 					GetAllPages());
 
-				if(page == null) return null;
-				else return new PageDocument(page, dumpedDocument, TokenizeContent);
+				if(page == null)
+				{
+					return null;
+				}
+				else
+				{
+					return new PageDocument(page, dumpedDocument, TokenizeContent);
+				}
 			}
 			else if(dumpedDocument.TypeTag == MessageDocument.StandardTypeTag) {
 				string pageFullName;
@@ -1165,10 +1355,19 @@ namespace ScrewTurn.Wiki {
 				MessageDocument.GetMessageDetails(dumpedDocument.Name, out pageFullName, out id);
 
 				PageInfo page = FindPage(NameTools.GetNamespace(pageFullName), NameTools.GetLocalName(pageFullName), GetAllPages());
-				if(page == null) return null;
-				else return new MessageDocument(page, id, dumpedDocument, TokenizeContent);
+				if(page == null)
+				{
+					return null;
+				}
+				else
+				{
+					return new MessageDocument(page, id, dumpedDocument, TokenizeContent);
+				}
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1234,7 +1433,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The results.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
 		public SearchResultCollection PerformSearch(SearchParameters parameters) {
-			if(parameters == null) throw new ArgumentNullException("parameters");
+			if(parameters == null)
+			{
+				throw new ArgumentNullException("parameters");
+			}
 
 			lock(this) {
 				return index.Search(parameters);
@@ -1334,8 +1536,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
 		public PageInfo GetPage(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
 
 			lock(this) {
 				string nspace, name;
@@ -1361,8 +1570,15 @@ namespace ScrewTurn.Wiki {
 				// either null-null or same name
 				foreach(PageInfo page in allPages) {
 					string pageNamespace = NameTools.GetNamespace(page.FullName);
-					if(nspace == null && pageNamespace == null) selectedPages.Add(page);
-					if(nspace != null && pageNamespace != null && StringComparer.OrdinalIgnoreCase.Compare(nspace.Name, pageNamespace) == 0) selectedPages.Add(page);
+					if(nspace == null && pageNamespace == null)
+					{
+						selectedPages.Add(page);
+					}
+
+					if(nspace != null && pageNamespace != null && StringComparer.OrdinalIgnoreCase.Compare(nspace.Name, pageNamespace) == 0)
+					{
+						selectedPages.Add(page);
+					}
 				}
 
 				return selectedPages.ToArray();
@@ -1391,7 +1607,10 @@ namespace ScrewTurn.Wiki {
 							}
 						}
 					}
-					if(!found) result.Add(p);
+					if(!found)
+					{
+						result.Add(p);
+					}
 				}
 
 				return result.ToArray();
@@ -1404,12 +1623,19 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The instance of <see cref="T:PageInfo" /> to "convert" to <see cref="T:LocalPageInfo" />.</param>
 		/// <returns>The instance of <see cref="T:LocalPageInfo" />, or <c>null</c>.</returns>
 		private LocalPageInfo LoadLocalPageInfo(PageInfo page) {
-			if(page == null) return null;
+			if(page == null)
+			{
+				return null;
+			}
+
 			lock(this) {
 				PageInfo[] pages = GetAllPages();
 				PageNameComparer comp = new PageNameComparer();
 				for(int i = 0; i < pages.Length; i++) {
-					if(comp.Compare(pages[i], page) == 0) return pages[i] as LocalPageInfo;
+					if(comp.Compare(pages[i], page) == 0)
+					{
+						return pages[i] as LocalPageInfo;
+					}
 				}
 			}
 			return null;
@@ -1425,7 +1651,10 @@ namespace ScrewTurn.Wiki {
 				PageInfo[] pages = GetAllPages();
 				PageNameComparer comp = new PageNameComparer();
 				for(int i = 0; i < pages.Length; i++) {
-					if(comp.Compare(pages[i], page) == 0) return true;
+					if(comp.Compare(pages[i], page) == 0)
+					{
+						return true;
+					}
 				}
 			}
 			return false;
@@ -1442,12 +1671,26 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		public PageInfo AddPage(string nspace, string name, DateTime creationDateTime) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			lock(this) {
-				if(!NamespaceExists(nspace)) return null;
-				if(PageExists(new PageInfo(NameTools.GetFullName(nspace, name), this, DateTime.Now))) return null;
+				if(!NamespaceExists(nspace))
+				{
+					return null;
+				}
+
+				if(PageExists(new PageInfo(NameTools.GetFullName(nspace, name), this, DateTime.Now)))
+				{
+					return null;
+				}
 
 				LocalPageInfo result = new LocalPageInfo(NameTools.GetFullName(nspace, name), this, creationDateTime,
 					GetNamespacePartialPathForPageContent(nspace) + name + ".cs");
@@ -1473,11 +1716,17 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Page Content object, <c>null</c> if the page does not exist or <paramref name="page"/> is <c>null</c>,
 		/// or an empty instance if the content could not be retrieved (<seealso cref="PageContent.GetEmpty"/>).</returns>
 		public PageContent GetContent(PageInfo page) {
-			if(page == null) return null;
+			if(page == null)
+			{
+				return null;
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return null;
+				if(local == null)
+				{
+					return null;
+				}
 
 				string text = null;
 				try {
@@ -1494,7 +1743,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private PageContent ExtractContent(string data, PageInfo pageInfo) {
-			if(data == null) return null;
+			if(data == null)
+			{
+				return null;
+			}
 			// Structure (Keywords and Description are new in v3)
 			// Page Title
 			// Username|DateTime[|Comment][|(((Keyword,Keyword,Keyword)))(((Description)))] --- Comment is optional
@@ -1512,8 +1764,14 @@ namespace ScrewTurn.Wiki {
 			string[] keywords = null;
 			string description = null;
 
-			if(fields.Length >= 3 && !fields[2].StartsWith("(((")) comment = Tools.UnescapeString(fields[2]);
-			else comment = "";
+			if(fields.Length >= 3 && !fields[2].StartsWith("((("))
+			{
+				comment = Tools.UnescapeString(fields[2]);
+			}
+			else
+			{
+				comment = "";
+			}
 
 			string lastField = fields[fields.Length - 1];
 			if(lastField.StartsWith("(((") && lastField.EndsWith(")))")) {
@@ -1526,7 +1784,10 @@ namespace ScrewTurn.Wiki {
 				}
 
 				description = Tools.UnescapeString(lastField.Substring(closedBracketsIndex + 3).Trim('(', ')'));
-				if(string.IsNullOrEmpty(description)) description = null;
+				if(string.IsNullOrEmpty(description))
+				{
+					description = null;
+				}
 			}
 
 			int nlIndex = data.IndexOf("\n"); // Index of first new-line char
@@ -1542,11 +1803,17 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The Page to backup.</param>
 		/// <returns>True if the Page has been backupped successfully.</returns>
 		private bool Backup(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return false;
+				if(local == null)
+				{
+					return false;
+				}
 
 				int[] backups = GetBackups(page);
 				int rev = (backups.Length > 0 ? backups[backups.Length - 1] + 1 : 0);
@@ -1565,16 +1832,25 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The list of Backup/Revision numbers.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public int[] GetBackups(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return null;
+				if(local == null)
+				{
+					return null;
+				}
 
 				// Files in <Public>\Pages\[Namespace\]FileName.NNNNN.cs
 				string dir = GetFullPath(PagesDirectory);
 				string nsDir = GetNamespacePartialPathForPageContent(NameTools.GetNamespace(page.FullName));
-				if(nsDir.Length > 0) dir = Path.Combine(dir, nsDir);
+				if(nsDir.Length > 0)
+				{
+					dir = Path.Combine(dir, nsDir);
+				}
 
 				string[] files = Directory.GetFiles(dir, Path.GetFileNameWithoutExtension(local.File) + ".*" + Path.GetExtension(local.File));
 
@@ -1582,7 +1858,10 @@ namespace ScrewTurn.Wiki {
 				for(int i = 0; i < files.Length; i++) {
 					string num = Path.GetFileNameWithoutExtension(files[i]).Substring(NameTools.GetLocalName(page.FullName).Length + 1);
 					int bak = -1;
-					if(int.TryParse(num, out bak)) result.Add(bak);
+					if(int.TryParse(num, out bak))
+					{
+						result.Add(bak);
+					}
 				}
 				return result.ToArray();
 			}
@@ -1597,18 +1876,34 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
 		public PageContent GetBackupContent(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(revision < 0) throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(revision < 0)
+			{
+				throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return null;
+				if(local == null)
+				{
+					return null;
+				}
 
 				string filename = Path.GetFileNameWithoutExtension(local.File) + "." + Tools.GetVersionString(revision) + Path.GetExtension(local.File);
 				string path = GetFullPathForPageContent(GetNamespacePartialPathForPageContent(NameTools.GetNamespace(page.FullName)) + filename);
 
-				if(!File.Exists(path)) return null;
-				else return ExtractContent(File.ReadAllText(path), page);
+				if(!File.Exists(path))
+				{
+					return null;
+				}
+				else
+				{
+					return ExtractContent(File.ReadAllText(path), page);
+				}
 			}
 		}
 
@@ -1621,12 +1916,22 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="content"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
 		public bool SetBackupContent(PageContent content, int revision) {
-			if(content == null) throw new ArgumentNullException("content");
-			if(revision < 0) throw new ArgumentOutOfRangeException("Invalid Revision", "revision");
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
+
+			if(revision < 0)
+			{
+				throw new ArgumentOutOfRangeException("Invalid Revision", "revision");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(content.PageInfo);
-				if(local == null) return false;
+				if(local == null)
+				{
+					return false;
+				}
 
 				StringBuilder sb = new StringBuilder();
 				sb.Append(content.Title);
@@ -1656,17 +1961,34 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="newName"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty.</exception>
 		public PageInfo RenamePage(PageInfo page, string newName) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			lock(this) {
-				if(PageExists(new PageInfo(NameTools.GetFullName(NameTools.GetNamespace(page.FullName), newName), this, DateTime.Now))) return null;
+				if(PageExists(new PageInfo(NameTools.GetFullName(NameTools.GetNamespace(page.FullName), newName), this, DateTime.Now)))
+				{
+					return null;
+				}
 
 				NamespaceInfo currentNs = FindNamespace(NameTools.GetNamespace(page.FullName), GetNamespaces());
 				if(currentNs != null && currentNs.DefaultPage != null) {
 					// Cannot rename the default page
-					if(new PageNameComparer().Compare(currentNs.DefaultPage, page) == 0) return null;
+					if(new PageNameComparer().Compare(currentNs.DefaultPage, page) == 0)
+					{
+						return null;
+					}
 				}
 
 				PageInfo[] pgs = GetAllPages();
@@ -1761,7 +2083,10 @@ namespace ScrewTurn.Wiki {
 		private void RenameBackups(PageInfo page, string newName) {
 			lock(this) {
 				int[] backups = GetBackups(page);
-				if(backups == null) return; // Page does not exist
+				if(backups == null)
+				{
+					return; // Page does not exist
+				}
 
 				LocalPageInfo local = (LocalPageInfo)page;
 				string extension = Path.GetExtension(local.File);
@@ -1794,16 +2119,42 @@ namespace ScrewTurn.Wiki {
 		public bool ModifyPage(PageInfo page, string title, string username, DateTime dateTime, string comment, string content,
 			string[] keywords, string description, SaveMode saveMode) {
 
-			if(page == null) throw new ArgumentNullException("page");
-			if(title == null) throw new ArgumentNullException("title");
-			if(title.Length == 0) throw new ArgumentException("Title cannot be empty", "title");
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
-			if(content == null) throw new ArgumentNullException("content"); // content can be empty
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(title == null)
+			{
+				throw new ArgumentNullException("title");
+			}
+
+			if(title.Length == 0)
+			{
+				throw new ArgumentException("Title cannot be empty", "title");
+			}
+
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content"); // content can be empty
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return false;
+				if(local == null)
+				{
+					return false;
+				}
 
 				if(saveMode == SaveMode.Backup) {
 					Backup(local);
@@ -1824,7 +2175,10 @@ namespace ScrewTurn.Wiki {
 					if(keywords != null) {
 						for(int i = 0; i < keywords.Length; i++) {
 							sb.Append(Tools.EscapeString(keywords[i]));
-							if(i != keywords.Length - 1) sb.Append(",");
+							if(i != keywords.Length - 1)
+							{
+								sb.Append(",");
+							}
 						}
 					}
 					sb.Append(")))(((");
@@ -1862,16 +2216,28 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The draft, or <c>null</c> if no draft exists.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public PageContent GetDraft(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return null;
+				if(local == null)
+				{
+					return null;
+				}
 
 				string targetFileFullPath = GetDraftFullPath(local);
 
-				if(!File.Exists(targetFileFullPath)) return null;
-				else return ExtractContent(File.ReadAllText(targetFileFullPath), local);
+				if(!File.Exists(targetFileFullPath))
+				{
+					return null;
+				}
+				else
+				{
+					return ExtractContent(File.ReadAllText(targetFileFullPath), local);
+				}
 			}
 		}
 
@@ -1882,15 +2248,24 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the draft is deleted, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public bool DeleteDraft(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return false;
+				if(local == null)
+				{
+					return false;
+				}
 
 				string targetFileFullPath = GetDraftFullPath(local);
 
-				if(!File.Exists(targetFileFullPath)) return false;
+				if(!File.Exists(targetFileFullPath))
+				{
+					return false;
+				}
 				else {
 					File.Delete(targetFileFullPath);
 					// Delete directory if empty
@@ -1911,18 +2286,31 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
 		public bool RollbackPage(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(revision < 0) throw new ArgumentOutOfRangeException("Invalid Revision", "revision");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(revision < 0)
+			{
+				throw new ArgumentOutOfRangeException("Invalid Revision", "revision");
+			}
 
 			lock(this) {
-				if(!PageExists(page)) return false;
+				if(!PageExists(page))
+				{
+					return false;
+				}
 
 				// Operations:
 				// - Load specific revision's content
 				// - Modify page with loaded content, performing backup
 
 				PageContent revisionContent = GetBackupContent(page, revision);
-				if(revisionContent == null) return false;
+				if(revisionContent == null)
+				{
+					return false;
+				}
 
 				bool done = ModifyPage(page, revisionContent.Title, revisionContent.User, revisionContent.LastModified,
 					revisionContent.Comment, revisionContent.Content, revisionContent.Keywords, revisionContent.Description,
@@ -1941,13 +2329,27 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than -1.</exception>
 		public bool DeleteBackups(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(revision < -1) throw new ArgumentOutOfRangeException("Invalid Revision", "revision");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(revision < -1)
+			{
+				throw new ArgumentOutOfRangeException("Invalid Revision", "revision");
+			}
 
 			lock(this) {
 				int[] temp = GetBackups(page);
-				if(temp == null) return false;
-				if(temp.Length == 0) return true;
+				if(temp == null)
+				{
+					return false;
+				}
+
+				if(temp.Length == 0)
+				{
+					return true;
+				}
 
 				List<int> backups = new List<int>(temp);
 
@@ -1984,13 +2386,19 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the Page has been removed successfully, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public bool RemovePage(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			lock(this) {
 				NamespaceInfo currentNs = FindNamespace(NameTools.GetNamespace(page.FullName), GetNamespaces());
 				if(currentNs != null && currentNs.DefaultPage != null) {
 					// Cannot remove the default page
-					if(new PageNameComparer().Compare(currentNs.DefaultPage, page) == 0) return false;
+					if(new PageNameComparer().Compare(currentNs.DefaultPage, page) == 0)
+					{
+						return false;
+					}
 				}
 
 				List<PageInfo> allPages = new List<PageInfo>(GetAllPages());
@@ -2042,23 +2450,43 @@ namespace ScrewTurn.Wiki {
 		/// <remarks>After a successful operation, the Page is bound with all and only the categories passed as argument.</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="categories"/> are <c>null</c>.</exception>
 		public bool RebindPage(PageInfo page, string[] categories) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(categories == null) throw new ArgumentNullException("categories");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(categories == null)
+			{
+				throw new ArgumentNullException("categories");
+			}
 
 			lock(this) {
-				if(!PageExists(page)) return false;
+				if(!PageExists(page))
+				{
+					return false;
+				}
 
 				CategoryInfo[] cats = GetAllCategories();
 
 				// Check all categories (they all must exist and be valid)
 				foreach(string cat in categories) {
-					if(cat == null) throw new ArgumentNullException("categories", "A category name cannot be null");
-					if(cat.Length == 0) throw new ArgumentException("A category name cannot be empty", "categories");
+					if(cat == null)
+					{
+						throw new ArgumentNullException("categories", "A category name cannot be null");
+					}
+
+					if(cat.Length == 0)
+					{
+						throw new ArgumentException("A category name cannot be empty", "categories");
+					}
 
 					CategoryNameComparer comp = new CategoryNameComparer();
 					if(Array.Find<CategoryInfo>(cats, delegate(CategoryInfo x) {
 						return comp.Compare(x, new CategoryInfo(cat, this)) == 0;
-					}) == null) return false;
+					}) == null)
+					{
+						return false;
+					}
 				}
 
 				// Operations:
@@ -2071,7 +2499,11 @@ namespace ScrewTurn.Wiki {
 
 					int idx = GetIndex(pages, page.FullName);
 
-					if(idx != -1) pages.Remove(pages[idx]);
+					if(idx != -1)
+					{
+						pages.Remove(pages[idx]);
+					}
+
 					cats[i].Pages = pages.ToArray();
 				}
 
@@ -2093,7 +2525,10 @@ namespace ScrewTurn.Wiki {
 
 		private static int GetIndex(List<string> pages, string page) {
 			for(int i = 0; i < pages.Count; i++) {
-				if(StringComparer.OrdinalIgnoreCase.Compare(pages[i], page) == 0) return i;
+				if(StringComparer.OrdinalIgnoreCase.Compare(pages[i], page) == 0)
+				{
+					return i;
+				}
 			}
 			return -1;
 		}
@@ -2173,14 +2608,23 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The list of the <b>first-level</b> Messages, containing the replies properly nested, sorted by date/time.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public Message[] GetMessages(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return null;
+				if(local == null)
+				{
+					return null;
+				}
 
 				// Shortcut
-				if(!File.Exists(GetFullPathForMessages(local.File))) return new Message[0];
+				if(!File.Exists(GetFullPathForMessages(local.File)))
+				{
+					return new Message[0];
+				}
 
 				string data = File.ReadAllText(GetFullPathForMessages(local.File)).Replace("\r", "");
 
@@ -2241,13 +2685,23 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The number of messages.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public int GetMessageCount(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return -1;
+				if(local == null)
+				{
+					return -1;
+				}
 
-				if(!File.Exists(GetFullPathForMessages(local.File))) return 0;
+				if(!File.Exists(GetFullPathForMessages(local.File)))
+				{
+					return 0;
+				}
+
 				string data = File.ReadAllText(GetFullPathForMessages(local.File)).Replace("\r", "");
 				return data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
 			}
@@ -2269,7 +2723,10 @@ namespace ScrewTurn.Wiki {
 				if(result == null) {
 					result = FindMessage(msg.Replies, id);
 				}
-				if(result != null) break;
+				if(result != null)
+				{
+					break;
+				}
 			}
 			return result;
 		}
@@ -2282,11 +2739,21 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the messages are stored, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="messages"/> are <c>null</c>.</exception>
 		public bool BulkStoreMessages(PageInfo page, Message[] messages) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(messages == null) throw new ArgumentNullException("messages");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(messages == null)
+			{
+				throw new ArgumentNullException("messages");
+			}
 
 			LocalPageInfo local = LoadLocalPageInfo(page);
-			if(local == null) return false;
+			if(local == null)
+			{
+				return false;
+			}
 
 			// Validate IDs by using a dictionary as a way of validation
 			try {
@@ -2336,22 +2803,55 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
 		public bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
-			if(body == null) throw new ArgumentNullException("body"); // body can be empty
-			if(parent < -1) throw new ArgumentOutOfRangeException("parent", "Invalid Parent Message ID");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
+
+			if(body == null)
+			{
+				throw new ArgumentNullException("body"); // body can be empty
+			}
+
+			if(parent < -1)
+			{
+				throw new ArgumentOutOfRangeException("parent", "Invalid Parent Message ID");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return false;
+				if(local == null)
+				{
+					return false;
+				}
 
 				if(parent != -1) {
 					// Check for existence of parent message
 					Message[] allMessages = GetMessages(page);
-					if(FindMessage(new List<Message>(allMessages), parent) == null) return false;
+					if(FindMessage(new List<Message>(allMessages), parent) == null)
+					{
+						return false;
+					}
 				}
 
 				subject = Tools.EscapeString(subject);
@@ -2397,7 +2897,10 @@ namespace ScrewTurn.Wiki {
 			lock(this) {
 				try {
 					// Trim "RE:" to avoid polluting the search engine index
-					if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
+					if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3)
+					{
+						subject = subject.Substring(3).Trim();
+					}
 
 					string documentName = MessageDocument.GetDocumentName(page, id);
 
@@ -2447,7 +2950,10 @@ namespace ScrewTurn.Wiki {
 		private void UnindexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body) {
 			lock(this) {
 				// Trim "RE:" to avoid polluting the search engine index
-				if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
+				if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3)
+				{
+					subject = subject.Substring(3).Trim();
+				}
 
 				string documentName = MessageDocument.GetDocumentName(page, id);
 
@@ -2476,7 +2982,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Message ID.</returns>
 		private int GetFreeMessageID(LocalPageInfo page) {
 			lock(this) {
-				if(!File.Exists(GetFullPathForMessages(page.File))) return 0;
+				if(!File.Exists(GetFullPathForMessages(page.File)))
+				{
+					return 0;
+				}
 
 				int result = 0;
 
@@ -2487,7 +2996,10 @@ namespace ScrewTurn.Wiki {
 				for(int i = 0; i < lines.Length; i++) {
 					idx = lines[i].IndexOf('|');
 					tmp = int.Parse(lines[i].Substring(0, idx));
-					if(tmp > result) result = tmp;
+					if(tmp > result)
+					{
+						result = tmp;
+					}
 				}
 
 				result++;
@@ -2506,16 +3018,29 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="id"/> is less than zero.</exception>
 		public bool RemoveMessage(PageInfo page, int id, bool removeReplies) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(id < 0) throw new ArgumentOutOfRangeException("Invalid ID", "id");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(id < 0)
+			{
+				throw new ArgumentOutOfRangeException("Invalid ID", "id");
+			}
 
 			lock(this) {
 				LocalPageInfo local = LoadLocalPageInfo(page);
-				if(local == null) return false;
+				if(local == null)
+				{
+					return false;
+				}
 
 				Message[] messages = GetMessages(page);
 				Message msg = FindMessage(messages, id);
-				if(msg == null) return false;
+				if(msg == null)
+				{
+					return false;
+				}
 
 				Message[] replies = new Message[0];
 				if(!removeReplies) {
@@ -2543,7 +3068,10 @@ namespace ScrewTurn.Wiki {
 				if(removeReplies) {
 					UnindexMessageTree(page, msg);
 				}
-				else UnindexMessage(page, msg.ID, msg.Subject, msg.DateTime, msg.Body);
+				else
+				{
+					UnindexMessage(page, msg.ID, msg.Subject, msg.DateTime, msg.Body);
+				}
 
 				List<Message> tempList = new List<Message>(messages);
 				RemoveMessage(tempList, msg);
@@ -2573,7 +3101,10 @@ namespace ScrewTurn.Wiki {
 						result = FindAnchestor(msg.Replies, id);
 					}
 				}
-				if(result != null) break;
+				if(result != null)
+				{
+					break;
+				}
 			}
 			return result;
 		}
@@ -2617,22 +3148,55 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="id"/> is less than zero.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
 		public bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(id < 0) throw new ArgumentOutOfRangeException("Invalid Message ID", "id");
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
-			if(body == null) throw new ArgumentNullException("body"); // body can be empty
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(id < 0)
+			{
+				throw new ArgumentOutOfRangeException("Invalid Message ID", "id");
+			}
+
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
+
+			if(body == null)
+			{
+				throw new ArgumentNullException("body"); // body can be empty
+			}
 
 			lock(this) {
-				if(LoadLocalPageInfo(page) == null) return false;
+				if(LoadLocalPageInfo(page) == null)
+				{
+					return false;
+				}
 
 				List<Message> messages = new List<Message>(GetMessages(page));
 
 				Message msg = FindMessage(messages, id);
 
-				if(msg == null) return false;
+				if(msg == null)
+				{
+					return false;
+				}
 
 				// Update search engine index
 				UnindexMessage(page, id, msg.Subject, msg.DateTime, msg.Body);
@@ -2762,8 +3326,15 @@ namespace ScrewTurn.Wiki {
 
 				foreach(NavigationPath path in allNavigationPaths) {
 					string pathNamespace = NameTools.GetNamespace(path.FullName);
-					if(nspace == null && pathNamespace == null) selectedNavigationPaths.Add(path);
-					if(nspace != null && pathNamespace != null && StringComparer.OrdinalIgnoreCase.Compare(nspace.Name, pathNamespace) == 0) selectedNavigationPaths.Add(path);
+					if(nspace == null && pathNamespace == null)
+					{
+						selectedNavigationPaths.Add(path);
+					}
+
+					if(nspace != null && pathNamespace != null && StringComparer.OrdinalIgnoreCase.Compare(nspace.Name, pathNamespace) == 0)
+					{
+						selectedNavigationPaths.Add(path);
+					}
 				}
 
 				selectedNavigationPaths.Sort(new NavigationPathComparer());
@@ -2782,20 +3353,46 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="pages"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> or <paramref name="pages"/> are empty.</exception>
 		public NavigationPath AddNavigationPath(string nspace, string name, PageInfo[] pages) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(pages == null) throw new ArgumentNullException("pages");
-			if(pages.Length == 0) throw new ArgumentException("Pages cannot be empty");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(pages == null)
+			{
+				throw new ArgumentNullException("pages");
+			}
+
+			if(pages.Length == 0)
+			{
+				throw new ArgumentException("Pages cannot be empty");
+			}
 
 			lock(this) {
 				NavigationPathComparer comp = new NavigationPathComparer();
 				NavigationPath temp = new NavigationPath(NameTools.GetFullName(nspace, name), this);
-				if(Array.Find(GetAllNavigationPaths(), delegate(NavigationPath p) { return comp.Compare(p, temp) == 0; }) != null) return null;
+				if(Array.Find(GetAllNavigationPaths(), delegate(NavigationPath p) { return comp.Compare(p, temp) == 0; }) != null)
+				{
+					return null;
+				}
+
 				temp = null;
 
 				foreach(PageInfo page in pages) {
-					if(page == null) throw new ArgumentNullException("pages", "A page element cannot be null");
-					if(LoadLocalPageInfo(page) == null) throw new ArgumentException("Page not found", "pages");
+					if(page == null)
+					{
+						throw new ArgumentNullException("pages", "A page element cannot be null");
+					}
+
+					if(LoadLocalPageInfo(page) == null)
+					{
+						throw new ArgumentException("Page not found", "pages");
+					}
 				}
 
 				NavigationPath result = new NavigationPath(NameTools.GetFullName(nspace, name), this);
@@ -2828,14 +3425,32 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="path"/> or <paramref name="pages"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="pages"/> is empty.</exception>
 		public NavigationPath ModifyNavigationPath(NavigationPath path, PageInfo[] pages) {
-			if(path == null) throw new ArgumentNullException("path");
-			if(pages == null) throw new ArgumentNullException("pages");
-			if(pages.Length == 0) throw new ArgumentException("Pages cannot be empty");
+			if(path == null)
+			{
+				throw new ArgumentNullException("path");
+			}
+
+			if(pages == null)
+			{
+				throw new ArgumentNullException("pages");
+			}
+
+			if(pages.Length == 0)
+			{
+				throw new ArgumentException("Pages cannot be empty");
+			}
 
 			lock(this) {
 				foreach(PageInfo page in pages) {
-					if(page == null) throw new ArgumentNullException("pages", "A page element cannot be null");
-					if(LoadLocalPageInfo(page) == null) throw new ArgumentException("Page not found", "pages");
+					if(page == null)
+					{
+						throw new ArgumentNullException("pages", "A page element cannot be null");
+					}
+
+					if(LoadLocalPageInfo(page) == null)
+					{
+						throw new ArgumentException("Page not found", "pages");
+					}
 				}
 
 				NavigationPath[] paths = GetAllNavigationPaths();
@@ -2870,7 +3485,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>True if the Path is removed successfully.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="path"/> is <c>null</c>.</exception>
 		public bool RemoveNavigationPath(NavigationPath path) {
-			if(path == null) throw new ArgumentNullException("path");
+			if(path == null)
+			{
+				throw new ArgumentNullException("path");
+			}
 
 			lock(this) {
 				List<NavigationPath> paths = new List<NavigationPath>(GetAllNavigationPaths());
@@ -2899,7 +3517,10 @@ namespace ScrewTurn.Wiki {
 						sb.Append("|");
 						sb.Append(paths[i].Pages[k]);
 					}
-					if(i != paths.Length - 1) sb.Append("\r\n");
+					if(i != paths.Length - 1)
+					{
+						sb.Append("\r\n");
+					}
 				}
 				File.WriteAllText(GetFullPath(NavigationPathsFile), sb.ToString());
 			}
@@ -2933,14 +3554,29 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public Snippet AddSnippet(string name, string content) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(content == null) throw new ArgumentNullException("content"); // content can be empty
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content"); // content can be empty
+			}
 
 			lock(this) {
 				SnippetNameComparer comp = new SnippetNameComparer();
 				Snippet temp = new Snippet(name, content, this);
-				if(Array.Find(GetSnippets(), delegate(Snippet s) { return comp.Compare(s, temp) == 0; }) != null) return null;
+				if(Array.Find(GetSnippets(), delegate(Snippet s) { return comp.Compare(s, temp) == 0; }) != null)
+				{
+					return null;
+				}
+
 				temp = null;
 
 				File.WriteAllText(GetFullPathForSnippets(name + ".cs"), content);
@@ -2957,14 +3593,29 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public Snippet ModifySnippet(string name, string content) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(content == null) throw new ArgumentNullException("content"); // content can be empty
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content"); // content can be empty
+			}
 
 			lock(this) {
 				SnippetNameComparer comp = new SnippetNameComparer();
 				Snippet temp = new Snippet(name, content, this);
-				if(Array.Find(GetSnippets(), delegate(Snippet s) { return comp.Compare(s, temp) == 0; }) == null) return null;
+				if(Array.Find(GetSnippets(), delegate(Snippet s) { return comp.Compare(s, temp) == 0; }) == null)
+				{
+					return null;
+				}
+
 				temp = null;
 
 				File.WriteAllText(GetFullPathForSnippets(name + ".cs"), content);
@@ -2980,13 +3631,24 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public bool RemoveSnippet(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			lock(this) {
 				SnippetNameComparer comp = new SnippetNameComparer();
 				Snippet temp = new Snippet(name, "", this);
-				if(Array.Find(GetSnippets(), delegate(Snippet s) { return comp.Compare(s, temp) == 0; }) == null) return false;
+				if(Array.Find(GetSnippets(), delegate(Snippet s) { return comp.Compare(s, temp) == 0; }) == null)
+				{
+					return false;
+				}
+
 				temp = null;
 
 				File.Delete(GetFullPathForSnippets(name + ".cs"));
@@ -3022,14 +3684,28 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public ContentTemplate AddContentTemplate(string name, string content) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(content == null) throw new ArgumentNullException("content");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
 
 			lock(this) {
 				string file = GetFullPathForContentTemplate(name + ".cs");
 
-				if(File.Exists(file)) return null;
+				if(File.Exists(file))
+				{
+					return null;
+				}
 
 				File.WriteAllText(file, content);
 
@@ -3046,14 +3722,28 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public ContentTemplate ModifyContentTemplate(string name, string content) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(content == null) throw new ArgumentNullException("content");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
 
 			lock(this) {
 				string file = GetFullPathForContentTemplate(name + ".cs");
 
-				if(!File.Exists(file)) return null;
+				if(!File.Exists(file))
+				{
+					return null;
+				}
 
 				File.WriteAllText(file, content);
 
@@ -3069,13 +3759,23 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public bool RemoveContentTemplate(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			lock(this) {
 				string file = GetFullPathForContentTemplate(name + ".cs");
 
-				if(!File.Exists(file)) return false;
+				if(!File.Exists(file))
+				{
+					return false;
+				}
 
 				File.Delete(file);
 

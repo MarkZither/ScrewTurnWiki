@@ -22,7 +22,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="page">The page.</param>
 		/// <returns>The document name.</returns>
 		public static string GetDocumentName(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
 			return page.FullName;
 		}
 
@@ -32,8 +36,16 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="documentName">The document name.</param>
 		/// <returns>The page name.</returns>
 		public static string GetPageName(string documentName) {
-			if(documentName == null) throw new ArgumentNullException("documentName");
-			if(documentName.Length == 0) throw new ArgumentException("Document Name cannot be empty", "documentName");
+			if(documentName == null)
+			{
+				throw new ArgumentNullException("documentName");
+			}
+
+			if(documentName.Length == 0)
+			{
+				throw new ArgumentException("Document Name cannot be empty", "documentName");
+			}
+
 			return documentName;
 		}
 
@@ -51,8 +63,15 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="dumpedDocument">The dumped document data.</param>
 		/// <param name="tokenizer">The tokenizer.</param>
 		public PageDocument(PageInfo pageInfo, DumpedDocument dumpedDocument, Tokenizer tokenizer) {
-			if(dumpedDocument == null) throw new ArgumentNullException("dumpedDocument");
-			if(tokenizer == null) throw new ArgumentNullException("tokenizer");
+			if(dumpedDocument == null)
+			{
+				throw new ArgumentNullException("dumpedDocument");
+			}
+
+			if(tokenizer == null)
+			{
+				throw new ArgumentNullException("tokenizer");
+			}
 
 			this.pageInfo = pageInfo;
 			id = dumpedDocument.ID;

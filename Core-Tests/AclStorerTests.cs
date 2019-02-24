@@ -39,15 +39,30 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void Constructor_NullAclManager() {
-			AclStorer storer = new AclStorer(null, testFile);
+		public void Constructor_NullAclManager()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclStorer storer = new AclStorer(null, testFile);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void Constructor_InvalidFile(string f) {
-			AclStorer storer = new AclStorer(MockAclManager(), f);
+		[TestCase(null)]
+		public void Constructor_InvalidFile_ShouldThrowArgumentNullException(string f)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclStorer storer = new AclStorer(MockAclManager(), f);
+			});
+		}
+
+		[TestCase("")]
+		public void Constructor_InvalidFile_ShouldThrowArgumentException(string f)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclStorer storer = new AclStorer(MockAclManager(), f);
+			});
 		}
 
 		private void AssertAclEntriesAreEqual(AclEntry expected, AclEntry actual) {

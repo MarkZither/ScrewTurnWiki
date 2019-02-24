@@ -94,14 +94,30 @@ namespace ScrewTurn.Wiki {
 			req.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7";
 			string addr = null;
 			int port = -1;
-			if(txtProxyAddress.Text.Length > 0) addr = txtProxyAddress.Text;
-			if(txtProxyPort.Text.Length > 0) port = int.Parse(txtProxyPort.Text);
+			if(txtProxyAddress.Text.Length > 0)
+			{
+				addr = txtProxyAddress.Text;
+			}
+
+			if(txtProxyPort.Text.Length > 0)
+			{
+				port = int.Parse(txtProxyPort.Text);
+			}
 
 			if(addr != null) {
-				if(port > 0) req.Proxy = new WebProxy(addr, port);
-				else req.Proxy = new WebProxy(addr);
+				if(port > 0)
+				{
+					req.Proxy = new WebProxy(addr, port);
+				}
+				else
+				{
+					req.Proxy = new WebProxy(addr);
+				}
 			}
-			else req.Proxy = null;
+			else
+			{
+				req.Proxy = null;
+			}
 		}
 
 		private void savePage(string text) {
@@ -147,8 +163,15 @@ namespace ScrewTurn.Wiki {
 						translator = new Translator();
 					}
 					if(lstWiki.SelectedValue.ToUpperInvariant() == "FLEX") {
-						if(txtWikiUrl.Text.EndsWith("/")) url = txtWikiUrl.Text + "wikiedit.aspx?topic=" + pageList.Items[i].Value;
-						else url = txtWikiUrl.Text + "/wikiedit.aspx?topic=" + pageList.Items[i].Value;
+						if(txtWikiUrl.Text.EndsWith("/"))
+						{
+							url = txtWikiUrl.Text + "wikiedit.aspx?topic=" + pageList.Items[i].Value;
+						}
+						else
+						{
+							url = txtWikiUrl.Text + "/wikiedit.aspx?topic=" + pageList.Items[i].Value;
+						}
+
 						textarea = new Regex(@"(?<=(\<textarea class=\'EditBox\'([^>])*?)\>)(.|\s)+?(?=(\<\/textarea\>))");
 						translator = new TranslatorFlex();
 					}
@@ -184,10 +207,20 @@ namespace ScrewTurn.Wiki {
 
 		private IAsyncResult BeginPageRequest(object sender, EventArgs e, AsyncCallback cb, object state) {
 			string editPageUrl = "";
-			if(lstWiki.SelectedValue.ToUpperInvariant() == "MEDIA") editPageUrl = txtPageUrl.Text + "?title=" + txtPageName.Text + "&action=edit";
+			if(lstWiki.SelectedValue.ToUpperInvariant() == "MEDIA")
+			{
+				editPageUrl = txtPageUrl.Text + "?title=" + txtPageName.Text + "&action=edit";
+			}
+
 			if(lstWiki.SelectedValue.ToUpperInvariant() == "FLEX") {
-				if(txtPageUrl.Text.EndsWith("/")) editPageUrl = txtPageUrl.Text + "wikiedit.aspx?topic=" + txtPageName.Text;
-				else editPageUrl = txtPageUrl.Text + "/wikiedit.aspx?topic=" + txtPageName.Text;
+				if(txtPageUrl.Text.EndsWith("/"))
+				{
+					editPageUrl = txtPageUrl.Text + "wikiedit.aspx?topic=" + txtPageName.Text;
+				}
+				else
+				{
+					editPageUrl = txtPageUrl.Text + "/wikiedit.aspx?topic=" + txtPageName.Text;
+				}
 			}
 			request = (HttpWebRequest)WebRequest.Create(editPageUrl);
 			SetProxyAndUserAgent(request);
@@ -264,13 +297,22 @@ namespace ScrewTurn.Wiki {
 							}
 						}
 						else
+						{
 							pages.AddRange(PartialList(pageText, namespaces[k + 1]));
+						}
 					}
 				}
 				else {
 					string pageText = null;
-					if(txtWikiUrl.Text.EndsWith("/")) pageText = PageRequest(txtWikiUrl.Text + @"search.aspx?search=&namespace=%5BAll%5D");
-					else pageText = PageRequest(txtWikiUrl.Text + @"/search.aspx?search=&namespace=%5BAll%5D");
+					if(txtWikiUrl.Text.EndsWith("/"))
+					{
+						pageText = PageRequest(txtWikiUrl.Text + @"search.aspx?search=&namespace=%5BAll%5D");
+					}
+					else
+					{
+						pageText = PageRequest(txtWikiUrl.Text + @"/search.aspx?search=&namespace=%5BAll%5D");
+					}
+
 					Regex pageTitle = new Regex(@"<div class='searchHitHead'>(.|\s)+?</div>");
 					Match match = pageTitle.Match(pageText);
 					while(match.Success) {
@@ -315,8 +357,14 @@ namespace ScrewTurn.Wiki {
 				while(match1.Success) {
 					namespacesList.Add(match1.Value);
 					if(match1.Value != "0")
+					{
 						namespacesList.Add(match.Value.Substring(match.Value.IndexOf(">", match1.Index) + 1, match.Value.IndexOf("<", match.Value.IndexOf(">", match1.Index)) - match.Value.IndexOf(">", match1.Index) - 1) + ":");
-					else namespacesList.Add("");
+					}
+					else
+					{
+						namespacesList.Add("");
+					}
+
 					match1 = namespaceValue.Match(match.Value, match1.Index + 1);
 				}
 			}

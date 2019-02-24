@@ -24,9 +24,8 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void Constructor_InvalidValue() {
-			Relevance rel = new Relevance(-1);
+            Assert.Throws<ArgumentOutOfRangeException>(() => { Relevance rel = new Relevance(-1); });
 		}
 
 		[Test]
@@ -41,10 +40,9 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void SetValue_InvalidValue() {
 			Relevance rel = new Relevance();
-			rel.SetValue(-1);
+            Assert.Throws<ArgumentOutOfRangeException>(() => { rel.SetValue(-1); });
 		}
 
 		[Test]
@@ -59,36 +57,32 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void Finalize_InvalidFactor() {
 			Relevance rel = new Relevance();
 			rel.SetValue(8);
-			rel.Finalize(-1);
+            Assert.Throws<ArgumentOutOfRangeException>(() => { rel.Finalize(-1); });
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void Finalize_AlreadyFinalized() {
 			Relevance rel = new Relevance();
 			rel.SetValue(8);
 			rel.Finalize(0.5F);
-			rel.Finalize(1);
+            Assert.Throws<InvalidOperationException>(() => { rel.Finalize(1); });
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void Finalize_InvalidTotal() {
 			Relevance rel = new Relevance(2);
-			rel.Finalize(-1);
+            Assert.Throws<ArgumentOutOfRangeException>(() => { rel.Finalize(-1); });
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void SetValue_AfterFinalize() {
 			Relevance rel = new Relevance();
 			rel.SetValue(5);
 			rel.Finalize(12);
-			rel.SetValue(8);
+            Assert.Throws<InvalidOperationException>(() => { rel.SetValue(8); });
 		}
 
 		[Test]
@@ -100,20 +94,16 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void NormalizeAfterFinalization_InvalidFactor() {
 			Relevance rel = new Relevance(8);
 			rel.Finalize(16);
-			rel.NormalizeAfterFinalization(-0.5F);
+            Assert.Throws<ArgumentOutOfRangeException>(() => { rel.NormalizeAfterFinalization(-0.5F); });
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void NormalizeAfterFinalization_BeforeFinalize() {
 			Relevance rel = new Relevance(8);
-			rel.NormalizeAfterFinalization(0.5F);
-		}
-
+            Assert.Throws<InvalidOperationException>(() => { rel.NormalizeAfterFinalization(0.5F); });
+        }
 	}
-
 }

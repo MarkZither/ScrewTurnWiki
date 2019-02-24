@@ -43,7 +43,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				sb.Append(builder.ObjectNamePrefix);
 				sb.Append(columns[i]);
 				sb.Append(builder.ObjectNameSuffix);
-				if(i != columns.Length - 1) sb.Append(",");
+				if(i != columns.Length - 1)
+				{
+					sb.Append(",");
+				}
+
 				sb.Append(" ");
 			}
 
@@ -141,7 +145,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				sb.Append(joinedTableColumns[i]);
 				sb.Append(builder.ObjectNameSuffix);
 
-				if(i != joinedTableColumns.Length - 1) sb.Append(", ");
+				if(i != joinedTableColumns.Length - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 
 			sb.Append(" from ");
@@ -179,7 +186,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				sb.Append(joinJoinedTableColumns[i]);
 				sb.Append(builder.ObjectNameSuffix);
 
-				if(i != joinTableColumns.Length - 1) sb.Append(" and ");
+				if(i != joinTableColumns.Length - 1)
+				{
+					sb.Append(" and ");
+				}
 			}
 
 			return sb.ToString();
@@ -309,7 +319,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				sb.Append(otherJoinedTableColumns[i]);
 				sb.Append(builder.ObjectNameSuffix);
 
-				if(i != otherJoinedTableColumns.Length - 1) sb.Append(", ");
+				if(i != otherJoinedTableColumns.Length - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 
 			sb.Append(" from ");
@@ -446,7 +459,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					sb.Append(parameter);
 					sb.Append(builder.ParameterNameSuffix);
 				}
-				else sb.Append(builder.ParameterPlaceholder);
+				else
+				{
+					sb.Append(builder.ParameterPlaceholder);
+				}
 			}
 
 			return sb.ToString();
@@ -506,11 +522,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			StringBuilder sb = new StringBuilder(150);
 			sb.Append(query);
 			sb.Append(" where ");
-			if(openBracket) sb.Append("(");
+			if(openBracket)
+			{
+				sb.Append("(");
+			}
 
 			sb.Append(BuildWhereClause(table, column, op, parameter));
 
-			if(closeBracket) sb.Append(")");
+			if(closeBracket)
+			{
+				sb.Append(")");
+			}
 
 			return sb.ToString();
 		}
@@ -547,7 +569,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				else {
 					sb.Append(builder.ParameterPlaceholder);
 				}
-				if(i != parameters.Length - 1) sb.Append(", ");
+				if(i != parameters.Length - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 
 			sb.Append(")");
@@ -669,11 +694,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append(query);
 			sb.Append(" and ");
-			if(openBracket) sb.Append("(");
+			if(openBracket)
+			{
+				sb.Append("(");
+			}
 
 			sb.Append(BuildWhereClause(table, column, op, parameter));
 
-			if(closeBracket) sb.Append(")");
+			if(closeBracket)
+			{
+				sb.Append(")");
+			}
 
 			return sb.ToString();
 		}
@@ -732,11 +763,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append(query);
 			sb.Append(" or ");
-			if(openBracket) sb.Append("(");
+			if(openBracket)
+			{
+				sb.Append("(");
+			}
 
 			sb.Append(BuildWhereClause(table, column, op, parameter));
 
-			if(closeBracket) sb.Append(")");
+			if(closeBracket)
+			{
+				sb.Append(")");
+			}
 
 			return sb.ToString();
 		}
@@ -792,7 +829,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				sb.Append(OrderingToString(orderings[i]));
 
-				if(i != columns.Length - 1) sb.Append(", ");
+				if(i != columns.Length - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 
 			return sb.ToString();
@@ -830,7 +870,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				sb.Append(columns[i]);
 				sb.Append(builder.ObjectNameSuffix);
 
-				if(i != columns.Length - 1) sb.Append(", ");
+				if(i != columns.Length - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 
 			return sb.ToString();
@@ -856,7 +899,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				sb.Append(builder.ObjectNamePrefix);
 				sb.Append(columns[i]);
 				sb.Append(builder.ObjectNameSuffix);
-				if(i != columns.Length - 1) sb.Append(", ");
+				if(i != columns.Length - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 			sb.Append(") values (");
 			for(int i = 0; i < parameters.Length; i++) {
@@ -869,7 +915,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					sb.Append(builder.ParameterPlaceholder);
 				}
 
-				if(i != parameters.Length - 1) sb.Append(", ");
+				if(i != parameters.Length - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 			sb.Append(")");
 
@@ -907,7 +956,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					sb.Append(builder.ParameterPlaceholder);
 				}
 
-				if(i != columns.Length - 1) sb.Append(", ");
+				if(i != columns.Length - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 
 			return sb.ToString();
@@ -940,8 +992,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			sb.Append(column);
 			sb.Append(builder.ObjectNameSuffix);
 
-			if(increment > 0) sb.Append(" + ");
-			else sb.Append(" - ");
+			if(increment > 0)
+			{
+				sb.Append(" + ");
+			}
+			else
+			{
+				sb.Append(" - ");
+			}
+
 			sb.Append(Math.Abs(increment).ToString());
 
 			return sb.ToString();

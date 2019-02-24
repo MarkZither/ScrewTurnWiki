@@ -22,15 +22,50 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/>, <paramref name="action"/>, <paramref name="user"/>, <paramref name="groups"/> or <paramref name="entries"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/>, <paramref name="action"/>, <paramref name="user"/> are empty, or if <paramref name="action"/> equals <see cref="AclEntry.FullControlAction"/>.</exception>
 		public static Authorization AuthorizeAction(string resource, string action, string user, string[] groups, AclEntry[] entries) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(action == AclEntry.FullControlAction) throw new ArgumentException("Action cannot be the FullControl flag", "action");
-			if(user == null) throw new ArgumentNullException("user");
-			if(user.Length == 0) throw new ArgumentException("User cannot be empty", "user");
-			if(groups == null) throw new ArgumentNullException("groups");
-			if(entries == null) throw new ArgumentNullException("entries");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(action == AclEntry.FullControlAction)
+			{
+				throw new ArgumentException("Action cannot be the FullControl flag", "action");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(user.Length == 0)
+			{
+				throw new ArgumentException("User cannot be empty", "user");
+			}
+
+			if(groups == null)
+			{
+				throw new ArgumentNullException("groups");
+			}
+
+			if(entries == null)
+			{
+				throw new ArgumentNullException("entries");
+			}
 
 			// Simple ACL model
 			// Sort entries so that FullControl ones are at the bottom
@@ -47,9 +82,18 @@ namespace ScrewTurn.Wiki.AclEngine {
 
 			foreach(AclEntry entry in sortedEntries) {
 				if(entry.Resource == resource && (entry.Action == action || entry.Action == AclEntry.FullControlAction) && entry.Subject == user) {
-					if(entry.Value == Value.Grant) return Authorization.Granted;
-					else if(entry.Value == Value.Deny) return Authorization.Denied;
-					else throw new NotSupportedException("Entry value not supported");
+					if(entry.Value == Value.Grant)
+					{
+						return Authorization.Granted;
+					}
+					else if(entry.Value == Value.Deny)
+					{
+						return Authorization.Denied;
+					}
+					else
+					{
+						throw new NotSupportedException("Entry value not supported");
+					}
 				}
 			}
 
@@ -96,14 +140,33 @@ namespace ScrewTurn.Wiki.AclEngine {
 			bool tentativeGrant = false;
 			bool tentativeDeny = false;
 			foreach(string group in groupFullControlGrant.Keys) {
-				if(groupExplicitGrant[group]) return Authorization.Granted;
-				
-				if(groupFullControlGrant[group] && !groupFullControlDeny[group]) tentativeGrant = true;
-				if(!groupFullControlGrant[group] && groupFullControlDeny[group]) tentativeDeny = true;
+				if(groupExplicitGrant[group])
+				{
+					return Authorization.Granted;
+				}
+
+				if(groupFullControlGrant[group] && !groupFullControlDeny[group])
+				{
+					tentativeGrant = true;
+				}
+
+				if(!groupFullControlGrant[group] && groupFullControlDeny[group])
+				{
+					tentativeDeny = true;
+				}
 			}
-			if(tentativeGrant && !tentativeDeny) return Authorization.Granted;
-			else if(tentativeDeny) return Authorization.Denied;
-			else return Authorization.Unknown;
+			if(tentativeGrant && !tentativeDeny)
+			{
+				return Authorization.Granted;
+			}
+			else if(tentativeDeny)
+			{
+				return Authorization.Denied;
+			}
+			else
+			{
+				return Authorization.Unknown;
+			}
 		}
 
 	}

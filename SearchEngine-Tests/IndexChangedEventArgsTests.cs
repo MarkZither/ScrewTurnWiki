@@ -22,14 +22,13 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_NullDocument() {
 			IDocument doc = MockDocument("Doc", "Document", "ptdoc", DateTime.Now);
 			DumpedChange change = new DumpedChange(new DumpedDocument(doc), new List<DumpedWord>(),
 				new List<DumpedWordMapping>(new DumpedWordMapping[] { new DumpedWordMapping(1, 1, 1, 1, 1) }));
 
-			IndexChangedEventArgs args = new IndexChangedEventArgs(null, IndexChangeType.DocumentAdded, change, null);
-		}
+            Assert.That(() => new IndexChangedEventArgs(null, IndexChangeType.DocumentAdded, change, null), Throws.ArgumentNullException);
+        }
 
 		[Test]
 		public void Constructor_IndexCleared() {
@@ -37,11 +36,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_NullChangeData() {
-			IndexChangedEventArgs args = new IndexChangedEventArgs(
-				MockDocument("Doc", "Document", "ptdoc", DateTime.Now), IndexChangeType.DocumentAdded, null, null);
-		}
+            Assert.That(() => new IndexChangedEventArgs(
+				MockDocument("Doc", "Document", "ptdoc", DateTime.Now), IndexChangeType.DocumentAdded, null, null), Throws.ArgumentNullException);
+        }
 
 	}
 

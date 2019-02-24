@@ -123,8 +123,14 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="y">The second object.</param>
 		/// <returns>The result of the comparison (1, 0 or -1).</returns>
 		public int Compare(Message x, Message y) {
-			if(!reverse) return x.DateTime.CompareTo(y.DateTime);
-			else return y.DateTime.CompareTo(x.DateTime);
+			if(!reverse)
+			{
+				return x.DateTime.CompareTo(y.DateTime);
+			}
+			else
+			{
+				return y.DateTime.CompareTo(x.DateTime);
+			}
 		}
 	}
 

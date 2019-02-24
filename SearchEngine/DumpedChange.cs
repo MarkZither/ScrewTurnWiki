@@ -32,9 +32,20 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="mappings">The list of dumped mappings data.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="document"/>, <paramref name="words"/> or <paramref name="mappings"/> are <c>null</c>.</exception>
 		public DumpedChange(DumpedDocument document, List<DumpedWord> words, List<DumpedWordMapping> mappings) {
-			if(document == null) throw new ArgumentNullException("document");
-			if(words == null) throw new ArgumentNullException("words");
-			if(mappings == null) throw new ArgumentNullException("mappings");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
+
+			if(words == null)
+			{
+				throw new ArgumentNullException("words");
+			}
+
+			if(mappings == null)
+			{
+				throw new ArgumentNullException("mappings");
+			}
 
 			// mappings can be empty if the document did not have any indexable content
 			//if(mappings.Count == 0) throw new ArgumentException("Mappings cannot be empty", "mappings");

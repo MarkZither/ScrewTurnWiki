@@ -84,17 +84,26 @@ namespace ScrewTurn.Wiki {
 					Content.SetPseudoCacheValue("RegisterNotice", n);
 				}
 			}
-			if(!string.IsNullOrEmpty(n)) lblRegisterDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
+			if(!string.IsNullOrEmpty(n))
+			{
+				lblRegisterDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
+			}
 		}
 
 		protected void btnRegister_Click(object sender, EventArgs e) {
-			if(!Settings.UsersCanRegister) return;
+			if(!Settings.UsersCanRegister)
+			{
+				return;
+			}
 
 			lblResult.Text = "";
 			lblResult.CssClass = "";
 
 			Page.Validate();
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			// Ready to save the user
 			Log.LogEntry("Account creation requested for " + txtUsername.Text, EntryType.General, Log.SystemUsername);

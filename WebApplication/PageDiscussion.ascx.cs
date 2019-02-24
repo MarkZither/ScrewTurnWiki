@@ -49,7 +49,10 @@ namespace ScrewTurn.Wiki {
 		/// Renders the messages.
 		/// </summary>
 		private void RenderMessages() {
-			if(currentPage == null) return;
+			if(currentPage == null)
+			{
+				return;
+			}
 
 			Message[] messages = Pages.GetPageMessages(currentPage);
 

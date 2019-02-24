@@ -281,7 +281,9 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		private int SearchPlugin(string[] plugins, string currentPlugin) {
 			for(int i = 0; i < plugins.Length; i++) {
 				if(plugins[i].Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries)[0] == currentPlugin)
+				{
 					return i;
+				}
 			}
 			return -1;
 		}
@@ -377,7 +379,10 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		private bool DirectoryExists(IFilesStorageProviderV30 filesStorageProvider, string directoryName) {
 			string[] directoryList = filesStorageProvider.ListDirectories("/");
 			foreach(string dir in directoryList) {
-				if(dir == directoryName) return true;
+				if(dir == directoryName)
+				{
+					return true;
+				}
 			}
 			return false;
 		}
@@ -385,7 +390,10 @@ $('#serialStar" + numRatings + @"').rating({showCancel: false, startValue: " + a
 		private bool FileExists(IFilesStorageProviderV30 filesStorageProvider, string directory, string fileName) {
 			string[] filesList = filesStorageProvider.ListFiles(directory);
 			foreach(string file in filesList) {
-				if(file == directory + fileName) return true;
+				if(file == directory + fileName)
+				{
+					return true;
+				}
 			}
 			return false;
 		}

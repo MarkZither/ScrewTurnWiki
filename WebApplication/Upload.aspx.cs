@@ -24,7 +24,10 @@ namespace ScrewTurn.Wiki {
 				string provider = Request["Provider"];
 
 				if(!string.IsNullOrEmpty(targetDir)) {
-					if(string.IsNullOrEmpty(provider)) provider = Settings.DefaultFilesProvider;
+					if(string.IsNullOrEmpty(provider))
+					{
+						provider = Settings.DefaultFilesProvider;
+					}
 
 					fileManager.TryEnterDirectory(provider, targetDir);
 				}

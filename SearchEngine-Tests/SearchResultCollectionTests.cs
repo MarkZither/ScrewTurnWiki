@@ -23,9 +23,8 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void Constructor_InvalidCapacity() {
-			SearchResultCollection collection = new SearchResultCollection(0);
+            Assert.Throws<ArgumentOutOfRangeException>(() => { SearchResultCollection collection = new SearchResultCollection(0); });
 		}
 
 		[Test]
@@ -45,14 +44,12 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Add_NullItem() {
-			SearchResultCollection collection = new SearchResultCollection();
-			collection.Add(null);
+            SearchResultCollection collection = new SearchResultCollection();
+			Assert.That(() => { collection.Add(null); }, Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void Add_DuplicateItem() {
 			SearchResultCollection collection = new SearchResultCollection();
 
@@ -61,8 +58,8 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			collection.Add(res);
 			collection.Add(res2);
-			collection.Add(res);
-		}
+            Assert.That(() => collection.Add(res), Throws.ArgumentException);
+        }
 
 		[Test]
 		public void Clear() {
@@ -109,10 +106,9 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetSearchResult_NullDocument() {
 			SearchResultCollection collection = new SearchResultCollection();
-			collection.GetSearchResult(null);
+			Assert.That(() => collection.GetSearchResult(null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -147,35 +143,31 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void CopyTo_NullArray() {
 			SearchResultCollection collection = new SearchResultCollection();
 
-			collection.CopyTo(null, 0);
+            Assert.That(() => collection.CopyTo(null, 0), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyTo_InvalidIndex_Negative() {
 			SearchResultCollection collection = new SearchResultCollection();
 
 			SearchResult[] results = new SearchResult[10];
 
-			collection.CopyTo(results, -1);
-		}
+            Assert.Throws<ArgumentOutOfRangeException>(() => collection.CopyTo(results, -1));
+        }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyTo_InvalidIndex_TooBig() {
 			SearchResultCollection collection = new SearchResultCollection();
 
 			SearchResult[] results = new SearchResult[10];
 
-			collection.CopyTo(results, 10);
+			Assert.Throws<ArgumentOutOfRangeException>(() => collection.CopyTo(results, 10));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyTo_ArrayTooSmall() {
 			SearchResultCollection collection = new SearchResultCollection();
 
@@ -187,11 +179,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			SearchResult[] results = new SearchResult[1];
 
-			collection.CopyTo(results, 0);
+			Assert.Throws<ArgumentOutOfRangeException>(() => collection.CopyTo(results, 0));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyTo_NoSpaceAtIndex() {
 			SearchResultCollection collection = new SearchResultCollection();
 
@@ -203,7 +194,7 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			SearchResult[] results = new SearchResult[2];
 
-			collection.CopyTo(results, 1);
+			Assert.Throws<ArgumentOutOfRangeException>(() => collection.CopyTo(results, 1));
 		}
 
 		[Test]
@@ -231,10 +222,9 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Remove_NullItem() {
 			SearchResultCollection collection = new SearchResultCollection();
-			collection.Remove(null);
+			Assert.That(() => collection.Remove(null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -269,19 +259,15 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(IndexOutOfRangeException))]
 		public void Indexer_InvalidIndex_Negative() {
 			SearchResultCollection collection = new SearchResultCollection();
-			SearchResult i = collection[-1];
+            Assert.Throws<IndexOutOfRangeException>(() => { SearchResult i = collection[-1]; });
 		}
 
-		[Test]
-		[ExpectedException(typeof(IndexOutOfRangeException))]
-		public void Indexer_InvalidIndex_TooBig() {
-			SearchResultCollection collection = new SearchResultCollection();
-			SearchResult i = collection[1];
-		}
-
+        [Test]
+        public void Indexer_InvalidIndex_TooBig() {
+            SearchResultCollection collection = new SearchResultCollection();
+            Assert.Throws<IndexOutOfRangeException>(() => { SearchResult i = collection[1]; });
+        }
 	}
-
 }

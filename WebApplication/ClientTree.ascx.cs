@@ -31,15 +31,24 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public void PopulateTree() {
 			// Use ViewState to cache data
-			if(Populate == null) ViewState[ClientTreeItems] = new List<TreeElement>();
-			else ViewState[ClientTreeItems] = Populate(this, new PopulateEventArgs());
+			if(Populate == null)
+			{
+				ViewState[ClientTreeItems] = new List<TreeElement>();
+			}
+			else
+			{
+				ViewState[ClientTreeItems] = Populate(this, new PopulateEventArgs());
+			}
 
 			Render();
 		}
 
 		private void Render() {
 			List<TreeElement> items = (List<TreeElement>)ViewState[ClientTreeItems];
-			if(items == null) return;
+			if(items == null)
+			{
+				return;
+			}
 
 			StringBuilder sb = new StringBuilder();
 			sb.Append(@"<div class=""treecontainer"">");

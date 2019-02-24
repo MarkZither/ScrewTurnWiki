@@ -34,7 +34,11 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="value">The initial relevance value, non-finalized.</param>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="value"/> is less than zero.</exception>
 		public Relevance(float value) {
-			if(value < 0) throw new ArgumentOutOfRangeException("value", "Value must be greater than or equal to zero");
+			if(value < 0)
+			{
+				throw new ArgumentOutOfRangeException("value", "Value must be greater than or equal to zero");
+			}
+
 			this.value = value;
 			this.isFinalized = false;
 		}
@@ -46,8 +50,16 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="value"/> is less than zero.</exception>
 		/// <exception cref="InvalidOperationException">If <see cref="M:IsFinalized"/> is <c>true</c> (<see cref="M:Finalize"/> was called).</exception>
 		public void SetValue(float value) {
-			if(value < 0) throw new ArgumentOutOfRangeException("value", "Value must be greater than or equal to zero");
-			if(isFinalized) throw new InvalidOperationException("After finalization, the value cannot be changed anymore");
+			if(value < 0)
+			{
+				throw new ArgumentOutOfRangeException("value", "Value must be greater than or equal to zero");
+			}
+
+			if(isFinalized)
+			{
+				throw new InvalidOperationException("After finalization, the value cannot be changed anymore");
+			}
+
 			this.value = value;
 		}
 
@@ -58,8 +70,16 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <remarks>The method sets the finalized value of the relevance to <b>value / total * 100</b>.</remarks>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="total"/> is less than zero.</exception>
 		public void Finalize(float total) {
-			if(total < 0) throw new ArgumentOutOfRangeException("total", "Total must be greater than or equal to zero");
-			if(isFinalized) throw new InvalidOperationException("Finalization already performed");
+			if(total < 0)
+			{
+				throw new ArgumentOutOfRangeException("total", "Total must be greater than or equal to zero");
+			}
+
+			if(isFinalized)
+			{
+				throw new InvalidOperationException("Finalization already performed");
+			}
+
 			value = value / total * 100;
 			isFinalized = true;
 		}
@@ -69,8 +89,16 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// </summary>
 		/// <param name="factor">The normalization factor.</param>
 		public void NormalizeAfterFinalization(float factor) {
-			if(factor < 0) throw new ArgumentOutOfRangeException("factor", "Factor must be greater than or equal to zero");
-			if(!isFinalized) throw new InvalidOperationException("Normalization can be performed only after finalization");
+			if(factor < 0)
+			{
+				throw new ArgumentOutOfRangeException("factor", "Factor must be greater than or equal to zero");
+			}
+
+			if(!isFinalized)
+			{
+				throw new InvalidOperationException("Normalization can be performed only after finalization");
+			}
+
 			value = value * factor;
 		}
 

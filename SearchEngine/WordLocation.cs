@@ -95,11 +95,23 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="other">The other instance.</param>
 		/// <returns>The comparison result.</returns>
 		public int CompareTo(WordLocation other) {
-			if(object.ReferenceEquals(other, null)) return 1;
+			if(object.ReferenceEquals(other, null))
+			{
+				return 1;
+			}
 
-			if(location > other.location) return 1;
-			else if(location < other.location) return -1;
-			else return 0;
+			if(location > other.location)
+			{
+				return 1;
+			}
+			else if(location < other.location)
+			{
+				return -1;
+			}
+			else
+			{
+				return 0;
+			}
 			//return location.CompareTo(other.location);
 		}
 
@@ -109,8 +121,14 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="obj">The object.</param>
 		/// <returns><c>true</c> if the current instance equals the object, <c>false</c> otherwise.</returns>
 		public override bool Equals(object obj) {
-			if(obj is WordLocation) return Equals((WordLocation)obj);
-			else return false;
+			if(obj is WordLocation)
+			{
+				return Equals((WordLocation)obj);
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -127,8 +145,14 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="other">The other instance.</param>
 		/// <returns><c>true</c> if the current instance equals the other, <c>false</c> otherwise.</returns>
 		public bool Equals(WordLocation other) {
-			if(object.ReferenceEquals(other, null)) return false;
-			else return location == other.location;
+			if(object.ReferenceEquals(other, null))
+			{
+				return false;
+			}
+			else
+			{
+				return location == other.location;
+			}
 		}
 
 		/// <summary>
@@ -138,9 +162,21 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="y">The second object.</param>
 		/// <returns><c>true</c> if the objects are value-equal, <c>false</c> otherwise.</returns>
 		public static bool operator ==(WordLocation x, WordLocation y) {
-			if(object.ReferenceEquals(x, null) && !object.ReferenceEquals(y, null)) return false;
-			if(!object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null)) return false;
-			if(object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null)) return true;
+			if(object.ReferenceEquals(x, null) && !object.ReferenceEquals(y, null))
+			{
+				return false;
+			}
+
+			if(!object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null))
+			{
+				return false;
+			}
+
+			if(object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null))
+			{
+				return true;
+			}
+
 			return x.Equals(y);
 		}
 

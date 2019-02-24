@@ -35,7 +35,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="group">The group subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		public static bool SetPermissionForGlobals(AuthStatus status, string action, UserGroup group) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			return SetPermissionForGlobals(status, action, AuthTools.PrepareGroup(group.Name));
 		}
@@ -48,7 +51,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		public static bool SetPermissionForGlobals(AuthStatus status, string action, UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return SetPermissionForGlobals(status, action, AuthTools.PrepareUsername(user.Username));
 		}
@@ -61,8 +67,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="subject">The subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		private static bool SetPermissionForGlobals(AuthStatus status, string action, string subject) {
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
 			if(action != Actions.FullControl && !AuthTools.IsValidAction(action, Actions.ForGlobals.All)) {
 				throw new ArgumentException("Invalid action", "action");
 			}
@@ -107,7 +121,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="group">The group subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		public static bool SetPermissionForNamespace(AuthStatus status, NamespaceInfo nspace, string action, UserGroup group) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			return SetPermissionForNamespace(status, nspace, action, AuthTools.PrepareGroup(group.Name));
 		}
@@ -121,7 +138,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		public static bool SetPermissionForNamespace(AuthStatus status, NamespaceInfo nspace, string action, UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return SetPermissionForNamespace(status, nspace, action, AuthTools.PrepareUsername(user.Username));
 		}
@@ -135,8 +155,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="subject">The subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		private static bool SetPermissionForNamespace(AuthStatus status, NamespaceInfo nspace, string action, string subject) {
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
 			if(action != Actions.FullControl && !AuthTools.IsValidAction(action, Actions.ForNamespaces.All)) {
 				throw new ArgumentException("Invalid action", "action");
 			}
@@ -185,7 +213,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="group">The group subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		public static bool SetPermissionForDirectory(AuthStatus status, IFilesStorageProviderV30 provider, string directory, string action, UserGroup group) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			return SetPermissionForDirectory(status, provider, directory, action, AuthTools.PrepareGroup(group.Name));
 		}
@@ -200,7 +231,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		public static bool SetPermissionForDirectory(AuthStatus status, IFilesStorageProviderV30 provider, string directory, string action, UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return SetPermissionForDirectory(status, provider, directory, action, AuthTools.PrepareUsername(user.Username));
 		}
@@ -215,11 +249,31 @@ namespace ScrewTurn.Wiki {
 		/// <param name="subject">The subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		private static bool SetPermissionForDirectory(AuthStatus status, IFilesStorageProviderV30 provider, string directory, string action, string subject) {
-			if(provider == null) throw new ArgumentNullException("provider");
-			if(directory == null) throw new ArgumentNullException("directory");
-			if(directory.Length == 0) throw new ArgumentException("Directory cannot be empty", "directory");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
+			if(provider == null)
+			{
+				throw new ArgumentNullException("provider");
+			}
+
+			if(directory == null)
+			{
+				throw new ArgumentNullException("directory");
+			}
+
+			if(directory.Length == 0)
+			{
+				throw new ArgumentException("Directory cannot be empty", "directory");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
 			if(action != Actions.FullControl && !AuthTools.IsValidAction(action, Actions.ForDirectories.All)) {
 				throw new ArgumentException("Invalid action", "action");
 			}
@@ -267,7 +321,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="group">The group subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		public static bool SetPermissionForPage(AuthStatus status, PageInfo page, string action, UserGroup group) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			return SetPermissionForPage(status, page, action, AuthTools.PrepareGroup(group.Name));
 		}
@@ -281,7 +338,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		public static bool SetPermissionForPage(AuthStatus status, PageInfo page, string action, UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return SetPermissionForPage(status, page, action, AuthTools.PrepareUsername(user.Username));
 		}
@@ -295,9 +355,21 @@ namespace ScrewTurn.Wiki {
 		/// <param name="subject">The subject of the authorization change.</param>
 		/// <returns><c>true</c> if the authorization status is changed, <c>false</c> otherwise.</returns>
 		private static bool SetPermissionForPage(AuthStatus status, PageInfo page, string action, string subject) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
 			if(action != Actions.FullControl && !AuthTools.IsValidAction(action, Actions.ForPages.All)) {
 				throw new ArgumentException("Invalid action", "action");
 			}
@@ -340,7 +412,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="group">The user group.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		public static bool RemoveEntriesForGlobals(UserGroup group) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			return RemoveEntriesForGlobals(AuthTools.PrepareGroup(group.Name));
 		}
@@ -351,7 +426,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		public static bool RemoveEntriesForGlobals(UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return RemoveEntriesForGlobals(AuthTools.PrepareUsername(user.Username));
 		}
@@ -368,7 +446,10 @@ namespace ScrewTurn.Wiki {
 				if(entry.Resource == Actions.ForGlobals.ResourceMasterPrefix) {
 					// This call automatically logs the operation result
 					bool done = SetPermissionForGlobals(AuthStatus.Delete, entry.Action, subject);
-					if(!done) return false;
+					if(!done)
+					{
+						return false;
+					}
 				}
 			}
 
@@ -382,7 +463,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		public static bool RemoveEntriesForNamespace(UserGroup group, NamespaceInfo nspace) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			return RemoveEntriesForNamespace(AuthTools.PrepareGroup(group.Name), nspace);
 		}
@@ -394,7 +478,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		public static bool RemoveEntriesForNamespace(UserInfo user, NamespaceInfo nspace) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return RemoveEntriesForNamespace(AuthTools.PrepareUsername(user.Username), nspace);
 		}
@@ -407,7 +494,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private static bool RemoveEntriesForNamespace(string subject, NamespaceInfo nspace) {
 			string resourceName = Actions.ForNamespaces.ResourceMasterPrefix;
-			if(nspace != null) resourceName += nspace.Name;
+			if(nspace != null)
+			{
+				resourceName += nspace.Name;
+			}
 
 			AclEntry[] entries = SettingsProvider.AclManager.RetrieveEntriesForSubject(subject);
 
@@ -415,7 +505,10 @@ namespace ScrewTurn.Wiki {
 				if(entry.Resource == resourceName) {
 					// This call automatically logs the operation result
 					bool done = SetPermissionForNamespace(AuthStatus.Delete, nspace, entry.Action, subject);
-					if(!done) return false;
+					if(!done)
+					{
+						return false;
+					}
 				}
 			}
 
@@ -429,7 +522,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The page.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		public static bool RemoveEntriesForPage(UserGroup group, PageInfo page) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			return RemoveEntriesForPage(AuthTools.PrepareGroup(group.Name), page);
 		}
@@ -441,7 +537,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The page.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		public static bool RemoveEntriesForPage(UserInfo user, PageInfo page) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return RemoveEntriesForPage(AuthTools.PrepareUsername(user.Username), page);
 		}
@@ -453,7 +552,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The page.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private static bool RemoveEntriesForPage(string subject, PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			string resourceName = Actions.ForPages.ResourceMasterPrefix + page.FullName;
 
@@ -463,7 +565,10 @@ namespace ScrewTurn.Wiki {
 				if(entry.Resource == resourceName) {
 					// This call automatically logs the operation result
 					bool done = SetPermissionForPage(AuthStatus.Delete, page, entry.Action, subject);
-					if(!done) return false;
+					if(!done)
+					{
+						return false;
+					}
 				}
 			}
 
@@ -478,7 +583,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="directory">The directory.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		public static bool RemoveEntriesForDirectory(UserGroup group, IFilesStorageProviderV30 provider, string directory) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			return RemoveEntriesForDirectory(AuthTools.PrepareGroup(group.Name), provider, directory);
 		}
@@ -491,7 +599,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="directory">The directory.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		public static bool RemoveEntriesForDirectory(UserInfo user, IFilesStorageProviderV30 provider, string directory) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return RemoveEntriesForDirectory(AuthTools.PrepareUsername(user.Username), provider, directory);
 		}
@@ -504,9 +615,20 @@ namespace ScrewTurn.Wiki {
 		/// <param name="directory">The directory.</param>
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		private static bool RemoveEntriesForDirectory(string subject, IFilesStorageProviderV30 provider, string directory) {
-			if(provider == null) throw new ArgumentNullException("provider");
-			if(directory == null) throw new ArgumentNullException("directory");
-			if(directory.Length == 0) throw new ArgumentException("Directory cannot be empty", "directory");
+			if(provider == null)
+			{
+				throw new ArgumentNullException("provider");
+			}
+
+			if(directory == null)
+			{
+				throw new ArgumentNullException("directory");
+			}
+
+			if(directory.Length == 0)
+			{
+				throw new ArgumentException("Directory cannot be empty", "directory");
+			}
 
 			string resourceName = Actions.ForDirectories.ResourceMasterPrefix + AuthTools.GetDirectoryName(provider, directory);
 
@@ -516,7 +638,10 @@ namespace ScrewTurn.Wiki {
 				if(entry.Resource == resourceName) {
 					// This call automatically logs the operation result
 					bool done = SetPermissionForDirectory(AuthStatus.Delete, provider, directory, entry.Action, subject);
-					if(!done) return false;
+					if(!done)
+					{
+						return false;
+					}
 				}
 			}
 
@@ -529,10 +654,20 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The directory.</param>
 		public static void ClearEntriesForDirectory(IFilesStorageProviderV30 provider, string directory) {
-			if(provider == null) throw new ArgumentNullException("provider");
+			if(provider == null)
+			{
+				throw new ArgumentNullException("provider");
+			}
 
-			if(directory == null) throw new ArgumentNullException("directory");
-			if(directory.Length == 0) throw new ArgumentException("Directory cannot be empty", "directory");
+			if(directory == null)
+			{
+				throw new ArgumentNullException("directory");
+			}
+
+			if(directory.Length == 0)
+			{
+				throw new ArgumentException("Directory cannot be empty", "directory");
+			}
 
 			string resourceName = Actions.ForDirectories.ResourceMasterPrefix + AuthTools.GetDirectoryName(provider, directory);
 
@@ -545,14 +680,31 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace.</param>
 		/// <param name="pages">The local names of the pages in the namespace.</param>
 		public static void ClearEntriesForNamespace(string nspace, List<string> pages) {
-			if(nspace == null) throw new ArgumentNullException("nspac");
-			if(nspace.Length == 0) throw new ArgumentException("Namespace cannot be empty", "nspace");
+			if(nspace == null)
+			{
+				throw new ArgumentNullException("nspac");
+			}
 
-			if(pages == null) throw new ArgumentNullException("pages");
+			if(nspace.Length == 0)
+			{
+				throw new ArgumentException("Namespace cannot be empty", "nspace");
+			}
+
+			if(pages == null)
+			{
+				throw new ArgumentNullException("pages");
+			}
 
 			foreach(string p in pages) {
-				if(p == null) throw new ArgumentNullException("pages");
-				if(p.Length == 0) throw new ArgumentException("Page Element cannot be empty", "pages");
+				if(p == null)
+				{
+					throw new ArgumentNullException("pages");
+				}
+
+				if(p.Length == 0)
+				{
+					throw new ArgumentException("Page Element cannot be empty", "pages");
+				}
 			}
 
 			string resourceName;
@@ -571,8 +723,15 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The page full name.</param>
 		public static void ClearEntriesForPage(string page) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
 
 			string resourceName = Actions.ForPages.ResourceMasterPrefix + page;
 
@@ -588,13 +747,30 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the operation completed successfully, <c>false</c> otherwise.</returns>
 		/// <remarks>The method <b>does not</b> recurse in sub-directories.</remarks>
 		public static bool ProcessDirectoryRenaming(IFilesStorageProviderV30 provider, string oldName, string newName) {
-			if(provider == null) throw new ArgumentNullException("provider");
+			if(provider == null)
+			{
+				throw new ArgumentNullException("provider");
+			}
 
-			if(oldName == null) throw new ArgumentNullException("oldName");
-			if(oldName.Length == 0) throw new ArgumentException("Old Name cannot be empty", "oldName");
+			if(oldName == null)
+			{
+				throw new ArgumentNullException("oldName");
+			}
 
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(oldName.Length == 0)
+			{
+				throw new ArgumentException("Old Name cannot be empty", "oldName");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			return SettingsProvider.AclManager.RenameResource(
 				Actions.ForDirectories.ResourceMasterPrefix + AuthTools.GetDirectoryName(provider, oldName),
@@ -609,17 +785,42 @@ namespace ScrewTurn.Wiki {
 		/// <param name="newName">The new name of the namespace.</param>
 		/// <returns><c>true</c> if the operation completed successfully, <c>false</c> otherwise.</returns>
 		public static bool ProcessNamespaceRenaming(string oldName, List<string> oldPages, string newName) {
-			if(oldName == null) throw new ArgumentNullException("oldName");
-			if(oldName.Length == 0) throw new ArgumentException("Old Name cannot be empty", "oldName");
-
-			if(oldPages == null) throw new ArgumentNullException("oldPages");
-			foreach(string p in oldPages) {
-				if(p == null) throw new ArgumentNullException("oldPages");
-				if(p.Length == 0) throw new ArgumentException("Page cannot be empty", "oldPages");
+			if(oldName == null)
+			{
+				throw new ArgumentNullException("oldName");
 			}
 
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(oldName.Length == 0)
+			{
+				throw new ArgumentException("Old Name cannot be empty", "oldName");
+			}
+
+			if(oldPages == null)
+			{
+				throw new ArgumentNullException("oldPages");
+			}
+
+			foreach(string p in oldPages) {
+				if(p == null)
+				{
+					throw new ArgumentNullException("oldPages");
+				}
+
+				if(p.Length == 0)
+				{
+					throw new ArgumentException("Page cannot be empty", "oldPages");
+				}
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			foreach(string p in oldPages) {
 				SettingsProvider.AclManager.RenameResource(
@@ -639,11 +840,25 @@ namespace ScrewTurn.Wiki {
 		/// <param name="newName">The new full page name.</param>
 		/// <returns><c>true</c> if the operation completed successfully, <c>false</c> otherwise.</returns>
 		public static bool ProcessPageRenaming(string oldName, string newName) {
-			if(oldName == null) throw new ArgumentNullException("oldName");
-			if(oldName.Length == 0) throw new ArgumentException("Old Name cannot be empty", "oldName");
+			if(oldName == null)
+			{
+				throw new ArgumentNullException("oldName");
+			}
 
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(oldName.Length == 0)
+			{
+				throw new ArgumentException("Old Name cannot be empty", "oldName");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			return SettingsProvider.AclManager.RenameResource(
 				Actions.ForPages.ResourceMasterPrefix + oldName,

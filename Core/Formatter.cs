@@ -143,8 +143,15 @@ namespace ScrewTurn.Wiki {
 			match = JavascriptRegex.Match(sb.ToString());
 			while(match.Success) {
 				sb.Remove(match.Index, match.Length);
-				if(singleLine) sb.Insert(match.Index, match.Value.Replace("\n", ""));
-				else sb.Insert(match.Index, match.Value.Replace("\n\n", "\n"));
+				if(singleLine)
+				{
+					sb.Insert(match.Index, match.Value.Replace("\n", ""));
+				}
+				else
+				{
+					sb.Insert(match.Index, match.Value.Replace("\n\n", "\n"));
+				}
+
 				match = JavascriptRegex.Match(sb.ToString(), match.Index + 1);
 			}
 
@@ -181,7 +188,11 @@ namespace ScrewTurn.Wiki {
 						while(destination.StartsWith("[") && destination.EndsWith("]")) {
 							destination = destination.Substring(1, destination.Length - 2);
 						}
-						while(sb[match.Index] == '\n' && match.Index < sb.Length - 1) sb.Remove(match.Index, 1);
+						while(sb[match.Index] == '\n' && match.Index < sb.Length - 1)
+						{
+							sb.Remove(match.Index, 1);
+						}
+
 						PageInfo dest = Pages.FindPage(destination);
 						if(dest != null) {
 							Redirections.AddRedirection(current, dest);
@@ -406,8 +417,15 @@ namespace ScrewTurn.Wiki {
 				}
 
 				done = false;
-				if(match.Value.StartsWith("[[")) tmp = match.Value.Substring(2, match.Length - 4).Trim();
-				else tmp = match.Value.Substring(1, match.Length - 2).Trim();
+				if(match.Value.StartsWith("[["))
+				{
+					tmp = match.Value.Substring(2, match.Length - 4).Trim();
+				}
+				else
+				{
+					tmp = match.Value.Substring(1, match.Length - 2).Trim();
+				}
+
 				sb.Remove(match.Index, match.Length);
 				a = "";
 				n = "";
@@ -440,8 +458,15 @@ namespace ScrewTurn.Wiki {
 							}
 							title = fields[1];
 							url = fields[2];
-							if(fields.Length == 4) bigUrl = fields[3];
-							else bigUrl = "";
+							if(fields.Length == 4)
+							{
+								bigUrl = fields[3];
+							}
+							else
+							{
+								bigUrl = "";
+							}
+
 							url = EscapeUrl(url);
 							// bigUrl = EscapeUrl(bigUrl); The url is already escaped by BuildUrl
 							if(c.Equals("imageauto")) {
@@ -457,8 +482,15 @@ namespace ScrewTurn.Wiki {
 								dummy.Append(@"<img class=""image"" src=""");
 								dummy.Append(url);
 								dummy.Append(@""" alt=""");
-								if(title.Length > 0) dummy.Append(StripWikiMarkup(StripHtml(title.TrimStart('#'))));
-								else dummy.Append(Exchanger.ResourceExchanger.GetResource("Image"));
+								if(title.Length > 0)
+								{
+									dummy.Append(StripWikiMarkup(StripHtml(title.TrimStart('#'))));
+								}
+								else
+								{
+									dummy.Append(Exchanger.ResourceExchanger.GetResource("Image"));
+								}
+
 								dummy.Append(@""" />");
 								img.Append(BuildLink(bigUrl, dummy.ToString(), true, title, forIndexing, bareBones, context, null, tempLinkedPages));
 							}
@@ -466,8 +498,15 @@ namespace ScrewTurn.Wiki {
 								img.Append(@"<img class=""image"" src=""");
 								img.Append(url);
 								img.Append(@""" alt=""");
-								if(title.Length > 0) img.Append(StripWikiMarkup(StripHtml(title.TrimStart('#'))));
-								else img.Append(Exchanger.ResourceExchanger.GetResource("Image"));
+								if(title.Length > 0)
+								{
+									img.Append(StripWikiMarkup(StripHtml(title.TrimStart('#'))));
+								}
+								else
+								{
+									img.Append(Exchanger.ResourceExchanger.GetResource("Image"));
+								}
+
 								img.Append(@""" />");
 							}
 							if(title.Length > 0 && !title.StartsWith("#")) {
@@ -486,8 +525,15 @@ namespace ScrewTurn.Wiki {
 						else if(fields[0].ToLowerInvariant().Equals("image")) {
 							title = fields[1];
 							url = fields[2];
-							if(fields.Length == 4) bigUrl = fields[3];
-							else bigUrl = "";
+							if(fields.Length == 4)
+							{
+								bigUrl = fields[3];
+							}
+							else
+							{
+								bigUrl = "";
+							}
+
 							url = EscapeUrl(url);
 							// bigUrl = EscapeUrl(bigUrl); The url is already escaped by BuildUrl
 							if(bigUrl.Length > 0) {
@@ -495,8 +541,15 @@ namespace ScrewTurn.Wiki {
 								dummy.Append(@"<img src=""");
 								dummy.Append(url);
 								dummy.Append(@""" alt=""");
-								if(title.Length > 0) dummy.Append(StripWikiMarkup(StripHtml(title.TrimStart('#'))));
-								else dummy.Append(Exchanger.ResourceExchanger.GetResource("Image"));
+								if(title.Length > 0)
+								{
+									dummy.Append(StripWikiMarkup(StripHtml(title.TrimStart('#'))));
+								}
+								else
+								{
+									dummy.Append(Exchanger.ResourceExchanger.GetResource("Image"));
+								}
+
 								dummy.Append(@""" />");
 								img.Append(BuildLink(bigUrl, dummy.ToString(), true, title, forIndexing, bareBones, context, null, tempLinkedPages));
 							}
@@ -504,8 +557,15 @@ namespace ScrewTurn.Wiki {
 								img.Append(@"<img src=""");
 								img.Append(url);
 								img.Append(@""" alt=""");
-								if(title.Length > 0) img.Append(StripWikiMarkup(StripHtml(title.TrimStart('#'))));
-								else img.Append(Exchanger.ResourceExchanger.GetResource("Image"));
+								if(title.Length > 0)
+								{
+									img.Append(StripWikiMarkup(StripHtml(title.TrimStart('#'))));
+								}
+								else
+								{
+									img.Append(Exchanger.ResourceExchanger.GetResource("Image"));
+								}
+
 								img.Append(@""" />");
 							}
 							sb.Insert(match.Index, img.ToString());
@@ -520,8 +580,16 @@ namespace ScrewTurn.Wiki {
 					// This is an attachment
 					done = true;
 					string f = tmp.Substring("attachment:".Length);
-					if(f.StartsWith("{up}")) f = f.Substring(4);
-					if(f.ToLowerInvariant().StartsWith(UpReplacement.ToLowerInvariant())) f = f.Substring(UpReplacement.Length);
+					if(f.StartsWith("{up}"))
+					{
+						f = f.Substring(4);
+					}
+
+					if(f.ToLowerInvariant().StartsWith(UpReplacement.ToLowerInvariant()))
+					{
+						f = f.Substring(UpReplacement.Length);
+					}
+
 					attachments.Add(HttpContext.Current.Server.UrlDecode(f));
 					// Remove all trailing \n, so that attachments have no effect on the output in any case
 					while(sb[match.Index] == '\n' && match.Index < sb.Length - 1) {
@@ -666,7 +734,11 @@ namespace ScrewTurn.Wiki {
 					sb.Remove(match.Index, match.Length);
 					h = match.Value.Substring(4, match.Value.Length - 8 - (match.Value.EndsWith("\n") ? 1 : 0));
 					dummy = new StringBuilder(200);
-					if(current != null && !bareBones && !forIndexing) dummy.Append(BuildEditSectionLink(count, current.FullName));
+					if(current != null && !bareBones && !forIndexing)
+					{
+						dummy.Append(BuildEditSectionLink(count, current.FullName));
+					}
+
 					dummy.Append(@"<h3 class=""separator"">");
 					dummy.Append(h);
 					if(!bareBones && !forIndexing) {
@@ -687,7 +759,11 @@ namespace ScrewTurn.Wiki {
 					sb.Remove(match.Index, match.Length);
 					h = match.Value.Substring(3, match.Value.Length - 6 - (match.Value.EndsWith("\n") ? 1 : 0));
 					dummy = new StringBuilder(200);
-					if(current != null && !bareBones && !forIndexing) dummy.Append(BuildEditSectionLink(count, current.FullName));
+					if(current != null && !bareBones && !forIndexing)
+					{
+						dummy.Append(BuildEditSectionLink(count, current.FullName));
+					}
+
 					dummy.Append(@"<h2 class=""separator"">");
 					dummy.Append(h);
 					if(!bareBones && !forIndexing) {
@@ -708,7 +784,11 @@ namespace ScrewTurn.Wiki {
 					sb.Remove(match.Index, match.Length);
 					h = match.Value.Substring(2, match.Value.Length - 4 - (match.Value.EndsWith("\n") ? 1 : 0));
 					dummy = new StringBuilder(200);
-					if(current != null && !bareBones && !forIndexing) dummy.Append(BuildEditSectionLink(count, current.FullName));
+					if(current != null && !bareBones && !forIndexing)
+					{
+						dummy.Append(BuildEditSectionLink(count, current.FullName));
+					}
+
 					dummy.Append(@"<h1 class=""separator"">");
 					dummy.Append(h);
 					if(!bareBones && !forIndexing) {
@@ -743,7 +823,10 @@ namespace ScrewTurn.Wiki {
 				while(match.Success) {
 					if(!IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
 						sb.Remove(match.Index, match.Length);
-						if(!forIndexing) sb.Insert(match.Index, tocString);
+						if(!forIndexing)
+						{
+							sb.Insert(match.Index, tocString);
+						}
 					}
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 					match = TocRegex.Match(sb.ToString(), end);
@@ -776,7 +859,10 @@ namespace ScrewTurn.Wiki {
 							string[] temp = null;
 							sb.Insert(match.Index,
 								Format(FormatSnippet(balanced, tocString), forIndexing, context, current, out temp, bareBones).Trim('\n'));
-							if(temp != null) tempLinkedPages.AddRange(temp);
+							if(temp != null)
+							{
+								tempLinkedPages.AddRange(temp);
+							}
 						}
 						else {
 							// Nested snippet
@@ -788,8 +874,11 @@ namespace ScrewTurn.Wiki {
 								lastOpen = balanced.LastIndexOf("{");
 								firstClosedAfterLastOpen = balanced.IndexOf("}", lastOpen + 1);
 
-								if(lastOpen < 0 || firstClosedAfterLastOpen <= lastOpen) break; // Give up
-								
+								if(lastOpen < 0 || firstClosedAfterLastOpen <= lastOpen)
+								{
+									break; // Give up
+								}
+
 								string internalSnippet = balanced.Substring(lastOpen, firstClosedAfterLastOpen - lastOpen + 1);
 								balanced = balanced.Remove(lastOpen, firstClosedAfterLastOpen - lastOpen + 1);
 
@@ -803,7 +892,10 @@ namespace ScrewTurn.Wiki {
 								string formattedInternalSnippet = FormatSnippet(internalSnippet, tocString);
 								string[] temp;
 								formattedInternalSnippet = Format(formattedInternalSnippet, forIndexing, context, current, out temp, bareBones).Trim('\n');
-								if(temp != null) tempLinkedPages.AddRange(temp);
+								if(temp != null)
+								{
+									tempLinkedPages.AddRange(temp);
+								}
 
 								balanced = balanced.Insert(lastOpen, formattedInternalSnippet);
 							} while(lastOpen != -1);
@@ -847,7 +939,10 @@ namespace ScrewTurn.Wiki {
 			ProcessLineBreaks(sb, bareBones);
 
 			if(addedNewLineAtEnd) {
-				if(sb.ToString().EndsWith("<br />")) sb.Remove(sb.Length - 6, 6);
+				if(sb.ToString().EndsWith("<br />"))
+				{
+					sb.Remove(sb.Length - 6, 6);
+				}
 			}
 
 			// Append Attachments
@@ -860,7 +955,10 @@ namespace ScrewTurn.Wiki {
 					sb.Append(@""" class=""attachment"">");
 					sb.Append(attachments[i]);
 					sb.Append("</a>");
-					if(i != attachments.Count - 1) sb.Append(" - ");
+					if(i != attachments.Count - 1)
+					{
+						sb.Append(" - ");
+					}
 				}
 				sb.Append("</div>");
 			}
@@ -905,8 +1003,14 @@ namespace ScrewTurn.Wiki {
 			buffer.Append(id);
 			buffer.Append(@""" title=""");
 			buffer.Append(SectionLinkTextPlaceHolder);
-			if(Settings.EnableSectionAnchors) buffer.Append(@""">&#0182;</a>");
-			else buffer.Append(@"""></a>");
+			if(Settings.EnableSectionAnchors)
+			{
+				buffer.Append(@""">&#0182;</a>");
+			}
+			else
+			{
+				buffer.Append(@"""></a>");
+			}
 		}
 
 		/// <summary>
@@ -920,14 +1024,23 @@ namespace ScrewTurn.Wiki {
 		private static string BuildRecentChanges(NamespaceInfo currentNamespace, bool allNamespaces, FormattingContext context, PageInfo currentPage) {
 			List<RecentChange> allChanges = new List<RecentChange>(RecentChanges.GetAllChanges());
 
-			if(allChanges.Count == 0) return "";
+			if(allChanges.Count == 0)
+			{
+				return "";
+			}
 
 			// Sort by descending date/time
 			allChanges.Reverse();
 
 			Func<NamespaceInfo, string> getName = (ns) => {
-				if(ns == null) return null;
-				else return ns.Name;
+				if(ns == null)
+				{
+					return null;
+				}
+				else
+				{
+					return ns.Name;
+				}
 			};
 
 			string currentNamespaceName = getName(currentNamespace);
@@ -1047,7 +1160,10 @@ namespace ScrewTurn.Wiki {
 		private static string BuildOrphanedPagesList(NamespaceInfo nspace, FormattingContext context, PageInfo current) {
 			PageInfo[] orhpans = Pages.GetOrphanedPages(nspace);
 
-			if(orhpans.Length == 0) return "";
+			if(orhpans.Length == 0)
+			{
+				return "";
+			}
 
 			StringBuilder sb = new StringBuilder(500);
 			sb.Append("<ul>");
@@ -1073,7 +1189,10 @@ namespace ScrewTurn.Wiki {
 		private static string BuildWantedPagesList(NamespaceInfo nspace) {
 			Dictionary<string, List<string>> wanted = Pages.GetWantedPages(nspace != null ? nspace.Name : null);
 
-			if(wanted.Count == 0) return "";
+			if(wanted.Count == 0)
+			{
+				return "";
+			}
 
 			StringBuilder sb = new StringBuilder(500);
 			sb.Append("<ul>");
@@ -1097,10 +1216,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="current">The current page, if any.</param>
 		/// <returns>The list.</returns>
 		private static string BuildIncomingLinksList(PageInfo page, FormattingContext context, PageInfo current) {
-			if(page == null) return "";
+			if(page == null)
+			{
+				return "";
+			}
 
 			string[] links = Pages.GetPageIncomingLinks(page);
-			if(links.Length == 0) return "";
+			if(links.Length == 0)
+			{
+				return "";
+			}
 
 			StringBuilder sb = new StringBuilder(500);
 			sb.AppendFormat("<ul>");
@@ -1130,10 +1255,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="current">The current page, if any.</param>
 		/// <returns>The list.</returns>
 		private static string BuildOutgoingLinksList(PageInfo page, FormattingContext context, PageInfo current) {
-			if(page == null) return "";
+			if(page == null)
+			{
+				return "";
+			}
 
 			string[] links = Pages.GetPageOutgoingLinks(page);
-			if(links.Length == 0) return "";
+			if(links.Length == 0)
+			{
+				return "";
+			}
 
 			StringBuilder sb = new StringBuilder(500);
 			sb.Append("<ul>");
@@ -1289,18 +1420,27 @@ namespace ScrewTurn.Wiki {
 			int openCount = 0;
 			do {
 				tempIndex = value.IndexOf("{", tempIndex + 1);
-				if(tempIndex >= 0) openCount++;
+				if(tempIndex >= 0)
+				{
+					openCount++;
+				}
 			} while(tempIndex != -1 && tempIndex < value.Length - 1);
 
 			int closeCount = 0;
 			tempIndex = -1;
 			do {
 				tempIndex = value.IndexOf("}", tempIndex + 1);
-				if(tempIndex >= 0) closeCount++;
+				if(tempIndex >= 0)
+				{
+					closeCount++;
+				}
 			} while(tempIndex != -1 && tempIndex < value.Length - 1);
 
 			// Already balanced
-			if(openCount == closeCount) return value;
+			if(openCount == closeCount)
+			{
+				return value;
+			}
 
 			tempIndex = index + value.Length - 1;
 
@@ -1308,9 +1448,16 @@ namespace ScrewTurn.Wiki {
 
 			do {
 				int dummy = bigString.IndexOf("{", tempIndex + 1);
-				if(dummy != -1) openCount++;
+				if(dummy != -1)
+				{
+					openCount++;
+				}
+
 				tempIndex = bigString.IndexOf("}", tempIndex + 1);
-				if(tempIndex != -1) closeCount++;
+				if(tempIndex != -1)
+				{
+					closeCount++;
+				}
 
 				tempIndex = Math.Max(dummy, tempIndex);
 
@@ -1354,7 +1501,10 @@ namespace ScrewTurn.Wiki {
 			// 0. Find snippet object
 			string snippetName = capturedMarkup.Substring(3, capturedMarkup.IndexOf("\n") - 3).Trim();
 			Snippet snippet = Snippets.Find(snippetName);
-			if(snippet == null) return @"<b style=""color: #FF0000;"">FORMATTER ERROR (Snippet Not Found)</b>";
+			if(snippet == null)
+			{
+				return @"<b style=""color: #FF0000;"">FORMATTER ERROR (Snippet Not Found)</b>";
+			}
 
 			// 1. Strip all useless data at the beginning and end of the text ({s| and }, plus all whitespaces)
 
@@ -1364,7 +1514,10 @@ namespace ScrewTurn.Wiki {
 			sb.Remove(sb.Length - 1, 1);
 			
 			// Strip all whitespaces at the end
-			while(char.IsWhiteSpace(sb[sb.Length - 1])) sb.Remove(sb.Length - 1, 1);
+			while(char.IsWhiteSpace(sb[sb.Length - 1]))
+			{
+				sb.Remove(sb.Length - 1, 1);
+			}
 
 			// 2. Split into lines, preserving empty lines
 			string[] lines = sb.ToString().Split('\n');
@@ -1404,8 +1557,14 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 
-				if(!values.ContainsKey(parameterName)) values.Add(parameterName, currentValue.ToString());
-				else values[parameterName] = currentValue.ToString();
+				if(!values.ContainsKey(parameterName))
+				{
+					values.Add(parameterName, currentValue.ToString());
+				}
+				else
+				{
+					values[parameterName] = currentValue.ToString();
+				}
 			}
 
 			// 5. Prepare the snippet output, replacing parameters placeholders with their values
@@ -1439,8 +1598,15 @@ namespace ScrewTurn.Wiki {
 		private static string FormatClassicSnippet(string capturedMarkup) {
 			int secondPipe = capturedMarkup.Substring(3).IndexOf("|");
 			string name = "";
-			if(secondPipe == -1) name = capturedMarkup.Substring(3, capturedMarkup.Length - 4); // No parameters
-			else name = capturedMarkup.Substring(3, secondPipe);
+			if(secondPipe == -1)
+			{
+				name = capturedMarkup.Substring(3, capturedMarkup.Length - 4); // No parameters
+			}
+			else
+			{
+				name = capturedMarkup.Substring(3, secondPipe);
+			}
+
 			Snippet snippet = Snippets.Find(name);
 			if(snippet != null) {
 				string[] parameters = CustomSplit(capturedMarkup.Substring(3 + secondPipe + 1, capturedMarkup.Length - secondPipe - 5));
@@ -1464,11 +1630,25 @@ namespace ScrewTurn.Wiki {
 			int openBrackets = 0; // Account for links with two brackets, e.g. [[link]]
 			while(index < data.Length) {
 				if(data[index] == '|') {
-					if(openBrackets == 0) indices.Add(index);
+					if(openBrackets == 0)
+					{
+						indices.Add(index);
+					}
 				}
-				else if(data[index] == '[') openBrackets++;
-				else if(data[index] == ']') openBrackets--;
-				if(openBrackets < 0) openBrackets = 0;
+				else if(data[index] == '[')
+				{
+					openBrackets++;
+				}
+				else if(data[index] == ']')
+				{
+					openBrackets--;
+				}
+
+				if(openBrackets < 0)
+				{
+					openBrackets = 0;
+				}
+
 				index++;
 			}
 
@@ -1537,7 +1717,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="content">The Content.</param>
 		/// <returns>The stripped Content.</returns>
 		private static string StripWikiMarkup(string content) {
-			if(string.IsNullOrEmpty(content)) return "";
+			if(string.IsNullOrEmpty(content))
+			{
+				return "";
+			}
 
 			StringBuilder sb = new StringBuilder(content);
 			sb.Replace("*", "");
@@ -1566,7 +1749,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="content">The string.</param>
 		/// <returns>The result.</returns>
 		public static string StripHtml(string content) {
-			if(string.IsNullOrEmpty(content)) return "";
+			if(string.IsNullOrEmpty(content))
+			{
+				return "";
+			}
 
 			StringBuilder sb = new StringBuilder(Regex.Replace(content, "<[^>]*>", " "));
 			sb.Replace("&nbsp;", "");
@@ -1590,9 +1776,20 @@ namespace ScrewTurn.Wiki {
 		private static string BuildLink(string targetUrl, string title, bool isImage, string imageTitle,
 			bool forIndexing, bool bareBones, FormattingContext context, PageInfo currentPage, List<string> linkedPages) {
 
-			if(targetUrl == null) targetUrl = "";
-			if(title == null) title = "";
-			if(imageTitle == null) imageTitle = "";
+			if(targetUrl == null)
+			{
+				targetUrl = "";
+			}
+
+			if(title == null)
+			{
+				title = "";
+			}
+
+			if(imageTitle == null)
+			{
+				imageTitle = "";
+			}
 
 			bool blank = false;
 			if(targetUrl.StartsWith("^")) {
@@ -1612,55 +1809,130 @@ namespace ScrewTurn.Wiki {
 			}
 			else if(targetUrl.StartsWith("#")) {
 				sb.Append(@"<a");
-				if(!isImage) sb.Append(@" class=""internallink""");
-				if(blank) sb.Append(@" target=""_blank""");
+				if(!isImage)
+				{
+					sb.Append(@" class=""internallink""");
+				}
+
+				if(blank)
+				{
+					sb.Append(@" target=""_blank""");
+				}
+
 				sb.Append(@" href=""");
 				//sb.Append(a);
 				UrlTools.BuildUrl(sb, targetUrl);
 				sb.Append(@""" title=""");
-				if(!isImage && title.Length > 0) sb.Append(nstripped);
-				else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-				else sb.Append(targetUrl.Substring(1));
+				if(!isImage && title.Length > 0)
+				{
+					sb.Append(nstripped);
+				}
+				else if(isImage && imageTitle.Length > 0)
+				{
+					sb.Append(imageTitleStripped);
+				}
+				else
+				{
+					sb.Append(targetUrl.Substring(1));
+				}
+
 				sb.Append(@""">");
-				if(title.Length > 0) sb.Append(title);
-				else sb.Append(targetUrl.Substring(1));
+				if(title.Length > 0)
+				{
+					sb.Append(title);
+				}
+				else
+				{
+					sb.Append(targetUrl.Substring(1));
+				}
+
 				sb.Append("</a>");
 			}
 			else if(targetUrl.StartsWith("http://") || targetUrl.StartsWith("https://") || targetUrl.StartsWith("ftp://") || targetUrl.StartsWith("file://")) {
 				// The link is complete
 				sb.Append(@"<a");
-				if(!isImage) sb.Append(@" class=""externallink""");
+				if(!isImage)
+				{
+					sb.Append(@" class=""externallink""");
+				}
+
 				sb.Append(@" href=""");
 				sb.Append(targetUrl);
 				sb.Append(@""" title=""");
-				if(!isImage && title.Length > 0) sb.Append(nstripped);
-				else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-				else sb.Append(targetUrl);
+				if(!isImage && title.Length > 0)
+				{
+					sb.Append(nstripped);
+				}
+				else if(isImage && imageTitle.Length > 0)
+				{
+					sb.Append(imageTitleStripped);
+				}
+				else
+				{
+					sb.Append(targetUrl);
+				}
+
 				sb.Append(@""" target=""_blank"">");
-				if(title.Length > 0) sb.Append(title);
-				else sb.Append(targetUrl);
+				if(title.Length > 0)
+				{
+					sb.Append(title);
+				}
+				else
+				{
+					sb.Append(targetUrl);
+				}
+
 				sb.Append("</a>");
 			}
 			else if(targetUrl.StartsWith(@"\\") || targetUrl.StartsWith("//")) {
 				// The link is a UNC path
 				sb.Append(@"<a");
-				if(!isImage) sb.Append(@" class=""externallink""");
+				if(!isImage)
+				{
+					sb.Append(@" class=""externallink""");
+				}
+
 				sb.Append(@" href=""file://///");
 				sb.Append(targetUrl.Substring(2));
 				sb.Append(@""" title=""");
-				if(!isImage && title.Length > 0) sb.Append(nstripped);
-				else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-				else sb.Append(targetUrl);
+				if(!isImage && title.Length > 0)
+				{
+					sb.Append(nstripped);
+				}
+				else if(isImage && imageTitle.Length > 0)
+				{
+					sb.Append(imageTitleStripped);
+				}
+				else
+				{
+					sb.Append(targetUrl);
+				}
+
 				sb.Append(@""" target=""_blank"">");
-				if(title.Length > 0) sb.Append(title);
-				else sb.Append(targetUrl);
+				if(title.Length > 0)
+				{
+					sb.Append(title);
+				}
+				else
+				{
+					sb.Append(targetUrl);
+				}
+
 				sb.Append("</a>");
 			}
 			else if(targetUrl.IndexOf("@") != -1 && targetUrl.IndexOf(".") != -1) {
 				// Email
 				sb.Append(@"<a");
-				if(!isImage) sb.Append(@" class=""emaillink""");
-				if(blank) sb.Append(@" target=""_blank""");
+				if(!isImage)
+				{
+					sb.Append(@" class=""emaillink""");
+				}
+
+				if(blank)
+				{
+					sb.Append(@" target=""_blank""");
+				}
+
 				if(targetUrl.StartsWith(@"mailto:")) {
 					sb.Append(@" href=""");
 				} else {
@@ -1668,12 +1940,29 @@ namespace ScrewTurn.Wiki {
 				}
 				sb.Append(Tools.ObfuscateText(targetUrl.Replace("&amp;", "%26"))); // Trick to let ampersands work in email addresses
 				sb.Append(@""" title=""");
-				if(!isImage && title.Length > 0) sb.Append(nstripped);
-				else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-				else sb.Append(Tools.ObfuscateText(targetUrl));
+				if(!isImage && title.Length > 0)
+				{
+					sb.Append(nstripped);
+				}
+				else if(isImage && imageTitle.Length > 0)
+				{
+					sb.Append(imageTitleStripped);
+				}
+				else
+				{
+					sb.Append(Tools.ObfuscateText(targetUrl));
+				}
+
 				sb.Append(@""">");
-				if(title.Length > 0) sb.Append(title);
-				else sb.Append(Tools.ObfuscateText(targetUrl));
+				if(title.Length > 0)
+				{
+					sb.Append(title);
+				}
+				else
+				{
+					sb.Append(Tools.ObfuscateText(targetUrl));
+				}
+
 				sb.Append("</a>");
 			}
 			else if(((targetUrl.IndexOf(".") != -1 && !targetUrl.ToLowerInvariant().EndsWith(".aspx")) || targetUrl.EndsWith("/")) &&
@@ -1681,37 +1970,94 @@ namespace ScrewTurn.Wiki {
 				!targetUrl.StartsWith("c:") && !targetUrl.StartsWith("C:")) {
 				// Link to an internal file or subdirectory, or link to GetFile.aspx
 				sb.Append(@"<a");
-				if(!isImage) sb.Append(@" class=""internallink""");
-				if(blank) sb.Append(@" target=""_blank""");
+				if(!isImage)
+				{
+					sb.Append(@" class=""internallink""");
+				}
+
+				if(blank)
+				{
+					sb.Append(@" target=""_blank""");
+				}
+
 				sb.Append(@" href=""");
 				//sb.Append(a);
-				if(targetUrl.ToLowerInvariant().StartsWith("getfile.aspx")) sb.Append(targetUrl);
-				else UrlTools.BuildUrl(sb, targetUrl);
+				if(targetUrl.ToLowerInvariant().StartsWith("getfile.aspx"))
+				{
+					sb.Append(targetUrl);
+				}
+				else
+				{
+					UrlTools.BuildUrl(sb, targetUrl);
+				}
+
 				sb.Append(@""" title=""");
-				if(!isImage && title.Length > 0) sb.Append(nstripped);
-				else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-				else sb.Append(targetUrl);
+				if(!isImage && title.Length > 0)
+				{
+					sb.Append(nstripped);
+				}
+				else if(isImage && imageTitle.Length > 0)
+				{
+					sb.Append(imageTitleStripped);
+				}
+				else
+				{
+					sb.Append(targetUrl);
+				}
+
 				sb.Append(@""">");
-				if(title.Length > 0) sb.Append(title);
-				else sb.Append(targetUrl);
+				if(title.Length > 0)
+				{
+					sb.Append(title);
+				}
+				else
+				{
+					sb.Append(targetUrl);
+				}
+
 				sb.Append("</a>");
 			}
 			else {
 				if(targetUrl.IndexOf(".aspx") != -1) {
 					// The link points to a "system" page
 					sb.Append(@"<a");
-					if(!isImage) sb.Append(@" class=""systemlink""");
-					if(blank) sb.Append(@" target=""_blank""");
+					if(!isImage)
+					{
+						sb.Append(@" class=""systemlink""");
+					}
+
+					if(blank)
+					{
+						sb.Append(@" target=""_blank""");
+					}
+
 					sb.Append(@" href=""");
 					//sb.Append(a);
 					UrlTools.BuildUrl(sb, targetUrl);
 					sb.Append(@""" title=""");
-					if(!isImage && title.Length > 0) sb.Append(nstripped);
-					else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-					else sb.Append(targetUrl);
+					if(!isImage && title.Length > 0)
+					{
+						sb.Append(nstripped);
+					}
+					else if(isImage && imageTitle.Length > 0)
+					{
+						sb.Append(imageTitleStripped);
+					}
+					else
+					{
+						sb.Append(targetUrl);
+					}
+
 					sb.Append(@""">");
-					if(title.Length > 0) sb.Append(title);
-					else sb.Append(targetUrl);
+					if(title.Length > 0)
+					{
+						sb.Append(title);
+					}
+					else
+					{
+						sb.Append(targetUrl);
+					}
+
 					sb.Append("</a>");
 				}
 				else {
@@ -1722,12 +2068,29 @@ namespace ScrewTurn.Wiki {
 						sb.Append(@"<a href=""");
 						UrlTools.BuildUrl(sb, "AllPages.aspx?Cat=", Tools.UrlEncode(targetUrl.Substring(2)));
 						sb.Append(@""" class=""systemlink"" title=""");
-						if(!isImage && title.Length > 0) sb.Append(nstripped);
-						else if(isImage && imageTitle.Length > 0) sb.Append(imageTitleStripped);
-						else sb.Append(targetUrl.Substring(2));
+						if(!isImage && title.Length > 0)
+						{
+							sb.Append(nstripped);
+						}
+						else if(isImage && imageTitle.Length > 0)
+						{
+							sb.Append(imageTitleStripped);
+						}
+						else
+						{
+							sb.Append(targetUrl.Substring(2));
+						}
+
 						sb.Append(@""">");
-						if(title.Length > 0) sb.Append(title);
-						else sb.Append(targetUrl.Substring(2));
+						if(title.Length > 0)
+						{
+							sb.Append(title);
+						}
+						else
+						{
+							sb.Append(targetUrl.Substring(2));
+						}
+
 						sb.Append("</a>");
 					}
 					else if(targetUrl.Contains(":") || targetUrl.ToLowerInvariant().Contains("%3a") || targetUrl.Contains("&") || targetUrl.Contains("%26")) {
@@ -1759,23 +2122,40 @@ namespace ScrewTurn.Wiki {
 								 NameTools.GetFullName(NameTools.GetNamespace(currentPage.FullName), NameTools.GetLocalName(tempLink)) :
 								 tempLink;
 						}
-						else fullName = tempLink;
+						else
+						{
+							fullName = tempLink;
+						}
 
 						// Add linked page without repetitions
 						//linkedPages.Add(fullName);
 						PageInfo info = Pages.FindPage(fullName);
 						if(info != null) {
-							if(!linkedPages.Contains(info.FullName)) linkedPages.Add(info.FullName);
+							if(!linkedPages.Contains(info.FullName))
+							{
+								linkedPages.Add(info.FullName);
+							}
 						}
 						else {
 							string lowercaseFullName = fullName.ToLowerInvariant();
-							if(linkedPages.Find(p => { return p.ToLowerInvariant() == lowercaseFullName; }) == null) linkedPages.Add(fullName);
+							if(linkedPages.Find(p => { return p.ToLowerInvariant() == lowercaseFullName; }) == null)
+							{
+								linkedPages.Add(fullName);
+							}
 						}
 
 						if(info == null) {
 							sb.Append(@"<a");
-							if(!isImage) sb.Append(@" class=""unknownlink""");
-							if(blank) sb.Append(@" target=""_blank""");
+							if(!isImage)
+							{
+								sb.Append(@" class=""unknownlink""");
+							}
+
+							if(blank)
+							{
+								sb.Append(@" target=""_blank""");
+							}
+
 							sb.Append(@" href=""");
 							//sb.Append(a);
 							UrlTools.BuildUrl(sb, explicitNamespace ? "++" : "", targetUrl);
@@ -1785,14 +2165,29 @@ namespace ScrewTurn.Wiki {
 							else sb.Append(tempLink);*/
 							sb.Append(fullName);
 							sb.Append(@""">");
-							if(title.Length > 0) sb.Append(title);
-							else sb.Append(tempLink);
+							if(title.Length > 0)
+							{
+								sb.Append(title);
+							}
+							else
+							{
+								sb.Append(tempLink);
+							}
+
 							sb.Append("</a>");
 						}
 						else {
 							sb.Append(@"<a");
-							if(!isImage) sb.Append(@" class=""pagelink""");
-							if(blank) sb.Append(@" target=""_blank""");
+							if(!isImage)
+							{
+								sb.Append(@" class=""pagelink""");
+							}
+
+							if(blank)
+							{
+								sb.Append(@" target=""_blank""");
+							}
+
 							sb.Append(@" href=""");
 							//sb.Append(a);
 							UrlTools.BuildUrl(sb, explicitNamespace ? "++" : "", targetUrl);
@@ -1818,14 +2213,27 @@ namespace ScrewTurn.Wiki {
 									if(retrievedContent != null && !retrievedContent.IsEmpty()) {
 										sb.Append(FormattingPipeline.PrepareTitle(retrievedContent.Title, forIndexing, context, currentPage));
 									}
-									else sb.Append(info.FullName);
+									else
+									{
+										sb.Append(info.FullName);
+									}
 								}
 							}
-							else sb.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(info, false).Title, forIndexing, context, currentPage));
+							else
+							{
+								sb.Append(FormattingPipeline.PrepareTitle(Content.GetPageContent(info, false).Title, forIndexing, context, currentPage));
+							}
 
 							sb.Append(@""">");
-							if(title.Length > 0) sb.Append(title);
-							else sb.Append(tempLink);
+							if(title.Length > 0)
+							{
+								sb.Append(title);
+							}
+							else
+							{
+								sb.Append(tempLink);
+							}
+
 							sb.Append("</a>");
 						}
 					}
@@ -1938,7 +2346,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The page name.</param>
 		/// <returns>The link.</returns>
 		private static string BuildEditSectionLink(int id, string page) {
-			if(!Settings.EnableSectionEditing) return "";
+			if(!Settings.EnableSectionEditing)
+			{
+				return "";
+			}
 
 			StringBuilder sb = new StringBuilder(100);
 			sb.Append(@"<a href=""");
@@ -1959,8 +2370,15 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The correct HTML markup.</returns>
 		private static string GenerateList(string[] lines, int line, int level, ref int currLine) {
 			StringBuilder sb = new StringBuilder(200);
-			if(lines[currLine][level] == '*') sb.Append("<ul>");
-			else if(lines[currLine][level] == '#') sb.Append("<ol>");
+			if(lines[currLine][level] == '*')
+			{
+				sb.Append("<ul>");
+			}
+			else if(lines[currLine][level] == '#')
+			{
+				sb.Append("<ol>");
+			}
+
 			while(currLine <= lines.Length - 1 && CountBullets(lines[currLine]) >= level + 1) {
 				if(CountBullets(lines[currLine]) == level + 1) {
 					sb.Append("<li>");
@@ -1974,8 +2392,15 @@ namespace ScrewTurn.Wiki {
 					sb.Append("</li>");
 				}
 			}
-			if(lines[line][level] == '*') sb.Append("</ul>");
-			else if(lines[line][level] == '#') sb.Append("</ol>");
+			if(lines[line][level] == '*')
+			{
+				sb.Append("</ul>");
+			}
+			else if(lines[line][level] == '#')
+			{
+				sb.Append("</ol>");
+			}
+
 			return sb.ToString();
 		}
 
@@ -2001,8 +2426,14 @@ namespace ScrewTurn.Wiki {
 		private static string ExtractBullets(string value) {
 			string res = "";
 			for(int i = 0; i < value.Length; i++) {
-				if(value[i] == '*' || value[i] == '#') res += value[i];
-				else break;
+				if(value[i] == '*' || value[i] == '#')
+				{
+					res += value[i];
+				}
+				else
+				{
+					break;
+				}
 			}
 			return res;
 		}
@@ -2040,15 +2471,31 @@ namespace ScrewTurn.Wiki {
 						sb.Append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 						break;
 				}
-				if(hPos[i].Level == 1) sb.Append("<b>");
-				if(hPos[i].Level == 4) sb.Append("<small>");
+				if(hPos[i].Level == 1)
+				{
+					sb.Append("<b>");
+				}
+
+				if(hPos[i].Level == 4)
+				{
+					sb.Append("<small>");
+				}
+
 				sb.Append(@"<a href=""#");
 				sb.Append(BuildHAnchor(hPos[i].Text, hPos[i].ID.ToString()));
 				sb.Append(@""">");
 				sb.Append(StripWikiMarkup(StripHtml(hPos[i].Text)));
 				sb.Append("</a>");
-				if(hPos[i].Level == 4) sb.Append("</small>");
-				if(hPos[i].Level == 1) sb.Append("</b>");
+				if(hPos[i].Level == 4)
+				{
+					sb.Append("</small>");
+				}
+
+				if(hPos[i].Level == 1)
+				{
+					sb.Append("</b>");
+				}
+
 				sb.Append("<br />");
 			}
 			sb.Append("</p>");
@@ -2068,7 +2515,10 @@ namespace ScrewTurn.Wiki {
 		public static string BuildHAnchor(string h) {
 			// Remove any extra spaces around the heading title:
 			// '=== Title ===' results in '<a id="Title">' instead of '<a id="_Title_">'
-			if(h != null) h = h.Trim();
+			if(h != null)
+			{
+				h = h.Trim();
+			}
 
 			StringBuilder sb = new StringBuilder(StripWikiMarkup(StripHtml(h)));
 			sb.Replace(" ", "_");
@@ -2150,7 +2600,10 @@ namespace ScrewTurn.Wiki {
 				count++;
 			}
 
-			if(!lines[count].StartsWith("|-")) sb.Append("<tr>");
+			if(!lines[count].StartsWith("|-"))
+			{
+				sb.Append("<tr>");
+			}
 
 			bool thAdded = false;
 
@@ -2158,7 +2611,10 @@ namespace ScrewTurn.Wiki {
 			for(int i = count; i < lines.Length - 1; i++) {
 				if(lines[i].Trim().StartsWith("|-")) {
 					// New line
-					if(i != count) sb.Append("</tr>");
+					if(i != count)
+					{
+						sb.Append("</tr>");
+					}
 
 					sb.Append("<tr");
 					if(lines[i].Length > 2) {
@@ -2172,7 +2628,11 @@ namespace ScrewTurn.Wiki {
 				}
 				else if(lines[i].Trim().StartsWith("|")) {
 					// Cell
-					if(lines[i].Length < 3) continue;
+					if(lines[i].Length < 3)
+					{
+						continue;
+					}
+
 					item = lines[i].Substring(2);
 					if(item.IndexOf(" || ") != -1) {
 						sb.Append("<td>");
@@ -2194,10 +2654,16 @@ namespace ScrewTurn.Wiki {
 				}
 				else if(lines[i].Trim().StartsWith("!")) {
 					// Header
-					if(lines[i].Length < 3) continue;
+					if(lines[i].Length < 3)
+					{
+						continue;
+					}
 
-                    // only if ! is found in the first row of the table, it is an header
-                    if(lines[i + 1] == "|-") thAdded = true;
+					// only if ! is found in the first row of the table, it is an header
+					if(lines[i + 1] == "|-")
+					{
+						thAdded = true;
+					}
 
 					item = lines[i].Substring(2);
 					if(item.IndexOf(" !! ") != -1) {
@@ -2258,7 +2724,11 @@ namespace ScrewTurn.Wiki {
 		private static string BuildIndent(string indent) {
 			int colons = 0;
 			indent = indent.Trim();
-			while(colons < indent.Length && indent[colons] == ':') colons++;
+			while(colons < indent.Length && indent[colons] == ':')
+			{
+				colons++;
+			}
+
 			indent = indent.Substring(colons).Trim();
 			return @"<div style=""margin: 0px; padding: 0px; padding-left: " + ((int)(colons * 15)).ToString() + @"px"">" + indent + "</div>";
 		}
@@ -2285,7 +2755,10 @@ namespace ScrewTurn.Wiki {
 					sb.Append(NameTools.GetLocalName(categories[i].FullName));
 					sb.Append("</a>");
 				}
-				if(i != categories.Count - 1) sb.Append(" ");
+				if(i != categories.Count - 1)
+				{
+					sb.Append(" ");
+				}
 			}
 			return sb.ToString();
 		}
@@ -2364,7 +2837,11 @@ namespace ScrewTurn.Wiki {
 				switch(match.Value.Substring(1, match.Value.Length - 2).ToUpperInvariant()) {
 					case "NAMESPACE":
 						string ns = Tools.DetectCurrentNamespace();
-						if(string.IsNullOrEmpty(ns)) ns = "&lt;root&gt;";
+						if(string.IsNullOrEmpty(ns))
+						{
+							ns = "&lt;root&gt;";
+						}
+
 						sb.Insert(match.Index, ns);
 						break;
 					case "NAMESPACEDROPDOWN":
@@ -2377,15 +2854,33 @@ namespace ScrewTurn.Wiki {
 						sb.Insert(match.Index, BuildOutgoingLinksList(current, context, current));
 						break;
 					case "USERNAME":
-						if(SessionFacade.LoginKey != null) sb.Insert(match.Index, GetProfileLink(SessionFacade.CurrentUsername));
-						else sb.Insert(match.Index, GetLanguageLink(Exchanger.ResourceExchanger.GetResource("Guest")));
+						if(SessionFacade.LoginKey != null)
+						{
+							sb.Insert(match.Index, GetProfileLink(SessionFacade.CurrentUsername));
+						}
+						else
+						{
+							sb.Insert(match.Index, GetLanguageLink(Exchanger.ResourceExchanger.GetResource("Guest")));
+						}
+
 						break;
 					case "PAGENAME":
-						if(current != null) sb.Insert(match.Index, current.FullName);
+						if(current != null)
+						{
+							sb.Insert(match.Index, current.FullName);
+						}
+
 						break;
 					case "LOGINLOGOUT":
-						if(SessionFacade.LoginKey != null) sb.Insert(match.Index, GetLogoutLink());
-						else sb.Insert(match.Index, GetLoginLink());
+						if(SessionFacade.LoginKey != null)
+						{
+							sb.Insert(match.Index, GetLogoutLink());
+						}
+						else
+						{
+							sb.Insert(match.Index, GetLoginLink());
+						}
+
 						break;
 				}
 				match = Phase3SpecialTagRegex.Match(sb.ToString());
@@ -2471,7 +2966,10 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				sb.Remove(match.Index, match.Length);
 				string pageName = match.Value.Substring(3, match.Value.Length - 4);
-				if(pageName.StartsWith("++")) pageName = pageName.Substring(2);
+				if(pageName.StartsWith("++"))
+				{
+					pageName = pageName.Substring(2);
+				}
 				else {
 					// Add current namespace, if not present
 					string tsNamespace = NameTools.GetNamespace(pageName);
@@ -2527,7 +3025,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The drop-down list HTML markup.</returns>
 		private static string BuildCurrentNamespaceDropDown() {
 			string ns = Tools.DetectCurrentNamespace();
-			if(ns == null) ns = "";
+			if(ns == null)
+			{
+				ns = "";
+			}
 
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();

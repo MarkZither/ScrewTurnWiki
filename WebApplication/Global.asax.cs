@@ -88,7 +88,10 @@ namespace ScrewTurn.Wiki {
 			catch { }
 			EmailTools.NotifyError(ex, url);
 			Session["LastError"] = Server.GetLastError();
-			if(!Request.PhysicalPath.ToLowerInvariant().Contains("error.aspx")) ScrewTurn.Wiki.UrlTools.Redirect("Error.aspx");
+			if(!Request.PhysicalPath.ToLowerInvariant().Contains("error.aspx"))
+			{
+				ScrewTurn.Wiki.UrlTools.Redirect("Error.aspx");
+			}
 		}
 
 		protected void Session_End(object sender, EventArgs e) {

@@ -75,7 +75,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
 			try {
 				int version = ExecuteScalar<int>(cmd, -1);
-				if(version > CurrentSchemaVersion) throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
+				if(version > CurrentSchemaVersion)
+				{
+					throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
+				}
+
 				exists = version != -1;
 			}
 			catch(SqlException) {

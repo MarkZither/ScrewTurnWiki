@@ -39,28 +39,67 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(index, storer.Index, "Wrong index");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void Constructor_InvalidDocumentsFile(string file) {
-			IndexStorer storer = new IndexStorer(file, wordsFile, mappingsFile, MockInMemoryIndex());
+		[TestCase(null)]
+		public void Constructor_InvalidDocumentsFile_ShouldThrowArgumentNullException(string file)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IndexStorer storer = new IndexStorer(file, wordsFile, mappingsFile, MockInMemoryIndex());
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void Constructor_InvalidWordsFile(string file) {
-			IndexStorer storer = new IndexStorer(documentsFile, file, mappingsFile, MockInMemoryIndex());
+		[TestCase("")]
+		public void Constructor_InvalidDocumentsFile_ShouldThrowArgumentException(string file)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IndexStorer storer = new IndexStorer(file, wordsFile, mappingsFile, MockInMemoryIndex());
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void Constructor_InvalidMappingsFile(string file) {
-			IndexStorer storer = new IndexStorer(documentsFile, wordsFile, file, MockInMemoryIndex());
+		[TestCase(null)]
+		public void Constructor_InvalidWordsFile_ShouldThrowArgumentNullException(string file)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IndexStorer storer = new IndexStorer(documentsFile, file, mappingsFile, MockInMemoryIndex());
+			});
+		}
+
+		[TestCase("")]
+		public void Constructor_InvalidWordsFile_ShouldThrowArgumentException(string file)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IndexStorer storer = new IndexStorer(documentsFile, file, mappingsFile, MockInMemoryIndex());
+			});
+		}
+
+		[TestCase(null)]
+		public void Constructor_InvalidMappingsFile_ShouldThrowArgumentNullException(string file)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IndexStorer storer = new IndexStorer(documentsFile, wordsFile, file, MockInMemoryIndex());
+			});
+		}
+
+		[TestCase("")]
+		public void Constructor_InvalidMappingsFile_ShouldThrowArgumentException(string file)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IndexStorer storer = new IndexStorer(documentsFile, wordsFile, file, MockInMemoryIndex());
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void Constructor_NullIndex() {
-			IndexStorer storer = new IndexStorer(documentsFile, wordsFile, mappingsFile, null);
+		public void Constructor_NullIndex()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IndexStorer storer = new IndexStorer(documentsFile, wordsFile, mappingsFile, null);
+			});
 		}
 
 		[Test]

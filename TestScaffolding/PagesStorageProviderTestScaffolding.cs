@@ -19,7 +19,10 @@ namespace ScrewTurn.Wiki.Tests {
 		private delegate string ToStringDelegate(PageInfo p, string input);
 
 		protected IHostV30 MockHost() {
-			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
+			if(!Directory.Exists(testDir))
+			{
+				Directory.CreateDirectory(testDir);
+			}
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
 			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
@@ -42,24 +45,32 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
 			IPagesStorageProviderV30 prov = GetProvider();
-			prov.Init(null, "");
+			Assert.That(() => prov.Init(null, ""), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
 			IPagesStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), null);
+			Assert.That(() => prov.Init(MockHost(), null), Throws.ArgumentNullException);
 		}
 
 		private void AssertNamespaceInfosAreEqual(NamespaceInfo expected, NamespaceInfo actual, bool checkProvider) {
 			Assert.AreEqual(expected.Name, actual.Name, "Wrong name");
-			if(expected.DefaultPage == null) Assert.IsNull(actual.DefaultPage, "DefaultPage should be null");
-			else AssertPageInfosAreEqual(expected.DefaultPage, actual.DefaultPage, true);
-			if(checkProvider) Assert.AreSame(expected.Provider, actual.Provider);
+			if(expected.DefaultPage == null)
+			{
+				Assert.IsNull(actual.DefaultPage, "DefaultPage should be null");
+			}
+			else
+			{
+				AssertPageInfosAreEqual(expected.DefaultPage, actual.DefaultPage, true);
+			}
+
+			if(checkProvider)
+			{
+				Assert.AreSame(expected.Provider, actual.Provider);
+			}
 		}
 
 		[Test]
@@ -131,19 +142,31 @@ namespace ScrewTurn.Wiki.Tests {
 			AssertNamespaceInfosAreEqual(ns2, ns2Out, true);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void GetNamespace_InvalidName(string n) {
 			IPagesStorageProviderV30 prov = GetProvider();
-
-			prov.GetNamespace(n);
+			Assert.That(() => prov.GetNamespace(n), Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase(null)]
+		public void GetNamespace_NullName(string n)
+		{
+			IPagesStorageProviderV30 prov = GetProvider();
+
+			Assert.That(() => prov.GetNamespace(n), Throws.ArgumentNullException);
+		}
+
+		[TestCase("")]
 		public void AddNamespace_InvalidName(string n) {
 			IPagesStorageProviderV30 prov = GetProvider();
-			prov.AddNamespace(n);
+			Assert.That(() => prov.AddNamespace(n), Throws.ArgumentException);
+		}
+
+		[TestCase(null)]
+		public void AddNamespace_NullName(string n)
+		{
+			IPagesStorageProviderV30 prov = GetProvider();
+			Assert.That(() => prov.AddNamespace(n), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -185,20 +208,39 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RenameNamespace_NullNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.RenameNamespace(null, "NewName");
+		public void RenameNamespace_NullNamespace()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.RenameNamespace(null, "NewName");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RenameNamespace_InvalidNewName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RenameNamespace_InvalidNewName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			NamespaceInfo ns = prov.AddNamespace("Sub");
+				NamespaceInfo ns = prov.AddNamespace("Sub");
 
-			prov.RenameNamespace(ns, n);
+				prov.RenameNamespace(ns, n);
+			});
+		}
+
+		[TestCase("")]
+		public void RenameNamespace_InvalidNewName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				NamespaceInfo ns = prov.AddNamespace("Sub");
+
+				prov.RenameNamespace(ns, n);
+			});
 		}
 
 		[Test]
@@ -263,13 +305,16 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetNamespaceDefaultPage_NullNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void SetNamespaceDefaultPage_NullNamespace()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
-			prov.SetNamespaceDefaultPage(null, page);
+				prov.SetNamespaceDefaultPage(null, page);
+			});
 		}
 
 		[Test]
@@ -290,10 +335,13 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveNamespace_NullNamespace() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.RemoveNamespace(null);
+		public void RemoveNamespace_NullNamespace()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.RemoveNamespace(null);
+			});
 		}
 
 		[Test]
@@ -593,11 +641,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void MovePage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void MovePage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.MovePage(null, prov.AddNamespace("ns"), false);
+				prov.MovePage(null, prov.AddNamespace("ns"), false);
+			});
 		}
 
 		[Test]
@@ -760,7 +811,10 @@ namespace ScrewTurn.Wiki.Tests {
 			for(int i = 0; i < expected.Pages.Length; i++) {
 				Assert.AreEqual(expected.Pages[i], actual.Pages[i], "Wrong page at position " + i.ToString());
 			}
-			if(checkProvider) Assert.AreSame(expected.Provider, actual.Provider, "Different provider instances");
+			if(checkProvider)
+			{
+				Assert.AreSame(expected.Provider, actual.Provider, "Different provider instances");
+			}
 		}
 
 		[Test]
@@ -862,11 +916,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void GetCategoriesForPage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void GetCategoriesForPage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.GetCategoriesForPage(null);
+				prov.GetCategoriesForPage(null);
+			});
 		}
 
 		[Test]
@@ -951,18 +1008,44 @@ namespace ScrewTurn.Wiki.Tests {
 			AssertCategoryInfosAreEqual(c2, c2Out, true);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void GetCategory_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.GetCategory(n);
+		[TestCase(null)]
+		public void GetCategory_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.GetCategory(n);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void AddCategory_InvalidCategory(string c) {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.AddCategory(null, c);
+		[TestCase("")]
+		public void GetCategory_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.GetCategory(n);
+			});
+		}
+
+		[TestCase(null)]
+		public void AddCategory_InvalidCategory_ShouldThrowArgumentNullException(string c)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.AddCategory(null, c);
+			});
+		}
+
+		[TestCase("")]
+		public void AddCategory_InvalidCategory_ShouldThrowArgumentException(string c)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.AddCategory(null, c);
+			});
 		}
 
 		[Test]
@@ -1018,19 +1101,36 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RenameCategory_NullCategory() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void RenameCategory_NullCategory()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RenameCategory(null, "Name");
+				prov.RenameCategory(null, "Name");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RenameCategory_InvalidNewName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
-			CategoryInfo c1 = prov.AddCategory(null, "Category1");
-			prov.RenameCategory(c1, n);
+		[TestCase(null)]
+		public void RenameCategory_InvalidNewName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				CategoryInfo c1 = prov.AddCategory(null, "Category1");
+				prov.RenameCategory(c1, n);
+			});
+		}
+
+		[TestCase("")]
+		public void RenameCategory_InvalidNewName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				CategoryInfo c1 = prov.AddCategory(null, "Category1");
+				prov.RenameCategory(c1, n);
+			});
 		}
 
 		[Test]
@@ -1068,11 +1168,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveCategory_NullCategory() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void RemoveCategory_NullCategory()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RemoveCategory(null);
+				prov.RemoveCategory(null);
+			});
 		}
 
 		[Test]
@@ -1169,23 +1272,29 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void MergeCategories_NullSource() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void MergeCategories_NullSource()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
+				CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
 
-			prov.MergeCategories(null, cat1);
+				prov.MergeCategories(null, cat1);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void MergeCategories_NullDestination() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void MergeCategories_NullDestination()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
+				CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
 
-			prov.MergeCategories(cat1, null);
+				prov.MergeCategories(cat1, null);
+			});
 		}
 
 		[Test]
@@ -1199,18 +1308,24 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void PerformSearch_NullParameters() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void PerformSearch_NullParameters()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.PerformSearch(null);
+				prov.PerformSearch(null);
+			});
 		}
 
 		private void AssertPageInfosAreEqual(PageInfo expected, PageInfo actual, bool checkProvider) {
 			Assert.AreEqual(expected.FullName, actual.FullName, "Wrong name");
 			Assert.AreEqual(expected.NonCached, actual.NonCached, "Wrong non-cached flag");
 			Tools.AssertDateTimesAreEqual(expected.CreationDateTime, actual.CreationDateTime, true);
-			if(checkProvider) Assert.AreSame(expected.Provider, actual.Provider, "Different provider instances");
+			if(checkProvider)
+			{
+				Assert.AreSame(expected.Provider, actual.Provider, "Different provider instances");
+			}
 		}
 
 		[Test]
@@ -1318,20 +1433,48 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void GetPage_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void GetPage_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.GetPage(n);
+				prov.GetPage(n);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void AddPage_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase("")]
+		public void GetPage_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.AddPage(null, n, DateTime.Now);
+				prov.GetPage(n);
+			});
+		}
+
+		[TestCase(null)]
+		public void AddPage_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				prov.AddPage(null, n, DateTime.Now);
+			});
+		}
+
+		[TestCase("")]
+		public void AddPage_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				prov.AddPage(null, n, DateTime.Now);
+			});
 		}
 
 		private void AssertPageContentsAreEqual(PageContent expected, PageContent actual) {
@@ -1468,34 +1611,68 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ModifyPage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.ModifyPage(null, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
+		public void ModifyPage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.ModifyPage(null, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ModifyPage_InvalidTitle(string t) {
-			IPagesStorageProviderV30 prov = GetProvider();
-			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
-			prov.ModifyPage(p, t, "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
+		[TestCase(null)]
+		public void ModifyPage_InvalidTitle_ShouldThrowArgumentNullException(string t)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, t, "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ModifyPage_InvalidUsername(string u) {
-			IPagesStorageProviderV30 prov = GetProvider();
-			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
-			prov.ModifyPage(p, "Title", u, DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
+		[TestCase("")]
+		public void ModifyPage_InvalidTitle_ShouldThrowArgumentException(string t)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, t, "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
+			});
+		}
+
+		[TestCase(null)]
+		public void ModifyPage_InvalidUsername_ShouldThrowArgumentNullException(string u)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, "Title", u, DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
+			});
+		}
+
+		[TestCase("")]
+		public void ModifyPage_InvalidUsername_ShouldThrowArgumentException(string u)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, "Title", u, DateTime.Now, "Comment", "Content", null, null, SaveMode.Backup);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ModifyPage_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
-			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "", null, null, null, SaveMode.Backup);
+		public void ModifyPage_NullContent()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "", null, null, null, SaveMode.Backup);
+			});
 		}
 
 		[Test]
@@ -1700,11 +1877,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void GetDraft_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void GetDraft_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.GetDraft(null);
+				prov.GetDraft(null);
+			});
 		}
 
 		[Test]
@@ -1724,11 +1904,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void DeleteDraft_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void DeleteDraft_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.DeleteDraft(null);
+				prov.DeleteDraft(null);
+			});
 		}
 
 		[Test]
@@ -1752,10 +1935,13 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void GetBackups_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.GetBackups(null);
+		public void GetBackups_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.GetBackups(null);
+			});
 		}
 
 		[Test]
@@ -1816,10 +2002,13 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void GetBackupContent_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.GetBackupContent(null, 0);
+		public void GetBackupContent_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.GetBackupContent(null, 0);
+			});
 		}
 
 		[Test]
@@ -1861,34 +2050,43 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void GetBackupContent_InvalidRevision() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void GetBackupContent_InvalidRevision()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
-			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
-			prov.ModifyPage(p, "Title1", "NUnit1", DateTime.Now, "Comment1", "Content1", null, null, SaveMode.Backup);
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
+				prov.ModifyPage(p, "Title1", "NUnit1", DateTime.Now, "Comment1", "Content1", null, null, SaveMode.Backup);
 
-			prov.GetBackupContent(p, -1);
+				prov.GetBackupContent(p, -1);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetBackupContent_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.SetBackupContent(null, 0);
+		public void SetBackupContent_NullContent()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.SetBackupContent(null, 0);
+			});
 		}
-		
+
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void SetBackupContent_InvalidRevision() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void SetBackupContent_InvalidRevision()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
-			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
-			prov.ModifyPage(p, "Title1", "NUnit1", DateTime.Now, "Comment1", "Content1", null, null, SaveMode.Backup);
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
+				prov.ModifyPage(p, "Title1", "NUnit1", DateTime.Now, "Comment1", "Content1", null, null, SaveMode.Backup);
 
-			prov.SetBackupContent(new PageContent(p, "Title100", "NUnit100", DateTime.Now, "Comment100", "Content100", null, null), -1);
+				prov.SetBackupContent(new PageContent(p, "Title100", "NUnit100", DateTime.Now, "Comment100", "Content100", null, null), -1);
+			});
 		}
 
 		[Test]
@@ -2090,21 +2288,41 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RenamePage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.RenamePage(null, "New Name");
+		public void RenamePage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.RenamePage(null, "New Name");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RenamePage_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RenamePage_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
-			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
 
-			prov.RenamePage(p, n);
+				prov.RenamePage(p, n);
+			});
+		}
+
+		[TestCase("")]
+		public void RenamePage_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
+
+				prov.RenamePage(p, n);
+			});
 		}
 
 		[Test]
@@ -2184,23 +2402,29 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RollbackPage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void RollbackPage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RollbackPage(null, 0);
+				prov.RollbackPage(null, 0);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void RollbackPage_InvalidRevision() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void RollbackPage_InvalidRevision()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
-			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
-			prov.ModifyPage(p, "Title1", "NUnit1", DateTime.Now, "Comment1", "Content1", null, null, SaveMode.Backup);
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
+				prov.ModifyPage(p, "Title1", "NUnit1", DateTime.Now, "Comment1", "Content1", null, null, SaveMode.Backup);
 
-			prov.RollbackPage(p, -1);
+				prov.RollbackPage(p, -1);
+			});
 		}
 
 		[Test]
@@ -2259,24 +2483,30 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void DeleteBackups_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void DeleteBackups_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.DeleteBackups(null, -1);
+				prov.DeleteBackups(null, -1);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void DeleteBackups_InvalidRevision() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void DeleteBackups_InvalidRevision()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
-			prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
-			prov.ModifyPage(p, "Title1", "NUnit1", DateTime.Now, "Comment1", "Content1", null, null, SaveMode.Backup);
-			prov.ModifyPage(p, "Title2", "NUnit2", DateTime.Now, "Comment2", "Content2", null, null, SaveMode.Backup);
+				PageInfo p = prov.AddPage(null, "Page", DateTime.Now);
+				prov.ModifyPage(p, "Title", "NUnit", DateTime.Now, "Comment", "Content", null, null, SaveMode.Normal);
+				prov.ModifyPage(p, "Title1", "NUnit1", DateTime.Now, "Comment1", "Content1", null, null, SaveMode.Backup);
+				prov.ModifyPage(p, "Title2", "NUnit2", DateTime.Now, "Comment2", "Content2", null, null, SaveMode.Backup);
 
-			prov.DeleteBackups(p, -2);
+				prov.DeleteBackups(p, -2);
+			});
 		}
 
 		[Test]
@@ -2351,11 +2581,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemovePage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void RemovePage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RemovePage(null);
+				prov.RemovePage(null);
+			});
 		}
 
 		[Test]
@@ -2439,34 +2672,59 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RebindPage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void RebindPage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RebindPage(null, new string[0]);
+				prov.RebindPage(null, new string[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RebindPage_NullCategories() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void RebindPage_NullCategories()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
-			prov.RebindPage(page, null);
+				prov.RebindPage(page, null);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RebindPage_InvalidCategoryElement(string e) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RebindPage_InvalidCategoryElement_ShouldThrowArgumentNullException(string e)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
-			CategoryInfo cat2 = prov.AddCategory(null, "Cat2");
+				CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
+				CategoryInfo cat2 = prov.AddCategory(null, "Cat2");
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
-			prov.RebindPage(page, new string[] { "Cat1", e });
+				prov.RebindPage(page, new string[] { "Cat1", e });
+			});
+		}
+
+		[TestCase("")]
+		public void RebindPage_InvalidCategoryElement_ShouldThrowArgumentException(string e)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				CategoryInfo cat1 = prov.AddCategory(null, "Cat1");
+				CategoryInfo cat2 = prov.AddCategory(null, "Cat2");
+
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+
+				prov.RebindPage(page, new string[] { "Cat1", e });
+			});
 		}
 
 		[Test]
@@ -2607,17 +2865,23 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void BulkStoreMessages_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.BulkStoreMessages(null, new Message[0]);
+		public void BulkStoreMessages_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.BulkStoreMessages(null, new Message[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void BulkStoreMessages_NullMessages() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.BulkStoreMessages(new PageInfo("Page", prov, DateTime.Now), null);
+		public void BulkStoreMessages_NullMessages()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.BulkStoreMessages(new PageInfo("Page", prov, DateTime.Now), null);
+			});
 		}
 
 		[Test]
@@ -2729,67 +2993,114 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void GetMessages_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void GetMessages_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.GetMessages(null);
+				prov.GetMessages(null);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void GetMessageCount_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void GetMessageCount_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.GetMessageCount(null);
+				prov.GetMessageCount(null);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void AddMessage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void AddMessage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.AddMessage(null, "NUnit", "Subject", DateTime.Now, "Body", -1);
+				prov.AddMessage(null, "NUnit", "Subject", DateTime.Now, "Body", -1);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void AddMessage_InvalidUsername(string u) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void AddMessage_InvalidUsername_ShouldThrowArgumentNullException(string u)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
-			prov.AddMessage(page, u, "Subject", DateTime.Now, "Body", -1);
+				prov.AddMessage(page, u, "Subject", DateTime.Now, "Body", -1);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void AddMessage_InvalidSubject(string s) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase("")]
+		public void AddMessage_InvalidUsername_ShouldThrowArgumentException(string u)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
-			prov.AddMessage(page, "NUnit", s, DateTime.Now, "Body", -1);
+				prov.AddMessage(page, u, "Subject", DateTime.Now, "Body", -1);
+			});
+		}
+
+		[TestCase(null)]
+		public void AddMessage_InvalidSubject_ShouldThrowArgumentNullException(string s)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+
+				prov.AddMessage(page, "NUnit", s, DateTime.Now, "Body", -1);
+			});
+		}
+
+		[TestCase("")]
+		public void AddMessage_InvalidSubject_ShouldThrowArgumentException(string s)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+
+				prov.AddMessage(page, "NUnit", s, DateTime.Now, "Body", -1);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void AddMessage_NullBody() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void AddMessage_NullBody()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
-			prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, null, -1);
+				prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, null, -1);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void AddMessage_InvalidParent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void AddMessage_InvalidParent()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
-			prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -2);
+				prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -2);
+			});
 		}
 
 		[Test]
@@ -2816,8 +3127,15 @@ namespace ScrewTurn.Wiki.Tests {
 			bool found1 = false, found2 = false;
 			foreach(SearchResult res in result) {
 				Assert.AreEqual(MessageDocument.StandardTypeTag, res.Document.TypeTag, "Wrong type tag");
-				if(res.Matches[0].Text == "dummy") found1 = true;
-				if(res.Matches[0].Text == "message") found2 = true;
+				if(res.Matches[0].Text == "dummy")
+				{
+					found1 = true;
+				}
+
+				if(res.Matches[0].Text == "message")
+				{
+					found2 = true;
+				}
 			}
 
 			Assert.IsTrue(found1, "First word not found");
@@ -2894,21 +3212,27 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveMessage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void RemoveMessage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RemoveMessage(null, 1, true);
+				prov.RemoveMessage(null, 1, true);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void RemoveMessage_InvalidId() {
-			IPagesStorageProviderV30 prov = GetProvider();
-			
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+		public void RemoveMessage_InvalidId()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RemoveMessage(page, -1, true);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+
+				prov.RemoveMessage(page, -1, true);
+			});
 		}
 
 		[Test]
@@ -2927,8 +3251,15 @@ namespace ScrewTurn.Wiki.Tests {
 
 			bool found1 = false, found2 = false;
 			foreach(WordInfo info in result[0].Matches) {
-				if(info.Text == "test2") found1 = true;
-				if(info.Text == "blah2") found2 = true;
+				if(info.Text == "test2")
+				{
+					found1 = true;
+				}
+
+				if(info.Text == "blah2")
+				{
+					found2 = true;
+				}
 			}
 
 			Assert.IsTrue(found1, "First word not found");
@@ -3018,54 +3349,97 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ModifyMessage_NullPage() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifyMessage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			Assert.IsFalse(prov.ModifyMessage(null, 1, "NUnit", "Subject", DateTime.Now, "Body"), "ModifyMessage should return false");
+				Assert.IsFalse(prov.ModifyMessage(null, 1, "NUnit", "Subject", DateTime.Now, "Body"), "ModifyMessage should return false");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void ModifyMessage_InvalidId() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifyMessage_InvalidId()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
 
-			Assert.IsFalse(prov.ModifyMessage(page, -1, "NUnit", "Subject", DateTime.Now, "Body"), "ModifyMessage should return false");
+				Assert.IsFalse(prov.ModifyMessage(page, -1, "NUnit", "Subject", DateTime.Now, "Body"), "ModifyMessage should return false");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ModifyMessage_InvalidUsername(string u) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void ModifyMessage_InvalidUsername_ShouldThrowArgumentNullException(string u)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
-			prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
 
-			Assert.IsFalse(prov.ModifyMessage(page, prov.GetMessages(page)[0].ID, u, "Subject", DateTime.Now, "Body"), "ModifyMessage should return false");
+				Assert.IsFalse(prov.ModifyMessage(page, prov.GetMessages(page)[0].ID, u, "Subject", DateTime.Now, "Body"), "ModifyMessage should return false");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ModifyMessage_InvalidSubject(string s) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase("")]
+		public void ModifyMessage_InvalidUsername_ShouldThrowArgumentException(string u)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
-			prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
 
-			Assert.IsFalse(prov.ModifyMessage(page, prov.GetMessages(page)[0].ID, "NUnit", s, DateTime.Now, "Body"), "ModifyMessage should return false");
+				Assert.IsFalse(prov.ModifyMessage(page, prov.GetMessages(page)[0].ID, u, "Subject", DateTime.Now, "Body"), "ModifyMessage should return false");
+			});
+		}
+
+		[TestCase(null)]
+		public void ModifyMessage_InvalidSubject_ShouldThrowArgumentNullException(string s)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
+
+				Assert.IsFalse(prov.ModifyMessage(page, prov.GetMessages(page)[0].ID, "NUnit", s, DateTime.Now, "Body"), "ModifyMessage should return false");
+			});
+		}
+
+		[TestCase("")]
+		public void ModifyMessage_InvalidSubject_ShouldThrowArgumentException(string s)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
+
+				Assert.IsFalse(prov.ModifyMessage(page, prov.GetMessages(page)[0].ID, "NUnit", s, DateTime.Now, "Body"), "ModifyMessage should return false");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ModifyMessage_NullBody() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifyMessage_NullBody()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
-			prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
+				PageInfo page = prov.AddPage(null, "Page", DateTime.Now);
+				prov.AddMessage(page, "NUnit", "Subject", DateTime.Now, "Body", -1);
 
-			Assert.IsFalse(prov.ModifyMessage(page, prov.GetMessages(page)[0].ID, "NUnit", "Subject", DateTime.Now, null), "ModifyMessage should return false");
+				Assert.IsFalse(prov.ModifyMessage(page, prov.GetMessages(page)[0].ID, "NUnit", "Subject", DateTime.Now, null), "ModifyMessage should return false");
+			});
 		}
 
 		[Test]
@@ -3156,51 +3530,80 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(page1.FullName, paths[1].Pages[0], "Wrong page at position 0");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void AddNavigationPath_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void AddNavigationPath_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
-			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
+				PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
+				PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
 
-			prov.AddNavigationPath(null, n, new PageInfo[] { page1, page2 });
+				prov.AddNavigationPath(null, n, new PageInfo[] { page1, page2 });
+			});
+		}
+
+		[TestCase("")]
+		public void AddNavigationPath_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
+				PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
+
+				prov.AddNavigationPath(null, n, new PageInfo[] { page1, page2 });
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void AddNavigationPath_NullPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void AddNavigationPath_NullPages()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.AddNavigationPath(null, "Path", null);
+				prov.AddNavigationPath(null, "Path", null);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void AddNavigationPath_EmptyPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void AddNavigationPath_EmptyPages()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.AddNavigationPath(null, "Path", new PageInfo[0]);
+				prov.AddNavigationPath(null, "Path", new PageInfo[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void AddNavigationPath_NullPageElement() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void AddNavigationPath_NullPageElement()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
+				PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 
-			prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, null });
+				prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, null });
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void AddNavigationPath_InexistentPageElement() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void AddNavigationPath_InexistentPageElement()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
+				PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
 
-			prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, new PageInfo("Inexistent", prov, DateTime.Now) });
+				prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, new PageInfo("Inexistent", prov, DateTime.Now) });
+			});
 		}
 
 		[Test]
@@ -3258,67 +3661,82 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ModifyNavigationPath_NullPath() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifyNavigationPath_NullPath()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
-			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
+				PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
+				PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
 
-			prov.ModifyNavigationPath(null, new PageInfo[] { page1, page2 });
+				prov.ModifyNavigationPath(null, new PageInfo[] { page1, page2 });
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ModifyNavigationPath_NullPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifyNavigationPath_NullPages()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
-			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
+				PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
+				PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
 
-			NavigationPath path = prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, page2 });
+				NavigationPath path = prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, page2 });
 
-			NavigationPath output = prov.ModifyNavigationPath(path, null);
+				NavigationPath output = prov.ModifyNavigationPath(path, null);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void ModifyNavigationPath_EmptyPages() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifyNavigationPath_EmptyPages()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
-			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
+				PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
+				PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
 
-			NavigationPath path = prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, page2 });
+				NavigationPath path = prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, page2 });
 
-			NavigationPath output = prov.ModifyNavigationPath(path, new PageInfo[0]);
+				NavigationPath output = prov.ModifyNavigationPath(path, new PageInfo[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ModifyNavigationPath_NullPageElement() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifyNavigationPath_NullPageElement()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
-			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
+				PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
+				PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
 
-			NavigationPath path = prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, page2 });
+				NavigationPath path = prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, page2 });
 
-			NavigationPath output = prov.ModifyNavigationPath(path, new PageInfo[] { page1, null });
+				NavigationPath output = prov.ModifyNavigationPath(path, new PageInfo[] { page1, null });
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void ModifyNavigationPath_InexistentPageElement() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifyNavigationPath_InexistentPageElement()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
-			PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
+				PageInfo page1 = prov.AddPage(null, "Page1", DateTime.Now);
+				PageInfo page2 = prov.AddPage(null, "Page2", DateTime.Now);
 
-			NavigationPath path = prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, page2 });
+				NavigationPath path = prov.AddNavigationPath(null, "Path", new PageInfo[] { page1, page2 });
 
-			NavigationPath output = prov.ModifyNavigationPath(path,
-				new PageInfo[] { page1, new PageInfo("Inexistent", prov, DateTime.Now) });
+				NavigationPath output = prov.ModifyNavigationPath(path,
+					new PageInfo[] { page1, new PageInfo("Inexistent", prov, DateTime.Now) });
+			});
 		}
 
 		[Test]
@@ -3366,11 +3784,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveNavigationPath_NullPath() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void RemoveNavigationPath_NullPath()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RemoveNavigationPath(null);
+				prov.RemoveNavigationPath(null);
+			});
 		}
 
 		[Test]
@@ -3399,20 +3820,37 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("Content2", snippets[1].Content, "Wrong content");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void AddSnippet_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void AddSnippet_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.AddSnippet(n, "Content");
+				prov.AddSnippet(n, "Content");
+			});
+		}
+
+		[TestCase("")]
+		public void AddSnippet_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				prov.AddSnippet(n, "Content");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void AddSnippet_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void AddSnippet_NullContent()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.AddSnippet("Snippet", null);
+				prov.AddSnippet("Snippet", null);
+			});
 		}
 
 		[Test]
@@ -3440,22 +3878,39 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("Content2", snippets[1].Content, "Wrong content");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ModifySnippet_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void ModifySnippet_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.ModifySnippet(n, "Content");
+				prov.ModifySnippet(n, "Content");
+			});
+		}
+
+		[TestCase("")]
+		public void ModifySnippet_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				prov.ModifySnippet(n, "Content");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ModifySnippet_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifySnippet_NullContent()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.AddSnippet("Snippet", "Blah");
+				prov.AddSnippet("Snippet", "Blah");
 
-			prov.AddSnippet("Snippet", null);
+				prov.AddSnippet("Snippet", null);
+			});
 		}
 
 		[Test]
@@ -3476,12 +3931,26 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("Content1", snippets[0].Content, "Wrong content");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RemoveSnippet_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RemoveSnippet_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RemoveSnippet(n);
+				prov.RemoveSnippet(n);
+			});
+		}
+
+		[TestCase("")]
+		public void RemoveSnippet_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				prov.RemoveSnippet(n);
+			});
 		}
 
 		[Test]
@@ -3509,20 +3978,37 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("Template2", templates[1].Content, "Wrong content");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void AddContentTemplate_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void AddContentTemplate_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.AddContentTemplate(n, "Content");
+				prov.AddContentTemplate(n, "Content");
+			});
+		}
+
+		[TestCase("")]
+		public void AddContentTemplate_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				prov.AddContentTemplate(n, "Content");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void AddContentTemplate_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void AddContentTemplate_NullContent()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.AddContentTemplate("T", null);
+				prov.AddContentTemplate("T", null);
+			});
 		}
 
 		[Test]
@@ -3549,20 +4035,37 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("Blah", templates[1].Content, "Wrong content");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ModifyContentTemplate_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void ModifyContentTemplate_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.ModifyContentTemplate(n, "Content");
+				prov.ModifyContentTemplate(n, "Content");
+			});
+		}
+
+		[TestCase("")]
+		public void ModifyContentTemplate_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				prov.ModifyContentTemplate(n, "Content");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ModifyContentTemplate_NullContent() {
-			IPagesStorageProviderV30 prov = GetProvider();
+		public void ModifyContentTemplate_NullContent()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.ModifyContentTemplate("T", null);
+				prov.ModifyContentTemplate("T", null);
+			});
 		}
 
 		[Test]
@@ -3583,12 +4086,26 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("Blah", templates[0].Content, "Wrong content");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RemoveContentTemplate_InvalidName(string n) {
-			IPagesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RemoveContentTemplate_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
 
-			prov.RemoveContentTemplate(n);
+				prov.RemoveContentTemplate(n);
+			});
+		}
+
+		[TestCase("")]
+		public void RemoveContentTemplate_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+
+				prov.RemoveContentTemplate(n);
+			});
 		}
 
 		[Test]

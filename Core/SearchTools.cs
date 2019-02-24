@@ -19,7 +19,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace to search into.</param>
 		/// <returns>The similar pages, if any.</returns>
 		public static PageInfo[] SearchSimilarPages(string name, string nspace) {
-			if(string.IsNullOrEmpty(nspace)) nspace = null;
+			if(string.IsNullOrEmpty(nspace))
+			{
+				nspace = null;
+			}
 
 			SearchResultCollection searchResults = Search(name, false, false, SearchOptions.AtLeastOneWord);
 
@@ -29,7 +32,10 @@ namespace ScrewTurn.Wiki {
 				PageDocument pageDoc = res.Document as PageDocument;
 				if(pageDoc != null) {
 					string pageNamespace = NameTools.GetNamespace(pageDoc.PageInfo.FullName);
-					if(string.IsNullOrEmpty(pageNamespace)) pageNamespace = null;
+					if(string.IsNullOrEmpty(pageNamespace))
+					{
+						pageNamespace = null;
+					}
 
 					if(pageNamespace == nspace) {
 						result.Add(pageDoc.PageInfo);
@@ -83,7 +89,10 @@ namespace ScrewTurn.Wiki {
 
 					allCollections.Add(filteredResults);
 				}
-				else allCollections.Add(currentResults);
+				else
+				{
+					allCollections.Add(currentResults);
+				}
 			}
 
 			// ... normalize relevance based on the number of providers
@@ -160,7 +169,10 @@ namespace ScrewTurn.Wiki {
 			else if(doc.TypeTag == PageAttachmentDocument.StandardTypeTag) {
 				return new PageAttachmentDocument(doc);
 			}
-			else throw new NotSupportedException();
+			else
+			{
+				throw new NotSupportedException();
+			}
 		}
 
 		/// <summary>

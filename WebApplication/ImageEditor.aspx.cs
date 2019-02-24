@@ -39,7 +39,10 @@ namespace ScrewTurn.Wiki {
 			bool canDeleteFiles = AuthChecker.CheckActionForDirectory(provider, dir,
 				Actions.ForDirectories.DeleteFiles, currentUser, currentGroups);
 
-			if(!canUpload || !canDeleteFiles) UrlTools.Redirect("AccessDenied.aspx");
+			if(!canUpload || !canDeleteFiles)
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			// Inject the proper stylesheet in page head
 			Literal l = new Literal();
@@ -69,10 +72,22 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private int GetSelectedRotation() {
-			if(rdo90CW.Checked) return 90;
-			else if(rdo90CCW.Checked) return 270;
-			else if(rdo180.Checked) return 180;
-			else return 0;
+			if(rdo90CW.Checked)
+			{
+				return 90;
+			}
+			else if(rdo90CCW.Checked)
+			{
+				return 270;
+			}
+			else if(rdo180.Checked)
+			{
+				return 180;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 
 		private void ResizeImage() {
@@ -148,7 +163,10 @@ namespace ScrewTurn.Wiki {
 			if(rdoPercentage.Checked) {
 				// Resize by percentage
 				int dim = 100;
-				if(string.IsNullOrEmpty(txtPercentage.Text)) dim = 100;
+				if(string.IsNullOrEmpty(txtPercentage.Text))
+				{
+					dim = 100;
+				}
 				else {
 					try {
 						dim = int.Parse(txtPercentage.Text);
@@ -255,15 +273,23 @@ namespace ScrewTurn.Wiki {
 			encoders = ImageCodecInfo.GetImageEncoders();
 			for(j = 0; j < encoders.Length; ++j) {
 				if(encoders[j].MimeType == mimeType)
+				{
 					return encoders[j];
+				}
 			}
 			return null;
 		}
 
 		private string GetCurrentFormat() {
 			if(chkNewName.Checked) {
-				if(rdoPng.Checked) return "image/png";
-				else return "image/jpeg";
+				if(rdoPng.Checked)
+				{
+					return "image/png";
+				}
+				else
+				{
+					return "image/jpeg";
+				}
 			}
 			else {
 				switch(Path.GetExtension(file).ToLowerInvariant()) {
@@ -284,7 +310,11 @@ namespace ScrewTurn.Wiki {
 			else if(w > h) {
 				// Landscape
 				float scale = (float)targetW / (float)w;
-				if(targetW > w) scale = 1;
+				if(targetW > w)
+				{
+					scale = 1;
+				}
+
 				int width = (int)(w * scale);
 				int height = (int)(h * scale);
 
@@ -299,7 +329,11 @@ namespace ScrewTurn.Wiki {
 			else {
 				// Portrait
 				float scale = (float)targetH / (float)h;
-				if(targetH > h) scale = 1;
+				if(targetH > h)
+				{
+					scale = 1;
+				}
+
 				int width = (int)(w * scale);
 				int height = (int)(h * scale);
 

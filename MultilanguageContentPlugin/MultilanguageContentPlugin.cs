@@ -66,10 +66,19 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 				noLocalization = true;
 			}
 			if(displayWarning && !noLocalization && context.Page != null) {
-				if(notLocalized) return NotLocalizedMessage + result;
-				else return StandardMessage + result;
+				if(notLocalized)
+				{
+					return NotLocalizedMessage + result;
+				}
+				else
+				{
+					return StandardMessage + result;
+				}
 			}
-			else return result;
+			else
+			{
+				return result;
+			}
 		}
 
 		private string ExtractLocalizedContent(string language, string content) {
@@ -81,8 +90,14 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 				sb.Append(match.Groups[1].Value);
 				match = regex.Match(content, match.Index + match.Length);
 			}
-			if(sb.Length > 0) return sb.ToString();
-			else return null;
+			if(sb.Length > 0)
+			{
+				return sb.ToString();
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>

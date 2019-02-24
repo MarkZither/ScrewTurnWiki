@@ -22,8 +22,15 @@ namespace ScrewTurn.Wiki {
 		public AclStorer(IAclManager aclManager, string file)
 			: base(aclManager) {
 
-			if(file == null) throw new ArgumentNullException("file");
-			if(file.Length == 0) throw new ArgumentException("File cannot be empty", "file");
+			if(file == null)
+			{
+				throw new ArgumentNullException("file");
+			}
+
+			if(file.Length == 0)
+			{
+				throw new ArgumentException("File cannot be empty", "file");
+			}
 
 			this.file = file;
 		}

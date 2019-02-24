@@ -45,8 +45,14 @@ namespace ScrewTurn.Wiki {
 			Array.Copy(pages, temp, pages.Length);
 			Array.Sort(temp, delegate(ExtendedPageInfo p1, ExtendedPageInfo p2) {
 				string t1 = p1.Title, t2 = p2.Title;
-				if(!reverse) return string.Compare(t1, t2, false, CultureInfo.CurrentCulture);
-				else return string.Compare(t2, t1, false, CultureInfo.CurrentCulture);
+				if(!reverse)
+				{
+					return string.Compare(t1, t2, false, CultureInfo.CurrentCulture);
+				}
+				else
+				{
+					return string.Compare(t2, t1, false, CultureInfo.CurrentCulture);
+				}
 			});
 
 			SortedDictionary<char, List<ExtendedPageInfo>> result =
@@ -55,11 +61,19 @@ namespace ScrewTurn.Wiki {
 			foreach(ExtendedPageInfo p in temp) {
 				char first = GetFirstChar(p.Title);
 				if(!char.IsLetter(first)) {
-					if(!result.ContainsKey('#')) result.Add('#', new List<ExtendedPageInfo>(20));
+					if(!result.ContainsKey('#'))
+					{
+						result.Add('#', new List<ExtendedPageInfo>(20));
+					}
+
 					result['#'].Add(p);
 				}
 				else {
-					if(!result.ContainsKey(first)) result.Add(first, new List<ExtendedPageInfo>(20));
+					if(!result.ContainsKey(first))
+					{
+						result.Add(first, new List<ExtendedPageInfo>(20));
+					}
+
 					result[first].Add(p);
 				}
 			}
@@ -73,7 +87,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private static char GetFirstChar(string value) {
-			if(string.IsNullOrEmpty(value)) return '0';
+			if(string.IsNullOrEmpty(value))
+			{
+				return '0';
+			}
 
 			// First we normalize the value to separate diacritics
 			string normalized = value.ToUpper(CultureInfo.CurrentCulture).Normalize(System.Text.NormalizationForm.FormD);
@@ -101,8 +118,14 @@ namespace ScrewTurn.Wiki {
 			Array.Copy(pages, temp, pages.Length);
 			Array.Sort(temp, delegate(ExtendedPageInfo p1, ExtendedPageInfo p2) {
 				string u1 = p1.LastAuthor, u2 = p2.LastAuthor;
-				if(!reverse) return string.Compare(u1, u2, false, CultureInfo.CurrentCulture);
-				else return string.Compare(u2, u1, false, CultureInfo.CurrentCulture);
+				if(!reverse)
+				{
+					return string.Compare(u1, u2, false, CultureInfo.CurrentCulture);
+				}
+				else
+				{
+					return string.Compare(u2, u1, false, CultureInfo.CurrentCulture);
+				}
 			});
 
 			SortedDictionary<char, List<ExtendedPageInfo>> result =
@@ -111,11 +134,19 @@ namespace ScrewTurn.Wiki {
 			foreach(ExtendedPageInfo p in temp) {
 				char first = GetFirstChar(p.LastAuthor);
 				if(!char.IsLetter(first)) {
-					if(!result.ContainsKey('#')) result.Add('#', new List<ExtendedPageInfo>(20));
+					if(!result.ContainsKey('#'))
+					{
+						result.Add('#', new List<ExtendedPageInfo>(20));
+					}
+
 					result['#'].Add(p);
 				}
 				else {
-					if(!result.ContainsKey(first)) result.Add(first, new List<ExtendedPageInfo>(20));
+					if(!result.ContainsKey(first))
+					{
+						result.Add(first, new List<ExtendedPageInfo>(20));
+					}
+
 					result[first].Add(p);
 				}
 			}
@@ -139,8 +170,14 @@ namespace ScrewTurn.Wiki {
 			Array.Copy(pages, temp, pages.Length);
 			Array.Sort(temp, delegate(ExtendedPageInfo p1, ExtendedPageInfo p2) {
 				string u1 = p1.Creator, u2 = p2.Creator;
-				if(!reverse) return string.Compare(u1, u2, false, CultureInfo.CurrentCulture);
-				else return string.Compare(u2, u1, false, CultureInfo.CurrentCulture);
+				if(!reverse)
+				{
+					return string.Compare(u1, u2, false, CultureInfo.CurrentCulture);
+				}
+				else
+				{
+					return string.Compare(u2, u1, false, CultureInfo.CurrentCulture);
+				}
 			});
 
 			SortedDictionary<char, List<ExtendedPageInfo>> result =
@@ -149,11 +186,19 @@ namespace ScrewTurn.Wiki {
 			foreach(ExtendedPageInfo p in temp) {
 				char first = GetFirstChar(p.Creator);
 				if(!char.IsLetter(first)) {
-					if(!result.ContainsKey('#')) result.Add('#', new List<ExtendedPageInfo>(20));
+					if(!result.ContainsKey('#'))
+					{
+						result.Add('#', new List<ExtendedPageInfo>(20));
+					}
+
 					result['#'].Add(p);
 				}
 				else {
-					if(!result.ContainsKey(first)) result.Add(first, new List<ExtendedPageInfo>(20));
+					if(!result.ContainsKey(first))
+					{
+						result.Add(first, new List<ExtendedPageInfo>(20));
+					}
+
 					result[first].Add(p);
 				}
 			}
@@ -176,8 +221,14 @@ namespace ScrewTurn.Wiki {
 			ExtendedPageInfo[] temp = new ExtendedPageInfo[pages.Length];
 			Array.Copy(pages, temp, pages.Length);
 			Array.Sort(temp, delegate(ExtendedPageInfo p1, ExtendedPageInfo p2) {
-				if(!reverse) return p1.ModificationDateTime.CompareTo(p2.ModificationDateTime);
-				else return p2.ModificationDateTime.CompareTo(p1.ModificationDateTime);
+				if(!reverse)
+				{
+					return p1.ModificationDateTime.CompareTo(p2.ModificationDateTime);
+				}
+				else
+				{
+					return p2.ModificationDateTime.CompareTo(p1.ModificationDateTime);
+				}
 			});
 
 			SortedDictionary<DateTime, List<ExtendedPageInfo>> result =
@@ -213,8 +264,14 @@ namespace ScrewTurn.Wiki {
 			ExtendedPageInfo[] temp = new ExtendedPageInfo[pages.Length];
 			Array.Copy(pages, temp, pages.Length);
 			Array.Sort(temp, delegate(ExtendedPageInfo p1, ExtendedPageInfo p2) {
-				if(!reverse) return p1.CreationDateTime.CompareTo(p2.CreationDateTime);
-				else return p2.CreationDateTime.CompareTo(p1.CreationDateTime);
+				if(!reverse)
+				{
+					return p1.CreationDateTime.CompareTo(p2.CreationDateTime);
+				}
+				else
+				{
+					return p2.CreationDateTime.CompareTo(p1.CreationDateTime);
+				}
 			});
 
 			SortedDictionary<DateTime, List<ExtendedPageInfo>> result =
@@ -243,8 +300,14 @@ namespace ScrewTurn.Wiki {
 		private static int GetLetterNumber(char c) {
 			// Only # and letters allowed
 			c = char.ToUpperInvariant(c);
-			if(c == '#') return 0;
-			else return c - 64;
+			if(c == '#')
+			{
+				return 0;
+			}
+			else
+			{
+				return c - 64;
+			}
 		}
 
 		private static DateTime GetMarkerDate(DateTime dt, out string label) {
@@ -265,7 +328,11 @@ namespace ScrewTurn.Wiki {
 
 			// Earlier this week
 			DateTime thisWeek = now;
-			while(thisWeek.DayOfWeek != DayOfWeek.Monday) thisWeek = thisWeek.AddDays(-1);
+			while(thisWeek.DayOfWeek != DayOfWeek.Monday)
+			{
+				thisWeek = thisWeek.AddDays(-1);
+			}
+
 			if(dt.Year == thisWeek.Year && dt.Month == thisWeek.Month && dt.Day >= thisWeek.Day) {
 				label = Properties.Messages.EarlierThisWeek;
 				return new DateTime(thisWeek.Year, thisWeek.Month, thisWeek.Day);
@@ -273,7 +340,11 @@ namespace ScrewTurn.Wiki {
 
 			// Earlier this month
 			DateTime thisMonth = now;
-			while(thisMonth.Day != 1) thisMonth = thisMonth.AddDays(-1);
+			while(thisMonth.Day != 1)
+			{
+				thisMonth = thisMonth.AddDays(-1);
+			}
+
 			if(dt.Year == thisMonth.Year && dt.Month == thisMonth.Month) {
 				label = Properties.Messages.EarlierThisMonth + " (" + thisMonth.ToString("MMMM") + ")";
 				return new DateTime(thisMonth.Year, thisMonth.Month, thisMonth.Day);
@@ -281,7 +352,11 @@ namespace ScrewTurn.Wiki {
 
 			// Last month
 			DateTime lastMonth = now.AddMonths(-1);
-			while(lastMonth.Day != 1) lastMonth = lastMonth.AddDays(-1);
+			while(lastMonth.Day != 1)
+			{
+				lastMonth = lastMonth.AddDays(-1);
+			}
+
 			if(dt.Year == lastMonth.Year && dt.Month == lastMonth.Month) {
 				label = Properties.Messages.LastMonth + " (" + lastMonth.ToString("MMMM") + ")";
 				return new DateTime(lastMonth.Year, lastMonth.Month, lastMonth.Day);
@@ -385,8 +460,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="y">The second Sorting Group.</param>
 		/// <returns>The comparison result.</returns>
 		public int Compare(SortingGroup x, SortingGroup y) {
-			if(!reverse) return x.Number.CompareTo(y.Number);
-			else return y.Number.CompareTo(x.Number);
+			if(!reverse)
+			{
+				return x.Number.CompareTo(y.Number);
+			}
+			else
+			{
+				return y.Number.CompareTo(x.Number);
+			}
 		}
 
 	}
@@ -413,8 +494,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="y">The second char.</param>
 		/// <returns>The comparison result.</returns>
 		public int Compare(char x, char y) {
-			if(!reverse) return x.CompareTo(y);
-			else return y.CompareTo(x);
+			if(!reverse)
+			{
+				return x.CompareTo(y);
+			}
+			else
+			{
+				return y.CompareTo(x);
+			}
 		}
 
 	}
@@ -441,8 +528,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="y">The second date/time.</param>
 		/// <returns>The comparison result.</returns>
 		public int Compare(DateTime x, DateTime y) {
-			if(!reverse) return x.CompareTo(y);
-			else return y.CompareTo(x);
+			if(!reverse)
+			{
+				return x.CompareTo(y);
+			}
+			else
+			{
+				return y.CompareTo(x);
+			}
 		}
 
 	}

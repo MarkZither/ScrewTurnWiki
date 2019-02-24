@@ -13,7 +13,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManagePages(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManagePages(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			if(!Page.IsPostBack) {
 				// Load namespaces
@@ -67,7 +70,10 @@ namespace ScrewTurn.Wiki {
 			txtCurrentNavPath.Value = e.CommandArgument as string;
 
 			if(e.CommandName == "Select") {
-				if(!CanManagePagesInCurrentNamespace()) return;
+				if(!CanManagePagesInCurrentNamespace())
+				{
+					return;
+				}
 
 				txtName.Text = txtCurrentNavPath.Value;
 				txtName.Enabled = false;
@@ -94,7 +100,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnNewNavPath_Click(object sender, EventArgs e) {
-			if(!CanManagePagesInCurrentNamespace()) return;
+			if(!CanManagePagesInCurrentNamespace())
+			{
+				return;
+			}
 
 			pnlList.Visible = false;
 			pnlEditNavPath.Visible = true;
@@ -214,11 +223,17 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnCreate_Click(object sender, EventArgs e) {
-			if(!CanManagePagesInCurrentNamespace()) return;
+			if(!CanManagePagesInCurrentNamespace())
+			{
+				return;
+			}
 
 			txtName.Text = txtName.Text.Trim();
 
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			if(lstPages.Items.Count == 0) {
 				lblResult.CssClass = "resulterror";
@@ -242,7 +257,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnDelete_Click(object sender, EventArgs e) {
-			if(!CanManagePagesInCurrentNamespace()) return;
+			if(!CanManagePagesInCurrentNamespace())
+			{
+				return;
+			}
 
 			bool done = NavigationPaths.RemoveNavigationPath(txtCurrentNavPath.Value);
 
@@ -259,7 +277,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnSave_Click(object sender, EventArgs e) {
-			if(!CanManagePagesInCurrentNamespace()) return;
+			if(!CanManagePagesInCurrentNamespace())
+			{
+				return;
+			}
 
 			bool done = NavigationPaths.ModifyNavigationPath(txtCurrentNavPath.Value, GetSelectedPages());
 

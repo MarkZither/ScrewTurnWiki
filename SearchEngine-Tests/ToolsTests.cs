@@ -84,9 +84,8 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Tokenize_NullText() {
-			Tools.Tokenize(null, WordLocation.Content);
+			Assert.That(() => Tools.Tokenize(null, WordLocation.Content), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -107,17 +106,13 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveStopWords_NullInputWords() {
-			Tools.RemoveStopWords(null, new string[0]);
+			Assert.That(() => { Tools.RemoveStopWords(null, new string[0]); }, Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveStopWords_NullStopWords() {
-			Tools.RemoveStopWords(new WordInfo[0], null);
-		}
-
+            Assert.That(() => { Tools.RemoveStopWords(new WordInfo[0], null); }, Throws.ArgumentNullException);
+        }
 	}
-
 }

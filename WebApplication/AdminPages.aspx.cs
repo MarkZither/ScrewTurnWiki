@@ -131,7 +131,11 @@ namespace ScrewTurn.Wiki {
 		protected void btnNewPage_Click(object sender, EventArgs e) {
 			// Redirect to the edit page, keeping the correct namespace
 			string currentNamespace = lstNamespace.SelectedValue;
-			if(!string.IsNullOrEmpty(currentNamespace)) currentNamespace += ".";
+			if(!string.IsNullOrEmpty(currentNamespace))
+			{
+				currentNamespace += ".";
+			}
+
 			Response.Redirect(currentNamespace + "Edit.aspx");
 		}
 
@@ -177,7 +181,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptPages_DataBinding(object sender, EventArgs e) {
-			if(currentPages == null) currentPages = GetPages();
+			if(currentPages == null)
+			{
+				currentPages = GetPages();
+			}
+
 			NamespaceInfo nspace = DetectNamespaceInfo();
 
 			List<PageRow> result = new List<PageRow>(PageSize);
@@ -198,18 +206,35 @@ namespace ScrewTurn.Wiki {
 				bool canEdit = AuthChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, currentUser, currentGroups);
 				bool canManagePage = false;
 				bool canManageDiscussion = false;
-				if(!canDeletePages) canManagePage = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, currentUser, currentGroups);
-				if(!canDeletePages && !canManagePage) canManageDiscussion = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, currentUser, currentGroups);
+				if(!canDeletePages)
+				{
+					canManagePage = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, currentUser, currentGroups);
+				}
+
+				if(!canDeletePages && !canManagePage)
+				{
+					canManageDiscussion = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, currentUser, currentGroups);
+				}
+
 				bool canSelect = canManagePage | canDeletePages | canManageDiscussion;
 
 				int incomingLinks = Pages.GetPageIncomingLinks(page).Length;
 
-				if(chkOrphansOnly.Checked && incomingLinks > 0) continue;
+				if(chkOrphansOnly.Checked && incomingLinks > 0)
+				{
+					continue;
+				}
 
 				PageContent firstContent = null;
 				List<int> baks = Pages.GetBackups(page);
-				if(baks.Count == 0) firstContent = currentContent;
-				else firstContent = Pages.GetBackupContent(page, baks[0]);
+				if(baks.Count == 0)
+				{
+					firstContent = currentContent;
+				}
+				else
+				{
+					firstContent = Pages.GetBackupContent(page, baks[0]);
+				}
 
 				result.Add(new PageRow(page, currentContent, firstContent,
 					Pages.GetMessageCount(page), baks.Count, incomingLinks == 0,
@@ -228,7 +253,10 @@ namespace ScrewTurn.Wiki {
 				ActivatePageEditor();
 			}
 			else if(e.CommandName == "Perms") {
-				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+				{
+					return;
+				}
 
 				ActivatePagePermissionsManager();
 			}
@@ -303,14 +331,20 @@ namespace ScrewTurn.Wiki {
 			if(pageNamespace != null) {
 				// Try adding Root as target namespace
 				bool canManagePages = AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
-				if(canManagePages) lstTargetNamespace.Items.Add(new ListItem("<root>", ""));
+				if(canManagePages)
+				{
+					lstTargetNamespace.Items.Add(new ListItem("<root>", ""));
+				}
 			}
 
 			// Try adding all other namespaces
 			foreach(NamespaceInfo nspace in Pages.GetNamespaces().FindAll(n => n.Provider == page.Provider)) {
 				if(pageNamespace == null || (pageNamespace != null && nspace.Name != pageNamespace.Name)) {
 					bool canManagePages = AuthChecker.CheckActionForNamespace(nspace, Actions.ForNamespaces.ManagePages, currentUser, currentGroups);
-					if(canManagePages) lstTargetNamespace.Items.Add(new ListItem(nspace.Name, nspace.Name));
+					if(canManagePages)
+					{
+						lstTargetNamespace.Items.Add(new ListItem(nspace.Name, nspace.Name));
+					}
 				}
 			}
 
@@ -515,7 +549,10 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnApprove_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				return;
+			}
 
 			PageContent draft = Pages.GetDraft(page);
 
@@ -541,7 +578,10 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnReject_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			if(!AdminMaster.CanApproveDraft(page, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				return;
+			}
 
 			Log.LogEntry("Page draft reject requested for " + page.FullName, EntryType.General, SessionFacade.CurrentUsername);
 
@@ -561,14 +601,20 @@ namespace ScrewTurn.Wiki {
 
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
 			if(!AuthChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
-				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				return;
+			}
 
 			txtNewName.Text = txtNewName.Text.Trim();
 
 			string currentNamespace = NameTools.GetNamespace(txtCurrentPage.Value);
 			string currentPage = NameTools.GetLocalName(txtCurrentPage.Value);
 
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			if(txtNewName.Text.ToLowerInvariant() == currentPage.ToLowerInvariant()) {
 				return;
@@ -663,12 +709,18 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnRollback_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			if(!AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				return;
+			}
 
 			int targetRevision = -1;
 
 			// This should never occur
-			if(!int.TryParse(lstRevision.SelectedValue, out targetRevision)) return;
+			if(!int.TryParse(lstRevision.SelectedValue, out targetRevision))
+			{
+				return;
+			}
 
 			Log.LogEntry("Page rollback requested for " + txtCurrentPage.Value + " to rev. " + targetRevision.ToString(), EntryType.General, Log.SystemUsername);
 
@@ -688,12 +740,18 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnDeleteBackups_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			if(!AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				return;
+			}
 
 			int targetRevision = -1;
 
 			// This should never occur
-			if(!int.TryParse(lstBackup.SelectedValue, out targetRevision)) return;
+			if(!int.TryParse(lstBackup.SelectedValue, out targetRevision))
+			{
+				return;
+			}
 
 			Log.LogEntry("Page backup deletion requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
 
@@ -719,7 +777,10 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnClearDiscussion_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
-			if(!AuthChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+			if(!AuthChecker.CheckActionForPage(page, Actions.ForPages.ManageDiscussion, SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				return;
+			}
 
 			Log.LogEntry("Page discussion cleanup requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
 
@@ -740,7 +801,10 @@ namespace ScrewTurn.Wiki {
 		protected void btnDeletePage_Click(object sender, EventArgs e) {
 			PageInfo page = Pages.FindPage(txtCurrentPage.Value);
 			if(!AuthChecker.CheckActionForNamespace(Pages.FindNamespace(NameTools.GetNamespace(page.FullName)), Actions.ForNamespaces.DeletePages,
-				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				return;
+			}
 
 			Log.LogEntry("Page deletion requested for " + txtCurrentPage.Value, EntryType.General, Log.SystemUsername);
 
@@ -853,7 +917,10 @@ namespace ScrewTurn.Wiki {
 			List<PageInfo> selectedPages = new List<PageInfo>(20);
 			foreach(string pg in pageListBuilder.SelectedPages) {
 				PageInfo page = Pages.FindPage(pg);
-				if(page != null && !IsDefaultPage(page)) selectedPages.Add(page);
+				if(page != null && !IsDefaultPage(page))
+				{
+					selectedPages.Add(page);
+				}
 			}
 
 			if(selectedPages.Count == 0) {
@@ -863,7 +930,11 @@ namespace ScrewTurn.Wiki {
 			}
 
 			string nspaceName = lstBulkMigrateTargetNamespace.SelectedValue;
-			if(nspaceName == ".") nspaceName = null;
+			if(nspaceName == ".")
+			{
+				nspaceName = null;
+			}
+
 			NamespaceInfo selectedNamespace = Pages.FindNamespace(nspaceName);
 
 			Log.LogEntry("Bulk migration requested", EntryType.General, SessionFacade.CurrentUsername);

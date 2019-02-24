@@ -19,7 +19,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			Page.Title = "Language/Time Zone - " + Settings.WikiTitle;
 
-			if(SessionFacade.LoginKey != null && SessionFacade.GetCurrentUsername() != "admin") UrlTools.Redirect("Profile.aspx");
+			if(SessionFacade.LoginKey != null && SessionFacade.GetCurrentUsername() != "admin")
+			{
+				UrlTools.Redirect("Profile.aspx");
+			}
 
 			if(!Page.IsPostBack) {
 				// Load values stored in cookie
@@ -28,13 +31,27 @@ namespace ScrewTurn.Wiki {
 				languageSelector.LoadLanguages();
 
 				string culture = null;
-				if(cookie != null) culture = cookie["C"];
-				else culture = Settings.DefaultLanguage;
+				if(cookie != null)
+				{
+					culture = cookie["C"];
+				}
+				else
+				{
+					culture = Settings.DefaultLanguage;
+				}
+
 				languageSelector.SelectedLanguage = culture;
 
 				string timezone = null;
-				if(cookie != null) timezone = cookie["T"];
-				else timezone = Settings.DefaultTimezone.ToString();
+				if(cookie != null)
+				{
+					timezone = cookie["T"];
+				}
+				else
+				{
+					timezone = Settings.DefaultTimezone.ToString();
+				}
+
 				languageSelector.SelectedTimezone = timezone;
 
 				if(!string.IsNullOrEmpty(Request["Language"])) {
@@ -43,8 +60,14 @@ namespace ScrewTurn.Wiki {
 					SavePreferences(lang, languageSelector.SelectedTimezone);
 					languageSelector.SelectedLanguage = lang;
 
-					if(Request["Redirect"] != null) UrlTools.Redirect(UrlTools.BuildUrl(Request["Redirect"]));
-					else if(Request.UrlReferrer != null && !string.IsNullOrEmpty(Request.UrlReferrer.ToString())) UrlTools.Redirect(UrlTools.BuildUrl(Request.UrlReferrer.ToString()));
+					if(Request["Redirect"] != null)
+					{
+						UrlTools.Redirect(UrlTools.BuildUrl(Request["Redirect"]));
+					}
+					else if(Request.UrlReferrer != null && !string.IsNullOrEmpty(Request.UrlReferrer.ToString()))
+					{
+						UrlTools.Redirect(UrlTools.BuildUrl(Request.UrlReferrer.ToString()));
+					}
 				}
 			}
 

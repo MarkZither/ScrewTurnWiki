@@ -23,7 +23,10 @@ namespace ScrewTurn.Wiki {
 
 		protected void Page_Load(object sender, EventArgs e) {
 			page = Pages.FindPage(Request["Page"]);
-			if(page == null) UrlTools.RedirectHome();
+			if(page == null)
+			{
+				UrlTools.RedirectHome();
+			}
 
 			// Check permissions
 			bool canView = false;
@@ -35,7 +38,10 @@ namespace ScrewTurn.Wiki {
 				canView = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadDiscussion,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 			}
-			if(!canView) UrlTools.Redirect("AccessDenied.aspx");
+			if(!canView)
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			content = Content.GetPageContent(page, true);
 
@@ -90,7 +96,10 @@ namespace ScrewTurn.Wiki {
 				sb.Append(Properties.Messages.NoMessages);
 				sb.Append("</i>");
 			}
-			else PrintSubtree(messages, null, sb);
+			else
+			{
+				PrintSubtree(messages, null, sb);
+			}
 		}
 
 		/// <summary>

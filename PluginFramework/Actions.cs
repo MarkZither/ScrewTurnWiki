@@ -99,8 +99,14 @@ namespace ScrewTurn.Wiki {
 			/// <param name="name">The internal name.</param>
 			/// <returns>The full name.</returns>
 			public static string GetFullName(string name) {
-				if(name == FullControl) return Exchanger.ResourceExchanger.GetResource("Action_FullControl");
-				else return Exchanger.ResourceExchanger.GetResource("Action_" + name);
+				if(name == FullControl)
+				{
+					return Exchanger.ResourceExchanger.GetResource("Action_FullControl");
+				}
+				else
+				{
+					return Exchanger.ResourceExchanger.GetResource("Action_" + name);
+				}
 			}
 
 		}
@@ -221,8 +227,14 @@ namespace ScrewTurn.Wiki {
 			/// <param name="name">The internal name.</param>
 			/// <returns>The full name.</returns>
 			public static string GetFullName(string name) {
-				if(name == FullControl) return Exchanger.ResourceExchanger.GetResource("Action_FullControl");
-				else return Exchanger.ResourceExchanger.GetResource("Action_" + name);
+				if(name == FullControl)
+				{
+					return Exchanger.ResourceExchanger.GetResource("Action_FullControl");
+				}
+				else
+				{
+					return Exchanger.ResourceExchanger.GetResource("Action_" + name);
+				}
 			}
 
 		}
@@ -345,8 +357,14 @@ namespace ScrewTurn.Wiki {
 			/// <param name="name">The internal name.</param>
 			/// <returns>The full name.</returns>
 			public static string GetFullName(string name) {
-				if(name == FullControl) return Exchanger.ResourceExchanger.GetResource("Action_FullControl");
-				else return Exchanger.ResourceExchanger.GetResource("Action_" + name);
+				if(name == FullControl)
+				{
+					return Exchanger.ResourceExchanger.GetResource("Action_FullControl");
+				}
+				else
+				{
+					return Exchanger.ResourceExchanger.GetResource("Action_" + name);
+				}
 			}
 
 		}
@@ -426,8 +444,14 @@ namespace ScrewTurn.Wiki {
 			/// <param name="name">The internal name.</param>
 			/// <returns>The full name.</returns>
 			public static string GetFullName(string name) {
-				if(name == FullControl) return Exchanger.ResourceExchanger.GetResource("Action_FullControl");
-				else return Exchanger.ResourceExchanger.GetResource("Action_" + name);
+				if(name == FullControl)
+				{
+					return Exchanger.ResourceExchanger.GetResource("Action_FullControl");
+				}
+				else
+				{
+					return Exchanger.ResourceExchanger.GetResource("Action_" + name);
+				}
 			}
 
 		}

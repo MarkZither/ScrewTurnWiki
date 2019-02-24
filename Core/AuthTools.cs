@@ -27,8 +27,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="subject">The subject to test.</param>
 		/// <returns><c>true</c> if the subject is a group, <c>false</c> if it is a user.</returns>
 		public static bool IsGroup(string subject) {
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length < 2) throw new ArgumentException("Subject must contain at least 2 characters", "subject");
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length < 2)
+			{
+				throw new ArgumentException("Subject must contain at least 2 characters", "subject");
+			}
 
 			return subject.ToUpperInvariant().StartsWith("G.");
 		}
@@ -39,8 +46,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="username">The username.</param>
 		/// <returns>The resulting username.</returns>
 		public static string PrepareUsername(string username) {
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
 
 			return "U." + username;
 		}
@@ -51,15 +65,28 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The group array.</param>
 		/// <returns>The resulting group array.</returns>
 		public static string[] PrepareGroups(string[] groups) {
-			if(groups == null) throw new ArgumentNullException("groups");
+			if(groups == null)
+			{
+				throw new ArgumentNullException("groups");
+			}
 
-			if(groups.Length == 0) return groups;
+			if(groups.Length == 0)
+			{
+				return groups;
+			}
 
 			string[] result = new string[groups.Length];
 
 			for(int i = 0; i < groups.Length; i++) {
-				if(groups[i] == null) throw new ArgumentNullException("groups");
-				if(groups[i].Length == 0) throw new ArgumentException("Groups cannot contain empty elements", "groups");
+				if(groups[i] == null)
+				{
+					throw new ArgumentNullException("groups");
+				}
+
+				if(groups[i].Length == 0)
+				{
+					throw new ArgumentException("Groups cannot contain empty elements", "groups");
+				}
 
 				result[i] = PrepareGroup(groups[i]);
 			}
@@ -83,9 +110,20 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The directory name.</param>
 		/// <returns>The full name (<b>not</b> prepended with <see cref="Actions.ForDirectories.ResourceMasterPrefix" />.</returns>
 		public static string GetDirectoryName(IFilesStorageProviderV30 prov, string name) {
-			if(prov == null) throw new ArgumentNullException("prov");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(prov == null)
+			{
+				throw new ArgumentNullException("prov");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			return "(" + prov.GetType().FullName + ")" + name;
 		}

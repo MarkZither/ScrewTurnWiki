@@ -42,10 +42,19 @@ namespace ScrewTurn.Wiki {
 
 			IFilesStorageProviderV30 provider = null;
 
-			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.FilesProviderCollector.GetProvider(Request["Provider"]);
+			if(!string.IsNullOrEmpty(Request["Provider"]))
+			{
+				provider = Collectors.FilesProviderCollector.GetProvider(Request["Provider"]);
+			}
 			else {
-				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(pageInfo, filename);
-				else provider = FilesAndAttachments.FindFileProvider(filename);
+				if(isPageAttachment)
+				{
+					provider = FilesAndAttachments.FindPageAttachmentProvider(pageInfo, filename);
+				}
+				else
+				{
+					provider = FilesAndAttachments.FindFileProvider(filename);
+				}
 			}
 
 			if(provider == null) {
@@ -55,7 +64,11 @@ namespace ScrewTurn.Wiki {
 			}
 
 			string size = Request["Size"];
-			if(string.IsNullOrEmpty(size)) size = "small";
+			if(string.IsNullOrEmpty(size))
+			{
+				size = "small";
+			}
+
 			size = size.ToLowerInvariant();
 
 			// Verify permissions
@@ -150,8 +163,11 @@ namespace ScrewTurn.Wiki {
                         result = new Bitmap(200, 200, pixelFormat);
                     }
                 }
-                else result = new Bitmap(200, 200, pixelFormat);
-            }
+                else
+				{
+					result = new Bitmap(200, 200, pixelFormat);
+				}
+			}
             else {
                 // Small thumb (outer size 48x48)
                 result = new Bitmap(48, 48, pixelFormat);
@@ -233,7 +249,11 @@ namespace ScrewTurn.Wiki {
 			else if(w > h) {
 				// Landscape
 				float scale = (float)targetW / (float)w;
-				if(targetW > w) scale = 1;
+				if(targetW > w)
+				{
+					scale = 1;
+				}
+
 				int width = (int)(w * scale);
 				int height = (int)(h * scale);
 
@@ -248,7 +268,11 @@ namespace ScrewTurn.Wiki {
 			else {
 				// Portrait
 				float scale = (float)targetH / (float)h;
-				if(targetH > h) scale = 1;
+				if(targetH > h)
+				{
+					scale = 1;
+				}
+
 				int width = (int)(w * scale);
 				int height = (int)(h * scale);
 

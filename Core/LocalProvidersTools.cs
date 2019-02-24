@@ -32,7 +32,11 @@ namespace ScrewTurn.Wiki {
 			}
 			finally {
 				try {
-					if(fs != null) fs.Close();
+					if(fs != null)
+					{
+						fs.Close();
+					}
+
 					System.IO.File.Delete(file);
 				}
 				catch {

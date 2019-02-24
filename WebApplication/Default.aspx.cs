@@ -21,7 +21,10 @@ namespace ScrewTurn.Wiki {
 
 			discussMode = Request["Discuss"] != null;
 			viewCodeMode = Request["Code"] != null && !discussMode;
-			if(!Settings.EnableViewPageCodeFeature) viewCodeMode = false;
+			if(!Settings.EnableViewPageCodeFeature)
+			{
+				viewCodeMode = false;
+			}
 
 			currentPage = DetectPageInfo(true);
 
@@ -42,7 +45,11 @@ namespace ScrewTurn.Wiki {
 			bool canEdit = false;
 			bool canEditWithApproval = false;
 			Pages.CanEditPage(currentPage, currentUsername, currentGroups, out canEdit, out canEditWithApproval);
-			if(canEditWithApproval && canEdit) canEditWithApproval = false;
+			if(canEditWithApproval && canEdit)
+			{
+				canEditWithApproval = false;
+			}
+
 			bool canDownloadAttachments = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.DownloadAttachments, currentUsername, currentGroups);
 			bool canSetPerms = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManagePermissions, currentUsername, currentGroups);
 			bool canAdmin = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.ManagePage, currentUsername, currentGroups);
@@ -51,8 +58,14 @@ namespace ScrewTurn.Wiki {
 			bool canManageDiscussion = AuthChecker.CheckActionForPage(currentPage, Actions.ForPages.ManageDiscussion, currentUsername, currentGroups);
 
 			if(!canView) {
-				if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
-				else UrlTools.Redirect(UrlTools.BuildUrl("AccessDenied.aspx"));
+				if(SessionFacade.LoginKey == null)
+				{
+					UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
+				}
+				else
+				{
+					UrlTools.Redirect(UrlTools.BuildUrl("AccessDenied.aspx"));
+				}
 			}
 			attachmentViewer.Visible = canDownloadAttachments;
 
@@ -143,7 +156,10 @@ namespace ScrewTurn.Wiki {
 						UrlTools.BuildUrl(NameTools.GetLocalName(currentPage.FullName), Settings.PageExtension));
 				}
 			}
-			else lblViewCodeLink.Visible = false;
+			else
+			{
+				lblViewCodeLink.Visible = false;
+			}
 
 			lblHistoryLink.Visible = Settings.EnablePageToolbar && !discussMode && !viewCodeMode && canViewDiscussion;
 			if(lblHistoryLink.Visible) {
@@ -173,21 +189,30 @@ namespace ScrewTurn.Wiki {
 						Tools.UrlEncode(currentPage.FullName),
 						Properties.Messages.RollbackThisPage, Properties.Messages.Rollback);
 				}
-				else lblRollbackPage.Visible = false;
+				else
+				{
+					lblRollbackPage.Visible = false;
+				}
 
 				if(canAdmin) {
 					lblAdministratePage.Text = string.Format(@"<a href=""AdminPages.aspx?Admin={0}"" title=""{1}"">{2}</a>",
 						Tools.UrlEncode(currentPage.FullName),
 						Properties.Messages.AdministrateThisPage, Properties.Messages.Administrate);
 				}
-				else lblAdministratePage.Visible = false;
+				else
+				{
+					lblAdministratePage.Visible = false;
+				}
 
 				if(canSetPerms) {
 					lblSetPagePermissions.Text = string.Format(@"<a href=""AdminPages.aspx?Perms={0}"" title=""{1}"">{2}</a>",
 						Tools.UrlEncode(currentPage.FullName),
 						Properties.Messages.SetPermissionsForThisPage, Properties.Messages.Permissions);
 				}
-				else lblSetPagePermissions.Visible = false;
+				else
+				{
+					lblSetPagePermissions.Visible = false;
+				}
 			}
 
 			lblPostMessageLink.Visible = discussMode && !viewCodeMode && canPostMessages;
@@ -267,7 +292,10 @@ namespace ScrewTurn.Wiki {
 						discussMode ? Properties.Messages.RssForThisDiscussion : Properties.Messages.RssForThisPage,
 						discussMode ? " class=\"discuss\"" : "");
 				}
-				else lblRssLink.Visible = false;
+				else
+				{
+					lblRssLink.Visible = false;
+				}
 			}
 			else {
 				lblPrintLink.Visible = false;
@@ -293,7 +321,10 @@ namespace ScrewTurn.Wiki {
 						GetCategoryLink(categories[i].FullName),
 						NameTools.GetLocalName(categories[i].FullName),
 						NameTools.GetLocalName(categories[i].FullName));
-					if(i != categories.Length - 1) sb.Append(", ");
+					if(i != categories.Length - 1)
+					{
+						sb.Append(", ");
+					}
 				}
 				return sb.ToString();
 			}
@@ -334,7 +365,10 @@ namespace ScrewTurn.Wiki {
 			StringBuilder sb = new StringBuilder(50);
 			for(int i = 0; i < keywords.Length; i++) {
 				sb.Append(keywords[i]);
-				if(i != keywords.Length - 1) sb.Append(", ");
+				if(i != keywords.Length - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 			return sb.ToString();
 		}
@@ -343,13 +377,19 @@ namespace ScrewTurn.Wiki {
 		/// Verifies the need for a page redirection, and performs it when appropriate.
 		/// </summary>
 		private void VerifyAndPerformPageRedirection() {
-			if(currentPage == null) return;
+			if(currentPage == null)
+			{
+				return;
+			}
 
 			// Force formatting so that the destination can be detected
 			Content.GetFormattedPageContent(currentPage, true);
 
 			PageInfo dest = Redirections.GetDestination(currentPage);
-			if(dest == null) return;
+			if(dest == null)
+			{
+				return;
+			}
 
 			if(dest != null) {
 				if(Request["NoRedirect"] != "1") {
@@ -389,7 +429,10 @@ namespace ScrewTurn.Wiki {
 
 			PageInfo[] pageTrail = SessionFacade.Breadcrumbs.AllPages;
 			int min = 3;
-			if(pageTrail.Length < 3) min = pageTrail.Length;
+			if(pageTrail.Length < 3)
+			{
+				min = pageTrail.Length;
+			}
 
 			sb.Append(@"<div id=""BreadcrumbsDivMin"">");
 			if(pageTrail.Length > 3) {
@@ -436,14 +479,22 @@ namespace ScrewTurn.Wiki {
 			string nspace = NameTools.GetNamespace(page.FullName);
 
 			sb.Append("&raquo; ");
-			if(comp.Compare(page, currentPage) == 0) sb.Append("<b>");
+			if(comp.Compare(page, currentPage) == 0)
+			{
+				sb.Append("<b>");
+			}
+
 			sb.AppendFormat(@"<a href=""{0}"" title=""{1}""{2}{3}{4}>{1}</a>",
 				Tools.UrlEncode(page.FullName) + Settings.PageExtension,
 				FormattingPipeline.PrepareTitle(pc.Title, false, FormattingContext.PageContent, currentPage) + (string.IsNullOrEmpty(nspace) ? "" : (" (" + NameTools.GetNamespace(page.FullName) + ")")),
 				(id != null ? @" onmouseover=""javascript:return __ShowDropDown(event, '" + id + @"', this);""" : ""),
 				(id != null ? @" id=""lnk" + id + @"""" : ""),
 				(id != null ? @" onmouseout=""javascript:return __HideDropDown('" + id + @"');""" : ""));
-			if(comp.Compare(page, currentPage) == 0) sb.Append("</b>");
+			if(comp.Compare(page, currentPage) == 0)
+			{
+				sb.Append("</b>");
+			}
+
 			sb.Append(" ");
 		}
 
@@ -460,7 +511,10 @@ namespace ScrewTurn.Wiki {
 			// Return DIV's ID
 
 			string[] outgoingLinks = Pages.GetPageOutgoingLinks(page);
-			if(outgoingLinks == null || outgoingLinks.Length == 0) return null;
+			if(outgoingLinks == null || outgoingLinks.Length == 0)
+			{
+				return null;
+			}
 
 			string id = dbPrefix + Guid.NewGuid().ToString();
 
@@ -478,14 +532,23 @@ namespace ScrewTurn.Wiki {
 
 					buffer.AppendFormat(@"<a href=""{0}{1}"" title=""{2}"">{2}</a>", link, Settings.PageExtension, title, title);
 				}
-				if(count >= 20) break;
+				if(count >= 20)
+				{
+					break;
+				}
 			}
 			buffer.Append("</div>");
 
 			sb.Insert(0, buffer.ToString());
 
-			if(count > 0) return id;
-			else return null;
+			if(count > 0)
+			{
+				return id;
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -510,9 +573,15 @@ namespace ScrewTurn.Wiki {
 
 					lblRedirectionSource.Text = sb.ToString();
 				}
-				else lblRedirectionSource.Visible = false;
+				else
+				{
+					lblRedirectionSource.Visible = false;
+				}
 			}
-			else lblRedirectionSource.Visible = false;
+			else
+			{
+				lblRedirectionSource.Visible = false;
+			}
 		}
 
 		/// <summary>
@@ -522,7 +591,10 @@ namespace ScrewTurn.Wiki {
 			string[] paths = NavigationPaths.PathsPerPage(currentPage);
 
 			string currentPath = Request["NavPath"];
-			if(!string.IsNullOrEmpty(currentPath)) currentPath = currentPath.ToLowerInvariant();
+			if(!string.IsNullOrEmpty(currentPath))
+			{
+				currentPath = currentPath.ToLowerInvariant();
+			}
 
 			if(!discussMode && !viewCodeMode && paths.Length > 0) {
 				StringBuilder sb = new StringBuilder(500);
@@ -531,7 +603,10 @@ namespace ScrewTurn.Wiki {
 				for(int i = 0; i < paths.Length; i++) {
 					NavigationPath path = NavigationPaths.Find(paths[i]);
 					if(path != null) {
-						if(currentPath != null && paths[i].ToLowerInvariant().Equals(currentPath)) sb.Append("<b>");
+						if(currentPath != null && paths[i].ToLowerInvariant().Equals(currentPath))
+						{
+							sb.Append("<b>");
+						}
 
 						sb.Append(@"<a href=""");
 						sb.Append(UrlTools.BuildUrl("Default.aspx?Page=", Tools.UrlEncode(currentPage.FullName), "&amp;NavPath=", Tools.UrlEncode(paths[i])));
@@ -541,14 +616,24 @@ namespace ScrewTurn.Wiki {
 						sb.Append(NameTools.GetLocalName(path.FullName));
 						sb.Append("</a>");
 
-						if(currentPath != null && paths[i].ToLowerInvariant().Equals(currentPath)) sb.Append("</b>");
-						if(i != paths.Length - 1) sb.Append(", ");
+						if(currentPath != null && paths[i].ToLowerInvariant().Equals(currentPath))
+						{
+							sb.Append("</b>");
+						}
+
+						if(i != paths.Length - 1)
+						{
+							sb.Append(", ");
+						}
 					}
 				}
 
 				lblNavigationPaths.Text = sb.ToString();
 			}
-			else lblNavigationPaths.Visible = false;
+			else
+			{
+				lblNavigationPaths.Visible = false;
+			}
 		}
 
 		/// <summary>
@@ -596,12 +681,18 @@ namespace ScrewTurn.Wiki {
 			if(prev.Length > 0) {
 				lblPreviousPage.Text = prev.ToString();
 			}
-			else lblPreviousPage.Visible = false;
+			else
+			{
+				lblPreviousPage.Visible = false;
+			}
 
 			if(next.Length > 0) {
 				lblNextPage.Text = next.ToString();
 			}
-			else lblNextPage.Visible = false;
+			else
+			{
+				lblNextPage.Visible = false;
+			}
 		}
 
 		/// <summary>
@@ -622,7 +713,10 @@ namespace ScrewTurn.Wiki {
 
 				lblDoubleClickHandler.Text = sb.ToString();
 			}
-			else lblDoubleClickHandler.Visible = false;
+			else
+			{
+				lblDoubleClickHandler.Visible = false;
+			}
 		}
 
 		/// <summary>
@@ -660,7 +754,10 @@ namespace ScrewTurn.Wiki {
 					btnEmailNotification.ToolTip = Properties.Messages.ClickToEnableEmailNotifications;
 				}
 			}
-			else btnEmailNotification.Visible = false;
+			else
+			{
+				btnEmailNotification.Visible = false;
+			}
 		}
 
 		protected void btnEmailNotification_Click(object sender, EventArgs e) {

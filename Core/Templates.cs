@@ -38,8 +38,14 @@ namespace ScrewTurn.Wiki {
 
 			int index = templates.BinarySearch(new ContentTemplate(name, "", null), new ContentTemplateNameComparer());
 
-			if(templates.Count > 0 && index >= 0) return templates[index];
-			else return null;
+			if(templates.Count > 0 && index >= 0)
+			{
+				return templates[index];
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -50,14 +56,26 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The target provider (<c>null</c> for the default provider).</param>
 		/// <returns><c>true</c> if the template is added, <c>false</c> otherwise.</returns>
 		public static bool AddTemplate(string name, string content, IPagesStorageProviderV30 provider) {
-			if(Find(name) != null) return false;
+			if(Find(name) != null)
+			{
+				return false;
+			}
 
-			if(provider == null) provider = Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			if(provider == null)
+			{
+				provider = Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			}
 
 			ContentTemplate result = provider.AddContentTemplate(name, content);
 
-			if(result != null) Log.LogEntry("Content Template " + name + " created", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Creation failed for Content Template " + name, EntryType.Error, Log.SystemUsername);
+			if(result != null)
+			{
+				Log.LogEntry("Content Template " + name + " created", EntryType.General, Log.SystemUsername);
+			}
+			else
+			{
+				Log.LogEntry("Creation failed for Content Template " + name, EntryType.Error, Log.SystemUsername);
+			}
 
 			return result != null;
 		}
@@ -70,8 +88,14 @@ namespace ScrewTurn.Wiki {
 		public static bool RemoveTemplate(ContentTemplate template) {
 			bool done = template.Provider.RemoveContentTemplate(template.Name);
 
-			if(done) Log.LogEntry("Content Template " + template.Name + " deleted", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Deletion failed for Content Template " + template.Name, EntryType.Error, Log.SystemUsername);
+			if(done)
+			{
+				Log.LogEntry("Content Template " + template.Name + " deleted", EntryType.General, Log.SystemUsername);
+			}
+			else
+			{
+				Log.LogEntry("Deletion failed for Content Template " + template.Name, EntryType.Error, Log.SystemUsername);
+			}
 
 			return done;
 		}
@@ -85,8 +109,14 @@ namespace ScrewTurn.Wiki {
 		public static bool ModifyTemplate(ContentTemplate template, string content) {
 			ContentTemplate result = template.Provider.ModifyContentTemplate(template.Name, content);
 
-			if(result != null) Log.LogEntry("Content Template " + template.Name + " updated", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Update failed for Content Template " + template.Name, EntryType.Error, Log.SystemUsername);
+			if(result != null)
+			{
+				Log.LogEntry("Content Template " + template.Name + " updated", EntryType.General, Log.SystemUsername);
+			}
+			else
+			{
+				Log.LogEntry("Update failed for Content Template " + template.Name, EntryType.Error, Log.SystemUsername);
+			}
 
 			return result != null;
 		}

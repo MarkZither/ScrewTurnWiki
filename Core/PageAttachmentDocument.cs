@@ -33,11 +33,30 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The file provider.</param>
 		/// <param name="dateTime">The modification date/time.</param>
 		public PageAttachmentDocument(PageInfo page, string name, string provider, DateTime dateTime) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(provider == null) throw new ArgumentNullException("provider");
-			if(provider.Length == 0) throw new ArgumentException("Provider cannot be empty", "provider");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(provider == null)
+			{
+				throw new ArgumentNullException("provider");
+			}
+
+			if(provider.Length == 0)
+			{
+				throw new ArgumentException("Provider cannot be empty", "provider");
+			}
 
 			this.name = page.FullName + "|" + provider + "|" + name;
 			id = Tools.HashDocumentNameForTemporaryIndex(this.name);

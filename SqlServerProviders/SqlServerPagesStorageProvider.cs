@@ -75,7 +75,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer {
 
 			try {
 				int version = ExecuteScalar<int>(cmd, -1);
-				if(version > CurrentSchemaVersion) throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
+				if(version > CurrentSchemaVersion)
+				{
+					throw new InvalidConfigurationException("The version of the database schema is greater than the supported version");
+				}
+
 				exists = version != -1;
 			}
 			catch(SqlException) {
@@ -262,8 +266,15 @@ exec sp_rename 'PagesProviderVersion', 'PagesProviderVersion_v2';";
 					insertCmd.Parameters.Add(new SqlParameter("@Page", reader["Page"] as string));
 					insertCmd.Parameters.Add(new SqlParameter("@Id", (short)(int)reader["ID"]));
 					int parent = (int)reader["Parent"];
-					if(parent == -1) insertCmd.Parameters.Add(new SqlParameter("@Parent", DBNull.Value));
-					else insertCmd.Parameters.Add(new SqlParameter("@Parent", (short)parent));
+					if(parent == -1)
+					{
+						insertCmd.Parameters.Add(new SqlParameter("@Parent", DBNull.Value));
+					}
+					else
+					{
+						insertCmd.Parameters.Add(new SqlParameter("@Parent", (short)parent));
+					}
+
 					insertCmd.Parameters.Add(new SqlParameter("@Username", reader["Username"] as string));
 					insertCmd.Parameters.Add(new SqlParameter("@Subject", reader["Subject"] as string));
 					insertCmd.Parameters.Add(new SqlParameter("@DateTime", (DateTime)reader["DateTime"]));

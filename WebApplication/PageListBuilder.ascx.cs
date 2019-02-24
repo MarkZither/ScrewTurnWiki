@@ -68,7 +68,10 @@ namespace ScrewTurn.Wiki {
 
 			txtPageName.Text = txtPageName.Text.Trim();
 
-			if(txtPageName.Text.Length == 0) return;
+			if(txtPageName.Text.Length == 0)
+			{
+				return;
+			}
 
 			PageInfo[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, CurrentNamespace);
 

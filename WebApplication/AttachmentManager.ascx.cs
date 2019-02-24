@@ -46,7 +46,10 @@ namespace ScrewTurn.Wiki {
 				string[] aft = Settings.AllowedFileTypes;
 				for(int i = 0; i < aft.Length; i++) {
 					sb.Append(aft[i].ToUpper());
-					if(i != aft.Length - 1) sb.Append(", ");
+					if(i != aft.Length - 1)
+					{
+						sb.Append(", ");
+					}
 				}
 				lblUploadFilesInfo.Text = lblUploadFilesInfo.Text.Replace("$2", sb.ToString());
 
@@ -59,7 +62,10 @@ namespace ScrewTurn.Wiki {
 					lstProviders.Items.Add(item);
 				}
 
-				if(CurrentPage == null) btnUpload.Enabled = false;
+				if(CurrentPage == null)
+				{
+					btnUpload.Enabled = false;
+				}
 			}
 
 			// Set provider
@@ -113,8 +119,15 @@ namespace ScrewTurn.Wiki {
 		public PageInfo CurrentPage {
 			get { return Pages.FindPage(ViewState["CP"] as string); }
 			set {
-				if(value == null) ViewState["CP"] = null;
-				else ViewState["CP"] = value.FullName;
+				if(value == null)
+				{
+					ViewState["CP"] = null;
+				}
+				else
+				{
+					ViewState["CP"] = value.FullName;
+				}
+
 				btnUpload.Enabled = value != null;
 				lblNoUpload.Visible = !btnUpload.Enabled;
 				DetectPermissions();
@@ -186,11 +199,22 @@ namespace ScrewTurn.Wiki {
 						string[] aft = Settings.AllowedFileTypes;
 						bool allowed = false;
 
-						if(aft.Length > 0 && aft[0] == "*") allowed = true;
+						if(aft.Length > 0 && aft[0] == "*")
+						{
+							allowed = true;
+						}
 						else {
 							string ext = Path.GetExtension(fileUpload.FileName);
-							if(ext == null) ext = "";
-							if(ext.StartsWith(".")) ext = ext.Substring(1).ToLowerInvariant();
+							if(ext == null)
+							{
+								ext = "";
+							}
+
+							if(ext.StartsWith("."))
+							{
+								ext = ext.Substring(1).ToLowerInvariant();
+							}
+
 							foreach(string ft in aft) {
 								if(ft == ext) {
 									allowed = true;

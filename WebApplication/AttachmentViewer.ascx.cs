@@ -34,7 +34,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void rptItems_DataBinding(object sender, EventArgs e) {
-			if(pageInfo == null) return;
+			if(pageInfo == null)
+			{
+				return;
+			}
 
 			// Build a DataTable containing the proper information
 			DataTable table = new DataTable("Items");

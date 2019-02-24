@@ -19,7 +19,11 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static Host Instance {
 			get {
-				if(instance == null) throw new InvalidOperationException("Host.Instance is null");
+				if(instance == null)
+				{
+					throw new InvalidOperationException("Host.Instance is null");
+				}
+
 				return instance;
 			}
 			set { instance = value; }
@@ -90,7 +94,11 @@ namespace ScrewTurn.Wiki {
 					return Settings.AccountActivationMode.ToString();
 				case SettingName.AllowedFileTypes:
 					StringBuilder sb = new StringBuilder(50);
-					foreach(string s in Settings.AllowedFileTypes) sb.Append(s + ",");
+					foreach(string s in Settings.AllowedFileTypes)
+					{
+						sb.Append(s + ",");
+					}
+
 					return sb.ToString().TrimEnd(',');
 				case SettingName.DisableAutomaticVersionCheck:
 					return Settings.DisableAutomaticVersionCheck.ToString();
@@ -164,8 +172,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>username</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>username</b> is empty.</exception>
 		public UserInfo FindUser(string username) {
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
 
 			return Users.FindUser(username);
 		}
@@ -196,8 +211,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public UserGroup FindUserGroup(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			return Users.FindUserGroup(name);
 		}
@@ -211,9 +233,20 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
 		public bool CheckActionForGlobals(string action, UserInfo user) {
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(user == null) throw new ArgumentNullException("user");
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return AuthChecker.CheckActionForGlobals(action, user.Username, user.Groups);
 		}
@@ -228,9 +261,20 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
 		public bool CheckActionForNamespace(NamespaceInfo nspace, string action, UserInfo user) {
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(user == null) throw new ArgumentNullException("user");
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return AuthChecker.CheckActionForNamespace(nspace, action, user.Username, user.Groups);
 		}
@@ -245,10 +289,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b>, <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
 		public bool CheckActionForPage(PageInfo page, string action, UserInfo user) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(user == null) throw new ArgumentNullException("user");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return AuthChecker.CheckActionForPage(page, action, user.Username, user.Groups);
 		}
@@ -263,10 +322,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>directory</b>, <b>action</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>action</b> is empty.</exception>
 		public bool CheckActionForDirectory(StDirectoryInfo directory, string action, UserInfo user) {
-			if(directory == null) throw new ArgumentNullException("directory");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(user == null) throw new ArgumentNullException("user");
+			if(directory == null)
+			{
+				throw new ArgumentNullException("directory");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			return AuthChecker.CheckActionForDirectory(directory.Provider, directory.FullPath, action,
 				user.Username, user.Groups);
@@ -340,7 +414,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Categories.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		public CategoryInfo[] GetCategoriesPerPage(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			return Pages.GetCategoriesForPage(page);
 		}
@@ -353,8 +430,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>fullName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>fullName</b> is empty.</exception>
 		public PageInfo FindPage(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty");
+			}
 
 			return Pages.FindPage(fullName);
 		}
@@ -366,7 +450,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Page Content.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		public PageContent GetPageContent(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			return Content.GetPageContent(page, true);
 		}
@@ -378,7 +465,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The Backup/Revision numbers.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		public int[] GetBackups(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			return Pages.GetBackups(page).ToArray();
 		}
@@ -392,8 +482,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <b>revision</b> is less than zero.</exception>
 		public PageContent GetBackupContent(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(revision < 0) throw new ArgumentOutOfRangeException("revision", "Revision must be greater than or equal to zero");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(revision < 0)
+			{
+				throw new ArgumentOutOfRangeException("revision", "Revision must be greater than or equal to zero");
+			}
 
 			return Pages.GetBackupContent(page, revision);
 		}
@@ -405,10 +502,17 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The formatted content.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		public string GetFormattedContent(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			PageInfo pageInfo = Pages.FindPage(page.FullName);
-			if(pageInfo == null) return null;
+			if(pageInfo == null)
+			{
+				return null;
+			}
+
 			PageContent content = Content.GetPageContent(pageInfo, true);
 			return Formatter.Format(content.Content, false, FormattingContext.PageContent, page);
 		}
@@ -420,7 +524,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The formatted content.</returns>
 		/// <exception cref="ArgumentNullException">If <b>raw</b> is <c>null</c>.</exception>
 		public string Format(string raw) {
-			if(raw == null) throw new ArgumentNullException("raw");
+			if(raw == null)
+			{
+				throw new ArgumentNullException("raw");
+			}
 
 			return Formatter.Format(raw, false, FormattingContext.Unknown, null);
 		}
@@ -433,7 +540,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The sanitized string.</returns>
 		/// <exception cref="ArgumentNullException">If <b>content</b> is <c>null</c>.</exception>
 		public string PrepareContentForIndexing(PageInfo page, string content) {
-			if(content == null) throw new ArgumentNullException("content");
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
 
 			// TODO: Improve this method - HTML formatting should not be needed
 			return Tools.RemoveHtmlMarkup(FormattingPipeline.FormatWithPhase1And2(content, true,
@@ -448,7 +558,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The sanitized string.</returns>
 		/// <exception cref="ArgumentNullException">If <b>title</b> is <c>null</c>.</exception>
 		public string PrepareTitleForIndexing(PageInfo page, string title) {
-			if(title == null) throw new ArgumentNullException("title");
+			if(title == null)
+			{
+				throw new ArgumentNullException("title");
+			}
 
 			return FormattingPipeline.PrepareTitle(title, true,
 				page != null ? FormattingContext.PageContent : FormattingContext.Unknown, page);
@@ -465,8 +578,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>query</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>query</b> is empty.</exception>
 		public SearchResultCollection PerformSearch(string query, bool fullText, bool filesAndAttachments, SearchOptions options) {
-			if(query == null) throw new ArgumentNullException("query");
-			if(query.Length == 0) throw new ArgumentException("Query cannot be empty", "query");
+			if(query == null)
+			{
+				throw new ArgumentNullException("query");
+			}
+
+			if(query.Length == 0)
+			{
+				throw new ArgumentException("Query cannot be empty", "query");
+			}
 
 			return SearchTools.Search(query, fullText, filesAndAttachments, options);
 		}
@@ -536,7 +656,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The attachments.</returns>
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		public StFileInfo[] ListPageAttachments(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			List<StFileInfo> result = new List<StFileInfo>(10);
 			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
@@ -563,14 +686,45 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>recipient</b>, <b>sender</b>, <b>subject</b> or <b>body</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>recipient</b>, <b>sender</b>, <b>subject</b> or <b>body</b> are empty.</exception>
 		public bool SendEmail(string recipient, string sender, string subject, string body, bool html) {
-			if(recipient == null) throw new ArgumentNullException("recipient");
-			if(recipient.Length == 0) throw new ArgumentException("Recipient cannot be empty");
-			if(sender == null) throw new ArgumentNullException("sender");
-			if(sender.Length == 0) throw new ArgumentException("Sender cannot be empty");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
-			if(body == null) throw new ArgumentNullException("body");
-			if(body.Length == 0) throw new ArgumentException("Body cannot be empty", "body");
+			if(recipient == null)
+			{
+				throw new ArgumentNullException("recipient");
+			}
+
+			if(recipient.Length == 0)
+			{
+				throw new ArgumentException("Recipient cannot be empty");
+			}
+
+			if(sender == null)
+			{
+				throw new ArgumentNullException("sender");
+			}
+
+			if(sender.Length == 0)
+			{
+				throw new ArgumentException("Sender cannot be empty");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
+
+			if(body == null)
+			{
+				throw new ArgumentNullException("body");
+			}
+
+			if(body.Length == 0)
+			{
+				throw new ArgumentException("Body cannot be empty", "body");
+			}
 
 			try {
 				EmailTools.AsyncSendEmail(recipient, sender, subject, body, html);
@@ -591,9 +745,20 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>message</b> or <b>caller</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>message is empty.</b></exception>
 		public void LogEntry(string message, LogEntryType entryType, string user, object caller) {
-			if(message == null) throw new ArgumentNullException("message");
-			if(message.Length == 0) throw new ArgumentException("Message cannot be empty");
-			if(caller == null) throw new ArgumentNullException("caller");
+			if(message == null)
+			{
+				throw new ArgumentNullException("message");
+			}
+
+			if(message.Length == 0)
+			{
+				throw new ArgumentException("Message cannot be empty");
+			}
+
+			if(caller == null)
+			{
+				throw new ArgumentNullException("caller");
+			}
 
 			EntryType t = EntryType.General;
 			switch(entryType) {
@@ -609,15 +774,38 @@ namespace ScrewTurn.Wiki {
 			}
 			string name = "?";
 			if(user == null) {
-				if(caller is IUsersStorageProviderV30) name = ((IUsersStorageProviderV30)caller).Information.Name;
-				else if(caller is IPagesStorageProviderV30) name = ((IPagesStorageProviderV30)caller).Information.Name;
-				else if(caller is IFormatterProviderV30) name = ((IFormatterProviderV30)caller).Information.Name;
-				else if(caller is ISettingsStorageProviderV30) name = ((ISettingsStorageProviderV30)caller).Information.Name;
-				else if(caller is IFilesStorageProviderV30) name = ((IFilesStorageProviderV30)caller).Information.Name;
-				else if(caller is ICacheProviderV30) name = ((ICacheProviderV30)caller).Information.Name;
+				if(caller is IUsersStorageProviderV30)
+				{
+					name = ((IUsersStorageProviderV30)caller).Information.Name;
+				}
+				else if(caller is IPagesStorageProviderV30)
+				{
+					name = ((IPagesStorageProviderV30)caller).Information.Name;
+				}
+				else if(caller is IFormatterProviderV30)
+				{
+					name = ((IFormatterProviderV30)caller).Information.Name;
+				}
+				else if(caller is ISettingsStorageProviderV30)
+				{
+					name = ((ISettingsStorageProviderV30)caller).Information.Name;
+				}
+				else if(caller is IFilesStorageProviderV30)
+				{
+					name = ((IFilesStorageProviderV30)caller).Information.Name;
+				}
+				else if(caller is ICacheProviderV30)
+				{
+					name = ((ICacheProviderV30)caller).Information.Name;
+				}
+
 				name += "+" + Log.SystemUsername;
 			}
-			else name = user;
+			else
+			{
+				name = user;
+			}
+
 			Log.LogEntry(message, t, name);
 		}
 
@@ -627,8 +815,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="language">The language code.</param>
 		public void ChangeCurrentUserLanguage(string language) {
 			int timezone = Preferences.LoadTimezoneFromCookie() ?? Settings.DefaultTimezone;
-			if(SessionFacade.LoginKey == null || SessionFacade.CurrentUsername == "admin") Preferences.SavePreferencesInCookie(language, timezone);
-			else Preferences.SavePreferencesInUserData(language, timezone);
+			if(SessionFacade.LoginKey == null || SessionFacade.CurrentUsername == "admin")
+			{
+				Preferences.SavePreferencesInCookie(language, timezone);
+			}
+			else
+			{
+				Preferences.SavePreferencesInUserData(language, timezone);
+			}
 		}
 
 		/// <summary>
@@ -668,21 +862,50 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentException">If <b>text</b> or <b>value</b> are empty, or if they contain single or double quotes, 
 		/// or if <b>value</b> does not contain a pipe when <b>item</b> is <b>SpecialTagWrap</b>.</exception>
 		public void AddToolbarItem(ToolbarItem item, string text, string value) {
-			if(text == null) throw new ArgumentNullException("text");
-			if(text.Length == 0) throw new ArgumentException("Text cannot be empty", "text");
-			if(text.Contains("\"") || text.Contains("'")) throw new ArgumentException("Text cannot contain single or double quotes", "text");
-			if(value == null) throw new ArgumentNullException("value");
-			if(value.Length == 0) throw new ArgumentException("Value cannot be empty", "value");
-			if(value.Contains("\"") || value.Contains("'")) throw new ArgumentException("Value cannot contain single or double quotes", "value");
+			if(text == null)
+			{
+				throw new ArgumentNullException("text");
+			}
 
-			if(item == ToolbarItem.SpecialTagWrap && !value.Contains("|")) throw new ArgumentException("Invalid value for a SpecialTagWrap (pipe not found)", "value");
+			if(text.Length == 0)
+			{
+				throw new ArgumentException("Text cannot be empty", "text");
+			}
+
+			if(text.Contains("\"") || text.Contains("'"))
+			{
+				throw new ArgumentException("Text cannot contain single or double quotes", "text");
+			}
+
+			if(value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+
+			if(value.Length == 0)
+			{
+				throw new ArgumentException("Value cannot be empty", "value");
+			}
+
+			if(value.Contains("\"") || value.Contains("'"))
+			{
+				throw new ArgumentException("Value cannot contain single or double quotes", "value");
+			}
+
+			if(item == ToolbarItem.SpecialTagWrap && !value.Contains("|"))
+			{
+				throw new ArgumentException("Invalid value for a SpecialTagWrap (pipe not found)", "value");
+			}
 
 			lock(customSpecialTags) {
 				if(customSpecialTags.ContainsKey(text)) {
 					customSpecialTags[text].Value = value;
 					customSpecialTags[text].Item = item;
 				}
-				else customSpecialTags.Add(text, new CustomToolbarItem(item, text, value));
+				else
+				{
+					customSpecialTags.Add(text, new CustomToolbarItem(item, text, value));
+				}
 			}
 		}
 
@@ -716,8 +939,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public IPagesStorageProviderV30[] GetPagesStorageProviders(bool enabled) {
-			if(enabled) return Collectors.PagesProviderCollector.AllProviders;
-			else return Collectors.DisabledPagesProviderCollector.AllProviders;
+			if(enabled)
+			{
+				return Collectors.PagesProviderCollector.AllProviders;
+			}
+			else
+			{
+				return Collectors.DisabledPagesProviderCollector.AllProviders;
+			}
 		}
 
 		/// <summary>
@@ -726,8 +955,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public IUsersStorageProviderV30[] GetUsersStorageProviders(bool enabled) {
-			if(enabled) return Collectors.UsersProviderCollector.AllProviders;
-			else return Collectors.DisabledUsersProviderCollector.AllProviders;
+			if(enabled)
+			{
+				return Collectors.UsersProviderCollector.AllProviders;
+			}
+			else
+			{
+				return Collectors.DisabledUsersProviderCollector.AllProviders;
+			}
 		}
 
 		/// <summary>
@@ -736,8 +971,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public IFilesStorageProviderV30[] GetFilesStorageProviders(bool enabled) {
-			if(enabled) return Collectors.FilesProviderCollector.AllProviders;
-			else return Collectors.DisabledFilesProviderCollector.AllProviders;
+			if(enabled)
+			{
+				return Collectors.FilesProviderCollector.AllProviders;
+			}
+			else
+			{
+				return Collectors.DisabledFilesProviderCollector.AllProviders;
+			}
 		}
 
 		/// <summary>
@@ -746,8 +987,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public ICacheProviderV30[] GetCacheProviders(bool enabled) {
-			if(enabled) return Collectors.CacheProviderCollector.AllProviders;
-			else return Collectors.DisabledCacheProviderCollector.AllProviders;
+			if(enabled)
+			{
+				return Collectors.CacheProviderCollector.AllProviders;
+			}
+			else
+			{
+				return Collectors.DisabledCacheProviderCollector.AllProviders;
+			}
 		}
 
 		/// <summary>
@@ -756,8 +1003,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="enabled"><c>true</c> to get enabled providers, <c>false</c> to get disabled providers.</param>
 		/// <returns>The providers.</returns>
 		public IFormatterProviderV30[] GetFormatterProviders(bool enabled) {
-			if(enabled) return Collectors.FormatterProviderCollector.AllProviders;
-			else return Collectors.DisabledFormatterProviderCollector.AllProviders;
+			if(enabled)
+			{
+				return Collectors.FormatterProviderCollector.AllProviders;
+			}
+			else
+			{
+				return Collectors.DisabledFormatterProviderCollector.AllProviders;
+			}
 		}
 
 		/// <summary>
@@ -776,13 +1029,23 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>providerTypeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>providerTypeName</b> is empty.</exception>
 		public string GetProviderConfiguration(string providerTypeName) {
-			if(providerTypeName == null) throw new ArgumentNullException("providerTypeName");
-			if(providerTypeName.Length == 0) throw new ArgumentException("Provider Type Name cannot be empty", "providerTypeName");
+			if(providerTypeName == null)
+			{
+				throw new ArgumentNullException("providerTypeName");
+			}
+
+			if(providerTypeName.Length == 0)
+			{
+				throw new ArgumentException("Provider Type Name cannot be empty", "providerTypeName");
+			}
 
 			if(providerTypeName == Settings.Provider.GetType().FullName) {
 				return StartupTools.GetSettingsStorageProviderConfiguration();
 			}
-			else return ProviderLoader.LoadConfiguration(providerTypeName);
+			else
+			{
+				return ProviderLoader.LoadConfiguration(providerTypeName);
+			}
 		}
 
 		/// <summary>
@@ -793,9 +1056,15 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the configuration is set, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>provider</b> is <c>null</c>.</exception>
 		public bool SetProviderConfiguration(IProviderV30 provider, string configuration) {
-			if(provider == null) throw new ArgumentNullException("provider");
+			if(provider == null)
+			{
+				throw new ArgumentNullException("provider");
+			}
 
-			if(configuration == null) configuration = "";
+			if(configuration == null)
+			{
+				configuration = "";
+			}
 
 			ProviderLoader.SaveConfiguration(provider.GetType().FullName, configuration);
 
@@ -811,7 +1080,10 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <b>oldStatus</b> is invalid.</exception>
 		public bool UpgradePageStatusToAcl(PageInfo page, char oldStatus) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			switch(oldStatus) {
 				case 'L':
@@ -835,8 +1107,15 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the operation succeeded, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>administrators</b> or <b>users</b> are <c>null</c>.</exception>
 		public bool UpgradeSecurityFlagsToGroupsAcl(UserGroup administrators, UserGroup users) {
-			if(administrators == null) throw new ArgumentNullException("administrators");
-			if(users == null) throw new ArgumentNullException("users");
+			if(administrators == null)
+			{
+				throw new ArgumentNullException("administrators");
+			}
+
+			if(users == null)
+			{
+				throw new ArgumentNullException("users");
+			}
 
 			bool done = true;
 			done &= StartupTools.SetAdministratorsGroupDefaultPermissions(administrators);

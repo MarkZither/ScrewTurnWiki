@@ -76,8 +76,14 @@ namespace ScrewTurn.Wiki {
 				SaveStatus(instance.GetType().FullName, false);
 				throw; // Exception is rethrown because it's not a normal condition
 			}
-			if(enabled) collectorEnabled.AddProvider(instance);
-			else collectorDisabled.AddProvider(instance);
+			if(enabled)
+			{
+				collectorEnabled.AddProvider(instance);
+			}
+			else
+			{
+				collectorDisabled.AddProvider(instance);
+			}
 
 			// Verify constraints
 			VerifyConstraints<T>(instance);
@@ -114,11 +120,30 @@ namespace ScrewTurn.Wiki {
 				IFormatterProviderV30[] f;
 				ICacheProviderV30[] c;
 				LoadFrom(pluginAssemblies[i], out u, out p, out d, out f, out c);
-				if(loadFiles) files.AddRange(d);
-				if(loadUsers) users.AddRange(u);
-				if(loadPages) pages.AddRange(p);
-				if(loadFormatters) forms.AddRange(f);
-				if(loadCache) cache.AddRange(c);
+				if(loadFiles)
+				{
+					files.AddRange(d);
+				}
+
+				if(loadUsers)
+				{
+					users.AddRange(u);
+				}
+
+				if(loadPages)
+				{
+					pages.AddRange(p);
+				}
+
+				if(loadFormatters)
+				{
+					forms.AddRange(f);
+				}
+
+				if(loadCache)
+				{
+					cache.AddRange(c);
+				}
 			}
 
 			// Init and add to the Collectors, starting from files providers
@@ -277,7 +302,10 @@ namespace ScrewTurn.Wiki {
 			Type[] interfaces;
 			for(int i = 0; i < types.Length; i++) {
 				// Avoid to load abstract classes as they cannot be instantiated
-				if(types[i].IsAbstract) continue;
+				if(types[i].IsAbstract)
+				{
+					continue;
+				}
 
 				interfaces = types[i].GetInterfaces();
 				foreach(Type iface in interfaces) {
@@ -388,7 +416,10 @@ namespace ScrewTurn.Wiki {
 						Assembly asm;
 						Type t;
 						string assemblyName = fields[1];
-						if(!assemblyName.ToLowerInvariant().EndsWith(".dll")) assemblyName += ".dll";
+						if(!assemblyName.ToLowerInvariant().EndsWith(".dll"))
+						{
+							assemblyName += ".dll";
+						}
 
 						if(File.Exists(assemblyName)) {
 							asm = Assembly.Load(LoadAssemblyFromDisk(assemblyName));
@@ -425,8 +456,14 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			if(result == null) throw new ArgumentException("Could not load the specified Settings Storage Provider", inner);
-			else return result;
+			if(result == null)
+			{
+				throw new ArgumentException("Could not load the specified Settings Storage Provider", inner);
+			}
+			else
+			{
+				return result;
+			}
 		}
 
 		/// <summary>
@@ -456,7 +493,10 @@ namespace ScrewTurn.Wiki {
 
 				foreach(Type type in types) {
 					// Avoid to load abstract classes as they cannot be instantiated
-					if(type.IsAbstract) continue;
+					if(type.IsAbstract)
+					{
+						continue;
+					}
 
 					Type[] interfaces = type.GetInterfaces();
 
@@ -464,7 +504,10 @@ namespace ScrewTurn.Wiki {
 						if(iface == typeof(ISettingsStorageProviderV30)) {
 							try {
 								ISettingsStorageProviderV30 temp = asm.CreateInstance(type.ToString()) as ISettingsStorageProviderV30;
-								if(temp != null) result.Add(temp);
+								if(temp != null)
+								{
+									result.Add(temp);
+								}
 							}
 							catch { }
 						}

@@ -46,25 +46,64 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 			AssertAclEntriesAreEqual(new AclEntry("Res", "Action", "U.User", Value.Grant), allEntries[1]);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void StoreEntry_InvalidResource(string s) {
-			AclManagerBase manager = MockAclManager();
-			manager.StoreEntry(s, "Action", "U.User", Value.Grant);
+		[TestCase(null)]
+		public void StoreEntry_InvalidResource_ShouldThrowArgumentNullException(string s)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.StoreEntry(s, "Action", "U.User", Value.Grant);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void StoreEntry_InvalidAction(string a) {
-			AclManagerBase manager = MockAclManager();
-			manager.StoreEntry("Res", a, "U.User", Value.Grant);
+		[TestCase("")]
+		public void StoreEntry_InvalidResource_ShouldThrowArgumentException(string s)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.StoreEntry(s, "Action", "U.User", Value.Grant);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void StoreEntry_InvalidSubject(string s) {
-			AclManagerBase manager = MockAclManager();
-			manager.StoreEntry("Res", "Action", s, Value.Grant);
+		[TestCase(null)]
+		public void StoreEntry_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.StoreEntry("Res", a, "U.User", Value.Grant);
+			});
+		}
+
+		[TestCase("")]
+		public void StoreEntry_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.StoreEntry("Res", a, "U.User", Value.Grant);
+			});
+		}
+
+		[TestCase(null)]
+		public void StoreEntry_InvalidSubject_ShouldThrowArgumentNullException(string s)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.StoreEntry("Res", "Action", s, Value.Grant);
+			});
+		}
+
+		[TestCase("")]
+		public void StoreEntry_InvalidSubject_ShouldThrowArgumentException(string s)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.StoreEntry("Res", "Action", s, Value.Grant);
+			});
 		}
 
 		[Test]
@@ -113,25 +152,64 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 			AssertAclEntriesAreEqual(new AclEntry("Res", "Action", "U.User", Value.Grant), allEntries[0]);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void DeleteEntry_InvalidResource(string r) {
-			AclManagerBase manager = MockAclManager();
-			manager.DeleteEntry(r, "Action", "U.User");
+		[TestCase(null)]
+		public void DeleteEntry_InvalidResource_ShouldThrowArgumentNullException(string r)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntry(r, "Action", "U.User");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void DeleteEntry_InvalidAction(string a) {
-			AclManagerBase manager = MockAclManager();
-			manager.DeleteEntry("Res", a, "U.User");
+		[TestCase("")]
+		public void DeleteEntry_InvalidResource_ShouldThrowArgumentException(string r)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntry(r, "Action", "U.User");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void DeleteEntry_InvalidSubject(string s) {
-			AclManagerBase manager = MockAclManager();
-			manager.DeleteEntry("Res", "Action", s);
+		[TestCase(null)]
+		public void DeleteEntry_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntry("Res", a, "U.User");
+			});
+		}
+
+		[TestCase("")]
+		public void DeleteEntry_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntry("Res", a, "U.User");
+			});
+		}
+
+		[TestCase(null)]
+		public void DeleteEntry_InvalidSubject_ShouldThrowArgumentNullException(string s)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntry("Res", "Action", s);
+			});
+		}
+
+		[TestCase("")]
+		public void DeleteEntry_InvalidSubject_ShouldThrowArgumentException(string s)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntry("Res", "Action", s);
+			});
 		}
 
 		[Test]
@@ -162,11 +240,24 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 			AssertAclEntriesAreEqual(new AclEntry("Res", "Action", "U.User", Value.Grant), allEntries[1]);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void DeleteEntriesForResource_InvalidResource(string r) {
-			AclManagerBase manager = MockAclManager();
-			manager.DeleteEntriesForResource(r);
+		[TestCase(null)]
+		public void DeleteEntriesForResource_InvalidResource_ShouldThrowArgumentNullException(string r)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntriesForResource(r);
+			});
+		}
+
+		[TestCase("")]
+		public void DeleteEntriesForResource_InvalidResource_ShouldThrowArgumentException(string r)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntriesForResource(r);
+			});
 		}
 
 		[Test]
@@ -197,11 +288,24 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 			AssertAclEntriesAreEqual(new AclEntry("Res", "Action", "U.User", Value.Grant), allEntries[1]);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void DeleteEntriesForSubject_InvalidSubject(string s) {
-			AclManagerBase manager = MockAclManager();
-			manager.DeleteEntriesForSubject(s);
+		[TestCase(null)]
+		public void DeleteEntriesForSubject_InvalidSubject_ShouldThrowArgumentNullException(string s)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntriesForSubject(s);
+			});
+		}
+
+		[TestCase("")]
+		public void DeleteEntriesForSubject_InvalidSubject_ShouldThrowArgumentException(string s)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.DeleteEntriesForSubject(s);
+			});
 		}
 
 		[Test]
@@ -224,11 +328,24 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 			AssertAclEntriesAreEqual(new AclEntry("Res", "Action", "U.User", Value.Grant), allEntries[1]);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RetrieveEntriesForResource_InvalidResource(string r) {
-			AclManagerBase manager = MockAclManager();
-			manager.RetrieveEntriesForResource(r);
+		[TestCase(null)]
+		public void RetrieveEntriesForResource_InvalidResource_ShouldThrowArgumentNullException(string r)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.RetrieveEntriesForResource(r);
+			});
+		}
+
+		[TestCase("")]
+		public void RetrieveEntriesForResource_InvalidResource_ShouldThrowArgumentException(string r)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.RetrieveEntriesForResource(r);
+			});
 		}
 
 		[Test]
@@ -251,11 +368,24 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 			AssertAclEntriesAreEqual(new AclEntry("Res2", "Action3", "G.Group2", Value.Deny), allEntries[1]);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RetrieveEntriesForSubject_InvalidSubject(string s) {
-			AclManagerBase manager = MockAclManager();
-			manager.RetrieveEntriesForSubject(s);
+		[TestCase(null)]
+		public void RetrieveEntriesForSubject_InvalidSubject_ShouldThrowArgumentNullException(string s)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.RetrieveEntriesForSubject(s);
+			});
+		}
+
+		[TestCase("")]
+		public void RetrieveEntriesForSubject_InvalidSubject_ShouldThrowArgumentException(string s)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.RetrieveEntriesForSubject(s);
+			});
 		}
 
 		[Test]
@@ -280,10 +410,13 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void InitializeData_NullData() {
-			AclManagerBase manager = MockAclManager();
-			manager.InitializeData(null);
+		public void InitializeData_NullData()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+				manager.InitializeData(null);
+			});
 		}
 
 		[Test]
@@ -427,15 +560,29 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 					Assert.AreEqual(1, e.Entries.Length, "Wrong entry count");
 					Assert.AreEqual("Res", e.Entries[0].Resource, "Wrong resource");
 
-					if(e.Entries[0].Action == entry1.Action) invokedDelete1 = true;
-					if(e.Entries[0].Action == entry2.Action) invokedDelete2 = true;
+					if(e.Entries[0].Action == entry1.Action)
+					{
+						invokedDelete1 = true;
+					}
+
+					if(e.Entries[0].Action == entry2.Action)
+					{
+						invokedDelete2 = true;
+					}
 				}
 				else {
 					Assert.AreEqual(1, e.Entries.Length, "Wrong entry count");
 					Assert.AreEqual("Res_Renamed", e.Entries[0].Resource, "Wrong resource");
 
-					if(e.Entries[0].Action == entry1.Action) invokedStore1 = true;
-					if(e.Entries[0].Action == entry2.Action) invokedStore2 = true;
+					if(e.Entries[0].Action == entry1.Action)
+					{
+						invokedStore1 = true;
+					}
+
+					if(e.Entries[0].Action == entry2.Action)
+					{
+						invokedStore2 = true;
+					}
 				}
 			};
 
@@ -477,20 +624,48 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 			Assert.AreEqual(Value.Deny, entries[2].Value, "Wrong value");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RenameResource_InvalidResource(string r) {
-			AclManagerBase manager = MockAclManager();
+		[TestCase(null)]
+		public void RenameResource_InvalidResource_ShouldThrowArgumentNullException(string r)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
 
-			manager.RenameResource(r, "new_name");
+				manager.RenameResource(r, "new_name");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RenameResource_InvalidNewName(string n) {
-			AclManagerBase manager = MockAclManager();
+		[TestCase("")]
+		public void RenameResource_InvalidResource_ShouldThrowArgumentException(string r)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
 
-			manager.RenameResource("res", n);
+				manager.RenameResource(r, "new_name");
+			});
+		}
+
+		[TestCase(null)]
+		public void RenameResource_InvalidNewName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+
+				manager.RenameResource("res", n);
+			});
+		}
+
+		[TestCase("")]
+		public void RenameResource_InvalidNewName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclManagerBase manager = MockAclManager();
+
+				manager.RenameResource("res", n);
+			});
 		}
 
 	}

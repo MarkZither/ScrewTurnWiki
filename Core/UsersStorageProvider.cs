@@ -36,8 +36,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
 		public void Init(IHostV30 host, string config) {
-			if(host == null) throw new ArgumentNullException("host");
-			if(config == null) throw new ArgumentNullException("config");
+			if(host == null)
+			{
+				throw new ArgumentNullException("host");
+			}
+
+			if(config == null)
+			{
+				throw new ArgumentNullException("config");
+			}
 
 			this.host = host;
 
@@ -197,8 +204,15 @@ namespace ScrewTurn.Wiki {
 		/// <returns>True if the Password is correct.</returns>
 		/// <exception cref="ArgumentNullException">If <b>user</b> or <b>password</b> are <c>null</c>.</exception>
 		public bool TestAccount(UserInfo user, string password) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(password == null) throw new ArgumentNullException("password");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(password == null)
+			{
+				throw new ArgumentNullException("password");
+			}
 
 			return TryManualLogin(user.Username, password) != null;
 		}
@@ -270,7 +284,10 @@ namespace ScrewTurn.Wiki {
 			UserInfo[] users = GetUsers();
 			UsernameComparer comp = new UsernameComparer();
 			for(int i = 0; i < users.Length; i++) {
-				if(comp.Compare(users[i], user) == 0) return users[i] as LocalUserInfo;
+				if(comp.Compare(users[i], user) == 0)
+				{
+					return users[i] as LocalUserInfo;
+				}
 			}
 			return null;
 		}
@@ -284,7 +301,10 @@ namespace ScrewTurn.Wiki {
 			UserInfo[] users = GetUsers();
 			UsernameComparer comp = new UsernameComparer();
 			for(int i = 0; i < users.Length; i++) {
-				if(comp.Compare(users[i], user) == 0) return true;
+				if(comp.Compare(users[i], user) == 0)
+				{
+					return true;
+				}
 			}
 			return false;
 		}
@@ -302,15 +322,41 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>username</b>, <b>password</b> or <b>email</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>username</b>, <b>password</b> or <b>email</b> are empty.</exception>
 		public UserInfo AddUser(string username, string displayName, string password, string email, bool active, DateTime dateTime) {
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
-			if(password == null) throw new ArgumentNullException("password");
-			if(password.Length == 0) throw new ArgumentException("Password cannot be empty", "password");
-			if(email == null) throw new ArgumentNullException("email");
-			if(email.Length == 0) throw new ArgumentException("Email cannot be empty", "email");
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
+
+			if(password == null)
+			{
+				throw new ArgumentNullException("password");
+			}
+
+			if(password.Length == 0)
+			{
+				throw new ArgumentException("Password cannot be empty", "password");
+			}
+
+			if(email == null)
+			{
+				throw new ArgumentNullException("email");
+			}
+
+			if(email.Length == 0)
+			{
+				throw new ArgumentException("Email cannot be empty", "email");
+			}
 
 			lock(this) {
-				if(UserExists(new UserInfo(username, displayName, "", true, DateTime.Now, this))) return null;
+				if(UserExists(new UserInfo(username, displayName, "", true, DateTime.Now, this)))
+				{
+					return null;
+				}
 
 				BackupUsersFile();
 
@@ -352,13 +398,27 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>user</b> or <b>newEmail</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>newEmail</b> is empty.</exception>
 		public UserInfo ModifyUser(UserInfo user, string newDisplayName, string newPassword, string newEmail, bool newActive) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(newEmail == null) throw new ArgumentNullException("newEmail");
-			if(newEmail.Length == 0) throw new ArgumentException("New Email cannot be empty", "newEmail");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(newEmail == null)
+			{
+				throw new ArgumentNullException("newEmail");
+			}
+
+			if(newEmail.Length == 0)
+			{
+				throw new ArgumentException("New Email cannot be empty", "newEmail");
+			}
 
 			lock(this) {
 				LocalUserInfo local = LoadLocalInstance(user);
-				if(local == null) return null;
+				if(local == null)
+				{
+					return null;
+				}
 
 				UserInfo[] allUsers = GetUsers();
 				UsernameComparer comp = new UsernameComparer();
@@ -388,7 +448,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>True if the User has been removed successfully.</returns>
 		/// <exception cref="ArgumentNullException">If <b>user</b> is <c>null</c>.</exception>
 		public bool RemoveUser(UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			lock(this) {
 				UserInfo[] users = GetUsers();
@@ -400,7 +463,10 @@ namespace ScrewTurn.Wiki {
 						break;
 					}
 				}
-				if(idx < 0) return false;
+				if(idx < 0)
+				{
+					return false;
+				}
 
 				// Remove user's data
 				string lowercaseUsername = user.Username.ToLowerInvariant();
@@ -479,7 +545,10 @@ namespace ScrewTurn.Wiki {
 				UserGroup target = new UserGroup(name, "", this);
 
 				foreach(UserGroup g in allUsers) {
-					if(comp.Compare(g, target) == 0) return g;
+					if(comp.Compare(g, target) == 0)
+					{
+						return g;
+					}
 				}
 
 				return null;
@@ -533,12 +602,26 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>name</b> or <b>description</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public UserGroup AddUserGroup(string name, string description) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(description == null) throw new ArgumentNullException("description");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(description == null)
+			{
+				throw new ArgumentNullException("description");
+			}
 
 			lock(this) {
-				if(FindGroup(name) != null) return null;
+				if(FindGroup(name) != null)
+				{
+					return null;
+				}
 
 				BackupGroupsFile();
 
@@ -597,8 +680,15 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The correct <see cref="T:UserGroup"/> object or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>group</b> or <b>description</b> are <c>null</c>.</exception>
 		public UserGroup ModifyUserGroup(UserGroup group, string description) {
-			if(group == null) throw new ArgumentNullException("group");
-			if(description == null) throw new ArgumentNullException("description");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
+
+			if(description == null)
+			{
+				throw new ArgumentNullException("description");
+			}
 
 			lock(this) {
 				UserGroup[] allGroups = GetUserGroups();
@@ -625,7 +715,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the group is removed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>group</b> is <c>null</c>.</exception>
 		public bool RemoveUserGroup(UserGroup group) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			lock(this) {
 				UserGroup[] allGroups = GetUserGroups();
@@ -657,16 +750,29 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The correct <see cref="T:UserGroup"/> object or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>user</b> or <b>groups</b> are <c>null</c>.</exception>
 		public UserInfo SetUserMembership(UserInfo user, string[] groups) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(groups == null) throw new ArgumentNullException("groups");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(groups == null)
+			{
+				throw new ArgumentNullException("groups");
+			}
 
 			lock(this) {
 				foreach(string g in groups) {
-					if(FindGroup(g) == null) return null;
+					if(FindGroup(g) == null)
+					{
+						return null;
+					}
 				}
 
 				LocalUserInfo local = LoadLocalInstance(user);
-				if(local == null) return null;
+				if(local == null)
+				{
+					return null;
+				}
 
 				UserGroup[] allGroups = GetUserGroups();
 
@@ -677,7 +783,10 @@ namespace ScrewTurn.Wiki {
 
 					if(IsSelected(allGroups[i], groups)) {
 						// Current group is one of the selected, add user to it
-						if(!users.Contains(user.Username)) users.Add(user.Username);
+						if(!users.Contains(user.Username))
+						{
+							users.Add(user.Username);
+						}
 					}
 					else {
 						// Current group is not bound with the user, remove user
@@ -719,12 +828,26 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The correct UserInfo object, or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>username</b> or <b>password</b> are <c>null</c>.</exception>
 		public UserInfo TryManualLogin(string username, string password) {
-			if(username == null) throw new ArgumentNullException("username");
-			if(password == null) throw new ArgumentNullException("password");
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(password == null)
+			{
+				throw new ArgumentNullException("password");
+			}
 
 			// Shortcut
-			if(username.Length == 0) return null;
-			if(password.Length == 0) return null;
+			if(username.Length == 0)
+			{
+				return null;
+			}
+
+			if(password.Length == 0)
+			{
+				return null;
+			}
 
 			lock(this) {
 				string hash = Hash.Compute(password);
@@ -750,7 +873,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The correct UserInfo object, or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>context</b> is <c>null</c>.</exception>
 		public UserInfo TryAutoLogin(System.Web.HttpContext context) {
-			if(context == null) throw new ArgumentNullException("context");
+			if(context == null)
+			{
+				throw new ArgumentNullException("context");
+			}
 
 			return null;
 		}
@@ -763,8 +889,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>username</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>username</b> is empty.</exception>
 		public UserInfo GetUser(string username) {
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
 
 			lock(this) {
 				UserInfo[] all = GetUsers();
@@ -785,12 +918,22 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>email</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>email</b> is empty.</exception>
 		public UserInfo GetUserByEmail(string email) {
-			if(email == null) throw new ArgumentNullException("email");
-			if(email.Length == 0) throw new ArgumentException("Email cannot be empty", "email");
+			if(email == null)
+			{
+				throw new ArgumentNullException("email");
+			}
+
+			if(email.Length == 0)
+			{
+				throw new ArgumentException("Email cannot be empty", "email");
+			}
 
 			lock(this) {
 				foreach(UserInfo user in GetUsers()) {
-					if(user.Email == email) return user;
+					if(user.Email == email)
+					{
+						return user;
+					}
 				}
 			}
 			return null;
@@ -802,7 +945,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user who has logged in.</param>
 		/// <exception cref="ArgumentNullException">If <b>user</b> is <c>null</c>.</exception>
 		public void NotifyCookieLogin(UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 			// Nothing to do
 		}
 
@@ -812,7 +958,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="user">The user who has logged out.</param>
 		/// <exception cref="ArgumentNullException">If <b>user</b> is <c>null</c>.</exception>
 		public void NotifyLogout(UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 			// Nothing to do
 		}
 
@@ -826,15 +975,29 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>user</b> or <b>key</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>key</b> is empty.</exception>
 		public bool StoreUserData(UserInfo user, string key, string value) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(key == null) throw new ArgumentNullException("key");
-			if(key.Length == 0) throw new ArgumentException("Key cannot be empty", "key");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
+
+			if(key.Length == 0)
+			{
+				throw new ArgumentException("Key cannot be empty", "key");
+			}
 
 			// Format
 			// User|Key|Value
 
 			lock(this) {
-				if(GetUser(user.Username) == null) return false;
+				if(GetUser(user.Username) == null)
+				{
+					return false;
+				}
 
 				// Find a previously existing key and replace it if found
 				// If not found, add a new line
@@ -880,9 +1043,20 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>user</b> or <b>key</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>key</b> is empty.</exception>
 		public string RetrieveUserData(UserInfo user, string key) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(key == null) throw new ArgumentNullException("key");
-			if(key.Length == 0) throw new ArgumentException("Key cannot be empty", "key");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
+
+			if(key.Length == 0)
+			{
+				throw new ArgumentException("Key cannot be empty", "key");
+			}
 
 			lock(this) {
 				string lowercaseUsername = user.Username.ToLowerInvariant();
@@ -910,7 +1084,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The user data elements (key-&gt;value).</returns>
 		/// <exception cref="ArgumentNullException">If <b>user</b> is <c>null</c>.</exception>
 		public IDictionary<string, string> RetrieveAllUserData(UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			lock(this) {
 				string lowercaseUsername = user.Username.ToLowerInvariant();
@@ -940,8 +1117,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>key</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>key</b> is empty.</exception>
 		public IDictionary<UserInfo, string> GetUsersWithData(string key) {
-			if(key == null) throw new ArgumentNullException("key");
-			if(key.Length == 0) throw new ArgumentException("Key cannot be empty", "key");
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
+
+			if(key.Length == 0)
+			{
+				throw new ArgumentException("Key cannot be empty", "key");
+			}
 
 			lock(this) {
 				UserInfo[] allUsers = GetUsers();
@@ -958,7 +1142,10 @@ namespace ScrewTurn.Wiki {
 						UserInfo currentUser = Array.Find(allUsers, delegate(UserInfo user) {
 							return user.Username == fields[0];
 						});
-						if(currentUser != null) result.Add(currentUser, fields[2]);
+						if(currentUser != null)
+						{
+							result.Add(currentUser, fields[2]);
+						}
 					}
 				}
 

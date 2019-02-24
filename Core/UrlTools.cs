@@ -33,20 +33,32 @@ namespace ScrewTurn.Wiki {
 			// Exctract the extension, e.g. .ashx or .aspx
 			string ext = Path.GetExtension(HttpContext.Current.Request.PhysicalPath).ToLowerInvariant();
 			// Remove trailing dot, .ashx -> ashx
-			if(ext.Length > 0) ext = ext.Substring(1);
+			if(ext.Length > 0)
+			{
+				ext = ext.Substring(1);
+			}
 
 			// IIS7+Integrated Pipeline handles all requests through the ASP.NET engine
 			// All non-interesting files are not processed, such as GIF, CSS, etc.
-			if(ext != "ashx" && ext != "aspx") return;
+			if(ext != "ashx" && ext != "aspx")
+			{
+				return;
+			}
 
 			// Extract the current namespace, if any
 			string nspace = GetCurrentNamespace() + "";
 			if(!string.IsNullOrEmpty(nspace)) {
 				// Verify that namespace exists
-				if(Pages.FindNamespace(nspace) == null) HttpContext.Current.Response.Redirect("~/PageNotFound.aspx?Page=" + pageName);
+				if(Pages.FindNamespace(nspace) == null)
+				{
+					HttpContext.Current.Response.Redirect("~/PageNotFound.aspx?Page=" + pageName);
+				}
 			}
 			// Trim Namespace. from pageName
-			if(!string.IsNullOrEmpty(nspace)) pageName = pageName.Substring(nspace.Length + 1);
+			if(!string.IsNullOrEmpty(nspace))
+			{
+				pageName = pageName.Substring(nspace.Length + 1);
+			}
 
 			string queryString = ""; // Empty or begins with ampersand, not question mark
 			try {
@@ -72,7 +84,11 @@ namespace ScrewTurn.Wiki {
 						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + "?NS=" + Tools.UrlEncode(nspace) + queryString);
 					}
 					else {
-						if(queryString.Length > 1) queryString = "?" + queryString.Substring(1);
+						if(queryString.Length > 1)
+						{
+							queryString = "?" + queryString.Substring(1);
+						}
+
 						HttpContext.Current.RewritePath("~/" + Tools.UrlEncode(pageName) + "." + ext + queryString);
 					}
 				}
@@ -90,9 +106,19 @@ namespace ScrewTurn.Wiki {
 			// Use dot to split the filename
 			string[] fields = filename.Split('.');
 
-			if(fields.Length != 1 && fields.Length != 2) return null; // Unrecognized format
-			if(fields.Length == 1) return ""; // Just page name
-			else return fields[0]; // Namespace.Page
+			if(fields.Length != 1 && fields.Length != 2)
+			{
+				return null; // Unrecognized format
+			}
+
+			if(fields.Length == 1)
+			{
+				return ""; // Just page name
+			}
+			else
+			{
+				return fields[0]; // Namespace.Page
+			}
 		}
 
 		/// <summary>
@@ -110,8 +136,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="addNamespace">A value indicating whether to add the namespace.</param>
 		public static void Redirect(string target, bool addNamespace) {
 			string nspace = HttpContext.Current.Request["NS"];
-			if(nspace == null || nspace.Length == 0 || !addNamespace) HttpContext.Current.Response.Redirect(target);
-			else HttpContext.Current.Response.Redirect(target + (target.Contains("?") ? "&" : "?") + "NS=" + Tools.UrlEncode(nspace));
+			if(nspace == null || nspace.Length == 0 || !addNamespace)
+			{
+				HttpContext.Current.Response.Redirect(target);
+			}
+			else
+			{
+				HttpContext.Current.Response.Redirect(target + (target.Contains("?") ? "&" : "?") + "NS=" + Tools.UrlEncode(nspace));
+			}
 		}
 
 		/// <summary>
@@ -120,8 +152,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="chunks">The chunks used to build the URL.</param>
 		/// <returns>The complete URL.</returns>
 		public static string BuildUrl(params string[] chunks) {
-			if(chunks == null) throw new ArgumentNullException("chunks");
-			if(chunks.Length == 0) return ""; // Shortcut
+			if(chunks == null)
+			{
+				throw new ArgumentNullException("chunks");
+			}
+
+			if(chunks.Length == 0)
+			{
+				return ""; // Shortcut
+			}
 
 			StringBuilder temp = new StringBuilder(chunks.Length * 10);
 			foreach(string chunk in chunks) {
@@ -130,7 +169,10 @@ namespace ScrewTurn.Wiki {
 
 			string tempString = temp.ToString();
 
-			if(tempString.StartsWith("++")) return tempString.Substring(2);
+			if(tempString.StartsWith("++"))
+			{
+				return tempString.Substring(2);
+			}
 
 			string nspace = null;
 			if(HttpContext.Current != null) {
@@ -138,15 +180,31 @@ namespace ScrewTurn.Wiki {
 				// The point is that BuildUrl is called without namespace info only from the web application, so HttpContext is available in that case
 				// When the context is not available, in all cases BuildUrl is called by the formatter, that has already included namespace info in the URL
 				nspace = HttpContext.Current.Request["NS"];
-				if(string.IsNullOrEmpty(nspace)) nspace = null;
-				if(nspace == null) nspace = GetCurrentNamespace();
+				if(string.IsNullOrEmpty(nspace))
+				{
+					nspace = null;
+				}
+
+				if(nspace == null)
+				{
+					nspace = GetCurrentNamespace();
+				}
 			}
-			if(string.IsNullOrEmpty(nspace)) nspace = null;
-			else nspace = Pages.FindNamespace(nspace).Name;
+			if(string.IsNullOrEmpty(nspace))
+			{
+				nspace = null;
+			}
+			else
+			{
+				nspace = Pages.FindNamespace(nspace).Name;
+			}
 
 			if(nspace != null) {
 				string tempStringLower = tempString.ToLowerInvariant();
-				if((tempStringLower.Contains(".ashx") || tempStringLower.Contains(".aspx")) && !tempString.StartsWith(Tools.UrlEncode(nspace) + ".")) temp.Insert(0, nspace + ".");
+				if((tempStringLower.Contains(".ashx") || tempStringLower.Contains(".aspx")) && !tempString.StartsWith(Tools.UrlEncode(nspace) + "."))
+				{
+					temp.Insert(0, nspace + ".");
+				}
 			}
 
 			return temp.ToString();
@@ -158,7 +216,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="destination">The destination <see cref="T:StringBuilder"/>.</param>
 		/// <param name="chunks">The chunks to append.</param>
 		public static void BuildUrl(StringBuilder destination, params string[] chunks) {
-			if(destination == null) throw new ArgumentNullException("destination");
+			if(destination == null)
+			{
+				throw new ArgumentNullException("destination");
+			}
 
 			destination.Append(BuildUrl(chunks));
 		}

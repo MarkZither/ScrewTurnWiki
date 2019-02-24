@@ -13,7 +13,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageSnippetsAndTemplates(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageSnippetsAndTemplates(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			if(!Page.IsPostBack) {
 				// Load snippets
@@ -41,8 +44,14 @@ namespace ScrewTurn.Wiki {
 			if(e.CommandName == "Select") {
 				txtCurrentElement.Value = e.CommandArgument as string;
 
-				if(txtCurrentElement.Value.StartsWith("S.")) SelectSnippet(txtCurrentElement.Value.Substring(2));
-				else SelectTemplate(txtCurrentElement.Value.Substring(2));
+				if(txtCurrentElement.Value.StartsWith("S."))
+				{
+					SelectSnippet(txtCurrentElement.Value.Substring(2));
+				}
+				else
+				{
+					SelectTemplate(txtCurrentElement.Value.Substring(2));
+				}
 
 				providerSelector.Enabled = false;
 				txtName.Text = txtCurrentElement.Value.Substring(2);
@@ -130,12 +139,21 @@ namespace ScrewTurn.Wiki {
 			lblResult.CssClass = "";
 			lblResult.Text = "";
 
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			txtName.Text = txtName.Text.Trim();
 
-			if(txtCurrentElement.Value == "S") CreateSnippet();
-			else CreateTemplate();
+			if(txtCurrentElement.Value == "S")
+			{
+				CreateSnippet();
+			}
+			else
+			{
+				CreateTemplate();
+			}
 		}
 
 		/// <summary>
@@ -182,8 +200,14 @@ namespace ScrewTurn.Wiki {
 			lblResult.CssClass = "";
 			lblResult.Text = "";
 
-			if(txtCurrentElement.Value.StartsWith("S.")) SaveSnippet(txtCurrentElement.Value.Substring(2));
-			else SaveTemplate(txtCurrentElement.Value.Substring(2));
+			if(txtCurrentElement.Value.StartsWith("S."))
+			{
+				SaveSnippet(txtCurrentElement.Value.Substring(2));
+			}
+			else
+			{
+				SaveTemplate(txtCurrentElement.Value.Substring(2));
+			}
 		}
 
 		/// <summary>
@@ -232,8 +256,14 @@ namespace ScrewTurn.Wiki {
 			lblResult.CssClass = "";
 			lblResult.Text = "";
 
-			if(txtCurrentElement.Value.StartsWith("S.")) DeleteSnippet(txtCurrentElement.Value.Substring(2));
-			else DeleteTemplate(txtCurrentElement.Value.Substring(2));
+			if(txtCurrentElement.Value.StartsWith("S."))
+			{
+				DeleteSnippet(txtCurrentElement.Value.Substring(2));
+			}
+			else
+			{
+				DeleteTemplate(txtCurrentElement.Value.Substring(2));
+			}
 		}
 
 		/// <summary>

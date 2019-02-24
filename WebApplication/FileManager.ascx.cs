@@ -50,7 +50,10 @@ namespace ScrewTurn.Wiki {
 				string[] aft = Settings.AllowedFileTypes;
 				for(int i = 0; i < aft.Length; i++) {
 					sb.Append(aft[i].ToUpper());
-					if(i != aft.Length - 1) sb.Append(", ");
+					if(i != aft.Length - 1)
+					{
+						sb.Append(", ");
+					}
 				}
 				lblUploadFilesInfo.Text = lblUploadFilesInfo.Text.Replace("$2", sb.ToString());
 
@@ -61,8 +64,16 @@ namespace ScrewTurn.Wiki {
 				// See if a dir is specified in query string
 				if(Request["Dir"] != null) {
 					string currDir = Request["Dir"];
-					if(!currDir.StartsWith("/")) currDir = "/" + currDir;
-					if(!currDir.EndsWith("/")) currDir += "/";
+					if(!currDir.StartsWith("/"))
+					{
+						currDir = "/" + currDir;
+					}
+
+					if(!currDir.EndsWith("/"))
+					{
+						currDir += "/";
+					}
+
 					CurrentDirectory = currDir;
 				}
 			}
@@ -218,8 +229,15 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="directory">The directory.</param>
 		private void DeletePermissions(string directory) {
-			if(!directory.StartsWith("/")) directory = "/" + directory;
-			if(!directory.EndsWith("/")) directory = directory + "/";
+			if(!directory.StartsWith("/"))
+			{
+				directory = "/" + directory;
+			}
+
+			if(!directory.EndsWith("/"))
+			{
+				directory = directory + "/";
+			}
 
 			foreach(string sub in provider.ListDirectories(directory)) {
 				DeletePermissions(sub);
@@ -282,15 +300,29 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The provider.</param>
 		/// <param name="directory">The full path of the directory.</param>
 		public void TryEnterDirectory(string provider, string directory) {
-			if(string.IsNullOrEmpty(directory) || string.IsNullOrEmpty(provider)) return;
+			if(string.IsNullOrEmpty(directory) || string.IsNullOrEmpty(provider))
+			{
+				return;
+			}
 
-			if(!directory.StartsWith("/")) directory = "/" + directory;
-			if(!directory.EndsWith("/")) directory += "/";
+			if(!directory.StartsWith("/"))
+			{
+				directory = "/" + directory;
+			}
+
+			if(!directory.EndsWith("/"))
+			{
+				directory += "/";
+			}
 
 			LoadProviders();
 
 			IFilesStorageProviderV30 realProvider = Collectors.FilesProviderCollector.GetProvider(provider);
-			if(realProvider == null) return;
+			if(realProvider == null)
+			{
+				return;
+			}
+
 			this.provider = realProvider;
 
 			// Detect existence
@@ -370,8 +402,14 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private string CurrentDirectory {
 			get {
-				if(ViewState["CurrDir"] != null) return (string)ViewState["CurrDir"];
-				else return "/";
+				if(ViewState["CurrDir"] != null)
+				{
+					return (string)ViewState["CurrDir"];
+				}
+				else
+				{
+					return "/";
+				}
 			}
 			set { ViewState["CurrDir"] = value; }
 		}
@@ -444,10 +482,25 @@ namespace ScrewTurn.Wiki {
 		/// <param name="oldDirectory">The old directory name.</param>
 		/// <param name="newDirectory">The new directory name.</param>
 		private void MovePermissions(string oldDirectory, string newDirectory) {
-			if(!oldDirectory.StartsWith("/")) oldDirectory = "/" + oldDirectory;
-			if(!oldDirectory.EndsWith("/")) oldDirectory = oldDirectory + "/";
-			if(!newDirectory.StartsWith("/")) newDirectory = "/" + newDirectory;
-			if(!newDirectory.EndsWith("/")) newDirectory = newDirectory + "/";
+			if(!oldDirectory.StartsWith("/"))
+			{
+				oldDirectory = "/" + oldDirectory;
+			}
+
+			if(!oldDirectory.EndsWith("/"))
+			{
+				oldDirectory = oldDirectory + "/";
+			}
+
+			if(!newDirectory.StartsWith("/"))
+			{
+				newDirectory = "/" + newDirectory;
+			}
+
+			if(!newDirectory.EndsWith("/"))
+			{
+				newDirectory = newDirectory + "/";
+			}
 
 			foreach(string sub in provider.ListDirectories(oldDirectory)) {
 				string subNew = newDirectory + sub.Substring(oldDirectory.Length);
@@ -557,11 +610,22 @@ namespace ScrewTurn.Wiki {
 						string[] aft = Settings.AllowedFileTypes;
 						bool allowed = false;
 
-						if(aft.Length > 0 && aft[0] == "*") allowed = true;
+						if(aft.Length > 0 && aft[0] == "*")
+						{
+							allowed = true;
+						}
 						else {
 							string ext = Path.GetExtension(fileUpload.FileName);
-							if(ext == null) ext = "";
-							if(ext.StartsWith(".")) ext = ext.Substring(1).ToLowerInvariant();
+							if(ext == null)
+							{
+								ext = "";
+							}
+
+							if(ext.StartsWith("."))
+							{
+								ext = ext.Substring(1).ToLowerInvariant();
+							}
+
 							foreach(string ft in aft) {
 								if(ft == ext) {
 									allowed = true;

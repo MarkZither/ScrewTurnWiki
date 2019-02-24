@@ -20,11 +20,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetBuildDocumentDelegate_NullDelegate() {
 			IInMemoryIndex index = (IInMemoryIndex)GetIndex();
-			index.SetBuildDocumentDelegate(null);
-		}
+            Assert.That(() => index.SetBuildDocumentDelegate(null), Throws.ArgumentNullException);
+        }
 
 		[Test]
 		public void InitializeData() {
@@ -71,35 +70,31 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void InitializeData_NullDocuments() {
 			IInMemoryIndex index = (IInMemoryIndex)GetIndex();
 			index.SetBuildDocumentDelegate(delegate(DumpedDocument doc) { return null; });
-			index.InitializeData(null, new DumpedWord[0], new DumpedWordMapping[0]);
-		}
+            Assert.That(() => index.InitializeData(null, new DumpedWord[0], new DumpedWordMapping[0]), Throws.ArgumentNullException);
+        }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void InitializeData_NullWords() {
 			IInMemoryIndex index = (IInMemoryIndex)GetIndex();
 			index.SetBuildDocumentDelegate(delegate(DumpedDocument doc) { return null; });
-			index.InitializeData(new DumpedDocument[0], null, new DumpedWordMapping[0]);
-		}
+            Assert.That(() => index.InitializeData(new DumpedDocument[0], null, new DumpedWordMapping[0]), Throws.ArgumentNullException);
+        }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void InitializeData_NullMappings() {
 			IInMemoryIndex index = (IInMemoryIndex)GetIndex();
 			index.SetBuildDocumentDelegate(delegate(DumpedDocument doc) { return null; });
-			index.InitializeData(new DumpedDocument[0], new DumpedWord[0], null);
-		}
+            Assert.That(() => index.InitializeData(new DumpedDocument[0], new DumpedWord[0], null), Throws.ArgumentNullException);
+        }
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void InitializeData_NoBuildDocumentDelegate() {
 			IInMemoryIndex index = (IInMemoryIndex)GetIndex();
-			index.InitializeData(new DumpedDocument[0], new DumpedWord[0], new DumpedWordMapping[0]);
-		}
+            Assert.Throws<InvalidOperationException>(() => index.InitializeData(new DumpedDocument[0], new DumpedWord[0], new DumpedWordMapping[0]));
+        }
 
 		[Test]
 		public void InitializeData_DocumentNotAvailable() {
@@ -143,8 +138,14 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 				new DumpedWordMapping(words[11].ID, documents[1].ID, new BasicWordInfo(28, 5, WordLocation.Content)) };
 
 			index.SetBuildDocumentDelegate(delegate(DumpedDocument d) {
-				if(d.Name == "doc") return doc;
-				else return null;
+				if(d.Name == "doc")
+				{
+					return doc;
+				}
+				else
+				{
+					return null;
+				}
 			});
 
 			index.InitializeData(documents, words, mappings);

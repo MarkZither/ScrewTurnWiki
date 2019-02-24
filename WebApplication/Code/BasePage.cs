@@ -30,7 +30,10 @@ namespace ScrewTurn.Wiki {
 			base.OnLoad(e);
 
 			// Bypass compression if the current request was made by Anthem.NET
-			if(HttpContext.Current.Request["Anthem_CallBack"] != null) return;
+			if(HttpContext.Current.Request["Anthem_CallBack"] != null)
+			{
+				return;
+			}
 
 			// Request might not be initialized -> use HttpContext
 			string ua = HttpContext.Current.Request.UserAgent != null ? HttpContext.Current.Request.UserAgent.ToLowerInvariant() : "";
@@ -55,7 +58,10 @@ namespace ScrewTurn.Wiki {
 			// If they are not available, look at the cookie
 
 			string culture = Preferences.LoadLanguageFromUserData();
-			if(culture == null) culture = Preferences.LoadLanguageFromCookie();
+			if(culture == null)
+			{
+				culture = Preferences.LoadLanguageFromCookie();
+			}
 
 			if(culture != null) {
 				Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);

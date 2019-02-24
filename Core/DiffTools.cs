@@ -64,8 +64,15 @@ namespace ScrewTurn.Wiki {
 			sb.Append("<tr>");
 
 			sb.Append(@"<td valign=""top"" width=""30"" style=""font-family: Courier New, monospace;"">");
-			if(n >= 0) sb.Append(((int)(n + 1)).ToString());
-			else sb.Append("&nbsp;");
+			if(n >= 0)
+			{
+				sb.Append(((int)(n + 1)).ToString());
+			}
+			else
+			{
+				sb.Append("&nbsp;");
+			}
+
 			sb.Append("</td>");
 
 			sb.Append(@"<td valign=""top"" style=""font-family: Courier New, monospace;"">");
@@ -202,14 +209,18 @@ namespace ScrewTurn.Wiki {
 			for(int i = 0; i < Lines.Length; ++i) {
 				s = Lines[i];
 				if(trimSpace)
+				{
 					s = s.Trim();
+				}
 
 				if(ignoreSpace) {
 					s = Regex.Replace(s, "\\s+", " ");
 				}
 
 				if(ignoreCase)
+				{
 					s = s.ToLowerInvariant();
+				}
 
 				aCode = h[s];
 				if(aCode == null) {
@@ -278,7 +289,9 @@ namespace ScrewTurn.Wiki {
 					else {
 						x = DownVector[DownOffset + k - 1] + 1; // a step to the right
 						if((k < DownK + D) && (DownVector[DownOffset + k + 1] >= x))
+						{
 							x = DownVector[DownOffset + k + 1]; // down
+						}
 					}
 					y = x - k;
 
@@ -313,7 +326,9 @@ namespace ScrewTurn.Wiki {
 					else {
 						x = UpVector[UpOffset + k + 1] - 1; // left
 						if((k > UpK - D) && (UpVector[UpOffset + k - 1] < x))
+						{
 							x = UpVector[UpOffset + k - 1]; // up
+						}
 					} // if
 					y = x - k;
 
@@ -369,14 +384,16 @@ namespace ScrewTurn.Wiki {
 			if(LowerA == UpperA) {
 				// mark as inserted lines.
 				while(LowerB < UpperB)
+				{
 					DataB.modified[LowerB++] = true;
-
+				}
 			}
 			else if(LowerB == UpperB) {
 				// mark as deleted lines.
 				while(LowerA < UpperA)
+				{
 					DataA.modified[LowerA++] = true;
-
+				}
 			}
 			else {
 				// Find the middle snakea and length of an optimal path for A and B
@@ -418,12 +435,16 @@ namespace ScrewTurn.Wiki {
 					StartB = LineB;
 
 					while(LineA < DataA.Length && (LineB >= DataB.Length || DataA.modified[LineA]))
+					{
 						// while (LineA < DataA.Length && DataA.modified[LineA])
 						LineA++;
+					}
 
 					while(LineB < DataB.Length && (LineA >= DataA.Length || DataB.modified[LineB]))
+					{
 						// while (LineB < DataB.Length && DataB.modified[LineB])
 						LineB++;
+					}
 
 					if((StartA < LineA) || (StartB < LineB)) {
 						// store a new difference-item

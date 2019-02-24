@@ -41,10 +41,19 @@ namespace ScrewTurn.Wiki {
 
 			IFilesStorageProviderV30 provider;
 
-			if(!string.IsNullOrEmpty(Request["Provider"])) provider = Collectors.FilesProviderCollector.GetProvider(Request["Provider"]);
+			if(!string.IsNullOrEmpty(Request["Provider"]))
+			{
+				provider = Collectors.FilesProviderCollector.GetProvider(Request["Provider"]);
+			}
 			else {
-				if(isPageAttachment) provider = FilesAndAttachments.FindPageAttachmentProvider(pageInfo, filename);
-				else provider = FilesAndAttachments.FindFileProvider(filename);
+				if(isPageAttachment)
+				{
+					provider = FilesAndAttachments.FindPageAttachmentProvider(pageInfo, filename);
+				}
+				else
+				{
+					provider = FilesAndAttachments.FindFileProvider(filename);
+				}
 			}
 
 			if(provider == null) {
@@ -55,7 +64,11 @@ namespace ScrewTurn.Wiki {
 
 			// Use canonical path format (leading with /)
 			if(!isPageAttachment) {
-				if(!filename.StartsWith("/")) filename = "/" + filename;
+				if(!filename.StartsWith("/"))
+				{
+					filename = "/" + filename;
+				}
+
 				filename = filename.Replace("\\", "/");
 			}
 
@@ -82,10 +95,19 @@ namespace ScrewTurn.Wiki {
 			long size = -1;
 
 			FileDetails details = null;
-			if(isPageAttachment) details = provider.GetPageAttachmentDetails(pageInfo, filename);
-			else details = provider.GetFileDetails(filename);
+			if(isPageAttachment)
+			{
+				details = provider.GetPageAttachmentDetails(pageInfo, filename);
+			}
+			else
+			{
+				details = provider.GetFileDetails(filename);
+			}
 
-			if(details != null) size = details.Size;
+			if(details != null)
+			{
+				size = details.Size;
+			}
 			else {
 				Log.LogEntry("Attempted to download an inexistent file/attachment (" + (pageInfo != null ? pageInfo.FullName + "/" : "") + filename + ")", EntryType.Warning, Log.SystemUsername);
 				Response.StatusCode = 404;
@@ -96,7 +118,11 @@ namespace ScrewTurn.Wiki {
 			string mime = "";
 			try {
 				string ext = Path.GetExtension(filename);
-				if(ext.StartsWith(".")) ext = ext.Substring(1).ToLowerInvariant(); // Remove trailing dot
+				if(ext.StartsWith("."))
+				{
+					ext = ext.Substring(1).ToLowerInvariant(); // Remove trailing dot
+				}
+
 				mime = GetMimeType(ext);
 			}
 			catch {
@@ -159,8 +185,14 @@ namespace ScrewTurn.Wiki {
 
 		private string GetMimeType(string ext) {
 			string mime = "";
-			if(MimeTypes.Types.TryGetValue(ext, out mime)) return mime;
-			else return "application/octet-stream";
+			if(MimeTypes.Types.TryGetValue(ext, out mime))
+			{
+				return mime;
+			}
+			else
+			{
+				return "application/octet-stream";
+			}
 		}
 
 		/// <summary>
@@ -171,15 +203,27 @@ namespace ScrewTurn.Wiki {
 		private bool CountHit(string file) {
 			bool result = Request["NoHit"] != "1";
 
-			if(!result) return false;
+			if(!result)
+			{
+				return false;
+			}
 			else {
 				FileDownloadCountFilterMode mode = Settings.FileDownloadCountFilterMode;
-				if(mode == FileDownloadCountFilterMode.CountAll) return true;
+				if(mode == FileDownloadCountFilterMode.CountAll)
+				{
+					return true;
+				}
 				else {
 					string[] allowedExtensions = Settings.FileDownloadCountFilter;
 					string extension = Path.GetExtension(file);
-					if(string.IsNullOrEmpty(extension)) return false;
-					else extension = extension.Trim('.').ToLowerInvariant();
+					if(string.IsNullOrEmpty(extension))
+					{
+						return false;
+					}
+					else
+					{
+						extension = extension.Trim('.').ToLowerInvariant();
+					}
 
 					bool found = false;
 					foreach(string ex in allowedExtensions) {
@@ -189,9 +233,18 @@ namespace ScrewTurn.Wiki {
 						}
 					}
 
-					if(found && mode == FileDownloadCountFilterMode.CountSpecifiedExtensions) return true;
-					else if(!found && mode == FileDownloadCountFilterMode.ExcludeSpecifiedExtensions) return true;
-					else return false;
+					if(found && mode == FileDownloadCountFilterMode.CountSpecifiedExtensions)
+					{
+						return true;
+					}
+					else if(!found && mode == FileDownloadCountFilterMode.ExcludeSpecifiedExtensions)
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
 				}
 			}
 		}

@@ -28,8 +28,15 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="text"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="text"/> is empty.</exception>
 		public DumpedWord(uint id, string text) {
-			if(text == null) throw new ArgumentNullException("text");
-			if(text.Length == 0) throw new ArgumentException("Text cannot be empty", "text");
+			if(text == null)
+			{
+				throw new ArgumentNullException("text");
+			}
+
+			if(text.Length == 0)
+			{
+				throw new ArgumentException("Text cannot be empty", "text");
+			}
 
 			this.id = id;
 			this.text = text;
@@ -41,7 +48,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="word">The word to extract the information from.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="word"/> is <c>null</c>.</exception>
 		public DumpedWord(Word word) {
-			if(word == null) throw new ArgumentNullException("word");
+			if(word == null)
+			{
+				throw new ArgumentNullException("word");
+			}
 
 			this.id = word.ID;
 			this.text = word.Text;

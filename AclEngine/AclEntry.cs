@@ -42,12 +42,35 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are empty.</exception>
 		public AclEntry(string resource, string action, string subject, Value value) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
 
 			this.resource = resource;
 			this.action = action;
@@ -106,8 +129,14 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <returns><c>true</c> if this object equals <b>obj</b>, <c>false</c> otherwise.</returns>
 		public override bool Equals(object obj) {
 			AclEntry other = obj as AclEntry;
-			if(other != null) return Equals(other);
-			else return false;
+			if(other != null)
+			{
+				return Equals(other);
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -116,9 +145,15 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <param name="other">The other instance.</param>
 		/// <returns><c>true</c> if this instance equals <b>other</b>, <c>false</c> otherwise.</returns>
 		public bool Equals(AclEntry other) {
-			if(object.ReferenceEquals(other, null)) return false;
-			else return resource == other.Resource &&
+			if(object.ReferenceEquals(other, null))
+			{
+				return false;
+			}
+			else
+			{
+				return resource == other.Resource &&
 				action == other.Action && subject == other.Subject;
+			}
 		}
 
 		/// <summary>
@@ -128,9 +163,21 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <param name="y">The second instance.</param>
 		/// <returns><c>true</c> if <b>x</b> equals <b>y</b>, <c>false</c> otherwise.</returns>
 		public static bool Equals(AclEntry x, AclEntry y) {
-			if(object.ReferenceEquals(x, null) && !object.ReferenceEquals(x, null)) return false;
-			if(!object.ReferenceEquals(x, null) && object.ReferenceEquals(x, null)) return false;
-			if(object.ReferenceEquals(x, null) && object.ReferenceEquals(x, null)) return true;
+			if(object.ReferenceEquals(x, null) && !object.ReferenceEquals(x, null))
+			{
+				return false;
+			}
+
+			if(!object.ReferenceEquals(x, null) && object.ReferenceEquals(x, null))
+			{
+				return false;
+			}
+
+			if(object.ReferenceEquals(x, null) && object.ReferenceEquals(x, null))
+			{
+				return true;
+			}
+
 			return x.Equals(y);
 		}
 

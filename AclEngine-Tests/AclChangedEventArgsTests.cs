@@ -27,15 +27,21 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void Constructor_NullEntries() {
-			AclChangedEventArgs args = new AclChangedEventArgs(null, Change.EntryDeleted);
+		public void Constructor_NullEntries()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclChangedEventArgs args = new AclChangedEventArgs(null, Change.EntryDeleted);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void Constructor_EmptyEntries() {
-			AclChangedEventArgs args = new AclChangedEventArgs(new AclEntry[0], Change.EntryDeleted);
+		public void Constructor_EmptyEntries()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclChangedEventArgs args = new AclChangedEventArgs(new AclEntry[0], Change.EntryDeleted);
+			});
 		}
 
 	}

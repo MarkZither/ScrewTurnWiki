@@ -49,7 +49,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = doubleDoubleBrackets.Match(sb.ToString(), end);
+				}
 				else {
 					string s = "<nowiki>" + match.Value.Substring(2, match.Length - 4) + "</nowiki>";
 					sb.Remove(match.Index, match.Length);
@@ -63,7 +65,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = exlink.Match(sb.ToString(), end);
+				}
 				else {
 					string s;
 					string[] split = match.Value.Split(new char[] { '"' });
@@ -72,14 +76,20 @@ namespace ScrewTurn.Wiki.ImportWiki {
 							string imgName = match.Value.Substring(match.Value.LastIndexOf('/') + 1, match.Length - match.Value.LastIndexOf('/') - 1);
 							s = "<noflex>[image|" + imgName + "|{UP}" + imgName + "]</noflex>";
 						}
-						else s = "[" + match.Value + "]";
+						else
+						{
+							s = "[" + match.Value + "]";
+						}
 					}
 					else {
 						if(split[1].EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase) | split[1].EndsWith(".gif", StringComparison.CurrentCultureIgnoreCase) | split[1].EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase)) {
 							string imgName = split[1].Substring(split[1].LastIndexOf('/') + 1, split[1].Length - split[1].LastIndexOf('/') - 1);
 							s = "<noflex>[image|" + imgName + "|{UP}" + imgName + "|" + split[2].Substring(1, split[2].Length - 1) + "]</noflex>";
 						}
-						else s = "<noflex>[" + split[2].Substring(1, split[2].Length - 1) + "|" + split[1] + "]</noflex>";
+						else
+						{
+							s = "<noflex>[" + split[2].Substring(1, split[2].Length - 1) + "|" + split[1] + "]</noflex>";
+						}
 					}
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, s);
@@ -93,11 +103,20 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = email.Match(sb.ToString(), end);
+				}
 				else {
 					string mailLink = "";
-					if(match.Value.StartsWith("mailto:")) mailLink = "[" + match.Value.Replace("mailto:", "") + "]";
-					else mailLink = "<noflex>[" + match.Value.Split(new char[] { ':' }, 2)[1].Replace("mailto:", "") + "|" + match.Value.Split(new char[] { ':' }, 2)[0].Substring(1, match.Value.Split(new char[] { ':' }, 2)[0].Length - 2) + "]</noflex>";
+					if(match.Value.StartsWith("mailto:"))
+					{
+						mailLink = "[" + match.Value.Replace("mailto:", "") + "]";
+					}
+					else
+					{
+						mailLink = "<noflex>[" + match.Value.Split(new char[] { ':' }, 2)[1].Replace("mailto:", "") + "|" + match.Value.Split(new char[] { ':' }, 2)[0].Substring(1, match.Value.Split(new char[] { ':' }, 2)[0].Length - 2) + "]</noflex>";
+					}
+
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, mailLink);
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
@@ -109,7 +128,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = bold.Match(sb.ToString(), end);
+				}
 				else {
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, "'''" + match.Value.Substring(1, match.Length - 2) + @"'''");
@@ -122,7 +143,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = underline.Match(sb.ToString(), end);
+				}
 				else {
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, "__" + match.Value.Substring(1, match.Length - 2) + @"__");
@@ -135,12 +158,24 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = strikethrough.Match(sb.ToString(), end);
+				}
 				else {
 					string s = "";
-					if(match.Value == "---") s = "---";
-					else if(match.Value == "--") s = "-";
-					else s = "--" + match.Value.Substring(1, match.Length - 2) + @"--";
+					if(match.Value == "---")
+					{
+						s = "---";
+					}
+					else if(match.Value == "--")
+					{
+						s = "-";
+					}
+					else
+					{
+						s = "--" + match.Value.Substring(1, match.Length - 2) + @"--";
+					}
+
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, s);
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
@@ -152,22 +187,36 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = head.Match(sb.ToString(), end);
+				}
 				else {
 					//Count the number of ! in order to put a corresponding
 					//number of =
 					int count = 1;
 					for(int i = 0; i < match.Length; i++) {
 						if(match.Value[i] == '!')
+						{
 							count++;
+						}
 					}
-					if(match.Value.EndsWith("!")) count--;
+					if(match.Value.EndsWith("!"))
+					{
+						count--;
+					}
+
 					string s = "";
 					for(int i = 0; i < count; i++)
+					{
 						s += "=";
+					}
+
 					s += match.Value.Substring(count - 1, match.Length - (count - 1) - 1);
 					for(int i = 0; i < count; i++)
+					{
 						s += "=";
+					}
+
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, s);
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
@@ -179,7 +228,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noFlexBegin, noFlexEnd, out end))
+				{
 					match = wikiTalk.Match(sb.ToString(), end);
+				}
 				else {
 					string s = @"<span style=""background-color:red; color:white""><nowiki>" + match.Value + @"</nowiki></span>";
 					sb.Remove(match.Index, match.Length);
@@ -193,7 +244,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = code.Match(sb.ToString(), end);
+				}
 				else {
 					string s = "{{<nowiki>" + match.Value.Substring(1, match.Length - 2) + @"</nowiki>}}";
 					sb.Remove(match.Index, match.Length);
@@ -207,19 +260,33 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = camelCase.Match(sb.ToString(), end);
+				}
 				else {
 					string s;
 					string[] split = match.Value.Split(new char[] { ':' }, 2);
 					if(split.Length == 1) {
 						string[] split1 = match.Value.Split(new char[] { '.' }, 2);
-						if(split1.Length == 1) s = match.Value;
-						else s = split1[1];
+						if(split1.Length == 1)
+						{
+							s = match.Value;
+						}
+						else
+						{
+							s = split1[1];
+						}
 					}
 					else {
 						string[] split1 = split[1].Split(new char[] { '.' }, 2);
-						if(split1.Length == 1) s = "[" + split[1].Substring(1, split[1].Length - 2) + "|" + split[0].Substring(1, split[0].Length - 2) + "]";
-						else s = "[" + split1[1].Substring(0, split1[1].Length - 1) + "|" + split[0].Substring(1, split[0].Length - 2) + "]";
+						if(split1.Length == 1)
+						{
+							s = "[" + split[1].Substring(1, split[1].Length - 2) + "|" + split[0].Substring(1, split[0].Length - 2) + "]";
+						}
+						else
+						{
+							s = "[" + split1[1].Substring(0, split1[1].Length - 1) + "|" + split[0].Substring(1, split[0].Length - 2) + "]";
+						}
 					}
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, s);
@@ -232,19 +299,33 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = pascalCase.Match(sb.ToString(), end);
+				}
 				else {
 					string s;
 					string[] split = match.Value.Split(new char[] { ':' }, 2);
 					if(split.Length == 1) {
 						string[] split1 = match.Value.Split(new char[] { '.' }, 2);
-						if(split1.Length == 1) s = "[" + match.Value + "]";
-						else s = "[" + split1[1] + "]";
+						if(split1.Length == 1)
+						{
+							s = "[" + match.Value + "]";
+						}
+						else
+						{
+							s = "[" + split1[1] + "]";
+						}
 					}
 					else {
 						string[] split1 = split[1].Split(new char[] { '.' });
-						if(split1.Length == 1) s = "[" + split[1] + "|" + split[0].Substring(1, split[0].Length - 2) + "]";
-						else s = "[" + split1[1] + "|" + split[0].Substring(1, split[0].Length - 2) + "]";
+						if(split1.Length == 1)
+						{
+							s = "[" + split[1] + "|" + split[0].Substring(1, split[0].Length - 2) + "]";
+						}
+						else
+						{
+							s = "[" + split1[1] + "|" + split[0].Substring(1, split[0].Length - 2) + "]";
+						}
 					}
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, s);
@@ -257,26 +338,41 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = lists.Match(sb.ToString(), end);
+				}
 				else {
 					string s = "";
 					char kindOfList;
 					int i = 0;
 					char[] ca = match.Value.ToCharArray();
 					while(ca[i] == ' ')
+					{
 						i++;
+					}
+
 					if(i > 0) {
 						kindOfList = ca[i];
 						i = i / 8;
 					}
 					else {
 						while(ca[i] == '\t')
+						{
 							i++;
+						}
+
 						kindOfList = ca[i];
 					}
 					for(int k = 1; k <= i; k++) {
-						if(kindOfList == '*') s += "*";
-						if(kindOfList == '1') s += "#";
+						if(kindOfList == '*')
+						{
+							s += "*";
+						}
+
+						if(kindOfList == '1')
+						{
+							s += "#";
+						}
 					}
 					sb.Remove(match.Index, match.Length);
 					sb.Insert(match.Index, s);
@@ -290,18 +386,37 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = table.Match(sb.ToString(), end);
+				}
 				else {
 					string s = "";
 					int indexEndOfLine = sb.ToString().IndexOf("\r\n", match.Index);
-					if(indexEndOfLine < 0) indexEndOfLine = sb.Length;
+					if(indexEndOfLine < 0)
+					{
+						indexEndOfLine = sb.Length;
+					}
+
 					string[] split = sb.ToString().Substring(match.Index + 2, indexEndOfLine - match.Index - 4).Split(new string[] { "||" }, StringSplitOptions.None);
-					if(tableBegin) s = "{|\r\n| " + split[0];
-					else s = "|-\r\n| " + split[0];
+					if(tableBegin)
+					{
+						s = "{|\r\n| " + split[0];
+					}
+					else
+					{
+						s = "|-\r\n| " + split[0];
+					}
+
 					for(int i = 1; i < split.Length; i++)
+					{
 						s += " || " + split[i];
+					}
+
 					if(indexEndOfLine != sb.Length) {
-						if(sb.ToString().Substring(indexEndOfLine + 2, 2) == "||") tableBegin = false;
+						if(sb.ToString().Substring(indexEndOfLine + 2, 2) == "||")
+						{
+							tableBegin = false;
+						}
 						else {
 							tableBegin = true;
 							s += "\r\n|}";
@@ -322,10 +437,14 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = italic.Match(sb.ToString(), end);
+				}
 				else {
 					if(IsNoFlexed(match.Index, noFlexBegin, noFlexEnd, out end))
+					{
 						match = italic.Match(sb.ToString(), end);
+					}
 					else {
 						sb.Remove(match.Index, match.Length);
 						sb.Insert(match.Index, "''" + match.Value.Substring(1, match.Length - 2) + @"''");
@@ -340,13 +459,20 @@ namespace ScrewTurn.Wiki.ImportWiki {
 			while(match.Success) {
 				int end;
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end))
+				{
 					match = newlinespace.Match(sb.ToString(), end);
+				}
 				else {
 					string s = "";
 					if(first)
+					{
 						s += "{{{{" + match.Value.Substring(1, match.Value.Length - 1);
+					}
 					else
+					{
 						s += match.Value.Substring(1, match.Value.Length - 1);
+					}
+
 					if(sb.Length > match.Index + match.Length + 1) {
 						if(sb[match.Index + match.Length] == '\n' && sb[match.Index + match.Length + 1] == ' ') {
 							first = false;

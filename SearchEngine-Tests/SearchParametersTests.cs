@@ -17,13 +17,18 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(SearchOptions.AtLeastOneWord, par.Options);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void Constructor_QueryOnly_InvalidQuery(string q) {
-			SearchParameters par = new SearchParameters(q);
+            Assert.That(() => { SearchParameters par = new SearchParameters(q); }, Throws.ArgumentException);
 		}
 
-		[Test]
+        [TestCase(null)]
+        public void Constructor_QueryOnly_NullQuery(string q)
+        {
+            Assert.That(() => { SearchParameters par = new SearchParameters(q); }, Throws.ArgumentNullException);
+        }
+
+        [Test]
 		public void Constructor_QueryDocumentTypeTags() {
 			SearchParameters par = new SearchParameters("query", "blah", "doc");
 			Assert.AreEqual("query", par.Query, "Wrong query");
@@ -33,13 +38,18 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(SearchOptions.AtLeastOneWord, par.Options);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void Constructor_QueryDocumentTypeTags_InvalidQuery(string q) {
-			SearchParameters par = new SearchParameters(q, "blah", "doc");
-		}
+            Assert.That(() => { SearchParameters par = new SearchParameters(q, "blah", "doc"); }, Throws.ArgumentException);
+        }
 
-		[Test]
+        [TestCase(null)]
+        public void Constructor_QueryDocumentTypeTags_NullQuery(string q)
+        {
+            Assert.That(() => { SearchParameters par = new SearchParameters(q, "blah", "doc"); }, Throws.ArgumentNullException);
+        }
+
+        [Test]
 		public void Constructor_QueryDocumentTypeTags_NullDocumentTypeTags() {
 			SearchParameters par = new SearchParameters("query", null);
 			Assert.AreEqual("query", par.Query, "Wrong query");
@@ -48,18 +58,22 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void Constructor_QueryDocumentTypeTags_EmptyDocumentTypeTags() {
-			SearchParameters par = new SearchParameters("query", new string[0]);
+            Assert.That(() => { SearchParameters par = new SearchParameters("query", new string[0]); }, Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void Constructor_QueryDocumentTypeTags_InvalidDocumentTypeTagsElement(string e) {
-			SearchParameters par = new SearchParameters("query", new string[] { "blah", e });
-		}
+            Assert.That(() => { SearchParameters par = new SearchParameters("query", new string[] { "blah", e }); }, Throws.ArgumentException);
+        }
 
-		[Test]
+        [TestCase(null)]
+        public void Constructor_QueryDocumentTypeTags_NullDocumentTypeTagsElement(string e)
+        {
+            Assert.That(() => { SearchParameters par = new SearchParameters("query", new string[] { "blah", e }); }, Throws.ArgumentNullException);
+        }
+
+        [Test]
 		public void Constructor_QueryOptions() {
 			SearchParameters par = new SearchParameters("query", SearchOptions.ExactPhrase);
 			Assert.AreEqual("query", par.Query, "Wrong query");
@@ -67,13 +81,18 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(SearchOptions.ExactPhrase, par.Options);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void Constructor_QueryOptions_InvalidQuery(string q) {
-			SearchParameters par = new SearchParameters(q, SearchOptions.ExactPhrase);
-		}
+            Assert.That(() => { SearchParameters par = new SearchParameters(q, SearchOptions.ExactPhrase); }, Throws.ArgumentException);
+        }
 
-		[Test]
+        [TestCase(null)]
+        public void Constructor_QueryOptions_NullQuery(string q)
+        {
+            Assert.That(() => { SearchParameters par = new SearchParameters(q, SearchOptions.ExactPhrase); }, Throws.ArgumentNullException);
+        }
+
+        [Test]
 		public void Constructor_Full() {
 			SearchParameters par = new SearchParameters("query", new string[] { "blah", "doc" }, SearchOptions.AllWords);
 			Assert.AreEqual("query", par.Query, "Wrong query");
@@ -83,13 +102,18 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(SearchOptions.AllWords, par.Options);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void Constructor_Full_InvalidQuery(string q) {
-			SearchParameters par = new SearchParameters(q, new string[] { "blah", "doc" }, SearchOptions.AllWords);
-		}
+            Assert.That(() => { SearchParameters par = new SearchParameters(q, new string[] { "blah", "doc" }, SearchOptions.AllWords); }, Throws.ArgumentException);
+        }
 
-		[Test]
+        [TestCase(null)]
+        public void Constructor_Full_NullQuery(string q)
+        {
+            Assert.That(() => { SearchParameters par = new SearchParameters(q, new string[] { "blah", "doc" }, SearchOptions.AllWords); }, Throws.ArgumentNullException);
+        }
+
+        [Test]
 		public void Constructor_Full_NullDocumentTypeTags() {
 			SearchParameters par = new SearchParameters("query", null, SearchOptions.AllWords);
 			Assert.AreEqual("query", par.Query, "Wrong query");
@@ -98,17 +122,21 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void Constructor_Full_EmptyDocumentTypeTags() {
-			SearchParameters par = new SearchParameters("query", new string[0], SearchOptions.AllWords);
-		}
+            Assert.That(() => { SearchParameters par = new SearchParameters("query", new string[0], SearchOptions.AllWords); }, Throws.ArgumentException);
+        }
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void Constructor_Full_InvalidDocumentTypeTagsElement(string e) {
-			SearchParameters par = new SearchParameters("query", new string[] { "blah", e }, SearchOptions.ExactPhrase);
+            Assert.That(() => { SearchParameters par = new SearchParameters("query", new string[] { "blah", e }, SearchOptions.ExactPhrase); }, Throws.ArgumentException);
 		}
 
-	}
+        [TestCase(null)]
+        public void Constructor_Full_NullDocumentTypeTagsElement(string e)
+        {
+            Assert.That(() => { SearchParameters par = new SearchParameters("query", new string[] { "blah", e }, SearchOptions.ExactPhrase); }, Throws.ArgumentNullException);
+        }
+
+    }
 
 }

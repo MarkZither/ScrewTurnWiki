@@ -39,8 +39,14 @@ namespace ScrewTurn.Wiki {
 
 			int result = allSnippets.BinarySearch(new Snippet(name, "", null), new SnippetNameComparer());
 
-			if(allSnippets.Count > 0 && result >= 0) return allSnippets[result];
-			else return null;
+			if(allSnippets.Count > 0 && result >= 0)
+			{
+				return allSnippets[result];
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -51,9 +57,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The Provider to use to store the Snippet (<c>null</c> for the default provider).</param>
 		/// <returns>True if the Snippets has been addedd successfully.</returns>
 		public static bool AddSnippet(string name, string content, IPagesStorageProviderV30 provider) {
-			if(Find(name) != null) return false;
+			if(Find(name) != null)
+			{
+				return false;
+			}
 
-			if(provider == null) provider = Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			if(provider == null)
+			{
+				provider = Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			}
 
 			Snippet newSnippet = provider.AddSnippet(name, content);
 
@@ -62,7 +74,10 @@ namespace ScrewTurn.Wiki {
 				Content.ClearPseudoCache();
 				Content.InvalidateAllPages();
 			}
-			else Log.LogEntry("Creation failed for Snippet " + name, EntryType.Error, Log.SystemUsername);
+			else
+			{
+				Log.LogEntry("Creation failed for Snippet " + name, EntryType.Error, Log.SystemUsername);
+			}
 
 			return newSnippet != null;
 		}
@@ -80,7 +95,10 @@ namespace ScrewTurn.Wiki {
 				Content.ClearPseudoCache();
 				Content.InvalidateAllPages();
 			}
-			else Log.LogEntry("Deletion failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername);
+			else
+			{
+				Log.LogEntry("Deletion failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername);
+			}
 
 			return done;
 		}
@@ -99,7 +117,10 @@ namespace ScrewTurn.Wiki {
 				Content.ClearPseudoCache();
 				Content.InvalidateAllPages();
 			}
-			else Log.LogEntry("Modification failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername);
+			else
+			{
+				Log.LogEntry("Modification failed for Snippet " + snippet.Name, EntryType.Error, Log.SystemUsername);
+			}
 
 			return newSnippet != null;
 		}
@@ -127,7 +148,10 @@ namespace ScrewTurn.Wiki {
 			List<string> parms = new List<string>();
 			foreach(Match m in ParametersRegex.Matches(snippet.Content)) {
 				string value = m.Value.Substring(1, m.Value.Length - 2);
-				if(m.Success && !parms.Contains(value)) parms.Add(value);
+				if(m.Success && !parms.Contains(value))
+				{
+					parms.Add(value);
+				}
 			}
 			return parms.ToArray();
 		}

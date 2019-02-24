@@ -23,7 +23,11 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="messageID">The message ID.</param>
 		/// <returns>The document name.</returns>
 		public static string GetDocumentName(PageInfo page, int messageID) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
 			return page.FullName + "..." + messageID.ToString();
 		}
 
@@ -34,11 +38,21 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="pageName">The page name.</param>
 		/// <param name="messageID">The message ID.</param>
 		public static void GetMessageDetails(string documentName, out string pageName, out int messageID) {
-			if(documentName == null) throw new ArgumentNullException("documentName");
-			if(documentName.Length == 0) throw new ArgumentException("Document Name cannot be empty", "documentName");
+			if(documentName == null)
+			{
+				throw new ArgumentNullException("documentName");
+			}
+
+			if(documentName.Length == 0)
+			{
+				throw new ArgumentException("Document Name cannot be empty", "documentName");
+			}
 
 			int lastThreeDotsIndex = documentName.LastIndexOf("...");
-			if(lastThreeDotsIndex == -1) throw new ArgumentException("Document Name has an invalid format", "documentName");
+			if(lastThreeDotsIndex == -1)
+			{
+				throw new ArgumentException("Document Name has an invalid format", "documentName");
+			}
 
 			pageName = documentName.Substring(0, lastThreeDotsIndex);
 			messageID = int.Parse(documentName.Substring(lastThreeDotsIndex + 3));
@@ -60,8 +74,15 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <param name="dumpedDocument">The dumped document data.</param>
 		/// <param name="tokenizer">The tokenizer.</param>
 		public MessageDocument(PageInfo pageInfo, int messageID, DumpedDocument dumpedDocument, Tokenizer tokenizer) {
-			if(dumpedDocument == null) throw new ArgumentNullException("dumpedDocument");
-			if(tokenizer == null) throw new ArgumentNullException("tokenizer");
+			if(dumpedDocument == null)
+			{
+				throw new ArgumentNullException("dumpedDocument");
+			}
+
+			if(tokenizer == null)
+			{
+				throw new ArgumentNullException("tokenizer");
+			}
 
 			this.pageInfo = pageInfo;
 			this.messageID = messageID;

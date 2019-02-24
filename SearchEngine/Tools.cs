@@ -27,13 +27,30 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="filterDocumentType"/> is <c>true</c> and <paramref name="documentTypeTags"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="filterDocumentType"/> is <c>true</c> and <paramref name="documentTypeTags"/> is empty.</exception>
 		public static SearchResultCollection SearchInternal(string query, string[] documentTypeTags, bool filterDocumentType, SearchOptions options, IWordFetcher fetcher) {
-			if(query == null) throw new ArgumentNullException("query");
-			if(query.Length == 0) throw new ArgumentException("Query cannot be empty", "query");
+			if(query == null)
+			{
+				throw new ArgumentNullException("query");
+			}
 
-			if(filterDocumentType && documentTypeTags == null) throw new ArgumentNullException("documentTypeTags");
-			if(filterDocumentType && documentTypeTags.Length == 0) throw new ArgumentException("documentTypeTags cannot be empty", "documentTypeTags");
+			if(query.Length == 0)
+			{
+				throw new ArgumentException("Query cannot be empty", "query");
+			}
 
-			if(fetcher == null) throw new ArgumentNullException("fetcher");
+			if(filterDocumentType && documentTypeTags == null)
+			{
+				throw new ArgumentNullException("documentTypeTags");
+			}
+
+			if(filterDocumentType && documentTypeTags.Length == 0)
+			{
+				throw new ArgumentException("documentTypeTags cannot be empty", "documentTypeTags");
+			}
+
+			if(fetcher == null)
+			{
+				throw new ArgumentNullException("fetcher");
+			}
 
 			SearchResultCollection results = new SearchResultCollection();
 
@@ -48,7 +65,11 @@ namespace ScrewTurn.Wiki.SearchEngine {
 					foreach(IDocument doc in word.Occurrences.Keys) {
 						// Skip documents with excluded tags
 						if(filterDocumentType &&
-							!IsDocumentTypeTagIncluded(doc.TypeTag, documentTypeTags)) continue;
+							!IsDocumentTypeTagIncluded(doc.TypeTag, documentTypeTags))
+						{
+							continue;
+						}
+
 						foreach(BasicWordInfo info in word.Occurrences[doc]) {
 							// If a search result is already present, add a new match to it,
 							// otherwise create a new search result object
@@ -82,7 +103,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 			else if(options == SearchOptions.AtLeastOneWord) {
 				// Nothing to do
 			}
-			else throw new InvalidOperationException("Unsupported SearchOptions");
+			else
+			{
+				throw new InvalidOperationException("Unsupported SearchOptions");
+			}
 
 			// Finalize relevance values
 			for(int i = 0; i < results.Count; i++) {
@@ -103,7 +127,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 			float relevanceToRemove = 0;
 			List<SearchResult> toRemove = new List<SearchResult>();
 			foreach(SearchResult r in results) {
-				if(r.Matches.Count < queryWords.Length) toRemove.Add(r);
+				if(r.Matches.Count < queryWords.Length)
+				{
+					toRemove.Add(r);
+				}
 				else {
 					foreach(string w in queryWords) {
 						if(!r.Matches.Contains(w)) {
@@ -132,7 +159,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 			List<SearchResult> toRemove = new List<SearchResult>();
 			foreach(SearchResult r in results) {
 				// Shortcut
-				if(r.Matches.Count < queryWords.Length) toRemove.Add(r);
+				if(r.Matches.Count < queryWords.Length)
+				{
+					toRemove.Add(r);
+				}
 				else {
 					// Verify that all matches are in the same order as in the query
 					// and that their indices make up contiguous words,
@@ -188,7 +218,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		public static bool IsDocumentTypeTagIncluded(string currentTag, string[] includedTags) {
 			currentTag = currentTag.ToLowerInvariant();
 			foreach(string s in includedTags) {
-				if(s.ToLowerInvariant() == currentTag) return true;
+				if(s.ToLowerInvariant() == currentTag)
+				{
+					return true;
+				}
 			}
 			return false;
 		}
@@ -201,7 +234,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="keywords">The keywords to cleanup.</param>
 		/// <returns>The clean keywords.</returns>
 		public static string[] CleanupKeywords(string[] keywords) {
-			if(keywords == null || keywords.Length == 0) return keywords;
+			if(keywords == null || keywords.Length == 0)
+			{
+				return keywords;
+			}
 
 			List<string> result = new List<string>(keywords.Length);
 			foreach(string k in keywords) {
@@ -230,13 +266,22 @@ namespace ScrewTurn.Wiki.SearchEngine {
 			for(int i = 0; i < normalizedString.Length; i++) {
 				char c = normalizedString[i];
 				if(char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark) {
-					if(char.IsLetterOrDigit(c)) stringBuilder.Append(c);
-					else if(!isSingleWord) stringBuilder.Append(" ");
+					if(char.IsLetterOrDigit(c))
+					{
+						stringBuilder.Append(c);
+					}
+					else if(!isSingleWord)
+					{
+						stringBuilder.Append(" ");
+					}
 				}
 			}
 
 			if(!isSingleWord) {
-				while(stringBuilder.ToString().Contains("  ")) stringBuilder.Replace("  ", " ");
+				while(stringBuilder.ToString().Contains("  "))
+				{
+					stringBuilder.Replace("  ", " ");
+				}
 			}
 
 			return stringBuilder.ToString().ToLowerInvariant().Trim(' ', '\'', '"');
@@ -273,13 +318,23 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns>The index of the first non-split char.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="content"/> is <c>null</c>.</exception>
 		public static ushort SkipSplitChars(ushort startIndex, string content) {
-			if(content == null) throw new ArgumentNullException("content");
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
 
 			// startIndex < 0 is not actually a problem, so it's possible to set it to zero
-			if(startIndex < 0) startIndex = 0;
+			if(startIndex < 0)
+			{
+				startIndex = 0;
+			}
 
 			int currentIndex = startIndex;
-			while(currentIndex < content.Length && IsSplitChar(content[currentIndex])) currentIndex++;
+			while(currentIndex < content.Length && IsSplitChar(content[currentIndex]))
+			{
+				currentIndex++;
+			}
+
 			return (ushort)currentIndex;
 		}
 
@@ -291,7 +346,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns>The tokens.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="text"/> is <c>null</c>.</exception>
 		public static WordInfo[] Tokenize(string text, WordLocation location) {
-			if(text == null) throw new ArgumentNullException("text");
+			if(text == null)
+			{
+				throw new ArgumentNullException("text");
+			}
 
 			List<WordInfo> words = new List<WordInfo>(text.Length / 5); // Average 5 chars/word
 
@@ -303,7 +361,11 @@ namespace ScrewTurn.Wiki.SearchEngine {
 			currentWordStart = currentIndex;
 
 			while(currentIndex < text.Length && currentIndex < 65500) {
-				while(currentIndex < text.Length && !Tools.IsSplitChar(text[currentIndex])) currentIndex++;
+				while(currentIndex < text.Length && !Tools.IsSplitChar(text[currentIndex]))
+				{
+					currentIndex++;
+				}
+
 				string w = text.Substring(currentWordStart, currentIndex - currentWordStart);
 				w = Tools.RemoveDiacriticsAndPunctuation(w, true);
 				if(!string.IsNullOrEmpty(w)) {
@@ -332,8 +394,15 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns>The input words without the stop words.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="words"/> or <paramref name="stopWords"/> are <c>null</c>.</exception>
 		public static WordInfo[] RemoveStopWords(WordInfo[] words, string[] stopWords) {
-			if(words == null) throw new ArgumentNullException("words");
-			if(stopWords == null) throw new ArgumentNullException("stopWords");
+			if(words == null)
+			{
+				throw new ArgumentNullException("words");
+			}
+
+			if(stopWords == null)
+			{
+				throw new ArgumentNullException("stopWords");
+			}
 
 			List<WordInfo> result = new List<WordInfo>(words.Length);
 
@@ -345,7 +414,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 						break;
 					}
 				}
-				if(!found) result.Add(current);
+				if(!found)
+				{
+					result.Add(current);
+				}
 			}
 
 			return result.ToArray();

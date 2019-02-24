@@ -16,13 +16,22 @@ namespace ScrewTurn.Wiki {
 
 		protected void Page_Load(object sender, EventArgs e) {
 			object t = ViewState["ProviderType"];
-			if(t != null) providerType = (ProviderType)t;
+			if(t != null)
+			{
+				providerType = (ProviderType)t;
+			}
 
 			t = ViewState["ExcludeReadOnly"];
-			if(t != null) excludeReadOnly = (bool)t;
+			if(t != null)
+			{
+				excludeReadOnly = (bool)t;
+			}
 
 			t = ViewState["UsersProviderIntendedUse"];
-			if(t != null) usersProviderIntendedUse = (UsersProviderIntendedUse)t;
+			if(t != null)
+			{
+				usersProviderIntendedUse = (UsersProviderIntendedUse)t;
+			}
 
 			if(!Page.IsPostBack) {
 				Reload();
@@ -63,7 +72,11 @@ namespace ScrewTurn.Wiki {
 				if(IsProviderIncludedInList(prov)) {
 					string typeName = prov.GetType().FullName;
 					lstProviders.Items.Add(new ListItem(prov.Information.Name, typeName));
-					if(typeName == defaultProvider) lstProviders.Items[count].Selected = true;
+					if(typeName == defaultProvider)
+					{
+						lstProviders.Items[count].Selected = true;
+					}
+
 					count++;
 				}
 			}
@@ -188,7 +201,10 @@ namespace ScrewTurn.Wiki {
 		public event EventHandler<EventArgs> SelectedProviderChanged;
 
 		protected void lstProviders_SelectedIndexChanged(object sender, EventArgs e) {
-			if(SelectedProviderChanged != null) SelectedProviderChanged(sender, e);
+			if(SelectedProviderChanged != null)
+			{
+				SelectedProviderChanged(sender, e);
+			}
 		}
 
 	}

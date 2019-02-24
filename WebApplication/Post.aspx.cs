@@ -23,28 +23,52 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			Page.Title = Properties.Messages.PostTitle + " - " + Settings.WikiTitle;
 
-			if(Request["Page"] == null) UrlTools.RedirectHome();
+			if(Request["Page"] == null)
+			{
+				UrlTools.RedirectHome();
+			}
+
 			page = Pages.FindPage(Request["Page"]);
-			if(page == null) UrlTools.RedirectHome();
+			if(page == null)
+			{
+				UrlTools.RedirectHome();
+			}
+
 			editor.CurrentPage = page;
 
-			if(page.Provider.ReadOnly) UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension));
+			if(page.Provider.ReadOnly)
+			{
+				UrlTools.Redirect(UrlTools.BuildUrl(page.FullName, Settings.PageExtension));
+			}
 
 			content = Content.GetPageContent(page, true);
-			if(!Page.IsPostBack) lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.MessageBody, page);
+			if(!Page.IsPostBack)
+			{
+				lblTitle.Text += " - " + FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.MessageBody, page);
+			}
 
 			// Verify permissions and setup captcha
 			bool canPostMessage = AuthChecker.CheckActionForPage(page, Actions.ForPages.PostDiscussion,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
-			if(!canPostMessage) UrlTools.Redirect(UrlTools.BuildUrl(Tools.UrlEncode(page.FullName), Settings.PageExtension));
+			if(!canPostMessage)
+			{
+				UrlTools.Redirect(UrlTools.BuildUrl(Tools.UrlEncode(page.FullName), Settings.PageExtension));
+			}
+
 			captcha.Visible = SessionFacade.LoginKey == null && !Settings.DisableCaptchaControl;
 
-			if(Page.IsPostBack) return;
+			if(Page.IsPostBack)
+			{
+				return;
+			}
 
 			editor.SetContent("", Settings.UseVisualEditorAsDefault);
 
 			string username = Request.UserHostAddress;
-			if(SessionFacade.LoginKey != null) username = SessionFacade.CurrentUsername;
+			if(SessionFacade.LoginKey != null)
+			{
+				username = SessionFacade.CurrentUsername;
+			}
 
 			bool edit = Request["Edit"] != null;
 
@@ -78,7 +102,10 @@ namespace ScrewTurn.Wiki {
 					txtSubject.Text = msg.Subject;
 					editor.SetContent(msg.Body, Settings.UseVisualEditorAsDefault);
 				}
-				else throw new Exception("Message not found (" + page.FullName + "." + Request["Edit"] + ").");
+				else
+				{
+					throw new Exception("Message not found (" + page.FullName + "." + Request["Edit"] + ").");
+				}
 			}
 
 		}
@@ -102,7 +129,10 @@ namespace ScrewTurn.Wiki {
 			}
 
 			string username = Request.UserHostAddress;
-			if(SessionFacade.LoginKey != null) username = SessionFacade.CurrentUsername;
+			if(SessionFacade.LoginKey != null)
+			{
+				username = SessionFacade.CurrentUsername;
+			}
 
 			if(Request["Edit"] == null) {
 				int parent = -1;

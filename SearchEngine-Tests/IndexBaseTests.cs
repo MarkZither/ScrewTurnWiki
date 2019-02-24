@@ -46,7 +46,11 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			IDocument doc = MockDocument("Doc", "Document", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
+
 			index.StoreDocument(doc, null, PlainTextDocumentContent, null);
 
 			bool eventFired = false;
@@ -58,7 +62,11 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			index.Clear(null);
 
-			if(imIndex != null) Assert.IsTrue(eventFired, "IndexChanged event not fired");
+			if(imIndex != null)
+			{
+				Assert.IsTrue(eventFired, "IndexChanged event not fired");
+			}
+
 			Assert.AreEqual(0, index.TotalDocuments, "Wrong document count");
 			Assert.AreEqual(0, index.TotalWords, "Wrong word count");
 			Assert.AreEqual(0, index.TotalOccurrences, "Wrong occurrence count");
@@ -95,7 +103,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(5, index.TotalWords, "Wrong total words count");
 			Assert.AreEqual(5, index.TotalOccurrences, "Wrong total occurrences count");
 			Assert.AreEqual(1, index.TotalDocuments, "Wrong total documents count");
-			if(imIndex != null) Assert.IsTrue(eventFired, "Event not fired");
+			if(imIndex != null)
+			{
+				Assert.IsTrue(eventFired, "Event not fired");
+			}
 		}
 
 		[Test]
@@ -103,7 +114,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			IIndex index = GetIndex();
 			IInMemoryIndex imIndex = index as IInMemoryIndex;
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			IDocument doc = MockDocument("Doc", "Document", "ptdoc", DateTime.Now);
 
@@ -121,18 +135,16 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void StoreDocument_NullDocument() {
 			IIndex index = GetIndex();
-			index.StoreDocument(null, null, "blah", null);
-		}
+            Assert.That(() => index.StoreDocument(null, null, "blah", null), Throws.ArgumentNullException);
+        }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void StoreDocument_NullContent() {
 			IIndex index = GetIndex();
-			index.StoreDocument(MockDocument("Doc", "Document", "ptdoc", DateTime.Now), null, null, null);
-		}
+            Assert.That(() => index.StoreDocument(MockDocument("Doc", "Document", "ptdoc", DateTime.Now), null, null, null), Throws.ArgumentNullException);
+        }
 
 		[Test]
 		public void RemoveDocument() {
@@ -142,7 +154,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
 			IDocument doc2 = MockDocument("Doc2", "Document 2", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 			index.StoreDocument(doc2, null, "", null);
@@ -180,11 +195,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveDocument_NullDocument() {
 			IIndex index = GetIndex();
-			index.RemoveDocument(null, null);
-		}
+            Assert.That(() => index.RemoveDocument(null, null), Throws.ArgumentNullException);
+        }
 
 		private static bool AreDocumentsEqual(IDocument doc1, IDocument doc2) {
 			return
@@ -205,7 +219,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			IDocument doc2 = MockDocument("Doc2", "Document 2", "ptdoc", DateTime.Now);
 			IDocument doc3 = MockDocument("Doc3", "Document 3", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 			index.StoreDocument(doc2, null, "", null);
@@ -220,9 +237,18 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			// Matches are in unpredictable order
 			bool doc1Found = false, doc2Found = false, doc3Found = false;
 			foreach(SearchResult r in res2) {
-				if(AreDocumentsEqual(r.Document, doc1)) doc1Found = true;
-				else if(AreDocumentsEqual(r.Document, doc2)) doc2Found = true;
-				else if(AreDocumentsEqual(r.Document, doc3)) doc3Found = true;
+				if(AreDocumentsEqual(r.Document, doc1))
+				{
+					doc1Found = true;
+				}
+				else if(AreDocumentsEqual(r.Document, doc2))
+				{
+					doc2Found = true;
+				}
+				else if(AreDocumentsEqual(r.Document, doc3))
+				{
+					doc3Found = true;
+				}
 
 				Assert.AreEqual(1, r.Matches.Count, "Wrong match count");
 				Assert.AreEqual(0, r.Matches[0].FirstCharIndex, "Wrong start index");
@@ -242,7 +268,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			IDocument doc = MockDocument3("Doc", "Document", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc, null, "", null);
 
@@ -265,7 +294,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			// The mocked document has a default content
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 
@@ -291,7 +323,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			IDocument doc2 = MockDocument("Doc2", "Document 2", "htmldoc", DateTime.Now);
 			IDocument doc3 = MockDocument("Doc3", "Document 3", "odoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 			index.StoreDocument(doc2, null, "", null);
@@ -304,9 +339,18 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			// Matches are in unpredictable order
 			bool doc1Found = false, doc2Found = false, doc3Found = false;
 			foreach(SearchResult r in res) {
-				if(AreDocumentsEqual(r.Document, doc1)) doc1Found = true;
-				else if(AreDocumentsEqual(r.Document, doc2)) doc2Found = true;
-				else if(AreDocumentsEqual(r.Document, doc3)) doc3Found = true;
+				if(AreDocumentsEqual(r.Document, doc1))
+				{
+					doc1Found = true;
+				}
+				else if(AreDocumentsEqual(r.Document, doc2))
+				{
+					doc2Found = true;
+				}
+				else if(AreDocumentsEqual(r.Document, doc3))
+				{
+					doc3Found = true;
+				}
 
 				Assert.AreEqual(1, r.Matches.Count, "Wrong match count");
 				Assert.AreEqual(0, r.Matches[0].FirstCharIndex, "Wrong start index");
@@ -320,11 +364,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void Search_Filtered_EmptyDocumentTags() {
 			IIndex index = GetIndex();
-			index.Search(new SearchParameters("hello", new string[0]));
-		}
+            Assert.That(() => index.Search(new SearchParameters("hello", new string[0])), Throws.ArgumentException);
+        }
 
 		[Test]
 		public void Search_WithOptions_AtLeastOneWord() {
@@ -333,7 +376,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 
@@ -360,7 +406,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 
@@ -380,7 +429,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
 			
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 
@@ -396,7 +448,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			IDocument doc = MockDocument4("Doc", "Document", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc, null, "", null);
 
@@ -414,7 +469,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, new string[] { "development" }, "", null);
 
@@ -454,7 +512,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
 			IDocument doc2 = MockDocument2("Doc2", "Text 2", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 			index.StoreDocument(doc2, null, "", null);
@@ -467,8 +528,14 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(1, res[0].Matches.Count, "Wrong matches count");
 			Assert.AreEqual(1, res[1].Matches.Count, "Wrong matches count");
 			foreach(SearchResult r in res) {
-				if(r.Matches[0].Location == WordLocation.Content) Assert.AreEqual(33.3, r.Relevance.Value, 0.1, "Wrong relevance for content");
-				else if(r.Matches[0].Location == WordLocation.Title) Assert.AreEqual(66.6, r.Relevance.Value, 0.1, "Wrong relevance for title");
+				if(r.Matches[0].Location == WordLocation.Content)
+				{
+					Assert.AreEqual(33.3, r.Relevance.Value, 0.1, "Wrong relevance for content");
+				}
+				else if(r.Matches[0].Location == WordLocation.Title)
+				{
+					Assert.AreEqual(66.6, r.Relevance.Value, 0.1, "Wrong relevance for title");
+				}
 			}
 		}
 
@@ -480,7 +547,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
 			IDocument doc2 = MockDocument2("Doc2", "Text 2", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 			index.StoreDocument(doc2, new string[] { "blah" }, "", null);
@@ -493,8 +563,14 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(1, res[0].Matches.Count, "Wrong matches count");
 			Assert.AreEqual(1, res[1].Matches.Count, "Wrong matches count");
 			foreach(SearchResult r in res) {
-				if(r.Matches[0].Location == WordLocation.Content) Assert.AreEqual(40.0, r.Relevance.Value, 0.1, "Wrong relevance for content");
-				else if(r.Matches[0].Location == WordLocation.Keywords) Assert.AreEqual(60.0, r.Relevance.Value, 0.1, "Wrong relevance for keywords");
+				if(r.Matches[0].Location == WordLocation.Content)
+				{
+					Assert.AreEqual(40.0, r.Relevance.Value, 0.1, "Wrong relevance for content");
+				}
+				else if(r.Matches[0].Location == WordLocation.Keywords)
+				{
+					Assert.AreEqual(60.0, r.Relevance.Value, 0.1, "Wrong relevance for keywords");
+				}
 			}
 		}
 
@@ -506,7 +582,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			IDocument doc1 = MockDocument("Doc1", "Document 1", "ptdoc", DateTime.Now);
 			IDocument doc2 = MockDocument2("Doc2", "Text 2", "ptdoc", DateTime.Now);
 
-			if(imIndex != null) imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			if(imIndex != null)
+			{
+				imIndex.IndexChanged += AutoHandlerForDocumentStorage;
+			}
 
 			index.StoreDocument(doc1, null, "", null);
 			index.StoreDocument(doc2, new string[] { "blah" }, "", null);
@@ -519,8 +598,14 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(1, res[0].Matches.Count, "Wrong matches count");
 			Assert.AreEqual(1, res[1].Matches.Count, "Wrong matches count");
 			foreach(SearchResult r in res) {
-				if(r.Matches[0].Location == WordLocation.Keywords) Assert.AreEqual(42.8, r.Relevance.Value, 0.1, "Wrong relevance for content");
-				else if(r.Matches[0].Location == WordLocation.Title) Assert.AreEqual(57.1, r.Relevance.Value, 0.1, "Wrong relevance for keywords");
+				if(r.Matches[0].Location == WordLocation.Keywords)
+				{
+					Assert.AreEqual(42.8, r.Relevance.Value, 0.1, "Wrong relevance for content");
+				}
+				else if(r.Matches[0].Location == WordLocation.Title)
+				{
+					Assert.AreEqual(57.1, r.Relevance.Value, 0.1, "Wrong relevance for keywords");
+				}
 			}
 		}
 

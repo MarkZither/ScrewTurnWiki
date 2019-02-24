@@ -15,10 +15,22 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("U.U.User", AuthTools.PrepareUsername("U.User"), "Wrong result");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void Static_PrepareUsername_InvalidUsername(string s) {
-			AuthTools.PrepareUsername(s);
+		[TestCase(null)]
+		public void Static_PrepareUsername_InvalidUsername_ShouldThrowArgumentNullException(string s)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AuthTools.PrepareUsername(s);
+			});
+		}
+
+		[TestCase("")]
+		public void Static_PrepareUsername_InvalidUsername_ShouldThrowArgumentException(string s)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AuthTools.PrepareUsername(s);
+			});
 		}
 
 		[Test]
@@ -35,20 +47,32 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void Static_PrepareGroups_NullGroups() {
-			AuthTools.PrepareGroups(null);
+		public void Static_PrepareGroups_NullGroups()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AuthTools.PrepareGroups(null);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void Static_PrepareGroups_InvalidElement(string e) {
-			AuthTools.PrepareGroups(new string[] { e });
+		[TestCase(null)]
+		public void Static_PrepareGroups_InvalidElement_ShouldThrowArgumentNullException(string e)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AuthTools.PrepareGroups(new string[] { e });
+			});
 		}
 
-		[TestCase(null, false, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", false, ExpectedException = typeof(ArgumentException))]
-		[TestCase("G", false, ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
+		public void Static_PrepareGroups_InvalidElement_ShouldThrowArgumentException(string e)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AuthTools.PrepareGroups(new string[] { e });
+			});
+		}
+
 		[TestCase("G.", true)]
 		[TestCase("g.", true)]
 		[TestCase("G.Blah", true)]
@@ -59,6 +83,25 @@ namespace ScrewTurn.Wiki.Tests {
 		[TestCase("u.Blah", false)]
 		public void Static_IsGroup(string subject, bool result) {
 			Assert.AreEqual(result, AuthTools.IsGroup(subject), "Wrong result");
+		}
+
+		[TestCase(null, false)]
+		public void Static_IsGroup_ShouldThrowArgumentNullException(string subject, bool result)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Assert.AreEqual(result, AuthTools.IsGroup(subject), "Wrong result");
+			});
+		}
+
+		[TestCase("", false)]
+		[TestCase("G", false)]
+		public void Static_IsGroup_ShouldThrowArgumentException(string subject, bool result)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Assert.AreEqual(result, AuthTools.IsGroup(subject), "Wrong result");
+			});
 		}
 
 	}

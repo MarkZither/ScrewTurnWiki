@@ -62,7 +62,11 @@ namespace ScrewTurn.Wiki {
 		public static string MasterPassword {
 			get {
 				string pass = WebConfigurationManager.AppSettings["MasterPassword"];
-				if(pass == null || pass.Length == 0) throw new Exception("Configuration: MasterPassword cannot be null.");
+				if(pass == null || pass.Length == 0)
+				{
+					throw new Exception("Configuration: MasterPassword cannot be null.");
+				}
+
 				return pass;
 			}
 		}
@@ -72,8 +76,14 @@ namespace ScrewTurn.Wiki {
         /// </summary>
 		public static string Direction {
 			get {
-				if(Tools.IsRightToLeftCulture()) return "rtl";
-				else return "ltr";
+				if(Tools.IsRightToLeftCulture())
+				{
+					return "rtl";
+				}
+				else
+				{
+					return "ltr";
+				}
 			}
 		}
 
@@ -165,10 +175,20 @@ namespace ScrewTurn.Wiki {
 		public static string PublicDirectoryName {
 			get {
 				string dir = WebConfigurationManager.AppSettings["PublicDirectory"];
-				if(string.IsNullOrEmpty(dir)) throw new InvalidConfigurationException("PublicDirectory cannot be empty or null");
+				if(string.IsNullOrEmpty(dir))
+				{
+					throw new InvalidConfigurationException("PublicDirectory cannot be empty or null");
+				}
+
 				dir = dir.Trim('\\', '/'); // Remove '/' and '\' from head and tail
-				if(string.IsNullOrEmpty(dir)) throw new InvalidConfigurationException("PublicDirectory cannot be empty or null");
-				else return dir;
+				if(string.IsNullOrEmpty(dir))
+				{
+					throw new InvalidConfigurationException("PublicDirectory cannot be empty or null");
+				}
+				else
+				{
+					return dir;
+				}
 			}
 		}
 
@@ -211,7 +231,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="def">The default value, returned when string parsing fails.</param>
 		/// <returns>The result.</returns>
 		private static int GetInt(string value, int def) {
-			if(value == null) return def;
+			if(value == null)
+			{
+				return def;
+			}
+
 			int i = def;
 			int.TryParse(value, out i);
 			return i;
@@ -224,9 +248,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="def">The default value, returned when parsing fails.</param>
 		/// <returns>The result.</returns>
 		private static bool GetBool(string value, bool def) {
-			if(value == null) return def;
+			if(value == null)
+			{
+				return def;
+			}
 			else {
-				if(value.ToLowerInvariant() == "yes") return true;
+				if(value.ToLowerInvariant() == "yes")
+				{
+					return true;
+				}
+
 				bool b = def;
 				bool.TryParse(value, out b);
 				return b;
@@ -249,8 +280,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="def">The default value, returned when the raw string is <c>null</c>.</param>
 		/// <returns>The result.</returns>
 		private static string GetString(string value, string def) {
-			if(string.IsNullOrEmpty(value)) return def;
-			else return value;
+			if(string.IsNullOrEmpty(value))
+			{
+				return def;
+			}
+			else
+			{
+				return value;
+			}
 		}
 
 		/// <summary>
@@ -597,7 +634,11 @@ namespace ScrewTurn.Wiki {
 		public static string MainUrl {
 			get {
 				string s = GetString(Provider.GetSetting("MainUrl"), "http://www.server.com/");
-				if(!s.EndsWith("/")) s += "/";
+				if(!s.EndsWith("/"))
+				{
+					s += "/";
+				}
+
 				return s;
 			}
 			set {
@@ -772,7 +813,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The theme name.</returns>
 		public static string GetTheme(string nspace) {
-			if(!string.IsNullOrEmpty(nspace)) nspace = Pages.FindNamespace(nspace).Name;
+			if(!string.IsNullOrEmpty(nspace))
+			{
+				nspace = Pages.FindNamespace(nspace).Name;
+			}
+
 			string propertyName = "Theme" + (!string.IsNullOrEmpty(nspace) ? "-" + nspace : "");
 			return GetString(Provider.GetSetting(propertyName), "Default");
 		}
@@ -783,7 +828,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <param name="theme">The theme name.</param>
 		public static void SetTheme(string nspace, string theme) {
-			if(!string.IsNullOrEmpty(nspace)) nspace = Pages.FindNamespace(nspace).Name;
+			if(!string.IsNullOrEmpty(nspace))
+			{
+				nspace = Pages.FindNamespace(nspace).Name;
+			}
+
 			string propertyName = "Theme" + (!string.IsNullOrEmpty(nspace) ? "-" + nspace : "");
 			Provider.SetSetting(propertyName, theme);
 		}

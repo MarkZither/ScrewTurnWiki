@@ -61,8 +61,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public string GetSetting(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -88,14 +95,28 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				// HACK: this allows to correctly initialize a fully SQL-based wiki instance without any user intervention
 				if(string.IsNullOrEmpty(result)) {
-					if(name == "DefaultUsersProvider") result = DefaultUsersStorageProvider;
-					if(name == "DefaultPagesProvider") result = DefaultPagesStorageProvider;
-					if(name == "DefaultFilesProvider") result = DefaultFilesStorageProvider;
+					if(name == "DefaultUsersProvider")
+					{
+						result = DefaultUsersStorageProvider;
+					}
+
+					if(name == "DefaultPagesProvider")
+					{
+						result = DefaultPagesStorageProvider;
+					}
+
+					if(name == "DefaultFilesProvider")
+					{
+						result = DefaultFilesStorageProvider;
+					}
 				}
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -106,14 +127,24 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>True if the Setting is stored, false otherwise.</returns>
 		/// <remarks>This method stores the Value immediately.</remarks>
 		public bool SetSetting(string name, string value) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			// 1. Delete old value, if any
 			// 2. Store new value
 
 			// Nulls are converted to empty strings
-			if(value == null) value = "";
+			if(value == null)
+			{
+				value = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -146,8 +177,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			rows = ExecuteNonQuery(command, false);
 
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -177,7 +214,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -253,10 +293,25 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>message</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>message</b> or <b>user</b> are empty.</exception>
 		public void LogEntry(string message, EntryType entryType, string user) {
-			if(message == null) throw new ArgumentNullException("message");
-			if(message.Length == 0) throw new ArgumentException("Message cannot be empty", "message");
-			if(user == null) throw new ArgumentNullException("user");
-			if(user.Length == 0) throw new ArgumentException("User cannot be empty", "user");
+			if(message == null)
+			{
+				throw new ArgumentNullException("message");
+			}
+
+			if(message.Length == 0)
+			{
+				throw new ArgumentException("Message cannot be empty", "message");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(user.Length == 0)
+			{
+				throw new ArgumentException("User cannot be empty", "user");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -393,7 +448,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -423,7 +481,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				int rows = ExecuteScalar<int>(command, -1);
 
-				if(rows == -1) return 0;
+				if(rows == -1)
+				{
+					return 0;
+				}
 
 				int estimatedSize = rows * EstimatedLogEntrySize;
 
@@ -438,7 +499,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="tag">The tag that specifies the context (usually the namespace).</param>
 		/// <returns>The content.</returns>
 		public string GetMetaDataItem(MetaDataItem item, string tag) {
-			if(tag == null) tag = "";
+			if(tag == null)
+			{
+				tag = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -466,8 +530,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="content">The content.</param>
 		/// <returns><c>true</c> if the content is set, <c>false</c> otherwise.</returns>
 		public bool SetMetaDataItem(MetaDataItem item, string tag, string content) {
-			if(tag == null) tag = "";
-			if(content == null) content = "";
+			if(tag == null)
+			{
+				tag = "";
+			}
+
+			if(content == null)
+			{
+				content = "";
+			}
 
 			// 1. Delete old value, if any
 			// 2. Store new value
@@ -506,8 +577,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			rows = ExecuteNonQuery(command, false);
 
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -593,7 +670,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -610,12 +690,35 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>page</b>, <b>title</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b>, <b>title</b> or <b>user</b> are empty.</exception>
 		public bool AddRecentChange(string page, string title, string messageSubject, DateTime dateTime, string user, ScrewTurn.Wiki.PluginFramework.Change change, string descr) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
-			if(title == null) throw new ArgumentNullException("title");
-			if(title.Length == 0) throw new ArgumentException("Title cannot be empty", "title");
-			if(user == null) throw new ArgumentNullException("user");
-			if(user.Length == 0) throw new ArgumentException("User cannot be empty", "user");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
+
+			if(title == null)
+			{
+				throw new ArgumentNullException("title");
+			}
+
+			if(title.Length == 0)
+			{
+				throw new ArgumentException("Title cannot be empty", "title");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(user.Length == 0)
+			{
+				throw new ArgumentException("User cannot be empty", "user");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 
@@ -625,13 +728,26 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			List<Parameter> parameters = new List<Parameter>(7);
 			parameters.Add(new Parameter(ParameterType.String, "Page", page));
 			parameters.Add(new Parameter(ParameterType.String, "Title", title));
-			if(!string.IsNullOrEmpty(messageSubject)) parameters.Add(new Parameter(ParameterType.String, "MessageSubject", messageSubject));
-			else parameters.Add(new Parameter(ParameterType.String, "MessageSubject", DBNull.Value));
+			if(!string.IsNullOrEmpty(messageSubject))
+			{
+				parameters.Add(new Parameter(ParameterType.String, "MessageSubject", messageSubject));
+			}
+			else
+			{
+				parameters.Add(new Parameter(ParameterType.String, "MessageSubject", DBNull.Value));
+			}
+
 			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", dateTime));
 			parameters.Add(new Parameter(ParameterType.String, "User", user));
 			parameters.Add(new Parameter(ParameterType.Char, "Change", RecentChangeToChar(change)));
-			if(!string.IsNullOrEmpty(descr)) parameters.Add(new Parameter(ParameterType.String, "Description", descr));
-			else parameters.Add(new Parameter(ParameterType.String, "Description", DBNull.Value));
+			if(!string.IsNullOrEmpty(descr))
+			{
+				parameters.Add(new Parameter(ParameterType.String, "Description", descr));
+			}
+			else
+			{
+				parameters.Add(new Parameter(ParameterType.String, "Description", DBNull.Value));
+			}
 
 			DbCommand command = builder.GetCommand(connString, query, parameters);
 
@@ -663,7 +779,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows > maxChanges) {
 				// Remove 10% of old changes to avoid 1-by-1 deletion every time a change is made
 				int entriesToDelete = maxChanges / 10;
-				if(entriesToDelete > rows) entriesToDelete = rows;
+				if(entriesToDelete > rows)
+				{
+					entriesToDelete = rows;
+				}
 				//entriesToDelete += entriesToDelete / 10;
 
 				// This code is not optimized, but it surely works in most DBMS
@@ -738,7 +857,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -750,11 +872,30 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>filename</b> or <b>assembly</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>filename</b> or <b>assembly</b> are empty.</exception>
 		public bool StorePluginAssembly(string filename, byte[] assembly) {
-			if(filename == null) throw new ArgumentNullException("filename");
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
-			if(assembly == null) throw new ArgumentNullException("assembly");
-			if(assembly.Length == 0) throw new ArgumentException("Assembly cannot be empty", "assembly");
-			if(assembly.Length > MaxAssemblySize) throw new ArgumentException("Assembly is too big", "assembly");
+			if(filename == null)
+			{
+				throw new ArgumentNullException("filename");
+			}
+
+			if(filename.Length == 0)
+			{
+				throw new ArgumentException("Filename cannot be empty", "filename");
+			}
+
+			if(assembly == null)
+			{
+				throw new ArgumentNullException("assembly");
+			}
+
+			if(assembly.Length == 0)
+			{
+				throw new ArgumentException("Assembly cannot be empty", "assembly");
+			}
+
+			if(assembly.Length > MaxAssemblySize)
+			{
+				throw new ArgumentException("Assembly is too big", "assembly");
+			}
 
 			// 1. Delete old plugin assembly, if any
 			// 2. Store new assembly
@@ -775,8 +916,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteNonQuery(command, false);
 
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -789,8 +936,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>filename</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>filename</b> is empty.</exception>
 		public byte[] RetrievePluginAssembly(string filename) {
-			if(filename == null) throw new ArgumentNullException("filename");
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
+			if(filename == null)
+			{
+				throw new ArgumentNullException("filename");
+			}
+
+			if(filename.Length == 0)
+			{
+				throw new ArgumentException("Filename cannot be empty", "filename");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -816,7 +970,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -873,8 +1030,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>filename</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>filename</b> is empty.</exception>
 		public bool DeletePluginAssembly(string filename) {
-			if(filename == null) throw new ArgumentNullException(filename);
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
+			if(filename == null)
+			{
+				throw new ArgumentNullException(filename);
+			}
+
+			if(filename.Length == 0)
+			{
+				throw new ArgumentException("Filename cannot be empty", "filename");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -904,7 +1068,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteScalar<int>(command, -1, false);
 
-			if(rows == -1) return;
+			if(rows == -1)
+			{
+				return;
+			}
 
 			if(rows == 0) {
 				// Insert a neutral row (enabled, empty config)
@@ -931,8 +1098,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
 		public bool SetPluginStatus(string typeName, bool enabled) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+			if(typeName == null)
+			{
+				throw new ArgumentNullException("typeName");
+			}
+
+			if(typeName.Length == 0)
+			{
+				throw new ArgumentException("Type Name cannot be empty", "typeName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -953,8 +1127,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteNonQuery(command, false);
 
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -967,8 +1147,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
 		public bool GetPluginStatus(string typeName) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+			if(typeName == null)
+			{
+				throw new ArgumentNullException("typeName");
+			}
+
+			if(typeName.Length == 0)
+			{
+				throw new ArgumentException("Type Name cannot be empty", "typeName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -986,16 +1173,28 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			bool? enabled = null;
 
 			if(reader != null && reader.Read()) {
-				if(!IsDBNull(reader, "Enabled")) enabled = (bool)reader["Enabled"];
+				if(!IsDBNull(reader, "Enabled"))
+				{
+					enabled = (bool)reader["Enabled"];
+				}
 			}
 			CloseReader(command, reader);
 
-			if(enabled.HasValue) return enabled.Value;
+			if(enabled.HasValue)
+			{
+				return enabled.Value;
+			}
 			else {
 				if(typeName == "ScrewTurn.Wiki.UsersStorageProvider" ||
 					typeName == "ScrewTurn.Wiki.PagesStorageProvider" ||
-					typeName == "ScrewTurn.Wiki.FilesStorageProvider") return false;
-				else return true;
+					typeName == "ScrewTurn.Wiki.FilesStorageProvider")
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
 			}
 		}
 
@@ -1008,10 +1207,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
 		public bool SetPluginConfiguration(string typeName, string config) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+			if(typeName == null)
+			{
+				throw new ArgumentNullException("typeName");
+			}
 
-			if(config == null) config = "";
+			if(typeName.Length == 0)
+			{
+				throw new ArgumentException("Type Name cannot be empty", "typeName");
+			}
+
+			if(config == null)
+			{
+				config = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1032,8 +1241,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteNonQuery(command, false);
 
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -1046,8 +1261,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
 		public string GetPluginConfiguration(string typeName) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+			if(typeName == null)
+			{
+				throw new ArgumentNullException("typeName");
+			}
+
+			if(typeName.Length == 0)
+			{
+				throw new ArgumentException("Type Name cannot be empty", "typeName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1081,13 +1303,31 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>page</b> or <b>outgoingLinks</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> or <b>outgoingLinks</b> are empty.</exception>
 		public bool StoreOutgoingLinks(string page, string[] outgoingLinks) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
-			if(outgoingLinks == null) throw new ArgumentNullException("outgoingLinks");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
+
+			if(outgoingLinks == null)
+			{
+				throw new ArgumentNullException("outgoingLinks");
+			}
 
 			foreach(string link in outgoingLinks) {
-				if(link == null) throw new ArgumentNullException("outgoingLinks");
-				if(link.Length == 0) throw new ArgumentException("Link cannot be empty", "outgoingLinks");
+				if(link == null)
+				{
+					throw new ArgumentNullException("outgoingLinks");
+				}
+
+				if(link.Length == 0)
+				{
+					throw new ArgumentException("Link cannot be empty", "outgoingLinks");
+				}
 			}
 
 			// 1. Delete old values, if any
@@ -1141,8 +1381,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> is empty.</exception>
 		public string[] GetOutgoingLinks(string page) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1169,7 +1416,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1215,7 +1465,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1226,8 +1479,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> is empty.</exception>
 		public bool DeleteOutgoingLinks(string page) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1256,10 +1516,25 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>oldName</b> or <b>newName</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>oldName</b> or <b>newName</b> are empty.</exception>
 		public bool UpdateOutgoingLinksForRename(string oldName, string newName) {
-			if(oldName == null) throw new ArgumentNullException("oldName");
-			if(oldName.Length == 0) throw new ArgumentException("Old Name cannot be empty", "oldName");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(oldName == null)
+			{
+				throw new ArgumentNullException("oldName");
+			}
+
+			if(oldName.Length == 0)
+			{
+				throw new ArgumentException("Old Name cannot be empty", "oldName");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			// 1. Rename sources
 			// 2. Rename destinations
@@ -1299,8 +1574,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			rows = ExecuteNonQuery(command, false);
 
-			if(rows >= 0) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows >= 0)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return somethingUpdated || rows > 0;
 		}
@@ -1375,7 +1656,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1411,7 +1695,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1447,7 +1734,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>

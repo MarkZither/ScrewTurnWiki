@@ -43,12 +43,17 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			_config = config ?? string.Empty;
 			var configEntries = _config.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-			if(configEntries.Length != 3) throw new InvalidConfigurationException("Configuration is missing required parameters");
+			if(configEntries.Length != 3)
+			{
+				throw new InvalidConfigurationException("Configuration is missing required parameters");
+			}
 
 			_baseUrl = configEntries[0];
 
 			if(_baseUrl.EndsWith("/"))
+			{
 				_baseUrl = _baseUrl.Substring(0, _baseUrl.Length - 1);
+			}
 
 			_username = configEntries[1];
 			_password = configEntries[2];
@@ -78,13 +83,19 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			if(block.Key != -1) {
 				string unfuddleTickets = null;
 				if(HttpContext.Current != null)
+				{
 					unfuddleTickets = HttpContext.Current.Cache["UnfuddleTicketsStore"] as string;
+				}
 
 				if(string.IsNullOrEmpty(unfuddleTickets))
+				{
 					unfuddleTickets = LoadUnfuddleTicketsFromWeb();
+				}
 
 				if(string.IsNullOrEmpty(unfuddleTickets))
+				{
 					unfuddleTickets = LoadErrorMessage;
+				}
 
 				do {
 					buffer.Insert(block.Key, unfuddleTickets);
@@ -178,7 +189,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <returns>An html string that contains the tables to display the ticket information, or null</returns>
 		private string LoadUnfuddleTicketsFromWeb() {
 			var xml = BuildXmlFromApiCalls();
-			if(xml == null) return null;
+			if(xml == null)
+			{
+				return null;
+			}
 
 			string results;
 			using(var sw = new StringWriter()) {

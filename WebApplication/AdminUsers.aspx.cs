@@ -25,7 +25,11 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageUsers(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageUsers(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
+
 			aclActionsSelector.Visible = AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
 
 			revUsername.ValidationExpression = Settings.UsernameRegex;
@@ -94,10 +98,16 @@ namespace ScrewTurn.Wiki {
 
 			foreach(UserInfo user in allUsers) {
 				if(user.Active && chkActive.Checked) {
-					if(FilterUsername(user)) result.Add(user);
+					if(FilterUsername(user))
+					{
+						result.Add(user);
+					}
 				}
 				else if(!user.Active && chkInactive.Checked) {
-					if(FilterUsername(user)) result.Add(user);
+					if(FilterUsername(user))
+					{
+						result.Add(user);
+					}
 				}
 			}
 
@@ -118,12 +128,21 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private bool FilterUsername(UserInfo user) {
-			if(txtFilter.Text.Length == 0) return true;
-			else return user.Username.ToLower(System.Globalization.CultureInfo.CurrentCulture).Contains(txtFilter.Text.ToLower(System.Globalization.CultureInfo.CurrentCulture));
+			if(txtFilter.Text.Length == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return user.Username.ToLower(System.Globalization.CultureInfo.CurrentCulture).Contains(txtFilter.Text.ToLower(System.Globalization.CultureInfo.CurrentCulture));
+			}
 		}
 
 		protected void rptAccounts_DataBinding(object sender, EventArgs e) {
-			if(currentUsers == null) currentUsers = GetUsers();
+			if(currentUsers == null)
+			{
+				currentUsers = GetUsers();
+			}
 
 			List<UserRow> selectedRows = new List<UserRow>(PageSize);
 
@@ -264,7 +283,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnCreate_Click(object sender, EventArgs e) {
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			txtUsername.Text = txtUsername.Text.Trim();
 
@@ -315,7 +337,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnSave_Click(object sender, EventArgs e) {
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			// Perform proper actions based on provider read-only settings
 			// 1. If possible, modify user
@@ -381,7 +406,10 @@ namespace ScrewTurn.Wiki {
 
 			UserInfo currentUser = Users.FindUser(txtCurrentUsername.Value);
 
-			if(currentUser.Provider.UserAccountsReadOnly) return;
+			if(currentUser.Provider.UserAccountsReadOnly)
+			{
+				return;
+			}
 
 			// Remove global permissions, remove group membership, remove user
 			bool done = RemoveAllAclEntries(currentUser);
@@ -440,7 +468,10 @@ namespace ScrewTurn.Wiki {
 		private string[] GetSelectedGroups() {
 			List<string> selectedGroups = new List<string>(5);
 			foreach(ListItem item in lstGroups.Items) {
-				if(item.Selected) selectedGroups.Add(item.Value);
+				if(item.Selected)
+				{
+					selectedGroups.Add(item.Value);
+				}
 			}
 			return selectedGroups.ToArray();
 		}
@@ -464,12 +495,18 @@ namespace ScrewTurn.Wiki {
 		private bool AddAclEntries(UserInfo user, string[] grants, string[] denials) {
 			foreach(string action in grants) {
 				bool done = AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, action, user);
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			foreach(string action in denials) {
 				bool done = AuthWriter.SetPermissionForGlobals(AuthStatus.Deny, action, user);
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			return true;
@@ -525,7 +562,10 @@ namespace ScrewTurn.Wiki {
 			StringBuilder sb = new StringBuilder(50);
 			for(int i = 0; i < groups.Count; i++) {
 				sb.Append(groups[i].Name);
-				if(i != groups.Count - 1) sb.Append(", ");
+				if(i != groups.Count - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 			memberOf = sb.ToString();
 

@@ -93,12 +93,19 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 
-				if(Request["Query"] != null) txtQuery.Text = Request["Query"];
+				if(Request["Query"] != null)
+				{
+					txtQuery.Text = Request["Query"];
+				}
 
 				// Launch search, if query is specified
 
 				string mode = Request["Mode"];
-				if(string.IsNullOrEmpty(mode)) mode = "1";
+				if(string.IsNullOrEmpty(mode))
+				{
+					mode = "1";
+				}
+
 				if(!string.IsNullOrEmpty(Request["Query"])) {
 					PerformSearch(Request["Query"], searchModeMap[mode], selectedCategories,
 						chkUncategorizedPages.Checked, chkAllNamespaces.Checked, chkFilesAndAttachments.Checked);
@@ -138,9 +145,18 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The search mode string.</returns>
 		private string GetMode() {
-			if(rdoAtLeastOneWord.Checked) return "1";
-			else if(rdoAllWords.Checked) return "2";
-			else return "3";
+			if(rdoAtLeastOneWord.Checked)
+			{
+				return "1";
+			}
+			else if(rdoAllWords.Checked)
+			{
+				return "2";
+			}
+			else
+			{
+				return "3";
+			}
 		}
 
 		/// <summary>
@@ -184,7 +200,10 @@ namespace ScrewTurn.Wiki {
 					// Verify permissions
 					bool canReadPage = AuthChecker.CheckActionForPage(currentPage,
 						Actions.ForPages.ReadPage, currentUser, currentGroups);
-					if(!canReadPage) continue; // Skip
+					if(!canReadPage)
+					{
+						continue; // Skip
+					}
 				}
 				else if(res.Document.TypeTag == MessageDocument.StandardTypeTag) {
 					currentPage = (res.Document as MessageDocument).PageInfo;
@@ -193,7 +212,10 @@ namespace ScrewTurn.Wiki {
 					// Verify permissions
 					bool canReadDiscussion = AuthChecker.CheckActionForPage(currentPage,
 						Actions.ForPages.ReadDiscussion, currentUser, currentGroups);
-					if(!canReadDiscussion) continue; // Skip
+					if(!canReadDiscussion)
+					{
+						continue; // Skip
+					}
 				}
 				else if(res.Document.TypeTag == PageAttachmentDocument.StandardTypeTag) {
 					currentPage = (res.Document as PageAttachmentDocument).Page;
@@ -202,7 +224,10 @@ namespace ScrewTurn.Wiki {
 					// Verify permissions
 					bool canDownloadAttn = AuthChecker.CheckActionForPage(currentPage,
 						Actions.ForPages.DownloadAttachments, currentUser, currentGroups);
-					if(!canDownloadAttn) continue; // Skip
+					if(!canDownloadAttn)
+					{
+						continue; // Skip
+					}
 				}
 				else if(res.Document.TypeTag == FileDocument.StandardTypeTag) {
 					string[] fields = ((FileDocument)res.Document).Name.Split('|');
@@ -212,11 +237,17 @@ namespace ScrewTurn.Wiki {
 					// Verify permissions
 					bool canDownloadFiles = AuthChecker.CheckActionForDirectory(provider, directory,
 						Actions.ForDirectories.DownloadFiles, currentUser, currentGroups);
-					if(!canDownloadFiles) continue; // Skip
+					if(!canDownloadFiles)
+					{
+						continue; // Skip
+					}
 				}
 
 				string currentNamespace = DetectNamespace();
-				if(string.IsNullOrEmpty(currentNamespace)) currentNamespace = null;
+				if(string.IsNullOrEmpty(currentNamespace))
+				{
+					currentNamespace = null;
+				}
 
 				if(currentPage != null) {
 					// Check categories match, if page is set
@@ -242,7 +273,10 @@ namespace ScrewTurn.Wiki {
 					count++;
 				}
 
-				if(count >= MaxResults) break;
+				if(count >= MaxResults)
+				{
+					break;
+				}
 			}
 
 			rptResults.DataSource = rows;
@@ -411,7 +445,10 @@ namespace ScrewTurn.Wiki {
 					FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, content.PageInfo) +
 					")", result.Relevance.Value, "");
 			}
-			else throw new NotSupportedException();
+			else
+			{
+				throw new NotSupportedException();
+			}
 		}
 
 		/// <summary>
@@ -471,12 +508,20 @@ namespace ScrewTurn.Wiki {
 
 				int openIndex = match.FirstCharIndex + i * (highlightOpen.Length + highlightClose.Length);
 				bool openIndexOk = openIndex >= 0 && openIndex <= sb.Length;
-				if(openIndexOk) sb.Insert(openIndex, highlightOpen);
+				if(openIndexOk)
+				{
+					sb.Insert(openIndex, highlightOpen);
+				}
 
 				int closeIndex = match.FirstCharIndex + match.Text.Length + highlightOpen.Length + i * (highlightOpen.Length + highlightClose.Length);
-				if(openIndexOk && closeIndex >= 0 && closeIndex <= sb.Length) sb.Insert(closeIndex, highlightClose);
-				else if(openIndexOk) sb.Append(highlightClose); // Make sure an open tags is also closed
-
+				if(openIndexOk && closeIndex >= 0 && closeIndex <= sb.Length)
+				{
+					sb.Insert(closeIndex, highlightClose);
+				}
+				else if(openIndexOk)
+				{
+					sb.Append(highlightClose); // Make sure an open tags is also closed
+				}
 			}
 
 			bool startsAtZero = false, endsAtEnd = false;
@@ -493,8 +538,15 @@ namespace ScrewTurn.Wiki {
 					len = sb.Length - start;
 					endsAtEnd = true;
 				}
-				if(len <= 0) len = sb.Length; // HACK: This should never occur, but if it does it crashes the wiki, so set it to max len
-				if(len > maxLen) len = maxLen;
+				if(len <= 0)
+				{
+					len = sb.Length; // HACK: This should never occur, but if it does it crashes the wiki, so set it to max len
+				}
+
+				if(len > maxLen)
+				{
+					len = maxLen;
+				}
 
 				result = sb.ToString();
 
@@ -503,7 +555,10 @@ namespace ScrewTurn.Wiki {
 					start--;
 					len++;
 				}
-				while(start + len < result.Length && result[start + len] != ' ') len++;
+				while(start + len < result.Length && result[start + len] != ' ')
+				{
+					len++;
+				}
 
 				result = sb.ToString().Substring(start, len);
 			}
@@ -511,7 +566,10 @@ namespace ScrewTurn.Wiki {
 				// Extract an initial piece of the content (300 chars)
 				startsAtZero = true;
 				endsAtEnd = true;
-				if(input.Length < 300) result = input;
+				if(input.Length < 300)
+				{
+					result = input;
+				}
 				else {
 					endsAtEnd = false;
 					result = input.Substring(0, 300);
@@ -522,8 +580,15 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			if(!startsAtZero) result = "[...] " + result;
-			if(!endsAtEnd) result += " [...]";
+			if(!startsAtZero)
+			{
+				result = "[...] " + result;
+			}
+
+			if(!endsAtEnd)
+			{
+				result += " [...]";
+			}
 
 			return result;
 		}
@@ -540,7 +605,11 @@ namespace ScrewTurn.Wiki {
 			for(int i = 0; i < matches.Count; i++) {
 				if(matches[i].Text.Length > 1 && !added.Contains(matches[i].Text)) {
 					buffer.Append(Tools.UrlEncode(matches[i].Text));
-					if(i != matches.Count - 1) buffer.Append(",");
+					if(i != matches.Count - 1)
+					{
+						buffer.Append(",");
+					}
+
 					added.Add(matches[i].Text);
 				}
 			}

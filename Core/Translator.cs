@@ -72,7 +72,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 				}
 				else
+				{
 					match = math.Match(sb.ToString(), end);
+				}
 			}
 
 			match = references.Match(sb.ToString());
@@ -84,7 +86,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 				}
 				else
+				{
 					match = references.Match(sb.ToString(), end);
+				}
 			}
 
 			match = references1.Match(sb.ToString());
@@ -96,7 +100,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 				}
 				else
+				{
 					match = references1.Match(sb.ToString(), end);
+				}
 			}
 
 			match = redirect.Match(sb.ToString());
@@ -108,7 +114,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 				}
 				else
+				{
 					match = redirect.Match(sb.ToString(), end);
+				}
 			}
 
 			match = transclusion.Match(sb.ToString());
@@ -137,7 +145,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 				}
 				else
+				{
 					match = pre.Match(sb.ToString(), end);
+				}
 			}
 
 			match = exlink.Match(sb.ToString());
@@ -152,7 +162,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 							match = exlink.Match(sb.ToString(), match.Index + match.Length);
 						}
 						else
+						{
 							match = exlink.Match(sb.ToString(), match.Index + match.Length);
+						}
 					}
 					else {
 						sb.Remove(match.Index, match.Length);
@@ -162,7 +174,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 					}
 				}
 				else
+				{
 					match = exlink.Match(sb.ToString(), end);
+				}
 			}
 
 			match = mailto.Match(sb.ToString());
@@ -191,7 +205,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 					}
 				}
 				else
+				{
 					match = mailto.Match(sb.ToString(), end);
+				}
 			}
 
 			match = image.Match(sb.ToString());
@@ -208,11 +224,15 @@ namespace ScrewTurn.Wiki.ImportWiki {
 					name = splits[0];
 					for(int i = 0; i < splits.Length; i++) {
 						if(splits[i] == "right" || splits[i] == "left" || splits[i] == "center" || splits[i] == "none")
+						{
 							location = splits[i];
+						}
 						else if(splits[i].Contains("px")) { }
 						else if(splits[i] == "thumb" || splits[i] == "thumbnail" || splits[i] == "frame") { }
 						else
+						{
 							caption = splits[i] + "|";
+						}
 					}
 					if(location == "right" || location == "left") {
 						sb.Remove(match.Index, match.Length);
@@ -251,9 +271,14 @@ namespace ScrewTurn.Wiki.ImportWiki {
 				if(IsNoWikied(match.Index, noWikiBegin, noWikiEnd, out end)) {
 					string s = "";
 					if(first)
+					{
 						s += "{{{{" + match.Value.Substring(1, match.Value.Length - 1);
+					}
 					else
+					{
 						s += match.Value.Substring(1, match.Value.Length - 1);
+					}
+
 					if(sb.Length > match.Index + match.Length + 1) {
 						if(sb[match.Index + match.Length] == '\n' && sb[match.Index + match.Length + 1] == ' ') {
 							first = false;
@@ -273,8 +298,9 @@ namespace ScrewTurn.Wiki.ImportWiki {
 					ComputeNoWiki(sb.ToString(), ref noWikiBegin, ref noWikiEnd);
 				}
 				else
+				{
 					match = newlinespace.Match(sb.ToString(), end);
-
+				}
 			}
 
 			return sb.ToString();

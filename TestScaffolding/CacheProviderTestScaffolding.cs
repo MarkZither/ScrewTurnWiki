@@ -43,18 +43,16 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
 			ICacheProviderV30 prov = GetProvider();
 
-			prov.Init(null, "");
+			Assert.That(() => prov.Init(null, ""), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
 			ICacheProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), null);
+			Assert.That(() => prov.Init(MockHost(), null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -89,18 +87,30 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("", prov.GetPseudoCacheValue("Test"), "Wrong pseudo-cache value");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void GetPseudoCacheValue_InvalidName(string n) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.GetPseudoCacheValue(n);
+			Assert.That(() => prov.GetPseudoCacheValue(n), Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase(null)]
+		public void GetPseudoCacheValue_NullName(string n)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.GetPseudoCacheValue(n), Throws.ArgumentNullException);
+		}
+
+		[TestCase("")]
 		public void SetPseudoCacheValue_InvalidName(string n) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.SetPseudoCacheValue(n, "Value");
+			Assert.That(() => prov.SetPseudoCacheValue(n, "Value"), Throws.ArgumentException);
+		}
+
+		[TestCase(null)]
+		public void SetPseudoCacheValue_NullName(string n)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.SetPseudoCacheValue(n, "Value"), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -146,32 +156,29 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsNull(prov.GetPageContent(new PageInfo("Blah", MockPagesProvider(), DateTime.Now)), "GetPageContent should return null");
 		}
 
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetPageContent_NullPage() {
 			ICacheProviderV30 prov = GetProvider();
-			prov.GetPageContent(null);
+			Assert.That(() => prov.GetPageContent(null), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPageContent_NullPage() {
 			ICacheProviderV30 prov = GetProvider();
 
 			PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
 			PageContent c1 = new PageContent(p1, "Page 1", "admin", DateTime.Now, "Comment", "Content", null, null);
 
-			prov.SetPageContent(null, c1);
+			Assert.That(() => prov.SetPageContent(null, c1), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetPageContent_NullContent() {
 			ICacheProviderV30 prov = GetProvider();
 
 			PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
 			PageContent c1 = new PageContent(p1, "Page 1", "admin", DateTime.Now, "Comment", "Content", null, null);
 
-			prov.SetPageContent(p1, null);
+			Assert.That(() => prov.SetPageContent(p1, null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -196,27 +203,24 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetFormattedPageContent_NullPage() {
 			ICacheProviderV30 prov = GetProvider();
-			prov.GetFormattedPageContent(null);
+			Assert.That(() => prov.GetFormattedPageContent(null), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetFormattedPageContent_NullPage() {
 			ICacheProviderV30 prov = GetProvider();
-			prov.SetFormattedPageContent(null, "Content");
+			Assert.That(() => prov.SetFormattedPageContent(null, "Content"), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetFormattedPageContent_NullContent() {
 			ICacheProviderV30 prov = GetProvider();
 
 			PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
 
-			prov.SetFormattedPageContent(p1, null);
+			Assert.That(() => prov.SetFormattedPageContent(p1, null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -247,11 +251,10 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemovePageContent_NullPage() {
 			ICacheProviderV30 prov = GetProvider();
 
-			prov.RemovePage(null);
+			Assert.That(() => prov.RemovePage(null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -331,11 +334,11 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsNull(prov.GetFormattedPageContent(p1), "GetFormattedPageContent should not null");
 		}
 
-		[TestCase(-1, ExpectedException = typeof(ArgumentOutOfRangeException))]
-		[TestCase(0, ExpectedException = typeof(ArgumentOutOfRangeException))]
+		[TestCase(-1)]
+		[TestCase(0)]
 		public void CutCache_InvalidSize(int s) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.CutCache(s);
+			Assert.Throws<ArgumentOutOfRangeException>(() => prov.CutCache(s));
 		}
 
 		[Test]
@@ -354,32 +357,55 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsFalse(prov.IsPageBeingEdited("Page", "User2"), "IsPageBeingEdited should return false");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void RenewEditingSession_InvalidPage(string p) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.RenewEditingSession(p, "User");
+			Assert.That(() => prov.RenewEditingSession(p, "User"), Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase(null)]
+		public void RenewEditingSession_NullPage(string p)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.RenewEditingSession(p, "User"), Throws.ArgumentNullException);
+		}
+
+		[TestCase("")]
 		public void RenewEditingSession_InvalidUser(string u) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.RenewEditingSession("Page", u);
+			Assert.That(() => prov.RenewEditingSession("Page", u), Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase(null)]
+		public void RenewEditingSession_NullUser(string u)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.RenewEditingSession("Page", u), Throws.ArgumentNullException);
+		}
+
+		[TestCase("")]
 		public void IsPageBeingEdited_InvalidPage(string p) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.IsPageBeingEdited(p, "User");
+			Assert.That(() => prov.IsPageBeingEdited(p, "User"), Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		public void IsPageBeingEdited_NullPage(string p)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.IsPageBeingEdited(p, "User"), Throws.ArgumentNullException);
+		}
+
+		[TestCase("")]
 		public void IsPageBeingEdited_InvalidUser(string u) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.IsPageBeingEdited("Page", u);
+			Assert.That(() => prov.IsPageBeingEdited("Page", u), Throws.ArgumentException);
+		}
+
+		[TestCase(null)]
+		public void IsPageBeingEdited_NullUser(string u)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.IsPageBeingEdited("Page", u), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -409,18 +435,30 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsFalse(prov.IsPageBeingEdited("Page", "User2"), "IsPageBeingEditing should return false");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void CancelEditingSession_InvalidPage(string p) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.CancelEditingSession(p, "User");
+			Assert.That(() => prov.CancelEditingSession(p, "User"), Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase(null)]
+		public void CancelEditingSession_NullPage(string p)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.CancelEditingSession(p, "User"), Throws.ArgumentNullException);
+		}
+
+		[TestCase("")]
 		public void CancelEditingSession_InvalidUser(string u) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.CancelEditingSession("Page", u);
+			Assert.That(() => prov.CancelEditingSession("Page", u), Throws.ArgumentException);
+		}
+
+		[TestCase(null)]
+		public void CancelEditingSession_NullUser(string u)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.CancelEditingSession("Page", u), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -444,11 +482,17 @@ namespace ScrewTurn.Wiki.Tests {
 
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void WhosEditing_InvalidPage(string p) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.WhosEditing(p);
+			Assert.That(() => prov.WhosEditing(p), Throws.ArgumentException);
+		}
+
+		[TestCase(null)]
+		public void WhosEditing_NullPage(string p)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.WhosEditing(p), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -478,29 +522,46 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsNull(prov.GetRedirectionDestination("Page"), "No redirection should be in cache");
 		}
 
-		[TestCase(null, "destination", ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", "destination", ExpectedException = typeof(ArgumentException))]
-		[TestCase("source", null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("source", "", ExpectedException = typeof(ArgumentException))]
+		
+		[TestCase("", "destination")]
+		[TestCase("source", "")]
 		public void AddRedirection_InvalidParameters(string src, string dest) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.AddRedirection(src, dest);
+			Assert.That(() => prov.AddRedirection(src, dest), Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase(null, "destination")]
+		[TestCase("source", null)]
+		public void AddRedirection_NullParameters(string src, string dest)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.AddRedirection(src, dest), Throws.ArgumentNullException);
+		}
+
+		[TestCase("")]
 		public void GetRedirectionDestination_InvalidSource(string src) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.GetRedirectionDestination(src);
+			Assert.That(() => prov.GetRedirectionDestination(src), Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase(null)]
+		public void GetRedirectionDestination_NullSource(string src)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.GetRedirectionDestination(src), Throws.ArgumentNullException);
+		}
+
+		[TestCase("")]
 		public void RemovePageFromRedirections_InvalidName(string name) {
 			ICacheProviderV30 prov = GetProvider();
-			prov.RemovePageFromRedirections(name);
+			Assert.That(() => prov.RemovePageFromRedirections(name), Throws.ArgumentException);
 		}
 
+		[TestCase(null)]
+		public void RemovePageFromRedirections_NullName(string name)
+		{
+			ICacheProviderV30 prov = GetProvider();
+			Assert.That(() => prov.RemovePageFromRedirections(name), Throws.ArgumentNullException);
+		}
 	}
-
 }

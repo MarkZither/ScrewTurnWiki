@@ -26,22 +26,58 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 			Assert.AreEqual(Value.Deny, entry.Value, "Wrong value");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void Constructor_InvalidResource(string r) {
-			AclEntry entry = new AclEntry(r, "Action", "U.USer", Value.Grant);
+		[TestCase(null)]
+		public void Constructor_InvalidResource_ShouldThrowArgumentNullException(string r)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclEntry entry = new AclEntry(r, "Action", "U.USer", Value.Grant);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void Constructor_InvalidAction(string a) {
-			AclEntry entry = new AclEntry("Res", a, "G.Group", Value.Deny);
+		[TestCase("")]
+		public void Constructor_InvalidResource_ShouldThrowArgumentException(string r)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclEntry entry = new AclEntry(r, "Action", "U.USer", Value.Grant);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void Constructor_InvalidSubject(string s) {
-			AclEntry entry = new AclEntry("Res", "Action", s, Value.Grant);
+		[TestCase(null)]
+		public void Constructor_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclEntry entry = new AclEntry("Res", a, "G.Group", Value.Deny);
+			});
+		}
+
+		[TestCase("")]
+		public void Constructor_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclEntry entry = new AclEntry("Res", a, "G.Group", Value.Deny);
+			});
+		}
+
+		[TestCase(null)]
+		public void Constructor_InvalidSubject_ShouldThrowArgumentNullException(string s)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclEntry entry = new AclEntry("Res", "Action", s, Value.Grant);
+			});
+		}
+
+		[TestCase("")]
+		public void Constructor_InvalidSubject_ShouldThrowArgumentException(string s)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclEntry entry = new AclEntry("Res", "Action", s, Value.Grant);
+			});
 		}
 
 		[Test]

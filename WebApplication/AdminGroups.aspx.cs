@@ -17,7 +17,11 @@ namespace ScrewTurn.Wiki {
 			string currentUser = SessionFacade.GetCurrentUsername();
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
-			if(!AdminMaster.CanManageGroups(currentUser, currentGroups)) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageGroups(currentUser, currentGroups))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
+
 			aclActionsSelector.Visible = AdminMaster.CanManagePermissions(currentUser, currentGroups);
 
 			revName.ValidationExpression = Settings.UsernameRegex;
@@ -108,8 +112,14 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void cvName_ServerValidate(object sender, ServerValidateEventArgs e) {
-			if(txtName.Enabled) e.IsValid = Users.FindUserGroup(txtName.Text) == null;
-			else e.IsValid = true;
+			if(txtName.Enabled)
+			{
+				e.IsValid = Users.FindUserGroup(txtName.Text) == null;
+			}
+			else
+			{
+				e.IsValid = true;
+			}
 		}
 
 		protected void btnNewGroup_Click(object sender, EventArgs e) {
@@ -121,7 +131,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnCreate_Click(object sender, EventArgs e) {
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			txtName.Text = txtName.Text.Trim();
 
@@ -157,7 +170,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnSave_Click(object sender, EventArgs e) {
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			lblResult.CssClass = "";
 			lblResult.Text = "";
@@ -211,7 +227,10 @@ namespace ScrewTurn.Wiki {
 
 			UserGroup currentGroup = Users.FindUserGroup(txtCurrentName.Value);
 
-			if(currentGroup.Provider.UserGroupsReadOnly) return;
+			if(currentGroup.Provider.UserGroupsReadOnly)
+			{
+				return;
+			}
 
 			// Remove all global permissions for the group then delete it
 			bool done = RemoveAllAclEntries(currentGroup);
@@ -259,12 +278,18 @@ namespace ScrewTurn.Wiki {
 		private bool AddAclEntries(UserGroup group, string[] grants, string[] denials) {
 			foreach(string action in grants) {
 				bool done = AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, action, group);
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			foreach(string action in denials) {
 				bool done = AuthWriter.SetPermissionForGlobals(AuthStatus.Deny, action, group);
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			return true;

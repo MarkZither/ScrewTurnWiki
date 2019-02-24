@@ -25,7 +25,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// </summary>
 		/// <param name="connector">The connection object.</param>
 		public SqlIndex(IIndexConnector connector) {
-			if(connector == null) throw new ArgumentNullException("connector");
+			if(connector == null)
+			{
+				throw new ArgumentNullException("connector");
+			}
 
 			this.connector = connector;
 			this.stopWords = new string[0];
@@ -42,7 +45,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				}
 			}
 			set {
-				if(value == null) throw new ArgumentNullException("value", "Stop words cannot be null");
+				if(value == null)
+				{
+					throw new ArgumentNullException("value", "Stop words cannot be null");
+				}
+
 				lock(this) {
 					stopWords = value;
 				}
@@ -100,9 +107,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <remarks>Indexing the content of the document is <b>O(n)</b>,
 		/// where <b>n</b> is the total number of words in the document.</remarks>
 		public int StoreDocument(IDocument document, string[] keywords, string content, object state) {
-			if(document == null) throw new ArgumentNullException("document");
-			if(keywords == null) keywords = new string[0];
-			if(content == null) throw new ArgumentNullException("content");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
+
+			if(keywords == null)
+			{
+				keywords = new string[0];
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
 
 			RemoveDocument(document, state);
 
@@ -136,7 +154,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="document">The document to remove.</param>
 		/// <param name="state">A state object that is passed to the IndexStorer SaveDate/DeleteData function.</param>
 		public void RemoveDocument(IDocument document, object state) {
-			if(document == null) throw new ArgumentNullException("document");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
 
 			connector.DeleteDataForDocument(document, state);
 		}
@@ -147,7 +168,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="parameters">The search parameters.</param>
 		/// <returns>The results.</returns>
 		public SearchResultCollection Search(SearchParameters parameters) {
-			if(parameters == null) throw new ArgumentNullException("parameters");
+			if(parameters == null)
+			{
+				throw new ArgumentNullException("parameters");
+			}
 
 			using(IWordFetcher fetcher = connector.GetWordFetcher()) {
 				if(parameters.DocumentTypeTags == null) {
@@ -175,8 +199,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="connection">An open database connection.</param>
 		/// <param name="implementation">The method implementation.</param>
 		public SqlWordFetcher(DbConnection connection, TryFindWord implementation) {
-			if(connection == null) throw new ArgumentNullException("connection");
-			if(implementation == null) throw new ArgumentNullException("implementation");
+			if(connection == null)
+			{
+				throw new ArgumentNullException("connection");
+			}
+
+			if(implementation == null)
+			{
+				throw new ArgumentNullException("implementation");
+			}
 
 			this.connection = connection;
 			this.implementation = implementation;

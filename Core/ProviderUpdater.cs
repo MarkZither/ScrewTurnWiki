@@ -30,10 +30,25 @@ namespace ScrewTurn.Wiki {
 			Dictionary<string, string> fileNamesForProviders,
 			params IProviderV30[][] providers) {
 
-			if(settingsProvider == null) throw new ArgumentNullException("settingsProvider");
-			if(fileNamesForProviders == null) throw new ArgumentNullException("fileNamesForProviders");
-			if(providers == null) throw new ArgumentNullException("providers");
-			if(providers.Length == 0) throw new ArgumentException("Providers cannot be empty", "providers");
+			if(settingsProvider == null)
+			{
+				throw new ArgumentNullException("settingsProvider");
+			}
+
+			if(fileNamesForProviders == null)
+			{
+				throw new ArgumentNullException("fileNamesForProviders");
+			}
+
+			if(providers == null)
+			{
+				throw new ArgumentNullException("providers");
+			}
+
+			if(providers.Length == 0)
+			{
+				throw new ArgumentException("Providers cannot be empty", "providers");
+			}
 
 			this.settingsProvider = settingsProvider;
 			this.fileNamesForProviders = fileNamesForProviders;
@@ -56,7 +71,10 @@ namespace ScrewTurn.Wiki {
 			int updatedDlls = 0;
 
 			foreach(IProviderV30 prov in providers) {
-				if(string.IsNullOrEmpty(prov.Information.UpdateUrl)) continue;
+				if(string.IsNullOrEmpty(prov.Information.UpdateUrl))
+				{
+					continue;
+				}
 
 				string newVersion;
 				string newDllUrl;
@@ -115,8 +133,14 @@ namespace ScrewTurn.Wiki {
 				reader.Close();
 
 				bool done = settingsProvider.StorePluginAssembly(filename, content);
-				if(done) Log.LogEntry("Provider " + provider.GetType().FullName + " updated", EntryType.General, Log.SystemUsername);
-				else Log.LogEntry("Update failed for provider " + provider.GetType().FullName + ": could not store assembly", EntryType.Error, Log.SystemUsername);
+				if(done)
+				{
+					Log.LogEntry("Provider " + provider.GetType().FullName + " updated", EntryType.General, Log.SystemUsername);
+				}
+				else
+				{
+					Log.LogEntry("Update failed for provider " + provider.GetType().FullName + ": could not store assembly", EntryType.Error, Log.SystemUsername);
+				}
 
 				return done;
 			}

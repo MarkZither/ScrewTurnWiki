@@ -27,8 +27,15 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="change"/> is not <see cref="IndexChangeType.IndexCleared"/> and <paramref name="document"/> or <paramref name="changeData"/> are <c>null</c>.</exception>
 		public IndexChangedEventArgs(IDocument document, IndexChangeType change, DumpedChange changeData, object state) {
 			if(change != IndexChangeType.IndexCleared) {
-				if(document == null) throw new ArgumentNullException("document");
-				if(changeData == null) throw new ArgumentNullException("changeData");
+				if(document == null)
+				{
+					throw new ArgumentNullException("document");
+				}
+
+				if(changeData == null)
+				{
+					throw new ArgumentNullException("changeData");
+				}
 			}
 
 			this.document = document;

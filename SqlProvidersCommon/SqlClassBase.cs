@@ -34,8 +34,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="defaultValue">The default value to return when the column contains a null value.</param>
 		/// <returns>The value.</returns>
 		protected T GetNullableColumn<T>(DbDataReader reader, string column, T defaultValue) {
-			if(IsDBNull(reader, column)) return defaultValue;
-			else return (T)reader[column];
+			if(IsDBNull(reader, column))
+			{
+				return defaultValue;
+			}
+			else
+			{
+				return (T)reader[column];
+			}
 		}
 
 		/// <summary>
@@ -58,7 +64,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			do {
 				read = reader.GetBytes(columnOrdinal, totalRead, buffer, 0, buffer.Length);
 
-				if(totalRead + read > maxSize) return null;
+				if(totalRead + read > maxSize)
+				{
+					return null;
+				}
 
 				if(read > 0) {
 					Buffer.BlockCopy(buffer, 0, tempResult, (int)totalRead, (int)read);
@@ -146,7 +155,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(temp != null) {
 				return (T)temp;
 			}
-			else return defaultValue;
+			else
+			{
+				return defaultValue;
+			}
 		}
 
 		/// <summary>
@@ -183,7 +195,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				rows = command.ExecuteNonQuery();
 			}
 			catch(DbException dbex) {
-				if(logError) LogException(dbex);
+				if(logError)
+				{
+					LogException(dbex);
+				}
 			}
 			finally {
 				if(close) {
@@ -207,7 +222,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			}
 			catch(DbException dbex) {
 				LogException(dbex);
-				if(closeOnError) CloseConnection(command.Connection);
+				if(closeOnError)
+				{
+					CloseConnection(command.Connection);
+				}
 			}
 
 			return reader;

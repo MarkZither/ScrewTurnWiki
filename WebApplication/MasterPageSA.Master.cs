@@ -21,8 +21,15 @@ namespace ScrewTurn.Wiki {
 				CphMasterSA.ClientID + "_", Properties.Messages.ConfirmOperation);
 
 			string nspace = currentNamespace;
-			if(string.IsNullOrEmpty(nspace)) nspace = "";
-			else nspace += ".";
+			if(string.IsNullOrEmpty(nspace))
+			{
+				nspace = "";
+			}
+			else
+			{
+				nspace += ".";
+			}
+
 			lnkMainPage.NavigateUrl = nspace + "Default.aspx";
 
 			if(!Page.IsPostBack) {
@@ -31,7 +38,10 @@ namespace ScrewTurn.Wiki {
 					lnkPreviousPage.Visible = true;
 					lnkPreviousPage.NavigateUrl = referrer;
 				}
-				else lnkPreviousPage.Visible = false;
+				else
+				{
+					lnkPreviousPage.Visible = false;
+				}
 			}
 
 			PrintHtmlHead();
@@ -54,8 +64,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The item name.</param>
 		/// <returns>The namespace-qualified item name.</returns>
 		private string GetPseudoCacheItemName(string name) {
-			if(string.IsNullOrEmpty(currentNamespace)) return name;
-			else return currentNamespace + "." + name;
+			if(string.IsNullOrEmpty(currentNamespace))
+			{
+				return name;
+			}
+			else
+			{
+				return currentNamespace + "." + name;
+			}
 		}
 
 		/// <summary>

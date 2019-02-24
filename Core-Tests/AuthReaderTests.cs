@@ -35,7 +35,10 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		protected IHostV30 MockHost() {
-			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
+			if(!Directory.Exists(testDir))
+			{
+				Directory.CreateDirectory(testDir);
+			}
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
 			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.Any();
@@ -93,11 +96,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForGlobals_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForGlobals_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForGlobals(null as UserGroup);
+				AuthReader.RetrieveGrantsForGlobals(null as UserGroup);
+			});
 		}
 
 		[Test]
@@ -127,11 +133,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForGlobals_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForGlobals_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForGlobals(null as UserInfo);
+				AuthReader.RetrieveGrantsForGlobals(null as UserInfo);
+			});
 		}
 
 		[Test]
@@ -161,11 +170,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForGlobals_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForGlobals_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForGlobals(null as UserGroup);
+				AuthReader.RetrieveDenialsForGlobals(null as UserGroup);
+			});
 		}
 
 		[Test]
@@ -195,11 +207,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForGlobals_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForGlobals_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForGlobals(null as UserInfo);
+				AuthReader.RetrieveDenialsForGlobals(null as UserInfo);
+			});
 		}
 
 		[Test]
@@ -325,11 +340,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForNamespace_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForNamespace_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForNamespace(null as UserGroup, new NamespaceInfo("Sub", null, null));
+				AuthReader.RetrieveGrantsForNamespace(null as UserGroup, new NamespaceInfo("Sub", null, null));
+			});
 		}
 
 		[Test]
@@ -384,11 +402,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForNamespace_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForNamespace_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForNamespace(null as UserInfo, new NamespaceInfo("Sub", null, null));
+				AuthReader.RetrieveGrantsForNamespace(null as UserInfo, new NamespaceInfo("Sub", null, null));
+			});
 		}
 
 		[Test]
@@ -442,11 +463,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForNamespace_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForNamespace_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForNamespace(null as UserGroup, new NamespaceInfo("Sub", null, null));
+				AuthReader.RetrieveDenialsForNamespace(null as UserGroup, new NamespaceInfo("Sub", null, null));
+			});
 		}
 
 		[Test]
@@ -501,11 +525,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForNamespace_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForNamespace_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForNamespace(null as UserInfo, new NamespaceInfo("Sub", null, null));
+				AuthReader.RetrieveDenialsForNamespace(null as UserInfo, new NamespaceInfo("Sub", null, null));
+			});
 		}
 
 		[Test]
@@ -545,11 +572,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveSubjectsForPage_NullPage() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveSubjectsForPage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveSubjectsForPage(null);
+				AuthReader.RetrieveSubjectsForPage(null);
+			});
 		}
 
 		[Test]
@@ -580,19 +610,25 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForPage_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForPage_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForPage(null as UserGroup, new PageInfo("Page", null, DateTime.Now));
+				AuthReader.RetrieveGrantsForPage(null as UserGroup, new PageInfo("Page", null, DateTime.Now));
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForPage_Group_NullPage() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForPage_Group_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForPage(new UserGroup("Group", "Group", null), null);
+				AuthReader.RetrieveGrantsForPage(new UserGroup("Group", "Group", null), null);
+			});
 		}
 
 		[Test]
@@ -623,19 +659,25 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForPage_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForPage_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForPage(null as UserInfo, new PageInfo("Page", null, DateTime.Now));
+				AuthReader.RetrieveGrantsForPage(null as UserInfo, new PageInfo("Page", null, DateTime.Now));
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForPage_User_NullPage() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForPage_User_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForPage(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), null);
+				AuthReader.RetrieveGrantsForPage(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), null);
+			});
 		}
 
 		[Test]
@@ -666,19 +708,25 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForPage_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForPage_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForPage(null as UserGroup, new PageInfo("Page", null, DateTime.Now));
+				AuthReader.RetrieveDenialsForPage(null as UserGroup, new PageInfo("Page", null, DateTime.Now));
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForPage_Group_NullPage() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForPage_Group_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForPage(new UserGroup("Group", "Group", null), null);
+				AuthReader.RetrieveDenialsForPage(new UserGroup("Group", "Group", null), null);
+			});
 		}
 
 		[Test]
@@ -709,19 +757,25 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForPage_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForPage_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForPage(null as UserInfo, new PageInfo("Page", null, DateTime.Now));
+				AuthReader.RetrieveDenialsForPage(null as UserInfo, new PageInfo("Page", null, DateTime.Now));
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForPage_User_NullPage() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForPage_User_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForPage(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), null);
+				AuthReader.RetrieveDenialsForPage(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), null);
+			});
 		}
 
 		[Test]
@@ -801,21 +855,40 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveSubjectsForDirectory_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveSubjectsForDirectory_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveSubjectsForDirectory(null, "/");
+				AuthReader.RetrieveSubjectsForDirectory(null, "/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RetrieveSubjectsForDirectory_InvalidDirectory(string d) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void RetrieveSubjectsForDirectory_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthReader.RetrieveSubjectsForDirectory(fProv, d);
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveSubjectsForDirectory(fProv, d);
+			});
+		}
+
+		[TestCase("")]
+		public void RetrieveSubjectsForDirectory_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveSubjectsForDirectory(fProv, d);
+			});
 		}
 
 		[Test]
@@ -877,31 +950,53 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForDirectory_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForDirectory_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthReader.RetrieveGrantsForDirectory(null as UserGroup, fProv, "/");
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveGrantsForDirectory(null as UserGroup, fProv, "/");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForDirectory_Group_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForDirectory_Group_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForDirectory(new UserGroup("Group", "Group", null), null, "/");
+				AuthReader.RetrieveGrantsForDirectory(new UserGroup("Group", "Group", null), null, "/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RetrieveGrantsForDirectory_Group_InvalidDirectory(string d) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void RetrieveGrantsForDirectory_Group_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthReader.RetrieveGrantsForDirectory(new UserGroup("Group", "Group", null), fProv, d);	
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveGrantsForDirectory(new UserGroup("Group", "Group", null), fProv, d);
+			});
+		}
+
+		[TestCase("")]
+		public void RetrieveGrantsForDirectory_Group_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveGrantsForDirectory(new UserGroup("Group", "Group", null), fProv, d);
+			});
 		}
 
 		[Test]
@@ -963,32 +1058,54 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForDirectory_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForDirectory_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthReader.RetrieveGrantsForDirectory(null as UserInfo, fProv, "/");
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveGrantsForDirectory(null as UserInfo, fProv, "/");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveGrantsForDirectory_User_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveGrantsForDirectory_User_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveGrantsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null),
-				null, "/");
+				AuthReader.RetrieveGrantsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null),
+					null, "/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RetrieveGrantsForDirectory_User_InvalidDirectory(string d) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void RetrieveGrantsForDirectory_User_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthReader.RetrieveGrantsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveGrantsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
+			});
+		}
+
+		[TestCase("")]
+		public void RetrieveGrantsForDirectory_User_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveGrantsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
+			});
 		}
 
 		[Test]
@@ -1050,31 +1167,53 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForDirectory_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForDirectory_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthReader.RetrieveDenialsForDirectory(null as UserGroup, fProv, "/");
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveDenialsForDirectory(null as UserGroup, fProv, "/");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForDirectory_Group_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForDirectory_Group_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForDirectory(new UserGroup("Group", "Group", null), null, "/");
+				AuthReader.RetrieveDenialsForDirectory(new UserGroup("Group", "Group", null), null, "/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RetrieveDenialsForDirectory_Group_InvalidDirectory(string d) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void RetrieveDenialsForDirectory_Group_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthReader.RetrieveDenialsForDirectory(new UserGroup("Group", "Group", null), fProv, d);
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveDenialsForDirectory(new UserGroup("Group", "Group", null), fProv, d);
+			});
+		}
+
+		[TestCase("")]
+		public void RetrieveDenialsForDirectory_Group_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveDenialsForDirectory(new UserGroup("Group", "Group", null), fProv, d);
+			});
 		}
 
 		[Test]
@@ -1136,32 +1275,54 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForDirectory_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForDirectory_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthReader.RetrieveDenialsForDirectory(null as UserInfo, fProv, "/");
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveDenialsForDirectory(null as UserInfo, fProv, "/");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrieveDenialsForDirectory_User_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RetrieveDenialsForDirectory_User_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthReader.RetrieveDenialsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null),
-				null, "/");
+				AuthReader.RetrieveDenialsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null),
+					null, "/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RetrieveDenialsForDirectory_User_InvalidDirectory(string d) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void RetrieveDenialsForDirectory_User_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthReader.RetrieveDenialsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveDenialsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
+			});
+		}
+
+		[TestCase("")]
+		public void RetrieveDenialsForDirectory_User_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthReader.RetrieveDenialsForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
+			});
 		}
 
 	}

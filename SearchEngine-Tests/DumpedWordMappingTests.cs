@@ -30,10 +30,9 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_WithBasicWordInfo_NullInfo() {
-			DumpedWordMapping map = new DumpedWordMapping(10, 12, null);
-		}
+            Assert.That(() => new DumpedWordMapping(10, 12, null), Throws.ArgumentNullException);
+        }
 
 	}
 

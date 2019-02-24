@@ -141,9 +141,6 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Verify(aclManager);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForGlobals_Group_InvalidAction(string a) {
 			ISettingsStorageProviderV30 prov = MockProvider();
@@ -153,14 +150,44 @@ namespace ScrewTurn.Wiki.Tests {
 			AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, a, new UserGroup("Group", "Desc", null));
 		}
 
+		[TestCase(null)]
+		public void SetPermissionForGlobals_Group_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, a, new UserGroup("Group", "Desc", null));
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("Blah")]
+		public void SetPermissionForGlobals_Group_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, a, new UserGroup("Group", "Desc", null));
+			});
+		}
+
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForGlobals_Group_NullGroup() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForGlobals_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, Actions.ForGlobals.ManageAccounts, null as UserGroup);
+				AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, Actions.ForGlobals.ManageAccounts, null as UserGroup);
+			});
 		}
 
 		[Test]
@@ -232,9 +259,6 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Verify(aclManager);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForGlobals_User_InvalidAction(string a) {
 			ISettingsStorageProviderV30 prov = MockProvider();
@@ -245,14 +269,46 @@ namespace ScrewTurn.Wiki.Tests {
 				new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
 		}
 
+		[TestCase(null)]
+		public void SetPermissionForGlobals_User_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, a,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("Blah")]
+		public void SetPermissionForGlobals_User_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, a,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
+		}
+
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForGlobals_User_NullUser() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForGlobals_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, Actions.ForGlobals.ManageAccounts, null as UserInfo);
+				AuthWriter.SetPermissionForGlobals(AuthStatus.Grant, Actions.ForGlobals.ManageAccounts, null as UserInfo);
+			});
 		}
 
 		[Test]
@@ -324,9 +380,6 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Verify(aclManager);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForNamespace_Group_InvalidAction(string a) {
 			ISettingsStorageProviderV30 prov = MockProvider();
@@ -336,14 +389,44 @@ namespace ScrewTurn.Wiki.Tests {
 			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, a, new UserGroup("Group", "Descr", null));
 		}
 
+		[TestCase(null)]
+		public void SetPermissionForNamespace_Group_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, a, new UserGroup("Group", "Descr", null));
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("Blah")]
+		public void SetPermissionForNamespace_Group_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, a, new UserGroup("Group", "Descr", null));
+			});
+		}
+
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForNamespace_Group_NullGroup() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForNamespace_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, null as UserGroup);
+				AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, null as UserGroup);
+			});
 		}
 
 		[Test]
@@ -415,9 +498,6 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Verify(aclManager);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForNamespace_User_InvalidAction(string a) {
 			ISettingsStorageProviderV30 prov = MockProvider();
@@ -428,14 +508,46 @@ namespace ScrewTurn.Wiki.Tests {
 				new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
 		}
 
+		[TestCase(null)]
+		public void SetPermissionForNamespace_User_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, a,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("Blah")]
+		public void SetPermissionForNamespace_User_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, a,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
+		}
+
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForNamespace_User_NullUser() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForNamespace_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, null as UserInfo);
+				AuthWriter.SetPermissionForNamespace(AuthStatus.Grant, null, Actions.ForNamespaces.ModifyPages, null as UserInfo);
+			});
 		}
 
 		[Test]
@@ -510,29 +622,46 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForDirectory_Group_NullProvider() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForDirectory_Group_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, null, "/", Actions.ForDirectories.DeleteFiles, new UserGroup("Group", "Group", null));
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, null, "/", Actions.ForDirectories.DeleteFiles, new UserGroup("Group", "Group", null));
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void SetPermissionForDirectory_Group_InvalidDirectory(string d) {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+		[TestCase(null)]
+		public void SetPermissionForDirectory_Group_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, d, Actions.ForDirectories.DownloadFiles, new UserGroup("Group", "Group", null));
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, d, Actions.ForDirectories.DownloadFiles, new UserGroup("Group", "Group", null));
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
+		public void SetPermissionForDirectory_Group_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, d, Actions.ForDirectories.DownloadFiles, new UserGroup("Group", "Group", null));
+			});
+		}
+
 		[TestCase("*")]
 		public void SetPermissionForDirectory_Group_InvalidAction(string a) {
 			ISettingsStorageProviderV30 prov = MockProvider();
@@ -543,15 +672,47 @@ namespace ScrewTurn.Wiki.Tests {
 			AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", a, new UserGroup("Group", "Group", null));
 		}
 
+		[TestCase(null)]
+		public void SetPermissionForDirectory_Group_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", a, new UserGroup("Group", "Group", null));
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("Blah")]
+		public void SetPermissionForDirectory_Group_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", a, new UserGroup("Group", "Group", null));
+			});
+		}
+
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForDirectory_Group_NullGroup() {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+		public void SetPermissionForDirectory_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", Actions.ForDirectories.DownloadFiles, null as UserGroup);
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", Actions.ForDirectories.DownloadFiles, null as UserGroup);
+			});
 		}
 
 		[Test]
@@ -629,31 +790,49 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForDirectory_User_NullProvider() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForDirectory_User_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, null, "/", Actions.ForDirectories.DeleteFiles,
-				new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, null, "/", Actions.ForDirectories.DeleteFiles,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void SetPermissionForDirectory_User_InvalidDirectory(string d) {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+		[TestCase(null)]
+		public void SetPermissionForDirectory_User_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, d, Actions.ForDirectories.DownloadFiles,
-				new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, d, Actions.ForDirectories.DownloadFiles,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
+		public void SetPermissionForDirectory_User_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, d, Actions.ForDirectories.DownloadFiles,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
+		}
+
 		[TestCase("*")]
 		public void SetPermissionForDirectory_User_InvalidAction(string a) {
 			ISettingsStorageProviderV30 prov = MockProvider();
@@ -665,15 +844,49 @@ namespace ScrewTurn.Wiki.Tests {
 				new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
 		}
 
+		[TestCase(null)]
+		public void SetPermissionForDirectory_User_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", a,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("Blah")]
+		public void SetPermissionForDirectory_User_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", a,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
+		}
+
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForDirectory_User_NullUser() {
-			ISettingsStorageProviderV30 prov = MockProvider();
-			IFilesStorageProviderV30 filesProv = MockFilesProvider();
+		public void SetPermissionForDirectory_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+				IFilesStorageProviderV30 filesProv = MockFilesProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", Actions.ForDirectories.DownloadFiles, null as UserInfo);
+				AuthWriter.SetPermissionForDirectory(AuthStatus.Grant, filesProv, "/", Actions.ForDirectories.DownloadFiles, null as UserInfo);
+			});
 		}
 
 		[Test]
@@ -743,18 +956,18 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForPage_Group_NullPage() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForPage_Group_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForPage(AuthStatus.Grant, null, Actions.ForPages.ModifyPage, new UserGroup("Group", "Group", null));
+				AuthWriter.SetPermissionForPage(AuthStatus.Grant, null, Actions.ForPages.ModifyPage, new UserGroup("Group", "Group", null));
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForPage_Group_InvalidAction(string a) {
 			ISettingsStorageProviderV30 prov = MockProvider();
@@ -765,15 +978,47 @@ namespace ScrewTurn.Wiki.Tests {
 				a, new UserGroup("Group", "Group", null));
 		}
 
+		[TestCase(null)]
+		public void SetPermissionForPage_Group_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+					a, new UserGroup("Group", "Group", null));
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("Blah")]
+		public void SetPermissionForPage_Group_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+					a, new UserGroup("Group", "Group", null));
+			});
+		}
+
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForPage_Group_NullGroup() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForPage_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
-				Actions.ForPages.ModifyPage, null as UserGroup);
+				AuthWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+					Actions.ForPages.ModifyPage, null as UserGroup);
+			});
 		}
 
 		[Test]
@@ -846,19 +1091,19 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForPage_User_NullPage() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForPage_User_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForPage(AuthStatus.Grant, null, Actions.ForPages.ModifyPage,
-				new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+				AuthWriter.SetPermissionForPage(AuthStatus.Grant, null, Actions.ForPages.ModifyPage,
+					new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
 		[TestCase("*")]
 		public void SetPermissionForPage_User_InvalidAction(string a) {
 			ISettingsStorageProviderV30 prov = MockProvider();
@@ -869,15 +1114,47 @@ namespace ScrewTurn.Wiki.Tests {
 				a, new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
 		}
 
+		[TestCase(null)]
+		public void SetPermissionForPage_User_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+					a, new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("Blah")]
+		public void SetPermissionForPage_User_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
+
+				Collectors.SettingsProvider = prov;
+
+				AuthWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+					a, new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null));
+			});
+		}
+
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPermissionForPage_User_NullUser() {
-			ISettingsStorageProviderV30 prov = MockProvider();
+		public void SetPermissionForPage_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISettingsStorageProviderV30 prov = MockProvider();
 
-			Collectors.SettingsProvider = prov;
+				Collectors.SettingsProvider = prov;
 
-			AuthWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
-				Actions.ForPages.ModifyPage, null as UserInfo);
+				AuthWriter.SetPermissionForPage(AuthStatus.Grant, new PageInfo("Page", null, DateTime.Now),
+					Actions.ForPages.ModifyPage, null as UserInfo);
+			});
 		}
 
 		[Test]
@@ -910,11 +1187,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForGlobals_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForGlobals_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForGlobals(null as UserGroup);
+				AuthWriter.RemoveEntriesForGlobals(null as UserGroup);
+			});
 		}
 
 		[Test]
@@ -947,11 +1227,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForGlobals_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForGlobals_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForGlobals(null as UserInfo);
+				AuthWriter.RemoveEntriesForGlobals(null as UserInfo);
+			});
 		}
 
 		[Test]
@@ -1017,11 +1300,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForNamespace_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForNamespace_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForNamespace(null as UserGroup, new NamespaceInfo("Sub", null, null));
+				AuthWriter.RemoveEntriesForNamespace(null as UserGroup, new NamespaceInfo("Sub", null, null));
+			});
 		}
 
 		[Test]
@@ -1089,11 +1375,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForNamespace_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForNamespace_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForNamespace(null as UserInfo, new NamespaceInfo("Sub", null, null));
+				AuthWriter.RemoveEntriesForNamespace(null as UserInfo, new NamespaceInfo("Sub", null, null));
+			});
 		}
 
 		[Test]
@@ -1129,19 +1418,25 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForPage_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForPage_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForPage(null as UserGroup, new PageInfo("Page", null, DateTime.Now));
+				AuthWriter.RemoveEntriesForPage(null as UserGroup, new PageInfo("Page", null, DateTime.Now));
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForPage_Group_NullPage() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForPage_Group_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForPage(new UserGroup("Group", "Group", null), null);
+				AuthWriter.RemoveEntriesForPage(new UserGroup("Group", "Group", null), null);
+			});
 		}
 
 		[Test]
@@ -1177,19 +1472,25 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForPage_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForPage_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForPage(null as UserInfo, new PageInfo("Page", null, DateTime.Now));
+				AuthWriter.RemoveEntriesForPage(null as UserInfo, new PageInfo("Page", null, DateTime.Now));
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForPage_User_NullPage() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForPage_User_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForPage(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), null);
+				AuthWriter.RemoveEntriesForPage(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), null);
+			});
 		}
 
 		[Test]
@@ -1257,31 +1558,53 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForDirectory_Group_NullGroup() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForDirectory_Group_NullGroup()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthWriter.RemoveEntriesForDirectory(null as UserGroup, fProv, "/");
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthWriter.RemoveEntriesForDirectory(null as UserGroup, fProv, "/");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForDirectory_Group_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForDirectory_Group_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForDirectory(new UserGroup("Group", "Group", null), null, "/");
+				AuthWriter.RemoveEntriesForDirectory(new UserGroup("Group", "Group", null), null, "/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RemoveEntriesForDirectory_Group_InvalidDirectory(string d) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void RemoveEntriesForDirectory_Group_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthWriter.RemoveEntriesForDirectory(new UserGroup("Group", "Group", null), fProv, d);
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthWriter.RemoveEntriesForDirectory(new UserGroup("Group", "Group", null), fProv, d);
+			});
+		}
+
+		[TestCase("")]
+		public void RemoveEntriesForDirectory_Group_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthWriter.RemoveEntriesForDirectory(new UserGroup("Group", "Group", null), fProv, d);
+			});
 		}
 
 		[Test]
@@ -1349,31 +1672,53 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForDirectory_User_NullUser() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForDirectory_User_NullUser()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthWriter.RemoveEntriesForDirectory(null as UserInfo, fProv, "/");
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthWriter.RemoveEntriesForDirectory(null as UserInfo, fProv, "/");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RemoveEntriesForDirectory_User_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
+		public void RemoveEntriesForDirectory_User_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.RemoveEntriesForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), null, "/");
+				AuthWriter.RemoveEntriesForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), null, "/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RemoveEntriesForDirectory_User_InvalidDirectory(string d) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void RemoveEntriesForDirectory_User_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
-			mocks.Replay(fProv);
-			AuthWriter.RemoveEntriesForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthWriter.RemoveEntriesForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
+			});
+		}
+
+		[TestCase("")]
+		public void RemoveEntriesForDirectory_User_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				IFilesStorageProviderV30 fProv = mocks.DynamicMock<IFilesStorageProviderV30>();
+				mocks.Replay(fProv);
+				AuthWriter.RemoveEntriesForDirectory(new UserInfo("User", "User", "user@users.com", true, DateTime.Now, null), fProv, d);
+			});
 		}
 
 		[Test]
@@ -1399,19 +1744,36 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ClearEntriesForDirectory_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
+		public void ClearEntriesForDirectory_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ClearEntriesForDirectory(null, "/dir/");
+				AuthWriter.ClearEntriesForDirectory(null, "/dir/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ClearEntriesForDirectory_InvalidDirectory(string d) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void ClearEntriesForDirectory_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ClearEntriesForDirectory(MockFilesProvider(), d);
+				AuthWriter.ClearEntriesForDirectory(MockFilesProvider(), d);
+			});
+		}
+
+		[TestCase("")]
+		public void ClearEntriesForDirectory_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ClearEntriesForDirectory(MockFilesProvider(), d);
+			});
 		}
 
 		[Test]
@@ -1437,28 +1799,59 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Verify(aclManager);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ClearEntriesForNamespace_InvalidNamespace(string n) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void ClearEntriesForNamespace_InvalidNamespace_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ClearEntriesForNamespace(n, new List<string>());
+				AuthWriter.ClearEntriesForNamespace(n, new List<string>());
+			});
+		}
+
+		[TestCase("")]
+		public void ClearEntriesForNamespace_InvalidNamespace_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ClearEntriesForNamespace(n, new List<string>());
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ClearEntriesForNamespace_NullPages() {
-			Collectors.SettingsProvider = MockProvider();
+		public void ClearEntriesForNamespace_NullPages()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ClearEntriesForNamespace("NS", null);
+				AuthWriter.ClearEntriesForNamespace("NS", null);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ClearEntriesForNamespace_InvalidPageElement(string p) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void ClearEntriesForNamespace_InvalidPageElement_ShouldThrowArgumentNullException(string p)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ClearEntriesForNamespace("NS", new List<string>() { "Page", p, "Page3" });
+				AuthWriter.ClearEntriesForNamespace("NS", new List<string>() { "Page", p, "Page3" });
+			});
+		}
+
+		[TestCase("")]
+		public void ClearEntriesForNamespace_InvalidPageElement_ShouldThrowArgumentException(string p)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ClearEntriesForNamespace("NS", new List<string>() { "Page", p, "Page3" });
+			});
 		}
 
 		[Test]
@@ -1481,12 +1874,26 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Verify(aclManager);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ClearEntriesForPage_InvalidPage(string p) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void ClearEntriesForPage_InvalidPage_ShouldThrowArgumentNullException(string p)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ClearEntriesForPage(p);
+				AuthWriter.ClearEntriesForPage(p);
+			});
+		}
+
+		[TestCase("")]
+		public void ClearEntriesForPage_InvalidPage_ShouldThrowArgumentException(string p)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ClearEntriesForPage(p);
+			});
 		}
 
 		[Test]
@@ -1513,27 +1920,58 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ProcessDirectoryRenaming_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
+		public void ProcessDirectoryRenaming_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ProcessDirectoryRenaming(null, "/Dir/", "/Dir2/");
+				AuthWriter.ProcessDirectoryRenaming(null, "/Dir/", "/Dir2/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ProcessDirectoryRenaming_InvalidOldName(string n) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void ProcessDirectoryRenaming_InvalidOldName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ProcessDirectoryRenaming(MockFilesProvider(), n, "/Dir/");
+				AuthWriter.ProcessDirectoryRenaming(MockFilesProvider(), n, "/Dir/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ProcessDirectoryRenaming_InvalidNewName(string n) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase("")]
+		public void ProcessDirectoryRenaming_InvalidOldName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ProcessDirectoryRenaming(MockFilesProvider(), "/Dir/", n);
+				AuthWriter.ProcessDirectoryRenaming(MockFilesProvider(), n, "/Dir/");
+			});
+		}
+
+		[TestCase(null)]
+		public void ProcessDirectoryRenaming_InvalidNewName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ProcessDirectoryRenaming(MockFilesProvider(), "/Dir/", n);
+			});
+		}
+
+		[TestCase("")]
+		public void ProcessDirectoryRenaming_InvalidNewName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ProcessDirectoryRenaming(MockFilesProvider(), "/Dir/", n);
+			});
 		}
 
 		[Test]
@@ -1559,36 +1997,81 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Verify(aclManager);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ProcessNamespaceRenaming_InvalidOldName(string n) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void ProcessNamespaceRenaming_InvalidOldName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ProcessNamespaceRenaming(n, new List<string>(), "NS_Renamed");
+				AuthWriter.ProcessNamespaceRenaming(n, new List<string>(), "NS_Renamed");
+			});
+		}
+
+		[TestCase("")]
+		public void ProcessNamespaceRenaming_InvalidOldName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ProcessNamespaceRenaming(n, new List<string>(), "NS_Renamed");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ProcessNamespaceRenaming_NullPages() {
-			Collectors.SettingsProvider = MockProvider();
+		public void ProcessNamespaceRenaming_NullPages()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ProcessNamespaceRenaming("NS", null, "NS_Renamed");
+				AuthWriter.ProcessNamespaceRenaming("NS", null, "NS_Renamed");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ProcessNamespaceRenaming_InvalidPageElement(string p) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void ProcessNamespaceRenaming_InvalidPageElement_ShouldThrowArgumentNullException(string p)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ProcessNamespaceRenaming("NS", new List<string>() { "Page", p, "Page3" }, "NS_Renamed");
+				AuthWriter.ProcessNamespaceRenaming("NS", new List<string>() { "Page", p, "Page3" }, "NS_Renamed");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ProcessNamespaceRenaming_InvalidNewName(string n) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase("")]
+		public void ProcessNamespaceRenaming_InvalidPageElement_ShouldThrowArgumentException(string p)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ProcessNamespaceRenaming("NS", new List<string>(), n);
+				AuthWriter.ProcessNamespaceRenaming("NS", new List<string>() { "Page", p, "Page3" }, "NS_Renamed");
+			});
+		}
+
+		[TestCase(null)]
+		public void ProcessNamespaceRenaming_InvalidNewName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ProcessNamespaceRenaming("NS", new List<string>(), n);
+			});
+		}
+
+		[TestCase("")]
+		public void ProcessNamespaceRenaming_InvalidNewName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ProcessNamespaceRenaming("NS", new List<string>(), n);
+			});
 		}
 
 		[Test]
@@ -1611,20 +2094,48 @@ namespace ScrewTurn.Wiki.Tests {
 			mocks.Verify(aclManager);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ProcessPageRenaming_InvalidOldName(string n) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase(null)]
+		public void ProcessPageRenaming_InvalidOldName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ProcessPageRenaming(n, "NS.Renamed");
+				AuthWriter.ProcessPageRenaming(n, "NS.Renamed");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void ProcessPageRenaming_InvalidNewName(string n) {
-			Collectors.SettingsProvider = MockProvider();
+		[TestCase("")]
+		public void ProcessPageRenaming_InvalidOldName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
 
-			AuthWriter.ProcessPageRenaming("NS.Original", n);
+				AuthWriter.ProcessPageRenaming(n, "NS.Renamed");
+			});
+		}
+
+		[TestCase(null)]
+		public void ProcessPageRenaming_InvalidNewName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ProcessPageRenaming("NS.Original", n);
+			});
+		}
+
+		[TestCase("")]
+		public void ProcessPageRenaming_InvalidNewName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+
+				AuthWriter.ProcessPageRenaming("NS.Original", n);
+			});
 		}
 
 	}

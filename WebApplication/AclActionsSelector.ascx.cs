@@ -18,8 +18,14 @@ namespace ScrewTurn.Wiki {
 		public AclResources CurrentResource {
 			get {
 				object temp = ViewState["CR"];
-				if(temp == null) return AclResources.Globals;
-				else return (AclResources)temp;
+				if(temp == null)
+				{
+					return AclResources.Globals;
+				}
+				else
+				{
+					return (AclResources)temp;
+				}
 			}
 			set {
 				ViewState["CR"] = value;
@@ -88,12 +94,18 @@ namespace ScrewTurn.Wiki {
 			get {
 				List<string> actions = new List<string>();
 				foreach(ListItem item in lstActionsGrant.Items) {
-					if(item.Selected) actions.Add(item.Value);
+					if(item.Selected)
+					{
+						actions.Add(item.Value);
+					}
 				}
 				return actions.ToArray();
 			}
 			set {
-				if(value == null) throw new ArgumentNullException("value");
+				if(value == null)
+				{
+					throw new ArgumentNullException("value");
+				}
 
 				SelectActions(value, DeniedActions);
 			}
@@ -106,12 +118,18 @@ namespace ScrewTurn.Wiki {
 			get {
 				List<string> actions = new List<string>();
 				foreach(ListItem item in lstActionsDeny.Items) {
-					if(item.Selected) actions.Add(item.Value);
+					if(item.Selected)
+					{
+						actions.Add(item.Value);
+					}
 				}
 				return actions.ToArray();
 			}
 			set {
-				if(value == null) throw new ArgumentNullException("value");
+				if(value == null)
+				{
+					throw new ArgumentNullException("value");
+				}
 
 				SelectActions(GrantedActions, value);
 			}
@@ -149,7 +167,11 @@ namespace ScrewTurn.Wiki {
 			// The list parameter determines the last checkbox list that changed status,
 			// allowing to switch the proper checkbox pair
 			if(lstActionsGrant.Items.Count > 0) {
-				if(list == null) list = lstActionsGrant;
+				if(list == null)
+				{
+					list = lstActionsGrant;
+				}
+
 				Anthem.CheckBoxList other = list == lstActionsGrant ? lstActionsDeny : lstActionsGrant;
 
 				// Verify whether full-control is checked

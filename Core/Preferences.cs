@@ -24,7 +24,10 @@ namespace ScrewTurn.Wiki {
 				string culture = cookie["C"];
 				return culture;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -37,7 +40,10 @@ namespace ScrewTurn.Wiki {
 				string culture = Users.GetUserData(currentUser, "Culture");
 				return culture;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -49,7 +55,10 @@ namespace ScrewTurn.Wiki {
 			if(cookie != null) {
 				string timezone = cookie["T"];
 				int res = 0;
-				if(int.TryParse(timezone, NumberStyles.Any, CultureInfo.InvariantCulture, out res)) return res;
+				if(int.TryParse(timezone, NumberStyles.Any, CultureInfo.InvariantCulture, out res))
+				{
+					return res;
+				}
 			}
 			
 			return null;
@@ -65,7 +74,10 @@ namespace ScrewTurn.Wiki {
 				string timezone = Users.GetUserData(currentUser, "Timezone");
 				if(timezone != null) {
 					int res = 0;
-					if(int.TryParse(timezone, NumberStyles.Any, CultureInfo.InvariantCulture, out res)) return res;
+					if(int.TryParse(timezone, NumberStyles.Any, CultureInfo.InvariantCulture, out res))
+					{
+						return res;
+					}
 				}
 			}
 			
@@ -130,7 +142,10 @@ namespace ScrewTurn.Wiki {
 			// If they are not available, look at the cookie
 
 			int? tempShift = LoadTimezoneFromUserData();
-			if(!tempShift.HasValue) tempShift = LoadTimezoneFromCookie();
+			if(!tempShift.HasValue)
+			{
+				tempShift = LoadTimezoneFromCookie();
+			}
 
 			int shift = tempShift.HasValue ? tempShift.Value : Settings.DefaultTimezone;
 			return dateTime.ToUniversalTime().AddMinutes(shift + (dateTime.IsDaylightSavingTime() ? 60 : 0));

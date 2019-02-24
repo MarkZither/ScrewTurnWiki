@@ -22,8 +22,14 @@ namespace ScrewTurn.Wiki {
 			// Sort by priority, then by name
 			providers.Sort((x, y) => {
 				int preliminaryResult = x.ExecutionPriority.CompareTo(y.ExecutionPriority);
-				if(preliminaryResult != 0) return preliminaryResult;
-				else return x.Information.Name.CompareTo(y.Information.Name);
+				if(preliminaryResult != 0)
+				{
+					return preliminaryResult;
+				}
+				else
+				{
+					return x.Information.Name.CompareTo(y.Information.Name);
+				}
 			});
 
 			return providers;

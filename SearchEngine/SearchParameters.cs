@@ -23,13 +23,32 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="query"/> or one of the elements of <paramref name="documentTypeTags"/> (when the array is not <c>null</c>) are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="query"/> or one of the elements of <paramref name="documentTypeTags"/> (when the array is not <c>null</c>) are empty.</exception>
 		public SearchParameters(string query, string[] documentTypeTags, SearchOptions options) {
-			if(query == null) throw new ArgumentNullException("query");
-			if(query.Length == 0) throw new ArgumentException("Query cannot be empty", "query");
+			if(query == null)
+			{
+				throw new ArgumentNullException("query");
+			}
+
+			if(query.Length == 0)
+			{
+				throw new ArgumentException("Query cannot be empty", "query");
+			}
+
 			if(documentTypeTags != null) {
-				if(documentTypeTags.Length == 0) throw new ArgumentException("DocumentTypeTags cannot be empty", "documentTypeTags");
+				if(documentTypeTags.Length == 0)
+				{
+					throw new ArgumentException("DocumentTypeTags cannot be empty", "documentTypeTags");
+				}
+
 				foreach(string dtt in documentTypeTags) {
-					if(dtt == null) throw new ArgumentNullException("documentTypeTags");
-					if(dtt.Length == 0) throw new ArgumentException("DocumentTypeTag cannot be empty", "documentTypeTag");
+					if(dtt == null)
+					{
+						throw new ArgumentNullException("documentTypeTags");
+					}
+
+					if(dtt.Length == 0)
+					{
+						throw new ArgumentException("DocumentTypeTag cannot be empty", "documentTypeTag");
+					}
 				}
 			}
 
@@ -71,8 +90,14 @@ namespace ScrewTurn.Wiki.SearchEngine {
 
 			// This behavior is slightly different from RemoveDiacriticsAndPunctuation
 			foreach(char c in query) {
-				if(!ScrewTurn.Wiki.SearchEngine.Tools.IsSplitChar(c)) sb.Append(c);
-				else sb.Append(" ");
+				if(!ScrewTurn.Wiki.SearchEngine.Tools.IsSplitChar(c))
+				{
+					sb.Append(c);
+				}
+				else
+				{
+					sb.Append(" ");
+				}
 			}
 
 			string normalized = Tools.RemoveDiacriticsAndPunctuation(sb.ToString(), false);

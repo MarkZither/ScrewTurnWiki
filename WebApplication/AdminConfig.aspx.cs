@@ -16,7 +16,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			StringBuilder sb = new StringBuilder(200);
 			sb.Append("<script type=\"text/javascript\">\r\n<!--\r\n");
@@ -68,7 +71,10 @@ namespace ScrewTurn.Wiki {
 			lstRootTheme.Items.Clear();
 			foreach(string theme in themes) {
 				lstRootTheme.Items.Add(new ListItem(theme, theme));
-				if(theme.ToLowerInvariant() == current) lstRootTheme.Items[lstRootTheme.Items.Count - 1].Selected = true;
+				if(theme.ToLowerInvariant() == current)
+				{
+					lstRootTheme.Items[lstRootTheme.Items.Count - 1].Selected = true;
+				}
 			}
 		}
 
@@ -102,7 +108,10 @@ namespace ScrewTurn.Wiki {
 			foreach(string lang in langs) {
 				string[] fields = lang.Split('|');
 				lstDefaultLanguage.Items.Add(new ListItem(fields[1], fields[0]));
-				if(fields[0].ToLowerInvariant() == current) lstDefaultLanguage.Items[lstDefaultLanguage.Items.Count - 1].Selected = true;
+				if(fields[0].ToLowerInvariant() == current)
+				{
+					lstDefaultLanguage.Items[lstDefaultLanguage.Items.Count - 1].Selected = true;
+				}
 			}
 		}
 
@@ -112,8 +121,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="current">The current time zone.</param>
 		private void PopulateTimeZones(string current) {
 			for(int i = 0; i < lstDefaultTimeZone.Items.Count; i++) {
-				if(lstDefaultTimeZone.Items[i].Value == current) lstDefaultTimeZone.Items[i].Selected = true;
-				else lstDefaultTimeZone.Items[i].Selected = false;
+				if(lstDefaultTimeZone.Items[i].Value == current)
+				{
+					lstDefaultTimeZone.Items[i].Selected = true;
+				}
+				else
+				{
+					lstDefaultTimeZone.Items[i].Selected = false;
+				}
 			}
 		}
 
@@ -173,8 +188,15 @@ namespace ScrewTurn.Wiki {
 			chkAutoGeneratePageNames.Checked = Settings.AutoGeneratePageNames;
 			chkProcessSingleLineBreaks.Checked = Settings.ProcessSingleLineBreaks;
 			chkUseVisualEditorAsDefault.Checked = Settings.UseVisualEditorAsDefault;
-			if(Settings.KeptBackupNumber == -1) txtKeptBackupNumber.Text = "";
-			else txtKeptBackupNumber.Text = Settings.KeptBackupNumber.ToString();
+			if(Settings.KeptBackupNumber == -1)
+			{
+				txtKeptBackupNumber.Text = "";
+			}
+			else
+			{
+				txtKeptBackupNumber.Text = Settings.KeptBackupNumber.ToString();
+			}
+
 			chkDisplayGravatars.Checked = Settings.DisplayGravatars;
 		}
 
@@ -183,9 +205,18 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="current">The current account activation mode.</param>
 		private void PopulateAccountActivationMode(AccountActivationMode current) {
-			if(current == AccountActivationMode.Email) lstAccountActivationMode.SelectedIndex = 0;
-			else if(current == AccountActivationMode.Administrator) lstAccountActivationMode.SelectedIndex = 1;
-			else lstAccountActivationMode.SelectedIndex = 2;
+			if(current == AccountActivationMode.Email)
+			{
+				lstAccountActivationMode.SelectedIndex = 0;
+			}
+			else if(current == AccountActivationMode.Administrator)
+			{
+				lstAccountActivationMode.SelectedIndex = 1;
+			}
+			else
+			{
+				lstAccountActivationMode.SelectedIndex = 2;
+			}
 		}
 
 		/// <summary>
@@ -417,7 +448,10 @@ namespace ScrewTurn.Wiki {
 
 			Page.Validate();
 
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			Log.LogEntry("Wiki Configuration change requested", EntryType.General, SessionFacade.CurrentUsername);
 
@@ -432,8 +466,15 @@ namespace ScrewTurn.Wiki {
 			Settings.SmtpServer = txtSmtpServer.Text;
             
 			txtSmtpPort.Text = txtSmtpPort.Text.Trim();
-			if(txtSmtpPort.Text.Length > 0) Settings.SmtpPort = int.Parse(txtSmtpPort.Text);
-			else Settings.SmtpPort = -1;
+			if(txtSmtpPort.Text.Length > 0)
+			{
+				Settings.SmtpPort = int.Parse(txtSmtpPort.Text);
+			}
+			else
+			{
+				Settings.SmtpPort = -1;
+			}
+
 			if(txtUsername.Text.Length > 0) {
 				Settings.SmtpUsername = txtUsername.Text;
 				Settings.SmtpPassword = txtPassword.Text;
@@ -462,8 +503,15 @@ namespace ScrewTurn.Wiki {
 			Settings.AutoGeneratePageNames = chkAutoGeneratePageNames.Checked;
 			Settings.ProcessSingleLineBreaks = chkProcessSingleLineBreaks.Checked;
 			Settings.UseVisualEditorAsDefault = chkUseVisualEditorAsDefault.Checked;
-			if(txtKeptBackupNumber.Text == "") Settings.KeptBackupNumber = -1;
-			else Settings.KeptBackupNumber = int.Parse(txtKeptBackupNumber.Text);
+			if(txtKeptBackupNumber.Text == "")
+			{
+				Settings.KeptBackupNumber = -1;
+			}
+			else
+			{
+				Settings.KeptBackupNumber = int.Parse(txtKeptBackupNumber.Text);
+			}
+
 			Settings.DisplayGravatars = chkDisplayGravatars.Checked;
 
 			// Save security configuration
@@ -489,9 +537,18 @@ namespace ScrewTurn.Wiki {
 			Settings.DisableCaptchaControl = !chkEnableCaptchaControl.Checked;
 			Settings.DisableConcurrentEditing = chkPreventConcurrentEditing.Checked;
 
-			if(rdoNoModeration.Checked) Settings.ChangeModerationMode = ChangeModerationMode.None;
-			else if(rdoRequirePageViewingPermissions.Checked) Settings.ChangeModerationMode = ChangeModerationMode.RequirePageViewingPermissions;
-			else if(rdoRequirePageEditingPermissions.Checked) Settings.ChangeModerationMode = ChangeModerationMode.RequirePageEditingPermissions;
+			if(rdoNoModeration.Checked)
+			{
+				Settings.ChangeModerationMode = ChangeModerationMode.None;
+			}
+			else if(rdoRequirePageViewingPermissions.Checked)
+			{
+				Settings.ChangeModerationMode = ChangeModerationMode.RequirePageViewingPermissions;
+			}
+			else if(rdoRequirePageEditingPermissions.Checked)
+			{
+				Settings.ChangeModerationMode = ChangeModerationMode.RequirePageEditingPermissions;
+			}
 
 			Settings.AllowedFileTypes = GetAllowedFileExtensions();
 
@@ -501,10 +558,23 @@ namespace ScrewTurn.Wiki {
 			Settings.MaxFileSize = int.Parse(txtMaxFileSize.Text);
 			Settings.ScriptTagsAllowed = chkAllowScriptTags.Checked;
 			LoggingLevel level = LoggingLevel.AllMessages;
-			if(rdoAllMessages.Checked) level = LoggingLevel.AllMessages;
-			else if(rdoWarningsAndErrors.Checked) level = LoggingLevel.WarningsAndErrors;
-			else if(rdoErrorsOnly.Checked) level = LoggingLevel.ErrorsOnly;
-			else level = LoggingLevel.DisableLog;
+			if(rdoAllMessages.Checked)
+			{
+				level = LoggingLevel.AllMessages;
+			}
+			else if(rdoWarningsAndErrors.Checked)
+			{
+				level = LoggingLevel.WarningsAndErrors;
+			}
+			else if(rdoErrorsOnly.Checked)
+			{
+				level = LoggingLevel.ErrorsOnly;
+			}
+			else
+			{
+				level = LoggingLevel.DisableLog;
+			}
+
 			Settings.LoggingLevel = level;
 			Settings.MaxLogSize = int.Parse(txtMaxLogSize.Text);
             Settings.IpHostFilter = txtIpHostFilter.Text;

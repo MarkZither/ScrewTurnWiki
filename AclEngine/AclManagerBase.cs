@@ -42,12 +42,35 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are empty.</exception>
 		public bool StoreEntry(string resource, string action, string subject, Value value) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
 
 			AclEntry result = new AclEntry(resource, action, subject, value);
 
@@ -75,12 +98,35 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are empty.</exception>
 		public bool DeleteEntry(string resource, string action, string subject) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
 
 			AclEntry result = new AclEntry(resource, action, subject, Value.Deny);
 
@@ -92,7 +138,10 @@ namespace ScrewTurn.Wiki.AclEngine {
 					OnAclChanged(new AclEntry[] { entry }, Change.EntryDeleted);
 					return true;
 				}
-				else return false;
+				else
+				{
+					return false;
+				}
 			}
 		}
 
@@ -104,8 +153,15 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/> is empty.</exception>
 		public bool DeleteEntriesForResource(string resource) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
 
 			lock(this) {
 				List<int> indexesToRemove = new List<int>(30);
@@ -127,7 +183,10 @@ namespace ScrewTurn.Wiki.AclEngine {
 
 					return true;
 				}
-				else return false;
+				else
+				{
+					return false;
+				}
 			}
 		}
 
@@ -139,8 +198,15 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="subject"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="subject"/> is empty.</exception>
 		public bool DeleteEntriesForSubject(string subject) {
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
 
 			lock(this) {
 				List<int> indexesToRemove = new List<int>(30);
@@ -162,7 +228,10 @@ namespace ScrewTurn.Wiki.AclEngine {
 
 					return true;
 				}
-				else return false;
+				else
+				{
+					return false;
+				}
 			}
 		}
 
@@ -175,11 +244,25 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/> or <paramref name="newName"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/> or <paramref name="newName"/> are empty.</exception>
 		public bool RenameResource(string resource, string newName) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
 
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			lock(this) {
 				AclEntry[] entries = RetrieveEntriesForResource(resource);
@@ -189,10 +272,19 @@ namespace ScrewTurn.Wiki.AclEngine {
 					bool deleted = DeleteEntry(entry.Resource, entry.Action, entry.Subject);
 					if(deleted) {
 						bool stored = StoreEntry(newName, entry.Action, entry.Subject, entry.Value);
-						if(stored) renamed = true;
-						else return false;
+						if(stored)
+						{
+							renamed = true;
+						}
+						else
+						{
+							return false;
+						}
 					}
-					else return false;
+					else
+					{
+						return false;
+					}
 				}
 
 				return renamed;
@@ -217,14 +309,24 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/> is empty.</exception>
 		public AclEntry[] RetrieveEntriesForResource(string resource) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
 
 			lock(this) {
 				List<AclEntry> result = new List<AclEntry>(10);
 
 				foreach(AclEntry e in entries) {
-					if(e.Resource == resource) result.Add(e);
+					if(e.Resource == resource)
+					{
+						result.Add(e);
+					}
 				}
 
 				return result.ToArray();
@@ -239,14 +341,24 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="subject"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="subject"/> is empty.</exception>
 		public AclEntry[] RetrieveEntriesForSubject(string subject) {
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
 
 			lock(this) {
 				List<AclEntry> result = new List<AclEntry>(10);
 
 				foreach(AclEntry e in entries) {
-					if(e.Subject == subject) result.Add(e);
+					if(e.Subject == subject)
+					{
+						result.Add(e);
+					}
 				}
 
 				return result.ToArray();
@@ -259,7 +371,10 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <param name="entries">The ACL entries.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="entries"/> is <c>null</c>.</exception>
 		public void InitializeData(AclEntry[] entries) {
-			if(entries == null) throw new ArgumentNullException("entries");
+			if(entries == null)
+			{
+				throw new ArgumentNullException("entries");
+			}
 
 			lock(this) {
 				this.entries = new List<AclEntry>(entries);

@@ -32,8 +32,14 @@ namespace ScrewTurn.Wiki {
 		/// Removes all the items in the browser and re-populates it.
 		/// </summary>
 		public void PopulateBrowser() {
-			if(Populate == null) ViewState[ClientBrowserItems] = new List<TreeElement>();
-			else ViewState[ClientBrowserItems] = Populate(this, new PopulateEventArgs());
+			if(Populate == null)
+			{
+				ViewState[ClientBrowserItems] = new List<TreeElement>();
+			}
+			else
+			{
+				ViewState[ClientBrowserItems] = Populate(this, new PopulateEventArgs());
+			}
 
 			Render();
 		}
@@ -42,7 +48,10 @@ namespace ScrewTurn.Wiki {
 			lblStrings.Text = string.Format("<script type=\"text/javascript\">\r\n<!--\r\n\tvar CurrentDivId = \"{0}\";\r\n// -->\r\n</script>", BuildSubTreeContainerID(0));
 
 			List<TreeElement> items = (List<TreeElement>)ViewState[ClientBrowserItems];
-			if(items == null) return;
+			if(items == null)
+			{
+				return;
+			}
 
 			StringBuilder sb = new StringBuilder();
 			sb.Append(@"<div class=""browsercontainer"">");

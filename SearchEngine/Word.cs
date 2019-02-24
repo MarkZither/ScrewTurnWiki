@@ -44,9 +44,20 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="text"/> or <paramref name="occurrences"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="text"/> is empty.</exception>
 		public Word(uint id, string text, OccurrenceDictionary occurrences) {
-			if(text == null) throw new ArgumentNullException("text");
-			if(text.Length == 0) throw new ArgumentException("Text must contain at least one character", "text");
-			if(occurrences == null) throw new ArgumentNullException("occurrences");
+			if(text == null)
+			{
+				throw new ArgumentNullException("text");
+			}
+
+			if(text.Length == 0)
+			{
+				throw new ArgumentException("Text must contain at least one character", "text");
+			}
+
+			if(occurrences == null)
+			{
+				throw new ArgumentNullException("occurrences");
+			}
 
 			this.text = Tools.RemoveDiacriticsAndPunctuation(text, true);
 			//if(this.text.Length == 0) throw new InvalidOperationException();
@@ -121,9 +132,20 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="document"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="firstCharIndex"/> or <paramref name="wordIndex"/> are less than zero.</exception>
 		public void AddOccurrence(IDocument document, ushort firstCharIndex, ushort wordIndex, WordLocation location) {
-			if(document == null) throw new ArgumentNullException("document");
-			if(firstCharIndex < 0) throw new ArgumentOutOfRangeException("firstCharIndex", "Invalid first char index: must be greater than or equal to zero");
-			if(wordIndex < 0) throw new ArgumentOutOfRangeException("wordIndex", "Invalid word index: must be greater than or equal to zero");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
+
+			if(firstCharIndex < 0)
+			{
+				throw new ArgumentOutOfRangeException("firstCharIndex", "Invalid first char index: must be greater than or equal to zero");
+			}
+
+			if(wordIndex < 0)
+			{
+				throw new ArgumentOutOfRangeException("wordIndex", "Invalid word index: must be greater than or equal to zero");
+			}
 
 			lock(occurrences) {
 				if(occurrences.ContainsKey(document)) {
@@ -147,11 +169,20 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <remarks>Removing the occurrences for the document is <b>O(1)</b>.</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="document"/> is <c>null</c>.</exception>
 		public List<DumpedWordMapping> RemoveOccurrences(IDocument document) {
-			if(document == null) throw new ArgumentNullException("document");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
 
 			lock(occurrences) {
-				if(occurrences.ContainsKey(document)) return occurrences.RemoveExtended(document, ID);
-				else return new List<DumpedWordMapping>();
+				if(occurrences.ContainsKey(document))
+				{
+					return occurrences.RemoveExtended(document, ID);
+				}
+				else
+				{
+					return new List<DumpedWordMapping>();
+				}
 			}
 		}
 
@@ -165,15 +196,31 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// Bulk-adding the occurrences is <b>O(1)</b>.</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="document"/> or <paramref name="positions"/> are <c>null</c>.</exception>
 		public void BulkAddOccurrences(IDocument document, SortedBasicWordInfoSet positions) {
-			if(document == null) throw new ArgumentNullException("document");
-			if(positions == null) throw new ArgumentNullException("positions");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
+
+			if(positions == null)
+			{
+				throw new ArgumentNullException("positions");
+			}
 
 			lock(occurrences) {
 				if(occurrences.ContainsKey(document)) {
-					if(positions.Count == 0) RemoveOccurrences(document);
-					else occurrences[document] = positions;
+					if(positions.Count == 0)
+					{
+						RemoveOccurrences(document);
+					}
+					else
+					{
+						occurrences[document] = positions;
+					}
 				}
-				else occurrences.Add(document, positions);
+				else
+				{
+					occurrences.Add(document, positions);
+				}
 			}
 		}
 

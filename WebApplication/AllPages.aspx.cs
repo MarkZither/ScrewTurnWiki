@@ -36,9 +36,13 @@ namespace ScrewTurn.Wiki {
 
 			if(Request["Cat"] != null) {
 				if(Request["Cat"].Equals("-"))
+				{
 					lblPages.Text = Properties.Messages.UncategorizedPages;
+				}
 				else
+				{
 					lblPages.Text = Properties.Messages.PagesOfCategory + " <i>" + Request["Cat"] + "</i>";
+				}
 			}
 
 			if(!Page.IsPostBack) {
@@ -50,7 +54,11 @@ namespace ScrewTurn.Wiki {
 				pageSelector.PageSize = PageSize;
 
 				string p = Request["Page"];
-				if(!int.TryParse(p, out selectedPage)) selectedPage = 0;
+				if(!int.TryParse(p, out selectedPage))
+				{
+					selectedPage = 0;
+				}
+
 				pageSelector.SelectPage(selectedPage);
 			}
 
@@ -107,7 +115,10 @@ namespace ScrewTurn.Wiki {
 							pages[i] = Pages.FindPage(cat.Pages[i]);
 						}
 					}
-					else return new List<PageInfo>();
+					else
+					{
+						return new List<PageInfo>();
+					}
 				}
 			}
 			else {
@@ -123,7 +134,10 @@ namespace ScrewTurn.Wiki {
         public void PrintPages() {
 			StringBuilder sb = new StringBuilder(65536);
 
-			if(currentPages == null) currentPages = GetAllPages();
+			if(currentPages == null)
+			{
+				currentPages = GetAllPages();
+			}
 
 			// Prepare ExtendedPageInfo array
 			ExtendedPageInfo[] tempPageList = new ExtendedPageInfo[rangeEnd - rangeBegin + 1];
@@ -142,9 +156,15 @@ namespace ScrewTurn.Wiki {
 				}
 				catch {
 					// Backwards compatibility
-					if(Request["SortBy"].ToLowerInvariant() == "date") sortBy = SortingMethod.DateTime;
+					if(Request["SortBy"].ToLowerInvariant() == "date")
+					{
+						sortBy = SortingMethod.DateTime;
+					}
 				}
-				if(Request["Reverse"] != null) reverse = true;
+				if(Request["Reverse"] != null)
+				{
+					reverse = true;
+				}
 			}
 
 			SortedDictionary<SortingGroup, List<ExtendedPageInfo>> sortedPages = PageSortingTools.Sort(tempPageList, sortBy, reverse);
@@ -264,7 +284,11 @@ namespace ScrewTurn.Wiki {
 					}
 
 					sb.Append(@"<tr class=""tablerow");
-					if((i + 1) % 2 == 0) sb.Append("alternate");
+					if((i + 1) % 2 == 0)
+					{
+						sb.Append("alternate");
+					}
+
 					sb.Append(@""">");
 
 					// Page title
@@ -288,7 +312,11 @@ namespace ScrewTurn.Wiki {
 						sb.Append(msg.ToString());
 						sb.Append("</a>");
 					}
-					else sb.Append("&nbsp;");
+					else
+					{
+						sb.Append("&nbsp;");
+					}
+
 					sb.Append("</td>");
 
 					// Creation date/time
@@ -328,7 +356,10 @@ namespace ScrewTurn.Wiki {
 							sb.Append(@""">");
 							sb.Append(NameTools.GetLocalName(cats[k].FullName));
 							sb.Append("</a>");
-							if(k != cats.Length - 1) sb.Append(", ");
+							if(k != cats.Length - 1)
+							{
+								sb.Append(", ");
+							}
 						}
 					}
 					sb.Append("</td>");

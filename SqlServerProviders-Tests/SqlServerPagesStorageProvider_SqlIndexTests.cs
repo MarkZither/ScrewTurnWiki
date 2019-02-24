@@ -17,7 +17,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 	public class SqlServerPagesStorageProvider_SqlIndexTests : IndexBaseTests {
 
 		//private const string ConnString = "Data Source=(local)\\SQLExpress;User ID=sa;Password=password;";
-		private const string ConnString = "Data Source=(local)\\SQLExpress;Integrated Security=SSPI;";
+		private const string ConnString = "Data Source=(local)\\MSSQLSERVER2016;Integrated Security=SSPI;";
 		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
 
 		private MockRepository mocks = new MockRepository();
@@ -26,7 +26,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 		private delegate string ToStringDelegate(PageInfo p, string input);
 
 		protected IHostV30 MockHost() {
-			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
+			if(!Directory.Exists(testDir))
+			{
+				Directory.CreateDirectory(testDir);
+			}
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
 			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
@@ -44,7 +47,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 			return prov;
 		}
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void FixtureSetUp() {
 			// Create database with no tables
 			SqlConnection cn = new SqlConnection(ConnString);
@@ -80,7 +83,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 			cn.Close();
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void FixtureTearDown() {
 			// Delete database
 			SqlConnection cn = new SqlConnection(ConnString);

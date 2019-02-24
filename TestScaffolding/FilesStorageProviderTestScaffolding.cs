@@ -26,7 +26,10 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		protected IHostV30 MockHost() {
-			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
+			if(!Directory.Exists(testDir))
+			{
+				Directory.CreateDirectory(testDir);
+			}
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
 			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.AtLeastOnce();
@@ -47,17 +50,15 @@ namespace ScrewTurn.Wiki.Tests {
 		public abstract IFilesStorageProviderV30 GetProvider();
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullHost() {
 			IFilesStorageProviderV30 prov = GetProvider();
-			prov.Init(null, "");
+			Assert.That(() => prov.Init(null, ""), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Init_NullConfig() {
 			IFilesStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), null);
+			Assert.That(() => prov.Init(MockHost(), null), Throws.ArgumentNullException);
 		}
 
 		private Stream FillStream(string content) {
@@ -108,33 +109,45 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("/Test/File2.txt", files[1], "Wrong file");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void StoreFile_InvalidFullName(string fn) {
 			IFilesStorageProviderV30 prov = GetProvider();
 
 			using(Stream s = FillStream("Blah")) {
-				prov.StoreFile(fn, s, false);
+				Assert.That(() => prov.StoreFile(fn, s, false), Throws.ArgumentException);
+			}
+		}
+
+		[TestCase(null)]
+		public void StoreFile_NullFullName(string fn)
+		{
+			IFilesStorageProviderV30 prov = GetProvider();
+
+			using(Stream s = FillStream("Blah"))
+			{
+				Assert.That(() => prov.StoreFile(fn, s, false), Throws.ArgumentNullException);
 			}
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void StoreFile_NullStream() {
 			IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.StoreFile("/Blah.txt", null, false);
+			Assert.That(() => prov.StoreFile("/Blah.txt", null, false), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void StoreFile_ClosedStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void StoreFile_ClosedStream()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			Stream s = FillStream("Blah");
-			s.Close();
+				Stream s = FillStream("Blah");
+				s.Close();
 
-			prov.StoreFile("Blah.txt", s, false);
+				prov.StoreFile("Blah.txt", s, false);
+			});
 		}
 
 		[Test]
@@ -184,34 +197,41 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void ListFiles_InexistentDirectory() {
 			IFilesStorageProviderV30 prov = GetProvider();
-			prov.ListFiles("/dir/that/does/not/exist");
+			Assert.That(() => prov.ListFiles("/dir/that/does/not/exist"), Throws.ArgumentException);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void RetrieveFile_InvalidFile(string f) {
 			IFilesStorageProviderV30 prov = GetProvider();
 
 			using(MemoryStream s = new MemoryStream()) {
-				prov.RetrieveFile(f, s, false);
+				Assert.That(() => prov.RetrieveFile(f, s, false), Throws.ArgumentException);
+			}
+		}
+
+		[TestCase(null)]
+		public void RetrieveFile_NullFile(string f)
+		{
+			IFilesStorageProviderV30 prov = GetProvider();
+
+			using(MemoryStream s = new MemoryStream())
+			{
+				Assert.That(() => prov.RetrieveFile(f, s, false), Throws.ArgumentNullException);
 			}
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void RetrieveFile_InexistentFile() {
 			IFilesStorageProviderV30 prov = GetProvider();
 
 			using(MemoryStream s = new MemoryStream()) {
-				prov.RetrieveFile("/Inexistent.txt", s, false);
+				Assert.That(() => prov.RetrieveFile("/Inexistent.txt", s, false), Throws.ArgumentException);
 			}
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void RetrieveFile_NullStream() {
 			IFilesStorageProviderV30 prov = GetProvider();
 
@@ -219,21 +239,25 @@ namespace ScrewTurn.Wiki.Tests {
 				prov.StoreFile("/File.txt", s, false);
 			}
 
-			prov.RetrieveFile("/File.txt", null, false);
+			Assert.That(() => prov.RetrieveFile("/File.txt", null, false), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RetrieveFile_ClosedStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RetrieveFile_ClosedStream()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StoreFile("/File.txt", s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StoreFile("/File.txt", s, false);
+				}
 
-			MemoryStream s2 = new MemoryStream();
-			s2.Close();
-			prov.RetrieveFile("/File.txt", s2, false);
+				MemoryStream s2 = new MemoryStream();
+				s2.Close();
+				prov.RetrieveFile("/File.txt", s2, false);
+			});
 		}
 
 		[Test]
@@ -417,12 +441,26 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsNull(prov.GetFileDetails("/Dir/Sub/File.txt"), "GetFileDetails should return null");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void GetFileDetails_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void GetFileDetails_InvalidFile_ShouldThrowArgumentNullException(string f)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.GetFileDetails(f);
+				prov.GetFileDetails(f);
+			});
+		}
+
+		[TestCase("")]
+		public void GetFileDetails_InvalidFile_ShouldThrowArgumentException(string f)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.GetFileDetails(f);
+			});
 		}
 
 		[Test]
@@ -432,20 +470,37 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsNull(prov.GetFileDetails("/Inexistent.txt"), "GetFileDetails should return null");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void SetFileRetrievalCount_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void SetFileRetrievalCount_InvalidFile_ShouldThrowArgumentNullException(string f)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.SetFileRetrievalCount(f, 10);
+				prov.SetFileRetrievalCount(f, 10);
+			});
+		}
+
+		[TestCase("")]
+		public void SetFileRetrievalCount_InvalidFile_ShouldThrowArgumentException(string f)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.SetFileRetrievalCount(f, 10);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void SetFileRetrievalCount_NegativeCount() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void SetFileRetrievalCount_NegativeCount()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.SetFileRetrievalCount("/File.txt", -1);
+				prov.SetFileRetrievalCount("/File.txt", -1);
+			});
 		}
 
 		[Test]
@@ -465,20 +520,37 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(0, prov.ListFiles("/Sub/").Length, "Wrong file count");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void DeleteFile_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void DeleteFile_InvalidFile_ShouldThrowArgumentNullException(string f)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.DeleteFile(f);
+				prov.DeleteFile(f);
+			});
+		}
+
+		[TestCase("")]
+		public void DeleteFile_InvalidFile_ShouldThrowArgumentException(string f)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.DeleteFile(f);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void DeleteFile_InexistentFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void DeleteFile_InexistentFile()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.DeleteFile("/File.txt");
+				prov.DeleteFile("/File.txt");
+			});
 		}
 
 		[Test]
@@ -504,45 +576,86 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("/Sub/File2.txt", files[0], "Wrong file");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RenameFile_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RenameFile_InvalidFile_ShouldThrowArgumentNullException(string f)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.RenameFile(f, "/Blah.txt");
+				prov.RenameFile(f, "/Blah.txt");
+			});
+		}
+
+		[TestCase("")]
+		public void RenameFile_InvalidFile_ShouldThrowArgumentException(string f)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.RenameFile(f, "/Blah.txt");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RenameFile_InexistentFile() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RenameFile_InexistentFile()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.RenameFile("/Blah.txt", "/Blah2.txt");
+				prov.RenameFile("/Blah.txt", "/Blah2.txt");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RenameFile_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RenameFile_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StoreFile("/File.txt", s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StoreFile("/File.txt", s, false);
+				}
 
-			prov.RenameFile("/File.txt", n);
+				prov.RenameFile("/File.txt", n);
+			});
+		}
+
+		[TestCase("")]
+		public void RenameFile_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StoreFile("/File.txt", s, false);
+				}
+
+				prov.RenameFile("/File.txt", n);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RenameFile_ExistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RenameFile_ExistentName()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StoreFile("/File.txt", s, false);
-				prov.StoreFile("/File2.txt", s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StoreFile("/File.txt", s, false);
+					prov.StoreFile("/File2.txt", s, false);
+				}
 
-			prov.RenameFile("/File.txt", "/File2.txt");
+				prov.RenameFile("/File.txt", "/File2.txt");
+			});
 		}
 
 		[Test]
@@ -564,36 +677,59 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void CreateDirectory_NullDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void CreateDirectory_NullDirectory()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.CreateDirectory(null, "Dir");
+				prov.CreateDirectory(null, "Dir");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void CreateDirectory_InexistentDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void CreateDirectory_InexistentDirectory()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.CreateDirectory("/Inexistent/Dir/", "Sub");
+				prov.CreateDirectory("/Inexistent/Dir/", "Sub");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void CreateDirectory_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void CreateDirectory_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.CreateDirectory("/", n);
+				prov.CreateDirectory("/", n);
+			});
+		}
+
+		[TestCase("")]
+		public void CreateDirectory_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.CreateDirectory("/", n);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void CreateDirectory_ExistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void CreateDirectory_ExistentName()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			Assert.IsTrue(prov.CreateDirectory("/", "Dir"), "CreateDirectory should return true");
-			prov.CreateDirectory("/", "Dir");
+				Assert.IsTrue(prov.CreateDirectory("/", "Dir"), "CreateDirectory should return true");
+				prov.CreateDirectory("/", "Dir");
+			});
 		}
 
 		[Test]
@@ -615,11 +751,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void ListDirectories_InexistentDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void ListDirectories_InexistentDirectory()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.ListDirectories("/Inexistent/");
+				prov.ListDirectories("/Inexistent/");
+			});
 		}
 
 		[Test]
@@ -643,21 +782,38 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual(0, prov.ListDirectories("/").Length, "Wrong dir count");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("/", ExpectedException = typeof(ArgumentException))]
-		public void DeleteDirectory_InvalidDirectory(string d) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void DeleteDirectory_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.DeleteDirectory(d);
+				prov.DeleteDirectory(d);
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("/")]
+		public void DeleteDirectory_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.DeleteDirectory(d);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void DeleteDirectory_InexistentDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void DeleteDirectory_InexistentDirectory()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.DeleteDirectory("/Inexistent/");
+				prov.DeleteDirectory("/Inexistent/");
+			});
 		}
 
 		[Test]
@@ -703,43 +859,79 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.AreEqual("/Dir2/Sub2/File.txt", prov.ListFiles("/Dir2/Sub2/")[0], "Wrong file");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("/", ExpectedException = typeof(ArgumentException))]
-		public void RenameDirectory_InvalidDirectory(string d) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RenameDirectory_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.RenameDirectory(d, "/Dir/");
+				prov.RenameDirectory(d, "/Dir/");
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("/")]
+		public void RenameDirectory_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.RenameDirectory(d, "/Dir/");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RenameDirectory_InexistentDirectory() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RenameDirectory_InexistentDirectory()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.RenameDirectory("/Inexistent/", "/Inexistent2/");
+				prov.RenameDirectory("/Inexistent/", "/Inexistent2/");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("/", ExpectedException = typeof(ArgumentException))]
-		public void RenameDirectory_InvalidNewDir(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RenameDirectory_InvalidNewDir_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.CreateDirectory("/", "Dir");
+				prov.CreateDirectory("/", "Dir");
 
-			prov.RenameDirectory("/Dir/", n);
+				prov.RenameDirectory("/Dir/", n);
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("/")]
+		public void RenameDirectory_InvalidNewDir_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.CreateDirectory("/", "Dir");
+
+				prov.RenameDirectory("/Dir/", n);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RenameDirectory_ExistentNewDir() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RenameDirectory_ExistentNewDir()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.CreateDirectory("/", "Dir");
-			prov.CreateDirectory("/", "Dir2");
+				prov.CreateDirectory("/", "Dir");
+				prov.CreateDirectory("/", "Dir2");
 
-			prov.RenameDirectory("/Dir/", "/Dir2/");
+				prov.RenameDirectory("/Dir/", "/Dir2/");
+			});
 		}
 
 		[Test]
@@ -773,11 +965,14 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ListPageAttachments_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void ListPageAttachments_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.ListPageAttachments(null);
+				prov.ListPageAttachments(null);
+			});
 		}
 
 		[Test]
@@ -788,25 +983,49 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void StorePageAttachment_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void StorePageAttachment_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(null, "File.txt", s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(null, "File.txt", s, false);
+				}
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void StorePageAttachment_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void StorePageAttachment_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(pi, n, s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(pi, n, s, false);
+				}
+			});
+		}
+
+		[TestCase("")]
+		public void StorePageAttachment_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(pi, n, s, false);
+				}
+			});
 		}
 
 		[Test]
@@ -843,113 +1062,161 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void StorePageAttachment_NullStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void StorePageAttachment_NullStream()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			prov.StorePageAttachment(pi, "File.txt", null, false);
+				prov.StorePageAttachment(pi, "File.txt", null, false);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void StorePageAttachment_ClosedStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void StorePageAttachment_ClosedStream()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			MemoryStream ms = new MemoryStream();
-			ms.Close();
-			prov.StorePageAttachment(pi, "File.txt", ms, false);
+				MemoryStream ms = new MemoryStream();
+				ms.Close();
+				prov.StorePageAttachment(pi, "File.txt", ms, false);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrievePageAttachment_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RetrievePageAttachment_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(pi, "File.txt", s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(pi, "File.txt", s, false);
+				}
 
-			using(MemoryStream ms = new MemoryStream()) {
-				prov.RetrievePageAttachment(null, "File.txt", ms, false);
-			}
+				using(MemoryStream ms = new MemoryStream())
+				{
+					prov.RetrievePageAttachment(null, "File.txt", ms, false);
+				}
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RetrievePageAttachment_InexistentPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RetrievePageAttachment_InexistentPage()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(pi, "File.txt", s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(pi, "File.txt", s, false);
+				}
 
-			pi = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
+				pi = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
 
-			using(MemoryStream ms = new MemoryStream()) {
+				using(MemoryStream ms = new MemoryStream())
+				{
+					prov.RetrievePageAttachment(pi, "File.txt", ms, false);
+				}
+			});
+		}
+
+		[TestCase(null)]
+		public void RetrievePageAttachment_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				using(MemoryStream ms = new MemoryStream())
+				{
+					prov.RetrievePageAttachment(pi, n, ms, false);
+				}
+			});
+		}
+
+		[TestCase("")]
+		public void RetrievePageAttachment_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				using(MemoryStream ms = new MemoryStream())
+				{
+					prov.RetrievePageAttachment(pi, n, ms, false);
+				}
+			});
+		}
+
+		[Test]
+		public void RetrievePageAttachment_InexistentName()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				using(MemoryStream ms = new MemoryStream())
+				{
+					prov.RetrievePageAttachment(pi, "File.txt", ms, false);
+				}
+			});
+		}
+
+		[Test]
+		public void RetrievePageAttachment_NullStream()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(pi, "File.txt", s, false);
+				}
+
+				prov.RetrievePageAttachment(pi, "File.txt", null, false);
+			});
+		}
+
+		[Test]
+		public void RetrievePageAttachment_ClosedStream()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(pi, "File.txt", s, false);
+				}
+
+				MemoryStream ms = new MemoryStream();
+				ms.Close();
 				prov.RetrievePageAttachment(pi, "File.txt", ms, false);
-			}
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RetrievePageAttachment_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
-
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
-
-			using(MemoryStream ms = new MemoryStream()) {
-				prov.RetrievePageAttachment(pi, n, ms, false);
-			}
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RetrievePageAttachment_InexistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
-
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
-
-			using(MemoryStream ms = new MemoryStream()) {
-				prov.RetrievePageAttachment(pi, "File.txt", ms, false);
-			}
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RetrievePageAttachment_NullStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
-
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
-
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(pi, "File.txt", s, false);
-			}
-
-			prov.RetrievePageAttachment(pi, "File.txt", null, false);
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RetrievePageAttachment_ClosedStream() {
-			IFilesStorageProviderV30 prov = GetProvider();
-
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
-
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(pi, "File.txt", s, false);
-			}
-
-			MemoryStream ms = new MemoryStream();
-			ms.Close();
-			prov.RetrievePageAttachment(pi, "File.txt", ms, false);
+			});
 		}
 
 		[Test]
@@ -1127,43 +1394,80 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void GetPageAttachmentDetails_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void GetPageAttachmentDetails_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.GetPageAttachmentDetails(null, "File.txt");
+				prov.GetPageAttachmentDetails(null, "File.txt");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void GetPageAttachmentDetails_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void GetPageAttachmentDetails_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.GetPageAttachmentDetails(new PageInfo("Page", null, DateTime.Now), n);
+				prov.GetPageAttachmentDetails(new PageInfo("Page", null, DateTime.Now), n);
+			});
+		}
+
+		[TestCase("")]
+		public void GetPageAttachmentDetails_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.GetPageAttachmentDetails(new PageInfo("Page", null, DateTime.Now), n);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void SetPageAttachmentRetrievalCount_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void SetPageAttachmentRetrievalCount_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.SetPageAttachmentRetrievalCount(null, "File.txt", 10);
+				prov.SetPageAttachmentRetrievalCount(null, "File.txt", 10);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void SetPageAttachmentRetrievalCount_InvalidFile(string f) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void SetPageAttachmentRetrievalCount_InvalidFile_ShouldThrowArgumentNullException(string f)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.SetPageAttachmentRetrievalCount(new PageInfo("Page", null, DateTime.Now), f, 10);
+				prov.SetPageAttachmentRetrievalCount(new PageInfo("Page", null, DateTime.Now), f, 10);
+			});
+		}
+
+		[TestCase("")]
+		public void SetPageAttachmentRetrievalCount_InvalidFile_ShouldThrowArgumentException(string f)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				prov.SetPageAttachmentRetrievalCount(new PageInfo("Page", null, DateTime.Now), f, 10);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void SetPageAttachmentRetrievalCount_NegativeCount() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void SetPageAttachmentRetrievalCount_NegativeCount()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.SetPageAttachmentRetrievalCount(new PageInfo("Page", null, DateTime.Now), "File.txt", -1);
+				prov.SetPageAttachmentRetrievalCount(new PageInfo("Page", null, DateTime.Now), "File.txt", -1);
+			});
 		}
 
 		[Test]
@@ -1183,45 +1487,71 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void DeletePageAttachment_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void DeletePageAttachment_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.DeletePageAttachment(null, "File.txt");
+				prov.DeletePageAttachment(null, "File.txt");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void DeletePageAttachment_InexistentPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void DeletePageAttachment_InexistentPage()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			prov.DeletePageAttachment(pi, "File.txt");
+				prov.DeletePageAttachment(pi, "File.txt");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void DeletePageAttachment_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void DeletePageAttachment_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			prov.DeletePageAttachment(pi, n);
+				prov.DeletePageAttachment(pi, n);
+			});
+		}
+
+		[TestCase("")]
+		public void DeletePageAttachment_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				prov.DeletePageAttachment(pi, n);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void DeletePageAttachment_InexistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void DeletePageAttachment_InexistentName()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(pi, "File.txt", s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(pi, "File.txt", s, false);
+				}
 
-			prov.DeletePageAttachment(pi, "File222.txt");
+				prov.DeletePageAttachment(pi, "File222.txt");
+			});
 		}
 
 		[Test]
@@ -1242,70 +1572,116 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void RenamePageAttachment_NullPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RenamePageAttachment_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			prov.RenamePageAttachment(null, "File.txt", "File2.txt");
+				prov.RenamePageAttachment(null, "File.txt", "File2.txt");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RenamePageAttachment_InexistentPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RenamePageAttachment_InexistentPage()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			prov.RenamePageAttachment(pi, "File.txt", "File2.txt");
+				prov.RenamePageAttachment(pi, "File.txt", "File2.txt");
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RenamePageAttachment_InvalidName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase(null)]
+		public void RenamePageAttachment_InvalidName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			prov.RenamePageAttachment(pi, n, "File2.txt");
+				prov.RenamePageAttachment(pi, n, "File2.txt");
+			});
 		}
 
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RenamePageAttachment_InexistentName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		[TestCase("")]
+		public void RenamePageAttachment_InvalidName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(pi, "File.txt", s, false);
-			}
-
-			prov.RenamePageAttachment(pi, "File1.txt", "File2.txt");
-		}
-
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void RenamePageAttachment_InvalidNewName(string n) {
-			IFilesStorageProviderV30 prov = GetProvider();
-
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
-
-			prov.RenamePageAttachment(pi, "File.txt", n);
+				prov.RenamePageAttachment(pi, n, "File2.txt");
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void RenamePageAttachment_ExistentNewName() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void RenamePageAttachment_InexistentName()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(pi, "File.txt", s, false);
-				prov.StorePageAttachment(pi, "File2.txt", s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(pi, "File.txt", s, false);
+				}
 
-			prov.RenamePageAttachment(pi, "File.txt", "File2.txt");
+				prov.RenamePageAttachment(pi, "File1.txt", "File2.txt");
+			});
+		}
+
+		[TestCase(null)]
+		public void RenamePageAttachment_InvalidNewName_ShouldThrowArgumentNullException(string n)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				prov.RenamePageAttachment(pi, "File.txt", n);
+			});
+		}
+
+		[TestCase("")]
+		public void RenamePageAttachment_InvalidNewName_ShouldThrowArgumentException(string n)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				prov.RenamePageAttachment(pi, "File.txt", n);
+			});
+		}
+
+		[Test]
+		public void RenamePageAttachment_ExistentNewName()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
+
+				PageInfo pi = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
+
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(pi, "File.txt", s, false);
+					prov.StorePageAttachment(pi, "File2.txt", s, false);
+				}
+
+				prov.RenamePageAttachment(pi, "File.txt", "File2.txt");
+			});
 		}
 
 		[Test]
@@ -1331,13 +1707,16 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void NotifyPageRenaming_NullOldPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void NotifyPageRenaming_NullOldPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo p2 = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
+				PageInfo p2 = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
 
-			prov.NotifyPageRenaming(null, p2);
+				prov.NotifyPageRenaming(null, p2);
+			});
 		}
 
 		[Test]
@@ -1353,29 +1732,36 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void NotifyPageRenaming_NullNewPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void NotifyPageRenaming_NullNewPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
+				PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
 
-			prov.NotifyPageRenaming(p1, null);
+				prov.NotifyPageRenaming(p1, null);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void NotifyPageRenaming_ExistentNewPage() {
-			IFilesStorageProviderV30 prov = GetProvider();
+		public void NotifyPageRenaming_ExistentNewPage()
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IFilesStorageProviderV30 prov = GetProvider();
 
-			PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
-			PageInfo p2 = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
+				PageInfo p1 = new PageInfo("Page1", MockPagesProvider(), DateTime.Now);
+				PageInfo p2 = new PageInfo("Page2", MockPagesProvider(), DateTime.Now);
 
-			using(Stream s = FillStream("Blah")) {
-				prov.StorePageAttachment(p1, "File1.txt", s, false);
-				prov.StorePageAttachment(p2, "File2.txt", s, false);
-			}
+				using(Stream s = FillStream("Blah"))
+				{
+					prov.StorePageAttachment(p1, "File1.txt", s, false);
+					prov.StorePageAttachment(p2, "File2.txt", s, false);
+				}
 
-			prov.NotifyPageRenaming(p1, p2);
+				prov.NotifyPageRenaming(p1, p2);
+			});
 		}
 
 		[Test]

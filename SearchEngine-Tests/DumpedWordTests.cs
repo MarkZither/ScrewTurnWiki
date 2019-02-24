@@ -16,13 +16,18 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual("word", w.Text, "Wrong text");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void Constructor_WithParameters_InvalidText(string text) {
-			DumpedWord w = new DumpedWord(5, text);
-		}
+            Assert.That(() => new DumpedWord(5, text), Throws.ArgumentException);
+        }
 
-		[Test]
+        [TestCase(null)]
+        public void Constructor_WithParameters_NullText(string text)
+        {
+            Assert.That(() => new DumpedWord(5, text), Throws.ArgumentNullException);
+        }
+
+        [Test]
 		public void Constructor_Word() {
 			DumpedWord w = new DumpedWord(new Word(23, "text"));
 			Assert.AreEqual(23, w.ID, "Wrong ID");
@@ -30,10 +35,9 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_Word_NullWord() {
-			DumpedWord w = new DumpedWord(null);
-		}
+            Assert.That(() => new DumpedWord(null), Throws.ArgumentNullException);
+        }
 
 	}
 

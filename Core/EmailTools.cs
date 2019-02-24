@@ -46,7 +46,10 @@ namespace ScrewTurn.Wiki {
 				if(ex is SmtpException) {
 					Log.LogEntry("Unable to send Email: " + ex.Message, EntryType.Error, Log.SystemUsername);
 				}
-				else Log.LogEntry(ex.ToString(), EntryType.Error, Log.SystemUsername);
+				else
+				{
+					Log.LogEntry(ex.ToString(), EntryType.Error, Log.SystemUsername);
+				}
 			}
 		}
 
@@ -60,8 +63,15 @@ namespace ScrewTurn.Wiki {
 				client.Credentials = new NetworkCredential(Settings.SmtpUsername, Settings.SmtpPassword);
 			}
 			client.EnableSsl = Settings.SmtpSsl;
-			if(Settings.SmtpPort != -1) client.Port = Settings.SmtpPort;
-			else if(Settings.SmtpSsl) client.Port = 465;
+			if(Settings.SmtpPort != -1)
+			{
+				client.Port = Settings.SmtpPort;
+			}
+			else if(Settings.SmtpSsl)
+			{
+				client.Port = 465;
+			}
+
 			return client;
 		}
 
@@ -71,7 +81,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="users">The users.</param>
 		/// <returns>The email addresses.</returns>
 		public static string[] GetRecipients(UserInfo[] users) {
-			if(users == null) return new string[0];
+			if(users == null)
+			{
+				return new string[0];
+			}
 
 			string[] result = new string[users.Length];
 
@@ -91,7 +104,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="body">The body.</param>
 		/// <param name="html"><c>true</c> if the body is HTML.</param>
 		public static void AsyncSendMassEmail(string[] recipients, string sender, string subject, string body, bool html) {
-			if(recipients.Length == 0) return;
+			if(recipients.Length == 0)
+			{
+				return;
+			}
 
 			System.Threading.ThreadPool.QueueUserWorkItem(delegate(object state) {
 				MailMessage message = new MailMessage(new MailAddress(sender), new MailAddress(sender));

@@ -68,7 +68,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The results.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
 		public SearchResultCollection PerformSearch(SearchParameters parameters) {
-			if(parameters == null) throw new ArgumentNullException("parameters");
+			if(parameters == null)
+			{
+				throw new ArgumentNullException("parameters");
+			}
 
 			return index.Search(parameters);
 		}
@@ -141,8 +144,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				PageInfo page = GetPage(pageName);
 
-				if(page == null) return null;
-				else return new PageDocument(page, dumpedDocument, TokenizeContent);
+				if(page == null)
+				{
+					return null;
+				}
+				else
+				{
+					return new PageDocument(page, dumpedDocument, TokenizeContent);
+				}
 			}
 			else if(dumpedDocument.TypeTag == MessageDocument.StandardTypeTag) {
 				string pageFullName;
@@ -150,10 +159,19 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				MessageDocument.GetMessageDetails(dumpedDocument.Name, out pageFullName, out id);
 
 				PageInfo page = GetPage(pageFullName);
-				if(page == null) return null;
-				else return new MessageDocument(page, id, dumpedDocument, TokenizeContent);
+				if(page == null)
+				{
+					return null;
+				}
+				else
+				{
+					return new MessageDocument(page, id, dumpedDocument, TokenizeContent);
+				}
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		// Extremely dirty way for testing the search engine in combination with alwaysGenerateDocument
@@ -209,21 +227,33 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(connection, query, new List<Parameter>());
 			int rows = ExecuteScalar<int>(command, -1, false);
 
-			if(rows == -1) return 0;
+			if(rows == -1)
+			{
+				return 0;
+			}
+
 			size += rows * 118;
 
 			query = queryBuilder.SelectCountFrom("IndexWord");
 			command = builder.GetCommand(connection, query, new List<Parameter>());
 			rows = ExecuteScalar<int>(command, -1, false);
 
-			if(rows == -1) return 0;
+			if(rows == -1)
+			{
+				return 0;
+			}
+
 			size += rows * 24;
 
 			query = queryBuilder.SelectCountFrom("IndexWordMapping");
 			command = builder.GetCommand(connection, query, new List<Parameter>());
 			rows = ExecuteScalar<int>(command, -1, false);
 
-			if(rows == -1) return 0;
+			if(rows == -1)
+			{
+				return 0;
+			}
+
 			size += rows * 21;
 
 			CloseConnection(connection);
@@ -245,10 +275,22 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			int count = 0;
 
 			string elemName = "";
-			if(element == IndexElementType.Documents) elemName = "IndexDocument";
-			else if(element == IndexElementType.Words) elemName = "IndexWord";
-			else if(element == IndexElementType.Occurrences) elemName = "IndexWordMapping";
-			else throw new NotSupportedException("Unsupported element type");
+			if(element == IndexElementType.Documents)
+			{
+				elemName = "IndexDocument";
+			}
+			else if(element == IndexElementType.Words)
+			{
+				elemName = "IndexWord";
+			}
+			else if(element == IndexElementType.Occurrences)
+			{
+				elemName = "IndexWordMapping";
+			}
+			else
+			{
+				throw new NotSupportedException("Unsupported element type");
+			}
 
 			string query = queryBuilder.SelectCountFrom(elemName);
 
@@ -283,8 +325,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AppendForBatch(query, query2);
 
 			DbCommand command = null;
-			if(state != null) command = builder.GetCommand((DbTransaction)state, query, parameters);
-			else command = builder.GetCommand(connString, query, parameters);
+			if(state != null)
+			{
+				command = builder.GetCommand((DbTransaction)state, query, parameters);
+			}
+			else
+			{
+				command = builder.GetCommand(connString, query, parameters);
+			}
 
 			// Close only if state is null
 			ExecuteNonQuery(command, state == null);
@@ -312,7 +360,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			DbTransaction transaction = null;
-			if(state != null) transaction = (DbTransaction)state;
+			if(state != null)
+			{
+				transaction = (DbTransaction)state;
+			}
 			else {
 				DbConnection connection = builder.GetConnection(connString);
 				transaction = BeginTransaction(connection);
@@ -336,7 +387,11 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			if(ExecuteNonQuery(command, false) != 1) {
-				if(state == null) RollbackTransaction(transaction);
+				if(state == null)
+				{
+					RollbackTransaction(transaction);
+				}
+
 				return -1;
 			}
 			document.ID = freeDocumentId;
@@ -387,14 +442,21 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				int id = ExecuteScalar<int>(command, -1, false);
 				if(id == -1) {
-					if(state == null) RollbackTransaction(transaction);
+					if(state == null)
+					{
+						RollbackTransaction(transaction);
+					}
+
 					return -1;
 				}
 
 				if(!wordIds.ContainsKey(word.Text)) {
 					wordIds.Add(word.Text, (uint)id);
 				}
-				else if(wordIds[word.Text] != (uint)id) throw new InvalidOperationException("Word ID mismatch");
+				else if(wordIds[word.Text] != (uint)id)
+				{
+					throw new InvalidOperationException("Word ID mismatch");
+				}
 			}
 
 			// Insert all mappings
@@ -419,12 +481,19 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				command = builder.GetCommand(transaction, query, parameters);
 
 				if(ExecuteNonQuery(command, false) != 1) {
-					if(state == null) RollbackTransaction(transaction);
+					if(state == null)
+					{
+						RollbackTransaction(transaction);
+					}
+
 					return -1;
 				}
 			}
 
-			if(state == null) CommitTransaction(transaction);
+			if(state == null)
+			{
+				CommitTransaction(transaction);
+			}
 
 			return allWords.Count;
 		}
@@ -436,7 +505,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="transaction">The current database transaction.</param>
 		/// <returns>The free element ID.</returns>
 		private uint GetFreeElementId(IndexElementType element, DbTransaction transaction) {
-			if(element == IndexElementType.Occurrences) throw new ArgumentException("Element cannot be Occurrences", "element");
+			if(element == IndexElementType.Occurrences)
+			{
+				throw new ArgumentException("Element cannot be Occurrences", "element");
+			}
 
 			string table = element == IndexElementType.Documents ? "IndexDocument" : "IndexWord";
 
@@ -450,8 +522,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int id = ExecuteScalar<int>(command, -1, false);
 
-			if(id == -1) return 0;
-			else return (uint)id + 1;
+			if(id == -1)
+			{
+				return 0;
+			}
+			else
+			{
+				return (uint)id + 1;
+			}
 		}
 
 		/// <summary>
@@ -520,7 +598,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			Dictionary<uint, IDocument> documents = new Dictionary<uint, IDocument>(64);
 			foreach(DumpedWordMapping map in mappings) {
 				uint docId = map.DocumentID;
-				if(documents.ContainsKey(docId)) continue;
+				if(documents.ContainsKey(docId))
+				{
+					continue;
+				}
 
 				parameters[0].Value = (int)docId;
 				command = builder.GetCommand(connection, query, parameters);
@@ -535,7 +616,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 					IDocument document = BuildDocument(dumpedDoc);
 
-					if(document != null) documents.Add(docId, document);
+					if(document != null)
+					{
+						documents.Add(docId, document);
+					}
 				}
 				CloseReader(reader);
 			}
@@ -569,8 +653,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.AppendForBatch(query, queryBuilder.DeleteFrom("IndexDocument"));
 
 			DbCommand command = null;
-			if(state == null) command = builder.GetCommand(connString, query, new List<Parameter>());
-			else command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>());
+			if(state == null)
+			{
+				command = builder.GetCommand(connString, query, new List<Parameter>());
+			}
+			else
+			{
+				command = builder.GetCommand((DbTransaction)state, query, new List<Parameter>());
+			}
 
 			ExecuteNonQuery(command, state == null);
 		}
@@ -655,7 +745,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private int IndexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body, DbTransaction transaction) {
 			try {
 				// Trim "RE:" to avoid polluting the search engine index
-				if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
+				if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3)
+				{
+					subject = subject.Substring(3).Trim();
+				}
 
 				string documentName = MessageDocument.GetDocumentName(page, id);
 
@@ -705,7 +798,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The number of indexed words, including duplicates.</returns>
 		private void UnindexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body, DbTransaction transaction) {
 			// Trim "RE:" to avoid polluting the search engine index
-			if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3) subject = subject.Substring(3).Trim();
+			if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3)
+			{
+				subject = subject.Substring(3).Trim();
+			}
 
 			string documentName = MessageDocument.GetDocumentName(page, id);
 
@@ -758,7 +854,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -801,7 +900,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -812,8 +914,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		public NamespaceInfo GetNamespace(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -866,7 +975,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -877,8 +989,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		public NamespaceInfo AddNamespace(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -892,8 +1011,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteNonQuery(command);
 
-			if(rows == 1) return new NamespaceInfo(name, this, null);
-			else return null;
+			if(rows == 1)
+			{
+				return new NamespaceInfo(name, this, null);
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -905,9 +1030,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="nspace"/> or <paramref name="newName"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty.</exception>
 		public NamespaceInfo RenameNamespace(NamespaceInfo nspace, string newName) {
-			if(nspace == null) throw new ArgumentNullException("nspace");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(nspace == null)
+			{
+				throw new ArgumentNullException("nspace");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -978,7 +1114,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The correct <see cref="T:NamespaceInfo"/> object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="nspace"/> is <c>null</c>.</exception>
 		public NamespaceInfo SetNamespaceDefaultPage(NamespaceInfo nspace, PageInfo page) {
-			if(nspace == null) throw new ArgumentNullException("nspace");
+			if(nspace == null)
+			{
+				throw new ArgumentNullException("nspace");
+			}
 
 			// Namespace existence is verified by the affected rows (should be 1)
 
@@ -997,8 +1136,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			query = queryBuilder.Where(query, "Name", WhereOperator.Equals, "Name");
 
 			List<Parameter> parameters = new List<Parameter>(2);
-			if(page == null) parameters.Add(new Parameter(ParameterType.String, "DefaultPage", DBNull.Value));
-			else parameters.Add(new Parameter(ParameterType.String, "DefaultPage", NameTools.GetLocalName(page.FullName)));
+			if(page == null)
+			{
+				parameters.Add(new Parameter(ParameterType.String, "DefaultPage", DBNull.Value));
+			}
+			else
+			{
+				parameters.Add(new Parameter(ParameterType.String, "DefaultPage", NameTools.GetLocalName(page.FullName)));
+			}
+
 			parameters.Add(new Parameter(ParameterType.String, "Name", nspace.Name));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -1022,7 +1168,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns><c>true</c> if the namespace is removed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="nspace"/> is <c>null</c>.</exception>
 		public bool RemoveNamespace(NamespaceInfo nspace) {
-			if(nspace == null) throw new ArgumentNullException("nspace");
+			if(nspace == null)
+			{
+				throw new ArgumentNullException("nspace");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1047,8 +1196,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			int rows = ExecuteNonQuery(command, false);
-			if(rows > 0) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows > 0)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows > 0;
 		}
@@ -1061,13 +1216,25 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns><c>true</c> if the page is the default page, <c>false</c> otherwise.</returns>
 		private bool IsDefaultPage(DbTransaction transaction, PageInfo page) {
 			string nspaceName = NameTools.GetNamespace(page.FullName);
-			if(string.IsNullOrEmpty(nspaceName)) return false;
+			if(string.IsNullOrEmpty(nspaceName))
+			{
+				return false;
+			}
 
 			NamespaceInfo nspace = GetNamespace(transaction, nspaceName);
-			if(nspace == null) return false;
+			if(nspace == null)
+			{
+				return false;
+			}
 			else {
-				if(nspace.DefaultPage != null) return new PageNameComparer().Compare(nspace.DefaultPage, page) == 0;
-				else return false;
+				if(nspace.DefaultPage != null)
+				{
+					return new PageNameComparer().Compare(nspace.DefaultPage, page) == 0;
+				}
+				else
+				{
+					return false;
+				}
 			}
 		}
 
@@ -1081,7 +1248,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The correct instance of <see cref="T:PageInfo"/>.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public PageInfo MovePage(PageInfo page, NamespaceInfo destination, bool copyCategories) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			// Check:
 			// 1. Same namespace - ROOT, SUB (explicit check)
@@ -1093,13 +1263,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string sourceName = null;
 			string pageName = null;
 			NameTools.ExpandFullName(page.FullName, out sourceName, out pageName);
-			if(sourceName == null) sourceName = "";
+			if(sourceName == null)
+			{
+				sourceName = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
 			DbTransaction transaction = BeginTransaction(connection);
 
-			if(destinationName.ToLowerInvariant() == sourceName.ToLowerInvariant()) return null;
+			if(destinationName.ToLowerInvariant() == sourceName.ToLowerInvariant())
+			{
+				return null;
+			}
+
 			if(IsDefaultPage(transaction, page)) {
 				RollbackTransaction(transaction);
 				return null;
@@ -1199,7 +1376,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string nspace = null;
 			string name = null;
 			NameTools.ExpandFullName(fullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1222,7 +1402,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				List<string> pages = new List<string>(50);
 
 				while(reader.Read()) {
-					if(result == null) result = new CategoryInfo(NameTools.GetFullName(reader["Category_Namespace"] as string, reader["Category_Name"] as string), this);
+					if(result == null)
+					{
+						result = new CategoryInfo(NameTools.GetFullName(reader["Category_Namespace"] as string, reader["Category_Name"] as string), this);
+					}
 
 					if(!IsDBNull(reader, "CategoryBinding_Page")) {
 						pages.Add(NameTools.GetFullName(reader["Category_Namespace"] as string, reader["CategoryBinding_Page"] as string));
@@ -1231,11 +1414,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				CloseReader(reader);
 
-				if(result != null) result.Pages = pages.ToArray();
+				if(result != null)
+				{
+					result.Pages = pages.ToArray();
+				}
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1248,7 +1437,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string nspace = null;
 			string name = null;
 			NameTools.ExpandFullName(fullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1271,7 +1463,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				List<string> pages = new List<string>(50);
 
 				while(reader.Read()) {
-					if(result == null) result = new CategoryInfo(NameTools.GetFullName(reader["Category_Namespace"] as string, reader["Category_Name"] as string), this);
+					if(result == null)
+					{
+						result = new CategoryInfo(NameTools.GetFullName(reader["Category_Namespace"] as string, reader["Category_Name"] as string), this);
+					}
 
 					if(!IsDBNull(reader, "CategoryBinding_Page")) {
 						pages.Add(NameTools.GetFullName(reader["Category_Namespace"] as string, reader["CategoryBinding_Page"] as string));
@@ -1280,11 +1475,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				CloseReader(reader);
 
-				if(result != null) result.Pages = pages.ToArray();
+				if(result != null)
+				{
+					result.Pages = pages.ToArray();
+				}
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1295,8 +1496,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
 		public CategoryInfo GetCategory(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1358,11 +1566,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				CloseReader(reader);
 
-				if(result.Count > 0) result[result.Count - 1].Pages = pages.ToArray();
+				if(result.Count > 0)
+				{
+					result[result.Count - 1].Pages = pages.ToArray();
+				}
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1416,11 +1630,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				CloseReader(reader);
 
-				if(result.Count > 0) result[result.Count - 1].Pages = pages.ToArray();
+				if(result.Count > 0)
+				{
+					result[result.Count - 1].Pages = pages.ToArray();
+				}
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1445,14 +1665,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The categories, sorted by name.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public CategoryInfo[] GetCategoriesForPage(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string nspace, pageName;
 			NameTools.ExpandFullName(page.FullName, out nspace, out pageName);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			string query = queryBuilder.SelectFrom("Category", "CategoryBinding", new string[] { "Name", "Namespace" }, new string[] { "Category", "Namespace" }, Join.LeftJoin,
 				new string[] { "Name", "Namespace" }, new string[] { "Page" });
@@ -1495,11 +1721,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				CloseReader(command, reader);
 
-				if(result.Count > 0) result[result.Count - 1].Pages = pages.ToArray();
+				if(result.Count > 0)
+				{
+					result[result.Count - 1].Pages = pages.ToArray();
+				}
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1512,10 +1744,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		public CategoryInfo AddCategory(string nspace, string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
 
-			if(nspace == null) nspace = "";
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 
@@ -1529,8 +1771,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteNonQuery(command);
 
-			if(rows == 1) return new CategoryInfo(NameTools.GetFullName(nspace, name), this);
-			else return null;
+			if(rows == 1)
+			{
+				return new CategoryInfo(NameTools.GetFullName(nspace, name), this);
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1542,14 +1790,28 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="category"/> or <paramref name="newName"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty.</exception>
 		public CategoryInfo RenameCategory(CategoryInfo category, string newName) {
-			if(category == null) throw new ArgumentNullException("category");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(category == null)
+			{
+				throw new ArgumentNullException("category");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			string nspace = null;
 			string name = null;
 			NameTools.ExpandFullName(category.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1591,7 +1853,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string nspace = null;
 			string name = null;
 			NameTools.ExpandFullName(category.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1621,7 +1886,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string nspace = null;
 			string name = null;
 			NameTools.ExpandFullName(category.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1648,7 +1916,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>True if the Category has been removed successfully.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="category"/> is <c>null</c>.</exception>
 		public bool RemoveCategory(CategoryInfo category) {
-			if(category == null) throw new ArgumentNullException("category");
+			if(category == null)
+			{
+				throw new ArgumentNullException("category");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1669,8 +1940,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// in the destination Category.</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="source"/> or <paramref name="destination"/> are <c>null</c>.</exception>
 		public CategoryInfo MergeCategories(CategoryInfo source, CategoryInfo destination) {
-			if(source == null) throw new ArgumentNullException("source");
-			if(destination == null) throw new ArgumentNullException("destination");
+			if(source == null)
+			{
+				throw new ArgumentNullException("source");
+			}
+
+			if(destination == null)
+			{
+				throw new ArgumentNullException("destination");
+			}
 
 			// 1. Check for same namespace
 			// 2. Load all pages in source
@@ -1684,7 +1962,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			string destinationNs = NameTools.GetNamespace(destination.FullName);
 			
 			// If one is null and the other not null, fail
-			if(sourceNs == null && destinationNs != null || sourceNs != null && destinationNs == null) return null;
+			if(sourceNs == null && destinationNs != null || sourceNs != null && destinationNs == null)
+			{
+				return null;
+			}
 			else {
 				// Both non-null or both null
 				if(sourceNs != null) {
@@ -1692,7 +1973,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					NamespaceInfo tempSource = new NamespaceInfo(sourceNs, this, null);
 					NamespaceInfo tempDest = new NamespaceInfo(destinationNs, this, null);
 					// Different names, fail
-					if(new NamespaceComparer().Compare(tempSource, tempDest) != 0) return null;
+					if(new NamespaceComparer().Compare(tempSource, tempDest) != 0)
+					{
+						return null;
+					}
 				}
 				// else both null, OK
 			}
@@ -1828,7 +2112,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private PageInfo GetPage(DbTransaction transaction, string fullName) {
 			string nspace, name;
 			NameTools.ExpandFullName(fullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1857,7 +2144,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1869,7 +2159,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private PageInfo GetPage(DbConnection connection, string fullName) {
 			string nspace, name;
 			NameTools.ExpandFullName(fullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1898,7 +2191,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1909,8 +2205,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
 		public PageInfo GetPage(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1956,7 +2259,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1994,7 +2300,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -2047,7 +2356,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -2065,7 +2377,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string name, nspace;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			string query = queryBuilder.SelectFrom("PageContent", "PageKeyword", new string[] { "Page", "Namespace", "Revision" }, new string[] { "Page", "Namespace", "Revision" }, Join.LeftJoin,
 				new string [] { "Title", "User", "LastModified", "Comment", "Content", "Description" }, new string[] { "Keyword" });
@@ -2112,7 +2427,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -2130,7 +2448,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string name, nspace;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			string query = queryBuilder.SelectFrom("PageContent", "PageKeyword", new string[] { "Page", "Namespace", "Revision" }, new string[] { "Page", "Namespace", "Revision" }, Join.LeftJoin,
 				new string[] { "Title", "User", "LastModified", "Comment", "Content", "Description" }, new string[] { "Keyword" });
@@ -2177,7 +2498,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -2187,7 +2511,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The Page Content object, <c>null</c> if the page does not exist or <paramref name="page"/> is <c>null</c>,
 		/// or an empty instance if the content could not be retrieved (<seealso cref="PageContent.GetEmpty"/>).</returns>
 		public PageContent GetContent(PageInfo page) {
-			if(page == null) return null;
+			if(page == null)
+			{
+				return null;
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -2205,7 +2532,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The draft, or <c>null</c> if no draft exists.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public PageContent GetDraft(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -2223,7 +2553,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns><c>true</c> if the draft is deleted, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public bool DeleteDraft(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -2247,7 +2580,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string name, nspace;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -2278,7 +2614,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -2294,7 +2633,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string name, nspace;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -2325,7 +2667,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -2335,7 +2680,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The Backup/Revision numbers.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public int[] GetBackups(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -2355,8 +2703,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
 		public PageContent GetBackupContent(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(revision < 0) throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(revision < 0)
+			{
+				throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -2377,7 +2732,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private bool SetContent(DbTransaction transaction, PageContent content, int revision) {
 			string name, nspace;
 			NameTools.ExpandFullName(content.PageInfo.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -2393,17 +2751,33 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			parameters.Add(new Parameter(ParameterType.String, "Title", content.Title));
 			parameters.Add(new Parameter(ParameterType.String, "User", content.User));
 			parameters.Add(new Parameter(ParameterType.DateTime, "LastModified", content.LastModified));
-			if(!string.IsNullOrEmpty(content.Comment)) parameters.Add(new Parameter(ParameterType.String, "Comment", content.Comment));
-			else parameters.Add(new Parameter(ParameterType.String, "Comment", DBNull.Value));
+			if(!string.IsNullOrEmpty(content.Comment))
+			{
+				parameters.Add(new Parameter(ParameterType.String, "Comment", content.Comment));
+			}
+			else
+			{
+				parameters.Add(new Parameter(ParameterType.String, "Comment", DBNull.Value));
+			}
+
 			parameters.Add(new Parameter(ParameterType.String, "Content", content.Content));
-			if(!string.IsNullOrEmpty(content.Description)) parameters.Add(new Parameter(ParameterType.String, "Description", content.Description));
-			else parameters.Add(new Parameter(ParameterType.String, "Description", DBNull.Value));
+			if(!string.IsNullOrEmpty(content.Description))
+			{
+				parameters.Add(new Parameter(ParameterType.String, "Description", content.Description));
+			}
+			else
+			{
+				parameters.Add(new Parameter(ParameterType.String, "Description", DBNull.Value));
+			}
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			int rows = ExecuteNonQuery(command, false);
 
-			if(rows != 1) return false;
+			if(rows != 1)
+			{
+				return false;
+			}
 
 			if(content.Keywords.Length > 0) {
 				parameters = new List<Parameter>(content.Keywords.Length * 4);
@@ -2431,7 +2805,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return rows == content.Keywords.Length;
 			}
-			else return true;
+			else
+			{
+				return true;
+			}
 		}
 
 		/// <summary>
@@ -2444,7 +2821,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private bool DeleteContent(DbTransaction transaction, PageInfo page, int revision) {
 			string name, nspace;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -2476,7 +2856,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private bool DeleteContent(DbConnection connection, PageInfo page, int revision) {
 			string name, nspace;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -2507,8 +2890,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="content"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
 		public bool SetBackupContent(PageContent content, int revision) {
-			if(content == null) throw new ArgumentNullException("content");
-			if(revision < 0) throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
+
+			if(revision < 0)
+			{
+				throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			}
 
 			// 1. DeletebBackup, if any
 			// 2. Set new content
@@ -2521,8 +2911,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			bool set = SetContent(transaction, content, revision);
 
-			if(set) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(set)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return set;
 		}
@@ -2538,10 +2934,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		public PageInfo AddPage(string nspace, string name, DateTime creationDateTime) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
 
-			if(nspace == null) nspace = "";
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 
@@ -2560,7 +2966,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows == 1) {
 				return new PageInfo(NameTools.GetFullName(nspace, name), this, creationDateTime);
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -2572,9 +2981,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="newName"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="newName"/> is empty.</exception>
 		public PageInfo RenamePage(PageInfo page, string newName) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			// Check
 			// 1. Page is default page of its namespace
@@ -2605,7 +3025,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			CategoryInfo[] currCategories = GetCategories(transaction, nspace == "" ? null : GetNamespace(transaction, nspace));
 			string lowerPageName = page.FullName.ToLowerInvariant();
@@ -2672,12 +3095,35 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="title"/>, <paramref name="username"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="title"/> or <paramref name="username"/> are empty.</exception>
 		public bool ModifyPage(PageInfo page, string title, string username, DateTime dateTime, string comment, string content, string[] keywords, string description, SaveMode saveMode) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(title == null) throw new ArgumentNullException("title");
-			if(title.Length == 0) throw new ArgumentException("Title cannot be empty", "title");
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
-			if(content == null) throw new ArgumentNullException("content"); // content can be empty
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(title == null)
+			{
+				throw new ArgumentNullException("title");
+			}
+
+			if(title.Length == 0)
+			{
+				throw new ArgumentException("Title cannot be empty", "title");
+			}
+
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content"); // content can be empty
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -2690,25 +3136,51 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			switch(saveMode) {
 				case SaveMode.Backup:
 					// Do backup (if there is something to backup), delete current version (if any), store new version
-					if(currentContent != null) UnindexPage(currentContent, transaction);
+					if(currentContent != null)
+					{
+						UnindexPage(currentContent, transaction);
+					}
+
 					Backup(transaction, page);
 					DeleteContent(transaction, page, CurrentRevision);
 					bool done1 = SetContent(transaction, pageContent, CurrentRevision);
-					if(done1) IndexPage(pageContent, transaction);
+					if(done1)
+					{
+						IndexPage(pageContent, transaction);
+					}
 
-					if(done1) CommitTransaction(transaction);
-					else RollbackTransaction(transaction);
+					if(done1)
+					{
+						CommitTransaction(transaction);
+					}
+					else
+					{
+						RollbackTransaction(transaction);
+					}
 
 					return done1;
 				case SaveMode.Normal:
 					// Delete current version (if any), store new version
-					if(currentContent != null) UnindexPage(currentContent, transaction);
+					if(currentContent != null)
+					{
+						UnindexPage(currentContent, transaction);
+					}
+
 					DeleteContent(transaction, page, CurrentRevision);
 					bool done2 = SetContent(transaction, pageContent, CurrentRevision);
-					if(done2) IndexPage(pageContent, transaction);
+					if(done2)
+					{
+						IndexPage(pageContent, transaction);
+					}
 
-					if(done2) CommitTransaction(transaction);
-					else RollbackTransaction(transaction);
+					if(done2)
+					{
+						CommitTransaction(transaction);
+					}
+					else
+					{
+						RollbackTransaction(transaction);
+					}
 
 					return done2;
 				case SaveMode.Draft:
@@ -2716,8 +3188,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					DeleteContent(transaction, page, DraftRevision);
 					bool done3 = SetContent(transaction, pageContent, DraftRevision);
 
-					if(done3) CommitTransaction(transaction);
-					else RollbackTransaction(transaction);
+					if(done3)
+					{
+						CommitTransaction(transaction);
+					}
+					else
+					{
+						RollbackTransaction(transaction);
+					}
 
 					return done3;
 				default:
@@ -2738,14 +3216,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(currentContent != null) {
 				// Insert a new revision
 				int[] backups = GetBackups(transaction, page);
-				if(backups == null) return false;
+				if(backups == null)
+				{
+					return false;
+				}
 
 				int revision = backups.Length > 0 ? backups[backups.Length - 1] + 1 : FirstRevision;
 				bool set = SetContent(transaction, currentContent, revision);
 
 				return set;
 			}
-			else return false;
+			else
+			{
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -2757,8 +3241,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than zero.</exception>
 		public bool RollbackPage(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(revision < 0) throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(revision < 0)
+			{
+				throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			}
 
 			// 1. Load specific revision's content
 			// 2. Modify page with loaded content, performing backup
@@ -2810,8 +3301,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="revision"/> is less than -1.</exception>
 		public bool DeleteBackups(PageInfo page, int revision) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(revision < -1) throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(revision < -1)
+			{
+				throw new ArgumentOutOfRangeException("revision", "Invalid Revision");
+			}
 
 			// 1. Retrieve target content (revision-1 = first kept revision)
 			// 2. Replace the current content (delete, store)
@@ -2835,20 +3333,31 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
 			string query = queryBuilder.DeleteFrom("PageContent");
 			query = queryBuilder.Where(query, "Page", WhereOperator.Equals, "Page");
 			query = queryBuilder.AndWhere(query, "Namespace", WhereOperator.Equals, "Namespace");
-			if(revision != -1) query = queryBuilder.AndWhere(query, "Revision", WhereOperator.LessThanOrEqualTo, "Revision");
+			if(revision != -1)
+			{
+				query = queryBuilder.AndWhere(query, "Revision", WhereOperator.LessThanOrEqualTo, "Revision");
+			}
+
 			query = queryBuilder.AndWhere(query, "Revision", WhereOperator.GreaterThanOrEqualTo, "FirstRevision");
 
 			List<Parameter> parameters = new List<Parameter>(4);
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
-			if(revision != -1) parameters.Add(new Parameter(ParameterType.Int16, "Revision", revision));
+			if(revision != -1)
+			{
+				parameters.Add(new Parameter(ParameterType.Int16, "Revision", revision));
+			}
+
 			parameters.Add(new Parameter(ParameterType.Int16, "FirstRevision", FirstRevision));
 
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
@@ -2877,8 +3386,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				rows = ExecuteNonQuery(command, false);
 
-				if(rows > 0) CommitTransaction(transaction);
-				else RollbackTransaction(transaction);
+				if(rows > 0)
+				{
+					CommitTransaction(transaction);
+				}
+				else
+				{
+					RollbackTransaction(transaction);
+				}
 
 				return rows >= 0;
 			}
@@ -2895,7 +3410,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>True if the Page is removed successfully.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public bool RemovePage(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -2918,7 +3436,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
@@ -2934,8 +3455,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteNonQuery(command, false);
 
-			if(rows > 0) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows > 0)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows > 0;
 		}
@@ -2951,7 +3478,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private bool RebindPage(DbTransaction transaction, PageInfo page, string[] categories) {
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -2968,7 +3498,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteNonQuery(command, false);
 
-			if(rows < 0) return false;
+			if(rows < 0)
+			{
+				return false;
+			}
 
 			if(categories.Length > 0) {
 				string finalQuery = "";
@@ -2996,7 +3529,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return rows == categories.Length;
 			}
-			else return true;
+			else
+			{
+				return true;
+			}
 		}
 
 		/// <summary>
@@ -3010,7 +3546,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private bool RebindPage(DbConnection connection, PageInfo page, string[] categories) {
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -3027,7 +3566,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteNonQuery(command, false);
 
-			if(rows < 0) return false;
+			if(rows < 0)
+			{
+				return false;
+			}
 
 			if(categories.Length > 0) {
 				string finalQuery = "";
@@ -3055,7 +3597,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return rows == categories.Length;
 			}
-			else return true;
+			else
+			{
+				return true;
+			}
 		}
 
 		/// <summary>
@@ -3067,12 +3612,26 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <remarks>After a successful operation, the Page is bound with all and only the categories passed as argument.</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="categories"/> are <c>null</c>.</exception>
 		public bool RebindPage(PageInfo page, string[] categories) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(categories == null) throw new ArgumentNullException("categories");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(categories == null)
+			{
+				throw new ArgumentNullException("categories");
+			}
 
 			foreach(string cat in categories) {
-				if(cat == null) throw new ArgumentNullException("categories");
-				if(cat.Length == 0) throw new ArgumentException("Category item cannot be empty", "categories");
+				if(cat == null)
+				{
+					throw new ArgumentNullException("categories");
+				}
+
+				if(cat.Length == 0)
+				{
+					throw new ArgumentException("Category item cannot be empty", "categories");
+				}
 			}
 
 			// 1. Delete old bindings
@@ -3094,14 +3653,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="page">The Page.</param>
 		/// <returns>The list of the <b>first-level</b> Messages, containing the replies properly nested, sorted by date/time.</returns>
 		private Message[] GetMessages(DbTransaction transaction, PageInfo page) {
-			if(GetPage(transaction, page.FullName) == null) return null;
+			if(GetPage(transaction, page.FullName) == null)
+			{
+				return null;
+			}
 
 			// 1. Load all messages in memory in a dictionary id->message
 			// 2. Build tree using ParentID
 
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -3133,10 +3698,19 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					// Import from V2: parent = -1, otherwise null
 					if(!IsDBNull(reader, "Parent")) {
 						short par = (short)reader["Parent"];
-						if(par >= 0) parents.Add(par);
-						else parents.Add(null);
+						if(par >= 0)
+						{
+							parents.Add(par);
+						}
+						else
+						{
+							parents.Add(null);
+						}
 					}
-					else parents.Add(null);
+					else
+					{
+						parents.Add(null);
+					}
 
 					allMessages.Add((short)msg.ID, msg);
 				}
@@ -3155,12 +3729,18 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						replies.Add(allMessages[currentId]);
 						allMessages[currentParent.Value].Replies = replies.ToArray();
 					}
-					else result.Add(allMessages[currentId]);
+					else
+					{
+						result.Add(allMessages[currentId]);
+					}
 				}
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -3170,14 +3750,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="page">The Page.</param>
 		/// <returns>The list of the <b>first-level</b> Messages, containing the replies properly nested, sorted by date/time.</returns>
 		private Message[] GetMessages(DbConnection connection, PageInfo page) {
-			if(GetPage(connection, page.FullName) == null) return null;
+			if(GetPage(connection, page.FullName) == null)
+			{
+				return null;
+			}
 
 			// 1. Load all messages in memory in a dictionary id->message
 			// 2. Build tree using ParentID
 
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -3209,10 +3795,19 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					// Import from V2: parent = -1, otherwise null
 					if(!IsDBNull(reader, "Parent")) {
 						short par = (short)reader["Parent"];
-						if(par >= 0) parents.Add(par);
-						else parents.Add(null);
+						if(par >= 0)
+						{
+							parents.Add(par);
+						}
+						else
+						{
+							parents.Add(null);
+						}
 					}
-					else parents.Add(null);
+					else
+					{
+						parents.Add(null);
+					}
 
 					allMessages.Add((short)msg.ID, msg);
 				}
@@ -3231,12 +3826,18 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						replies.Add(allMessages[currentId]);
 						allMessages[currentParent.Value].Replies = replies.ToArray();
 					}
-					else result.Add(allMessages[currentId]);
+					else
+					{
+						result.Add(allMessages[currentId]);
+					}
 				}
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -3246,7 +3847,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The list of the <b>first-level</b> Messages, containing the replies properly nested, sorted by date/time.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public Message[] GetMessages(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -3264,7 +3868,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The number of messages.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		public int GetMessageCount(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -3276,7 +3883,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
@@ -3303,8 +3913,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns><c>true</c> if the messages are stored, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> or <paramref name="messages"/> are <c>null</c>.</exception>
 		public bool BulkStoreMessages(PageInfo page, Message[] messages) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(messages == null) throw new ArgumentNullException("messages");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(messages == null)
+			{
+				throw new ArgumentNullException("messages");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -3321,7 +3938,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
 
@@ -3363,8 +3983,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				parameters.Add(new Parameter(ParameterType.String, "Page" + countString, name));
 				parameters.Add(new Parameter(ParameterType.String, "Namespace" + countString, nspace));
 				parameters.Add(new Parameter(ParameterType.Int16, "Id" + countString, (short)msg.ID));
-				if(parent != -1) parameters.Add(new Parameter(ParameterType.Int16, "Parent" + countString, parent));
-				else parameters.Add(new Parameter(ParameterType.Int16, "Parent" + countString, DBNull.Value));
+				if(parent != -1)
+				{
+					parameters.Add(new Parameter(ParameterType.Int16, "Parent" + countString, parent));
+				}
+				else
+				{
+					parameters.Add(new Parameter(ParameterType.Int16, "Parent" + countString, DBNull.Value));
+				}
+
 				parameters.Add(new Parameter(ParameterType.String, "Username" + countString, msg.Username));
 				parameters.Add(new Parameter(ParameterType.String, "Subject" + countString, msg.Subject));
 				parameters.Add(new Parameter(ParameterType.DateTime, "DateTime" + countString, msg.DateTime));
@@ -3446,17 +4073,47 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
 		public bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
-			if(body == null) throw new ArgumentNullException("body"); // body can be empty
-			if(parent < -1) throw new ArgumentOutOfRangeException("parent", "Invalid Parent Message ID");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
+
+			if(body == null)
+			{
+				throw new ArgumentNullException("body"); // body can be empty
+			}
+
+			if(parent < -1)
+			{
+				throw new ArgumentOutOfRangeException("parent", "Invalid Parent Message ID");
+			}
 
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -3484,8 +4141,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			freeId = ExecuteScalar<short>(command, -1, false);
 
-			if(freeId == -1) freeId = 0;
-			else freeId++;
+			if(freeId == -1)
+			{
+				freeId = 0;
+			}
+			else
+			{
+				freeId++;
+			}
 
 			query = queryBuilder.InsertInto("Message", new string[] { "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" },
 				new string[] { "Page", "Namespace", "Id", "Parent", "Username", "Subject", "DateTime", "Body" });
@@ -3494,8 +4157,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			parameters.Add(new Parameter(ParameterType.String, "Page", name));
 			parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 			parameters.Add(new Parameter(ParameterType.Int16, "Id", freeId));
-			if(parent != -1) parameters.Add(new Parameter(ParameterType.Int16, "Parent", parent));
-			else parameters.Add(new Parameter(ParameterType.Int16, "Parent", DBNull.Value));
+			if(parent != -1)
+			{
+				parameters.Add(new Parameter(ParameterType.Int16, "Parent", parent));
+			}
+			else
+			{
+				parameters.Add(new Parameter(ParameterType.Int16, "Parent", DBNull.Value));
+			}
+
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 			parameters.Add(new Parameter(ParameterType.String, "Subject", subject));
 			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", dateTime));
@@ -3533,7 +4203,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				if(result == null) {
 					result = FindMessage(msg.Replies, id);
 				}
-				if(result != null) break;
+				if(result != null)
+				{
+					break;
+				}
 			}
 			return result;
 		}
@@ -3556,7 +4229,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						result = FindAnchestor(msg.Replies, id);
 					}
 				}
-				if(result != null) break;
+				if(result != null)
+				{
+					break;
+				}
 			}
 			return result;
 		}
@@ -3572,12 +4248,23 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private bool RemoveMessage(DbTransaction transaction, PageInfo page, int id, bool removeReplies) {
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			Message[] messages = GetMessages(transaction, page);
-			if(messages == null) return false;
+			if(messages == null)
+			{
+				return false;
+			}
+
 			Message message = FindMessage(messages, id);
-			if(message == null) return false;
+			if(message == null)
+			{
+				return false;
+			}
+
 			Message parent = FindAnchestor(messages, id);
 			int parentId = parent != null ? parent.ID : -1;
 
@@ -3586,7 +4273,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(removeReplies) {
 				// Recursively remove all replies BEFORE removing parent (depth-first)
 				foreach(Message reply in message.Replies) {
-					if(!RemoveMessage(transaction, page, reply.ID, true)) return false;
+					if(!RemoveMessage(transaction, page, reply.ID, true))
+					{
+						return false;
+					}
 				}
 			}
 
@@ -3617,8 +4307,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				query = queryBuilder.AndWhere(query, "Parent", WhereOperator.Equals, "OldParent");
 
 				parameters = new List<Parameter>(4);
-				if(parentId != -1) parameters.Add(new Parameter(ParameterType.Int16, "NewParent", parentId));
-				else parameters.Add(new Parameter(ParameterType.Int16, "NewParent", DBNull.Value));
+				if(parentId != -1)
+				{
+					parameters.Add(new Parameter(ParameterType.Int16, "NewParent", parentId));
+				}
+				else
+				{
+					parameters.Add(new Parameter(ParameterType.Int16, "NewParent", DBNull.Value));
+				}
+
 				parameters.Add(new Parameter(ParameterType.String, "Page", name));
 				parameters.Add(new Parameter(ParameterType.String, "Namespace", nspace));
 				parameters.Add(new Parameter(ParameterType.Int16, "OldParent", (short)id));
@@ -3641,8 +4338,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="id"/> is less than zero.</exception>
 		public bool RemoveMessage(PageInfo page, int id, bool removeReplies) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(id < 0) throw new ArgumentOutOfRangeException("id", "Invalid ID");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(id < 0)
+			{
+				throw new ArgumentOutOfRangeException("id", "Invalid ID");
+			}
 
 			// 1. If removeReplies, recursively delete all messages with parent == id
 			//    Else remove current message, updating all replies' parent id (set to this message's parent or to NULL)
@@ -3655,8 +4359,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			bool done = RemoveMessage(transaction, page, id, removeReplies);
 
-			if(done) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(done)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return done;
 		}
@@ -3675,17 +4385,47 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="id"/> is less than zero.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
 		public bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(id < 0) throw new ArgumentOutOfRangeException("id", "Invalid Message ID");
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
-			if(body == null) throw new ArgumentNullException("body"); // body can be empty
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(id < 0)
+			{
+				throw new ArgumentOutOfRangeException("id", "Invalid Message ID");
+			}
+
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
+
+			if(body == null)
+			{
+				throw new ArgumentNullException("body"); // body can be empty
+			}
 
 			string nspace, name;
 			NameTools.ExpandFullName(page.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -3792,7 +4532,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -3837,7 +4580,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				result.Pages = Array.ConvertAll<PageInfo, string>(pages, (x) => { return x.FullName; });
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -3850,12 +4596,30 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="pages"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> or <paramref name="pages"/> are empty.</exception>
 		public NavigationPath AddNavigationPath(string nspace, string name, PageInfo[] pages) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(pages == null) throw new ArgumentNullException("pages");
-			if(pages.Length == 0) throw new ArgumentException("Pages cannot be empty");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
 
-			if(nspace == null) nspace = "";
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(pages == null)
+			{
+				throw new ArgumentNullException("pages");
+			}
+
+			if(pages.Length == 0)
+			{
+				throw new ArgumentException("Pages cannot be empty");
+			}
+
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -3874,8 +4638,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			NavigationPath path = AddNavigationPath(transaction, nspace, name, pages);
 
-			if(path != null) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(path != null)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return path;
 		}
@@ -3889,9 +4659,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="path"/> or <paramref name="pages"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="pages"/> is empty.</exception>
 		public NavigationPath ModifyNavigationPath(NavigationPath path, PageInfo[] pages) {
-			if(path == null) throw new ArgumentNullException("path");
-			if(pages == null) throw new ArgumentNullException("pages");
-			if(pages.Length == 0) throw new ArgumentException("Pages cannot be empty");
+			if(path == null)
+			{
+				throw new ArgumentNullException("path");
+			}
+
+			if(pages == null)
+			{
+				throw new ArgumentNullException("pages");
+			}
+
+			if(pages.Length == 0)
+			{
+				throw new ArgumentException("Pages cannot be empty");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -3911,7 +4692,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(RemoveNavigationPath(transaction, path)) {
 				string nspace, name;
 				NameTools.ExpandFullName(path.FullName, out nspace, out name);
-				if(nspace == null) nspace = "";
+				if(nspace == null)
+				{
+					nspace = "";
+				}
 
 				NavigationPath result = AddNavigationPath(transaction, nspace, name, pages);
 
@@ -3939,7 +4723,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private bool RemoveNavigationPath(DbTransaction transaction, NavigationPath path) {
 			string nspace, name;
 			NameTools.ExpandFullName(path.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -3968,7 +4755,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		private bool RemoveNavigationPath(DbConnection connection, NavigationPath path) {
 			string nspace, name;
 			NameTools.ExpandFullName(path.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -3995,11 +4785,17 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns><c>true</c> if the path is removed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="path"/> is <c>null</c>.</exception>
 		public bool RemoveNavigationPath(NavigationPath path) {
-			if(path == null) throw new ArgumentNullException("path");
+			if(path == null)
+			{
+				throw new ArgumentNullException("path");
+			}
 
 			string nspace, name;
 			NameTools.ExpandFullName(path.FullName, out nspace, out name);
-			if(nspace == null) nspace = "";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -4036,7 +4832,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -4062,7 +4861,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows == 1) {
 				return new Snippet(name, content, this);
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -4088,7 +4890,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows == 1) {
 				return new Snippet(name, content, this);
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -4100,9 +4905,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public Snippet AddSnippet(string name, string content) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(content == null) throw new ArgumentNullException("content"); // content can be empty
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content"); // content can be empty
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -4122,9 +4938,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public Snippet ModifySnippet(string name, string content) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(content == null) throw new ArgumentNullException("content"); // content can be empty
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content"); // content can be empty
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -4133,8 +4960,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(RemoveSnippet(transaction, name)) {
 				Snippet result = AddSnippet(transaction, name, content);
 
-				if(result != null) CommitTransaction(transaction);
-				else RollbackTransaction(transaction);
+				if(result != null)
+				{
+					CommitTransaction(transaction);
+				}
+				else
+				{
+					RollbackTransaction(transaction);
+				}
 
 				return result;
 			}
@@ -4198,8 +5031,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public bool RemoveSnippet(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -4236,7 +5076,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -4262,7 +5105,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows == 1) {
 				return new ContentTemplate(name, content, this);
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -4288,7 +5134,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows == 1) {
 				return new ContentTemplate(name, content, this);
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -4300,9 +5149,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public ContentTemplate AddContentTemplate(string name, string content) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(content == null) throw new ArgumentNullException("content"); // content can be empty
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content"); // content can be empty
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -4322,10 +5182,21 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public ContentTemplate ModifyContentTemplate(string name, string content) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(content == null) throw new ArgumentNullException("content"); // content can be empty
-			
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content"); // content can be empty
+			}
+
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
 			DbTransaction transaction = BeginTransaction(connection);
@@ -4333,8 +5204,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(RemoveContentTemplate(transaction, name)) {
 				ContentTemplate template = AddContentTemplate(transaction, name, content);
 
-				if(template != null) CommitTransaction(transaction);
-				else RollbackTransaction(transaction);
+				if(template != null)
+				{
+					CommitTransaction(transaction);
+				}
+				else
+				{
+					RollbackTransaction(transaction);
+				}
 
 				return template;
 			}
@@ -4398,8 +5275,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="name"/> is empty.</exception>
 		public bool RemoveContentTemplate(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);

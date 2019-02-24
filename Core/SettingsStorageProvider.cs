@@ -81,8 +81,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
 		public void Init(IHostV30 host, string config) {
-			if(host == null) throw new ArgumentNullException("host");
-			if(config == null) throw new ArgumentNullException("config");
+			if(host == null)
+			{
+				throw new ArgumentNullException("host");
+			}
+
+			if(config == null)
+			{
+				throw new ArgumentNullException("config");
+			}
 
 			this.host = host;
 
@@ -220,13 +227,26 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public string GetSetting(string name) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			lock(this) {
 				string val = null;
-				if(configData.TryGetValue(name, out val)) return val;
-				else return null;
+				if(configData.TryGetValue(name, out val))
+				{
+					return val;
+				}
+				else
+				{
+					return null;
+				}
 			}
 		}
 
@@ -240,16 +260,29 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>name</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public bool SetSetting(string name, string value) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			// Nulls are converted to empty strings
-			if(value == null) value = "";
+			if(value == null)
+			{
+				value = "";
+			}
 
 			// Store, then if not bulkUpdating, dump
 			lock(this) {
 				configData[name] = value;
-				if(!bulkUpdating) DumpConfig();
+				if(!bulkUpdating)
+				{
+					DumpConfig();
+				}
 
 				return true;
 			}
@@ -287,11 +320,17 @@ namespace ScrewTurn.Wiki {
 					lines[i] = lines[i].Trim();
 					
 					// Skip comments
-					if(lines[i].StartsWith("#")) continue;
+					if(lines[i].StartsWith("#"))
+					{
+						continue;
+					}
 
 					fields = new string[2];
 					int idx = lines[i].IndexOf("=");
-					if(idx < 0) continue;
+					if(idx < 0)
+					{
+						continue;
+					}
 
 					try {
 						// Extract key
@@ -428,10 +467,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>message</b> or <b>user</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>message</b> or <b>user</b> are empty.</exception>
 		public void LogEntry(string message, EntryType entryType, string user) {
-			if(message == null) throw new ArgumentNullException("message");
-			if(message.Length == 0) throw new ArgumentException("Message cannot be empty", "message");
-			if(user == null) throw new ArgumentNullException("user");
-			if(user.Length == 0) throw new ArgumentException("User cannot be empty", "user");
+			if(message == null)
+			{
+				throw new ArgumentNullException("message");
+			}
+
+			if(message.Length == 0)
+			{
+				throw new ArgumentException("Message cannot be empty", "message");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(user.Length == 0)
+			{
+				throw new ArgumentException("User cannot be empty", "user");
+			}
 
 			lock(this) {
 				message = Sanitize(message);
@@ -441,10 +495,18 @@ namespace ScrewTurn.Wiki {
 					case LoggingLevel.AllMessages:
 						break;
 					case LoggingLevel.WarningsAndErrors:
-						if(entryType != EntryType.Error && entryType != EntryType.Warning) return;
+						if(entryType != EntryType.Error && entryType != EntryType.Warning)
+						{
+							return;
+						}
+
 						break;
 					case LoggingLevel.ErrorsOnly:
-						if(entryType != EntryType.Error) return;
+						if(entryType != EntryType.Error)
+						{
+							return;
+						}
+
 						break;
 					case LoggingLevel.DisableLog:
 						return;
@@ -628,8 +690,14 @@ namespace ScrewTurn.Wiki {
 		public string GetMetaDataItem(MetaDataItem item, string tag) {
 			lock(this) {
 				string fullFile = GetFullPathForMetaDataItem(tag, MetaDataItemFiles[item]);
-				if(!File.Exists(fullFile)) return "";
-				else return File.ReadAllText(fullFile);
+				if(!File.Exists(fullFile))
+				{
+					return "";
+				}
+				else
+				{
+					return File.ReadAllText(fullFile);
+				}
 			}
 		}
 
@@ -641,7 +709,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="content">The content.</param>
 		/// <returns><c>true</c> if the content is set, <c>false</c> otherwise.</returns>
 		public bool SetMetaDataItem(MetaDataItem item, string tag, string content) {
-			if(content == null) content = "";
+			if(content == null)
+			{
+				content = "";
+			}
 
 			lock(this) {
 				File.WriteAllText(GetFullPathForMetaDataItem(tag, MetaDataItemFiles[item]), content);
@@ -747,15 +818,45 @@ namespace ScrewTurn.Wiki {
 		public bool AddRecentChange(string page, string title, string messageSubject, DateTime dateTime, string user,
 			ScrewTurn.Wiki.PluginFramework.Change change, string descr) {
 
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
-			if(title == null) throw new ArgumentNullException("title");
-			if(title.Length == 0) throw new ArgumentException("Title cannot be empty", "title");
-			if(user == null) throw new ArgumentNullException("user");
-			if(user.Length == 0) throw new ArgumentException("User cannot be empty", "user");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
-			if(messageSubject == null) messageSubject = "";
-			if(descr == null) descr = "";
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
+
+			if(title == null)
+			{
+				throw new ArgumentNullException("title");
+			}
+
+			if(title.Length == 0)
+			{
+				throw new ArgumentException("Title cannot be empty", "title");
+			}
+
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(user.Length == 0)
+			{
+				throw new ArgumentException("User cannot be empty", "user");
+			}
+
+			if(messageSubject == null)
+			{
+				messageSubject = "";
+			}
+
+			if(descr == null)
+			{
+				descr = "";
+			}
 
 			lock(this) {
 				StringBuilder sb = new StringBuilder(100);
@@ -777,7 +878,10 @@ namespace ScrewTurn.Wiki {
 
 				// Delete old changes, if needed
 				int max = int.Parse(host.GetSettingValue(SettingName.MaxRecentChanges));
-				if(GetRecentChanges().Length > max) CutRecentChanges((int)(max * 0.90));
+				if(GetRecentChanges().Length > max)
+				{
+					CutRecentChanges((int)(max * 0.90));
+				}
 
 				return true;
 			}
@@ -790,7 +894,10 @@ namespace ScrewTurn.Wiki {
 		private void CutRecentChanges(int size) {
 			lock(this) {
 				List<RecentChange> changes = new List<RecentChange>(GetRecentChanges());
-				if(size >= changes.Count) return;
+				if(size >= changes.Count)
+				{
+					return;
+				}
 
 				int idx = changes.Count - size + 1;
 
@@ -824,7 +931,11 @@ namespace ScrewTurn.Wiki {
 			lock(this) {
 				string[] files = Directory.GetFiles(GetFullPath(PluginsDirectory), "*.dll");
 				string[] result = new string[files.Length];
-				for(int i = 0; i < files.Length; i++) result[i] = Path.GetFileName(files[i]);
+				for(int i = 0; i < files.Length; i++)
+				{
+					result[i] = Path.GetFileName(files[i]);
+				}
+
 				return result;
 			}
 		}
@@ -838,10 +949,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>filename</b> or <b>assembly</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>filename</b> or <b>assembly</b> are empty.</exception>
 		public bool StorePluginAssembly(string filename, byte[] assembly) {
-			if(filename == null) throw new ArgumentNullException("filename");
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
-			if(assembly == null) throw new ArgumentNullException("assembly");
-			if(assembly.Length == 0) throw new ArgumentException("Assembly cannot be empty", "assembly");
+			if(filename == null)
+			{
+				throw new ArgumentNullException("filename");
+			}
+
+			if(filename.Length == 0)
+			{
+				throw new ArgumentException("Filename cannot be empty", "filename");
+			}
+
+			if(assembly == null)
+			{
+				throw new ArgumentNullException("assembly");
+			}
+
+			if(assembly.Length == 0)
+			{
+				throw new ArgumentException("Assembly cannot be empty", "assembly");
+			}
 
 			lock(this) {
 				try {
@@ -862,10 +988,20 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>filename</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>filename</b> is empty.</exception>
 		public byte[] RetrievePluginAssembly(string filename) {
-			if(filename == null) throw new ArgumentNullException("filename");
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
+			if(filename == null)
+			{
+				throw new ArgumentNullException("filename");
+			}
 
-			if(!File.Exists(GetFullPathForPlugin(filename))) return null;
+			if(filename.Length == 0)
+			{
+				throw new ArgumentException("Filename cannot be empty", "filename");
+			}
+
+			if(!File.Exists(GetFullPathForPlugin(filename)))
+			{
+				return null;
+			}
 
 			lock(this) {
 				try {
@@ -885,12 +1021,23 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>filename</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>filename</b> is empty.</exception>
 		public bool DeletePluginAssembly(string filename) {
-			if(filename == null) throw new ArgumentNullException(filename);
-			if(filename.Length == 0) throw new ArgumentException("Filename cannot be empty", "filename");
+			if(filename == null)
+			{
+				throw new ArgumentNullException(filename);
+			}
+
+			if(filename.Length == 0)
+			{
+				throw new ArgumentException("Filename cannot be empty", "filename");
+			}
 
 			lock(this) {
 				string fullName = GetFullPathForPlugin(filename);
-				if(!File.Exists(fullName)) return false;
+				if(!File.Exists(fullName))
+				{
+					return false;
+				}
+
 				try {
 					File.Delete(fullName);
 					return true;
@@ -910,8 +1057,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
 		public bool SetPluginStatus(string typeName, bool enabled) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+			if(typeName == null)
+			{
+				throw new ArgumentNullException("typeName");
+			}
+
+			if(typeName.Length == 0)
+			{
+				throw new ArgumentException("Type Name cannot be empty", "typeName");
+			}
 
 			lock(this) {
 				string data = File.ReadAllText(GetFullPathForPlugin(PluginsStatusFile)).Replace("\r", "");
@@ -927,7 +1081,10 @@ namespace ScrewTurn.Wiki {
 					if(idx >= 0) {
 						StringBuilder sb = new StringBuilder(200);
 						for(int i = 0; i < lines.Length; i++) {
-							if(i != idx) sb.Append(lines[i] + "\r\n");
+							if(i != idx)
+							{
+								sb.Append(lines[i] + "\r\n");
+							}
 						}
 						File.WriteAllText(GetFullPathForPlugin(PluginsStatusFile), sb.ToString());
 					}
@@ -937,7 +1094,10 @@ namespace ScrewTurn.Wiki {
 					if(idx == -1) {
 						StringBuilder sb = new StringBuilder(200);
 						for(int i = 0; i < lines.Length; i++) {
-							if(i != idx) sb.Append(lines[i] + "\r\n");
+							if(i != idx)
+							{
+								sb.Append(lines[i] + "\r\n");
+							}
 						}
 						sb.Append(typeName + "\r\n");
 						File.WriteAllText(GetFullPathForPlugin(PluginsStatusFile), sb.ToString());
@@ -956,14 +1116,24 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
 		public bool GetPluginStatus(string typeName) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+			if(typeName == null)
+			{
+				throw new ArgumentNullException("typeName");
+			}
+
+			if(typeName.Length == 0)
+			{
+				throw new ArgumentException("Type Name cannot be empty", "typeName");
+			}
 
 			lock(this) {
 				string data = File.ReadAllText(GetFullPathForPlugin(PluginsStatusFile)).Replace("\r", "");
 				string[] lines = data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 				for(int i = 0; i < lines.Length; i++) {
-					if(lines[i].Equals(typeName)) return false;
+					if(lines[i].Equals(typeName))
+					{
+						return false;
+					}
 				}
 				return true;
 			}
@@ -978,8 +1148,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
 		public bool SetPluginConfiguration(string typeName, string config) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+			if(typeName == null)
+			{
+				throw new ArgumentNullException("typeName");
+			}
+
+			if(typeName.Length == 0)
+			{
+				throw new ArgumentException("Type Name cannot be empty", "typeName");
+			}
 
 			lock(this) {
 				try {
@@ -1000,12 +1177,22 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>typeName</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>typeName</b> is empty.</exception>
 		public string GetPluginConfiguration(string typeName) {
-			if(typeName == null) throw new ArgumentNullException("typeName");
-			if(typeName.Length == 0) throw new ArgumentException("Type Name cannot be empty", "typeName");
+			if(typeName == null)
+			{
+				throw new ArgumentNullException("typeName");
+			}
+
+			if(typeName.Length == 0)
+			{
+				throw new ArgumentException("Type Name cannot be empty", "typeName");
+			}
 
 			lock(this) {
 				string file = GetFullPathForPluginConfig(typeName + ".cs");
-				if(!File.Exists(file)) return "";
+				if(!File.Exists(file))
+				{
+					return "";
+				}
 				else {
 					try {
 						return File.ReadAllText(file);
@@ -1037,9 +1224,20 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b> or <b>outgoingLinks</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> or <b>outgoingLinks</b> are empty.</exception>
 		public bool StoreOutgoingLinks(string page, string[] outgoingLinks) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
-			if(outgoingLinks == null) throw new ArgumentNullException("outgoingLinks");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
+
+			if(outgoingLinks == null)
+			{
+				throw new ArgumentNullException("outgoingLinks");
+			}
 
 			lock(this) {
 				// Step 1: remove old values
@@ -1063,11 +1261,21 @@ namespace ScrewTurn.Wiki {
 				sb.Append("|");
 
 				for(int i = 0; i < outgoingLinks.Length; i++) {
-					if(outgoingLinks[i] == null) throw new ArgumentNullException("outgoingLinks", "Null element in outgoing links array");
-					if(outgoingLinks[i].Length == 0) throw new ArgumentException("Elements in outgoing links cannot be empty", "outgoingLinks");
+					if(outgoingLinks[i] == null)
+					{
+						throw new ArgumentNullException("outgoingLinks", "Null element in outgoing links array");
+					}
+
+					if(outgoingLinks[i].Length == 0)
+					{
+						throw new ArgumentException("Elements in outgoing links cannot be empty", "outgoingLinks");
+					}
 
 					sb.Append(outgoingLinks[i]);
-					if(i != outgoingLinks.Length - 1) sb.Append("|");
+					if(i != outgoingLinks.Length - 1)
+					{
+						sb.Append("|");
+					}
 				}
 				sb.Append("\r\n");
 
@@ -1085,8 +1293,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> is empty.</exception>
 		public string[] GetOutgoingLinks(string page) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
 
 			lock(this) {
 				string[] lines = File.ReadAllLines(GetFullPath(LinksFile));
@@ -1142,8 +1357,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>page</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>page</b> is empty.</exception>
 		public bool DeleteOutgoingLinks(string page) {
-			if(page == null) throw new ArgumentNullException("page");
-			if(page.Length == 0) throw new ArgumentException("Page cannot be empty", "page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
+
+			if(page.Length == 0)
+			{
+				throw new ArgumentException("Page cannot be empty", "page");
+			}
 
 			lock(this) {
 				bool removedSomething = false;
@@ -1170,7 +1392,10 @@ namespace ScrewTurn.Wiki {
 						sb.Append("|");
 						for(int i = 0; i < links[key].Length; i++) {
 							sb.Append(links[key][i]);
-							if(i != links[key][i].Length - 1) sb.Append("|");
+							if(i != links[key][i].Length - 1)
+							{
+								sb.Append("|");
+							}
 						}
 						sb.Append("\r\n");
 					}
@@ -1191,10 +1416,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <b>oldName</b> or <b>newName</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>oldName</b> or <b>newName</b> are empty.</exception>
 		public bool UpdateOutgoingLinksForRename(string oldName, string newName) {
-			if(oldName == null) throw new ArgumentNullException("oldName");
-			if(oldName.Length == 0) throw new ArgumentException("Old Name cannot be empty", "oldName");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(oldName == null)
+			{
+				throw new ArgumentNullException("oldName");
+			}
+
+			if(oldName.Length == 0)
+			{
+				throw new ArgumentException("Old Name cannot be empty", "oldName");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			lock(this) {
 				bool replacedSomething = false;
@@ -1227,7 +1467,10 @@ namespace ScrewTurn.Wiki {
 						sb.Append("|");
 						for(int i = 0; i < links[key].Length; i++) {
 							sb.Append(links[key][i]);
-							if(i != links[key][i].Length - 1) sb.Append("|");
+							if(i != links[key][i].Length - 1)
+							{
+								sb.Append("|");
+							}
 						}
 						sb.Append("\r\n");
 					}

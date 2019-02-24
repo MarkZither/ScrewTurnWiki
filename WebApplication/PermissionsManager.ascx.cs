@@ -82,10 +82,19 @@ namespace ScrewTurn.Wiki {
 
 			// Sort: groups first, users second
 			Array.Sort(subjects, delegate(SubjectInfo x, SubjectInfo y) {
-				if(x.Type == y.Type) return x.Name.CompareTo(y.Name);
+				if(x.Type == y.Type)
+				{
+					return x.Name.CompareTo(y.Name);
+				}
 				else {
-					if(x.Type == SubjectType.Group) return -1;
-					else return 1;
+					if(x.Type == SubjectType.Group)
+					{
+						return -1;
+					}
+					else
+					{
+						return 1;
+					}
 				}
 			});
 
@@ -103,8 +112,14 @@ namespace ScrewTurn.Wiki {
 
 		protected void lstSubjects_SelectedIndexChanged(object sender, EventArgs e) {
 			string selectedSubject = lstSubjects.SelectedValue;
-			if(string.IsNullOrEmpty(selectedSubject)) ClearPermissions();
-			else DisplaySubjectPermissions(selectedSubject.Substring(2), selectedSubject.StartsWith("G.") ? SubjectType.Group : SubjectType.User);
+			if(string.IsNullOrEmpty(selectedSubject))
+			{
+				ClearPermissions();
+			}
+			else
+			{
+				DisplaySubjectPermissions(selectedSubject.Substring(2), selectedSubject.StartsWith("G.") ? SubjectType.Group : SubjectType.User);
+			}
 		}
 
 		/// <summary>
@@ -281,8 +296,14 @@ namespace ScrewTurn.Wiki {
 			UserGroup group = null;
 			UserInfo user = null;
 
-			if(isGroup) group = Users.FindUserGroup(subject);
-			else user = Users.FindUser(subject);
+			if(isGroup)
+			{
+				group = Users.FindUserGroup(subject);
+			}
+			else
+			{
+				user = Users.FindUser(subject);
+			}
 
 			foreach(string action in grants) {
 				bool done = false;
@@ -294,7 +315,10 @@ namespace ScrewTurn.Wiki {
 					done = AuthWriter.SetPermissionForNamespace(AuthStatus.Grant,
 						namespaceInfo, action, user);
 				}
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			foreach(string action in denials) {
@@ -307,7 +331,10 @@ namespace ScrewTurn.Wiki {
 					done = AuthWriter.SetPermissionForNamespace(AuthStatus.Deny,
 						namespaceInfo, action, user);
 				}
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			return true;
@@ -330,8 +357,14 @@ namespace ScrewTurn.Wiki {
 			UserGroup group = null;
 			UserInfo user = null;
 
-			if(isGroup) group = Users.FindUserGroup(subject);
-			else user = Users.FindUser(subject);
+			if(isGroup)
+			{
+				group = Users.FindUserGroup(subject);
+			}
+			else
+			{
+				user = Users.FindUser(subject);
+			}
 
 			foreach(string action in grants) {
 				bool done = false;
@@ -343,7 +376,10 @@ namespace ScrewTurn.Wiki {
 					done = AuthWriter.SetPermissionForPage(AuthStatus.Grant,
 						currentPage, action, user);
 				}
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			foreach(string action in denials) {
@@ -356,7 +392,10 @@ namespace ScrewTurn.Wiki {
 					done = AuthWriter.SetPermissionForPage(AuthStatus.Deny,
 						currentPage, action, user);
 				}
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			return true;
@@ -378,8 +417,14 @@ namespace ScrewTurn.Wiki {
 			UserGroup group = null;
 			UserInfo user = null;
 
-			if(isGroup) group = Users.FindUserGroup(subject);
-			else user = Users.FindUser(subject);
+			if(isGroup)
+			{
+				group = Users.FindUserGroup(subject);
+			}
+			else
+			{
+				user = Users.FindUser(subject);
+			}
 
 			foreach(string action in grants) {
 				bool done = false;
@@ -391,7 +436,10 @@ namespace ScrewTurn.Wiki {
 					done = AuthWriter.SetPermissionForDirectory(AuthStatus.Grant,
 						provider, directory, action, user);
 				}
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			foreach(string action in denials) {
@@ -404,7 +452,10 @@ namespace ScrewTurn.Wiki {
 					done = AuthWriter.SetPermissionForDirectory(AuthStatus.Deny,
 						provider, directory, action, user);
 				}
-				if(!done) return false;
+				if(!done)
+				{
+					return false;
+				}
 			}
 
 			return true;

@@ -56,7 +56,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="info">The <see cref="BasicWordInfo" />.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="info"/> is <c>null</c>.</exception>
 		public DumpedWordMapping(uint wordId, uint documentId, BasicWordInfo info) {
-			if(info == null) throw new ArgumentNullException("info");
+			if(info == null)
+			{
+				throw new ArgumentNullException("info");
+			}
 
 			this.wordId = wordId;
 			this.documentId = documentId;

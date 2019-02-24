@@ -32,7 +32,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <remarks>The relevance is initially set to <b>0</b>.</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="document"/> is <c>null</c>.</exception>
 		public SearchResult(IDocument document) {
-			if(document == null) throw new ArgumentNullException("document");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
 
 			this.document = document;
 			this.matches = new WordInfoCollection();

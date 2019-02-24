@@ -82,7 +82,10 @@ namespace ScrewTurn.Wiki {
 			Match match = null;
 
 			StringBuilder buffer = new StringBuilder(html);
-			if(!html.EndsWith("\r\n")) buffer.Append("\r\n");
+			if(!html.EndsWith("\r\n"))
+			{
+				buffer.Append("\r\n");
+			}
 
 			buffer.Replace("<br>", "<br />");
 			buffer.Replace("<BR>", "<br />");
@@ -196,10 +199,21 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				char c = buffer[match.Index + match.Length];
 				bool addNewLine = false;
-				if(buffer[match.Index + match.Length] != '\n') addNewLine = true;
+				if(buffer[match.Index + match.Length] != '\n')
+				{
+					addNewLine = true;
+				}
+
 				buffer.Remove(match.Index, match.Length);
-				if(addNewLine) buffer.Insert(match.Index, "==" + match.Groups[2].Value + "==\n");
-				else buffer.Insert(match.Index, "==" + match.Groups[2].Value + "==");
+				if(addNewLine)
+				{
+					buffer.Insert(match.Index, "==" + match.Groups[2].Value + "==\n");
+				}
+				else
+				{
+					buffer.Insert(match.Index, "==" + match.Groups[2].Value + "==");
+				}
+
 				match = H1Regex.Match(buffer.ToString(), match.Index + 1);
 			}
 
@@ -207,10 +221,21 @@ namespace ScrewTurn.Wiki {
 			match = H2Regex.Match(buffer.ToString());
 			while(match.Success) {
 				bool addNewLine = false;
-				if(buffer[match.Index + match.Length] != '\n') addNewLine = true;
+				if(buffer[match.Index + match.Length] != '\n')
+				{
+					addNewLine = true;
+				}
+
 				buffer.Remove(match.Index, match.Length);
-				if(addNewLine) buffer.Insert(match.Index, "===" + match.Groups[2].Value + "===\n");
-				else buffer.Insert(match.Index, "===" + match.Groups[2].Value + "===");
+				if(addNewLine)
+				{
+					buffer.Insert(match.Index, "===" + match.Groups[2].Value + "===\n");
+				}
+				else
+				{
+					buffer.Insert(match.Index, "===" + match.Groups[2].Value + "===");
+				}
+
 				match = H2Regex.Match(buffer.ToString(), match.Index + 1);
 			}
 
@@ -218,10 +243,21 @@ namespace ScrewTurn.Wiki {
 			match = H3Regex.Match(buffer.ToString());
 			while(match.Success) {
 				bool addNewLine = false;
-				if(buffer[match.Index + match.Length] != '\n') addNewLine = true;
+				if(buffer[match.Index + match.Length] != '\n')
+				{
+					addNewLine = true;
+				}
+
 				buffer.Remove(match.Index, match.Length);
-				if(addNewLine) buffer.Insert(match.Index, "====" + match.Groups[2].Value + "====\n");
-				else buffer.Insert(match.Index, "====" + match.Groups[2].Value + "====");
+				if(addNewLine)
+				{
+					buffer.Insert(match.Index, "====" + match.Groups[2].Value + "====\n");
+				}
+				else
+				{
+					buffer.Insert(match.Index, "====" + match.Groups[2].Value + "====");
+				}
+
 				match = H3Regex.Match(buffer.ToString(), match.Index + 1);
 			}
 
@@ -229,10 +265,21 @@ namespace ScrewTurn.Wiki {
 			match = H4Regex.Match(buffer.ToString());
 			while(match.Success) {
 				bool addNewLine = false;
-				if(buffer[match.Index + match.Length] != '\n') addNewLine = true;
+				if(buffer[match.Index + match.Length] != '\n')
+				{
+					addNewLine = true;
+				}
+
 				buffer.Remove(match.Index, match.Length);
-				if(addNewLine) buffer.Insert(match.Index, "=====" + match.Groups[2].Value + "=====\n");
-				else buffer.Insert(match.Index, "=====" + match.Groups[2].Value + "=====");
+				if(addNewLine)
+				{
+					buffer.Insert(match.Index, "=====" + match.Groups[2].Value + "=====\n");
+				}
+				else
+				{
+					buffer.Insert(match.Index, "=====" + match.Groups[2].Value + "=====");
+				}
+
 				match = H4Regex.Match(buffer.ToString(), match.Index + 1);
 			}
 
@@ -250,10 +297,18 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[2].Value == @"target=""_blank"" ") insertion += "^";
+				if(match.Groups[2].Value == @"target=""_blank"" ")
+				{
+					insertion += "^";
+				}
+
 				string decoded = UrlDecode(match.Groups[3].Value);
 				insertion += (decoded.StartsWith("  ") ? "++" : "") + decoded.Trim();
-				if(match.Groups[6].Value != decoded) insertion += "|" + match.Groups[6].Value;
+				if(match.Groups[6].Value != decoded)
+				{
+					insertion += "|" + match.Groups[6].Value;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = PageLinkRegex.Match(buffer.ToString(), match.Index + 1);
@@ -264,12 +319,20 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[3].Value == " target=_blank") insertion += "^";
+				if(match.Groups[3].Value == " target=_blank")
+				{
+					insertion += "^";
+				}
+
 				string page = match.Groups[2].Value.Substring(match.Groups[2].Value.LastIndexOf("/") + 1);
 				page = page.Substring(0, page.Length - 5); // Remove .ashx
 				page = UrlDecode(page);
 				insertion += page;
-				if(match.Groups[4].Value != page) insertion += "|" + match.Groups[4].Value;
+				if(match.Groups[4].Value != page)
+				{
+					insertion += "|" + match.Groups[4].Value;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = PageLinkRegexIE.Match(buffer.ToString(), match.Index + 1);
@@ -280,10 +343,18 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[2].Value == @"target=""_blank"" ") insertion += "^";
+				if(match.Groups[2].Value == @"target=""_blank"" ")
+				{
+					insertion += "^";
+				}
+
 				string decoded = UrlDecode(match.Groups[3].Value);
 				insertion += decoded;
-				if(match.Groups[6].Value != decoded) insertion += "|" + match.Groups[6].Value;
+				if(match.Groups[6].Value != decoded)
+				{
+					insertion += "|" + match.Groups[6].Value;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = UnknownLinkRegex.Match(buffer.ToString(), match.Index + 1);
@@ -294,12 +365,20 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[3].Value == " target=_blank") insertion += "^";
+				if(match.Groups[3].Value == " target=_blank")
+				{
+					insertion += "^";
+				}
+
 				string page = match.Groups[2].Value.Substring(match.Groups[2].Value.LastIndexOf("/") + 1);
 				page = page.Substring(0, page.Length - 5); // Remove .ashx
 				page = UrlDecode(page);
 				insertion += page;
-				if(match.Groups[4].Value != page) insertion += "|" + match.Groups[4].Value;
+				if(match.Groups[4].Value != page)
+				{
+					insertion += "|" + match.Groups[4].Value;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = UnknownLinkRegexIE.Match(buffer.ToString(), match.Index + 1);
@@ -310,10 +389,25 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[2].Value == @"target=""_blank"" ") insertion += "^";
-				if(match.Groups[3].Value != "") insertion += "{UP:" + match.Groups[4].Value + "}" + UrlDecode(match.Groups[6].Value);
-				else insertion += "{UP}" + UrlDecode(match.Groups[6].Value);
-				if(!match.Groups[10].Value.StartsWith("GetFile.aspx") && !match.Groups[10].Value.StartsWith("{UP")) insertion += "|" + match.Groups[10];
+				if(match.Groups[2].Value == @"target=""_blank"" ")
+				{
+					insertion += "^";
+				}
+
+				if(match.Groups[3].Value != "")
+				{
+					insertion += "{UP:" + match.Groups[4].Value + "}" + UrlDecode(match.Groups[6].Value);
+				}
+				else
+				{
+					insertion += "{UP}" + UrlDecode(match.Groups[6].Value);
+				}
+
+				if(!match.Groups[10].Value.StartsWith("GetFile.aspx") && !match.Groups[10].Value.StartsWith("{UP"))
+				{
+					insertion += "|" + match.Groups[10];
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = FileLinkRegex.Match(buffer.ToString(), match.Index + 1);
@@ -324,13 +418,32 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[8].Value == " target=_blank") insertion += "^";
-				if(match.Groups[3].Value != "") insertion += "{UP:" + match.Groups[4].Value;
-				else insertion += "{UP";
-				if(match.Groups[6].Value != "") insertion += "(" + UrlDecode(match.Groups[6].Value) + ")";
+				if(match.Groups[8].Value == " target=_blank")
+				{
+					insertion += "^";
+				}
+
+				if(match.Groups[3].Value != "")
+				{
+					insertion += "{UP:" + match.Groups[4].Value;
+				}
+				else
+				{
+					insertion += "{UP";
+				}
+
+				if(match.Groups[6].Value != "")
+				{
+					insertion += "(" + UrlDecode(match.Groups[6].Value) + ")";
+				}
+
 				insertion += "}";
 				insertion += UrlDecode(match.Groups[7].Value);
-				if(!match.Groups[9].Value.StartsWith("GetFile.aspx") && !match.Groups[9].Value.StartsWith("{UP")) insertion += "|" + match.Groups[9].Value;
+				if(!match.Groups[9].Value.StartsWith("GetFile.aspx") && !match.Groups[9].Value.StartsWith("{UP"))
+				{
+					insertion += "|" + match.Groups[9].Value;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = FileOrAttachmentLinkRegexIE.Match(buffer.ToString(), match.Index + 1);
@@ -341,11 +454,18 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[2].Value == @"target=""_blank"" ") insertion += "^";
+				if(match.Groups[2].Value == @"target=""_blank"" ")
+				{
+					insertion += "^";
+				}
 				// if the provider is not present "{UP" is added without ":providername"
 				insertion += match.Groups[4].Value == "" ? "{UP" : "{UP:" + match.Groups[4].Value;
 				insertion += "(" + UrlDecode(match.Groups[6].Value) + ")}" + UrlDecode(match.Groups[8].Value);
-				if(!match.Groups[12].Value.StartsWith("GetFile.aspx") && !match.Groups[12].Value.StartsWith("{UP")) insertion += "|" + match.Groups[12];
+				if(!match.Groups[12].Value.StartsWith("GetFile.aspx") && !match.Groups[12].Value.StartsWith("{UP"))
+				{
+					insertion += "|" + match.Groups[12];
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = AttachmentLinkRegex.Match(buffer.ToString(), match.Index + 1);
@@ -358,9 +478,17 @@ namespace ScrewTurn.Wiki {
 				string insertion = "[";
 				//if(match.Groups[6].Value == @"target=""_blank""") insertion += "^";
 				string url = match.Groups[2].Value;
-				if(url.StartsWith(Settings.MainUrl)) url = url.Substring(Settings.MainUrl.Length);
+				if(url.StartsWith(Settings.MainUrl))
+				{
+					url = url.Substring(Settings.MainUrl.Length);
+				}
+
 				insertion += url;
-				if(match.Groups[7].Value != match.Groups[2].Value && match.Groups[7].Value + "/" != match.Groups[2].Value) insertion += "|" + match.Groups[7].Value;
+				if(match.Groups[7].Value != match.Groups[2].Value && match.Groups[7].Value + "/" != match.Groups[2].Value)
+				{
+					insertion += "|" + match.Groups[7].Value;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = ExternalLinkRegex.Match(buffer.ToString(), match.Index + 1);
@@ -372,9 +500,17 @@ namespace ScrewTurn.Wiki {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
 				string url = match.Groups[2].Value;
-				if(url.StartsWith(Settings.MainUrl)) url = url.Substring(Settings.MainUrl.Length);
+				if(url.StartsWith(Settings.MainUrl))
+				{
+					url = url.Substring(Settings.MainUrl.Length);
+				}
+
 				insertion += url;
-				if(match.Groups[4].Value != match.Groups[2].Value.TrimEnd('/')) insertion += "|" + match.Groups[4].Value;
+				if(match.Groups[4].Value != match.Groups[2].Value.TrimEnd('/'))
+				{
+					insertion += "|" + match.Groups[4].Value;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = ExternalLinkRegexIE.Match(buffer.ToString(), match.Index + 1);
@@ -385,12 +521,24 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[1].Value == @"target=""_blank""") insertion += "^";
+				if(match.Groups[1].Value == @"target=""_blank""")
+				{
+					insertion += "^";
+				}
+
 				string url = match.Groups[2].Value;
-				if(url.StartsWith(Settings.MainUrl)) url = url.Substring(Settings.MainUrl.Length);
+				if(url.StartsWith(Settings.MainUrl))
+				{
+					url = url.Substring(Settings.MainUrl.Length);
+				}
+
 				insertion += url;
 				string decoded = UrlDecode(match.Groups[6].Value);
-				if(match.Groups[2].Value != decoded) insertion += "|" + decoded;
+				if(match.Groups[2].Value != decoded)
+				{
+					insertion += "|" + decoded;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = InternalLinkRegex.Match(buffer.ToString(), match.Index + 1);
@@ -401,12 +549,24 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[3].Value == " target=_blank") insertion += "^";
+				if(match.Groups[3].Value == " target=_blank")
+				{
+					insertion += "^";
+				}
+
 				string url = match.Groups[2].Value;
-				if(url.StartsWith(Settings.MainUrl)) url = url.Substring(Settings.MainUrl.Length);
+				if(url.StartsWith(Settings.MainUrl))
+				{
+					url = url.Substring(Settings.MainUrl.Length);
+				}
+
 				insertion += url;
 				string decoded = UrlDecode(match.Groups[4].Value);
-				if(decoded != match.Groups[2].Value) insertion += "|" + decoded;
+				if(decoded != match.Groups[2].Value)
+				{
+					insertion += "|" + decoded;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = InternalLinkRegexIE.Match(buffer.ToString(), match.Index + 1);
@@ -417,11 +577,19 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[3].Value != "") insertion += "^";
+				if(match.Groups[3].Value != "")
+				{
+					insertion += "^";
+				}
+
 				insertion += "#";
 				insertion += match.Groups[1].Value;
 				string val = match.Groups[6].Value.ToLowerInvariant().Replace("&nbsp;", "");
-				if(val != "") insertion += "|" + val;
+				if(val != "")
+				{
+					insertion += "|" + val;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = AnchorLinkRegex.Match(buffer.ToString(), match.Index + 1);
@@ -432,10 +600,18 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[1].Value == @"target=""_blank""") insertion += "^";
+				if(match.Groups[1].Value == @"target=""_blank""")
+				{
+					insertion += "^";
+				}
+
 				insertion += match.Groups[2].Value;
 				string decoded = UrlDecode(match.Groups[6].Value);
-				if(match.Groups[2].Value != decoded) insertion += "|" + decoded;
+				if(match.Groups[2].Value != decoded)
+				{
+					insertion += "|" + decoded;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = SystemLinkRegex.Match(buffer.ToString(), match.Index + 1);
@@ -446,11 +622,19 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[3].Value == " target=_blank") insertion += "^";
+				if(match.Groups[3].Value == " target=_blank")
+				{
+					insertion += "^";
+				}
+
 				string url = match.Groups[2].Value.Substring(match.Groups[2].Value.LastIndexOf("/") + 1);
 				insertion += url;
 				string decoded = UrlDecode(match.Groups[4].Value);
-				if(decoded != url) insertion += "|" + decoded;
+				if(decoded != url)
+				{
+					insertion += "|" + decoded;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = SystemLinkRegexIE.Match(buffer.ToString(), match.Index + 1);
@@ -461,10 +645,18 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[2].Value == @"target=""_blank"" ") insertion += "^";
+				if(match.Groups[2].Value == @"target=""_blank"" ")
+				{
+					insertion += "^";
+				}
+
 				insertion += match.Groups[3].Value;
 				string decoded = UrlDecode(match.Groups[6].Value);
-				if(decoded != match.Groups[3].Value) insertion += "|" + decoded;
+				if(decoded != match.Groups[3].Value)
+				{
+					insertion += "|" + decoded;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = EmailLinkRegex.Match(buffer.ToString(), match.Index + 1);
@@ -477,7 +669,11 @@ namespace ScrewTurn.Wiki {
 				string insertion = "[";
 				insertion += match.Groups[2].Value.Substring(7); // Remove mailto:
 				string decoded = UrlDecode(match.Groups[4].Value);
-				if(decoded != match.Groups[2].Value.Substring(7)) insertion += "|" + decoded;
+				if(decoded != match.Groups[2].Value.Substring(7))
+				{
+					insertion += "|" + decoded;
+				}
+
 				insertion += "]";
 				buffer.Insert(match.Index, insertion);
 				match = EmailLinkRegexIE.Match(buffer.ToString(), match.Index + 1);
@@ -496,13 +692,24 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[";
-				if(match.Groups[1].Value.StartsWith("<div")) insertion += match.Groups[2].Value + "|";
-				else insertion += "imageauto|";
+				if(match.Groups[1].Value.StartsWith("<div"))
+				{
+					insertion += match.Groups[2].Value + "|";
+				}
+				else
+				{
+					insertion += "imageauto|";
+				}
+
 				insertion += match.Groups[13].Value + "|";
 				insertion += PrepareImageUrl(match.Groups[8].Value);
 				if(match.Groups[3].Value != "") {
 					insertion += "|";
-					if(match.Groups[6].Value != "") insertion += "^";
+					if(match.Groups[6].Value != "")
+					{
+						insertion += "^";
+					}
+
 					insertion += PrepareLink(match.Groups[4].Value);
 				}
 				insertion += "]";
@@ -520,7 +727,11 @@ namespace ScrewTurn.Wiki {
 				insertion += PrepareImageUrl(match.Groups[7].Value);
 				if(match.Groups[4].Value != "") {
 					insertion += "|";
-					if(match.Groups[5].Value != "") insertion += "^";
+					if(match.Groups[5].Value != "")
+					{
+						insertion += "^";
+					}
+
 					insertion += PrepareLink(match.Groups[4].Value);
 				}
 				insertion += "]";
@@ -537,7 +748,11 @@ namespace ScrewTurn.Wiki {
 				insertion += PrepareImageUrl(match.Groups[6].Value);
 				if(match.Groups[1].Value != "") {
 					insertion += "|";
-					if(match.Groups[4].Value != "") insertion += "^";
+					if(match.Groups[4].Value != "")
+					{
+						insertion += "^";
+					}
+
 					insertion += PrepareLink(match.Groups[3].Value);
 				}
 				insertion += "]";
@@ -550,12 +765,20 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[image|";
-				if(match.Groups[8].Value != "Image") insertion += match.Groups[8].Value;
+				if(match.Groups[8].Value != "Image")
+				{
+					insertion += match.Groups[8].Value;
+				}
+
 				insertion += "|";
 				insertion += PrepareImageUrl(match.Groups[6].Value);
 				if(match.Groups[4].Value != "") {
 					insertion += "|";
-					if(match.Groups[2].Value != "") insertion += "^";
+					if(match.Groups[2].Value != "")
+					{
+						insertion += "^";
+					}
+
 					insertion += PrepareLink(match.Groups[4].Value);
 				}
 				insertion += "]";
@@ -568,12 +791,20 @@ namespace ScrewTurn.Wiki {
 			while(match.Success) {
 				buffer.Remove(match.Index, match.Length);
 				string insertion = "[image|";
-				if(match.Groups[5].Value != "Image") insertion += match.Groups[5].Value;
+				if(match.Groups[5].Value != "Image")
+				{
+					insertion += match.Groups[5].Value;
+				}
+
 				insertion += "|";
 				insertion += PrepareImageUrl(match.Groups[6].Value);
 				if(match.Groups[3].Value != "") {
 					insertion += "|";
-					if(match.Groups[3].Value != "") insertion += "^";
+					if(match.Groups[3].Value != "")
+					{
+						insertion += "^";
+					}
+
 					insertion += PrepareLink(match.Groups[3].Value);
 				}
 				insertion += "]";
@@ -655,7 +886,10 @@ namespace ScrewTurn.Wiki {
 							// Skip processed data
 							lastIndex = openIndex + result.Length;
 						}
-						else lastIndex += 4;
+						else
+						{
+							lastIndex += 4;
+						}
 
 						continue;
 					}
@@ -675,7 +909,10 @@ namespace ScrewTurn.Wiki {
 							// Skip processed data
 							lastIndex = openIndex + result.Length;
 						}
-						else lastIndex += 4;
+						else
+						{
+							lastIndex += 4;
+						}
 
 						continue;
 					}
@@ -821,10 +1058,16 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The anchestor of <b>current</b>.</returns>
 		private static HtmlList FindAnchestor(HtmlList root, HtmlList current) {
 			foreach(HtmlListElement elem in root.Elements) {
-				if(elem.SubList == current) return root;
+				if(elem.SubList == current)
+				{
+					return root;
+				}
 				else if(elem.SubList != null) {
 					HtmlList temp = FindAnchestor(elem.SubList, current);
-					if(temp != null) return temp;
+					if(temp != null)
+					{
+						return temp;
+					}
 				}
 			}
 			//return root;
@@ -862,8 +1105,14 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			if(nothingFound) return -1;
-			else return min;
+			if(nothingFound)
+			{
+				return -1;
+			}
+			else
+			{
+				return min;
+			}
 		}
 
 		/// <summary>
@@ -896,7 +1145,10 @@ namespace ScrewTurn.Wiki {
 
 			do {
 				currentOpenIndex = text.IndexOf(openTag, currentOpenIndex + 1);
-				if(currentOpenIndex != -1) openIndexes.Add(currentOpenIndex);
+				if(currentOpenIndex != -1)
+				{
+					openIndexes.Add(currentOpenIndex);
+				}
 			} while(currentOpenIndex != -1);
 
 			// Optimization
@@ -908,7 +1160,10 @@ namespace ScrewTurn.Wiki {
 
 			do {
 				currentCloseIndex = text.IndexOf(closeTag, currentCloseIndex + 1);
-				if(currentCloseIndex != -1) closeIndexes.Add(currentCloseIndex);
+				if(currentCloseIndex != -1)
+				{
+					closeIndexes.Add(currentCloseIndex);
+				}
 			} while(currentCloseIndex != -1);
 
 			// Optimization
@@ -941,9 +1196,15 @@ namespace ScrewTurn.Wiki {
 			foreach(Tag tag in tags) {
 				if(tag.Type == TagType.Open) {
 					openCount++;
-					if(firstOpenIndex == -1) firstOpenIndex = tag.Index;
+					if(firstOpenIndex == -1)
+					{
+						firstOpenIndex = tag.Index;
+					}
 				}
-				else openCount--;
+				else
+				{
+					openCount--;
+				}
 
 				if(openCount == 0) {
 					openIndex = firstOpenIndex;
@@ -965,9 +1226,15 @@ namespace ScrewTurn.Wiki {
 		private static string PrepareLink(string rawUrl) {
 			rawUrl = UrlDecode(rawUrl);
 			string mainUrl = GetCurrentRequestMainUrl().ToLowerInvariant();
-			if(rawUrl.ToLowerInvariant().StartsWith(mainUrl)) rawUrl = rawUrl.Substring(mainUrl.Length);
+			if(rawUrl.ToLowerInvariant().StartsWith(mainUrl))
+			{
+				rawUrl = rawUrl.Substring(mainUrl.Length);
+			}
 
-			if(rawUrl.ToLowerInvariant().EndsWith(".ashx")) return rawUrl.Substring(0, rawUrl.Length - 5);
+			if(rawUrl.ToLowerInvariant().EndsWith(".ashx"))
+			{
+				return rawUrl.Substring(0, rawUrl.Length - 5);
+			}
 
 			int extensionIndex = rawUrl.ToLowerInvariant().IndexOf(".ashx#");
 			if(extensionIndex != -1) {
@@ -980,7 +1247,10 @@ namespace ScrewTurn.Wiki {
 				string provider, page, file;
 				GetProviderAndFileAndPage(rawUrl, out provider, out page, out file);
 
-				if(provider == null && page == null) return "{UP}" + file;
+				if(provider == null && page == null)
+				{
+					return "{UP}" + file;
+				}
 				else if(page != null) {
 					return "{UP" + (provider != null ? ":" + provider : "") + "(" + page + ")}" + file;
 				}
@@ -1000,7 +1270,10 @@ namespace ScrewTurn.Wiki {
 		private static string PrepareImageUrl(string rawUrl) {
 			rawUrl = UrlDecode(rawUrl);
 			string mainUrl = GetCurrentRequestMainUrl().ToLowerInvariant();
-			if(rawUrl.ToLowerInvariant().StartsWith(mainUrl)) rawUrl = rawUrl.Substring(mainUrl.Length);
+			if(rawUrl.ToLowerInvariant().StartsWith(mainUrl))
+			{
+				rawUrl = rawUrl.Substring(mainUrl.Length);
+			}
 
 			if(rawUrl.StartsWith("GetFile.aspx")) {
 				// Look for File and Provider parameter (v2 and v3)
@@ -1008,10 +1281,19 @@ namespace ScrewTurn.Wiki {
 				string provider, page, file;
 				GetProviderAndFileAndPage(rawUrl, out provider, out page, out file);
 
-				if(provider == null) return "{UP" + (page != null ? "(" + page + ")" : "") + "}" + file;
-				else return "{UP:" + provider + (page != null ? "(" + page + ")" : "") + "}" + file;
+				if(provider == null)
+				{
+					return "{UP" + (page != null ? "(" + page + ")" : "") + "}" + file;
+				}
+				else
+				{
+					return "{UP:" + provider + (page != null ? "(" + page + ")" : "") + "}" + file;
+				}
 			}
-			else return rawUrl;
+			else
+			{
+				return rawUrl;
+			}
 		}
 
 		/// <summary>
@@ -1022,7 +1304,10 @@ namespace ScrewTurn.Wiki {
 			string url = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Path);
 			if(!url.EndsWith("/")) {
 				int index = url.LastIndexOf("/");
-				if(index != -1) url = url.Substring(0, index + 1);
+				if(index != -1)
+				{
+					url = url.Substring(0, index + 1);
+				}
 			}
 			return url;
 		}

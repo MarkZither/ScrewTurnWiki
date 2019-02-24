@@ -43,21 +43,18 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_NullText() {
-			Word word = new Word(1, null);
-		}
+            Assert.That(() => { Word word = new Word(1, null); }, Throws.ArgumentNullException);
+        }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void Constructor_InvalidText() {
-			Word word = new Word(1, "");
-		}
+            Assert.That(() => { Word word = new Word(1, ""); }, Throws.ArgumentException);
+        }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_NullOccurrences() {
-			Word word = new Word(1, "hello", null);
+            Assert.That(() => { Word word = new Word(1, "hello", null); }, Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -105,10 +102,9 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void AddOccurrence_NullDocument() {
 			Word word = new Word(1, "dummy");
-			word.AddOccurrence(null, 0, 0, WordLocation.Content);
+			Assert.That(() => word.AddOccurrence(null, 0, 0, WordLocation.Content), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -132,10 +128,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void RemoveOccurrences_NullDocument() {
 			Word word = new Word(1, "hey");
-			word.RemoveOccurrences(null);
+			IDocument doc = null;
+			Assert.That(() => word.RemoveOccurrences(doc), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -219,19 +215,15 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void BulkAddOccurrences_NullDocument() {
 			Word word = new Word(1, "john");
-			word.BulkAddOccurrences(null, new SortedBasicWordInfoSet());
+            Assert.That(() => { word.BulkAddOccurrences(null, new SortedBasicWordInfoSet()); }, Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void BulkAddOccurrences_NullPositions() {
 			Word word = new Word(1, "john");
-			word.BulkAddOccurrences(MockDocument("Doc", "Doc", "d", DateTime.Now), null);
-		}
-
+            Assert.That(() => { word.BulkAddOccurrences(MockDocument("Doc", "Doc", "d", DateTime.Now), null); }, Throws.ArgumentNullException);
+        }
 	}
-
 }

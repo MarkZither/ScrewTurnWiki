@@ -39,7 +39,10 @@ namespace ScrewTurn.Wiki {
 
 			bool canView = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
 				SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
-			if(!canView) UrlTools.Redirect("AccessDenied.aspx");
+			if(!canView)
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			int rev1 = -1;
 			int rev2 = -1;
@@ -54,8 +57,15 @@ namespace ScrewTurn.Wiki {
 			if(int.TryParse(Request["Rev1"], out rev1)) {
 				rev1Content = Pages.GetBackupContent(page, rev1);
 				rev1Text = rev1.ToString();
-				if(rev1 >= 0 && rev1Content == null && Pages.GetBackupContent(page, rev1 - 1) != null) rev1Content = Content.GetPageContent(page, false);
-				if(rev1Content == null) Redirect();
+				if(rev1 >= 0 && rev1Content == null && Pages.GetBackupContent(page, rev1 - 1) != null)
+				{
+					rev1Content = Content.GetPageContent(page, false);
+				}
+
+				if(rev1Content == null)
+				{
+					Redirect();
+				}
 			}
 			else {
 				// Look for current
@@ -63,14 +73,24 @@ namespace ScrewTurn.Wiki {
 					rev1Content = Content.GetPageContent(page, false);
 					rev1Text = Properties.Messages.Current;
 				}
-				else Redirect();
+				else
+				{
+					Redirect();
+				}
 			}
 
 			if(int.TryParse(Request["Rev2"], out rev2)) {
 				rev2Content = Pages.GetBackupContent(page, rev2);
 				rev2Text = rev2.ToString();
-				if(rev2 >= 0 && rev2Content == null && Pages.GetBackupContent(page, rev2 - 1) != null) rev2Content = Content.GetPageContent(page, false);
-				if(rev2Content == null) Redirect();
+				if(rev2 >= 0 && rev2Content == null && Pages.GetBackupContent(page, rev2 - 1) != null)
+				{
+					rev2Content = Content.GetPageContent(page, false);
+				}
+
+				if(rev2Content == null)
+				{
+					Redirect();
+				}
 			}
 			else {
 				// Look for current or draft
@@ -82,9 +102,15 @@ namespace ScrewTurn.Wiki {
 					rev2Content = Pages.GetDraft(page);
 					rev2Text = Properties.Messages.Draft;
 					draft = true;
-					if(rev2Content == null) Redirect();
+					if(rev2Content == null)
+					{
+						Redirect();
+					}
 				}
-				else Redirect();
+				else
+				{
+					Redirect();
+				}
 			}
 
 			PageContent content = Content.GetPageContent(page, true);

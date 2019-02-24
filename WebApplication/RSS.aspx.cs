@@ -34,7 +34,10 @@ namespace ScrewTurn.Wiki {
 			string[] currentGroups = SessionFacade.GetCurrentGroupNames();
 
 			currentNamespace = DetectNamespace();
-			if(string.IsNullOrEmpty(currentNamespace)) currentNamespace = null;
+			if(string.IsNullOrEmpty(currentNamespace))
+			{
+				currentNamespace = null;
+			}
 
 			if(SessionFacade.LoginKey == null) {
 				// Look for username/password in the query string
@@ -65,7 +68,10 @@ namespace ScrewTurn.Wiki {
 
             if(Request["Page"] != null) {
 				PageInfo page = Pages.FindPage(Request["Page"]);
-				if(page == null) return;
+				if(page == null)
+				{
+					return;
+				}
 
 				PageContent content = Content.GetPageContent(page, true);
 				if(Request["Discuss"] == null) {
@@ -247,21 +253,33 @@ namespace ScrewTurn.Wiki {
 									break;
 								}
 							}
-							if(duplicateFound) continue;
+							if(duplicateFound)
+							{
+								continue;
+							}
 
 							// Skip message-related entries
-							if(!IsPageChange(ch[i].Change)) continue;
+							if(!IsPageChange(ch[i].Change))
+							{
+								continue;
+							}
 
 							PageInfo p = Pages.FindPage(ch[i].Page);
 							if(p != null) {
 								// Check permissions for every page
 								bool canReadThisPage = AuthChecker.CheckActionForPage(p, Actions.ForPages.ReadPage,
 									currentUsername, currentGroups);
-								if(!canReadThisPage) continue;
+								if(!canReadThisPage)
+								{
+									continue;
+								}
 
 								if(useCat) {
 									CategoryInfo[] infos = Pages.GetCategoriesForPage(p);
-									if(infos.Length == 0 && cat != "-") continue;
+									if(infos.Length == 0 && cat != "-")
+									{
+										continue;
+									}
 									else if(infos.Length != 0) {
 										bool found = false;
 										for(int k = 0; k < infos.Length; k++) {
@@ -270,16 +288,25 @@ namespace ScrewTurn.Wiki {
 												break;
 											}
 										}
-										if(!found) continue;
+										if(!found)
+										{
+											continue;
+										}
 									}
 								}
 							}
 
 							// Check namespace
-							if(p != null && NameTools.GetNamespace(p.FullName) != currentNamespace) continue;
+							if(p != null && NameTools.GetNamespace(p.FullName) != currentNamespace)
+							{
+								continue;
+							}
 
 							// Skip deleted pages as their category binding is unknown
-							if(p == null && useCat) continue;
+							if(p == null && useCat)
+							{
+								continue;
+							}
 
 							// Write the item element
 							rss.WriteStartElement("item");
@@ -287,9 +314,14 @@ namespace ScrewTurn.Wiki {
 							rss.WriteCData(Formatter.StripHtml(FormattingPipeline.PrepareTitle(ch[i].Title, false, FormattingContext.PageContent, p)));
 							rss.WriteEndElement();
 							if (ch[i].Change != Change.PageDeleted && p != null)
+							{
 								rss.WriteElementString("link", Settings.MainUrl + ch[i].Page + Settings.PageExtension);
+							}
 							else
+							{
 								rss.WriteElementString("link", Settings.MainUrl);
+							}
+
 							BuildAuthorTag(rss, ch[i].User);
 
 							// Create the description tag
@@ -372,7 +404,10 @@ namespace ScrewTurn.Wiki {
 						for (int i = 0; i < ch.Length; i++)
 						{
 							// Skip page-related entries
-							if (!IsMessageChange(ch[i].Change)) continue;
+							if (!IsMessageChange(ch[i].Change))
+							{
+								continue;
+							}
 
 							PageInfo p = Pages.FindPage(ch[i].Page);
 							if (p != null)
@@ -381,12 +416,18 @@ namespace ScrewTurn.Wiki {
 								// Check permissions for every page
 								bool canReadThisPageDiscussion = AuthChecker.CheckActionForPage(p, Actions.ForPages.ReadDiscussion,
 									currentUsername, currentGroups);
-								if (!canReadThisPageDiscussion) continue;
+								if (!canReadThisPageDiscussion)
+								{
+									continue;
+								}
 
 								if (useCat)
 								{
 									CategoryInfo[] infos = Pages.GetCategoriesForPage(p);
-									if (infos.Length == 0 && cat != "-") continue;
+									if (infos.Length == 0 && cat != "-")
+									{
+										continue;
+									}
 									else if (infos.Length != 0)
 									{
 										bool found = false;
@@ -398,12 +439,18 @@ namespace ScrewTurn.Wiki {
 												break;
 											}
 										}
-										if (!found) continue;
+										if (!found)
+										{
+											continue;
+										}
 									}
 								}
 
 								// Check namespace
-								if (NameTools.GetNamespace(p.FullName) != currentNamespace) continue;
+								if (NameTools.GetNamespace(p.FullName) != currentNamespace)
+								{
+									continue;
+								}
 
 								// Write the item element
 								rss.WriteStartElement("item");
@@ -416,7 +463,10 @@ namespace ScrewTurn.Wiki {
 								{
 									rss.WriteElementString("link", Settings.MainUrl + ch[i].Page + Settings.PageExtension + "?Discuss=1#" + id);
 								}
-								else rss.WriteElementString("link", Settings.MainUrl + ch[i].Page + Settings.PageExtension + "?Discuss=1");
+								else
+								{
+									rss.WriteElementString("link", Settings.MainUrl + ch[i].Page + Settings.PageExtension + "?Discuss=1");
+								}
 
 								string messageContent = FindMessageContent(ch[i].Page, id);
 
@@ -485,14 +535,23 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The message content, or <c>null</c>.</returns>
 		private string FindMessageContent(string pageName, string messageId) {
 			PageInfo page = Pages.FindPage(pageName);
-			if(page == null) return null;
+			if(page == null)
+			{
+				return null;
+			}
 
 			Message[] messages = Pages.GetPageMessages(page);
-			if(messages.Length == 0) return null;
+			if(messages.Length == 0)
+			{
+				return null;
+			}
 
 			List<Message> linearMessages = UnTreeMessages(messages);
 			foreach(Message msg in linearMessages) {
-				if(messageId == Tools.GetMessageIdForAnchor(msg.DateTime)) return msg.Body;
+				if(messageId == Tools.GetMessageIdForAnchor(msg.DateTime))
+				{
+					return msg.Body;
+				}
 			}
 
 			return null;

@@ -18,7 +18,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			PrintSystemStatus();
 
@@ -65,7 +68,10 @@ namespace ScrewTurn.Wiki {
 			lblEmailResult.Text = "";
 
 			Page.Validate("email");
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			List<string> emails = new List<string>();
 			foreach(ListItem item in lstGroups.Items) {
@@ -74,7 +80,10 @@ namespace ScrewTurn.Wiki {
 					if(group != null) {
 						foreach(string user in group.Users) {
 							UserInfo u = Users.FindUser(user);
-							if(u != null) emails.Add(u.Email);
+							if(u != null)
+							{
+								emails.Add(u.Email);
+							}
 						}
 					}
 				}
@@ -171,7 +180,10 @@ namespace ScrewTurn.Wiki {
 
 			List<UserInfo> users = Users.GetUsers();
 			for(int i = 0; i < users.Count; i++) {
-				if(!users[i].Active) inactive++;
+				if(!users[i].Active)
+				{
+					inactive++;
+				}
 			}
 			sb.Append(Properties.Messages.UserCount + ": <b>" + users.Count.ToString() + "</b> (" + inactive.ToString() + " " + Properties.Messages.InactiveUsers + ")<br />" + "\n");
 			sb.Append(Properties.Messages.CachedPages + ": <b>" + ScrewTurn.Wiki.Cache.PageCacheUsage.ToString() + "/" + Pages.GetGlobalPageCount().ToString() + "</b> (" + ScrewTurn.Wiki.Cache.FormattedPageCacheUsage.ToString() + " " + Properties.Messages.Formatted + ")<br />" + "\n");
@@ -187,7 +199,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private string CheckVersion() {
-			if(Settings.DisableAutomaticVersionCheck) return "";
+			if(Settings.DisableAutomaticVersionCheck)
+			{
+				return "";
+			}
 
 			StringBuilder sb = new StringBuilder(100);
 			sb.Append("(");
@@ -206,7 +221,10 @@ namespace ScrewTurn.Wiki {
 			else if(status == UpdateStatus.UpToDate) {
 				sb.Append(@"<span class=""resultok"">" + Properties.Messages.WikiUpToDate + "</span>");
 			}
-			else throw new NotSupportedException();
+			else
+			{
+				throw new NotSupportedException();
+			}
 
 			sb.Append(")");
 			return sb.ToString();

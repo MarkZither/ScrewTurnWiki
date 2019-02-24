@@ -15,7 +15,10 @@ namespace ScrewTurn.Wiki {
 			AdminMaster.RedirectToLoginIfNeeded();
 
 			bool canManageCategories = AdminMaster.CanManageCategories(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
-			if(!canManageCategories) UrlTools.Redirect("AccessDenied.aspx");
+			if(!canManageCategories)
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			if(!Page.IsPostBack) {
 				// Load namespaces
@@ -42,7 +45,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnNewCategory_Click(object sender, EventArgs e) {
-			if(!CanManageCategoriesInCurrentNamespace()) return;
+			if(!CanManageCategoriesInCurrentNamespace())
+			{
+				return;
+			}
 
 			lblNewCategoryResult.CssClass = "";
 			lblNewCategoryResult.Text = "";
@@ -50,7 +56,10 @@ namespace ScrewTurn.Wiki {
 			txtNewCategory.Text = txtNewCategory.Text.Trim();
 
 			Page.Validate("newcat");
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			txtNewCategory.Text = txtNewCategory.Text.Trim();
 			if(txtNewCategory.Text.Length == 0) {
@@ -151,7 +160,10 @@ namespace ScrewTurn.Wiki {
 
 		protected void rptCategories_ItemCommand(object sender, CommandEventArgs e) {
 			if(e.CommandName == "Select") {
-				if(!CanManageCategoriesInCurrentNamespace()) return;
+				if(!CanManageCategoriesInCurrentNamespace())
+				{
+					return;
+				}
 
 				txtCurrentCategory.Value = e.CommandArgument as string;
 				lblCurrentCategory.Text = txtCurrentCategory.Value;
@@ -181,12 +193,18 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnRename_Click(object sender, EventArgs e) {
-			if(!CanManageCategoriesInCurrentNamespace()) return;
+			if(!CanManageCategoriesInCurrentNamespace())
+			{
+				return;
+			}
 
 			lblRenameResult.CssClass = "";
 			lblRenameResult.Text = "";
 
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			txtNewName.Text = txtNewName.Text.Trim();
 
@@ -215,7 +233,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnMerge_Click(object sender, EventArgs e) {
-			if(!CanManageCategoriesInCurrentNamespace()) return;
+			if(!CanManageCategoriesInCurrentNamespace())
+			{
+				return;
+			}
 
 			CategoryInfo source = Pages.FindCategory(txtCurrentCategory.Value);
 			CategoryInfo dest = Pages.FindCategory(lstDestinationCategory.SelectedValue);
@@ -235,7 +256,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnDelete_Click(object sender, EventArgs e) {
-			if(!CanManageCategoriesInCurrentNamespace()) return;
+			if(!CanManageCategoriesInCurrentNamespace())
+			{
+				return;
+			}
 
 			Log.LogEntry("Category deletion requested for " + txtCurrentCategory.Value, EntryType.General, Log.SystemUsername);
 
@@ -315,14 +339,20 @@ namespace ScrewTurn.Wiki {
 			List<PageInfo> selectedPages = new List<PageInfo>(20);
 			foreach(string pg in pageListBuilder.SelectedPages) {
 				PageInfo page = Pages.FindPage(pg);
-				if(page != null) selectedPages.Add(page);
+				if(page != null)
+				{
+					selectedPages.Add(page);
+				}
 			}
 
 			List<CategoryInfo> selectedCategories = new List<CategoryInfo>(lstBulkCategories.Items.Count);
 			foreach(ListItem item in lstBulkCategories.Items) {
 				if(item.Selected) {
 					CategoryInfo cat = Pages.FindCategory(item.Value);
-					if(cat != null) selectedCategories.Add(cat);
+					if(cat != null)
+					{
+						selectedCategories.Add(cat);
+					}
 				}
 			}
 

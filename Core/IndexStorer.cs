@@ -43,13 +43,35 @@ namespace ScrewTurn.Wiki {
 		public IndexStorer(string documentsFile, string wordsFile, string mappingsFile, IInMemoryIndex index)
 			: base(index) {
 
-			if(documentsFile == null) throw new ArgumentNullException("documentsFile");
-			if(wordsFile == null) throw new ArgumentNullException("wordsFile");
-			if(mappingsFile == null) throw new ArgumentNullException("mappingsFile");
+			if(documentsFile == null)
+			{
+				throw new ArgumentNullException("documentsFile");
+			}
 
-			if(documentsFile.Length == 0) throw new ArgumentException("Documents File cannot be empty", "documentsFile");
-			if(wordsFile.Length == 0) throw new ArgumentException("Words File cannot be emtpy", "wordsFile");
-			if(mappingsFile.Length == 0) throw new ArgumentException("Mappings File cannot be empty", "mappingsFile");
+			if(wordsFile == null)
+			{
+				throw new ArgumentNullException("wordsFile");
+			}
+
+			if(mappingsFile == null)
+			{
+				throw new ArgumentNullException("mappingsFile");
+			}
+
+			if(documentsFile.Length == 0)
+			{
+				throw new ArgumentException("Documents File cannot be empty", "documentsFile");
+			}
+
+			if(wordsFile.Length == 0)
+			{
+				throw new ArgumentException("Words File cannot be emtpy", "wordsFile");
+			}
+
+			if(mappingsFile.Length == 0)
+			{
+				throw new ArgumentException("Mappings File cannot be empty", "mappingsFile");
+			}
 
 			this.documentsFile = documentsFile;
 			this.wordsFile = wordsFile;
@@ -98,7 +120,10 @@ namespace ScrewTurn.Wiki {
 				documents = new DumpedDocument[count];
 				for(int i = 0; i < count; i++) {
 					documents[i] = ReadDumpedDocument(reader);
-					if(documents[i].ID > maxDocumentId) maxDocumentId = documents[i].ID;
+					if(documents[i].ID > maxDocumentId)
+					{
+						maxDocumentId = documents[i].ID;
+					}
 				}
 				firstFreeDocumentId = maxDocumentId + 1;
 			}
@@ -110,7 +135,10 @@ namespace ScrewTurn.Wiki {
 				words = new DumpedWord[count];
 				for(int i = 0; i < count; i++) {
 					words[i] = ReadDumpedWord(reader);
-					if(words[i].ID > maxWordId) maxWordId = words[i].ID;
+					if(words[i].ID > maxWordId)
+					{
+						maxWordId = words[i].ID;
+					}
 				}
 				firstFreeWordId = maxWordId + 1;
 			}
@@ -135,7 +163,10 @@ namespace ScrewTurn.Wiki {
 			bool allEqual = true;
 			for(int i = 0; i < ReservedBytes.Length; i++) {
 				int r = reader.ReadByte();
-				if(r != ReservedBytes[i]) allEqual = false;
+				if(r != ReservedBytes[i])
+				{
+					allEqual = false;
+				}
 			}
 			return allEqual;
 		}

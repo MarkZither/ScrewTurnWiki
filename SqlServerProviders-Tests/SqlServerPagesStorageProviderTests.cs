@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 	public class SqlServerPagesStorageProviderTests : PagesStorageProviderTestScaffolding {
 
 		//private const string ConnString = "Data Source=(local)\\SQLExpress;User ID=sa;Password=password;";
-		private const string ConnString = "Data Source=(local)\\SQLExpress;Integrated Security=SSPI;";
+		private const string ConnString = "Data Source=(local)\\MSSQLSERVER2016;Integrated Security=SSPI;";
 		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
 
 		public override IPagesStorageProviderV30 GetProvider() {
@@ -25,7 +25,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 			return prov;
 		}
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void FixtureSetUp() {
 			// Create database with no tables
 			SqlConnection cn = new SqlConnection(ConnString);
@@ -58,7 +58,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 			cn.Close();
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void FixtureTearDown() {
 			// Delete database
 			SqlConnection cn = new SqlConnection(ConnString);
@@ -97,12 +97,16 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 			Assert.IsNotNull(prov.Information, "Information should not be null");
 		}
 
-		[TestCase("", ExpectedException = typeof(InvalidConfigurationException))]
-		[TestCase("blah", ExpectedException = typeof(InvalidConfigurationException))]
-		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;", ExpectedException = typeof(InvalidConfigurationException))]
-		public void Init_InvalidConnString(string c) {
-			IPagesStorageProviderV30 prov = GetProvider();
-			prov.Init(MockHost(), c);
+		[TestCase("")]
+		[TestCase("blah")]
+		[TestCase("Data Source=(local)\\SQLExpress;User ID=inexistent;Password=password;InitialCatalog=Inexistent;")]
+		public void Init_InvalidConnString(string c)
+		{
+			Assert.Throws<InvalidConfigurationException>(() =>
+			{
+				IPagesStorageProviderV30 prov = GetProvider();
+				prov.Init(MockHost(), c);
+			});
 		}
 
 		[Test]
@@ -222,7 +226,10 @@ insert into [NavigationPathBinding] ([NavigationPath], [Page], [Number]) values 
 				cn.Close();
 			}
 
-			if(!done) throw new Exception("Could not generate v2 test database");
+			if(!done)
+			{
+				throw new Exception("Could not generate v2 test database");
+			}
 
 			MockRepository mocks = new MockRepository();
 			IHostV30 host = mocks.DynamicMock<IHostV30>();

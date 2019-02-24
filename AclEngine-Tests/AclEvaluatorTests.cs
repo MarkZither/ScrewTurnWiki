@@ -399,35 +399,77 @@ namespace ScrewTurn.Wiki.AclEngine.Tests {
 			Assert.AreEqual(Authorization.Granted, AclEvaluator.AuthorizeAction("Res", "Action", "U.User", new string[] { "G.Group" }, entries.ToArray()), "Wrong auth result");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void AuthorizeAction_InvalidResource(string r) {
-			AclEvaluator.AuthorizeAction(r, "Action", "U.User", new string[0], new AclEntry[0]);
+		[TestCase(null)]
+		public void AuthorizeAction_InvalidResource_ShouldThrowArgumentNullException(string r)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclEvaluator.AuthorizeAction(r, "Action", "U.User", new string[0], new AclEntry[0]);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase(AclEntry.FullControlAction, ExpectedException = typeof(ArgumentException))]
-		public void AuthorizeAction_InvalidAction(string a) {
-			AclEvaluator.AuthorizeAction("Res", a, "U.User", new string[0], new AclEntry[0]);
+		[TestCase("")]
+		public void AuthorizeAction_InvalidResource_ShouldThrowArgumentException(string r)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclEvaluator.AuthorizeAction(r, "Action", "U.User", new string[0], new AclEntry[0]);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void AuthorizeAction_InvalidUser(string u) {
-			AclEvaluator.AuthorizeAction("Res", "Action", u, new string[0], new AclEntry[0]);
+		[TestCase(null)]
+		public void AuthorizeAction_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclEvaluator.AuthorizeAction("Res", a, "U.User", new string[0], new AclEntry[0]);
+			});
+		}
+
+		[TestCase("")]
+		[TestCase(AclEntry.FullControlAction)]
+		public void AuthorizeAction_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclEvaluator.AuthorizeAction("Res", a, "U.User", new string[0], new AclEntry[0]);
+			});
+		}
+
+		[TestCase(null)]
+		public void AuthorizeAction_InvalidUser_ShouldThrowArgumentNullException(string u)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclEvaluator.AuthorizeAction("Res", "Action", u, new string[0], new AclEntry[0]);
+			});
+		}
+
+		[TestCase("")]
+		public void AuthorizeAction_InvalidUser_ShouldThrowArgumentException(string u)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				AclEvaluator.AuthorizeAction("Res", "Action", u, new string[0], new AclEntry[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void AuthorizeAction_NullGroups() {
-			AclEvaluator.AuthorizeAction("Res", "Action", "U.User", null, new AclEntry[0]);
+		public void AuthorizeAction_NullGroups()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclEvaluator.AuthorizeAction("Res", "Action", "U.User", null, new AclEntry[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void AuthorizeAction_NullEntries() {
-			AclEvaluator.AuthorizeAction("Res", "Action", "U.User", new string[0], null);
+		public void AuthorizeAction_NullEntries()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				AclEvaluator.AuthorizeAction("Res", "Action", "U.User", new string[0], null);
+			});
 		}
 
 		[Test]

@@ -24,22 +24,20 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_NullDocument() {
-			DumpedChange change = new DumpedChange(
+            Assert.That(() => new DumpedChange(
 				null,
 				new List<DumpedWord>(new DumpedWord[] { new DumpedWord(1, "word") }),
-				new List<DumpedWordMapping>(new DumpedWordMapping[] { new DumpedWordMapping(1, 1, 4, 1, WordLocation.Content.Location) }));
+				new List<DumpedWordMapping>(new DumpedWordMapping[] { new DumpedWordMapping(1, 1, 4, 1, WordLocation.Content.Location) })), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_NullWords() {
-			DumpedChange change = new DumpedChange(
+            Assert.That(() => new DumpedChange(
 				new DumpedDocument(MockDocument("doc", "Docum", "d", DateTime.Now)),
 				null,
-				new List<DumpedWordMapping>(new DumpedWordMapping[] { new DumpedWordMapping(1, 1, 4, 1, WordLocation.Content.Location) }));
-		}
+				new List<DumpedWordMapping>(new DumpedWordMapping[] { new DumpedWordMapping(1, 1, 4, 1, WordLocation.Content.Location) })), Throws.ArgumentNullException);
+        }
 
 		[Test]
 		public void Constructor_EmptyWords() {
@@ -51,13 +49,12 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_NullMappings() {
-			DumpedChange change = new DumpedChange(
+            Assert.That(() => new DumpedChange(
 				new DumpedDocument(MockDocument("doc", "Docum", "d", DateTime.Now)),
 				null,
-				new List<DumpedWordMapping>(new DumpedWordMapping[] { new DumpedWordMapping(1, 1, 4, 1, WordLocation.Content.Location) }));
-		}
+				new List<DumpedWordMapping>(new DumpedWordMapping[] { new DumpedWordMapping(1, 1, 4, 1, WordLocation.Content.Location) })), Throws.ArgumentNullException);
+        }
 
 		[Test]
 		public void Constructor_EmptyMappings() {

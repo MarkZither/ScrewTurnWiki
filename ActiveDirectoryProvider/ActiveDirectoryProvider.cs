@@ -128,7 +128,9 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 
 				// return the groups, if any
 				if(wikiGroups.Count > 0)
+				{
 					return wikiGroups;
+				}
 
 				// return the default groups, if any
 				return DefaultGroups.ToList();
@@ -143,7 +145,9 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 				string[] wikiGroups;
 
 				if(GroupMap.TryGetValue(domainGroup, out wikiGroups))
+				{
 					return wikiGroups;
+				}
 
 				return new string[0];
 			}
@@ -155,9 +159,13 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 			/// <param name="wikiGroups">The wiki groups.</param>
 			public void AddGroupMap(string domainGroup, string[] wikiGroups) {
 				if(wikiGroups == null || wikiGroups.Length == 0)
+				{
 					GroupMap.Remove(domainGroup);
+				}
 				else
+				{
 					GroupMap[domainGroup] = wikiGroups;
+				}
 			}
 
 			/// <summary>
@@ -328,10 +336,14 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 			var info = StorageProvider.TryManualLogin(username, password);
 
 			if(info != null)
+			{
 				return info;
+			}
 
 			if(m_Config.ValidateCredentials(username, password))
+			{
 				return GetUser(username);
+			}
 
 			return null;
 		}
@@ -348,7 +360,9 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 		public UserInfo TryAutoLogin(HttpContext context) {
 			try {
 				if(!context.User.Identity.IsAuthenticated)
+				{
 					return null;
+				}
 
 				var username = context.User.Identity.Name.Substring(context.User.Identity.Name.IndexOf(@"\") + 1);
 
@@ -415,8 +429,9 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 				var user = StorageProvider.GetUser(username);
 
 				if(user != null)
+				{
 					return user;
-
+				}
 
 				if(m_Config.CaseInsensitive) {
 					UserInfo[] all = StorageProvider.GetUsers();
@@ -424,7 +439,9 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 					int userIndex = Array.BinarySearch(all, new UserInfo(username, null, null, true, DateTime.MinValue, null), new UsernameComparer());
 
 					if(userIndex >= 0)
+					{
 						return all[userIndex];
+					}
 				}
 
 
@@ -459,7 +476,9 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 						}
 
 						if(result == null)
+						{
 							return null;
+						}
 					}
 
 					catch(Exception ex) {
@@ -865,7 +884,9 @@ namespace ScrewTurn.Wiki.Plugins.ActiveDirectory {
 					string remainingConfigLine = configLine.Split(new[] { ';' }).First();
 
 					if(remainingConfigLine.Length == 0)
+					{
 						continue;
+					}
 
 					string[] configEntry = remainingConfigLine.Split(new[] { '=' }, 2);
 

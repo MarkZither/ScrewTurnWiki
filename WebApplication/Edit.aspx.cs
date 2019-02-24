@@ -108,13 +108,19 @@ namespace ScrewTurn.Wiki {
 						// No cache because the page will be probably modified in a few minutes
 						currentContent = Content.GetPageContent(currentPage, false);
 					}
-					else isDraft = true;
+					else
+					{
+						isDraft = true;
+					}
 
 					// Set current page for editor and attachment manager
 					editor.CurrentPage = currentPage;
 					attachmentManager.CurrentPage = currentPage;
 
-					if(!int.TryParse(Request["Section"], out currentSection)) currentSection = -1;
+					if(!int.TryParse(Request["Section"], out currentSection))
+					{
+						currentSection = -1;
+					}
 
 					// Fill data, if not posted back
 					if(!Page.IsPostBack) {
@@ -180,15 +186,27 @@ namespace ScrewTurn.Wiki {
 			if(currentPage == null) {
 				// Check permissions for creating new pages
 				if(!canCreateNewPages) {
-					if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
-					else UrlTools.Redirect("AccessDenied.aspx");
+					if(SessionFacade.LoginKey == null)
+					{
+						UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
+					}
+					else
+					{
+						UrlTools.Redirect("AccessDenied.aspx");
+					}
 				}
 			}
 			else {
 				// Check permissions for editing current page
 				if(!canEdit && !canEditWithApproval) {
-					if(SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
-					else UrlTools.Redirect("AccessDenied.aspx");
+					if(SessionFacade.LoginKey == null)
+					{
+						UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
+					}
+					else
+					{
+						UrlTools.Redirect("AccessDenied.aspx");
+					}
 				}
 			}
 
@@ -236,7 +254,10 @@ namespace ScrewTurn.Wiki {
 				btnTemplates.Visible = false;
 				pnlTemplates.Visible = false;
 			}
-			else btnTemplates.Visible = true;
+			else
+			{
+				btnTemplates.Visible = true;
+			}
 		}
 
 		protected void editor_SelectedTabChanged(object sender, SelectedTabChangedEventArgs e) {
@@ -248,9 +269,16 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The content of the selected template.</returns>
 		private string LoadTemplateIfAppropriate() {
-			if(string.IsNullOrEmpty(Request["Template"])) return "";
+			if(string.IsNullOrEmpty(Request["Template"]))
+			{
+				return "";
+			}
+
 			ContentTemplate template = Templates.Find(Request["Template"]);
-			if(template == null) return "";
+			if(template == null)
+			{
+				return "";
+			}
 			else {
 				lblAutoTemplate.Text = lblAutoTemplate.Text.Replace("##TEMPLATE##", template.Name);
 				pnlAutoTemplate.Visible = true;
@@ -268,8 +296,15 @@ namespace ScrewTurn.Wiki {
 		public void PrintSessionRefresh() {
 			StringBuilder sb = new StringBuilder(50);
 			sb.Append(@"<iframe src=""");
-			if(currentPage != null) sb.AppendFormat("SessionRefresh.aspx?Page={0}", Tools.UrlEncode(currentPage.FullName));
-			else sb.Append("SessionRefresh.aspx");
+			if(currentPage != null)
+			{
+				sb.AppendFormat("SessionRefresh.aspx?Page={0}", Tools.UrlEncode(currentPage.FullName));
+			}
+			else
+			{
+				sb.Append("SessionRefresh.aspx");
+			}
+
 			sb.Append(@""" style=""width: 1px; height: 1px; border: none;"" scrolling=""no""></iframe>");
 
 			lblSessionRefresh.Text = sb.ToString();
@@ -279,14 +314,20 @@ namespace ScrewTurn.Wiki {
 		/// Verifies for editing collisions, and if no collision is found, "locks" the page
 		/// </summary>
 		private void ManageEditingCollisions() {
-			if(currentPage == null) return;
+			if(currentPage == null)
+			{
+				return;
+			}
 
 			lblRefreshLink.Text = @"<a href=""" +
 				UrlTools.BuildUrl("Edit.aspx?Page=", Tools.UrlEncode(currentPage.FullName), (Request["Section"] != null ? "&amp;Section=" + currentSection.ToString() : "")) +
 				@""">" + Properties.Messages.Refresh + " &raquo;</a>";
 
 			string username = Request.UserHostAddress;
-			if(SessionFacade.LoginKey != null) username = SessionFacade.CurrentUsername;
+			if(SessionFacade.LoginKey != null)
+			{
+				username = SessionFacade.CurrentUsername;
+			}
 
 			if(Collisions.IsPageBeingEdited(currentPage, username)) {
 				pnlCollisions.Visible = true;
@@ -344,7 +385,10 @@ namespace ScrewTurn.Wiki {
 				if(c.Provider == provider) {
 					ListItem itm = new ListItem(NameTools.GetLocalName(c.FullName), c.FullName);
 					if(Array.Find<CategoryInfo>(toSelect, delegate(CategoryInfo s) { return s.FullName == c.FullName; }) != null)
+					{
 						itm.Selected = true;
+					}
+
 					lstCategories.Items.Add(itm);
 				}
 			}
@@ -365,7 +409,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The name.</returns>
 		private static string GenerateAutoName(string title) {
 			// Replace all non-alphanumeric characters with dashes
-			if(title.Length == 0) return "";
+			if(title.Length == 0)
+			{
+				return "";
+			}
 
 			StringBuilder buffer = new StringBuilder(title.Length);
 
@@ -376,7 +423,10 @@ namespace ScrewTurn.Wiki {
 					unicat == System.Globalization.UnicodeCategory.DecimalDigitNumber) {
 					buffer.Append(ch);
 				}
-				else if(unicat != System.Globalization.UnicodeCategory.NonSpacingMark) buffer.Append("-");
+				else if(unicat != System.Globalization.UnicodeCategory.NonSpacingMark)
+				{
+					buffer.Append("-");
+				}
 			}
 
 			while(buffer.ToString().IndexOf("--") >= 0) {
@@ -438,7 +488,11 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void btnCancel_Click(object sender, EventArgs e) {
-			if(currentPage == null && txtName.Visible) currentPage = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text));
+			if(currentPage == null && txtName.Visible)
+			{
+				currentPage = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text));
+			}
+
 			if(currentPage != null) {
 				// Try redirecting to proper section
 				string anchor = null;
@@ -449,7 +503,10 @@ namespace ScrewTurn.Wiki {
 
 				UrlTools.Redirect(Tools.UrlEncode(currentPage.FullName) + Settings.PageExtension + (anchor != null ? ("#" + anchor + "_" + currentSection.ToString()) : ""));
 			}
-			else UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
+			else
+			{
+				UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
+			}
 		}
 
 		protected void cvName1_ServerValidate(object sender, ServerValidateEventArgs e) {
@@ -489,7 +546,10 @@ namespace ScrewTurn.Wiki {
 		private IPagesStorageProviderV30 FindAppropriateProvider() {
 			IPagesStorageProviderV30 provider = null;
 
-			if(currentPage != null) provider = currentPage.Provider;
+			if(currentPage != null)
+			{
+				provider = currentPage.Provider;
+			}
 			else {
 				NamespaceInfo currentNamespace = DetectNamespaceInfo();
 				provider =
@@ -529,11 +589,17 @@ namespace ScrewTurn.Wiki {
 			// Check permissions
 			if(currentPage == null) {
 				// Check permissions for creating new pages
-				if(!canCreateNewPages) UrlTools.Redirect("AccessDenied.aspx");
+				if(!canCreateNewPages)
+				{
+					UrlTools.Redirect("AccessDenied.aspx");
+				}
 			}
 			else {
 				// Check permissions for editing current page
-				if(!canEdit && !canEditWithApproval) UrlTools.Redirect("AccessDenied.aspx");
+				if(!canEdit && !canEditWithApproval)
+				{
+					UrlTools.Redirect("AccessDenied.aspx");
+				}
 			}
 
 			chkMinorChange.Visible = true;
@@ -554,14 +620,23 @@ namespace ScrewTurn.Wiki {
 			}
 
 			bool redirect = true;
-			if(sender == btnSaveAndContinue) redirect = false;
+			if(sender == btnSaveAndContinue)
+			{
+				redirect = false;
+			}
 
 			lblResult.Text = "";
 			lblResult.CssClass = "";
 
 			string username = "";
-			if(SessionFacade.LoginKey == null) username = Request.UserHostAddress;
-			else username = SessionFacade.CurrentUsername;
+			if(SessionFacade.LoginKey == null)
+			{
+				username = Request.UserHostAddress;
+			}
+			else
+			{
+				username = SessionFacade.CurrentUsername;
+			}
 
 			IPagesStorageProviderV30 provider = FindAppropriateProvider();
 
@@ -572,7 +647,10 @@ namespace ScrewTurn.Wiki {
 					CategoryInfo cat = Pages.FindCategory(lstCategories.Items[i].Value);
 
 					// Sanity check
-					if(cat.Provider == provider) categories.Add(cat);
+					if(cat.Provider == provider)
+					{
+						categories.Add(cat);
+					}
 				}
 			}
 
@@ -580,8 +658,15 @@ namespace ScrewTurn.Wiki {
 			txtDescription.Text = txtDescription.Text.Trim();
 
 			SaveMode saveMode = SaveMode.Backup;
-			if(chkSaveAsDraft.Checked) saveMode = SaveMode.Draft;
-			if(chkMinorChange.Checked) saveMode = SaveMode.Normal;
+			if(chkSaveAsDraft.Checked)
+			{
+				saveMode = SaveMode.Draft;
+			}
+
+			if(chkMinorChange.Checked)
+			{
+				saveMode = SaveMode.Normal;
+			}
 
 			if(txtName.Enabled) {
 				// Find page, if inexistent create it
@@ -605,7 +690,10 @@ namespace ScrewTurn.Wiki {
 					Pages.DeleteDraft(currentPage);
 					isDraft = false;
 				}
-				else isDraft = true;
+				else
+				{
+					isDraft = true;
+				}
 
 				ManageDraft();
 
@@ -629,7 +717,10 @@ namespace ScrewTurn.Wiki {
 				// Used for redirecting to a specific section after editing it
 				string anchor = "";
 
-				if(currentPage == null) currentPage = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text));
+				if(currentPage == null)
+				{
+					currentPage = Pages.FindPage(NameTools.GetFullName(DetectNamespace(), txtName.Text));
+				}
 
 				// Save data
 				Log.LogEntry("Page update requested for " + currentPage.FullName, EntryType.General, username);
@@ -638,9 +729,17 @@ namespace ScrewTurn.Wiki {
 					StringBuilder sb = new StringBuilder(cont.Content.Length);
 					int start, len;
 					ExtractSection(cont.Content, currentSection, out start, out len, out anchor);
-					if(start > 0) sb.Append(cont.Content.Substring(0, start));
+					if(start > 0)
+					{
+						sb.Append(cont.Content.Substring(0, start));
+					}
+
 					sb.Append(editor.GetContent());
-					if(start + len < cont.Content.Length - 1) sb.Append(cont.Content.Substring(start + len));
+					if(start + len < cont.Content.Length - 1)
+					{
+						sb.Append(cont.Content.Substring(start + len));
+					}
+
 					Pages.ModifyPage(currentPage, txtTitle.Text, username, DateTime.Now, txtComment.Text, sb.ToString(),
 						GetKeywords(), txtDescription.Text, saveMode);
 				}
@@ -657,7 +756,10 @@ namespace ScrewTurn.Wiki {
 					Pages.DeleteDraft(currentPage);
 					isDraft = false;
 				}
-				else isDraft = true;
+				else
+				{
+					isDraft = true;
+				}
 
 				ManageDraft();
 
@@ -699,12 +801,18 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="keywords">The keywords.</param>
 		private void SetKeywords(string[] keywords) {
-			if(keywords == null || keywords.Length == 0) txtKeywords.Text = "";
+			if(keywords == null || keywords.Length == 0)
+			{
+				txtKeywords.Text = "";
+			}
 
 			StringBuilder sb = new StringBuilder(50);
 			for(int i = 0; i < keywords.Length; i++) {
 				sb.Append(keywords[i]);
-				if(i != keywords.Length - 1) sb.Append(",");
+				if(i != keywords.Length - 1)
+				{
+					sb.Append(",");
+				}
 			}
 			txtKeywords.Text = sb.ToString();
 		}
@@ -725,7 +833,10 @@ namespace ScrewTurn.Wiki {
 				txtCategory.Text = txtCategory.Text.Trim();
 
 				Page.Validate("category");
-				if(!Page.IsValid) return;
+				if(!Page.IsValid)
+				{
+					return;
+				}
 
 				string fullName = NameTools.GetFullName(DetectNamespace(), txtCategory.Text);
 				Pages.CreateCategory(DetectNamespaceInfo(), txtCategory.Text, FindAppropriateProvider());
@@ -745,7 +856,10 @@ namespace ScrewTurn.Wiki {
 					if(selected.Find(delegate(CategoryInfo c) { return c.FullName == lstCategories.Items[i].Value; }) != null) {
 						lstCategories.Items[i].Selected = true;
 					}
-					if(lstCategories.Items[i].Value == fullName) lstCategories.Items[i].Selected = true;
+					if(lstCategories.Items[i].Value == fullName)
+					{
+						lstCategories.Items[i].Selected = true;
+					}
 				}
 				txtCategory.Text = "";
 			}

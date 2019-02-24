@@ -44,9 +44,18 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// </summary>
 		public IFilesStorageProviderV30 Provider {
 			get {
-				if(file != null) return file.Provider;
-				else if(directory != null) return directory.Provider;
-				else return null;
+				if(file != null)
+				{
+					return file.Provider;
+				}
+				else if(directory != null)
+				{
+					return directory.Provider;
+				}
+				else
+				{
+					return null;
+				}
 			}
 		}
 

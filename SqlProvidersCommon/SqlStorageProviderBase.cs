@@ -73,8 +73,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>host</b> or <b>config</b> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <b>config</b> is not valid or is incorrect.</exception>
 		public void Init(IHostV30 host, string config) {
-			if(host == null) throw new ArgumentNullException("host");
-			if(config == null) throw new ArgumentNullException("config");
+			if(host == null)
+			{
+				throw new ArgumentNullException("host");
+			}
+
+			if(config == null)
+			{
+				throw new ArgumentNullException("config");
+			}
 
 			this.host = host;
 
@@ -88,7 +95,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				config = TryLoadSettingsStorageProviderConfiguration();
 			}
 
-			if(config == null) config = "";
+			if(config == null)
+			{
+				config = "";
+			}
 
 			ValidateConnectionString(config);
 

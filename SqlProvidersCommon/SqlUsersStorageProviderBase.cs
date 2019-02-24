@@ -22,8 +22,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>True if the Password is correct.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="user"/> or <paramref name="password"/> are <c>null</c>.</exception>
 		public bool TestAccount(UserInfo user, string password) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(password == null) throw new ArgumentNullException("password");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(password == null)
+			{
+				throw new ArgumentNullException("password");
+			}
 
 			return TryManualLogin(user.Username, password) != null;
 		}
@@ -92,7 +99,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -108,12 +118,35 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="username"/>, <paramref name="password"/> or <paramref name="email"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="username"/>, <paramref name="password"/> or <paramref name="email"/> are empty.</exception>
 		public UserInfo AddUser(string username, string displayName, string password, string email, bool active, DateTime dateTime) {
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
-			if(password == null) throw new ArgumentNullException("password");
-			if(password.Length == 0) throw new ArgumentException("Password cannot be empty", "password");
-			if(email == null) throw new ArgumentNullException("email");
-			if(email.Length == 0) throw new ArgumentException("Email cannot be empty", "email");
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
+
+			if(password == null)
+			{
+				throw new ArgumentNullException("password");
+			}
+
+			if(password.Length == 0)
+			{
+				throw new ArgumentException("Password cannot be empty", "password");
+			}
+
+			if(email == null)
+			{
+				throw new ArgumentNullException("email");
+			}
+
+			if(email.Length == 0)
+			{
+				throw new ArgumentException("Email cannot be empty", "email");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 
@@ -124,8 +157,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			List<Parameter> parameters = new List<Parameter>(6);
 			parameters.Add(new Parameter(ParameterType.String, "Username", username));
 			parameters.Add(new Parameter(ParameterType.String, "PasswordHash", Hash.Compute(password)));
-			if(string.IsNullOrEmpty(displayName)) parameters.Add(new Parameter(ParameterType.String, "DisplayName", DBNull.Value));
-			else parameters.Add(new Parameter(ParameterType.String, "DisplayName", displayName));
+			if(string.IsNullOrEmpty(displayName))
+			{
+				parameters.Add(new Parameter(ParameterType.String, "DisplayName", DBNull.Value));
+			}
+			else
+			{
+				parameters.Add(new Parameter(ParameterType.String, "DisplayName", displayName));
+			}
+
 			parameters.Add(new Parameter(ParameterType.String, "Email", email));
 			parameters.Add(new Parameter(ParameterType.Boolean, "Active", active));
 			parameters.Add(new Parameter(ParameterType.DateTime, "DateTime", dateTime));
@@ -137,7 +177,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows == 1) {
 				return new UserInfo(username, displayName, email, active, dateTime, this);
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -172,7 +215,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -207,7 +253,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -222,9 +271,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>user</b> or <b>newEmail</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>newEmail</b> is empty.</exception>
 		public UserInfo ModifyUser(UserInfo user, string newDisplayName, string newPassword, string newEmail, bool newActive) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(newEmail == null) throw new ArgumentNullException("newEmail");
-			if(newEmail.Length == 0) throw new ArgumentException("New Email cannot be empty", "newEmail");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(newEmail == null)
+			{
+				throw new ArgumentNullException("newEmail");
+			}
+
+			if(newEmail.Length == 0)
+			{
+				throw new ArgumentException("New Email cannot be empty", "newEmail");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -249,8 +309,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(!string.IsNullOrEmpty(newPassword)) {
 				parameters.Add(new Parameter(ParameterType.String, "PasswordHash", Hash.Compute(newPassword)));
 			}
-			if(string.IsNullOrEmpty(newDisplayName)) parameters.Add(new Parameter(ParameterType.String, "DisplayName", DBNull.Value));
-			else parameters.Add(new Parameter(ParameterType.String, "DisplayName", newDisplayName));
+			if(string.IsNullOrEmpty(newDisplayName))
+			{
+				parameters.Add(new Parameter(ParameterType.String, "DisplayName", DBNull.Value));
+			}
+			else
+			{
+				parameters.Add(new Parameter(ParameterType.String, "DisplayName", newDisplayName));
+			}
+
 			parameters.Add(new Parameter(ParameterType.String, "Email", newEmail));
 			parameters.Add(new Parameter(ParameterType.Boolean, "Active", newActive));
 			parameters.Add(new Parameter(ParameterType.String, "Username", user.Username));
@@ -279,7 +346,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>True if the User has been removed successfully.</returns>
 		/// <exception cref="ArgumentNullException">If <b>user</b> is <c>null</c>.</exception>
 		public bool RemoveUser(UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -354,7 +424,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -366,9 +439,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>name</b> or <b>description</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>name</b> is empty.</exception>
 		public UserGroup AddUserGroup(string name, string description) {
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(description == null) throw new ArgumentNullException("description");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(description == null)
+			{
+				throw new ArgumentNullException("description");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 
@@ -386,7 +470,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			if(rows == 1) {
 				return new UserGroup(name, description, this);
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -421,7 +508,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -456,7 +546,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -467,8 +560,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The correct <see cref="T:UserGroup"/> object or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>group</b> or <b>description</b> are <c>null</c>.</exception>
 		public UserGroup ModifyUserGroup(UserGroup group, string description) {
-			if(group == null) throw new ArgumentNullException("group");
-			if(description == null) throw new ArgumentNullException("description");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
+
+			if(description == null)
+			{
+				throw new ArgumentNullException("description");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -508,7 +608,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns><c>true</c> if the group is removed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <b>group</b> is <c>null</c>.</exception>
 		public bool RemoveUserGroup(UserGroup group) {
-			if(group == null) throw new ArgumentNullException("group");
+			if(group == null)
+			{
+				throw new ArgumentNullException("group");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -600,8 +703,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The correct <see cref="T:UserGroup"/> object or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>user</b> or <b>groups</b> are <c>null</c>.</exception>
 		public UserInfo SetUserMembership(UserInfo user, string[] groups) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(groups == null) throw new ArgumentNullException("groups");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(groups == null)
+			{
+				throw new ArgumentNullException("groups");
+			}
 
 			// 1. Remove old user group membership
 			// 2. Add new memberships, one by one
@@ -651,12 +761,26 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The correct UserInfo object, or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>username</b> or <b>password</b> are <c>null</c>.</exception>
 		public UserInfo TryManualLogin(string username, string password) {
-			if(username == null) throw new ArgumentNullException("username");
-			if(password == null) throw new ArgumentNullException("password");
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(password == null)
+			{
+				throw new ArgumentNullException("password");
+			}
 
 			// Shortcut
-			if(username.Length == 0) return null;
-			if(password.Length == 0) return null;
+			if(username.Length == 0)
+			{
+				return null;
+			}
+
+			if(password.Length == 0)
+			{
+				return null;
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -721,11 +845,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 						string.CompareOrdinal(passwordHash, providedPasswordHash) == 0) {
 						return result;
 					}
-					else return null;
+					else
+					{
+						return null;
+					}
 				}
-				else return null;
+				else
+				{
+					return null;
+				}
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -736,7 +869,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The correct UserInfo object, or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <b>context</b> is <c>null</c>.</exception>
 		public UserInfo TryAutoLogin(System.Web.HttpContext context) {
-			if(context == null) throw new ArgumentNullException("context");
+			if(context == null)
+			{
+				throw new ArgumentNullException("context");
+			}
 
 			return null;
 		}
@@ -749,8 +885,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>username</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>username</b> is empty.</exception>
 		public UserInfo GetUser(string username) {
-			if(username == null) throw new ArgumentNullException("username");
-			if(username.Length == 0) throw new ArgumentException("Username cannot be empty", "username");
+			if(username == null)
+			{
+				throw new ArgumentNullException("username");
+			}
+
+			if(username.Length == 0)
+			{
+				throw new ArgumentException("Username cannot be empty", "username");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -805,7 +948,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -816,8 +962,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>email</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>email</b> is empty.</exception>
 		public UserInfo GetUserByEmail(string email) {
-			if(email == null) throw new ArgumentNullException("email");
-			if(email.Length == 0) throw new ArgumentException("Email cannot be empty", "email");
+			if(email == null)
+			{
+				throw new ArgumentNullException("email");
+			}
+
+			if(email.Length == 0)
+			{
+				throw new ArgumentException("Email cannot be empty", "email");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -873,7 +1026,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -882,7 +1038,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="user">The user who has logged in.</param>
 		/// <exception cref="ArgumentNullException">If <b>user</b> is <c>null</c>.</exception>
 		public void NotifyCookieLogin(UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 			// Nothing to do
 		}
 
@@ -892,7 +1051,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="user">The user who has logged out.</param>
 		/// <exception cref="ArgumentNullException">If <b>user</b> is <c>null</c>.</exception>
 		public void NotifyLogout(UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 			// Nothing to do
 		}
 
@@ -932,9 +1094,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>user</b> or <b>key</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>key</b> is empty.</exception>
 		public bool StoreUserData(UserInfo user, string key, string value) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(key == null) throw new ArgumentNullException("key");
-			if(key.Length == 0) throw new ArgumentException("Key cannot be empty", "key");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
+
+			if(key.Length == 0)
+			{
+				throw new ArgumentException("Key cannot be empty", "key");
+			}
 
 			// 1. Remove previous key, if present
 			// 2. Add new key, if value != null
@@ -958,8 +1131,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 					DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 					int rows = ExecuteNonQuery(command, false);
-					if(rows == 1) CommitTransaction(transaction);
-					else RollbackTransaction(transaction);
+					if(rows == 1)
+					{
+						CommitTransaction(transaction);
+					}
+					else
+					{
+						RollbackTransaction(transaction);
+					}
 
 					return rows == 1;
 				}
@@ -983,9 +1162,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>user</b> or <b>key</b> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>key</b> is empty.</exception>
 		public string RetrieveUserData(UserInfo user, string key) {
-			if(user == null) throw new ArgumentNullException("user");
-			if(key == null) throw new ArgumentNullException("key");
-			if(key.Length == 0) throw new ArgumentException("Key cannot be empty", "key");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
+
+			if(key.Length == 0)
+			{
+				throw new ArgumentException("Key cannot be empty", "key");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1013,7 +1203,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return data;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1023,7 +1216,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The user data elements (key-&gt;value).</returns>
 		/// <exception cref="ArgumentNullException">If <b>user</b> is <c>null</c>.</exception>
 		public IDictionary<string, string> RetrieveAllUserData(UserInfo user) {
-			if(user == null) throw new ArgumentNullException("user");
+			if(user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1050,7 +1246,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1061,8 +1260,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <b>key</b> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <b>key</b> is empty.</exception>
 		public IDictionary<UserInfo, string> GetUsersWithData(string key) {
-			if(key == null) throw new ArgumentNullException("key");
-			if(key.Length == 0) throw new ArgumentException("Key cannot be empty", "key");
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
+
+			if(key.Length == 0)
+			{
+				throw new ArgumentException("Key cannot be empty", "key");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1130,7 +1336,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		#endregion

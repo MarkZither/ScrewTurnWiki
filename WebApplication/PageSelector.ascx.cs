@@ -40,7 +40,11 @@ namespace ScrewTurn.Wiki {
 		public int ItemCount {
 			get { return itemCount; }
 			set {
-				if(value < 0) throw new ArgumentException("Item Count must be greater than or equal to zero", "value");
+				if(value < 0)
+				{
+					throw new ArgumentException("Item Count must be greater than or equal to zero", "value");
+				}
+
 				itemCount = value;
 				ViewState[ItemCountName] = value;
 				RenderPages();
@@ -53,7 +57,11 @@ namespace ScrewTurn.Wiki {
 		public int PageSize {
 			get { return pageSize; }
 			set {
-				if(value <= 0) throw new ArgumentException("Page Size must be greater than zero", "value");
+				if(value <= 0)
+				{
+					throw new ArgumentException("Page Size must be greater than zero", "value");
+				}
+
 				pageSize = value;
 				ViewState[PageSizeName] = value;
 				RenderPages();
@@ -67,7 +75,11 @@ namespace ScrewTurn.Wiki {
 			get { return selectedPage; }
 			private set {
 				int dummy;
-				if(value < 0 || value > CountPages(out dummy) - 1) throw new ArgumentException("Invalid Page", "value");
+				if(value < 0 || value > CountPages(out dummy) - 1)
+				{
+					throw new ArgumentException("Invalid Page", "value");
+				}
+
 				selectedPage = value;
 				ViewState[SelectedPageName] = value;
 			}

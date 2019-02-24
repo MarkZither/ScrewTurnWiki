@@ -16,7 +16,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageConfiguration(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			if(!Page.IsPostBack) {
 				// Load log entries
@@ -92,9 +95,18 @@ namespace ScrewTurn.Wiki {
 			user = entry.User.Replace(" ", "&nbsp;");
 			message = entry.Message.Replace("&", "&amp;");
 
-			if(entry.EntryType == EntryType.Error) additionalClass = " error";
-			else if(entry.EntryType == EntryType.Warning) additionalClass = " warning";
-			else additionalClass = "";
+			if(entry.EntryType == EntryType.Error)
+			{
+				additionalClass = " error";
+			}
+			else if(entry.EntryType == EntryType.Warning)
+			{
+				additionalClass = " warning";
+			}
+			else
+			{
+				additionalClass = "";
+			}
 		}
 
 		/// <summary>

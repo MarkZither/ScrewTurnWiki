@@ -36,12 +36,35 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public SqlAclManager(StoreEntry storeEntry, DeleteEntries deleteEntries, RenameResource renameResource,
 			RetrieveAllEntries retrieveAllEntries, RetrieveEntriesForResource retrieveEntriesForResource, RetrieveEntriesForSubject retrieveEntriesForSubject) {
 
-			if(storeEntry == null) throw new ArgumentNullException("storeEntry");
-			if(deleteEntries == null) throw new ArgumentNullException("deleteEntries");
-			if(renameResource == null) throw new ArgumentNullException("renameResource");
-			if(retrieveAllEntries == null) throw new ArgumentNullException("retrieveAllEntries");
-			if(retrieveEntriesForResource == null) throw new ArgumentNullException("retrieveEntriesForResource");
-			if(retrieveEntriesForSubject == null) throw new ArgumentNullException("retrieveEntriesForSubject");
+			if(storeEntry == null)
+			{
+				throw new ArgumentNullException("storeEntry");
+			}
+
+			if(deleteEntries == null)
+			{
+				throw new ArgumentNullException("deleteEntries");
+			}
+
+			if(renameResource == null)
+			{
+				throw new ArgumentNullException("renameResource");
+			}
+
+			if(retrieveAllEntries == null)
+			{
+				throw new ArgumentNullException("retrieveAllEntries");
+			}
+
+			if(retrieveEntriesForResource == null)
+			{
+				throw new ArgumentNullException("retrieveEntriesForResource");
+			}
+
+			if(retrieveEntriesForSubject == null)
+			{
+				throw new ArgumentNullException("retrieveEntriesForSubject");
+			}
 
 			_storeEntry = storeEntry;
 			_deleteEntries = deleteEntries;
@@ -74,12 +97,35 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are empty.</exception>
 		public bool StoreEntry(string resource, string action, string subject, Value value) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
 
 			AclEntry entry = new AclEntry(resource, action, subject, value);
 
@@ -96,12 +142,35 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/>, <paramref name="action"/> or <paramref name="subject"/> are empty.</exception>
 		public bool DeleteEntry(string resource, string action, string subject) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
-			if(action == null) throw new ArgumentNullException("action");
-			if(action.Length == 0) throw new ArgumentException("Action cannot be empty", "action");
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
+
+			if(action == null)
+			{
+				throw new ArgumentNullException("action");
+			}
+
+			if(action.Length == 0)
+			{
+				throw new ArgumentException("Action cannot be empty", "action");
+			}
+
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
 
 			AclEntry entry = new AclEntry(resource, action, subject, Value.Deny);
 
@@ -116,8 +185,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/> is empty.</exception>
 		public bool DeleteEntriesForResource(string resource) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
 
 			AclEntry[] entries = _retrieveEntriesForResource(resource);
 			return _deleteEntries(entries);
@@ -131,8 +207,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="subject"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="subject"/> is empty.</exception>
 		public bool DeleteEntriesForSubject(string subject) {
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
 
 			AclEntry[] entries = _retrieveEntriesForSubject(subject);
 			return _deleteEntries(entries);
@@ -147,11 +230,25 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/> or <paramref name="newName"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/> or <paramref name="newName"/> are empty.</exception>
 		public bool RenameResource(string resource, string newName) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
 
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			return _renameResource(resource, newName);
 		}
@@ -172,8 +269,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="resource"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="resource"/> is empty.</exception>
 		public AclEntry[] RetrieveEntriesForResource(string resource) {
-			if(resource == null) throw new ArgumentNullException("resource");
-			if(resource.Length == 0) throw new ArgumentException("Resource cannot be empty", "resource");
+			if(resource == null)
+			{
+				throw new ArgumentNullException("resource");
+			}
+
+			if(resource.Length == 0)
+			{
+				throw new ArgumentException("Resource cannot be empty", "resource");
+			}
 
 			return _retrieveEntriesForResource(resource);
 		}
@@ -186,8 +290,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="subject"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="subject"/> is empty.</exception>
 		public AclEntry[] RetrieveEntriesForSubject(string subject) {
-			if(subject == null) throw new ArgumentNullException("subject");
-			if(subject.Length == 0) throw new ArgumentException("Subject cannot be empty", "subject");
+			if(subject == null)
+			{
+				throw new ArgumentNullException("subject");
+			}
+
+			if(subject.Length == 0)
+			{
+				throw new ArgumentException("Subject cannot be empty", "subject");
+			}
 
 			return _retrieveEntriesForSubject(subject);
 		}
@@ -198,7 +309,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="entries">The ACL entries.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="entries"/> is <c>null</c>.</exception>
 		public void InitializeData(AclEntry[] entries) {
-			if(entries == null) throw new ArgumentNullException("entries");
+			if(entries == null)
+			{
+				throw new ArgumentNullException("entries");
+			}
 		}
 
 		/// <summary>

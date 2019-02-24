@@ -35,7 +35,10 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		protected IHostV30 MockHost() {
-			if(!Directory.Exists(testDir)) Directory.CreateDirectory(testDir);
+			if(!Directory.Exists(testDir))
+			{
+				Directory.CreateDirectory(testDir);
+			}
 
 			IHostV30 host = mocks.DynamicMock<IHostV30>();
 			Expect.Call(host.GetSettingValue(SettingName.PublicDirectory)).Return(testDir).Repeat.Any();
@@ -66,27 +69,56 @@ namespace ScrewTurn.Wiki.Tests {
 			return MockProvider(new List<AclEntry>());
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
-		[TestCase("*", ExpectedException = typeof(ArgumentException))]
-		public void CheckActionForGlobals_InvalidAction(string a) {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForGlobals(a, "User", new string[0]);
+		[TestCase(null)]
+		public void CheckActionForGlobals_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForGlobals(a, "User", new string[0]);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void CheckActionForGlobals_InvalidUser(string u) {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageAccounts, u, new string[0]);
+		[TestCase("")]
+		[TestCase("Blah")]
+		[TestCase("*")]
+		public void CheckActionForGlobals_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForGlobals(a, "User", new string[0]);
+			});
+		}
+
+		[TestCase(null)]
+		public void CheckActionForGlobals_InvalidUser_ShouldThrowArgumentNullException(string u)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageAccounts, u, new string[0]);
+			});
+		}
+
+		[TestCase("")]
+		public void CheckActionForGlobals_InvalidUser_ShouldThrowArgumentException(string u)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageAccounts, u, new string[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void CheckActionForGlobals_NullGroups() {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageAccounts, "User", null);
+		public void CheckActionForGlobals_NullGroups()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageAccounts, "User", null);
+			});
 		}
 
 		[Test]
@@ -206,27 +238,56 @@ namespace ScrewTurn.Wiki.Tests {
 			AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.CreatePages, "User", new string[0]);
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
-		[TestCase("*", ExpectedException = typeof(ArgumentException))]
-		public void CheckActionForNamespace_InvalidAction(string a) {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForNamespace(new NamespaceInfo("NS", null, null), a, "User", new string[0]);
+		[TestCase(null)]
+		public void CheckActionForNamespace_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForNamespace(new NamespaceInfo("NS", null, null), a, "User", new string[0]);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void CheckActionForNamespace_InvalidUser(string u) {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForNamespace(new NamespaceInfo("NS", null, null), Actions.ForNamespaces.ManagePages, u, new string[0]);
+		[TestCase("")]
+		[TestCase("Blah")]
+		[TestCase("*")]
+		public void CheckActionForNamespace_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForNamespace(new NamespaceInfo("NS", null, null), a, "User", new string[0]);
+			});
+		}
+
+		[TestCase(null)]
+		public void CheckActionForNamespace_InvalidUser_ShouldThrowArgumentNullException(string u)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForNamespace(new NamespaceInfo("NS", null, null), Actions.ForNamespaces.ManagePages, u, new string[0]);
+			});
+		}
+
+		[TestCase("")]
+		public void CheckActionForNamespace_InvalidUser_ShouldThrowArgumentException(string u)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForNamespace(new NamespaceInfo("NS", null, null), Actions.ForNamespaces.ManagePages, u, new string[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void CheckActionForNamespace_NullGroups() {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForNamespace(new NamespaceInfo("NS", null, null), Actions.ForNamespaces.ManagePages, "User", null);
+		public void CheckActionForNamespace_NullGroups()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForNamespace(new NamespaceInfo("NS", null, null), Actions.ForNamespaces.ManagePages, "User", null);
+			});
 		}
 
 		[Test]
@@ -573,33 +634,65 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void CheckActionForPage_NullPage() {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForPage(null, Actions.ForPages.DeleteAttachments, "User", new string[0]);
+		public void CheckActionForPage_NullPage()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForPage(null, Actions.ForPages.DeleteAttachments, "User", new string[0]);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
-		[TestCase("*", ExpectedException = typeof(ArgumentException))]
-		public void CheckActionForPage_InvalidAction(string a) {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), a, "User", new string[0]);
+		[TestCase(null)]
+		public void CheckActionForPage_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), a, "User", new string[0]);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void CheckActionForPage_InvalidUser(string u) {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments, u, new string[0]);
+		[TestCase("")]
+		[TestCase("Blah")]
+		[TestCase("*")]
+		public void CheckActionForPage_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), a, "User", new string[0]);
+			});
+		}
+
+		[TestCase(null)]
+		public void CheckActionForPage_InvalidUser_ShouldThrowArgumentNullException(string u)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments, u, new string[0]);
+			});
+		}
+
+		[TestCase("")]
+		public void CheckActionForPage_InvalidUser_ShouldThrowArgumentException(string u)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments, u, new string[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void CheckActionForPage_NullGroups() {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments, "User", null);
+		public void CheckActionForPage_NullGroups()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForPage(new PageInfo("Page", null, DateTime.Now), Actions.ForPages.DeleteAttachments, "User", null);
+			});
 		}
 
 		[Test]
@@ -1148,40 +1241,85 @@ namespace ScrewTurn.Wiki.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void CheckActionForDirectory_NullProvider() {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForDirectory(null, "/Dir", Actions.ForDirectories.CreateDirectories, "User", new string[0]);
+		public void CheckActionForDirectory_NullProvider()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForDirectory(null, "/Dir", Actions.ForDirectories.CreateDirectories, "User", new string[0]);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void CheckActionForDirectory_InvalidDirectory(string d) {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForDirectory(MockFilesProvider(), d, Actions.ForDirectories.CreateDirectories, "User", new string[0]);
+		[TestCase(null)]
+		public void CheckActionForDirectory_InvalidDirectory_ShouldThrowArgumentNullException(string d)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForDirectory(MockFilesProvider(), d, Actions.ForDirectories.CreateDirectories, "User", new string[0]);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		[TestCase("Blah", ExpectedException = typeof(ArgumentException))]
-		[TestCase("*", ExpectedException = typeof(ArgumentException))]
-		public void CheckActionForDirectory_InvalidAction(string a) {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForDirectory(MockFilesProvider(), "/Dir", a, "User", new string[0]);
+		[TestCase("")]
+		public void CheckActionForDirectory_InvalidDirectory_ShouldThrowArgumentException(string d)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForDirectory(MockFilesProvider(), d, Actions.ForDirectories.CreateDirectories, "User", new string[0]);
+			});
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
-		public void CheckActionForDirectory_InvalidUser(string u) {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForDirectory(MockFilesProvider(), "/Dir", Actions.ForDirectories.CreateDirectories, u, new string[0]);
+		[TestCase(null)]
+		public void CheckActionForDirectory_InvalidAction_ShouldThrowArgumentNullException(string a)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForDirectory(MockFilesProvider(), "/Dir", a, "User", new string[0]);
+			});
+		}
+
+		[TestCase("")]
+		[TestCase("Blah")]
+		[TestCase("*")]
+		public void CheckActionForDirectory_InvalidAction_ShouldThrowArgumentException(string a)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForDirectory(MockFilesProvider(), "/Dir", a, "User", new string[0]);
+			});
+		}
+
+		[TestCase(null)]
+		public void CheckActionForDirectory_InvalidUser_ShouldThrowArgumentNullException(string u)
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForDirectory(MockFilesProvider(), "/Dir", Actions.ForDirectories.CreateDirectories, u, new string[0]);
+			});
+		}
+
+		[TestCase("")]
+		public void CheckActionForDirectory_InvalidUser_ShouldThrowArgumentException(string u)
+		{
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForDirectory(MockFilesProvider(), "/Dir", Actions.ForDirectories.CreateDirectories, u, new string[0]);
+			});
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void CheckActionForDirectory_NullGroups() {
-			Collectors.SettingsProvider = MockProvider();
-			AuthChecker.CheckActionForDirectory(MockFilesProvider(), "/Dir", Actions.ForDirectories.CreateDirectories, "User", null);
+		public void CheckActionForDirectory_NullGroups()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Collectors.SettingsProvider = MockProvider();
+				AuthChecker.CheckActionForDirectory(MockFilesProvider(), "/Dir", Actions.ForDirectories.CreateDirectories, "User", null);
+			});
 		}
 
 		[Test]

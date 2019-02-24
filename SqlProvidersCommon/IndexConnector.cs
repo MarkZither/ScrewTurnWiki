@@ -34,13 +34,40 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		public IndexConnector(GetWordFetcher getWordFetcher, GetSize getSize, GetCount getCount, ClearIndex clearIndex,
 			DeleteDataForDocument deleteData, SaveDataForDocument saveData, TryFindWord tryFindWord) {
 
-			if(getWordFetcher == null) throw new ArgumentNullException("getWordFetcher");
-			if(getSize == null) throw new ArgumentNullException("getSize");
-			if(getCount == null) throw new ArgumentNullException("getCount");
-			if(clearIndex == null) throw new ArgumentNullException("clearIndex");
-			if(deleteData == null) throw new ArgumentNullException("deleteData");
-			if(saveData == null) throw new ArgumentNullException("saveData");
-			if(tryFindWord == null) throw new ArgumentNullException("tryFindWord");
+			if(getWordFetcher == null)
+			{
+				throw new ArgumentNullException("getWordFetcher");
+			}
+
+			if(getSize == null)
+			{
+				throw new ArgumentNullException("getSize");
+			}
+
+			if(getCount == null)
+			{
+				throw new ArgumentNullException("getCount");
+			}
+
+			if(clearIndex == null)
+			{
+				throw new ArgumentNullException("clearIndex");
+			}
+
+			if(deleteData == null)
+			{
+				throw new ArgumentNullException("deleteData");
+			}
+
+			if(saveData == null)
+			{
+				throw new ArgumentNullException("saveData");
+			}
+
+			if(tryFindWord == null)
+			{
+				throw new ArgumentNullException("tryFindWord");
+			}
 
 			this.getWordFetcher = getWordFetcher;
 			this.getSize = getSize;

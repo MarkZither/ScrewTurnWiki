@@ -19,8 +19,15 @@ namespace ScrewTurn.Wiki {
 		/// <returns>True if the Redirection is added, false otherwise.</returns>
 		/// <remarks>The method prevents circular and multi-level redirection.</remarks>
 		public static void AddRedirection(PageInfo source, PageInfo destination) {
-			if(source == null) throw new ArgumentNullException("source");
-			if(destination == null) throw new ArgumentNullException("destination");
+			if(source == null)
+			{
+				throw new ArgumentNullException("source");
+			}
+
+			if(destination == null)
+			{
+				throw new ArgumentNullException("destination");
+			}
 
 			Cache.Provider.AddRedirection(source.FullName, destination.FullName);
 		}
@@ -31,11 +38,20 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The source Page.</param>
 		/// <returns>The destination Page, or null.</returns>
 		public static PageInfo GetDestination(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			string destination = Cache.Provider.GetRedirectionDestination(page.FullName);
-			if(string.IsNullOrEmpty(destination)) return null;
-			else return Pages.FindPage(destination);
+			if(string.IsNullOrEmpty(destination))
+			{
+				return null;
+			}
+			else
+			{
+				return Pages.FindPage(destination);
+			}
 		}
 
 		/// <summary>
@@ -44,7 +60,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The Page to wipe-out.</param>
 		/// <remarks>This method is useful when removing a Page.</remarks>
 		public static void WipePageOut(PageInfo page) {
-			if(page == null) throw new ArgumentNullException("page");
+			if(page == null)
+			{
+				throw new ArgumentNullException("page");
+			}
 
 			Cache.Provider.RemovePageFromRedirections(page.FullName);
 		}

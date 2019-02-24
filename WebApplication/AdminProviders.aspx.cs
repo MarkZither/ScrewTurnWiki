@@ -14,7 +14,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageProviders(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageProviders(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			if(!Page.IsPostBack) {
 				// Load providers and related data
@@ -96,7 +99,10 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The update status.</returns>
 		private string GetUpdateStatus(ComponentInformation info) {
 			if(!Settings.DisableAutomaticVersionCheck) {
-				if(string.IsNullOrEmpty(info.UpdateUrl)) return "n/a";
+				if(string.IsNullOrEmpty(info.UpdateUrl))
+				{
+					return "n/a";
+				}
 				else {
 					string newVersion = null;
 					string newAssemblyUrl = null;
@@ -112,10 +118,16 @@ namespace ScrewTurn.Wiki {
 					else if(status == UpdateStatus.UpToDate) {
 						return "<span class=\"resultok\">" + Properties.Messages.UpToDate + "</span>";
 					}
-					else throw new NotSupportedException();
+					else
+					{
+						throw new NotSupportedException();
+					}
 				}
 			}
-			else return "n/a";
+			else
+			{
+				return "n/a";
+			}
 		}
 
 		/// <summary>
@@ -137,7 +149,10 @@ namespace ScrewTurn.Wiki {
 				IProviderV30 provider = GetCurrentProvider(out enabled, out canDisable);
 
 				// Cannot disable the provider that handles the default page of the root namespace
-				if(Pages.FindPage(Settings.DefaultPage).Provider == provider) canDisable = false;
+				if(Pages.FindPage(Settings.DefaultPage).Provider == provider)
+				{
+					canDisable = false;
+				}
 
 				pnlProviderDetails.Visible = true;
 				lblProviderName.Text = provider.Information.Name + " (" + provider.Information.Version + ")";
@@ -270,8 +285,14 @@ namespace ScrewTurn.Wiki {
 			int count = updater.UpdateAll();
 
 			lblAutoUpdateResult.CssClass = "resultok";
-			if(count > 0) lblAutoUpdateResult.Text = Properties.Messages.ProvidersUpdated;
-			else lblAutoUpdateResult.Text = Properties.Messages.NoProvidersToUpdate;
+			if(count > 0)
+			{
+				lblAutoUpdateResult.Text = Properties.Messages.ProvidersUpdated;
+			}
+			else
+			{
+				lblAutoUpdateResult.Text = Properties.Messages.NoProvidersToUpdate;
+			}
 
 			rptProviders.DataBind();
 		}
@@ -343,7 +364,11 @@ namespace ScrewTurn.Wiki {
 			string file = upDll.FileName;
 
 			string ext = System.IO.Path.GetExtension(file);
-			if(ext != null) ext = ext.ToLowerInvariant();
+			if(ext != null)
+			{
+				ext = ext.ToLowerInvariant();
+			}
+
 			if(ext != ".dll") {
 				lblUploadResult.CssClass = "resulterror";
 				lblUploadResult.Text = Properties.Messages.VoidOrInvalidFile;
@@ -354,8 +379,14 @@ namespace ScrewTurn.Wiki {
 
 			string[] asms = Settings.Provider.ListPluginAssemblies();
 			if(Array.Find<string>(asms, delegate(string v) {
-				if(v.Equals(file)) return true;
-				else return false;
+				if(v.Equals(file))
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
 			}) != null) {
 				// DLL already exists
 				lblUploadResult.CssClass = "resulterror";

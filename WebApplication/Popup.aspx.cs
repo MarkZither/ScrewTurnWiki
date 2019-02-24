@@ -24,13 +24,19 @@ namespace ScrewTurn.Wiki {
 			l.Text = Tools.GetIncludes(DetectNamespace());
 			Page.Header.Controls.AddAt(0, l);
 
-			if(string.IsNullOrEmpty(Request["Feature"])) return;
+			if(string.IsNullOrEmpty(Request["Feature"]))
+			{
+				return;
+			}
 
 			// Get instance of Current Page, if any
 			if(!string.IsNullOrEmpty(Request["CurrentPage"])) {
 				currentPage = Pages.FindPage(Request["CurrentPage"]);
 			}
-			else currentPage = null;
+			else
+			{
+				currentPage = null;
+			}
 
 			if(!Page.IsPostBack) {
 
@@ -52,7 +58,11 @@ namespace ScrewTurn.Wiki {
 
 				// Load namespaces
 				string currentNamespace = DetectNamespace();
-				if(string.IsNullOrEmpty(currentNamespace)) currentNamespace = "";
+				if(string.IsNullOrEmpty(currentNamespace))
+				{
+					currentNamespace = "";
+				}
+
 				lstNamespace.Items.Clear();
 				lstNamespace.Items.Add(new ListItem("<root>", ""));
 				foreach(NamespaceInfo ns in Pages.GetNamespaces()) {
@@ -128,7 +138,10 @@ namespace ScrewTurn.Wiki {
 			}
 
 			string currentNamespace = DetectNamespace();
-			if(string.IsNullOrEmpty(currentNamespace)) currentNamespace = "";
+			if(string.IsNullOrEmpty(currentNamespace))
+			{
+				currentNamespace = "";
+			}
 
 			StringBuilder sb = new StringBuilder(100);
 			sb.Append("<script type=\"text/javascript\">\r\n<!--\r\n");
@@ -149,12 +162,19 @@ namespace ScrewTurn.Wiki {
 
 		protected List<TreeElement> ctPages_Populate(object sender, PopulateEventArgs e) {
 			string currentNamespace = DetectNamespace();
-			if(string.IsNullOrEmpty(currentNamespace)) currentNamespace = null;
+			if(string.IsNullOrEmpty(currentNamespace))
+			{
+				currentNamespace = null;
+			}
 
 			List<TreeElement> result = new List<TreeElement>(100);
 			foreach(PageInfo pi in Pages.GetPages(Pages.FindNamespace(lstNamespace.SelectedValue))) {
 				string pageNamespace = NameTools.GetNamespace(pi.FullName);
-				if(string.IsNullOrEmpty(pageNamespace)) pageNamespace = null;
+				if(string.IsNullOrEmpty(pageNamespace))
+				{
+					pageNamespace = null;
+				}
+
 				PageContent cont = Content.GetPageContent(pi, true);
 				string formattedTitle = FormattingPipeline.PrepareTitle(cont.Title, false, FormattingContext.Other, pi);
 				string onClickJavascript = "javascript:";

@@ -25,7 +25,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="capacity">The initial capacity.</param>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="capacity"/> is <c>null</c>.</exception>
 		public SortedBasicWordInfoSet(int capacity) {
-			if(capacity <= 0) throw new ArgumentOutOfRangeException("Invalid capacity", "capacity");
+			if(capacity <= 0)
+			{
+				throw new ArgumentOutOfRangeException("Invalid capacity", "capacity");
+			}
 
 			items = new List<BasicWordInfo>(capacity);
 		}
@@ -60,7 +63,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 				items.Insert(~idx, item);
 				return true;
 			}
-			else return false;
+			else
+			{
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -70,7 +76,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns><c>true</c> if the set contains the specified item, <c>false</c> otherwise.</returns>
 		/// <remarks>The operation is <b>O(log n)</b>, where <b>n</b> is the number of items in the set.</remarks>
 		public bool Contains(BasicWordInfo item) {
-			if(items.Count == 0) return false;
+			if(items.Count == 0)
+			{
+				return false;
+			}
 
 			return items.BinarySearch(item) >= 0;
 		}
@@ -82,7 +91,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns><c>true</c> if the item is removed, <c>false</c> otherwise.</returns>
 		/// <remarks>The operation is <b>O(n)</b>, where <b>n</b> is the number of items in the set.</remarks>
 		public bool Remove(BasicWordInfo item) {
-			if(items.Count == 0) return false;
+			if(items.Count == 0)
+			{
+				return false;
+			}
 
 			// Remove and RemoveAt are both O(n)
 			return items.Remove(item);
@@ -120,7 +132,11 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="IndexOutOfRangeException">If <paramref name="index"/> is outside the bounds of the collection.</exception>
 		public BasicWordInfo this[int index] {
 			get {
-				if(index < 0 || index > items.Count - 1) throw new IndexOutOfRangeException("Index should be greater than or equal to zero and less than the number of items in the set");
+				if(index < 0 || index > items.Count - 1)
+				{
+					throw new IndexOutOfRangeException("Index should be greater than or equal to zero and less than the number of items in the set");
+				}
+
 				return items[index];
 			}
 		}
@@ -133,7 +149,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 			StringBuilder sb = new StringBuilder(50);
 			for(int i = 0; i < items.Count; i++) {
 				sb.AppendFormat("{0}", items[i]);
-				if(i != items.Count - 1) sb.Append(", ");
+				if(i != items.Count - 1)
+				{
+					sb.Append(", ");
+				}
 			}
 			return sb.ToString();
 		}

@@ -66,8 +66,14 @@ namespace ScrewTurn.Wiki {
 		public static NavigationPath Find(string fullName) {
 			List<NavigationPath> allPaths = GetAllNavigationPaths();
 			int idx = allPaths.BinarySearch(new NavigationPath(fullName, null), new NavigationPathComparer());
-			if(idx >= 0) return allPaths[idx];
-			else return null;
+			if(idx >= 0)
+			{
+				return allPaths[idx];
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -82,13 +88,26 @@ namespace ScrewTurn.Wiki {
 			string namespaceName = nspace != null ? nspace.Name : null;
 			string fullName = NameTools.GetFullName(namespaceName, name);
 
-			if(Exists(fullName)) return false;
+			if(Exists(fullName))
+			{
+				return false;
+			}
 
-			if(provider == null) provider = Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			if(provider == null)
+			{
+				provider = Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
+			}
 
 			NavigationPath newPath = provider.AddNavigationPath(namespaceName, name, pages.ToArray());
-			if(newPath != null) Log.LogEntry("Navigation Path " + fullName + " added", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Creation failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername);
+			if(newPath != null)
+			{
+				Log.LogEntry("Navigation Path " + fullName + " added", EntryType.General, Log.SystemUsername);
+			}
+			else
+			{
+				Log.LogEntry("Creation failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername);
+			}
+
 			return newPath != null;
 		}
 
@@ -99,11 +118,21 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the path is removed, <c>false</c> otherwise.</returns>
 		public static bool RemoveNavigationPath(string fullName) {
 			NavigationPath path = Find(fullName);
-			if(path == null) return false;
+			if(path == null)
+			{
+				return false;
+			}
 
 			bool done = path.Provider.RemoveNavigationPath(path);
-			if(done) Log.LogEntry("Navigation Path " + fullName + " removed", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Deletion failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername);
+			if(done)
+			{
+				Log.LogEntry("Navigation Path " + fullName + " removed", EntryType.General, Log.SystemUsername);
+			}
+			else
+			{
+				Log.LogEntry("Deletion failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername);
+			}
+
 			return done;
 		}
 
@@ -115,11 +144,21 @@ namespace ScrewTurn.Wiki {
 		/// <returns><c>true</c> if the path is modified, <c>false</c> otherwise.</returns>
 		public static bool ModifyNavigationPath(string fullName, List<PageInfo> pages) {
 			NavigationPath path = Find(fullName);
-			if(path == null) return false;
+			if(path == null)
+			{
+				return false;
+			}
 
 			NavigationPath newPath = path.Provider.ModifyNavigationPath(path, pages.ToArray());
-			if(newPath != null) Log.LogEntry("Navigation Path " + fullName + " modified", EntryType.General, Log.SystemUsername);
-			else Log.LogEntry("Modification failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername);
+			if(newPath != null)
+			{
+				Log.LogEntry("Navigation Path " + fullName + " modified", EntryType.General, Log.SystemUsername);
+			}
+			else
+			{
+				Log.LogEntry("Modification failed for Navigation Path " + fullName, EntryType.Error, Log.SystemUsername);
+			}
+
 			return newPath != null;
 		}
 

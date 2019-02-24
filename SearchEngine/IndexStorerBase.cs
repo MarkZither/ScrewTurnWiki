@@ -42,7 +42,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="index">The index to manage.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="index"/> is <c>null</c>.</exception>
 		public IndexStorerBase(IInMemoryIndex index) {
-			if(index == null) throw new ArgumentNullException("index");
+			if(index == null)
+			{
+				throw new ArgumentNullException("index");
+			}
 
 			this.index = index;
 			indexChangedHandler = new EventHandler<IndexChangedEventArgs>(IndexChangedHandler);
@@ -129,7 +132,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="e">The event arguments.</param>
 		protected void IndexChangedHandler(object sender, IndexChangedEventArgs e) {
 			lock(this) {
-				if(disposed) return;
+				if(disposed)
+				{
+					return;
+				}
 
 				switch(e.Change) {
 					case IndexChangeType.IndexCleared:
@@ -142,7 +148,11 @@ namespace ScrewTurn.Wiki.SearchEngine {
 						}
 						break;
 					case IndexChangeType.DocumentRemoved:
-						if(!dataCorrupted) DeleteData(e.ChangeData, e.State);
+						if(!dataCorrupted)
+						{
+							DeleteData(e.ChangeData, e.State);
+						}
+
 						break;
 					default:
 						throw new NotSupportedException("Invalid Change Type");
@@ -199,7 +209,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 					m.DocumentID == mapping.DocumentID &&
 					m.FirstCharIndex == mapping.FirstCharIndex &&
 					m.WordIndex == mapping.WordIndex &&
-					m.Location == mapping.Location) return true;
+					m.Location == mapping.Location)
+				{
+					return true;
+				}
 			}
 			return false;
 		}
@@ -212,7 +225,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns><c>true</c> if the word is contained in the list, <c>false</c> orherwise.</returns>
 		protected static bool Find(DumpedWord word, IEnumerable<DumpedWord> list) {
 			foreach(DumpedWord w in list) {
-				if(w.ID == word.ID && w.Text == word.Text) return true;
+				if(w.ID == word.ID && w.Text == word.Text)
+				{
+					return true;
+				}
 			}
 			return false;
 		}

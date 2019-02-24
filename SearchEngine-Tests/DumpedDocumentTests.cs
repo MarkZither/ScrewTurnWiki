@@ -21,9 +21,8 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_WithDocument_NullDocument() {
-			DumpedDocument ddoc = new DumpedDocument(null);
+            Assert.That(() => new DumpedDocument(null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -37,24 +36,38 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(doc.DateTime, ddoc.DateTime, "Wrong date/time");
 		}
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("")]
 		public void Constructor_WithParameters_InvalidName(string name) {
-			DumpedDocument ddoc = new DumpedDocument(10, name, "Title", "doc", DateTime.Now);
-		}
+            Assert.That(() => new DumpedDocument(10, name, "Title", "doc", DateTime.Now), Throws.ArgumentException);
+        }
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+        [TestCase(null)]
+        public void Constructor_WithParameters_NullName(string name)
+        {
+            Assert.That(() => new DumpedDocument(10, name, "Title", "doc", DateTime.Now), Throws.ArgumentNullException);
+        }
+
+		[TestCase("")]
 		public void Constructor_WithParameters_InvalidTitle(string title) {
-			DumpedDocument ddoc = new DumpedDocument(1, "name", title, "doc", DateTime.Now);
-		}
+            Assert.That(() => new DumpedDocument(1, "name", title, "doc", DateTime.Now), Throws.ArgumentException);
+        }
 
-		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
-		[TestCase("", ExpectedException = typeof(ArgumentException))]
+        [TestCase(null)]
+        public void Constructor_WithParameters_NullTitle(string title)
+        {
+            Assert.That(() => new DumpedDocument(1, "name", title, "doc", DateTime.Now), Throws.ArgumentNullException);
+        }
+
+		[TestCase("")]
 		public void Constructor_WithParameters_InvalidTypeTag(string typeTag) {
-			DumpedDocument ddoc = new DumpedDocument(1, "name", "Title", typeTag, DateTime.Now);
-		}
+            Assert.That(() => new DumpedDocument(1, "name", "Title", typeTag, DateTime.Now), Throws.ArgumentException);
+        }
 
-	}
+        [TestCase(null)]
+        public void Constructor_WithParameters_NullTypeTag(string typeTag)
+        {
+            Assert.That(() => new DumpedDocument(1, "name", "Title", typeTag, DateTime.Now), Throws.ArgumentNullException);
+        }
+    }
 
 }

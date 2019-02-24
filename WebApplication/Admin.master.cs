@@ -142,10 +142,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can manage categories in at least one namespace, <c>false</c> otherwise.</returns>
 		public static bool CanManageCategories(string username, string[] groups) {
-			if(AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManageCategories, username, groups)) return true;
+			if(AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManageCategories, username, groups))
+			{
+				return true;
+			}
 
 			foreach(NamespaceInfo ns in Pages.GetNamespaces()) {
-				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManageCategories, username, groups)) return true;
+				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManageCategories, username, groups))
+				{
+					return true;
+				}
 			}
 
 			return false;
@@ -191,10 +197,16 @@ namespace ScrewTurn.Wiki {
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the the user can manage pages in at least one namespace, <c>false</c> otherwise.</returns>
 		public static bool CanManagePages(string username, string[] groups) {
-			if(AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManagePages, username, groups)) return true;
+			if(AuthChecker.CheckActionForNamespace(null, Actions.ForNamespaces.ManagePages, username, groups))
+			{
+				return true;
+			}
 
 			foreach(NamespaceInfo ns in Pages.GetNamespaces()) {
-				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManagePages, username, groups)) return true;
+				if(AuthChecker.CheckActionForNamespace(ns, Actions.ForNamespaces.ManagePages, username, groups))
+				{
+					return true;
+				}
 			}
 
 			return false;

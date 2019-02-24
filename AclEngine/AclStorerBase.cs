@@ -31,7 +31,10 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <param name="aclManager">The instance of the ACL Manager to handle.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="aclManager"/> is <c>null</c>.</exception>
 		public AclStorerBase(IAclManager aclManager) {
-			if(aclManager == null) throw new ArgumentNullException("aclManager");
+			if(aclManager == null)
+			{
+				throw new ArgumentNullException("aclManager");
+			}
 
 			this.aclManager = aclManager;
 
@@ -46,9 +49,18 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <param name="sender">The sender.</param>
 		/// <param name="e">The event arguments.</param>
 		private void aclManager_AclChanged(object sender, AclChangedEventArgs e) {
-			if(e.Change == Change.EntryDeleted) DeleteEntries(e.Entries);
-			else if(e.Change == Change.EntryStored) StoreEntries(e.Entries);
-			else throw new NotSupportedException("Change type not supported");
+			if(e.Change == Change.EntryDeleted)
+			{
+				DeleteEntries(e.Entries);
+			}
+			else if(e.Change == Change.EntryStored)
+			{
+				StoreEntries(e.Entries);
+			}
+			else
+			{
+				throw new NotSupportedException("Change type not supported");
+			}
 		}
 
 		/// <summary>

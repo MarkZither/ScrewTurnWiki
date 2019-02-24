@@ -46,7 +46,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The page to get the content of.</param>
 		/// <returns>The page content, or <c>null</c>.</returns>
 		public static PageContent GetPageContent(PageInfo page) {
-			if(page == null) return null;
+			if(page == null)
+			{
+				return null;
+			}
+
 			return Provider.GetPageContent(page);
 		}
 
@@ -56,7 +60,11 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The page to get the formatted content of.</param>
 		/// <returns>The formatted page content, or <c>null</c>.</returns>
 		public static string GetFormattedPageContent(PageInfo page) {
-			if(page == null) return null;
+			if(page == null)
+			{
+				return null;
+			}
+
 			return Provider.GetFormattedPageContent(page);
 		}
 

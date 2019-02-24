@@ -36,8 +36,11 @@ namespace ScrewTurn.Wiki {
 
 				bool canView = AuthChecker.CheckActionForPage(page, Actions.ForPages.ReadPage,
 					SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames());
-				if(!canView) UrlTools.Redirect("AccessDenied.aspx");
-            }
+				if(!canView)
+				{
+					UrlTools.Redirect("AccessDenied.aspx");
+				}
+			}
             else {
                 lblTitle.Text = Properties.Messages.PageNotFound;
 				return;
@@ -51,16 +54,27 @@ namespace ScrewTurn.Wiki {
 				lstRev2.Items.Clear();
 				lstRev2.Items.Add(new ListItem(Properties.Messages.Current, "Current"));
 				if(Request["Rev2"] != null && Request["Rev2"].Equals(lstRev2.Items[0].Value))
+				{
 					lstRev2.SelectedIndex = 0;
+				}
+
 				for(int i = 0; i < revisions.Count; i++) {
 					lstRev1.Items.Add(new ListItem(revisions[i].ToString(), revisions[i].ToString()));
 					lstRev2.Items.Add(new ListItem(revisions[i].ToString(), revisions[i].ToString()));
 					if(Request["Rev1"] != null && Request["Rev1"].Equals(lstRev1.Items[i].Value))
+					{
 						lstRev1.SelectedIndex = i;
+					}
+
 					if(Request["Rev2"] != null && Request["Rev2"].Equals(lstRev2.Items[i + 1].Value))
+					{
 						lstRev2.SelectedIndex = i + 1;
+					}
 				}
-				if(revisions.Count == 0) btnCompare.Enabled = false;
+				if(revisions.Count == 0)
+				{
+					btnCompare.Enabled = false;
+				}
 			}
 
 			PrintHistory();
@@ -70,7 +84,10 @@ namespace ScrewTurn.Wiki {
 		/// Prints the history.
 		/// </summary>
         public void PrintHistory() {
-            if(page == null) return;
+            if(page == null)
+			{
+				return;
+			}
 
 			StringBuilder sb = new StringBuilder();
 
@@ -94,8 +111,11 @@ namespace ScrewTurn.Wiki {
 			}
 			else {
 				int rev = -1;
-				if(!int.TryParse(Request["Revision"], out rev)) UrlTools.Redirect(page.FullName + Settings.PageExtension);
-				
+				if(!int.TryParse(Request["Revision"], out rev))
+				{
+					UrlTools.Redirect(page.FullName + Settings.PageExtension);
+				}
+
 				List<int> backups = Pages.GetBackups(page);
 				if(!backups.Contains(rev)) {
 					UrlTools.Redirect(page.FullName + Settings.PageExtension);
@@ -157,7 +177,11 @@ namespace ScrewTurn.Wiki {
 
 		protected void rptHistory_ItemCommand(object sender, CommandEventArgs e) {
 			if(e.CommandName == "Rollback") {
-				if(!canRollback) return;
+				if(!canRollback)
+				{
+					return;
+				}
+
 				int rev = int.Parse(e.CommandArgument as string);
 
 				Log.LogEntry("Page rollback requested for " + page.FullName + " to rev. " + rev.ToString(), EntryType.General, SessionFacade.GetCurrentUsername());
@@ -190,8 +214,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="canRollback">A value indicating whether the current user can rollback the page.</param>
 		public RevisionRow(int revision, PageContent content, bool canRollback) {
 			this.page = content.PageInfo.FullName;
-			if(revision == -1) this.revision = Properties.Messages.Current;
-			else this.revision = revision.ToString();
+			if(revision == -1)
+			{
+				this.revision = Properties.Messages.Current;
+			}
+			else
+			{
+				this.revision = revision.ToString();
+			}
+
 			title = FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, content.PageInfo);
 			savedOn = Preferences.AlignWithTimezone(content.LastModified).ToString(Settings.DateTimeFormat);
 			savedBy = Users.UserLink(content.User);

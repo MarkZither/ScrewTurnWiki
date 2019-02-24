@@ -27,16 +27,28 @@ namespace ScrewTurn.Wiki {
 				sb.Append("// -->\r\n</script>");
 				lblStrings.Text = sb.ToString();
 
-				if(ViewState["ToolbarVisible"] == null) ViewState["ToolbarVisible"] = true;
+				if(ViewState["ToolbarVisible"] == null)
+				{
+					ViewState["ToolbarVisible"] = true;
+				}
 
 				InitToolbar();
 			}
 
-            if(mlvEditor.ActiveViewIndex == 1) inWYSIWYG = true;
-            else inWYSIWYG = false;
+            if(mlvEditor.ActiveViewIndex == 1)
+			{
+				inWYSIWYG = true;
+			}
+			else
+			{
+				inWYSIWYG = false;
+			}
 
 			//SelectTab(0);
-			if(ViewState["Tab"] != null) SelectTab((int)ViewState["Tab"]);
+			if(ViewState["Tab"] != null)
+			{
+				SelectTab((int)ViewState["Tab"]);
+			}
 
 			LoadSnippets();
 
@@ -47,7 +59,10 @@ namespace ScrewTurn.Wiki {
 			if(!ToolbarVisible) {
 				lblToolbarInit.Text = "<script type=\"text/javascript\">\n<!--\nHideToolbarButtons();\n// -->\n</script>";
 			}
-			else lblToolbarInit.Text = "";
+			else
+			{
+				lblToolbarInit.Text = "";
+			}
 		}
 
 		#region Tabs Management
@@ -94,7 +109,10 @@ namespace ScrewTurn.Wiki {
 			}
 			ViewState["Tab"] = index;
 
-			if(SelectedTabChanged != null) SelectedTabChanged(this, new SelectedTabChangedEventArgs());
+			if(SelectedTabChanged != null)
+			{
+				SelectedTabChanged(this, new SelectedTabChangedEventArgs());
+			}
 		}
 
 		/// <summary>
@@ -135,8 +153,10 @@ namespace ScrewTurn.Wiki {
             //added for WYSIWYG
             //if last view was WYSIWYG take text from WYSIWYG to Markup
             if(inWYSIWYG)
-                txtMarkup.Text = ReverseFormatter.ReverseFormat(lblWYSIWYG.Text);
-            //end
+			{
+				txtMarkup.Text = ReverseFormatter.ReverseFormat(lblWYSIWYG.Text);
+			}
+			//end
 		}
 
         protected void btnVisual_Click(object sender, EventArgs e) {
@@ -217,7 +237,11 @@ namespace ScrewTurn.Wiki {
 						label, s.Name, isPositional ? "" : "\\r\\n", GetParametersPlaceHolders(parameters, isPositional));
 				}
 			}
-			if(sb.Length == 0) sb.Append("<i>" + Properties.Messages.NoSnippets + "</i>");
+			if(sb.Length == 0)
+			{
+				sb.Append("<i>" + Properties.Messages.NoSnippets + "</i>");
+			}
+
 			lblSnippets.Text = sb.ToString();
 		}
 
@@ -229,8 +253,15 @@ namespace ScrewTurn.Wiki {
 		private static bool IsSnippetPositional(string[] parameters) {
 			int dummy;
 			for(int i = 0; i < parameters.Length; i++) {
-				if(!int.TryParse(parameters[i], out dummy)) return false;
-				if(dummy != i + 1) return false;
+				if(!int.TryParse(parameters[i], out dummy))
+				{
+					return false;
+				}
+
+				if(dummy != i + 1)
+				{
+					return false;
+				}
 			}
 			return true;
 		}
@@ -242,12 +273,21 @@ namespace ScrewTurn.Wiki {
 		/// <param name="isSnippetPositional">A value indicating whether the snippet parameters are positional.</param>
 		/// <returns>The snippet placeholder/template.</returns>
 		private static string GetParametersPlaceHolders(string[] parameters, bool isSnippetPositional) {
-			if(parameters.Length == 0) return "";
+			if(parameters.Length == 0)
+			{
+				return "";
+			}
 			else {
 				StringBuilder sb = new StringBuilder(20);
 				foreach(string param in parameters) {
-					if(isSnippetPositional) sb.AppendFormat("|PLACE YOUR VALUE HERE ({0})", param);
-					else sb.AppendFormat("| {0} = PLACE YOUR VALUE HERE\\r\\n", param);
+					if(isSnippetPositional)
+					{
+						sb.AppendFormat("|PLACE YOUR VALUE HERE ({0})", param);
+					}
+					else
+					{
+						sb.AppendFormat("| {0} = PLACE YOUR VALUE HERE\\r\\n", param);
+					}
 				}
 				/*for(int i = 1; i <= paramCount; i++) {
 					sb.Append("|P");
@@ -270,8 +310,14 @@ namespace ScrewTurn.Wiki {
 			inWYSIWYG = useVisual;
 			lblWYSIWYG.Text = "";
 			txtMarkup.Text = content;
-			if(useVisual) btnVisual_Click(this, null);
-			else btnWikiMarkup_Click(this, null);
+			if(useVisual)
+			{
+				btnVisual_Click(this, null);
+			}
+			else
+			{
+				btnWikiMarkup_Click(this, null);
+			}
 		}
 
 		/// <summary>
@@ -279,8 +325,14 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <returns>The content.</returns>
 		public string GetContent() {
-			if(inWYSIWYG) return ReverseFormatter.ReverseFormat(lblWYSIWYG.Text);
-			else return txtMarkup.Text;
+			if(inWYSIWYG)
+			{
+				return ReverseFormatter.ReverseFormat(lblWYSIWYG.Text);
+			}
+			else
+			{
+				return txtMarkup.Text;
+			}
 		}
 
 		/// <summary>

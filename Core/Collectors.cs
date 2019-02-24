@@ -90,41 +90,71 @@ namespace ScrewTurn.Wiki {
 			canDisable = typeName != Settings.DefaultPagesProvider;
 			if(prov == null) {
 				prov = DisabledPagesProviderCollector.GetProvider(typeName);
-				if(prov != null) enabled = false;
+				if(prov != null)
+				{
+					enabled = false;
+				}
 			}
-			if(prov != null) return prov;
+			if(prov != null)
+			{
+				return prov;
+			}
 
 			prov = UsersProviderCollector.GetProvider(typeName);
 			canDisable = typeName != Settings.DefaultUsersProvider;
 			if(prov == null) {
 				prov = DisabledUsersProviderCollector.GetProvider(typeName);
-				if(prov != null) enabled = false;
+				if(prov != null)
+				{
+					enabled = false;
+				}
 			}
-			if(prov != null) return prov;
+			if(prov != null)
+			{
+				return prov;
+			}
 
 			prov = FilesProviderCollector.GetProvider(typeName);
 			canDisable = typeName != Settings.DefaultFilesProvider;
 			if(prov == null) {
 				prov = DisabledFilesProviderCollector.GetProvider(typeName);
-				if(prov != null) enabled = false;
+				if(prov != null)
+				{
+					enabled = false;
+				}
 			}
-			if(prov != null) return prov;
+			if(prov != null)
+			{
+				return prov;
+			}
 
 			prov = CacheProviderCollector.GetProvider(typeName);
 			canDisable = typeName != Settings.DefaultCacheProvider;
 			if(prov == null) {
 				prov = DisabledCacheProviderCollector.GetProvider(typeName);
-				if(prov != null) enabled = false;
+				if(prov != null)
+				{
+					enabled = false;
+				}
 			}
-			if(prov != null) return prov;
+			if(prov != null)
+			{
+				return prov;
+			}
 
 			prov = FormatterProviderCollector.GetProvider(typeName);
 			if(prov == null) {
 				prov = DisabledFormatterProviderCollector.GetProvider(typeName);
-				if(prov != null) enabled = false;
+				if(prov != null)
+				{
+					enabled = false;
+				}
 			}
-			if(prov != null) return prov;
-			
+			if(prov != null)
+			{
+				return prov;
+			}
+
 			return null;
 		}
 
@@ -245,20 +275,55 @@ namespace ScrewTurn.Wiki {
 		public static string[] GetAllProviders() {
 			List<string> result = new List<string>(20);
 
-			foreach(IProviderV30 prov in PagesProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
-			foreach(IProviderV30 prov in DisabledPagesProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
+			foreach(IProviderV30 prov in PagesProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
 
-			foreach(IProviderV30 prov in UsersProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
-			foreach(IProviderV30 prov in DisabledUsersProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
+			foreach(IProviderV30 prov in DisabledPagesProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
 
-			foreach(IProviderV30 prov in FilesProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
-			foreach(IProviderV30 prov in DisabledFilesProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
+			foreach(IProviderV30 prov in UsersProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
 
-			foreach(IProviderV30 prov in CacheProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
-			foreach(IProviderV30 prov in DisabledCacheProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
+			foreach(IProviderV30 prov in DisabledUsersProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
 
-			foreach(IProviderV30 prov in FormatterProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
-			foreach(IProviderV30 prov in DisabledFormatterProviderCollector.AllProviders) result.Add(prov.GetType().FullName);
+			foreach(IProviderV30 prov in FilesProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
+
+			foreach(IProviderV30 prov in DisabledFilesProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
+
+			foreach(IProviderV30 prov in CacheProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
+
+			foreach(IProviderV30 prov in DisabledCacheProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
+
+			foreach(IProviderV30 prov in FormatterProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
+
+			foreach(IProviderV30 prov in DisabledFormatterProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
 
 			return result.ToArray();
 		}

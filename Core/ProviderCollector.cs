@@ -60,7 +60,10 @@ namespace ScrewTurn.Wiki {
 		public T GetProvider(string typeName) {
 			lock(this) {
 				for(int i = 0; i < list.Count; i++) {
-					if(list[i].GetType().FullName.Equals(typeName)) return list[i];
+					if(list[i].GetType().FullName.Equals(typeName))
+					{
+						return list[i];
+					}
 				}
 				return default(T);
 			}

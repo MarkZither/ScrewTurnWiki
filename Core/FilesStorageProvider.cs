@@ -41,8 +41,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
 		public void Init(IHostV30 host, string config) {
-			if(host == null) throw new ArgumentNullException("host");
-			if(config == null) throw new ArgumentNullException("config");
+			if(host == null)
+			{
+				throw new ArgumentNullException("host");
+			}
+
+			if(config == null)
+			{
+				throw new ArgumentNullException("config");
+			}
 
 			this.host = host;
 
@@ -102,7 +109,10 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="InvalidOperationException">If <paramref name="path"/> does not begin with <paramref name="begin"/> or contains "\.." or "..\".</exception>
 		private string CheckPath(string path, string begin) {
 			if(!path.StartsWith(begin) || path.Contains(Path.DirectorySeparatorChar + "..") || path.Contains(".." + Path.DirectorySeparatorChar))
+			{
 				throw new InvalidOperationException();
+			}
+
 			return path;
 		}
 
@@ -114,7 +124,11 @@ namespace ScrewTurn.Wiki {
 		/// <remarks>For example: if <b>partialPath</b> is "/my/directory", the method returns 
 		/// "C:\Inetpub\wwwroot\Wiki\public\Upload\my\directory", assuming the Wiki resides in "C:\Inetpub\wwwroot\Wiki".</remarks>
 		private string BuildFullPath(string partialPath) {
-			if(partialPath == null) partialPath = "";
+			if(partialPath == null)
+			{
+				partialPath = "";
+			}
+
 			partialPath = partialPath.Replace("/", Path.DirectorySeparatorChar.ToString()).TrimStart(Path.DirectorySeparatorChar);
 			string up = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), UploadDirectory);			
 			return CheckPath(Path.Combine(up, partialPath), up); // partialPath CANNOT start with "\" -> Path.Combine does not work
@@ -128,7 +142,11 @@ namespace ScrewTurn.Wiki {
 		/// <remarks>For example: if <b>partialPath</b> is "/my/directory", the method returns 
 		/// "C:\Inetpub\wwwroot\Wiki\public\Attachments\my\directory", assuming the Wiki resides in "C:\Inetpub\wwwroot\Wiki".</remarks>
 		private string BuildFullPathForAttachments(string partialPath) {
-			if(partialPath == null) partialPath = "";
+			if(partialPath == null)
+			{
+				partialPath = "";
+			}
+
 			partialPath = partialPath.Replace("/", Path.DirectorySeparatorChar.ToString()).TrimStart(Path.DirectorySeparatorChar);
 			string up = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), AttachmentsDirectory);
 			return CheckPath(Path.Combine(up, partialPath), up); // partialPath CANNOT start with "\" -> Path.Combine does not work
@@ -142,7 +160,10 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentException">If <paramref name="directory"/> does not exist.</exception>
 		public string[] ListFiles(string directory) {
 			string d = BuildFullPath(directory);
-			if(!Directory.Exists(d)) throw new ArgumentException("Directory does not exist", "directory");
+			if(!Directory.Exists(d))
+			{
+				throw new ArgumentException("Directory does not exist", "directory");
+			}
 
 			string[] temp = Directory.GetFiles(d);
 			
@@ -165,7 +186,10 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentException">If <paramref name="directory"/> does not exist.</exception>
 		public string[] ListDirectories(string directory) {
 			string d = BuildFullPath(directory);
-			if(!Directory.Exists(d)) throw new ArgumentException("Directory does not exist", "directory");
+			if(!Directory.Exists(d))
+			{
+				throw new ArgumentException("Directory does not exist", "directory");
+			}
 
 			string[] temp = Directory.GetDirectories(d);
 
@@ -208,15 +232,33 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> os <paramref name="sourceStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="sourceStream"/> does not support reading.</exception>
 		public bool StoreFile(string fullName, Stream sourceStream, bool overwrite) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
-			if(sourceStream == null) throw new ArgumentNullException("sourceStream");
-			if(!sourceStream.CanRead) throw new ArgumentException("Cannot read from Source Stream", "sourceStream");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
+
+			if(sourceStream == null)
+			{
+				throw new ArgumentNullException("sourceStream");
+			}
+
+			if(!sourceStream.CanRead)
+			{
+				throw new ArgumentException("Cannot read from Source Stream", "sourceStream");
+			}
 
 			string filename = BuildFullPath(fullName);
 
 			// Abort if the file already exists and overwrite is false
-			if(File.Exists(filename) && !overwrite) return false;
+			if(File.Exists(filename) && !overwrite)
+			{
+				return false;
+			}
 
 			FileStream fs = null;
 
@@ -254,14 +296,32 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> os <paramref name="destinationStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="destinationStream"/> does not support writing, or if <paramref name="fullName"/> does not exist.</exception>
 		public bool RetrieveFile(string fullName, Stream destinationStream, bool countHit) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
-			if(destinationStream == null) throw new ArgumentNullException("destinationStream");
-			if(!destinationStream.CanWrite) throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
+
+			if(destinationStream == null)
+			{
+				throw new ArgumentNullException("destinationStream");
+			}
+
+			if(!destinationStream.CanWrite)
+			{
+				throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
+			}
 
 			string filename = BuildFullPath(fullName);
 
-			if(!File.Exists(filename)) throw new ArgumentException("File does not exist", "fullName");
+			if(!File.Exists(filename))
+			{
+				throw new ArgumentException("File does not exist", "fullName");
+			}
 
 			FileStream fs = null;
 
@@ -454,8 +514,15 @@ namespace ScrewTurn.Wiki {
 		/// <param name="fullName">The full name of the file.</param>
 		/// <returns>The number of times the file was retrieved.</returns>
 		private int GetFileRetrievalCount(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
 
 			lock(this) {
 				// Format
@@ -470,8 +537,14 @@ namespace ScrewTurn.Wiki {
 					fields = line.Split('|');
 					if(fields[0].ToLowerInvariant() == lowercaseFullName) {
 						int res = 0;
-						if(int.TryParse(fields[1], out res)) return res;
-						else return 0;
+						if(int.TryParse(fields[1], out res))
+						{
+							return res;
+						}
+						else
+						{
+							return 0;
+						}
 					}
 				}
 			}
@@ -488,9 +561,20 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than zero.</exception>
 		public void SetFileRetrievalCount(string fullName, int count) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
-			if(count < 0) throw new ArgumentOutOfRangeException("count", "Count must be greater than or equal to zero");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
+
+			if(count < 0)
+			{
+				throw new ArgumentOutOfRangeException("count", "Count must be greater than or equal to zero");
+			}
 
 			SetDownloadHits(fullName, GetFullPath(FileDownloadsFile), 0);
 		}
@@ -503,12 +587,22 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
 		public FileDetails GetFileDetails(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
 
 			string n = BuildFullPath(fullName);
 
-			if(!File.Exists(n)) return null;
+			if(!File.Exists(n))
+			{
+				return null;
+			}
 
 			FileInfo fi = new FileInfo(n);
 
@@ -523,12 +617,22 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or it does not exist.</exception>
 		public bool DeleteFile(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
 
 			string n = BuildFullPath(fullName);
 
-			if(!File.Exists(n)) throw new ArgumentException("File does not exist", "fullName");
+			if(!File.Exists(n))
+			{
+				throw new ArgumentException("File does not exist", "fullName");
+			}
 
 			try {
 				File.Delete(n);
@@ -549,16 +653,38 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="oldFullName"/> or <paramref name="newFullName"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="oldFullName"/> or <paramref name="newFullName"/> are empty, or if the old file does not exist, or if the new file already exist.</exception>
 		public bool RenameFile(string oldFullName, string newFullName) {
-			if(oldFullName == null) throw new ArgumentNullException("oldFullName");
-			if(oldFullName.Length == 0) throw new ArgumentException("Old Full Name cannot be empty", "oldFullName");
-			if(newFullName == null) throw new ArgumentNullException("newFullName");
-			if(newFullName.Length == 0) throw new ArgumentException("New Full Name cannot be empty", "newFullName");
+			if(oldFullName == null)
+			{
+				throw new ArgumentNullException("oldFullName");
+			}
+
+			if(oldFullName.Length == 0)
+			{
+				throw new ArgumentException("Old Full Name cannot be empty", "oldFullName");
+			}
+
+			if(newFullName == null)
+			{
+				throw new ArgumentNullException("newFullName");
+			}
+
+			if(newFullName.Length == 0)
+			{
+				throw new ArgumentException("New Full Name cannot be empty", "newFullName");
+			}
 
 			string oldFilename = BuildFullPath(oldFullName);
 			string newFilename = BuildFullPath(newFullName);
 
-			if(!File.Exists(oldFilename)) throw new ArgumentException("Old File does not exist", "oldFullName");
-			if(File.Exists(newFilename)) throw new ArgumentException("New File already exists", "newFullName");
+			if(!File.Exists(oldFilename))
+			{
+				throw new ArgumentException("Old File does not exist", "oldFullName");
+			}
+
+			if(File.Exists(newFilename))
+			{
+				throw new ArgumentException("New File already exists", "newFullName");
+			}
 
 			try {
 				File.Move(oldFilename, newFilename);
@@ -580,16 +706,33 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="path"/> or <paramref name="name"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if the directory does not exist, or if the new directory already exists.</exception>
 		public bool CreateDirectory(string path, string name) {
-			if(path == null) throw new ArgumentNullException("path");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(path == null)
+			{
+				throw new ArgumentNullException("path");
+			}
 
-			if(!Directory.Exists(BuildFullPath(path))) throw new ArgumentException("Directory does not exist", "path");
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(!Directory.Exists(BuildFullPath(path)))
+			{
+				throw new ArgumentException("Directory does not exist", "path");
+			}
 
 			string partialPath = path + (!path.EndsWith("/") ? "/" : "") + name;
 			string d = BuildFullPath(partialPath);
 
-			if(Directory.Exists(d)) throw new ArgumentException("Directory already exists", "name");
+			if(Directory.Exists(d))
+			{
+				throw new ArgumentException("Directory already exists", "name");
+			}
 
 			try {
 				Directory.CreateDirectory(d);
@@ -608,18 +751,36 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullPath"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullPath"/> is empty or if it equals '/' or it does not exist.</exception>
 		public bool DeleteDirectory(string fullPath) {
-			if(fullPath == null) throw new ArgumentNullException("fullPath");
-			if(fullPath.Length == 0) throw new ArgumentException("Full Path cannot be empty", "fullPath");
-			if(fullPath == "/") throw new ArgumentException("Cannot delete the root directory", "fullPath");
+			if(fullPath == null)
+			{
+				throw new ArgumentNullException("fullPath");
+			}
+
+			if(fullPath.Length == 0)
+			{
+				throw new ArgumentException("Full Path cannot be empty", "fullPath");
+			}
+
+			if(fullPath == "/")
+			{
+				throw new ArgumentException("Cannot delete the root directory", "fullPath");
+			}
 
 			string d = BuildFullPath(fullPath);
 
-			if(!Directory.Exists(d)) throw new ArgumentException("Directory does not exist", "fullPath");
+			if(!Directory.Exists(d))
+			{
+				throw new ArgumentException("Directory does not exist", "fullPath");
+			}
 
 			try {
 				Directory.Delete(d, true);
 				// Make sure tht fullPath ends with "/" so that the method does not clear wrong items
-				if(!fullPath.EndsWith("/")) fullPath += "/";
+				if(!fullPath.EndsWith("/"))
+				{
+					fullPath += "/";
+				}
+
 				ClearDownloadHitsPartialMatch(fullPath, GetFullPath(FileDownloadsFile));
 				return true;
 			}
@@ -638,24 +799,62 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentException">If <paramref name="oldFullPath"/> or <paramref name="newFullPath"/> are empty or equal to '/', 
 		/// or if the old directory does not exist or the new directory already exists.</exception>
 		public bool RenameDirectory(string oldFullPath, string newFullPath) {
-			if(oldFullPath == null) throw new ArgumentNullException("oldFullPath");
-			if(oldFullPath.Length == 0) throw new ArgumentException("Old Full Path cannot be empty", "oldFullPath");
-			if(oldFullPath == "/") throw new ArgumentException("Cannot rename the root directory", "oldFullPath");
-			if(newFullPath == null) throw new ArgumentNullException("newFullPath");
-			if(newFullPath.Length == 0) throw new ArgumentException("New Full Path cannot be empty", "newFullPath");
-			if(newFullPath == "/") throw new ArgumentException("Cannot rename directory to the root directory", "newFullPath");
+			if(oldFullPath == null)
+			{
+				throw new ArgumentNullException("oldFullPath");
+			}
+
+			if(oldFullPath.Length == 0)
+			{
+				throw new ArgumentException("Old Full Path cannot be empty", "oldFullPath");
+			}
+
+			if(oldFullPath == "/")
+			{
+				throw new ArgumentException("Cannot rename the root directory", "oldFullPath");
+			}
+
+			if(newFullPath == null)
+			{
+				throw new ArgumentNullException("newFullPath");
+			}
+
+			if(newFullPath.Length == 0)
+			{
+				throw new ArgumentException("New Full Path cannot be empty", "newFullPath");
+			}
+
+			if(newFullPath == "/")
+			{
+				throw new ArgumentException("Cannot rename directory to the root directory", "newFullPath");
+			}
 
 			string olddir = BuildFullPath(oldFullPath);
 			string newdir = BuildFullPath(newFullPath);
 
-			if(!Directory.Exists(olddir)) throw new ArgumentException("Directory does not exist", "oldFullPath");
-			if(Directory.Exists(newdir)) throw new ArgumentException("Directory already exists", "newFullPath");
+			if(!Directory.Exists(olddir))
+			{
+				throw new ArgumentException("Directory does not exist", "oldFullPath");
+			}
+
+			if(Directory.Exists(newdir))
+			{
+				throw new ArgumentException("Directory already exists", "newFullPath");
+			}
 
 			try {
 				Directory.Move(olddir, newdir);
 				// Make sure that oldFullPath and newFullPath end with "/" so that the method does not rename wrong items
-				if(!oldFullPath.EndsWith("/")) oldFullPath += "/";
-				if(!newFullPath.EndsWith("/")) newFullPath += "/";
+				if(!oldFullPath.EndsWith("/"))
+				{
+					oldFullPath += "/";
+				}
+
+				if(!newFullPath.EndsWith("/"))
+				{
+					newFullPath += "/";
+				}
+
 				RenameDownloadHitsItemPartialMatch(oldFullPath, newFullPath, GetFullPath(FileDownloadsFile));
 				return true;
 			}
@@ -697,11 +896,17 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The names, or an empty list.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> is <c>null</c>.</exception>
 		public string[] ListPageAttachments(PageInfo pageInfo) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
 
 			string dir = BuildFullPathForAttachments(GetPageAttachmentDirectory(pageInfo));
 
-			if(!Directory.Exists(dir)) return new string[0];
+			if(!Directory.Exists(dir))
+			{
+				return new string[0];
+			}
 
 			string[] files = Directory.GetFiles(dir);
 
@@ -726,11 +931,30 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="name"/> or <paramref name="sourceStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="sourceStream"/> does not support reading.</exception>
 		public bool StorePageAttachment(PageInfo pageInfo, string name, Stream sourceStream, bool overwrite) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(sourceStream == null) throw new ArgumentNullException("sourceStream");
-			if(!sourceStream.CanRead) throw new ArgumentException("Cannot read from Source Stream", "sourceStream");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(sourceStream == null)
+			{
+				throw new ArgumentNullException("sourceStream");
+			}
+
+			if(!sourceStream.CanRead)
+			{
+				throw new ArgumentException("Cannot read from Source Stream", "sourceStream");
+			}
 
 			string filename = BuildFullPathForAttachments(GetPageAttachmentDirectory(pageInfo) + "/" + name);
 
@@ -744,7 +968,10 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
-			if(File.Exists(filename) && !overwrite) return false;
+			if(File.Exists(filename) && !overwrite)
+			{
+				return false;
+			}
 
 			FileStream fs = null;
 
@@ -784,17 +1011,42 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="destinationStream"/> does not support writing,
 		/// or if the page does not have attachments or if the attachment does not exist.</exception>
 		public bool RetrievePageAttachment(PageInfo pageInfo, string name, Stream destinationStream, bool countHit) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(destinationStream == null) throw new ArgumentNullException("destinationStream");
-			if(!destinationStream.CanWrite) throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(destinationStream == null)
+			{
+				throw new ArgumentNullException("destinationStream");
+			}
+
+			if(!destinationStream.CanWrite)
+			{
+				throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
+			}
 
 			string d = GetPageAttachmentDirectory(pageInfo);
-			if(!Directory.Exists(BuildFullPathForAttachments(d))) throw new ArgumentException("No attachments for Page", "pageInfo");
+			if(!Directory.Exists(BuildFullPathForAttachments(d)))
+			{
+				throw new ArgumentException("No attachments for Page", "pageInfo");
+			}
 
 			string filename = BuildFullPathForAttachments(d + "/" + name);
-			if(!File.Exists(filename)) throw new ArgumentException("Attachment does not exist", "name");
+			if(!File.Exists(filename))
+			{
+				throw new ArgumentException("Attachment does not exist", "name");
+			}
 
 			FileStream fs = null;
 
@@ -832,9 +1084,20 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The name of the attachment.</param>
 		/// <returns>The number of times the attachment was retrieved.</returns>
 		private int GetPageAttachmentRetrievalCount(PageInfo pageInfo, string name) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			lock(this) {
 				// Format
@@ -851,8 +1114,14 @@ namespace ScrewTurn.Wiki {
 
 					if(fields[0].ToLowerInvariant() == lowercaseFullName) {
 						int count;
-						if(int.TryParse(fields[1], out count)) return count;
-						else return 0;
+						if(int.TryParse(fields[1], out count))
+						{
+							return count;
+						}
+						else
+						{
+							return 0;
+						}
 					}
 				}
 			}
@@ -870,10 +1139,25 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than zero.</exception>
 		public void SetPageAttachmentRetrievalCount(PageInfo pageInfo, string name, int count) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
-			if(count < 0) throw new ArgumentOutOfRangeException("Count must be greater than or equal to zero", "count");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty");
+			}
+
+			if(count < 0)
+			{
+				throw new ArgumentOutOfRangeException("Count must be greater than or equal to zero", "count");
+			}
 
 			SetDownloadHits(pageInfo.FullName + "." + name, GetFullPath(AttachmentDownloadsFile), count);
 		}
@@ -887,15 +1171,32 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		public FileDetails GetPageAttachmentDetails(PageInfo pageInfo, string name) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty");
+			}
 
 			string d = GetPageAttachmentDirectory(pageInfo);
-			if(!Directory.Exists(BuildFullPathForAttachments(d))) return null;
+			if(!Directory.Exists(BuildFullPathForAttachments(d)))
+			{
+				return null;
+			}
 
 			string filename = BuildFullPathForAttachments(d + "/" + name);
-			if(!File.Exists(filename)) return null;
+			if(!File.Exists(filename))
+			{
+				return null;
+			}
 
 			FileInfo fi = new FileInfo(filename);
 
@@ -911,15 +1212,32 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if the page or attachment do not exist.</exception>
 		public bool DeletePageAttachment(PageInfo pageInfo, string name) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty");
+			}
 
 			string d = GetPageAttachmentDirectory(pageInfo);
-			if(!Directory.Exists(BuildFullPathForAttachments(d))) throw new ArgumentException("Page does not exist", "pageInfo");
+			if(!Directory.Exists(BuildFullPathForAttachments(d)))
+			{
+				throw new ArgumentException("Page does not exist", "pageInfo");
+			}
 
 			string filename = BuildFullPathForAttachments(d + "/" + name);
-			if(!File.Exists(filename)) throw new ArgumentException("Attachment does not exist", "name");
+			if(!File.Exists(filename))
+			{
+				throw new ArgumentException("Attachment does not exist", "name");
+			}
 
 			try {
 				File.Delete(filename);
@@ -942,20 +1260,48 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentException">If <paramref name="pageInfo"/>, <paramref name="oldName"/> or <paramref name="newName"/> are empty,
 		/// or if the page or old attachment do not exist, or the new attachment name already exists.</exception>
 		public bool RenamePageAttachment(PageInfo pageInfo, string oldName, string newName) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(oldName == null) throw new ArgumentNullException("oldName");
-			if(oldName.Length == 0) throw new ArgumentException("Old Name cannot be empty", "oldName");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(oldName == null)
+			{
+				throw new ArgumentNullException("oldName");
+			}
+
+			if(oldName.Length == 0)
+			{
+				throw new ArgumentException("Old Name cannot be empty", "oldName");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			string d = GetPageAttachmentDirectory(pageInfo);
-			if(!Directory.Exists(BuildFullPathForAttachments(d))) throw new ArgumentException("Page does not exist", "pageInfo");
+			if(!Directory.Exists(BuildFullPathForAttachments(d)))
+			{
+				throw new ArgumentException("Page does not exist", "pageInfo");
+			}
 
 			string oldFilename = BuildFullPathForAttachments(d + "/" + oldName);
-			if(!File.Exists(oldFilename)) throw new ArgumentException("Attachment does not exist", "oldName");
+			if(!File.Exists(oldFilename))
+			{
+				throw new ArgumentException("Attachment does not exist", "oldName");
+			}
 
 			string newFilename = BuildFullPathForAttachments(d + "/" + newName);
-			if(File.Exists(newFilename)) throw new ArgumentException("Attachment already exists", "newName");
+			if(File.Exists(newFilename))
+			{
+				throw new ArgumentException("Attachment already exists", "newName");
+			}
 
 			try {
 				File.Move(oldFilename, newFilename);
@@ -976,8 +1322,15 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="oldPage"/> or <paramref name="newPage"/> are <c>null</c></exception>
 		/// <exception cref="ArgumentException">If the new page is already in use.</exception>
 		public void NotifyPageRenaming(PageInfo oldPage, PageInfo newPage) {
-			if(oldPage == null) throw new ArgumentNullException("oldPage");
-			if(newPage == null) throw new ArgumentNullException("newPage");
+			if(oldPage == null)
+			{
+				throw new ArgumentNullException("oldPage");
+			}
+
+			if(newPage == null)
+			{
+				throw new ArgumentNullException("newPage");
+			}
 
 			string oldName = GetPageAttachmentDirectory(oldPage);
 			string newName = GetPageAttachmentDirectory(newPage);
@@ -985,8 +1338,15 @@ namespace ScrewTurn.Wiki {
 			string oldDir = BuildFullPathForAttachments(oldName);
 			string newDir = BuildFullPathForAttachments(newName);
 
-			if(!Directory.Exists(oldDir)) return; // Nothing to do
-			if(Directory.Exists(newDir)) throw new ArgumentException("New Page already exists", "newPage");
+			if(!Directory.Exists(oldDir))
+			{
+				return; // Nothing to do
+			}
+
+			if(Directory.Exists(newDir))
+			{
+				throw new ArgumentException("New Page already exists", "newPage");
+			}
 
 			try {
 				Directory.Move(oldDir, newDir);

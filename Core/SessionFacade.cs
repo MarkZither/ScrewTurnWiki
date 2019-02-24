@@ -18,8 +18,14 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		private static HttpSessionState Session {
 			get {
-				if(HttpContext.Current == null) return null;
-				else return HttpContext.Current.Session;
+				if(HttpContext.Current == null)
+				{
+					return null;
+				}
+				else
+				{
+					return HttpContext.Current.Session;
+				}
 			}
 		}
 
@@ -28,7 +34,11 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string LoginKey {
 			get { return Session != null ? (string)Session["LoginKey"] : null; }
-			set { if(Session != null) Session["LoginKey"] = value; }
+			set { if(Session != null)
+				{
+					Session["LoginKey"] = value;
+				}
+			}
 		}
 
 		/// <summary>
@@ -36,7 +46,11 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		public static string CurrentUsername {
 			get { return Session != null ? Session["Username"] as string : null; }
-			set { if(Session != null) Session["Username"] = value; }
+			set { if(Session != null)
+				{
+					Session["Username"] = value;
+				}
+			}
 		}
 
 		/// <summary>
@@ -48,11 +62,20 @@ namespace ScrewTurn.Wiki {
 				string sessionId = Session.SessionID;
 
 				UserInfo current = SessionCache.GetCurrentUser(sessionId);
-				if(current != null) return current;
+				if(current != null)
+				{
+					return current;
+				}
 				else {
 					string un = CurrentUsername;
-					if(string.IsNullOrEmpty(un)) return null;
-					else if(un == AnonymousUsername) return Users.GetAnonymousAccount();
+					if(string.IsNullOrEmpty(un))
+					{
+						return null;
+					}
+					else if(un == AnonymousUsername)
+					{
+						return Users.GetAnonymousAccount();
+					}
 					else {
 						current = Users.FindUser(un);
 						if(current != null) {
@@ -68,7 +91,10 @@ namespace ScrewTurn.Wiki {
 					}
 				}
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -82,8 +108,14 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The current username, or <b>AnonymousUsername</b> if anonymous.</returns>
 		public static string GetCurrentUsername() {
 			string un = CurrentUsername;
-			if(string.IsNullOrEmpty(un)) return AnonymousUsername;
-			else return un;
+			if(string.IsNullOrEmpty(un))
+			{
+				return AnonymousUsername;
+			}
+			else
+			{
+				return un;
+			}
 		}
 
 		/// <summary>
@@ -101,7 +133,10 @@ namespace ScrewTurn.Wiki {
 						List<UserGroup> temp = new List<UserGroup>(current.Groups.Length);
 						for(int i = 0; i < current.Groups.Length; i++) {
 							UserGroup tempGroup = Users.FindUserGroup(current.Groups[i]);
-							if(tempGroup != null) temp.Add(tempGroup);
+							if(tempGroup != null)
+							{
+								temp.Add(tempGroup);
+							}
 						}
 						groups = temp.ToArray();
 					}
@@ -114,7 +149,10 @@ namespace ScrewTurn.Wiki {
 
 				return groups;
 			}
-			else return new UserGroup[0];
+			else
+			{
+				return new UserGroup[0];
+			}
 		}
 
 		/// <summary>

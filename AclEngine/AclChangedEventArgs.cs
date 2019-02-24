@@ -21,8 +21,15 @@ namespace ScrewTurn.Wiki.AclEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="entries"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="entries"/> is empty.</exception>
 		public AclChangedEventArgs(AclEntry[] entries, Change change) {
-			if(entries == null) throw new ArgumentNullException("entry");
-			if(entries.Length == 0) throw new ArgumentException("Entries cannot be empty", "entries");
+			if(entries == null)
+			{
+				throw new ArgumentNullException("entry");
+			}
+
+			if(entries.Length == 0)
+			{
+				throw new ArgumentException("Entries cannot be empty", "entries");
+			}
 
 			this.entries = entries;
 			this.change = change;

@@ -22,7 +22,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <param name="directory">The directory to prepare.</param>
 		/// <returns>The prepared directory, for example "/" or "/my/directory/".</returns>
 		private static string PrepareDirectory(string directory) {
-			if(string.IsNullOrEmpty(directory)) return "/";
+			if(string.IsNullOrEmpty(directory))
+			{
+				return "/";
+			}
 			else {
 				return (!directory.StartsWith("/") ? "/" : "") +
 					directory +
@@ -191,7 +194,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -234,7 +240,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -277,7 +286,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -315,10 +327,25 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> os <paramref name="sourceStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="sourceStream"/> does not support reading.</exception>
 		public bool StoreFile(string fullName, System.IO.Stream sourceStream, bool overwrite) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
-			if(sourceStream == null) throw new ArgumentNullException("sourceStream");
-			if(!sourceStream.CanRead) throw new ArgumentException("Cannot read from Source Stream", "sourceStream");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
+
+			if(sourceStream == null)
+			{
+				throw new ArgumentNullException("sourceStream");
+			}
+
+			if(!sourceStream.CanRead)
+			{
+				throw new ArgumentException("Cannot read from Source Stream", "sourceStream");
+			}
 
 			string directory, filename;
 			SplitFileFullName(fullName, out directory, out filename);
@@ -377,8 +404,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			int rows = ExecuteNonQuery(command, false);
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -394,10 +427,25 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> os <paramref name="destinationStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or <paramref name="destinationStream"/> does not support writing.</exception>
 		public bool RetrieveFile(string fullName, System.IO.Stream destinationStream, bool countHit) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
-			if(destinationStream == null) throw new ArgumentNullException("destinationStream");
-			if(!destinationStream.CanWrite) throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
+
+			if(destinationStream == null)
+			{
+				throw new ArgumentNullException("destinationStream");
+			}
+
+			if(!destinationStream.CanWrite)
+			{
+				throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -479,9 +527,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than zero.</exception>
 		public void SetFileRetrievalCount(string fullName, int count) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
-			if(count < 0) throw new ArgumentOutOfRangeException("count", "Count must be greater than or equal to zero");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
+
+			if(count < 0)
+			{
+				throw new ArgumentOutOfRangeException("count", "Count must be greater than or equal to zero");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -511,8 +570,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty.</exception>
 		public FileDetails GetFileDetails(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -544,7 +610,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return details;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -555,8 +624,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullName"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullName"/> is empty or it does not exist.</exception>
 		public bool DeleteFile(string fullName) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -583,8 +659,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			int rows = ExecuteNonQuery(command, false);
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -598,10 +680,25 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="oldFullName"/> or <paramref name="newFullName"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="oldFullName"/> or <paramref name="newFullName"/> are empty, or if the old file does not exist, or if the new file already exist.</exception>
 		public bool RenameFile(string oldFullName, string newFullName) {
-			if(oldFullName == null) throw new ArgumentNullException("oldFullName");
-			if(oldFullName.Length == 0) throw new ArgumentException("Old Full Name cannot be empty", "oldFullName");
-			if(newFullName == null) throw new ArgumentNullException("newFullName");
-			if(newFullName.Length == 0) throw new ArgumentException("New Full Name cannot be empty", "newFullName");
+			if(oldFullName == null)
+			{
+				throw new ArgumentNullException("oldFullName");
+			}
+
+			if(oldFullName.Length == 0)
+			{
+				throw new ArgumentException("Old Full Name cannot be empty", "oldFullName");
+			}
+
+			if(newFullName == null)
+			{
+				throw new ArgumentNullException("newFullName");
+			}
+
+			if(newFullName.Length == 0)
+			{
+				throw new ArgumentException("New Full Name cannot be empty", "newFullName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -634,8 +731,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			int rows = ExecuteNonQuery(command, false);
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -650,9 +753,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="path"/> or <paramref name="name"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if the directory does not exist, or if the new directory already exists.</exception>
 		public bool CreateDirectory(string path, string name) {
-			if(path == null) throw new ArgumentNullException("path");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
+			if(path == null)
+			{
+				throw new ArgumentNullException("path");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
 
 			path = PrepareDirectory(path);
 
@@ -681,8 +795,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			int rows = ExecuteNonQuery(command, false);
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -725,9 +845,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="fullPath"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="fullPath"/> is empty or if it equals '/' or it does not exist.</exception>
 		public bool DeleteDirectory(string fullPath) {
-			if(fullPath == null) throw new ArgumentNullException("fullPath");
-			if(fullPath.Length == 0) throw new ArgumentException("Full Path cannot be empty", "fullPath");
-			if(fullPath == "/") throw new ArgumentException("Cannot delete the root directory", "fullPath");
+			if(fullPath == null)
+			{
+				throw new ArgumentNullException("fullPath");
+			}
+
+			if(fullPath.Length == 0)
+			{
+				throw new ArgumentException("Full Path cannot be empty", "fullPath");
+			}
+
+			if(fullPath == "/")
+			{
+				throw new ArgumentException("Cannot delete the root directory", "fullPath");
+			}
 
 			fullPath = PrepareDirectory(fullPath);
 
@@ -752,8 +883,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			bool done = DeleteDirectory(transaction, fullPath);
 
-			if(done) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(done)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return done;
 		}
@@ -803,12 +940,35 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentException">If <paramref name="oldFullPath"/> or <paramref name="newFullPath"/> are empty or equal to '/', 
 		/// or if the old directory does not exist or the new directory already exists.</exception>
 		public bool RenameDirectory(string oldFullPath, string newFullPath) {
-			if(oldFullPath == null) throw new ArgumentNullException("oldFullPath");
-			if(oldFullPath.Length == 0) throw new ArgumentException("Old Full Path cannot be empty", "oldFullPath");
-			if(oldFullPath == "/") throw new ArgumentException("Cannot rename the root directory", "oldFullPath");
-			if(newFullPath == null) throw new ArgumentNullException("newFullPath");
-			if(newFullPath.Length == 0) throw new ArgumentException("New Full Path cannot be empty", "newFullPath");
-			if(newFullPath == "/") throw new ArgumentException("Cannot rename directory to the root directory", "newFullPath");
+			if(oldFullPath == null)
+			{
+				throw new ArgumentNullException("oldFullPath");
+			}
+
+			if(oldFullPath.Length == 0)
+			{
+				throw new ArgumentException("Old Full Path cannot be empty", "oldFullPath");
+			}
+
+			if(oldFullPath == "/")
+			{
+				throw new ArgumentException("Cannot rename the root directory", "oldFullPath");
+			}
+
+			if(newFullPath == null)
+			{
+				throw new ArgumentNullException("newFullPath");
+			}
+
+			if(newFullPath.Length == 0)
+			{
+				throw new ArgumentException("New Full Path cannot be empty", "newFullPath");
+			}
+
+			if(newFullPath == "/")
+			{
+				throw new ArgumentException("Cannot rename directory to the root directory", "newFullPath");
+			}
 
 			oldFullPath = PrepareDirectory(oldFullPath);
 			newFullPath = PrepareDirectory(newFullPath);
@@ -838,8 +998,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			bool done = RenameDirectory(transaction, oldFullPath, newFullPath);
 
-			if(done) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(done)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return done;
 		}
@@ -871,7 +1037,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -906,7 +1075,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -941,7 +1113,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return result.ToArray();
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -951,7 +1126,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <returns>The names, or an empty list.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> is <c>null</c>.</exception>
 		public string[] ListPageAttachments(PageInfo pageInfo) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1027,11 +1205,30 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/>, <paramref name="name"/> or <paramref name="sourceStream"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="sourceStream"/> does not support reading.</exception>
 		public bool StorePageAttachment(PageInfo pageInfo, string name, System.IO.Stream sourceStream, bool overwrite) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(sourceStream == null) throw new ArgumentNullException("sourceStream");
-			if(!sourceStream.CanRead) throw new ArgumentException("Cannot read from Source Stream", "sourceStream");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(sourceStream == null)
+			{
+				throw new ArgumentNullException("sourceStream");
+			}
+
+			if(!sourceStream.CanRead)
+			{
+				throw new ArgumentException("Cannot read from Source Stream", "sourceStream");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1087,8 +1284,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			int rows = ExecuteNonQuery(command, false);
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -1106,11 +1309,30 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if <paramref name="destinationStream"/> does not support writing,
 		/// or if the page does not have attachments or if the attachment does not exist.</exception>
 		public bool RetrievePageAttachment(PageInfo pageInfo, string name, System.IO.Stream destinationStream, bool countHit) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty", "name");
-			if(destinationStream == null) throw new ArgumentNullException("destinationStream");
-			if(!destinationStream.CanWrite) throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			if(destinationStream == null)
+			{
+				throw new ArgumentNullException("destinationStream");
+			}
+
+			if(!destinationStream.CanWrite)
+			{
+				throw new ArgumentException("Cannot write into Destination Stream", "destinationStream");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1189,10 +1411,25 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="count"/> is less than zero.</exception>
 		public void SetPageAttachmentRetrievalCount(PageInfo pageInfo, string name, int count) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
-			if(count < 0) throw new ArgumentOutOfRangeException("Count must be greater than or equal to zero", "count");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty");
+			}
+
+			if(count < 0)
+			{
+				throw new ArgumentOutOfRangeException("Count must be greater than or equal to zero", "count");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1220,9 +1457,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty.</exception>
 		public FileDetails GetPageAttachmentDetails(PageInfo pageInfo, string name) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			QueryBuilder queryBuilder = new QueryBuilder(builder);
@@ -1251,7 +1499,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 				return details;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -1263,9 +1514,20 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="pageInfo"/> or <paramref name="name"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if the page or attachment do not exist.</exception>
 		public bool DeletePageAttachment(PageInfo pageInfo, string name) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(name == null) throw new ArgumentNullException("name");
-			if(name.Length == 0) throw new ArgumentException("Name cannot be empty");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1289,8 +1551,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			int rows = ExecuteNonQuery(command, false);
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -1306,11 +1574,30 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentException">If <paramref name="pageInfo"/>, <paramref name="oldName"/> or <paramref name="newName"/> are empty,
 		/// or if the page or old attachment do not exist, or the new attachment name already exists.</exception>
 		public bool RenamePageAttachment(PageInfo pageInfo, string oldName, string newName) {
-			if(pageInfo == null) throw new ArgumentNullException("pageInfo");
-			if(oldName == null) throw new ArgumentNullException("oldName");
-			if(oldName.Length == 0) throw new ArgumentException("Old Name cannot be empty", "oldName");
-			if(newName == null) throw new ArgumentNullException("newName");
-			if(newName.Length == 0) throw new ArgumentException("New Name cannot be empty", "newName");
+			if(pageInfo == null)
+			{
+				throw new ArgumentNullException("pageInfo");
+			}
+
+			if(oldName == null)
+			{
+				throw new ArgumentNullException("oldName");
+			}
+
+			if(oldName.Length == 0)
+			{
+				throw new ArgumentException("Old Name cannot be empty", "oldName");
+			}
+
+			if(newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			if(newName.Length == 0)
+			{
+				throw new ArgumentException("New Name cannot be empty", "newName");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1339,8 +1626,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 			DbCommand command = builder.GetCommand(transaction, query, parameters);
 
 			int rows = ExecuteNonQuery(command, false);
-			if(rows == 1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows == 1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 
 			return rows == 1;
 		}
@@ -1353,8 +1646,15 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 		/// <exception cref="ArgumentNullException">If <paramref name="oldPage"/> or <paramref name="newPage"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If the new page is already in use.</exception>
 		public void NotifyPageRenaming(PageInfo oldPage, PageInfo newPage) {
-			if(oldPage == null) throw new ArgumentNullException("oldPage");
-			if(newPage == null) throw new ArgumentNullException("newPage");
+			if(oldPage == null)
+			{
+				throw new ArgumentNullException("oldPage");
+			}
+
+			if(newPage == null)
+			{
+				throw new ArgumentNullException("newPage");
+			}
 
 			ICommandBuilder builder = GetCommandBuilder();
 			DbConnection connection = builder.GetConnection(connString);
@@ -1378,8 +1678,14 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 
 			int rows = ExecuteNonQuery(command, false);
 
-			if(rows != -1) CommitTransaction(transaction);
-			else RollbackTransaction(transaction);
+			if(rows != -1)
+			{
+				CommitTransaction(transaction);
+			}
+			else
+			{
+				RollbackTransaction(transaction);
+			}
 		}
 
 		#endregion

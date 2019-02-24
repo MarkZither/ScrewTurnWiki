@@ -20,7 +20,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="capacity">The initial capacity of the dictionary.</param>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="capacity"/> is less than or equal to zero.</exception>
 		public OccurrenceDictionary(int capacity) {
-			if(capacity < 0) throw new ArgumentOutOfRangeException("capacity", "Capacity must be greater than zero");
+			if(capacity < 0)
+			{
+				throw new ArgumentOutOfRangeException("capacity", "Capacity must be greater than zero");
+			}
 
 			mappings = new Dictionary<string, IDocument>(capacity);
 			dictionary = new Dictionary<IDocument, SortedBasicWordInfoSet>(capacity);
@@ -47,10 +50,20 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="key"/> or <paramref name="value"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="key"/> is already present in the dictionary.</exception>
 		public void Add(IDocument key, SortedBasicWordInfoSet value) {
-			if(key == null) throw new ArgumentNullException("key");
-			if(value == null) throw new ArgumentNullException("value");
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
 
-			if(ContainsKey(key)) throw new ArgumentException("The specified key is already contained in the dictionary", "key");
+			if(value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+
+			if(ContainsKey(key))
+			{
+				throw new ArgumentException("The specified key is already contained in the dictionary", "key");
+			}
 
 			mappings.Add(key.Name, key);
 			dictionary.Add(key, value);
@@ -71,7 +84,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns><c>true</c> if the dictionary contains the specified key, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="key"/> is <c>null</c>.</exception>
 		public bool ContainsKey(IDocument key) {
-			if(key == null) throw new ArgumentNullException("key");
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
 
 			return FindKey(key) != null;
 		}
@@ -90,7 +106,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns><c>true</c> if the element is removed, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="key"/> is <c>null</c>.</exception>
 		public bool Remove(IDocument key) {
-			if(key == null) throw new ArgumentNullException("key");
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
 
 			try {
 				// The removal is considered to be successful even if no word mappings are removed
@@ -121,10 +140,16 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="key"/> is <c>null</c>.</exception>
 		/// <exception cref="KeyNotFoundException">If <paramref name="key"/> is not present in the dictionary.</exception>
 		public List<DumpedWordMapping> RemoveExtended(IDocument key, uint wordId) {
-			if(key == null) throw new ArgumentNullException("key");
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
 
 			IDocument target = FindKey(key);
-			if(target == null) throw new KeyNotFoundException("Specified IDocument was not found");
+			if(target == null)
+			{
+				throw new KeyNotFoundException("Specified IDocument was not found");
+			}
 			else {
 				IDocument mappedDoc = mappings[key.Name];
 				if(mappings.Remove(target.Name)) {
@@ -135,11 +160,17 @@ namespace ScrewTurn.Wiki.SearchEngine {
 						dump.Add(new DumpedWordMapping(wordId, key.ID, w));
 					}
 
-					if(!dictionary.Remove(target)) throw new InvalidOperationException("Internal data is broken");
+					if(!dictionary.Remove(target))
+					{
+						throw new InvalidOperationException("Internal data is broken");
+					}
 
 					return dump;
 				}
-				else throw new InvalidOperationException("Internal data is broken");
+				else
+				{
+					throw new InvalidOperationException("Internal data is broken");
+				}
 			}
 		}
 
@@ -150,11 +181,20 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns>The key, or <c>null</c>.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="key"/> is <c>null</c>.</exception>
 		private IDocument FindKey(IDocument key) {
-			if(key == null) throw new ArgumentNullException("key");
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
 
 			IDocument target = null;
-			if(mappings.TryGetValue(key.Name, out target)) return target;
-			else return null;
+			if(mappings.TryGetValue(key.Name, out target))
+			{
+				return target;
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -165,7 +205,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns><c>true</c> if the value is retrieved, <c>false</c> otherwise.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="key"/> is <c>null</c>.</exception>
 		public bool TryGetValue(IDocument key, out SortedBasicWordInfoSet value) {
-			if(key == null) throw new ArgumentNullException("key");
+			if(key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
 
 			IDocument target = FindKey(key);
 			if(target == null) {
@@ -194,19 +237,41 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="IndexOutOfRangeException">If the key is not found.</exception>
 		public SortedBasicWordInfoSet this[IDocument key] {
 			get {
-				if(key == null) throw new ArgumentNullException("key");
+				if(key == null)
+				{
+					throw new ArgumentNullException("key");
+				}
 
 				IDocument target = FindKey(key);
-				if(target == null) throw new IndexOutOfRangeException("The specified key was not found");
-				else return dictionary[target];
+				if(target == null)
+				{
+					throw new IndexOutOfRangeException("The specified key was not found");
+				}
+				else
+				{
+					return dictionary[target];
+				}
 			}
 			set {
-				if(key == null) throw new ArgumentNullException("key");
-				if(value == null) throw new ArgumentNullException("value");
+				if(key == null)
+				{
+					throw new ArgumentNullException("key");
+				}
+
+				if(value == null)
+				{
+					throw new ArgumentNullException("value");
+				}
 
 				IDocument target = FindKey(key);
-				if(target == null) throw new IndexOutOfRangeException("The specified key was not found");
-				else dictionary[target] = value;
+				if(target == null)
+				{
+					throw new IndexOutOfRangeException("The specified key was not found");
+				}
+				else
+				{
+					dictionary[target] = value;
+				}
 			}
 		}
 
@@ -241,7 +306,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="arrayIndex">The index at which the copy begins.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="array"/> is <c>null</c>.</exception>
 		public void CopyTo(KeyValuePair<IDocument, SortedBasicWordInfoSet>[] array, int arrayIndex) {
-			if(array == null) throw new ArgumentNullException("array");
+			if(array == null)
+			{
+				throw new ArgumentNullException("array");
+			}
 
 			int i = 0;
 			foreach(KeyValuePair<IDocument, SortedBasicWordInfoSet> pair in dictionary) {

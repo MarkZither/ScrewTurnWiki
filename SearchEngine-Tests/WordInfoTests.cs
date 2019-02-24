@@ -17,16 +17,14 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Constructor_NullText() {
-			WordInfo info = new WordInfo(null, 0, 0, WordLocation.Content);
+            Assert.That(() => { WordInfo info = new WordInfo(null, 0, 0, WordLocation.Content); }, Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void Constructor_EmptyText() {
-			WordInfo info = new WordInfo("", 0, 0, WordLocation.Content);
-		}
+            Assert.That(() => { WordInfo info = new WordInfo("", 0, 0, WordLocation.Content); }, Throws.ArgumentException);
+        }
 
 		[Test]
 		public void Equals() {

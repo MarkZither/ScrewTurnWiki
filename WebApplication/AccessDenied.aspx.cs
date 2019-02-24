@@ -26,8 +26,11 @@ namespace ScrewTurn.Wiki {
 					Content.SetPseudoCacheValue("AccessDeniedNotice", n);
 				}
 			}
-			if(!string.IsNullOrEmpty(n)) lblDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
-        }
+			if(!string.IsNullOrEmpty(n))
+			{
+				lblDescription.Text = FormattingPipeline.FormatWithPhase3(n, FormattingContext.Other, null);
+			}
+		}
 
     }
 

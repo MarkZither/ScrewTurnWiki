@@ -26,10 +26,20 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
 		public void Init(IHostV30 host, string config) {
-			if(host == null) throw new ArgumentNullException("host");
-			if(config == null) throw new ArgumentNullException("config");
+			if(host == null)
+			{
+				throw new ArgumentNullException("host");
+			}
 
-			if(AlreadyRun) return;
+			if(config == null)
+			{
+				throw new ArgumentNullException("config");
+			}
+
+			if(AlreadyRun)
+			{
+				return;
+			}
 
 			// 1. Delete PluginPack.dll
 			// 2. Download all other DLLs

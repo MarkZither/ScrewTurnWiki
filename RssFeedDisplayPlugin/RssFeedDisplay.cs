@@ -101,14 +101,21 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 								XmlNode itemContent = node.SelectNodes("/rss/channel/item/description")[i];
 								string itemContentStr = StripHtml(itemContent.InnerText);
 								itemContentStr = (itemContentStr.Length > words && itemContentStr.Substring(words - 3, 5) != "[...]") ? itemContentStr.Substring(0, itemContentStr.IndexOf(" ", words - 5) + 1) + " [...]" : itemContentStr;
-								if(itemContentStr.Length <= 1) itemContentStr = StripHtml(itemContent.InnerText);
+								if(itemContentStr.Length <= 1)
+								{
+									itemContentStr = StripHtml(itemContent.InnerText);
+								}
 
 								if(isTwitter) {
 									string tweet = itemTitle.InnerText;
 									tweet = tweet.Substring(tweet.IndexOf(":") + 2);
 									result += @"<div class=""tweet"">
 										 <a href=""" + itemLink.InnerText + @""" title=""Go to this Tweet""";
-									if(newWindow) result += @" target=""_blank""";
+									if(newWindow)
+									{
+										result += @" target=""_blank""";
+									}
+
 									result += @">" + tweet + @"</a>
 										</div>";
 								}
@@ -116,7 +123,11 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 									result += @"<div class=""rssentry"">
 										<span class=""rsstitle"">
 										<a href=""" + itemLink.InnerText + @""" title=""" + itemTitle.InnerText + @"""";
-									if(newWindow) result += @" target=""_blank""";
+									if(newWindow)
+									{
+										result += @" target=""_blank""";
+									}
+
 									result += @">" + itemTitle.InnerText + @"</a>
 										</span>
 										<br />
@@ -248,7 +259,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="content">The string.</param>
 		/// <returns>The result.</returns>
 		private static string StripHtml(string content) {
-			if(string.IsNullOrEmpty(content)) return "";
+			if(string.IsNullOrEmpty(content))
+			{
+				return "";
+			}
 
 			StringBuilder sb = new StringBuilder(Regex.Replace(content, "<[^>]*>", " "));
 			sb.Replace("&nbsp;", "");
@@ -276,7 +290,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			this._host = host;
 			this._config = config != null ? config : "";
 
-			if(this._config.ToLowerInvariant() == "nolog") _enableLogging = false;
+			if(this._config.ToLowerInvariant() == "nolog")
+			{
+				_enableLogging = false;
+			}
 		}
 
 		/// <summary>

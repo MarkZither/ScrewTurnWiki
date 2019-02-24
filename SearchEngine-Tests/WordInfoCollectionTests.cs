@@ -23,9 +23,8 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void Constructor_InvalidCapacity() {
-			WordInfoCollection collection = new WordInfoCollection(0);
+            Assert.Throws<ArgumentOutOfRangeException>(() => { WordInfoCollection collection = new WordInfoCollection(0); });
 		}
 
 		[Test]
@@ -44,10 +43,9 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Add_NullItem() {
 			WordInfoCollection collection = new WordInfoCollection();
-			collection.Add(null);
+			Assert.That(() => collection.Add(null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -146,35 +144,31 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void CopyTo_NullArray() {
 			WordInfoCollection collection = new WordInfoCollection();
 
-			collection.CopyTo(null, 0);
+			Assert.That(() => collection.CopyTo(null, 0), Throws.ArgumentNullException);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyTo_InvalidIndex_Negative() {
 			WordInfoCollection collection = new WordInfoCollection();
 
 			WordInfo[] results = new WordInfo[10];
 
-			collection.CopyTo(results, -1);
+			Assert.Throws<ArgumentOutOfRangeException>(() => collection.CopyTo(results, -1));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyTo_InvalidIndex_TooBig() {
 			WordInfoCollection collection = new WordInfoCollection();
 
 			WordInfo[] results = new WordInfo[10];
 
-			collection.CopyTo(results, 10);
+            Assert.Throws<ArgumentOutOfRangeException>(() => collection.CopyTo(results, 10));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyTo_ArrayTooSmall() {
 			WordInfoCollection collection = new WordInfoCollection();
 
@@ -186,11 +180,10 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			WordInfo[] matches = new WordInfo[1];
 
-			collection.CopyTo(matches, 0);
+            Assert.Throws<ArgumentOutOfRangeException>(() => collection.CopyTo(matches, 0));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyTo_NoSpaceAtIndex() {
 			WordInfoCollection collection = new WordInfoCollection();
 
@@ -202,7 +195,7 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			WordInfo[] matches = new WordInfo[2];
 
-			collection.CopyTo(matches, 1);
+            Assert.Throws<ArgumentOutOfRangeException>(() => collection.CopyTo(matches, 1));
 		}
 
 		[Test]
@@ -226,10 +219,9 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Remove_NullItem() {
 			WordInfoCollection collection = new WordInfoCollection();
-			collection.Remove(null);
+			Assert.That(() => collection.Remove(null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -244,8 +236,16 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 
 			int count = 0;
 			foreach(WordInfo r in collection) {
-				if(count == 0) Assert.AreEqual(mi1, r, "Wrong item at position 0");
-				if(count == 1) Assert.AreEqual(mi2, r, "Wrong item at position 1");
+				if(count == 0)
+				{
+					Assert.AreEqual(mi1, r, "Wrong item at position 0");
+				}
+
+				if(count == 1)
+				{
+					Assert.AreEqual(mi2, r, "Wrong item at position 1");
+				}
+
 				count++;
 			}
 			Assert.AreEqual(2, count, "Wrong count - enumerator does not work");
@@ -266,19 +266,15 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(IndexOutOfRangeException))]
 		public void Indexer_InvalidIndex_Negative() {
 			WordInfoCollection collection = new WordInfoCollection();
-			WordInfo mi = collection[-1];
+            Assert.Throws<IndexOutOfRangeException>(() => { WordInfo mi = collection[-1]; });
 		}
 
 		[Test]
-		[ExpectedException(typeof(IndexOutOfRangeException))]
 		public void Indexer_InvalidIndex_TooBig() {
 			WordInfoCollection collection = new WordInfoCollection();
-			WordInfo mi = collection[0];
+            Assert.Throws<IndexOutOfRangeException>(() => { WordInfo mi = collection[0]; });
 		}
-
 	}
-
 }

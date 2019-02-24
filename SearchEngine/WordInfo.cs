@@ -27,8 +27,15 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="firstCharIndex"/> or <paramref name="wordIndex"/> are less than zero.</exception>
 		public WordInfo(string text, ushort firstCharIndex, ushort wordIndex, WordLocation location)
 			: base(firstCharIndex, wordIndex, location) {
-			if(text == null) throw new ArgumentNullException("text");
-			if(text.Length == 0) throw new ArgumentException("Invalid text", "text");
+			if(text == null)
+			{
+				throw new ArgumentNullException("text");
+			}
+
+			if(text.Length == 0)
+			{
+				throw new ArgumentException("Invalid text", "text");
+			}
 
 			this.text = Tools.RemoveDiacriticsAndPunctuation(text, true);
 			//if(this.text.Length == 0) throw new InvalidOperationException();
@@ -54,8 +61,14 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="other">The instance of the object.</param>
 		/// <returns><c>true</c> if the instances are value-equal, <c>false</c> otherwise.</returns>
 		public override bool Equals(object other) {
-			if(other is WordInfo) return Equals((WordInfo)other);
-			else return false;
+			if(other is WordInfo)
+			{
+				return Equals((WordInfo)other);
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -64,7 +77,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="other">The other instance.</param>
 		/// <returns><c>true</c> if the instances are value-equal, <c>false</c> otherwise.</returns>
 		public bool Equals(WordInfo other) {
-			if(object.ReferenceEquals(other, null)) return false;
+			if(object.ReferenceEquals(other, null))
+			{
+				return false;
+			}
 
 			return other.FirstCharIndex == firstCharIndex && other.WordIndex == wordIndex &&
 				other.Location == location && other.text == text;
@@ -78,9 +94,15 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns><c>true</c> if the objects are value-equal, <c>false</c> otherwise.</returns>
 		public static bool operator ==(WordInfo x, WordInfo y) {
 			if(object.ReferenceEquals(x, null) && !object.ReferenceEquals(y, null) ||
-				!object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null)) return false;
+				!object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null))
+			{
+				return false;
+			}
 
-			if(object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null)) return true;
+			if(object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null))
+			{
+				return true;
+			}
 
 			return x.Equals(y);
 		}
@@ -110,7 +132,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns>The comparison result.</returns>
 		/// <remarks><b>The First Char Index does not partecipate to the comparison.</b></remarks>
 		public int CompareTo(WordInfo other) {
-			if(other == null) return 1;
+			if(other == null)
+			{
+				return 1;
+			}
 
 			// text has a distance module of 1
 			// location has a distance module of 2

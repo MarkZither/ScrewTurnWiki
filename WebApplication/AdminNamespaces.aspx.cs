@@ -16,7 +16,10 @@ namespace ScrewTurn.Wiki {
 		protected void Page_Load(object sender, EventArgs e) {
 			AdminMaster.RedirectToLoginIfNeeded();
 
-			if(!AdminMaster.CanManageNamespaces(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) UrlTools.Redirect("AccessDenied.aspx");
+			if(!AdminMaster.CanManageNamespaces(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+			{
+				UrlTools.Redirect("AccessDenied.aspx");
+			}
 
 			if(!Page.IsPostBack) {
 				rptNamespaces.DataBind();
@@ -95,7 +98,10 @@ namespace ScrewTurn.Wiki {
 				lblResult.CssClass = "";
 			}
 			else if(e.CommandName == "Perms") {
-				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames())) return;
+				if(!AdminMaster.CanManagePermissions(SessionFacade.GetCurrentUsername(), SessionFacade.GetCurrentGroupNames()))
+				{
+					return;
+				}
 
 				permissionsManager.CurrentResourceName = nspace != null ? nspace.Name : null;
 
@@ -216,7 +222,10 @@ namespace ScrewTurn.Wiki {
 			txtName.Text = txtName.Text.Trim();
 
 			Page.Validate("namespace");
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			// Create new namespace and the default page (MainPage)
 			bool done = Pages.CreateNamespace(txtName.Text,
@@ -272,8 +281,15 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnSave_Click(object sender, EventArgs e) {
 			// This can rarely occur
-			if(string.IsNullOrEmpty(lstDefaultPage.SelectedValue)) return;
-			if(string.IsNullOrEmpty(lstTheme.SelectedValue)) return;
+			if(string.IsNullOrEmpty(lstDefaultPage.SelectedValue))
+			{
+				return;
+			}
+
+			if(string.IsNullOrEmpty(lstTheme.SelectedValue))
+			{
+				return;
+			}
 
 			NamespaceInfo nspace = txtCurrentNamespace.Value != RootName ?
 				Pages.FindNamespace(txtCurrentNamespace.Value) : null;
@@ -365,7 +381,11 @@ namespace ScrewTurn.Wiki {
 				lstDefaultPage.Items.Clear();
 				foreach(PageInfo page in pages) {
 					ListItem item = new ListItem(NameTools.GetLocalName(page.FullName), page.FullName);
-					if(page.FullName == currentDefaultPage) item.Selected = true;
+					if(page.FullName == currentDefaultPage)
+					{
+						item.Selected = true;
+					}
+
 					lstDefaultPage.Items.Add(item);
 				}
 			}
@@ -417,7 +437,10 @@ namespace ScrewTurn.Wiki {
 			txtNewName.Text = txtNewName.Text.Trim();
 
 			Page.Validate("rename");
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			NamespaceInfo nspace = Pages.FindNamespace(txtCurrentNamespace.Value);
 			string theme = Settings.GetTheme(nspace.Name);

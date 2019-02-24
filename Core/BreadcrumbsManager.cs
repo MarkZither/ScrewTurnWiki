@@ -27,7 +27,10 @@ namespace ScrewTurn.Wiki {
 				HttpCookie cookie = HttpContext.Current.Request.Cookies[CookieName];
 				return cookie;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -41,7 +44,10 @@ namespace ScrewTurn.Wiki {
 				try {
 					foreach(string p in cookie.Values[CookieValue].Split('|')) {
 						PageInfo page = Pages.FindPage(p);
-						if(page != null) pages.Add(page);
+						if(page != null)
+						{
+							pages.Add(page);
+						}
 					}
 				}
 				catch { }
@@ -61,7 +67,10 @@ namespace ScrewTurn.Wiki {
 			StringBuilder sb = new StringBuilder(MaxPages * 20);
 			for(int i = 0; i < pages.Count; i++) {
 				sb.Append(pages[i].FullName);
-				if(i != pages.Count - 1) sb.Append("|");
+				if(i != pages.Count - 1)
+				{
+					sb.Append("|");
+				}
 			}
 
 			cookie.Values[CookieValue] = sb.ToString();
@@ -80,9 +89,16 @@ namespace ScrewTurn.Wiki {
 		public void AddPage(PageInfo page) {
 			lock(this) {
 				int index = FindPage(page);
-				if(index != -1) pages.RemoveAt(index);
+				if(index != -1)
+				{
+					pages.RemoveAt(index);
+				}
+
 				pages.Add(page);
-				if(pages.Count > MaxPages) pages.RemoveRange(0, pages.Count - MaxPages);
+				if(pages.Count > MaxPages)
+				{
+					pages.RemoveRange(0, pages.Count - MaxPages);
+				}
 
 				UpdateCookie();
 			}
@@ -95,11 +111,17 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The index in the collection.</returns>
 		private int FindPage(PageInfo page) {
 			lock(this) {
-				if(pages == null || pages.Count == 0) return -1;
+				if(pages == null || pages.Count == 0)
+				{
+					return -1;
+				}
 
 				PageNameComparer comp = new PageNameComparer();
 				for(int i = 0; i < pages.Count; i++) {
-					if(comp.Compare(pages[i], page) == 0) return i;
+					if(comp.Compare(pages[i], page) == 0)
+					{
+						return i;
+					}
 				}
 
 				return -1;
@@ -113,7 +135,10 @@ namespace ScrewTurn.Wiki {
 		public void RemovePage(PageInfo page) {
 			lock(this) {
 				int index = FindPage(page);
-				if(index >= 0) pages.RemoveAt(index);
+				if(index >= 0)
+				{
+					pages.RemoveAt(index);
+				}
 
 				UpdateCookie();
 			}
@@ -138,7 +163,10 @@ namespace ScrewTurn.Wiki {
 				lock(this) {
 					List<PageInfo> newPages = new List<PageInfo>(pages.Count);
 					foreach(PageInfo p in pages) {
-						if(Pages.FindPage(p.FullName) != null) newPages.Add(p);
+						if(Pages.FindPage(p.FullName) != null)
+						{
+							newPages.Add(p);
+						}
 					}
 
 					return newPages.ToArray();

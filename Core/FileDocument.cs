@@ -30,10 +30,25 @@ namespace ScrewTurn.Wiki {
 		/// <param name="provider">The file provider.</param>
 		/// <param name="dateTime">The modification date/time.</param>
 		public FileDocument(string fullName, string provider, DateTime dateTime) {
-			if(fullName == null) throw new ArgumentNullException("fullName");
-			if(fullName.Length == 0) throw new ArgumentException("Full Name cannot be empty", "fullName");
-			if(provider == null) throw new ArgumentNullException("provider");
-			if(provider.Length == 0) throw new ArgumentException("Provider cannot be empty", "provider");
+			if(fullName == null)
+			{
+				throw new ArgumentNullException("fullName");
+			}
+
+			if(fullName.Length == 0)
+			{
+				throw new ArgumentException("Full Name cannot be empty", "fullName");
+			}
+
+			if(provider == null)
+			{
+				throw new ArgumentNullException("provider");
+			}
+
+			if(provider.Length == 0)
+			{
+				throw new ArgumentException("Provider cannot be empty", "provider");
+			}
 
 			id = Tools.HashDocumentNameForTemporaryIndex(fullName);
 			name = provider + "|" + fullName;

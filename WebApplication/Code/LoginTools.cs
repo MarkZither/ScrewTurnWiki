@@ -82,10 +82,19 @@ namespace ScrewTurn.Wiki {
 		public static void TryRedirect(bool goHome) {
 			if(HttpContext.Current.Request["Redirect"] != null) {
 				string target = HttpContext.Current.Request["Redirect"];
-				if(target.StartsWith("http:") || target.StartsWith("https:")) HttpContext.Current.Response.Redirect(target);
-				else UrlTools.Redirect(UrlTools.BuildUrl(target));
+				if(target.StartsWith("http:") || target.StartsWith("https:"))
+				{
+					HttpContext.Current.Response.Redirect(target);
+				}
+				else
+				{
+					UrlTools.Redirect(UrlTools.BuildUrl(target));
+				}
 			}
-			else if(goHome) UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
+			else if(goHome)
+			{
+				UrlTools.Redirect(UrlTools.BuildUrl("Default.aspx"));
+			}
 		}
 
 		/// <summary>
@@ -115,8 +124,14 @@ namespace ScrewTurn.Wiki {
 				currentUsername, currentGroups);
 
 			if(!canViewNamespace) {
-				if(SessionFacade.CurrentUsername == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(HttpContext.Current.Request.Url.ToString()));
-				else UrlTools.Redirect("AccessDenied.aspx");
+				if(SessionFacade.CurrentUsername == null)
+				{
+					UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(HttpContext.Current.Request.Url.ToString()));
+				}
+				else
+				{
+					UrlTools.Redirect("AccessDenied.aspx");
+				}
 			}
 		}
 

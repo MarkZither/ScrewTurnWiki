@@ -182,8 +182,14 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <returns>The value of the attribute or <c>null</c> if no value is available.</returns>
 		private static string TryGetAttribute(XmlNode node, string attribute) {
 			XmlAttribute attr = node.Attributes[attribute];
-			if(attr != null) return attr.Value;
-			else return null;
+			if(attr != null)
+			{
+				return attr.Value;
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -222,12 +228,21 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="providerName">The provider or <c>null</c> or <b>string.Empty</b>.</param>
 		/// <returns>The downloads.</returns>
 		private int CountDownloads(string fullFilePath, string providerName) {
-			if(string.IsNullOrEmpty(fullFilePath)) return 0;
+			if(string.IsNullOrEmpty(fullFilePath))
+			{
+				return 0;
+			}
 
 			IFilesStorageProviderV30 provider = GetProvider(providerName);
-			if(provider == null) return 0;
+			if(provider == null)
+			{
+				return 0;
+			}
 
-			if(!fullFilePath.StartsWith("/")) fullFilePath = "/" + fullFilePath;
+			if(!fullFilePath.StartsWith("/"))
+			{
+				fullFilePath = "/" + fullFilePath;
+			}
 
 			string directory = StDirectoryInfo.GetDirectory(fullFilePath);
 			StFileInfo[] files = _host.ListFiles(new StDirectoryInfo(directory, provider));
@@ -252,8 +267,15 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="providerName">The provider or <c>null</c> or <b>string.Empty</b>.</param>
 		/// <returns>The downloads.</returns>
 		private int CountDownloads(string attachmentName, string pageName, string providerName) {
-			if(string.IsNullOrEmpty(attachmentName)) return 0;
-			if(string.IsNullOrEmpty(pageName)) return 0;
+			if(string.IsNullOrEmpty(attachmentName))
+			{
+				return 0;
+			}
+
+			if(string.IsNullOrEmpty(pageName))
+			{
+				return 0;
+			}
 
 			PageInfo page = _host.FindPage(pageName);
 			if(page == null) {
@@ -262,7 +284,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			}
 
 			IFilesStorageProviderV30 provider = GetProvider(providerName);
-			if(provider == null) return 0;
+			if(provider == null)
+			{
+				return 0;
+			}
 
 			StFileInfo[] attachments = _host.ListPageAttachments(page);
 
@@ -284,12 +309,19 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// <param name="provider">The provider.</param>
 		/// <returns></returns>
 		private IFilesStorageProviderV30 GetProvider(string provider) {
-			if(string.IsNullOrEmpty(provider)) provider = _host.GetSettingValue(SettingName.DefaultFilesStorageProvider);
+			if(string.IsNullOrEmpty(provider))
+			{
+				provider = _host.GetSettingValue(SettingName.DefaultFilesStorageProvider);
+			}
+
 			provider = provider.ToLowerInvariant();
 
 			IFilesStorageProviderV30[] all = _host.GetFilesStorageProviders(true);
 			foreach(IFilesStorageProviderV30 prov in all) {
-				if(prov.GetType().FullName.ToLowerInvariant() == provider) return prov;
+				if(prov.GetType().FullName.ToLowerInvariant() == provider)
+				{
+					return prov;
+				}
 			}
 
 			LogWarning("Provider " + provider + " not found");
@@ -343,7 +375,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			this._host = host;
 			this._config = config != null ? config : "";
 
-			if(this._config.ToLowerInvariant() == "nolog") _enableLogging = false;
+			if(this._config.ToLowerInvariant() == "nolog")
+			{
+				_enableLogging = false;
+			}
 		}
 
 		/// <summary>

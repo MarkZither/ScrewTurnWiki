@@ -102,12 +102,26 @@ namespace ScrewTurn.Wiki {
 			// If not available, load defaults
 
 			string culture = Preferences.LoadLanguageFromUserData();
-			if(culture == null) culture = Preferences.LoadLanguageFromCookie();
-			if(culture == null) culture = Settings.DefaultLanguage;
+			if(culture == null)
+			{
+				culture = Preferences.LoadLanguageFromCookie();
+			}
+
+			if(culture == null)
+			{
+				culture = Settings.DefaultLanguage;
+			}
 
 			int? tempTimezone = Preferences.LoadTimezoneFromUserData();
-			if(!tempTimezone.HasValue) tempTimezone = Preferences.LoadTimezoneFromCookie();
-			if(!tempTimezone.HasValue) tempTimezone = Settings.DefaultTimezone;
+			if(!tempTimezone.HasValue)
+			{
+				tempTimezone = Preferences.LoadTimezoneFromCookie();
+			}
+
+			if(!tempTimezone.HasValue)
+			{
+				tempTimezone = Settings.DefaultTimezone;
+			}
 
 			languageSelector.SelectedLanguage = culture;
 			languageSelector.SelectedTimezone = tempTimezone.ToString();
@@ -148,7 +162,10 @@ namespace ScrewTurn.Wiki {
 			lblSaveDisplayNameResult.Text = "";
 
 			Page.Validate("vgDisplayName");
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			if(Users.ModifyUser(currentUser, txtDisplayName.Text, null,
 				currentUser.Email, currentUser.Active)) {
@@ -168,7 +185,10 @@ namespace ScrewTurn.Wiki {
 			lblSaveEmailResult.Text = "";
 
 			Page.Validate("vgEmail");
-			if(!Page.IsValid) return; 
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			Users.ChangeEmail(currentUser, txtEmail1.Text);
 			lblSaveEmailResult.CssClass = "resultok";
@@ -180,7 +200,10 @@ namespace ScrewTurn.Wiki {
 
 		protected void btnSavePassword_Click(object sender, EventArgs e) {
 			Page.Validate("vgPassword");
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			Users.ChangePassword(currentUser, txtPassword1.Text);
 			lblSavePasswordResult.CssClass = "resultok";

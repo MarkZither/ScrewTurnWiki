@@ -19,25 +19,47 @@ namespace ScrewTurn.Wiki {
 			Page.Title = Properties.Messages.UserTitle + " - " + Settings.WikiTitle;
 
 			currentUsername = Request["User"];
-			if(string.IsNullOrEmpty(currentUsername)) currentUsername = Request["Username"];
-			if(string.IsNullOrEmpty(currentUsername)) UrlTools.Redirect("Default.aspx");
+			if(string.IsNullOrEmpty(currentUsername))
+			{
+				currentUsername = Request["Username"];
+			}
+
+			if(string.IsNullOrEmpty(currentUsername))
+			{
+				UrlTools.Redirect("Default.aspx");
+			}
 
 			if(currentUsername == "admin") {
 				currentUser = Users.GetAdministratorAccount();
 			}
-			else currentUser = Users.FindUser(currentUsername);
+			else
+			{
+				currentUser = Users.FindUser(currentUsername);
+			}
 
-			if(currentUser == null) UrlTools.Redirect("Default.aspx");
+			if(currentUser == null)
+			{
+				UrlTools.Redirect("Default.aspx");
+			}
 
 			if(!Page.IsPostBack) {
 				lblTitle.Text = lblTitle.Text.Replace("##NAME##", Users.GetDisplayName(currentUser));
 
 				txtSubject.Text = Request["Subject"];
-				if(txtSubject.Text != "" && SessionFacade.LoginKey == null) UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
+				if(txtSubject.Text != "" && SessionFacade.LoginKey == null)
+				{
+					UrlTools.Redirect("Login.aspx?Redirect=" + Tools.UrlEncode(Request.Url.ToString()));
+				}
 			}
 
-			if(SessionFacade.LoginKey == null) pnlMessage.Visible = false;
-			else pnlMessage.Visible = true;
+			if(SessionFacade.LoginKey == null)
+			{
+				pnlMessage.Visible = false;
+			}
+			else
+			{
+				pnlMessage.Visible = true;
+			}
 
 			DisplayGravatar();
 
@@ -98,7 +120,10 @@ namespace ScrewTurn.Wiki {
 			lblSendResult.CssClass = "";
 
 			Page.Validate();
-			if(!Page.IsValid) return;
+			if(!Page.IsValid)
+			{
+				return;
+			}
 
 			UserInfo loggedUser = SessionFacade.GetCurrentUser();
 

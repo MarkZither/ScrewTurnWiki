@@ -22,10 +22,9 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(10, set.Capacity, "Wrong capacity (capacity should be ensured)");
 		}
 
-		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void Constructor_InvalidCapacity() {
-			SortedBasicWordInfoSet set = new SortedBasicWordInfoSet(0);
+        [Test]
+        public void Constructor_InvalidCapacity() {
+            Assert.Throws<ArgumentOutOfRangeException>(() => { SortedBasicWordInfoSet set = new SortedBasicWordInfoSet(0); });
 		}
 
 		[Test]
@@ -86,10 +85,26 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 			Assert.AreEqual(2, set.Count);
 			int count = 0;
 			foreach(BasicWordInfo item in set) {
-				if(count == 0) Assert.AreEqual(1, item.FirstCharIndex, "Wrong start index for current item");
-				if(count == 0) Assert.AreEqual(0, item.WordIndex, "Wrong word index for current item");
-				if(count == 1) Assert.AreEqual(3, item.FirstCharIndex, "Wrong start index for current item");
-				if(count == 1) Assert.AreEqual(1, item.WordIndex, "Wrong word index for current item");
+				if(count == 0)
+				{
+					Assert.AreEqual(1, item.FirstCharIndex, "Wrong start index for current item");
+				}
+
+				if(count == 0)
+				{
+					Assert.AreEqual(0, item.WordIndex, "Wrong word index for current item");
+				}
+
+				if(count == 1)
+				{
+					Assert.AreEqual(3, item.FirstCharIndex, "Wrong start index for current item");
+				}
+
+				if(count == 1)
+				{
+					Assert.AreEqual(1, item.WordIndex, "Wrong word index for current item");
+				}
+
 				count++;
 			}
 			Assert.AreEqual(2, count);
@@ -111,19 +126,15 @@ namespace ScrewTurn.Wiki.SearchEngine.Tests {
 		}
 
 		[Test]
-		[ExpectedException(typeof(IndexOutOfRangeException))]
 		public void Indexer_InvalidIndex_Negative() {
 			SortedBasicWordInfoSet set = new SortedBasicWordInfoSet();
-			BasicWordInfo i = set[-1];
+			Assert.Throws<IndexOutOfRangeException>(() => { BasicWordInfo i = set[-1]; });
 		}
 
 		[Test]
-		[ExpectedException(typeof(IndexOutOfRangeException))]
 		public void Indexer_InvalidIndex_TooBig() {
 			SortedBasicWordInfoSet set = new SortedBasicWordInfoSet();
-			BasicWordInfo i = set[1];
+            Assert.Throws<IndexOutOfRangeException>(() => { BasicWordInfo i = set[1]; });
 		}
-
 	}
-
 }

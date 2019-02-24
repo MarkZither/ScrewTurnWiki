@@ -51,8 +51,14 @@ namespace ScrewTurn.Wiki {
 
 			string customEditorCss = Path.Combine(Settings.ThemesDirectory, theme);
 			customEditorCss = Path.Combine(customEditorCss, "Editor.css");
-			if(File.Exists(customEditorCss)) result.AppendFormat(@"<link rel=""stylesheet"" href=""Themes/{0}/Editor.css"" type=""text/css"" />" + "\n", theme);
-			else result.Append(@"<link rel=""stylesheet"" href=""Themes/Editor.css"" type=""text/css"" />" + "\n");
+			if(File.Exists(customEditorCss))
+			{
+				result.AppendFormat(@"<link rel=""stylesheet"" href=""Themes/{0}/Editor.css"" type=""text/css"" />" + "\n", theme);
+			}
+			else
+			{
+				result.Append(@"<link rel=""stylesheet"" href=""Themes/Editor.css"" type=""text/css"" />" + "\n");
+			}
 
 			// OpenSearch
 			result.AppendFormat(@"<link rel=""search"" href=""Search.aspx?OpenSearch=1"" type=""application/opensearchdescription+xml"" title=""{1}"" />",
@@ -108,11 +114,23 @@ namespace ScrewTurn.Wiki {
         /// <param name="bytes">The # of bytes.</param>
         /// <returns>The formatted string.</returns>
         public static string BytesToString(long bytes) {
-            if(bytes < 1024) return bytes.ToString() + " B";
-            else if(bytes < 1048576) return string.Format("{0:N2} KB", (float)bytes / 1024F);
-            else if(bytes < 1073741824) return string.Format("{0:N2} MB", (float)bytes / 1048576F);
-            else return string.Format("{0:N2} GB", (float)bytes / 1073741824F);
-        }
+            if(bytes < 1024)
+			{
+				return bytes.ToString() + " B";
+			}
+			else if(bytes < 1048576)
+			{
+				return string.Format("{0:N2} KB", (float)bytes / 1024F);
+			}
+			else if(bytes < 1073741824)
+			{
+				return string.Format("{0:N2} MB", (float)bytes / 1048576F);
+			}
+			else
+			{
+				return string.Format("{0:N2} GB", (float)bytes / 1073741824F);
+			}
+		}
 
         /// <summary>
         /// Computes the Disk Space Usage of a directory.
@@ -232,7 +250,10 @@ namespace ScrewTurn.Wiki {
 			if(value.Length > 0) {
 				return value[0].ToString().ToUpper(CultureInfo.CurrentCulture) + value.Substring(1);
 			}
-			else return "";
+			else
+			{
+				return "";
+			}
 		}
 
         /// <summary>
@@ -295,8 +316,13 @@ namespace ScrewTurn.Wiki {
 			string password = "";
 			for(int i = 0; i < 10; i++) {
 				if(i % 2 == 0)
+				{
 					password += ((char)r.Next(65, 91)).ToString(); // Uppercase letter
-				else password += ((char)r.Next(97, 123)).ToString(); // Lowercase letter
+				}
+				else
+				{
+					password += ((char)r.Next(97, 123)).ToString(); // Lowercase letter
+				}
 			}
 			return password;
 		}
@@ -307,7 +333,11 @@ namespace ScrewTurn.Wiki {
 		public static TimeSpan SystemUptime {
 			get {
 				int t = Environment.TickCount;
-				if(t < 0) t = t + int.MaxValue;
+				if(t < 0)
+				{
+					t = t + int.MaxValue;
+				}
+
 				t = t / 1000;
 				return TimeSpan.FromSeconds(t);
 			}
@@ -332,7 +362,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="input">The input string.</param>
 		/// <returns>The encoded string.</returns>
 		public static string UrlEncode(string input) {
-			if(HttpContext.Current != null && HttpContext.Current.Server != null) return HttpContext.Current.Server.UrlEncode(input).Replace("+", "%20");
+			if(HttpContext.Current != null && HttpContext.Current.Server != null)
+			{
+				return HttpContext.Current.Server.UrlEncode(input).Replace("+", "%20");
+			}
 			else {
 				Log.LogEntry("HttpContext.Current or HttpContext.Current.Server were null (Tools.UrlEncode)", EntryType.Warning, Log.SystemUsername);
 				return input;
@@ -385,15 +418,30 @@ namespace ScrewTurn.Wiki {
 			string page = HttpContext.Current.Request["Page"];
 			if(string.IsNullOrEmpty(page)) {
 				if(loadDefault) {
-					if(nsinfo == null) page = Settings.DefaultPage;
-					else page = nsinfo.DefaultPage != null ? nsinfo.DefaultPage.FullName : "";
+					if(nsinfo == null)
+					{
+						page = Settings.DefaultPage;
+					}
+					else
+					{
+						page = nsinfo.DefaultPage != null ? nsinfo.DefaultPage.FullName : "";
+					}
 				}
-				else return null;
+				else
+				{
+					return null;
+				}
 			}
 
 			string fullName = null;
-			if(!page.StartsWith(nspace + ".")) fullName = nspace + "." + page;
-			else fullName = page;
+			if(!page.StartsWith(nspace + "."))
+			{
+				fullName = nspace + "." + page;
+			}
+			else
+			{
+				fullName = page;
+			}
 
 			fullName = fullName.Trim('.');
 
@@ -409,8 +457,14 @@ namespace ScrewTurn.Wiki {
 			string page = HttpContext.Current.Request["Page"] != null ? HttpContext.Current.Request["Page"] : "";
 
 			string fullName = null;
-			if(!page.StartsWith(nspace + ".")) fullName = nspace + "." + page;
-			else fullName = page;
+			if(!page.StartsWith(nspace + "."))
+			{
+				fullName = nspace + "." + page;
+			}
+			else
+			{
+				fullName = page;
+			}
 
 			return fullName.Trim('.');
 		}
@@ -452,7 +506,11 @@ namespace ScrewTurn.Wiki {
 				int index = filename.LastIndexOf("/");
 				if(index > 0) {
 					string directoryName = filename.Substring(0, index + 1);
-					if(!directoryName.StartsWith("/")) directoryName = "/" + directoryName;
+					if(!directoryName.StartsWith("/"))
+					{
+						directoryName = "/" + directoryName;
+					}
+
 					return directoryName;
 				}
 			}
@@ -517,8 +575,15 @@ namespace ScrewTurn.Wiki {
 				for(int i = 0; i < versions.Length; i++) {
 					ver = versions[i];
 					if(versions[i].Equals(currentVersion)) {
-						if(i == versions.Length - 1) upToDate = true;
-						else upToDate = false;
+						if(i == versions.Length - 1)
+						{
+							upToDate = true;
+						}
+						else
+						{
+							upToDate = false;
+						}
+
 						ver = versions[versions.Length - 1];
 						break;
 					}
@@ -532,8 +597,14 @@ namespace ScrewTurn.Wiki {
 				else {
 					newVersion = ver;
 
-					if(lines.Length == 2) newAssemblyUrl = lines[1];
-					else newAssemblyUrl = null;
+					if(lines.Length == 2)
+					{
+						newAssemblyUrl = lines[1];
+					}
+					else
+					{
+						newAssemblyUrl = null;
+					}
 
 					return UpdateStatus.NewVersionFound;
 				}
@@ -556,7 +627,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="value">The string to compute the hash of.</param>
 		/// <returns>The hash value.</returns>
 		public static uint HashDocumentNameForTemporaryIndex(string value) {
-			if(value == null) throw new ArgumentNullException("value");
+			if(value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
 
 			// sdbm algorithm, borrowed from http://www.cse.yorku.ca/~oz/hash.html
 			uint hash = 0;

@@ -43,8 +43,14 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The item name.</param>
 		/// <returns>The namespace-qualified item name.</returns>
 		private string GetPseudoCacheItemName(string name) {
-			if(string.IsNullOrEmpty(currentNamespace)) return name;
-			else return currentNamespace + "." + name;
+			if(string.IsNullOrEmpty(currentNamespace))
+			{
+				return name;
+			}
+			else
+			{
+				return currentNamespace + "." + name;
+			}
 		}
 
 		/// <summary>
@@ -92,8 +98,14 @@ namespace ScrewTurn.Wiki {
 
 			// Use a Control to allow 3rd party plugins to programmatically access the Page header
 			string nspace = currentNamespace;
-			if(nspace == null) nspace = "";
-			else if(nspace.Length > 0) nspace += ".";
+			if(nspace == null)
+			{
+				nspace = "";
+			}
+			else if(nspace.Length > 0)
+			{
+				nspace += ".";
+			}
 
 			Literal c = new Literal();
 			c.Text = h.Replace("######______INCLUDES______######", Tools.GetIncludes(currentNamespace)).Replace("######______NAMESPACE______######", nspace);

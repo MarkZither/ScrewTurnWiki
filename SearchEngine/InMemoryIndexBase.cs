@@ -38,7 +38,11 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <remarks>This method must be called before invoking <see cref="InitializeData" />.</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="buildDocument"/> is <c>null</c>.</exception>
 		public void SetBuildDocumentDelegate(BuildDocument buildDocument) {
-			if(buildDocument == null) throw new ArgumentNullException("buildDocument");
+			if(buildDocument == null)
+			{
+				throw new ArgumentNullException("buildDocument");
+			}
+
 			lock(this) {
 				this.buildDocument = buildDocument;
 			}
@@ -58,7 +62,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 				IndexChanged(this, args);
 				return args.Result;
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -79,7 +86,11 @@ namespace ScrewTurn.Wiki.SearchEngine {
 				}
 			}
 			set {
-				if(value == null) throw new ArgumentNullException("value", "Stop words cannot be null");
+				if(value == null)
+				{
+					throw new ArgumentNullException("value", "Stop words cannot be null");
+				}
+
 				lock(this) {
 					stopWords = value;
 				}
@@ -109,7 +120,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 				lock(this) {
 					foreach(KeyValuePair<string, Word> pair in catalog) {
 						foreach(KeyValuePair<IDocument, SortedBasicWordInfoSet> pair2 in pair.Value.Occurrences) {
-							if(!docs.Contains(pair2.Key)) docs.Add(pair2.Key);
+							if(!docs.Contains(pair2.Key))
+							{
+								docs.Add(pair2.Key);
+							}
 						}
 					}
 				}
@@ -155,11 +169,25 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <exception cref="ArgumentNullException">If <paramref name="documents"/>, <paramref name="words"/> or <paramref name="mappings"/> are <c>null</c>.</exception>
 		/// <exception cref="InvalidOperationException">If <see cref="M:SetBuildDocumentDelegate"/> was not called.</exception>
 		public void InitializeData(DumpedDocument[] documents, DumpedWord[] words, DumpedWordMapping[] mappings) {
-			if(documents == null) throw new ArgumentNullException("documents");
-			if(words == null) throw new ArgumentNullException("words");
-			if(mappings == null) throw new ArgumentNullException("mappings");
+			if(documents == null)
+			{
+				throw new ArgumentNullException("documents");
+			}
 
-			if(buildDocument == null) throw new InvalidOperationException("InitializeData can be invoked only when the BuildDocument delegate is set");
+			if(words == null)
+			{
+				throw new ArgumentNullException("words");
+			}
+
+			if(mappings == null)
+			{
+				throw new ArgumentNullException("mappings");
+			}
+
+			if(buildDocument == null)
+			{
+				throw new InvalidOperationException("InitializeData can be invoked only when the BuildDocument delegate is set");
+			}
 
 			lock(this) {
 				catalog.Clear();
@@ -231,9 +259,20 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// are deleted from the index.</remarks>
 		/// <exception cref="ArgumentNullException">If <paramref name="document"/> or <paramref name="content"/> are <c>null</c>.</exception>
 		public int StoreDocument(IDocument document, string[] keywords, string content, object state) {
-			if(document == null) throw new ArgumentNullException("document");
-			if(keywords == null) keywords = new string[0];
-			if(content == null) throw new ArgumentNullException("content");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
+
+			if(keywords == null)
+			{
+				keywords = new string[0];
+			}
+
+			if(content == null)
+			{
+				throw new ArgumentNullException("content");
+			}
 
 			lock(this) {
 				DumpedChange removeChange = RemoveDocumentInternal(document);
@@ -332,7 +371,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 						break;
 					}
 				}
-				if(!wordIdUpdated) throw new InvalidOperationException("No ID for new word");
+				if(!wordIdUpdated)
+				{
+					throw new InvalidOperationException("No ID for new word");
+				}
 			}
 
 			return count;
@@ -384,7 +426,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="state">A state object that is passed to the IndexStorer SaveDate/DeleteData function.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="document"/> is <c>null</c>.</exception>
 		public void RemoveDocument(IDocument document, object state) {
-			if(document == null) throw new ArgumentNullException("document");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
 
 			DumpedChange dc = RemoveDocumentInternal(document);
 
@@ -416,7 +461,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <param name="document">The document to remove.</param>
 		/// <returns>The dumped change data, if any, <c>null</c> otherwise.</returns>
 		protected DumpedChange RemoveDocumentInternal(IDocument document) {
-			if(document == null) throw new ArgumentNullException("document");
+			if(document == null)
+			{
+				throw new ArgumentNullException("document");
+			}
 
 			// Find real document to remove by name
 			document = FindDocument(document.Name);
@@ -434,7 +482,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 			// Remove all words that have no occurrences left
 			List<string> toRemove = new List<string>(50);
 			foreach(string w in catalog.Keys) {
-				if(catalog[w].TotalOccurrences == 0) toRemove.Add(w);
+				if(catalog[w].TotalOccurrences == 0)
+				{
+					toRemove.Add(w);
+				}
 			}
 			dw = new List<DumpedWord>(toRemove.Count);
 			foreach(string w in toRemove) {
@@ -445,7 +496,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 			if(dm.Count > 0 || dw.Count > 0 || document != null) {
 				return new DumpedChange(new DumpedDocument(document), dw, dm);
 			}
-			else return null;
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -455,7 +509,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// <returns>The results.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
 		public SearchResultCollection Search(SearchParameters parameters) {
-			if(parameters == null) throw new ArgumentNullException("parameters");
+			if(parameters == null)
+			{
+				throw new ArgumentNullException("parameters");
+			}
 
 			using(IWordFetcher fetcher = new InMemoryIndexWordFetcher(catalog)) {
 				if(parameters.DocumentTypeTags == null) {
@@ -481,7 +538,10 @@ namespace ScrewTurn.Wiki.SearchEngine {
 		/// </summary>
 		/// <param name="catalog">The index catalog.</param>
 		public InMemoryIndexWordFetcher(Dictionary<string, Word> catalog) {
-			if(catalog == null) throw new ArgumentNullException("catalog");
+			if(catalog == null)
+			{
+				throw new ArgumentNullException("catalog");
+			}
 
 			this.catalog = catalog;
 		}

@@ -52,7 +52,10 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 			MatchCollection mc = RefRegex.Matches(raw);
 
 			// No ref-tag found, nothing to do
-			if(mc.Count == 0) return raw;
+			if(mc.Count == 0)
+			{
+				return raw;
+			}
 
 			// No references tag
 			if(ReferencesRegex.Matches(raw).Count == 0) {
