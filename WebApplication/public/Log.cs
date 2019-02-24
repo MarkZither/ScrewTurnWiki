@@ -43,3 +43,21 @@ G|2019/02/23 18:18:51|Provider Local Users Provider loaded (Enabled)|SYSTEM
 G|2019/02/23 18:18:52|Provider Local Pages Provider loaded (Enabled)|SYSTEM
 G|2019/02/23 18:18:52|Provider Local Cache Provider loaded (Enabled)|SYSTEM
 G|2019/02/23 18:18:52|ScrewTurn Wiki is ready|SYSTEM
+G|2019/02/24 14:48:21|Provider Local Files Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 14:48:23|Provider Local Users Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 14:48:24|Provider Local Pages Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 14:48:24|Provider Local Cache Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 14:48:24|ScrewTurn Wiki is ready|SYSTEM
+G|2019/02/24 14:50:18|User admin logged in|SYSTEM
+G|2019/02/24 14:51:35|Provider DLL upload requested ScrewTurn.Wiki.AclEngine.dll|admin
+G|2019/02/24 14:52:54|Provider Local Files Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 14:52:54|Provider Local Users Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 14:52:55|Provider Local Pages Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 14:52:55|Provider Local Cache Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 14:52:55|ScrewTurn Wiki is ready|SYSTEM
+G|2019/02/24 14:56:19|User admin logged in|SYSTEM
+G|2019/02/24 15:15:11|Provider Local Files Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 15:15:11|Provider Local Users Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 15:15:12|Provider Local Pages Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 15:15:12|Provider Local Cache Provider loaded (Enabled)|SYSTEM
+G|2019/02/24 15:15:12|ScrewTurn Wiki is ready|SYSTEM
