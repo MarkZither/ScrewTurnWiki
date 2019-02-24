@@ -14,7 +14,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 	public class SqlServerFilesStorageProviderTests : FilesStorageProviderTestScaffolding {
 
 		//private const string ConnString = "Data Source=(local)\\SQLExpress;User ID=sa;Password=password;";
-		private const string ConnString = "Data Source=(local)\\MSSQLSERVER2016;Integrated Security=SSPI;";
+		private string ConnString = "Data Source=(local)\\MSSQLSERVER2016;Integrated Security=SSPI;";
 		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
 
 		public override IFilesStorageProviderV30 GetProvider() {
@@ -25,6 +25,10 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 
 		[OneTimeSetUp]
 		public void FixtureSetUp() {
+			bool.TryParse(Environment.GetEnvironmentVariable("APPVEYOR"), out bool isAppveyor);
+			if(isAppveyor){
+				ConnString = "Server=(local)\\SQL2016;User ID=sa;Password=Password12!";
+			}
 			// Create database with no tables
 			SqlConnection cn = new SqlConnection(ConnString);
 			cn.Open();
