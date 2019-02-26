@@ -2,6 +2,8 @@
 
 <%@ Register TagPrefix="st" TagName="ProviderSelector" Src="~/ProviderSelector.ascx" %>
 
+<%@ Register assembly="Syncfusion.EJ.Web, Version=16.4460.0.42, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" namespace="Syncfusion.JavaScript.Web" tagprefix="ej" %>
+
 <asp:Content ID="ctnHead" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 
@@ -20,7 +22,7 @@
 	</script>
 
 	<h2 class="sectiontitle"><asp:Literal ID="lblProviders" runat="server" Text="Providers" EnableViewState="False" meta:resourcekey="lblProvidersResource1" /></h2>
-
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server"></asp:UpdatePanel>
 	<anthem:Panel ID="pnlList" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlListResource1" UpdateAfterCallBack="True">
 		<asp:Literal ID="lblDisplay" runat="server" Text="Display" EnableViewState="False" meta:resourcekey="lblDisplayResource1" />:
 		<anthem:RadioButton ID="rdoPages" runat="server" Text="Pages Providers" GroupName="type" Checked="True" AutoCallBack="True" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoPagesResource1" />
@@ -52,7 +54,10 @@
 						<td><%# Eval("Version") %></td>
 						<td><a href='<%# Eval("AuthorUrl") %>' target="_blank"><%# Eval("Author") %></a></td>
 						<td><%# Eval("UpdateStatus") %></td>
-						<td><anthem:LinkButton ID="btnSelect" runat="server" CommandArgument='<%# Eval("TypeName") %>' CommandName="Select" meta:resourcekey="btnSelectResource2" Text="Select" /></td>
+						<td><anthem:LinkButton ID="btnSelect" runat="server" CommandArgument='<%# Eval("TypeName") %>' CommandName="Select" meta:resourcekey="btnSelectResource2" Text="Select" />
+                            <asp:LinkButton  ID="LinkButton1" runat="server" CommandArgument='<%# Eval("TypeName") %>' CommandName="Select" meta:resourcekey="btnSelectResource2" Text="Select" />
+
+						</td>
 					</tr>
 				</ItemTemplate>
 				<AlternatingItemTemplate>
@@ -162,8 +167,16 @@
 	<br />
 	<h2 class="separator"><asp:Literal ID="lblUploadProvidersTitle" runat="server" Text="Providers DLLs Management" EnableViewState="False" meta:resourcekey="lblUploadProvidersTitleResource1" /></h2>
 	
+    <h4><asp:Literal ID="lblUploadNewDllEj" runat="server" Text="Upload new DLL" EnableViewState="False" meta:resourcekey="lblUploadNewDllResource1" /></h4>
+	<div>
+        <ej:UploadBox ID="ejUpDll" SaveUrl="AdminProviders.aspx/UploadFile" runat="server">
+    </ej:UploadBox>
+
+	</div>
 	<h4><asp:Literal ID="lblUploadNewDll" runat="server" Text="Upload new DLL" EnableViewState="False" meta:resourcekey="lblUploadNewDllResource1" /></h4>
+
 	<anthem:FileUpload ID="upDll" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="upDllResource1" />
+    
 	<anthem:Button ID="btnUpload" runat="server" Text="Upload" OnClick="btnUpload_Click" EnabledDuringCallBack="False"
 		PreCallBackFunction="__ShowUploadProgress" PostCallBackFunction="__HideUploadProgress" meta:resourcekey="btnUploadResource1" />
 	<span id="UploadProgressSpan" style="display: none;"><img src="Images/Wait.gif" alt="Uploading..." /></span><br />
@@ -194,7 +207,8 @@
 	<br /><br />
 	
 	<h4><asp:Literal ID="lblMigratePages" runat="server" Text="Migrate Pages and related data" EnableViewState="False" meta:resourcekey="lblMigratePagesResource1" /></h4>
-	<anthem:DropDownList ID="lstPagesSource" runat="server" AutoCallBack="True" AutoUpdateAfterCallBack="True"
+    <ej:DropDownList ID="lstejPagesSource" runat="server"></ej:DropDownList>
+    <anthem:DropDownList ID="lstPagesSource" runat="server" AutoCallBack="True" AutoUpdateAfterCallBack="True"
 		OnSelectedIndexChanged="lstPagesSource_SelectedIndexChanged" meta:resourcekey="lstPagesSourceResource1" />
 	<img src="Images/ArrowRight.png" alt="->" />
 	<anthem:DropDownList ID="lstPagesDestination" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="lstPagesDestinationResource1"  />

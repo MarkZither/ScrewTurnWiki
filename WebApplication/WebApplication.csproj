@@ -53,6 +53,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Lib\Anthem.NET\Anthem.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.EJ.Web, Version=16.4460.0.42, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -63,6 +64,7 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Extensions.Design" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
@@ -600,6 +602,9 @@
     </Compile>
     <Compile Include="RSS.aspx.designer.cs">
       <DependentUpon>RSS.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="saveFiles.ashx.cs">
+      <DependentUpon>saveFiles.ashx</DependentUpon>
     </Compile>
     <Compile Include="Search.aspx.cs">
       <DependentUpon>Search.aspx</DependentUpon>
@@ -1288,6 +1293,12 @@
     <Content Include="Captcha.ascx" />
     <Content Include="Captcha.aspx" />
     <Content Include="Category.aspx" />
+    <Content Include="Content\ejthemes\common-images\ejicons.svg" />
+    <Content Include="Content\ejthemes\common-images\icons-black.png" />
+    <Content Include="Content\ejthemes\common-images\icons-gray.png" />
+    <Content Include="Content\ejthemes\common-images\icons-halfwhite.png" />
+    <Content Include="Content\ejthemes\common-images\icons-white.png" />
+    <Content Include="Content\ejthemes\ej.widgets.core.min.css" />
     <Content Include="Diff.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="GetFile.aspx" />
@@ -1329,6 +1340,17 @@
     <Content Include="Register.aspx" />
     <Content Include="robots.txt" />
     <Content Include="RSS.aspx" />
+    <Content Include="Content\ejthemes\common-images\ejicons.eot" />
+    <Content Include="Content\ejthemes\common-images\ejicons.ttf" />
+    <Content Include="Content\ejthemes\common-images\ejicons.woff" />
+    <None Include="packages.config" />
+    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\ej.web.all.min.js" />
+    <Content Include="Scripts\ej.webform.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="SessionRefresh.aspx" />
     <Content Include="Themes\Admin.css" />
     <Content Include="Themes\Elegant\Icon.ico" />
@@ -2628,6 +2650,15 @@
     <Content Include="Themes\Elegant\Images\EmailNotifOn-Discussion.png" />
     <Content Include="Themes\Elegant\Images\RSS-Discussion.png" />
     <Content Include="Web.SqlServer.Release.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="saveFiles.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

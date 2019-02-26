@@ -9,12 +9,22 @@
     <link rel="shortcut icon" href="Images/Icon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="Themes/Admin.css" />
     <link rel="stylesheet" type="text/css" href="Themes/Editor.css" />
-<%--    <meta http-equiv="X-UA-Compatible" content="IE=8" />--%>
+     <link href="Content/ejthemes/ej.widgets.core.min.css" rel="stylesheet" />
+<%-- <meta http-equiv="X-UA-Compatible" content="IE=8" />--%>
     <asp:Literal ID="lblJS" runat="server" EnableViewState="false" />
     <asp:ContentPlaceHolder ID="head" runat="server" />
+    <!--[if lt IE 9]>
+    <script src='<%= Page.ResolveClientUrl("~/Scripts/jquery-1.11.3.min.js")%>' type="text/javascript"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+    <script src='<%= Page.ResolveClientUrl("~/Scripts/jquery-3.3.1.min.js")%>' type="text/javascript"></script>
+    <!--<![endif]-->
+    <script src='<%= Page.ResolveClientUrl("~/Scripts/ej.web.all.min.js")%>' type="text/javascript"></script>
+    <script src='<%= Page.ResolveClientUrl("~/Scripts/ej.webform.min.js")%>' type="text/javascript"></script>
 </head>
 <body>
     <form id="frmAdmin" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
     <div id="MainDiv">
     
 		<asp:Literal ID="lblStrings" runat="server" meta:resourcekey="lblStringsResource1" />
