@@ -63,3 +63,10 @@ TestResult.xml
 # NuGet v3's project.json files produces more ignorable files
 *.nuget.props
 *.nuget.targets
+
+
+
+.vs/ScrewTurnWiki/v15/.suo
+.vs/ScrewTurnWiki/v15/Server/sqlite3/storage.ide
+.vs/ScrewTurnWiki/v15/Server/sqlite3/storage.ide-shm
+.vs/ScrewTurnWiki/v15/Server/sqlite3/storage.ide-wal
