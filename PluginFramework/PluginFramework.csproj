@@ -1,123 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{531A83D6-76F9-4014-91C5-295818E2D948}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ScrewTurn.Wiki.PluginFramework</RootNamespace>
     <AssemblyName>ScrewTurn.Wiki.PluginFramework</AssemblyName>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <AssemblyOriginatorKeyFile />
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyTitle>ScrewTurn Wiki Plugin Framework</AssemblyTitle>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <FileAlignment>512</FileAlignment>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Debug\ScrewTurn.Wiki.PluginFramework.XML</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DebugType>portable</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.PluginFramework.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <FileAlignment>512</FileAlignment>
-    <DocumentationFile>bin\Release\ScrewTurn.Wiki.PluginFramework.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.PluginFramework.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
+    <PackageReference Include="Lucene.Net" Version="3.0.3" />
+    <PackageReference Include="SharpZipLib" Version="0.86.0" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\AssemblyVersion.cs">
-      <Link>AssemblyVersion.cs</Link>
-    </Compile>
-    <Compile Include="Actions.cs" />
-    <Compile Include="CategoryInfo.cs" />
-    <Compile Include="ComponentInformation.cs" />
-    <Compile Include="ContentTemplate.cs" />
-    <Compile Include="ContextInformation.cs" />
-    <Compile Include="Exchanger.cs" />
-    <Compile Include="FileActivityEventArgs.cs" />
-    <Compile Include="FileDetails.cs" />
-    <Compile Include="ICacheProvider.cs" />
-    <Compile Include="IFilesStorageProvider.cs" />
-    <Compile Include="IFormatterProvider.cs" />
-    <Compile Include="IHost.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IPagesStorageProvider.cs" />
-    <Compile Include="IProvider.cs" />
-    <Compile Include="IResourceExchanger.cs" />
-    <Compile Include="ISettingsStorageProvider.cs" />
-    <Compile Include="IStorageProvider.cs" />
-    <Compile Include="IUsersStorageProvider.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="MessageDocument.cs" />
-    <Compile Include="NamespaceActivityEventArgs.cs" />
-    <Compile Include="NameTools.cs" />
-    <Compile Include="NamespaceInfo.cs" />
-    <Compile Include="NavigationPath.cs" />
-    <Compile Include="PageActivityEventArgs.cs" />
-    <Compile Include="PageContent.cs" />
-    <Compile Include="PageDocument.cs" />
-    <Compile Include="PageInfo.cs" />
-    <Compile Include="RecentChange.cs" />
-    <Compile Include="Snippet.cs" />
-    <Compile Include="StandardAclManager.cs" />
-    <Compile Include="StandardIndex.cs" />
-    <Compile Include="StDirectoryInfo.cs" />
-    <Compile Include="StFileInfo.cs" />
-    <Compile Include="Tokenizer.cs" />
-    <Compile Include="UserAccountActivityEventArgs.cs" />
-    <Compile Include="UserGroup.cs" />
-    <Compile Include="UserGroupActivityEventArgs.cs" />
-    <Compile Include="UserInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <ProjectReference Include="..\AclEngine\AclEngine.csproj" />
+    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AclEngine\AclEngine.csproj">
-      <Project>{44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81}</Project>
-      <Name>AclEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
-      <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
-      <Name>SearchEngine</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

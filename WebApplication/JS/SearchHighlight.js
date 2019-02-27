@@ -17,20 +17,20 @@ searchhi = {
 		}
 
 		// And do this node itself
-		if (node.nodeType == 3) { // text node
+		if (node.nodeType === 3) { // text node
 			tempNodeVal = node.nodeValue.toLowerCase();
 			tempWordVal = word.toLowerCase();
-			if (tempNodeVal.indexOf(tempWordVal) != -1) {
+			if (tempNodeVal.indexOf(tempWordVal) !== -1) {
 				var pn = node.parentNode;
 				// check if we're inside a "nosearchhi" zone
 				var checkn = pn;
-				while (checkn.nodeType != 9 &&
-		    checkn.nodeName.toLowerCase() != 'body') {
+				while (checkn.nodeType !== 9 &&
+                checkn.nodeName.toLowerCase() !== 'body') {
 					// 9 = top of doc
 					if (checkn.className.match(/\bnosearchhi\b/)) { return; }
 					checkn = checkn.parentNode;
 				}
-				if (pn.className != "searchkeyword") {
+				if (pn.className !== "searchkeyword") {
 					// word has not already been highlighted!
 					var nv = node.nodeValue;
 					var ni = tempNodeVal.indexOf(tempWordVal);
@@ -47,7 +47,7 @@ searchhi = {
 					pn.insertBefore(after, node);
 					pn.removeChild(node);
 					searchhi.found += 1;
-					if (searchhi.found == 1) pn.scrollIntoView();
+					if (searchhi.found === 1) pn.scrollIntoView();
 				}
 			}
 		}
@@ -57,9 +57,9 @@ searchhi = {
 		// Very fragile implementation that must only work with STW
 		var url = document.location.toString();
 		var qmIndex = url.indexOf("?HL=");
-		if (qmIndex == -1) return;
+		if (qmIndex === -1) return;
 		var ampIndex = url.indexOf("&");
-		var query = url.substring(qmIndex + 4, ampIndex != -1 ? ampIndex : url.length);
+		var query = url.substring(qmIndex + 4, ampIndex !== -1 ? ampIndex : url.length);
 		query = query.replace(/,/g, ' ');
 		query = unescape(query);
 		searchhi.process(query);
@@ -88,7 +88,7 @@ searchhi = {
 				frms[i].onsubmit = function() {
 					var inps = this.getElementsByTagName("input");
 					for (var j = 0; j < inps.length; j++) {
-						if (inps[j].type == "text") {
+						if (inps[j].type === "text") {
 							searchhi.process(inps[j].value);
 							return false;
 						}
@@ -103,7 +103,7 @@ searchhi = {
 
 (function(i) {var u =navigator.userAgent;var e=/*@cc_on!@*/false; var st =
 setTimeout;if(/webkit/i.test(u)){st(function(){var dr=document.readyState;
-if(dr=="loaded"||dr=="complete"){i()}else{st(arguments.callee,10);}},10);}
+if(dr==="loaded"||dr==="complete"){i()}else{st(arguments.callee,10);}},10);}
 else if((/mozilla/i.test(u)&&!/(compati)/.test(u)) || (/opera/i.test(u))){
 document.addEventListener("DOMContentLoaded",i,false); } else if(e){     (
 function(){var t=document.createElement('doc:rdy');try{t.doScroll('left');

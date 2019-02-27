@@ -154,12 +154,26 @@
     <Compile Include="AdminPages.aspx.designer.cs">
       <DependentUpon>AdminPages.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AdminPlugins.aspx.cs">
+      <DependentUpon>AdminPlugins.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminPlugins.aspx.designer.cs">
+      <DependentUpon>AdminPlugins.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AdminProviders.aspx.cs">
       <DependentUpon>AdminProviders.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AdminProviders.aspx.designer.cs">
       <DependentUpon>AdminProviders.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminProvidersManagement.aspx.cs">
+      <DependentUpon>AdminProvidersManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminProvidersManagement.aspx.designer.cs">
+      <DependentUpon>AdminProvidersManagement.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdminSnippets.aspx.cs">
       <DependentUpon>AdminSnippets.aspx</DependentUpon>
@@ -654,6 +668,8 @@
   <ItemGroup>
     <Content Include="AccessDenied.aspx" />
     <Content Include="Admin.aspx" />
+    <Content Include="AdminPlugins.aspx" />
+    <Content Include="AdminProvidersManagement.aspx" />
     <Content Include="AllPages.aspx" />
     <Content Include="App_LocalResources\AccessDenied.aspx.cs-CZ.resx">
       <SubType>Designer</SubType>

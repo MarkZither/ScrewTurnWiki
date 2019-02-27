@@ -1,97 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{617D5D30-97F9-48B2-903D-29D4524492E8}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ScrewTurn.Wiki.Plugins.SqlCommon</RootNamespace>
     <AssemblyName>ScrewTurn.Wiki.Plugins.SqlCommon</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
+    <TargetFramework>net472</TargetFramework>
+    <FileUpgradeFlags />
+    <UpgradeBackupLocation />
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkProfile />
+    <AssemblyTitle>ScrewTurn Wiki SQL Providers Common Types</AssemblyTitle>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Debug\ScrewTurn.Wiki.Plugins.SqlCommon.XML</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DebugType>portable</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Plugins.SqlCommon.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Release\ScrewTurn.Wiki.Plugins.SqlCommon.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Plugins.SqlCommon.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\AssemblyVersion.cs">
-      <Link>AssemblyVersion.cs</Link>
-    </Compile>
-    <Compile Include="IIndexConnector.cs" />
-    <Compile Include="SqlAclManager.cs" />
-    <Compile Include="SqlClassBase.cs" />
-    <Compile Include="SqlFilesStorageProviderBase.cs" />
-    <Compile Include="SqlIndex.cs" />
-    <Compile Include="IndexConnector.cs" />
-    <Compile Include="SqlPagesStorageProviderBase.cs" />
-    <Compile Include="SqlSettingsStorageProviderBase.cs" />
-    <Compile Include="SqlStorageProviderBase.cs" />
-    <Compile Include="Hash.cs" />
-    <Compile Include="Parameter.cs" />
-    <Compile Include="ICommandBuilder.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryBuilder.cs" />
-    <Compile Include="SqlUsersStorageProviderBase.cs" />
-    <Compile Include="Tools.cs" />
+    <ProjectReference Include="..\AclEngine\AclEngine.csproj" />
+    <ProjectReference Include="..\PluginFramework\PluginFramework.csproj" />
+    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AclEngine\AclEngine.csproj">
-      <Project>{44B0F4C1-8CDC-4272-B2A2-C0AF689CEB81}</Project>
-      <Name>AclEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PluginFramework\PluginFramework.csproj">
-      <Project>{531A83D6-76F9-4014-91C5-295818E2D948}</Project>
-      <Name>PluginFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SearchEngine\SearchEngine.csproj">
-      <Project>{2DF980A6-4742-49B1-A090-DE79314644D0}</Project>
-      <Name>SearchEngine</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

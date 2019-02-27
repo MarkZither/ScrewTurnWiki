@@ -12,21 +12,26 @@ using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using ScrewTurn.Wiki.PluginFramework;
 
-namespace ScrewTurn.Wiki {
+namespace ScrewTurn.Wiki
+{
 
-	public class BasePage : Page {
+	public class BasePage : Page
+	{
 
-		public BasePage() {
+		public BasePage()
+		{
 		}
 
-		protected override void OnInit(EventArgs e) {
+		protected override void OnInit(EventArgs e)
+		{
 			base.OnInit(e);
 
 			// Mitigate Cross-Site Request Forgery (CSRF/XSRF) attacks
 			ViewStateUserKey = Session.SessionID;
 		}
 
-		protected override void OnLoad(EventArgs e) {
+		protected override void OnLoad(EventArgs e)
+		{
 			base.OnLoad(e);
 
 			// Bypass compression if the current request was made by Anthem.NET
@@ -37,14 +42,17 @@ namespace ScrewTurn.Wiki {
 
 			// Request might not be initialized -> use HttpContext
 			string ua = HttpContext.Current.Request.UserAgent != null ? HttpContext.Current.Request.UserAgent.ToLowerInvariant() : "";
-			if(Settings.EnableHttpCompression && !ua.Contains("konqueror") && !ua.Contains("safari")) {
-				if(Request.Headers["Accept-encoding"] != null && Request.Headers["Accept-encoding"].Contains("gzip")) {
+			if(Settings.EnableHttpCompression && !ua.Contains("konqueror") && !ua.Contains("safari"))
+			{
+				if(Request.Headers["Accept-encoding"] != null && Request.Headers["Accept-encoding"].Contains("gzip"))
+				{
 					Response.Filter = new GZipStream(Response.Filter, CompressionMode.Compress, true);
 					Response.AppendHeader("Content-encoding", "gzip");
 					Response.AppendHeader("Vary", "Content-encoding");
 					//Response.Write("HTTP Compression Enabled (GZip)");
 				}
-				else if(Request.Headers["Accept-encoding"] != null && Request.Headers["Accept-encoding"].Contains("deflate")) {
+				else if(Request.Headers["Accept-encoding"] != null && Request.Headers["Accept-encoding"].Contains("deflate"))
+				{
 					Response.Filter = new DeflateStream(Response.Filter, CompressionMode.Compress, true);
 					Response.AppendHeader("Content-encoding", "deflate");
 					Response.AppendHeader("Vary", "Content-encoding");
@@ -53,7 +61,8 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		protected override void InitializeCulture() {
+		protected override void InitializeCulture()
+		{
 			// First, look for hard-stored user preferences
 			// If they are not available, look at the cookie
 
@@ -63,22 +72,28 @@ namespace ScrewTurn.Wiki {
 				culture = Preferences.LoadLanguageFromCookie();
 			}
 
-			if(culture != null) {
+			if(culture != null)
+			{
 				Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
 				Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
 			}
-			else {
-				try {
-					if(Settings.DefaultLanguage.Equals("-")) {
+			else
+			{
+				try
+				{
+					if(Settings.DefaultLanguage.Equals("-"))
+					{
 						Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 						Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
 					}
-					else {
+					else
+					{
 						Thread.CurrentThread.CurrentCulture = new CultureInfo(Settings.DefaultLanguage);
 						Thread.CurrentThread.CurrentUICulture = new CultureInfo(Settings.DefaultLanguage);
 					}
 				}
-				catch {
+				catch
+				{
 					Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 					Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
 				}
@@ -93,7 +108,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="loadDefault"><c>true</c> to load the default page of the specified namespace when <b>Page</b> is not specified, <c>false</c> otherwise.</param>
 		/// <returns>If <b>Page</b> is specified and exists, the correct <see cref="T:PageInfo" />, otherwise <c>null</c> if <b>loadDefault</b> is <c>false</c>,
 		/// or the <see cref="T:PageInfo" /> object representing the default page of the specified namespace if <b>loadDefault</b> is <c>true</c>.</returns>
-		protected PageInfo DetectPageInfo(bool loadDefault) {
+		protected PageInfo DetectPageInfo(bool loadDefault)
+		{
 			return Tools.DetectCurrentPageInfo(loadDefault);
 		}
 
@@ -101,7 +117,8 @@ namespace ScrewTurn.Wiki {
 		/// Detects the full name of the current page using the <b>Page</b> and <b>NS</b> parameters in the query string.
 		/// </summary>
 		/// <returns>The full name of the page, regardless of the existence of the page.</returns>
-		protected string DetectFullName() {
+		protected string DetectFullName()
+		{
 			return Tools.DetectCurrentFullName();
 		}
 
@@ -109,7 +126,8 @@ namespace ScrewTurn.Wiki {
 		/// Detects the correct <see cref="T:NamespaceInfo" /> object associated to the current namespace using the <b>NS</b> parameter in the query string.
 		/// </summary>
 		/// <returns>The correct <see cref="T:NamespaceInfo" /> object, or <c>null</c>.</returns>
-		protected NamespaceInfo DetectNamespaceInfo() {
+		protected NamespaceInfo DetectNamespaceInfo()
+		{
 			return Tools.DetectCurrentNamespaceInfo();
 		}
 
@@ -117,10 +135,9 @@ namespace ScrewTurn.Wiki {
 		/// Detects the name of the current namespace using the <b>NS</b> parameter in the query string.
 		/// </summary>
 		/// <returns>The name of the namespace, or an empty string.</returns>
-		protected string DetectNamespace() {
+		protected string DetectNamespace()
+		{
 			return Tools.DetectCurrentNamespace();
 		}
-
 	}
-
 }
