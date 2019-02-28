@@ -47,13 +47,19 @@ namespace ScrewTurn.Wiki {
 			{ "adminnamespaces", "lnkSelectNamespaces" },
 			{ "adminpages", "lnkSelectPages" },
 			{ "admincontent", "lnkSelectContent" },
-			{ "adminlog", "lnkSelectLog" },
 			{ "adminconfig", "lnkSelectConfig" },
 			{ "adminsnippets", "lnkSelectSnippets" },
 			{ "admincategories", "lnkSelectCategories" },
 			{ "adminhome", "lnkSelectAdminHome" },
 			{ "adminnavpaths", "lnkSelectNavPaths" },
-			{ "adminproviders", "lnkSelectProviders" }
+			{ "adminproviders", "lnkSelectProviders" },
+			{ "adminplugins", "lnkSelectPluginsConfiguration" },
+			{ "admintheme", "lnkSelectTheme" },
+			{ "adminglobalhome", "lnkSelectAdminGlobalHome" },
+			{ "adminglobalconfig", "lnkSelectGlobalConfig" },
+			{ "adminprovidersmanagement", "lnkSelectPluginsManagement" },
+			{ "adminimportexport", "lnkSelectImportExport"},
+			{ "adminlog", "lnkSelectLog" },
 		};
 
 		/// <summary>
@@ -134,6 +140,7 @@ namespace ScrewTurn.Wiki {
 			bool canManageConfiguration = AuthChecker.CheckActionForGlobals(Actions.ForGlobals.ManageConfiguration, username, groups);
 			return canManageConfiguration;
 		}
+
 
 		/// <summary>
 		/// Determines whether a user can manage categories in at least one namespace.
