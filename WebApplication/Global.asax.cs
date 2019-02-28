@@ -5,25 +5,34 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Text;
+using System.Web.Configuration;
 
 namespace ScrewTurn.Wiki {
 
-	public class Global : System.Web.HttpApplication {
+	public class Global : System.Web.HttpApplication
+	{
 
-		protected void Application_Start(object sender, EventArgs e) {
+		protected void Application_Start(object sender, EventArgs e)
+		{
 			// Nothing to do (see Application_BeginRequest).
+			//HttpCapabilitiesBase.BrowserCapabilitiesProvider =
+			//       new FiftyOne.Foundation.Mobile.Detection.MobileCapabilitiesProvider();
 		}
 
-		protected void Session_Start(object sender, EventArgs e) {
+		protected void Session_Start(object sender, EventArgs e)
+		{
 			// Increment # of online users and setup a new breadcrumbs manager
 			// TODO: avoid to increment # of online users when session is not InProc
 			ScrewTurn.Wiki.Cache.OnlineUsers++;
 		}
 
-		protected void Application_BeginRequest(object sender, EventArgs e) {
-			if(Application["StartupOK"] == null) {
+		protected void Application_BeginRequest(object sender, EventArgs e)
+		{
+			if(Application["StartupOK"] == null)
+			{
 				Application.Lock();
-				if(Application["StartupOK"] == null) {
+				if(Application["StartupOK"] == null)
+				{
 					// Setup Resource Exchanger
 					ScrewTurn.Wiki.Exchanger.ResourceExchanger = new ScrewTurn.Wiki.ResourceExchanger();
 					ScrewTurn.Wiki.StartupTools.Startup();
@@ -37,8 +46,10 @@ namespace ScrewTurn.Wiki {
 			ScrewTurn.Wiki.UrlTools.RouteCurrentRequest();
 		}
 
-		protected void Application_AcquireRequestState(object sender, EventArgs e) {
-			if(HttpContext.Current.Session != null) {
+		protected void Application_AcquireRequestState(object sender, EventArgs e)
+		{
+			if(HttpContext.Current.Session != null)
+			{
 				// This should be performed on EndRequest, but Session is not available there
 				SessionCache.ClearData(HttpContext.Current.Session.SessionID);
 
@@ -47,7 +58,8 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		protected void Application_AuthenticateRequest(object sender, EventArgs e) {
+		protected void Application_AuthenticateRequest(object sender, EventArgs e)
+		{
 			// Nothing to do
 		}
 
@@ -55,9 +67,11 @@ namespace ScrewTurn.Wiki {
 		/// Logs an error.
 		/// </summary>
 		/// <param name="ex">The error.</param>
-		private void LogError(Exception ex) {
+		private void LogError(Exception ex)
+		{
 			//if(ex.InnerException != null) ex = ex.InnerException;
-			try {
+			try
+			{
 				ScrewTurn.Wiki.Log.LogEntry(HttpContext.Current.Request.Url.ToString() + "\n" +
 					ex.Source + " thrown " + ex.GetType().FullName + "\n" + ex.Message + "\n" + ex.StackTrace,
 					ScrewTurn.Wiki.PluginFramework.EntryType.Error, ScrewTurn.Wiki.Log.SystemUsername);
@@ -65,15 +79,18 @@ namespace ScrewTurn.Wiki {
 			catch { }
 		}
 
-		protected void Application_Error(object sender, EventArgs e) {
+		protected void Application_Error(object sender, EventArgs e)
+		{
 			// Retrieve last error and log it, redirecting to Error.aspx (avoiding infinite loops)
 
 			Exception ex = Server.GetLastError();
 
 			HttpException httpEx = ex as HttpException;
-			if(httpEx != null) {
+			if(httpEx != null)
+			{
 				// Try to redirect an inexistent .aspx page to a probably existing .ashx page
-				if(httpEx.GetHttpCode() == 404) {
+				if(httpEx.GetHttpCode() == 404)
+				{
 					string page = System.IO.Path.GetFileNameWithoutExtension(Request.PhysicalPath);
 					ScrewTurn.Wiki.UrlTools.Redirect(page + ScrewTurn.Wiki.Settings.PageExtension);
 					return;
@@ -82,7 +99,8 @@ namespace ScrewTurn.Wiki {
 
 			LogError(ex);
 			string url = "";
-			try {
+			try
+			{
 				url = HttpContext.Current.Request.Url.ToString();
 			}
 			catch { }
@@ -94,16 +112,16 @@ namespace ScrewTurn.Wiki {
 			}
 		}
 
-		protected void Session_End(object sender, EventArgs e) {
+		protected void Session_End(object sender, EventArgs e)
+		{
 			// Decrement # of online users (only works when session is InProc)
 			ScrewTurn.Wiki.Cache.OnlineUsers--;
 		}
 
-		protected void Application_End(object sender, EventArgs e) {
+		protected void Application_End(object sender, EventArgs e)
+		{
 			// Try to cleanly shutdown the application and providers
 			ScrewTurn.Wiki.StartupTools.Shutdown();
 		}
-
 	}
-
 }

@@ -6,6 +6,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
 using ScrewTurn.Wiki.PluginFramework;
+using FiftyOne.Foundation;
+using FiftyOne.Foundation.Mobile.Detection;
+using ScrewTurn.Wiki.Models;
 
 namespace ScrewTurn.Wiki {
 
@@ -19,11 +22,20 @@ namespace ScrewTurn.Wiki {
 			lblStrings.Text = sb.ToString();
 
 			Page.Title = Properties.Messages.AdminTitle + " - " + Settings.WikiTitle;
+			if(WebProvider.ActiveProvider != null)
+			{
+				var match = WebProvider.ActiveProvider.Match(Request.Headers);
 
-			if(!string.IsNullOrEmpty(Request.UserAgent) && Request.UserAgent.ToLowerInvariant().Contains("konqueror") ||
-				Request.UserAgent.ToLowerInvariant().Contains("safari")) {
-				lblBrowserSupport.Visible = true;
+				// Create a model that is based on the match request from
+				// device detection.
+				var device = new Device(match);
+
+				if(device.IsMobile)
+				{
+					lblBrowserSupport.Visible = true;
+				}
 			}
+			
 
 			lblJS.Text = Tools.GetJavaScriptIncludes();
 

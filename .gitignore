@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
+[Aa]pp_[Dd]ata/
 
 # Build results
 [Dd]ebug/

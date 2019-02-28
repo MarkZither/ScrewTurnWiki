@@ -53,6 +53,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Lib\Anthem.NET\Anthem.dll</HintPath>
     </Reference>
+    <Reference Include="FiftyOne.Foundation, Version=3.2.21.1, Culture=neutral, PublicKeyToken=e0b3a8da0bbce49c, processorArchitecture=MSIL">
+      <HintPath>..\packages\51Degrees.mobi-core.3.2.21.1\lib\NET40\FiftyOne.Foundation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -192,6 +198,11 @@
     <Compile Include="AllPages.aspx.designer.cs">
       <DependentUpon>AllPages.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Mobile\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Models\Device.cs" />
     <Compile Include="PageListBuilder.ascx.cs">
       <DependentUpon>PageListBuilder.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1334,6 +1345,7 @@
     <Content Include="JS\Scripts.js" />
     <Content Include="Language.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="Mobile\Default.aspx" />
     <Content Include="NavPath.aspx" />
     <Content Include="Operation.aspx" />
     <Content Include="PageNotFound.aspx" />
@@ -2644,6 +2656,13 @@
     <Content Include="Themes\Elegant\Images\EmailNotifOn-Discussion.png" />
     <Content Include="Themes\Elegant\Images\RSS-Discussion.png" />
     <Content Include="Web.SqlServer.Release.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\51Degrees.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="51Degrees.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
