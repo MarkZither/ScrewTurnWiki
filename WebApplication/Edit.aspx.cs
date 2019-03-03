@@ -101,6 +101,8 @@ namespace ScrewTurn.Wiki {
 				// If page already exists, load the content and disable page name,
 				// otherwise pre-fill page name
 				if(currentPage != null) {
+					keepAlive.CurrentPage = currentPage.FullName;
+
 					// Look for a draft
 					currentContent = Pages.GetDraft(currentPage);
 
@@ -398,8 +400,9 @@ namespace ScrewTurn.Wiki {
 			pnlPageName.Visible = true;
 			pnlManualName.Visible = false;
 			txtName.Text = GenerateAutoName(txtTitle.Text);
-			pnlManualName.UpdateAfterCallBack = true;
-			pnlPageName.UpdateAfterCallBack = true;
+			//TODO: 
+			//pnlManualName.UpdateAfterCallBack = true;
+			//pnlPageName.UpdateAfterCallBack = true;
 		}
 
 		/// <summary>
@@ -577,8 +580,9 @@ namespace ScrewTurn.Wiki {
 				if(!rfvTitle.IsValid || !rfvName.IsValid || !cvName1.IsValid || !cvName2.IsValid) {
 					pnlPageName.Visible = true;
 					pnlManualName.Visible = false;
-					pnlPageName.UpdateAfterCallBack = true;
-					pnlManualName.UpdateAfterCallBack = true;
+					//TODO
+					//pnlPageName.UpdateAfterCallBack = true;
+					//pnlManualName.UpdateAfterCallBack = true;
 				}
 
 				return;

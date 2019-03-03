@@ -209,7 +209,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Label lblScale;
+        protected global::System.Web.UI.WebControls.Label lblScale;
         
         /// <summary>
         /// lblScalePost control.
@@ -254,7 +254,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.CheckBox chkNewName;
+        protected global::System.Web.UI.WebControls.CheckBox chkNewName;
         
         /// <summary>
         /// txtNewName control.
@@ -263,7 +263,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.TextBox txtNewName;
+        protected global::System.Web.UI.WebControls.TextBox txtNewName;
         
         /// <summary>
         /// rdoPng control.
@@ -272,7 +272,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.RadioButton rdoPng;
+        protected global::System.Web.UI.WebControls.RadioButton rdoPng;
         
         /// <summary>
         /// rdoJpegHigh control.
@@ -281,7 +281,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.RadioButton rdoJpegHigh;
+        protected global::System.Web.UI.WebControls.RadioButton rdoJpegHigh;
         
         /// <summary>
         /// rdoJpegMedium control.
@@ -290,6 +290,6 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.RadioButton rdoJpegMedium;
+        protected global::System.Web.UI.WebControls.RadioButton rdoJpegMedium;
     }
 }

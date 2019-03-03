@@ -3,46 +3,46 @@
 <%@ Register TagPrefix="st" TagName="LanguageSelector" Src="~/LanguageSelector.ascx" %>
 
 <asp:Content ID="CtnProfile" ContentPlaceHolderID="CphMasterSA" Runat="Server">
-    <script type="text/javascript">
-    <!-- 
-        function cvPassword_ClientValidate(source, args) {
-	        var txtP1 = __GetServerElementById("txtPassword1").value
+	<script type="text/javascript">
+	<!-- 
+		function cvPassword_ClientValidate(source, args) {
+			var txtP1 = __GetServerElementById("txtPassword1").value
 			var txtP2 = __GetServerElementById("txtPassword2").value
 			var bValid = true;
 				  
 			if((txtP1.length > 0) && (txtP2.length > 0)) {
-		        bValid = (txtP1 == txtP2);
-		    }
+				bValid = (txtP1 == txtP2);
+			}
 				  
-            args.IsValid = bValid;
+			args.IsValid = bValid;
 		}
 				
 		function cvEmail_ClientValidate(source, args) {
-		    var txtE1 = __GetServerElementById("txtEmail1").value
+			var txtE1 = __GetServerElementById("txtEmail1").value
 			var txtE2 = __GetServerElementById("txtEmail2").value
 			var bValid = true;
 				  
-		    if((txtE1.length > 0) && (txtE2.length > 0)) {
-			    bValid = (txtE1 == txtE2);
-		    }
+			if((txtE1.length > 0) && (txtE2.length > 0)) {
+				bValid = (txtE1 == txtE2);
+			}
 				  
-            args.IsValid = bValid;
+			args.IsValid = bValid;
 		}
-    // -->
-    </script>
-    
-    <h1 class="pagetitlesystem"><asp:Literal ID="lblTitle" runat="server" meta:resourcekey="lblTitleResource1" Text="User Profile" EnableViewState="False" /></h1>
+	// -->
+	</script>
+	
+	<h1 class="pagetitlesystem"><asp:Literal ID="lblTitle" runat="server" meta:resourcekey="lblTitleResource1" Text="User Profile" EnableViewState="False" /></h1>
    
-    <p><asp:Literal ID="lblDescription" runat="server" meta:resourcekey="lblDescriptionResource1" Text="Welcome to your Profile, " EnableViewState="False" />
-        <b><asp:Literal ID="lblUsername" runat="server" meta:resourcekey="lblUsernameResource1" /></b>.
-        <asp:Literal ID="lblGroups" runat="server" Text="You are member of the following groups:" EnableViewState="False" meta:resourcekey="lblGroupsResource1" />
-        <asp:Literal ID="lblGroupsList" runat="server" meta:resourcekey="lblGroupsListResource1" />.<br />
-        <asp:Literal ID="lblInfo" runat="server" meta:resourcekey="lblInfoResource1" EnableViewState="False" Text="Here you can edit your Profile settings, such as Email address and Password. You cannot change your Username." />
-    </p> 
-    <br />
-    
-    <asp:Panel ID="pnlUserData" runat="server" meta:resourcekey="pnlDetailsResource1">
-    
+	<p><asp:Literal ID="lblDescription" runat="server" meta:resourcekey="lblDescriptionResource1" Text="Welcome to your Profile, " EnableViewState="False" />
+		<b><asp:Literal ID="lblUsername" runat="server" meta:resourcekey="lblUsernameResource1" /></b>.
+		<asp:Literal ID="lblGroups" runat="server" Text="You are member of the following groups:" EnableViewState="False" meta:resourcekey="lblGroupsResource1" />
+		<asp:Literal ID="lblGroupsList" runat="server" meta:resourcekey="lblGroupsListResource1" />.<br />
+		<asp:Literal ID="lblInfo" runat="server" meta:resourcekey="lblInfoResource1" EnableViewState="False" Text="Here you can edit your Profile settings, such as Email address and Password. You cannot change your Username." />
+	</p> 
+	<br />
+	
+	<asp:Panel ID="pnlUserData" runat="server" meta:resourcekey="pnlDetailsResource1">
+	
 		<h2 class="separator"><asp:Literal ID="lblNotifications" runat="server" Text="Email Notification Settings" EnableViewState="False" meta:resourcekey="lblNotificationsResource1" /></h2>
 		
 		<table cellpadding="0" cellspacing="0">
@@ -62,10 +62,9 @@
 			</tr>
 			<tr>
 				<td colspan="2" style="vertical-align: top; padding-top: 20px;">
-					<anthem:Button ID="btnSaveNotifications" runat="server" Text="Save" OnClick="btnSaveNotifications_Click" CausesValidation="False"
+					<asp:Button ID="btnSaveNotifications" runat="server" Text="Save" OnClick="btnSaveNotifications_Click" CausesValidation="False"
 						meta:resourcekey="btnSaveNotificationsResource1" />
-					<anthem:Label ID="lblNotificationsResult" runat="server" meta:resourcekey="lblNotificationsResultResource1" 
-						AutoUpdateAfterCallBack="True" UpdateAfterCallBack="True" />
+					<asp:Label ID="lblNotificationsResult" runat="server" meta:resourcekey="lblNotificationsResultResource1" />
 				</td>
 			</tr>
 		</table>
@@ -212,17 +211,14 @@
 		<p><asp:Literal ID="lblDeleteAccountInfo" runat="server" EnableViewState="False" meta:resourcekey="lblDeleteAccountInfoResource1"
 			Text="You can delete your account by clicking on the Delete Account button and then confirming with the Confirm button.<br /><b>Warning</b>: the operation is irreversible." /></p>
 		<br /> 
-		<anthem:Button ID="btnDeleteAccount" runat="server" Text="Delete Account" OnClick="btnDeleteAccount_Click"
-			meta:resourcekey="btnDeleteAccountResource1" CausesValidation="False" 
-			AutoUpdateAfterCallBack="True" UpdateAfterCallBack="True" />
-		<anthem:Button ID="btnConfirm" runat="server" Text="Confirm" Enabled="False" OnClick="btnConfirm_Click"
-			meta:resourcekey="btnConfirmResource1" CausesValidation="False" 
-			AutoUpdateAfterCallBack="True" PreCallBackFunction="__RequestConfirm" 
-			UpdateAfterCallBack="True" />
-    
-    </asp:Panel>
-    
-    <asp:Panel ID="pnlNoChanges" runat="server" Visible="False" 
+		<asp:Button ID="btnDeleteAccount" runat="server" Text="Delete Account" OnClick="btnDeleteAccount_Click"
+			meta:resourcekey="btnDeleteAccountResource1" CausesValidation="False" />
+		<asp:Button ID="btnConfirm" runat="server" Text="Confirm" Enabled="False" OnClick="btnConfirm_Click"
+			meta:resourcekey="btnConfirmResource1" CausesValidation="False" />
+	
+	</asp:Panel>
+	
+	<asp:Panel ID="pnlNoChanges" runat="server" Visible="False" 
 		meta:resourcekey="pnlNoChangesResource1">
 		<br />
 		<i>
@@ -230,6 +226,6 @@
 			Text="Current system settings do not allow any change to your personal information." 
 			EnableViewState="False" meta:resourcekey="lblNoChangesResource1" />
 		</i>
-    </asp:Panel>
+	</asp:Panel>
 
 </asp:Content>

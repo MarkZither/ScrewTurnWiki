@@ -128,7 +128,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnSaveNotifications;
+        protected global::System.Web.UI.WebControls.Button btnSaveNotifications;
         
         /// <summary>
         /// lblNotificationsResult control.
@@ -137,7 +137,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Label lblNotificationsResult;
+        protected global::System.Web.UI.WebControls.Label lblNotificationsResult;
         
         /// <summary>
         /// lblLanguageTimeZone control.
@@ -497,7 +497,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnDeleteAccount;
+        protected global::System.Web.UI.WebControls.Button btnDeleteAccount;
         
         /// <summary>
         /// btnConfirm control.
@@ -506,7 +506,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnConfirm;
+        protected global::System.Web.UI.WebControls.Button btnConfirm;
         
         /// <summary>
         /// pnlNoChanges control.

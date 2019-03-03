@@ -29,6 +29,7 @@ namespace ScrewTurn.Wiki {
 				HttpCookie cookie = Request.Cookies[Settings.CultureCookieName];
 
 				languageSelector.LoadLanguages();
+				languageSelector.LoadTimezones();
 
 				string culture = null;
 				if(cookie != null)

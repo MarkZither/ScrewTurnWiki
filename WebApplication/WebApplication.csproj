@@ -49,10 +49,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Anthem, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Lib\Anthem.NET\Anthem.dll</HintPath>
-    </Reference>
     <Reference Include="FiftyOne.Foundation, Version=3.2.21.1, Culture=neutral, PublicKeyToken=e0b3a8da0bbce49c, processorArchitecture=MSIL">
       <HintPath>..\packages\51Degrees.mobi-core.3.2.21.1\lib\NET40\FiftyOne.Foundation.dll</HintPath>
     </Reference>
@@ -197,6 +193,13 @@
     </Compile>
     <Compile Include="AllPages.aspx.designer.cs">
       <DependentUpon>AllPages.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="KeepAlive.ascx.cs">
+      <DependentUpon>KeepAlive.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="KeepAlive.ascx.designer.cs">
+      <DependentUpon>KeepAlive.ascx</DependentUpon>
     </Compile>
     <Compile Include="Mobile\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -1343,6 +1346,7 @@
     <Content Include="Import.aspx" />
     <Content Include="JS\Readme.txt" />
     <Content Include="JS\Scripts.js" />
+    <Content Include="KeepAlive.ascx" />
     <Content Include="Language.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Mobile\Default.aspx" />

@@ -15,8 +15,6 @@ namespace ScrewTurn.Wiki {
 		protected void Application_Start(object sender, EventArgs e)
 		{
 			// Nothing to do (see Application_BeginRequest).
-			//HttpCapabilitiesBase.BrowserCapabilitiesProvider =
-			//       new FiftyOne.Foundation.Mobile.Detection.MobileCapabilitiesProvider();
 		}
 
 		protected void Session_Start(object sender, EventArgs e)

@@ -7,143 +7,143 @@
 <!-- added for WYSIWYG -->
 <script type="text/javascript">
 <!--
-    var debug=true;
+	var debug=true;
 
-    var iframe;
-    var inWYSIWYG=false;
+	var iframe;
+	var inWYSIWYG=false;
 
-    function IsInWYSIWYG() {
-      if(inWYSIWYG) {
-        inWYSIWYG=false;
-        return true;
-      }
-      return false;
-    }
+	function IsInWYSIWYG() {
+	  if(inWYSIWYG) {
+		inWYSIWYG=false;
+		return true;
+	  }
+	  return false;
+	}
 
-    function iframe_onload() {
-      inWYSIWYG=true;
-      if (document.all) {
-		    iframe = window.frames[0];
-		    iframe.focus();
-		    var range = iframe.document.selection.createRange();
-		    range.pasteHTML(document.getElementById(VisualControl).value);
-		    range.collapse(false);
-		    range.select();
-		    iframe.document.designMode='On';
-	    } else {
-		    iframe = document.getElementById('iframe').contentWindow;
-		    iframe.document.designMode='On';
-		    iframe.document.execCommand('styleWithCSS',false,false);
-		    iframe.document.execCommand('backcolor', false, 'white');
-		    try { // This seems to throw an exception in Firefox
-		    	iframe.focus();
-		    	iframe.document.execCommand('inserthtml', false, document.getElementById(VisualControl).value);
-		    } catch(ex) { }
-	    }
-    }
+	function iframe_onload() {
+	  inWYSIWYG=true;
+	  if (document.all) {
+			iframe = window.frames[0];
+			iframe.focus();
+			var range = iframe.document.selection.createRange();
+			range.pasteHTML(document.getElementById(VisualControl).value);
+			range.collapse(false);
+			range.select();
+			iframe.document.designMode='On';
+		} else {
+			iframe = document.getElementById('iframe').contentWindow;
+			iframe.document.designMode='On';
+			iframe.document.execCommand('styleWithCSS',false,false);
+			iframe.document.execCommand('backcolor', false, 'white');
+			try { // This seems to throw an exception in Firefox
+				iframe.focus();
+				iframe.document.execCommand('inserthtml', false, document.getElementById(VisualControl).value);
+			} catch(ex) { }
+		}
+	}
 
-    function execCmd(commandID,showUI,value) {
-      iframe.focus();
-      iframe.document.execCommand(commandID,showUI,value);
-    }
+	function execCmd(commandID,showUI,value) {
+	  iframe.focus();
+	  iframe.document.execCommand(commandID,showUI,value);
+	}
 
-    function getSelectedText() {
-      if(document.all)
-        var selected=iframe.document.selection.createRange().text;
-      else
-        var selected=iframe.document.defaultView.getSelection().getRangeAt(0); 
-      return selected;
-    }
+	function getSelectedText() {
+	  if(document.all)
+        var selected=iframe.document.selection.createRange().htmlText;
+	  else
+        var selected=iframe.document.defaultView.getSelection().getRangeAt(0).commonAncestorContainer.innerHTML;
+	  return selected;
+	}
 
-    function insertHTML(html) {
-        if (document.all) {
-		    iframe.focus();
-		    var range = iframe.document.selection.createRange();
-		    range.pasteHTML(html);
-		    range.collapse(false);
-		    range.select();
-		    iframe.focus();
-	    } else {
+	function insertHTML(html) {
+		if (document.all) {
+			iframe.focus();
+			var range = iframe.document.selection.createRange();
+			range.pasteHTML(html);
+			range.collapse(false);
+			range.select();
+			iframe.focus();
+		} else {
 			iframe.document.execCommand('inserthtml', false, html);
-		    iframe.focus();
-	    }
-    }
+			iframe.focus();
+		}
+	}
 
-    function wrapWithTagClass(tag,clsName) {
-    	insertHTML('<' + tag + ' class=' + clsName + '>' + getSelectedText() + '</' + tag + '>');
-    }
+	function wrapWithTagClass(tag,clsName) {
+		insertHTML('<' + tag + ' class=' + clsName + '>' + getSelectedText() + '</' + tag + '>');
+	}
 
-    function wrapWithTag(tag) {
-    	insertHTML('<' + tag + '>' + getSelectedText() + '</' + tag + '>');
-    }
+	function wrapWithTag(tag) {
+		insertHTML('<' + tag + '>' + getSelectedText() + '</' + tag + '>');
+	}
 
-    function insertBreak() {
-        insertHTML('<h1 class="separator"> </h1>\n');
-    }
+	function insertBreak() {
+		insertHTML('<h1 class="separator"> </h1>\n');
+	}
 
-    function insertList(listTag) {
-    	insertHTML('<' + listTag + '><li>' + getSelectedText() + '</li></' + listTag + '>');
-    	return false;
-    }
+	function insertList(listTag) {
+		insertHTML('<' + listTag + '><li>' + getSelectedText() + '</li></' + listTag + '>');
+		return false;
+	}
 
-    function IncreaseHeight(elemName) {
-    	var elem = document.getElementById(elemName);
-    	var pos = AbsolutePosition(elem);
-    	elem.style["height"] = pos.height + 100 + "px";
+	function IncreaseHeight(elemName) {
+		var elem = document.getElementById(elemName);
+		var pos = AbsolutePosition(elem);
+		elem.style["height"] = pos.height + 100 + "px";
 
-    	__CreateCookie("ScrewTurnWikiES", elem.style["height"], 365);
-    	
-    	return false;
-    }
-    function DecreaseHeight(elemName) {
-    	var elem = document.getElementById(elemName);
-    	var pos = AbsolutePosition(elem);
-    	if(pos.height > 100) elem.style["height"] = pos.height - 100 + "px";
+		__CreateCookie("ScrewTurnWikiES", elem.style["height"], 365);
+		
+		return false;
+	}
+	function DecreaseHeight(elemName) {
+		var elem = document.getElementById(elemName);
+		var pos = AbsolutePosition(elem);
+		if(pos.height > 100) elem.style["height"] = pos.height - 100 + "px";
 
-    	__CreateCookie("ScrewTurnWikiES", elem.style["height"], 365);
-    	
-    	return false;
-    }
+		__CreateCookie("ScrewTurnWikiES", elem.style["height"], 365);
+		
+		return false;
+	}
 
-    function InitES() {
-    	var cookieValue = __ReadCookie("ScrewTurnWikiES");
-    	if(cookieValue) {
-    		var elem = document.getElementById(MarkupControl);
-    		if(elem) elem.style["height"] = cookieValue;
-    		elem = document.getElementById("iframe");
-    		if(elem) elem.style["height"] = cookieValue;
-    	}
-    }
+	function InitES() {
+		var cookieValue = __ReadCookie("ScrewTurnWikiES");
+		if(cookieValue) {
+			var elem = document.getElementById(MarkupControl);
+			if(elem) elem.style["height"] = cookieValue;
+			elem = document.getElementById("iframe");
+			if(elem) elem.style["height"] = cookieValue;
+		}
+	}
 
-    function __FocusEditorWindow() {
-    	$("#<%= txtMarkup.ClientID %>").focus();
-    	$("#iframe").focus();
-    }
+	function __FocusEditorWindow() {
+		$("#<%= txtMarkup.ClientID %>").focus();
+		$("#iframe").focus();
+	}
 // -->
 </script>
 
 <div id="TabContainerDiv">
-	<anthem:Button ID="btnWikiMarkup" runat="server" Text="WikiMarkup" OnClick="btnWikiMarkup_Click" CssClass="tabbutton" CausesValidation="false"
-		PostCallBackFunction="HideProgress" PreCallBackFunction="ShowProgress" AutoUpdateAfterCallBack="True" EnableViewState="False" meta:resourcekey="btnWikiMarkupResource3" UpdateAfterCallBack="True" />
-	<anthem:Button ID="btnVisual" runat="server" Text="Visual" OnClick="btnVisual_Click" CssClass="tabbutton" CausesValidation="false"
-		PostCallBackFunction="HideProgress" PreCallBackFunction="ShowProgress" AutoUpdateAfterCallBack="True" EnableViewState="False" meta:resourcekey="btnVisualResource3" UpdateAfterCallBack="True" />
-	<anthem:Button ID="btnPreview" runat="server" Text="Preview" OnClick="btnPreview_Click" CssClass="tabbutton" CausesValidation="false"
-		PostCallBackFunction="HideProgress" PreCallBackFunction="ShowProgress" AutoUpdateAfterCallBack="True" EnableViewState="False" meta:resourcekey="btnPreviewResource3" UpdateAfterCallBack="True" />
+	<asp:Button ID="btnWikiMarkup" runat="server" Text="WikiMarkup" OnClick="btnWikiMarkup_Click" CssClass="tabbutton" CausesValidation="false"
+		EnableViewState="False" meta:resourcekey="btnWikiMarkupResource3" />
+	<asp:Button ID="btnVisual" runat="server" Text="Visual" OnClick="btnVisual_Click" CssClass="tabbutton" CausesValidation="false"
+		EnableViewState="False" meta:resourcekey="btnVisualResource3" />
+	<asp:Button ID="btnPreview" runat="server" Text="Preview" OnClick="btnPreview_Click" CssClass="tabbutton" CausesValidation="false"
+		EnableViewState="False" meta:resourcekey="btnPreviewResource3" />
 	<span id="ProgressSpan" style="display: none;">
 		<img src="Images/Editor/Progress.gif" alt="Please wait..." style="margin-bottom: -2px;" />
 	</span>
 </div>
 
-<anthem:MultiView ID="mlvEditor" AutoUpdateAfterCallBack="True" UpdateAfterCallBack="True" runat="server">
+<asp:MultiView ID="mlvEditor" runat="server">
 
-    <anthem:View ID="viwStandard" runat="server">
-    
-        <div class="toolbar">
+	<asp:View ID="viwStandard" runat="server">
+	
+		<div class="toolbar">
 			<div class="sizebuttons">
-				<anthem:ImageButton ID="btnBiggerMarkup" runat="server" ImageUrl="~/Images/Editor/EditorBigger.png" ImageUrlDuringCallBack="~/Images/Editor/EditorBigger.png"
+				<asp:ImageButton ID="btnBiggerMarkup" runat="server" ImageUrl="~/Images/Editor/EditorBigger.png"
 					ToolTip="Increase editor size" CssClass="helperbutton" EnableViewState="False" meta:resourcekey="btnBiggerMarkupResource3"
 					OnClientClick="javascript:return IncreaseHeight(MarkupControl);" />
-				<anthem:ImageButton ID="btnSmallerMarkup" runat="server" ImageUrl="~/Images/Editor/EditorSmaller.png" ImageUrlDuringCallBack="~/Images/Editor/EditorSmaller.png"
+				<asp:ImageButton ID="btnSmallerMarkup" runat="server" ImageUrl="~/Images/Editor/EditorSmaller.png" 
 					ToolTip="Decrease editor size" CssClass="helperbutton" EnableViewState="False" meta:resourcekey="btnSmallerMarkupResource3"
 					OnClientClick="javascript:return DecreaseHeight(MarkupControl);" />
 			</div>
@@ -204,26 +204,26 @@
 			<a href="#" title="<%= ScrewTurn.Wiki.Properties.Messages.SymbolsTitle %>" id="SymbolsMenuLinkMarkup" class="toolbarbutton" onclick="javascript:return ShowSymbolsMenuMarkup(event);">
 				<img src="Images/Editor/Symbol.png" alt="<%= ScrewTurn.Wiki.Properties.Messages.Symbols %>" /></a>
 			</div>
-        </div>
-        
-        <anthem:TextBox ID="txtMarkup" runat="server" TextMode="MultiLine" Width="99%" Height="400px" AutoUpdateAfterCallBack="True" meta:resourcekey="txtMarkupResource3" UpdateAfterCallBack="True" />
-    
-    </anthem:View>
-    
-    <anthem:View ID="viwVisual" runat="server">
-    
-        <div class="toolbar">
+		</div>
+		
+		<asp:TextBox ID="txtMarkup" runat="server" TextMode="MultiLine" Width="99%" Height="400px" style="width: 700px; min-width: 99%; max-width: 99%;" meta:resourcekey="txtMarkupResource3" />
+	
+	</asp:View>
+	
+	<asp:View ID="viwVisual" runat="server">
+	
+		<div class="toolbar">
 			<div class="sizebuttons">
-				<anthem:ImageButton ID="btnBiggerMarkupVisual" runat="server" ImageUrl="~/Images/Editor/EditorBigger.png" ImageUrlDuringCallBack="~/Images/Editor/EditorBigger.png"
+				<asp:ImageButton ID="btnBiggerMarkupVisual" runat="server" ImageUrl="~/Images/Editor/EditorBigger.png" 
 					ToolTip="Increase editor size" CssClass="helperbutton" EnableViewState="False" meta:resourcekey="btnBiggerMarkupVisualResource3"
 					OnClientClick="javascript:return IncreaseHeight('iframe');" />
-				<anthem:ImageButton ID="btnSmallerMarkupVisual" runat="server" ImageUrl="~/Images/Editor/EditorSmaller.png" ImageUrlDuringCallBack="~/Images/Editor/EditorSmaller.png"
+				<asp:ImageButton ID="btnSmallerMarkupVisual" runat="server" ImageUrl="~/Images/Editor/EditorSmaller.png" 
 					ToolTip="Decrease editor size" CssClass="helperbutton" EnableViewState="False" meta:resourcekey="btnSmallerMarkupVisualResource3"
 					OnClientClick="javascript:return DecreaseHeight('iframe');" />
 			</div>
-        
+		
 			<div id="VisualToolbarDiv">
-            <a href="#" title="<%= ScrewTurn.Wiki.Properties.Messages.BoldTitle %>" class="toolbarbutton" onclick="javascript:return execCmd('Bold',false,null);">
+			<a href="#" title="<%= ScrewTurn.Wiki.Properties.Messages.BoldTitle %>" class="toolbarbutton" onclick="javascript:return execCmd('Bold',false,null);">
 				<img src="Images/Editor/Bold.png" alt="<%= ScrewTurn.Wiki.Properties.Messages.Bold %>" /></a>
 			<a href="#" title="<%= ScrewTurn.Wiki.Properties.Messages.ItalicTitle %>" class="toolbarbutton" onclick="javascript:return execCmd('Italic',false,null);">
 				<img src="Images/Editor/Italic.png" alt="<%= ScrewTurn.Wiki.Properties.Messages.Italic %>" /></a>
@@ -274,36 +274,37 @@
 			<a href="#" title="<%= ScrewTurn.Wiki.Properties.Messages.SymbolsTitle %>" id="SymbolsMenuLinkMarkup" class="toolbarbutton" onclick="javascript:return ShowSymbolsMenuMarkup(event);">
 				<img src="Images/Editor/Symbol.png" alt="<%= ScrewTurn.Wiki.Properties.Messages.Symbols %>" /></a>
 			</div>
-        </div>
-        
-        <div id="WysiwygDiv">
-            <iframe id="iframe" name="iframe" onload="javascript:return iframe_onload();" src="IframeEditor.aspx" style="width: 100%; height: 400px;" frameborder="0"></iframe>
-        </div>
-        
-        <div style="display: none;">
-			<anthem:TextBox ID="lblWYSIWYG" runat="server" TextMode="MultiLine" AutoUpdateAfterCallBack="True" meta:resourcekey="lblWYSIWYGResource1" />
 		</div>
-    </anthem:View>
-    
-    <anthem:View ID="viwPreview" runat="server">
-        
-        <div class="toolbar" style="padding-top: 8px; padding-bottom: 0px;">
+		
+		<div id="WysiwygDiv">
+			<iframe id="iframe" name="iframe" onload="javascript:return iframe_onload();" src="IframeEditor.aspx" style="width: 100%; height: 400px;" frameborder="0"></iframe>
+		</div>
+		
+		<div style="display: none;">
+			<asp:TextBox ID="lblWYSIWYG" runat="server" TextMode="MultiLine" meta:resourcekey="lblWYSIWYGResource1" />
+		</div>
+	</asp:View>
+	
+	<asp:View ID="viwPreview" runat="server">
+		
+		<div class="toolbar" style="padding-top: 8px; padding-bottom: 0px;">
 			<asp:Label ID="lblPreviewWarning" runat="server" CssClass="resulterror" EnableViewState="False"
 				Text="&lt;b&gt;Warning&lt;/b&gt;: this is only a preview. The content was not saved." meta:resourcekey="lblPreviewWarningResource3" />
-        </div>
-    
-        <div id="PreviewDiv" style="border: solid 4px #999999; padding: 8px; height: 450px; overflow: auto;">
-            <asp:Literal ID="lblPreview" runat="server" EnableViewState="False" meta:resourcekey="lblPreviewResource3" />
-        </div>
-    </anthem:View>
+		</div>
+	
+		<div id="PreviewDiv" style="border: solid 4px #999999; padding: 8px; height: 450px; overflow: auto;">
+			<asp:Literal ID="lblPreview" runat="server" EnableViewState="False" meta:resourcekey="lblPreviewResource3" />
+		</div>
+	</asp:View>
 
-</anthem:MultiView>
+</asp:MultiView>
 
 <div id="SnippetsMenuDiv" class="menucontainer" style="display: none;">
 	<asp:Label ID="lblSnippets" runat="server" EnableViewState="False" meta:resourcekey="lblSnippetsResource3" />
 </div>
 
 <div id="SpecialTagsMenuDiv" class="menucontainer" style="display: none;">
+	<asp:Literal ID="lblCustomSpecialTags" runat="server" EnableViewState="false" />
 	<a href="#" onclick="javascript:return InsertMarkup('{WIKITITLE}');" class="menulink">{WikiTitle}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{UP}');" class="menulink">{Up}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{TOP}');" class="menulink">{Top}</a>
@@ -330,7 +331,6 @@
     <a href="#" onclick="javascript:return InsertMarkup('{OUTGOING}');" class="menulink">{Outgoing}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{RECENTCHANGES}');" class="menulink">{RecentChanges}</a>
     <a href="#" onclick="javascript:return InsertMarkup('{RECENTCHANGES(*)}');" class="menulink">{RecentChanges(*)}</a>
-    <asp:Literal ID="lblCustomSpecialTags" runat="server" EnableViewState="false" />
 </div>
 
 <div id="SymbolsMenuDiv" class="menucontainer" style="display: none;">

@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.ListBox lstSubjects;
+        protected global::System.Web.UI.WebControls.ListBox lstSubjects;
         
         /// <summary>
         /// btnRemove control.
@@ -38,7 +38,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnRemove;
+        protected global::System.Web.UI.WebControls.Button btnRemove;
         
         /// <summary>
         /// txtNewSubject control.
@@ -47,7 +47,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.TextBox txtNewSubject;
+        protected global::System.Web.UI.WebControls.TextBox txtNewSubject;
         
         /// <summary>
         /// btnSearch control.
@@ -56,7 +56,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnSearch;
+        protected global::System.Web.UI.WebControls.Button btnSearch;
         
         /// <summary>
         /// lstFoundSubjects control.
@@ -65,7 +65,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.DropDownList lstFoundSubjects;
+        protected global::System.Web.UI.WebControls.DropDownList lstFoundSubjects;
         
         /// <summary>
         /// btnAdd control.
@@ -74,7 +74,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnAdd;
+        protected global::System.Web.UI.WebControls.Button btnAdd;
         
         /// <summary>
         /// lblAddResult control.
@@ -83,7 +83,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Label lblAddResult;
+        protected global::System.Web.UI.WebControls.Label lblAddResult;
         
         /// <summary>
         /// lblPermissionsFor control.
@@ -119,7 +119,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnSave;
+        protected global::System.Web.UI.WebControls.Button btnSave;
         
         /// <summary>
         /// lblSaveResult control.
@@ -128,6 +128,6 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Label lblSaveResult;
+        protected global::System.Web.UI.WebControls.Label lblSaveResult;
     }
 }

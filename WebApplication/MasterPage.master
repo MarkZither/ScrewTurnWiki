@@ -21,42 +21,42 @@
 			}
 		// -->
 		</script>
-    
-        <div id="HeaderDiv">
-            <asp:Literal ID="lblHeaderDiv" runat="server" EnableViewState="false" />
-        </div>
-                   
-        <div id="ContainerDiv">
-                 
-            <div id="SidebarDiv">
-                <div id="SidebarHeaderDiv">
-                    <!-- Used for layout purposes only -->
-                </div>
-                <div id="SidebarContentDiv">
-                    <asp:Literal ID="lblSidebarDiv" runat="server" EnableViewState="false" />
-                </div>
-                <div id="SidebarFooterDiv">
-                    <!-- Used for layout purposes only -->
-                </div>
-            </div>
-            <div id="MainDiv">
-                <div id="MainHeaderDiv">
-                    <!-- Used for layout purposes only -->
-                </div>
-                <asp:Literal ID="lblPageHeaderDiv" runat="server" EnableViewState="false" />
-                <asp:contentplaceholder id="CphMaster" runat="server" />
-                <asp:Literal ID="lblPageFooterDiv" runat="server" EnableViewState="false" />
-                <div id="MainFooterDiv">
-                    <!-- Used for layout purposes only -->
-                </div>
-            </div>
+	
+		<div id="HeaderDiv">
+			<asp:Literal ID="lblHeaderDiv" runat="server" EnableViewState="false" />
+		</div>
+				   
+		<div id="ContainerDiv">
+				 
+			<div id="SidebarDiv">
+				<div id="SidebarHeaderDiv">
+					<!-- Used for layout purposes only -->
+				</div>
+				<div id="SidebarContentDiv">
+					<asp:Literal ID="lblSidebarDiv" runat="server" EnableViewState="false" />
+				</div>
+				<div id="SidebarFooterDiv">
+					<!-- Used for layout purposes only -->
+				</div>
+			</div>
+			<div id="MainDiv">
+				<div id="MainHeaderDiv">
+					<!-- Used for layout purposes only -->
+				</div>
+				<asp:Literal ID="lblPageHeaderDiv" runat="server" EnableViewState="false" />
+				<asp:contentplaceholder id="CphMaster" runat="server" />
+				<asp:Literal ID="lblPageFooterDiv" runat="server" EnableViewState="false" />
+				<div id="MainFooterDiv">
+					<!-- Used for layout purposes only -->
+				</div>
+			</div>
 
-        </div>
-            
-        <div id="FooterDiv">
-            <asp:Literal ID="lblFooterDiv" runat="server" EnableViewState="false" />
-        </div>
+		</div>
+			
+		<div id="FooterDiv">
+			<asp:Literal ID="lblFooterDiv" runat="server" EnableViewState="false" />
+		</div>
 
-    </form>  
+	</form>  
 </body>
 </html>

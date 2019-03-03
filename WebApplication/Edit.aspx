@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPageSA.master" AutoEventWireup="true" CodeBehind="Edit.aspx.cs" Inherits="ScrewTurn.Wiki.Edit" ValidateRequest="false" culture="auto" meta:resourcekey="PageResource2" uiculture="auto" %>
 
+<%@ Register TagPrefix="st" TagName="KeepAlive" Src="~/KeepAlive.ascx" %>
 <%@ Register TagPrefix="st" TagName="Editor" Src="~/Editor.ascx" %>
 <%@ Register TagPrefix="st" TagName="Captcha" Src="~/Captcha.ascx" %>
 <%@ Register TagPrefix="st" TagName="AttachmentManager" Src="~/AttachmentManager.ascx" %>
@@ -11,21 +12,21 @@
 	
 		var submitted = false;
 		function __UnloadPage(e) {
-		    if (!submitted) {
-		        if (document.getElementById('EditorDiv').getElementsByTagName('textarea')[0].value.length != 0) {
-				    e.returnValue = " ";
+			if (!submitted) {
+				if (document.getElementById('EditorDiv').getElementsByTagName('textarea')[0].value.length != 0) {
+					e.returnValue = " ";
 				}
 			}
 		}
 
 		function __SetSubmitted() {
 			submitted = true;
-        }
+		}
 		
 		function __RequestConfirmIfNotEmpty() {
-		    if (document.getElementById('EditorDiv').getElementsByTagName('textarea')[0].value.length != 0) {
-		      return(__RequestConfirm());
-		    }
+			if (document.getElementById('EditorDiv').getElementsByTagName('textarea')[0].value.length != 0) {
+			  return(__RequestConfirm());
+			}
 		}
 		
 	// -->
@@ -33,11 +34,11 @@
 
 	<asp:Panel ID="pnlCollisions" runat="server" Visible="False" 
 		CssClass="collisionsmanagement" meta:resourcekey="pnlCollisionsResource1">
-        <asp:Literal ID="lblConcurrentEditing" runat="server" Text="&lt;b&gt;Warning&lt;/b&gt;: this Page is being edited by another user" meta:resourcekey="lblConcurrentEditingResource1" />
-        <asp:Literal ID="lblConcurrentEditingUsername" runat="server" meta:resourcekey="lblConcurrentEditingUsernameResource1" />.
-        <asp:Literal ID="lblSaveDangerous" runat="server" Visible="False" Text="Saving this Page might result in a &lt;b&gt;data-loss&lt;/b&gt;." meta:resourcekey="lblSaveDangerousResource1" />
-        <asp:Literal ID="lblSaveDisabled" runat="server" Visible="False" Text="The Administrators don't allow to save this Page." meta:resourcekey="lblSaveDisabledResource1" />
-        <asp:Literal ID="lblRefreshLink" runat="server" meta:resourcekey="lblRefreshLinkResource1" />
+		<asp:Literal ID="lblConcurrentEditing" runat="server" Text="&lt;b&gt;Warning&lt;/b&gt;: this Page is being edited by another user" meta:resourcekey="lblConcurrentEditingResource1" />
+		<asp:Literal ID="lblConcurrentEditingUsername" runat="server" meta:resourcekey="lblConcurrentEditingUsernameResource1" />.
+		<asp:Literal ID="lblSaveDangerous" runat="server" Visible="False" Text="Saving this Page might result in a &lt;b&gt;data-loss&lt;/b&gt;." meta:resourcekey="lblSaveDangerousResource1" />
+		<asp:Literal ID="lblSaveDisabled" runat="server" Visible="False" Text="The Administrators don't allow to save this Page." meta:resourcekey="lblSaveDisabledResource1" />
+		<asp:Literal ID="lblRefreshLink" runat="server" meta:resourcekey="lblRefreshLinkResource1" />
 	</asp:Panel>
 	
 	<asp:Panel ID="pnlAnonymous" runat="server" Visible="False" CssClass="anonymous" meta:resourcekey="pnlAnonymousResource1">
@@ -65,10 +66,10 @@
 		<asp:Button ID="btnSaveAndContinue" runat="server" Text="Save &amp; Continue" OnClick="btnSave_Click" ValidationGroup="nametitle" meta:resourcekey="btnSaveAndContinueResource1" />
 		<asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="False" OnClick="btnCancel_Click" meta:resourcekey="btnCancelResource1" />
 		<div id="SaveOptionsDiv">
-			<anthem:CheckBox ID="chkMinorChange" runat="server" Text="Minor Change (no backup)" OnCheckedChanged="chkMinorChange_CheckedChanged"
-				AutoCallBack="True" AutoUpdateAfterCallBack="True" meta:resourcekey="chkMinorChangeResource1" UpdateAfterCallBack="True" /><br />
-			<anthem:CheckBox ID="chkSaveAsDraft" runat="server" Text="Save as Draft" OnCheckedChanged="chkSaveAsDraft_CheckedChanged"
-				AutoCallBack="True" AutoUpdateAfterCallBack="True" meta:resourcekey="chkSaveAsDraftResource1" UpdateAfterCallBack="True" />
+			<asp:CheckBox ID="chkMinorChange" runat="server" Text="Minor Change (no backup)" OnCheckedChanged="chkMinorChange_CheckedChanged"
+				meta:resourcekey="chkMinorChangeResource1" /><br />
+			<asp:CheckBox ID="chkSaveAsDraft" runat="server" Text="Save as Draft" OnCheckedChanged="chkSaveAsDraft_CheckedChanged"
+				meta:resourcekey="chkSaveAsDraftResource1" />
 		</div>
 		<div id="ResultDiv">
 			<asp:Label ID="lblResult" runat="server" EnableViewState="False" meta:resourcekey="lblResultResource1" />
@@ -76,7 +77,7 @@
 	</div>
 
 	<div id="PageNameAndTitleDiv">
-		<anthem:Panel ID="pnlPageName" runat="server">
+		<asp:Panel ID="pnlPageName" runat="server">
 			<asp:Literal ID="lblName" runat="server" Text="Page Name (used for linking pages)" meta:resourcekey="lblNameResource1" /><br />
 			<asp:TextBox ID="txtName" runat="server" CssClass="bigtextbox large" ToolTip="Type the name of the page here" meta:resourcekey="txtNameResource2" />
 			<asp:RequiredFieldValidator ID="rfvName" runat="server" CssClass="resulterror" ErrorMessage="Name is required"
@@ -86,12 +87,12 @@
 			<asp:CustomValidator ID="cvName2" runat="server" CssClass="resulterror" ErrorMessage="Page already exists"
 				Display="Dynamic" ControlToValidate="txtName" OnServerValidate="cvName2_ServerValidate" ValidationGroup="nametitle" meta:resourcekey="cvName2Resource1" />
 			<br />
-		</anthem:Panel>
-		<anthem:Panel ID="pnlManualName" runat="server" Visible="false">
-			<anthem:LinkButton ID="btnManualName" runat="server" Text="Specify page name manually..."
+		</asp:Panel>
+		<asp:Panel ID="pnlManualName" runat="server" Visible="false">
+			<asp:LinkButton ID="btnManualName" runat="server" Text="Specify page name manually..."
 				OnClick="btnManualName_Click" CssClass="small" meta:resourcekey="btnManualNameResource1" />
 			<br />
-		</anthem:Panel>
+		</asp:Panel>
 		<asp:Literal ID="lblTitle" runat="server" Text="Page Title" meta:resourcekey="lblTitleResource1" /><br />
 		<asp:TextBox ID="txtTitle" runat="server" CssClass="bigtextbox large" ToolTip="Type the title of the page here" ValidationGroup="nametitle" 
 			meta:resourcekey="txtTitleResource2" />
@@ -99,37 +100,37 @@
 			Display="Dynamic" ControlToValidate="txtTitle" ValidationGroup="nametitle" meta:resourcekey="rfvTitleResource1" />
 	</div>
 	
-	<div id="TemplatesDiv" runat="server">
-		<anthem:LinkButton ID="btnTemplates" runat="server" Text="Content Templates..." OnClick="btnTemplates_Click" 
-			AutoUpdateAfterCallBack="True" meta:resourcekey="btnTemplatesResource1" CssClass="small" />
+	<div id="TemplatesDiv">
+		<asp:LinkButton ID="btnTemplates" runat="server" Text="Content Templates..." OnClick="btnTemplates_Click" 
+			meta:resourcekey="btnTemplatesResource1" CssClass="small" />
 		
-		<anthem:Panel ID="pnlTemplates" runat="server" Visible="False" AutoUpdateAfterCallBack="True" meta:resourcekey="pnlTemplatesResource1">
+		<asp:Panel ID="pnlTemplates" runat="server" Visible="False" meta:resourcekey="pnlTemplatesResource1">
 			<div id="TemplatesInternalDiv">
-				<anthem:DropDownList ID="lstTemplates" runat="server" AutoCallBack="True" OnSelectedIndexChanged="lstTemplates_SelectedIndexChanged" 
+				<asp:DropDownList ID="lstTemplates" runat="server" OnSelectedIndexChanged="lstTemplates_SelectedIndexChanged" 
 					meta:resourcekey="lstTemplatesResource1" />
 				<div id="TemplatePreviewDiv">
-					<anthem:Label ID="lblTemplatePreview" runat="server" AutoUpdateAfterCallBack="True" meta:resourcekey="lblTemplatePreviewResource1" 
-						UpdateAfterCallBack="True" />
+					<asp:Label ID="lblTemplatePreview" runat="server" meta:resourcekey="lblTemplatePreviewResource1" 
+						/>
 				</div>
 				<small>
-					<anthem:LinkButton ID="btnUseTemplate" runat="server" Text="Use Template" ToolTip="Use this Template (replace current content)"
-						CausesValidation="False" AutoUpdateAfterCallBack="True" Visible="False" PreCallBackFunction="__RequestConfirmIfNotEmpty" OnClick="btnUseTemplate_Click" 
-						meta:resourcekey="btnUseTemplateResource1" UpdateAfterCallBack="True" />
+					<asp:LinkButton ID="btnUseTemplate" runat="server" Text="Use Template" ToolTip="Use this Template (replace current content)"
+						CausesValidation="False" Visible="False" OnClick="btnUseTemplate_Click" 
+						meta:resourcekey="btnUseTemplateResource1" />
 					&bull;
-					<anthem:LinkButton ID="btnCancelTemplate" runat="server" Text="Cancel" ToolTip="Close the Templates toolbar"
+					<asp:LinkButton ID="btnCancelTemplate" runat="server" Text="Cancel" ToolTip="Close the Templates toolbar"
 						CausesValidation="False" OnClick="btnCancelTemplate_Click" meta:resourcekey="btnCancelTemplateResource1" />
 				</small>
 			</div>
-		</anthem:Panel>
+		</asp:Panel>
 	</div>
 	
-	<anthem:Panel ID="pnlAutoTemplate" runat="server" Visible="False" CssClass="autotemplate" AutoUpdateAfterCallBack="True" 
-		meta:resourcekey="pnlAutoTemplateResource1" UpdateAfterCallBack="True">
+	<asp:Panel ID="pnlAutoTemplate" runat="server" Visible="False" CssClass="autotemplate"
+		meta:resourcekey="pnlAutoTemplateResource1">
 		<asp:Literal ID="lblAutoTemplate" runat="server" Text="The Content Template &quot;##TEMPLATE##&quot; was selected automatically. You can discard the content as well as select another Template using the link above." 
 			meta:resourcekey="lblAutoTemplateResource1" />
-		<anthem:LinkButton ID="btnAutoTemplateOK" runat="server" Text="Close" ToolTip="Close this message" OnClick="btnAutoTemplateOK_Click" 
+		<asp:LinkButton ID="btnAutoTemplateOK" runat="server" Text="Close" ToolTip="Close this message" OnClick="btnAutoTemplateOK_Click" 
 			meta:resourcekey="btnAutoTemplateOKResource1" />
-	</anthem:Panel>
+	</asp:Panel>
 	
 	<div id="EditorDiv">
 		<st:Editor ID="editor" runat="server" OnSelectedTabChanged="editor_SelectedTabChanged" />
@@ -143,15 +144,15 @@
 		<div>
 			<h3 class="separator"><asp:Literal ID="lblCategories" runat="server" Text="Page Categories" EnableViewState="False" meta:resourcekey="lblCategoriesResource1" /></h3>
 			<div id="CategoriesListDiv">
-				<anthem:CheckBoxList ID="lstCategories" runat="server" CssClass="medium h_short" RepeatLayout="Flow" AutoUpdateAfterCallBack="True" 
-					meta:resourcekey="lstCategoriesResource1" UpdateAfterCallBack="True" />
+				<asp:CheckBoxList ID="lstCategories" runat="server" CssClass="medium h_short" RepeatLayout="Flow"
+					meta:resourcekey="lstCategoriesResource1" />
 			</div>
-			<anthem:Panel ID="pnlCategoryCreation" runat="server" CssClass="categorycreation" AutoUpdateAfterCallBack="True" 
-				meta:resourcekey="pnlCategoryCreationResource1" UpdateAfterCallBack="True">
+			<asp:Panel ID="pnlCategoryCreation" runat="server" CssClass="categorycreation"
+				meta:resourcekey="pnlCategoryCreationResource1">
 				<asp:Literal ID="lblNewCategory" runat="server" Text="New Category" EnableViewState="False" meta:resourcekey="lblNewCategoryResource1" /><br />
-				<anthem:TextBox ID="txtCategory" runat="server" CssClass="short" ToolTip="Type the name of the category here" ValidationGroup="category" 
+				<asp:TextBox ID="txtCategory" runat="server" CssClass="short" ToolTip="Type the name of the category here" ValidationGroup="category" 
 					meta:resourcekey="txtCategoryResource2" />
-				<anthem:Button ID="btnCreateCategory" runat="server" Text="Create" ValidationGroup="category" OnClick="btnCreateCategory_Click" 
+				<asp:Button ID="btnCreateCategory" runat="server" Text="Create" ValidationGroup="category" OnClick="btnCreateCategory_Click" 
 					meta:resourcekey="btnCreateCategoryResource1" /><br />
 				<asp:RequiredFieldValidator ID="rfvCategory" runat="server" ValidationGroup="category" ControlToValidate="txtCategory" Display="Dynamic"
 					ErrorMessage="Name is required" meta:resourcekey="rfvCategoryResource1" />
@@ -159,8 +160,8 @@
 					ErrorMessage="Invalid Name" OnServerValidate="cvCategory1_ServerValidate" meta:resourcekey="cvCategory1Resource1" />
 				<asp:CustomValidator ID="cvCategory2" runat="server" ValidationGroup="category" ControlToValidate="txtCategory" Display="Dynamic"
 					ErrorMessage="Category already exists" OnServerValidate="cvCategory2_ServerValidate" meta:resourcekey="cvCategory2Resource1" />
-				<anthem:Label ID="lblCategoryResult" runat="server" meta:resourcekey="lblCategoryResultResource1" />
-			</anthem:Panel>
+				<asp:Label ID="lblCategoryResult" runat="server" meta:resourcekey="lblCategoryResultResource1" />
+			</asp:Panel>
 		</div>
 	</div>
 	
@@ -189,7 +190,7 @@
 		}
 		__GetServerElementById("btnCancel").onclick = __SetSubmitted;
 		if(__GetServerElementById("btnNewCategory")) {
-		    __GetServerElementById("btnNewCategory").onclick = __SetSubmitted;
+			__GetServerElementById("btnNewCategory").onclick = __SetSubmitted;
 		}
 
 		$(function() {
@@ -201,10 +202,12 @@
 			});
 		});
 	// -->
-    </script>
+	</script>
 	
 	<asp:Literal ID="lblUnloadPage" runat="server" meta:resourcekey="lblUnloadPageResource1" />
 	
 	<div class="cleanup"></div>
+
+	<st:KeepAlive runat="server" ID="keepAlive" />
 
 </asp:Content>

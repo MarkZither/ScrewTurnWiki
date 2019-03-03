@@ -1,7 +1,6 @@
 <%@ Control Language="C#" AutoEventWireup="true" Inherits="ScrewTurn.Wiki.AttachmentViewer" Codebehind="AttachmentViewer.ascx.cs" %>
 
-<anthem:Repeater ID="rptItems" runat="server" AutoUpdateAfterCallBack="True" 
-	OnDataBinding="rptItems_DataBinding" UpdateAfterCallBack="True">
+<asp:Repeater ID="rptItems" runat="server" OnDataBinding="rptItems_DataBinding">
 	<HeaderTemplate>
 		<table id="AttachmentViewerTable" class="generic" cellpadding="0" cellspacing="0">
 			<thead>
@@ -31,4 +30,4 @@
 		</tbody>
 		</table>
 	</FooterTemplate>
-</anthem:Repeater>
+</asp:Repeater>

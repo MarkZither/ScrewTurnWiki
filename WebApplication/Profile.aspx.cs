@@ -46,6 +46,7 @@ namespace ScrewTurn.Wiki {
 				pnlNoChanges.Visible = !usersDataSupported && !accountDetailsSupported;
 
 				languageSelector.LoadLanguages();
+				languageSelector.LoadTimezones();
 
 				string name = string.IsNullOrEmpty(currentUser.DisplayName) ? currentUser.Username : currentUser.DisplayName;
 				lblUsername.Text = name;

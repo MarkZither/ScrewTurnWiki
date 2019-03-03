@@ -419,7 +419,7 @@ namespace ScrewTurn.Wiki {
 		}
 
 		private void linkButton_Click(object sender, EventArgs e) {
-			Anthem.LinkButton lnk = sender as Anthem.LinkButton;
+			LinkButton lnk = sender as LinkButton;
 			if(lnk != null) {
 				CurrentDirectory = lnk.CommandArgument;
 
@@ -442,7 +442,7 @@ namespace ScrewTurn.Wiki {
 			// Add a LinkButton and a "/" label for each directory
 			string current = "/";
 			for(int i = 0; i < dirs.Length; i++) {
-				Anthem.LinkButton lnk = new Anthem.LinkButton();
+				LinkButton lnk = new LinkButton();
 				lnk.ID = "lnkDir" + i.ToString();
 				lnk.Text = dirs[i];
 				current += dirs[i] + "/";
@@ -451,7 +451,7 @@ namespace ScrewTurn.Wiki {
 				lnk.Click += new EventHandler(linkButton_Click);
 				plhDirectory.Controls.Add(lnk);
 
-				Anthem.Label lbl = new Anthem.Label();
+				Label lbl = new Label();
 				lbl.ID = "lblDir" + i.ToString();
 				lbl.Text = " / ";
 				plhDirectory.Controls.Add(lbl);

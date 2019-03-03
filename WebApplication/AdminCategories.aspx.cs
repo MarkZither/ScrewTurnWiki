@@ -160,10 +160,18 @@ namespace ScrewTurn.Wiki {
 
 		protected void rptCategories_ItemCommand(object sender, CommandEventArgs e) {
 			if(e.CommandName == "Select") {
+
 				if(!CanManageCategoriesInCurrentNamespace())
 				{
 					return;
 				}
+
+				lblRenameResult.CssClass = "";
+				lblRenameResult.Text = "";
+				lblDeleteResult.CssClass = "";
+				lblDeleteResult.Text = "";
+				lblMergeResult.CssClass = "";
+				lblMergeResult.Text = "";
 
 				txtCurrentCategory.Value = e.CommandArgument as string;
 				lblCurrentCategory.Text = txtCurrentCategory.Value;
