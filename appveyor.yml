@@ -1,0 +1,24 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+environment:
+  APPVEYOR: true
+services: mssql2016
+before_build:
+- cmd: >-
+    dotnet restore
+
+    nuget restore
+build:
+  verbosity: minimal
+test:
+  assemblies:
+    except:
+    - '**\ScrewTurn.Wiki.Tests.dll'
+    - TestScaffolding\bin\Debug\ScrewTurn.Wiki.Tests.dll
+notifications:
+- provider: Email
+  to:
+  - mark.burton@zither-it.co.uk
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: false

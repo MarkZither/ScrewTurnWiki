@@ -49,9 +49,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Anthem, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Lib\Anthem.NET\Anthem.dll</HintPath>
+    <Reference Include="FiftyOne.Foundation, Version=3.2.21.1, Culture=neutral, PublicKeyToken=e0b3a8da0bbce49c, processorArchitecture=MSIL">
+      <HintPath>..\packages\51Degrees.mobi-core.3.2.21.1\lib\NET40\FiftyOne.Foundation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.EJ.Web, Version=16.4460.0.42, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -156,12 +158,26 @@
     <Compile Include="AdminPages.aspx.designer.cs">
       <DependentUpon>AdminPages.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AdminPlugins.aspx.cs">
+      <DependentUpon>AdminPlugins.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminPlugins.aspx.designer.cs">
+      <DependentUpon>AdminPlugins.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AdminProviders.aspx.cs">
       <DependentUpon>AdminProviders.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AdminProviders.aspx.designer.cs">
       <DependentUpon>AdminProviders.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AdminProvidersManagement.aspx.cs">
+      <DependentUpon>AdminProvidersManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminProvidersManagement.aspx.designer.cs">
+      <DependentUpon>AdminProvidersManagement.aspx</DependentUpon>
     </Compile>
     <Compile Include="AdminSnippets.aspx.cs">
       <DependentUpon>AdminSnippets.aspx</DependentUpon>
@@ -180,6 +196,18 @@
     <Compile Include="AllPages.aspx.designer.cs">
       <DependentUpon>AllPages.aspx</DependentUpon>
     </Compile>
+    <Compile Include="KeepAlive.ascx.cs">
+      <DependentUpon>KeepAlive.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="KeepAlive.ascx.designer.cs">
+      <DependentUpon>KeepAlive.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Mobile\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Models\Device.cs" />
     <Compile Include="PageListBuilder.ascx.cs">
       <DependentUpon>PageListBuilder.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -659,6 +687,8 @@
   <ItemGroup>
     <Content Include="AccessDenied.aspx" />
     <Content Include="Admin.aspx" />
+    <Content Include="AdminPlugins.aspx" />
+    <Content Include="AdminProvidersManagement.aspx" />
     <Content Include="AllPages.aspx" />
     <Content Include="App_LocalResources\AccessDenied.aspx.cs-CZ.resx">
       <SubType>Designer</SubType>
@@ -1327,8 +1357,10 @@
     <Content Include="Import.aspx" />
     <Content Include="JS\Readme.txt" />
     <Content Include="JS\Scripts.js" />
+    <Content Include="KeepAlive.ascx" />
     <Content Include="Language.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="Mobile\Default.aspx" />
     <Content Include="NavPath.aspx" />
     <Content Include="Operation.aspx" />
     <Content Include="PageNotFound.aspx" />
@@ -2659,6 +2691,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="App_Data\51Degrees.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="51Degrees.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

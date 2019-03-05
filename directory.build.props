@@ -1,0 +1,12 @@
+<Project>
+	<PropertyGroup>
+		<Deterministic>true</Deterministic>
+	</PropertyGroup>
+	<PropertyGroup>
+		<AssemblyProduct>ScrewTurn Wiki</AssemblyProduct>
+		<AssemblyCompany>Zither IT Ltd</AssemblyCompany>
+		<AssemblyCopyright>Copyright © 20190</AssemblyCopyright>
+		<AssemblyVersion>3.0.4.560</AssemblyVersion>
+		<AssemblyInformationalVersion>3.0.4.560</AssemblyInformationalVersion>
+	</PropertyGroup>
+</Project>

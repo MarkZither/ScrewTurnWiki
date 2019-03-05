@@ -299,7 +299,7 @@ namespace ScrewTurn.Wiki {
 	/// </summary>
 	public class IndexRow {
 
-		private string provider, providerType, documents, words, occurrences, size;
+		private string command, provider, providerType, documents, words, occurrences, size;
 		private bool isOk;
 
 		/// <summary>
@@ -307,6 +307,7 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="provider">The original provider.</param>
 		public IndexRow(IPagesStorageProviderV30 provider) {
+			this.command = "Rebuild";//command;
 			this.provider = provider.Information.Name;
 			providerType = provider.GetType().FullName;
 
@@ -322,6 +323,16 @@ namespace ScrewTurn.Wiki {
 			this.isOk = !provider.IsIndexCorrupted;
 		}
 
+		/// <summary>
+		/// Gets the command
+		/// </summary>
+		public string Command
+		{
+			get
+			{
+				return command;
+			}
+		}
 		/// <summary>
 		/// Gets the provider.
 		/// </summary>

@@ -1,4 +1,3 @@
-
 using System.Reflection;
 
 [assembly: AssemblyCompany("Threeplicate Srl")]

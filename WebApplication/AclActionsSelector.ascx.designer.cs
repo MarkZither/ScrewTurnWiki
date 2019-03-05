@@ -37,7 +37,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.CheckBoxList lstActionsGrant;
+        protected global::System.Web.UI.WebControls.CheckBoxList lstActionsGrant;
         
         /// <summary>
         /// lstActionsDeny control.
@@ -46,6 +46,6 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.CheckBoxList lstActionsDeny;
+        protected global::System.Web.UI.WebControls.CheckBoxList lstActionsDeny;
     }
 }

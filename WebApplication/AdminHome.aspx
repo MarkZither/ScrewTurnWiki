@@ -4,7 +4,7 @@
 </asp:Content>
 
 <asp:Content ID="ctnAdminHome" ContentPlaceHolderID="cphAdmin" runat="server">
-	<script type="text/javascript">
+    	<script type="text/javascript">
 	<!--
 		function PreIndexRebuild() {
 			if(RequestConfirm()) {
@@ -93,37 +93,36 @@
 			</tbody>
 			</table>
 		</FooterTemplate>
-    </asp:Repeater>
-    <br /><br />
-    
-    <h2 class="separator"><asp:Literal ID="lblOrphanPages" runat="server" Text="Orphan Pages" EnableViewState="false" meta:resourcekey="lblOrphanPagesResource1" /></h2>
-    <asp:Literal ID="lblOrphanPagesInfoPre" runat="server" Text="There seem to be " EnableViewState="false" meta:resourcekey="lblOrphanPagesInfoPreResource1" />
-    <b><anthem:Label ID="lblOrphanPagesCount" runat="server" Text="0" AutoUpdateAfterCallBack="true" /></b>
-    <asp:Literal ID="lblOrphanPagesInfoPost" runat="server" Text=" orphan pages in the wiki" EnableViewState="false" meta:resourcekey="lblOrphanPagesInfoPostResource1" />
-    <small>(<asp:HyperLink ID="lnkPages" runat="server" Text="see Pages" ToolTip="Go to the Pages administration tab" NavigateUrl="~/AdminPages.aspx" meta:resourcekey="lnkPagesResource1" />)</small>.
-    <br />
-    <small><asp:Literal ID="lblOrphanPagesInfo" runat="server" Text="<b>Note</b>: a page is considered an <i>orphan</i> when it has no incoming links from other pages."
+	</asp:Repeater>
+	<br /><br />
+	
+	<h2 class="separator"><asp:Literal ID="lblOrphanPages" runat="server" Text="Orphan Pages" EnableViewState="false" meta:resourcekey="lblOrphanPagesResource1" /></h2>
+	<asp:Literal ID="lblOrphanPagesInfoPre" runat="server" Text="There seem to be " EnableViewState="false" meta:resourcekey="lblOrphanPagesInfoPreResource1" />
+	<b><asp:Label ID="lblOrphanPagesCount" runat="server" Text="0" /></b>
+	<asp:Literal ID="lblOrphanPagesInfoPost" runat="server" Text=" orphan pages in the wiki" EnableViewState="false" meta:resourcekey="lblOrphanPagesInfoPostResource1" />
+	<small>(<asp:HyperLink ID="lnkPages" runat="server" Text="see Pages" ToolTip="Go to the Pages administration tab" NavigateUrl="~/AdminPages.aspx" meta:resourcekey="lnkPagesResource1" />)</small>.
+	<br />
+	<small><asp:Literal ID="lblOrphanPagesInfo" runat="server" Text="<b>Note</b>: a page is considered an <i>orphan</i> when it has no incoming links from other pages."
 		EnableViewState="false" meta:resourcekey="lblOrphanPagesInfoResource1" /></small>
-    <br /><br />
-    
-    <anthem:Button ID="btnRebuildPageLinks" runat="server" Text="Rebuild Page Links" ToolTip="Rebuild the links structure"
-		PreCallBackFunction="PreLinksRebuild" PostCallBackFunction="PostLinksRebuild" meta:resourcekey="btnRebuildPageLinksResource1"
+	<br /><br />
+	
+	<asp:Button ID="btnRebuildPageLinks" runat="server" Text="Rebuild Page Links" ToolTip="Rebuild the links structure"
+		meta:resourcekey="btnRebuildPageLinksResource1"
 		OnClick="btnRebuildPageLinks_Click" />
     <span id="OrphansProgressSpan" style="display: none;">
 		<img src="Images/Wait.gif" alt="Rebuilding..." />
 		<img src="Images/Wait.gif" alt="Rebuilding..." />
 		<img src="Images/Wait.gif" alt="Rebuilding..." />
-    </span>
-    <br /><br />
-    
-    <small><asp:Literal ID="lblRebuildPageLinksInfo" runat="server" meta:resourcekey="lblRebuildPageLinksInfoResource1"
-		Text="<b>Warning</b>: rebuilding page links might take some time. Please do not close this screen while the links are being rebuilt." 
+	</span>
+	<br /><br />
+	
+	<small><asp:Literal ID="lblRebuildPageLinksInfo" runat="server" meta:resourcekey="lblRebuildPageLinksInfoResource1"
+		Text="<b>Warning</b>: rebuilding page links might take some time. Please do not close this screen while the links are being rebuilt. If you experience timeouts, increase the request execution timeout in the web.config." 
 		EnableViewState="False" /></small>
 	<br /><br />
-    
-    <h2 class="separator"><asp:Literal ID="lblIndexStatus" runat="server" Text="Search Index Status" EnableViewState="False" meta:resourcekey="lblIndexStatusResource1" /></h2>
-    <anthem:Repeater ID="rptIndex" runat="server" OnDataBinding="rptIndex_DataBinding" OnItemCommand="rptIndex_ItemCommand" 
-		AutoUpdateAfterCallBack="True">
+	
+	<h2 class="separator"><asp:Literal ID="lblIndexStatus" runat="server" Text="Search Index Status" EnableViewState="False" meta:resourcekey="lblIndexStatusResource1" /></h2>
+	<asp:Repeater ID="rptIndex" runat="server" OnDataBinding="rptIndex_DataBinding" OnItemCommand="rptIndex_ItemCommand" >
 		<HeaderTemplate>
 			<table class="generic" cellpadding="0" cellspacing="0">
 				<thead>
@@ -147,8 +146,9 @@
 				<td><%# Eval("Occurrences") %></td>
 				<td><%# Eval("Size") %></td>
 				<td><%# ((bool)Eval("IsOK") ? ScrewTurn.Wiki.Properties.Messages.OK : "<span class=\"resulterror\">" + ScrewTurn.Wiki.Properties.Messages.Corrupted + "</span>")%></td>
-				<td><anthem:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" CommandName="Rebuild" CommandArgument='<%# Eval("ProviderType") %>'
-					PreCallBackFunction="PreIndexRebuild" PostCallBackFunction="PostIndexRebuild" meta:resourcekey="btnRebuildResource1" /></td>
+				<td><asp:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" 
+                    CommandName='<%# Eval("Command") %>' CommandArgument='<%# Eval("ProviderType") %>'
+					meta:resourcekey="btnRebuildResource1" /></td>
 			</tr>
 		</ItemTemplate>
 		<AlternatingItemTemplate>
@@ -159,17 +159,17 @@
 				<td><%# Eval("Occurrences") %></td>
 				<td><%# Eval("Size") %></td>
 				<td><%# ((bool)Eval("IsOK") ? ScrewTurn.Wiki.Properties.Messages.OK : "<span class=\"resulterror\">" + ScrewTurn.Wiki.Properties.Messages.Corrupted + "</span>")%></td>
-				<td><anthem:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" CommandName="Rebuild" CommandArgument='<%# Eval("ProviderType") %>'
-					PreCallBackFunction="PreIndexRebuild" PostCallBackFunction="PostIndexRebuild" meta:resourcekey="btnRebuildResource2" /></td>
+				<td><asp:LinkButton ID="btnRebuild" runat="server" Text="Rebuild" ToolTip="Rebuild this index" CommandName='<%# Eval("Command") %>' CommandArgument='<%# Eval("ProviderType") %>'
+					meta:resourcekey="btnRebuildResource2" /></td>
 			</tr>
 		</AlternatingItemTemplate>
 		<FooterTemplate>
 			</tbody>
 			</table>
 		</FooterTemplate>
-    </anthem:Repeater>
-    <br />
-    <span id="ProgressSpan" style="display: none;">
+	</asp:Repeater>
+	<br />
+	<span id="ProgressSpan" style="display: none;">
 		<img src="Images/Wait.gif" alt="Rebuilding..." />
 		<img src="Images/Wait.gif" alt="Rebuilding..." />
 		<img src="Images/Wait.gif" alt="Rebuilding..." />

@@ -1,3 +1,0 @@
-http://sourceforge.net/projects/anthem-dot-net/
-
-Anthem.NET is released to public domain.
