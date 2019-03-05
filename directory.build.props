@@ -6,7 +6,7 @@
 		<AssemblyProduct>ScrewTurn Wiki</AssemblyProduct>
 		<AssemblyCompany>Zither IT Ltd</AssemblyCompany>
 		<AssemblyCopyright>Copyright © 20190</AssemblyCopyright>
-		<AssemblyVersion>3.0.4.560</AssemblyVersion>
-		<AssemblyInformationalVersion>3.0.4.560</AssemblyInformationalVersion>
+		<AssemblyVersion>3.1.0.0</AssemblyVersion>
+		<AssemblyInformationalVersion>3.1.0.0</AssemblyInformationalVersion>
 	</PropertyGroup>
 </Project>
