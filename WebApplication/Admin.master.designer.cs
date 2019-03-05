@@ -40,6 +40,15 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.HtmlControls.HtmlForm frmAdmin;
         
         /// <summary>
+        /// ScriptManager1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
+        
+        /// <summary>
         /// lblStrings control.
         /// </summary>
         /// <remarks>
@@ -157,13 +166,13 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.HyperLink lnkSelectContent;
         
         /// <summary>
-        /// lnkSelectLog control.
+        /// lnkSelectPluginsConfiguration control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkSelectLog;
+        protected global::System.Web.UI.WebControls.HyperLink lnkSelectPluginsConfiguration;
         
         /// <summary>
         /// lnkSelectProviders control.
@@ -182,6 +191,24 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkSelectConfig;
+        
+        /// <summary>
+        /// lnkSelectPluginsManagement control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkSelectPluginsManagement;
+        
+        /// <summary>
+        /// lnkSelectLog control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkSelectLog;
         
         /// <summary>
         /// cphAdmin control.

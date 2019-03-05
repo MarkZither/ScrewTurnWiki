@@ -213,7 +213,7 @@
 		</div>
 		
 		<div id="EmailNotificationDiv">
-			<anthem:ImageButton ID="btnEmailNotification" runat="server" OnClick="btnEmailNotification_Click"
+			<asp:ImageButton ID="btnEmailNotification" runat="server" OnClick="btnEmailNotification_Click"
 				AutoUpdateAfterCallBack="True" ImageUrl="~/Images/Blank.png" meta:resourcekey="btnEmailNotificationResource1" UpdateAfterCallBack="True" />
 		</div>
 		

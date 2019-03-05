@@ -20,7 +20,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.TextBox txtPageName;
+        protected global::System.Web.UI.WebControls.TextBox txtPageName;
         
         /// <summary>
         /// btnSearch control.
@@ -29,7 +29,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnSearch;
+        protected global::System.Web.UI.WebControls.Button btnSearch;
         
         /// <summary>
         /// lstAvailablePage control.
@@ -38,7 +38,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.DropDownList lstAvailablePage;
+        protected global::System.Web.UI.WebControls.DropDownList lstAvailablePage;
         
         /// <summary>
         /// btnAddPage control.
@@ -47,7 +47,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnAddPage;
+        protected global::System.Web.UI.WebControls.Button btnAddPage;
         
         /// <summary>
         /// lstPages control.
@@ -56,7 +56,7 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.ListBox lstPages;
+        protected global::System.Web.UI.WebControls.ListBox lstPages;
         
         /// <summary>
         /// btnRemove control.
@@ -65,6 +65,6 @@ namespace ScrewTurn.Wiki {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Anthem.Button btnRemove;
+        protected global::System.Web.UI.WebControls.Button btnRemove;
     }
 }

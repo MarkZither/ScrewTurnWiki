@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Net;
+using System.Web.Services;
+using System.IO;
 
 namespace ScrewTurn.Wiki {
 
@@ -241,6 +243,19 @@ namespace ScrewTurn.Wiki {
 			ReloadDefaultProviders();
 		}
 
+		[WebMethod]
+		public static string UploadFile()
+		{
+			string targetFolder = HttpContext.Current.Server.MapPath("uploadfiles");
+			if(!Directory.Exists(targetFolder))
+			{
+				Directory.CreateDirectory(targetFolder);
+			}
+			//HttpRequest request = context.Request;
+			//HttpFileCollection uploadedFiles = context.Request.Files;
+			return "test";
+		}
+
 		protected void btnUnload_Click(object sender, EventArgs e) {
 			bool enabled, canDisable;
 			IProviderV30 prov = GetCurrentProvider(out enabled, out canDisable);
@@ -421,9 +436,12 @@ namespace ScrewTurn.Wiki {
 		private void LoadSourceProviders() {
 			lstPagesSource.Items.Clear();
 			lstPagesSource.Items.Add(new ListItem("", ""));
+			lstejPagesSource.Items.Clear();
+			lstejPagesSource.Items.Add(new Syncfusion.JavaScript.Web.DropDownListItem() {Text = "", Value = "" });
 			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
 				if(!prov.ReadOnly) {
 					lstPagesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
+					lstejPagesSource.Items.Add(new Syncfusion.JavaScript.Web.DropDownListItem() { Text = prov.Information.Name, Value = prov.GetType().ToString() });
 				}
 			}
 

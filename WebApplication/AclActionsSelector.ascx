@@ -11,14 +11,12 @@
 	</tr>
 	<tr>
 		<td style="text-align: right;">
-			<anthem:CheckBoxList ID="lstActionsGrant" runat="server" AutoCallBack="True" AutoUpdateAfterCallBack="True"
-				TextAlign="Left" OnSelectedIndexChanged="lstActions_SelectedIndexChanged" 
-				meta:resourcekey="lstActionsGrantResource1" UpdateAfterCallBack="True" />
+			<asp:CheckBoxList ID="lstActionsGrant" runat="server" TextAlign="Left" OnSelectedIndexChanged="lstActions_SelectedIndexChanged" meta:resourcekey="lstActionsGrantResource1" />
 		</td>
 		<td>
-			<anthem:CheckBoxList ID="lstActionsDeny" runat="server" AutoCallBack="True" AutoUpdateAfterCallBack="True"
+			<asp:CheckBoxList ID="lstActionsDeny" runat="server" 
 				OnSelectedIndexChanged="lstActions_SelectedIndexChanged" 
-				meta:resourcekey="lstActionsDenyResource1" UpdateAfterCallBack="True" />
+				meta:resourcekey="lstActionsDenyResource1" />
 		</td>
 	</tr>
 </table>

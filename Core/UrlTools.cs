@@ -68,8 +68,12 @@ namespace ScrewTurn.Wiki {
 			catch { }
 
 			if(ext.Equals("ashx")) {
+				if(pageName.Equals("saveFiles"))
+				{
+					//do nothing
+				}
 				// Content page requested, process it via Default.aspx
-				if(!queryString.Contains("NS=")) {
+				else if(!queryString.Contains("NS=")) {
 					HttpContext.Current.RewritePath("~/Default.aspx?Page=" + Tools.UrlEncode(pageName) + "&NS=" + Tools.UrlEncode(nspace) + queryString);
 				}
 				else {

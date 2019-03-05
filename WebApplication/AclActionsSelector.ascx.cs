@@ -158,10 +158,10 @@ namespace ScrewTurn.Wiki {
 		}
 
 		protected void lstActions_SelectedIndexChanged(object sender, EventArgs e) {
-			SetupCheckBoxes(sender as Anthem.CheckBoxList);
+			SetupCheckBoxes(sender as CheckBoxList);
 		}
 
-		private void SetupCheckBoxes(Anthem.CheckBoxList list) {
+		private void SetupCheckBoxes(CheckBoxList list) {
 			// Setup the checkboxes so that full-control takes over the others,
 			// and there cannot be an action that is both granted and denied
 			// The list parameter determines the last checkbox list that changed status,
@@ -172,7 +172,7 @@ namespace ScrewTurn.Wiki {
 					list = lstActionsGrant;
 				}
 
-				Anthem.CheckBoxList other = list == lstActionsGrant ? lstActionsDeny : lstActionsGrant;
+				CheckBoxList other = list == lstActionsGrant ? lstActionsDeny : lstActionsGrant;
 
 				// Verify whether full-control is checked
 				// If so, disable all other checkboxes
