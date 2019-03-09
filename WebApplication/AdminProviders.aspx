@@ -2,8 +2,6 @@
 
     <%@ Register TagPrefix="st" TagName="ProviderSelector" Src="~/ProviderSelector.ascx" %>
 
-        <%@ Register assembly="Syncfusion.EJ.Web, Version=16.4460.0.42, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" namespace="Syncfusion.JavaScript.Web" tagprefix="ej" %>
-
             <asp:Content ID="ctnHead" ContentPlaceHolderID="head" runat="server">
             </asp:Content>
 
