@@ -436,12 +436,12 @@ namespace ScrewTurn.Wiki {
 		private void LoadSourceProviders() {
 			lstPagesSource.Items.Clear();
 			lstPagesSource.Items.Add(new ListItem("", ""));
-			lstejPagesSource.Items.Clear();
-			lstejPagesSource.Items.Add(new Syncfusion.JavaScript.Web.DropDownListItem() {Text = "", Value = "" });
+			//lstejPagesSource.Items.Clear();
+			//lstejPagesSource.Items.Add(new Syncfusion.JavaScript.Web.DropDownListItem() {Text = "", Value = "" });
 			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
 				if(!prov.ReadOnly) {
 					lstPagesSource.Items.Add(new ListItem(prov.Information.Name, prov.GetType().ToString()));
-					lstejPagesSource.Items.Add(new Syncfusion.JavaScript.Web.DropDownListItem() { Text = prov.Information.Name, Value = prov.GetType().ToString() });
+					//lstejPagesSource.Items.Add(new Syncfusion.JavaScript.Web.DropDownListItem() { Text = prov.Information.Name, Value = prov.GetType().ToString() });
 				}
 			}
 
