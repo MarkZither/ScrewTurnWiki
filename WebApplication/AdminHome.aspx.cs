@@ -209,7 +209,7 @@ namespace ScrewTurn.Wiki {
 
 			string newVersion = null;
 			string ignored = null;
-			UpdateStatus status = Tools.GetUpdateStatus("http://www.screwturn.eu/Version/Wiki/3.htm",
+			UpdateStatus status = Tools.GetUpdateStatus("https://raw.githubusercontent.com/MarkZither/ScrewTurnWiki/master/RELEASE",
 				Settings.WikiVersion, out newVersion, out ignored);
 
 			if(status == UpdateStatus.Error) {
