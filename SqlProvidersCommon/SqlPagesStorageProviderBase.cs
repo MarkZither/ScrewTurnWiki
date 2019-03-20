@@ -3342,6 +3342,7 @@ namespace ScrewTurn.Wiki.Plugins.SqlCommon {
 				return freeId;
 			}
 			else {
+                freeId = -1;
 				RollbackTransaction(transaction);
 				return freeId;
 			}
