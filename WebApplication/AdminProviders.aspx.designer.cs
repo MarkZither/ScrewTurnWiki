@@ -22,15 +22,6 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Literal lblProviders;
         
         /// <summary>
-        /// UpdatePanel1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
-        
-        /// <summary>
         /// pnlList control.
         /// </summary>
         /// <remarks>
@@ -479,15 +470,6 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal lblMigratePages;
-        
-        /// <summary>
-        /// lstejPagesSource control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Syncfusion.JavaScript.Web.DropDownList lstejPagesSource;
         
         /// <summary>
         /// lstPagesSource control.

@@ -13,6 +13,7 @@ using System.Web.UI.HtmlControls;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Text;
 using System.Xml;
+using System.Linq;
 
 namespace ScrewTurn.Wiki {
 
@@ -94,7 +95,7 @@ namespace ScrewTurn.Wiki {
 						BuildChannelHead(rss, Settings.WikiTitle + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page)),
 							Settings.MainUrl + page.FullName + Settings.PageExtension,
 							Settings.MainUrl + UrlTools.BuildUrl("RSS.aspx?Page=", page.FullName),
-							Formatter.StripHtml(content.Title) + " - " + Properties.Messages.PageUpdates);
+							Formatter.StripHtml(content.Title) + " - " + Properties.Messages.PageUpdates, DateTime.Now);
 
 						// Write the item element
 						rss.WriteStartElement("item");
@@ -166,7 +167,7 @@ namespace ScrewTurn.Wiki {
 						BuildChannelHead(rss, Settings.WikiTitle + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page)) + " - Discussion Updates",
 							Settings.MainUrl + page.FullName + Settings.PageExtension + "?Discuss=1",
 							Settings.MainUrl + UrlTools.BuildUrl("RSS.aspx?Page=", page.FullName, "&Discuss=1"),
-							Settings.WikiTitle + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page)) + " - Discussion Updates");
+							Settings.WikiTitle + " - " + Formatter.StripHtml(FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.PageContent, page)) + " - Discussion Updates", messages.OrderByDescending(x => x.DateTime).FirstOrDefault().DateTime);
 
 						for (int i = 0; i < messages.Count; i++)
 						{
@@ -235,13 +236,14 @@ namespace ScrewTurn.Wiki {
 							cat = Request["Category"];
 						}
 
+						RecentChange[] ch = RecentChanges.GetAllChanges();
+
 						// Build the channel element
 						BuildChannelHead(rss, Settings.WikiTitle + " - " + Properties.Messages.PageUpdates,
 							Settings.MainUrl,
 							Settings.MainUrl + UrlTools.BuildUrl("RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
-							Properties.Messages.RecentPageUpdates);
+							Properties.Messages.RecentPageUpdates, ch.OrderByDescending(x => x.DateTime).FirstOrDefault().DateTime);
 
-						RecentChange[] ch = RecentChanges.GetAllChanges();
 						Array.Reverse(ch);
 						for(int i = 0; i < ch.Length; i++) {
 
@@ -393,13 +395,14 @@ namespace ScrewTurn.Wiki {
 							cat = Request["Category"];
 						}
 
+						RecentChange[] ch = RecentChanges.GetAllChanges();
+
 						// Build the channel element
 						BuildChannelHead(rss, Settings.WikiTitle + " - " + Properties.Messages.DiscussionUpdates,
 							Settings.MainUrl,
 							Settings.MainUrl + UrlTools.BuildUrl("RSS.aspx", (useCat ? ("?Category=" + cat) : "")),
-							Properties.Messages.RecentDiscussionUpdates);
+							Properties.Messages.RecentDiscussionUpdates, ch.OrderByDescending(x => x.DateTime).FirstOrDefault().DateTime);
 
-						RecentChange[] ch = RecentChanges.GetAllChanges();
 						Array.Reverse(ch);
 						for (int i = 0; i < ch.Length; i++)
 						{
@@ -625,12 +628,12 @@ namespace ScrewTurn.Wiki {
 		/// <param name="selfLink">The self link (atom).</param>
 		/// <param name="description">The description.</param>
 		/// <returns>The complete channel head.</returns>
-		private void BuildChannelHead(XmlWriter rss, string title, string link, string selfLink, string description)
+		private void BuildChannelHead(XmlWriter rss, string title, string link, string selfLink, string description, DateTime lastUpdate)
 		{
 			rss.WriteStartElement("channel");
-			rss.WriteStartElement("title");
-			rss.WriteCData(title);
-			rss.WriteEndElement();
+				rss.WriteStartElement("title");
+				rss.WriteCData(title);
+				rss.WriteEndElement();
 			rss.WriteElementString("link", link);
 			rss.WriteStartElement(atomPrefix, "link", atomNs);
 			rss.WriteAttributeString("href", selfLink);
@@ -640,7 +643,8 @@ namespace ScrewTurn.Wiki {
 			rss.WriteStartElement("description");
 			rss.WriteCData(description);
 			rss.WriteEndElement();
-			rss.WriteElementString("pubDate", DateTime.Now.ToString("R"));
+			rss.WriteElementString("pubDate", lastUpdate.ToString("R"));
+			rss.WriteElementString("lastBuildDate", lastUpdate.ToString("R"));
 			rss.WriteElementString("generator", "ScrewTurn Wiki RSS Feed Generator");
 		}
 

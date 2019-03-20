@@ -315,6 +315,24 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		}
 
 		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
+		public void SetUp(IHostV30 host, string config)
+		{
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			// Nothing to do
+		}
+
+		/// <summary>
 		/// Gets the Information about the Provider.
 		/// </summary>
 		public ComponentInformation Information {

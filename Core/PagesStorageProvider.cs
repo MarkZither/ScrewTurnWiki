@@ -36,8 +36,23 @@ namespace ScrewTurn.Wiki {
 		private PageInfo[] pagesCache = null;
 		private CategoryInfo[] categoriesCache = null;
 
-		private IInMemoryIndex index;
-		private IndexStorerBase indexStorer;
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
+		public void SetUp(IHostV30 host, string config)
+		{
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			// Nothing to do
+		}
 
 		private string GetFullPath(string filename) {
 			return Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), filename);
@@ -152,20 +167,6 @@ namespace ScrewTurn.Wiki {
 			}
 			else if(upgradeNeeded) {
 				VerifyAndPerformUpgradeForNavigationPaths();
-			}
-
-			// Prepare search index
-			index = new StandardIndex();
-			index.SetBuildDocumentDelegate(BuildDocumentHandler);
-			indexStorer = new IndexStorer(GetFullPath(IndexDocumentsFile),
-				GetFullPath(IndexWordsFile),
-				GetFullPath(IndexMappingsFile),
-				index);
-			indexStorer.LoadIndex();
-
-			if(indexStorer.DataCorrupted) {
-				host.LogEntry("Search Engine Index is corrupted and needs to be rebuilt\r\n" +
-					indexStorer.ReasonForDataCorruption.ToString(),	LogEntryType.Warning, null, this);
 			}
 		}
 
@@ -372,7 +373,6 @@ namespace ScrewTurn.Wiki {
 		/// <remarks>This method might not be invoked in some cases.</remarks>
 		public void Shutdown() {
 			lock(this) {
-				indexStorer.Dispose();
 			}
 		}
 
@@ -622,11 +622,11 @@ namespace ScrewTurn.Wiki {
 				// Remove all pages and their messages from search engine index
 				foreach(PageInfo page in GetPages(nspace)) {
 					PageContent content = GetContent(page);
-					UnindexPage(content);
+					SearchClass.UnindexPage(content);
 
 					Message[] messages = GetMessages(page);
 					foreach(Message msg in messages) {
-						UnindexMessageTree(page, msg);
+						SearchClass.UnindexMessage(msg.ID, content);
 					}
 				}
 
@@ -698,11 +698,11 @@ namespace ScrewTurn.Wiki {
 				// Re-add all pages and their messages to the search engine index
 				foreach(PageInfo page in GetPages(result)) { // result contains the new name
 					PageContent content = GetContent(page);
-					IndexPage(content);
+					SearchClass.IndexPage(content);
 
 					Message[] messages = GetMessages(page);
 					foreach(Message msg in messages) {
-						IndexMessageTree(page, msg);
+						SearchClass.IndexMessage(msg, content);
 					}
 				}
 
@@ -879,9 +879,10 @@ namespace ScrewTurn.Wiki {
 
 					// Update search engine index
 					PageContent oldPageContent = GetContent(local);
-					UnindexPage(oldPageContent);
+					SearchClass.UnindexPage(oldPageContent);
+
 					foreach(Message msg in GetMessages(local)) {
-						UnindexMessageTree(local, msg);
+						SearchClass.UnindexMessage(msg.ID, oldPageContent);
 					}
 
 					// Move backups in new folder
@@ -914,12 +915,12 @@ namespace ScrewTurn.Wiki {
 					newPage = local;
 
 					DumpPages(allPages);
-
+					var newPageContent = new PageContent(newPage, oldPageContent.Title, oldPageContent.User, oldPageContent.LastModified, oldPageContent.Comment, oldPageContent.Content, oldPageContent.Keywords, oldPageContent.Description);
 					// Update search engine index
-					IndexPage(new PageContent(newPage, oldPageContent.Title, oldPageContent.User, oldPageContent.LastModified,
-						oldPageContent.Comment, oldPageContent.Content, oldPageContent.Keywords, oldPageContent.Description));
+					SearchClass.IndexPage(newPageContent);
+
 					foreach(Message msg in GetMessages(local)) {
-						IndexMessageTree(newPage, msg);
+						SearchClass.IndexMessage(msg, newPageContent);
 					}
 
 					break;
@@ -1325,165 +1326,6 @@ namespace ScrewTurn.Wiki {
 				newCat.Pages = newPages.ToArray();
 				categoriesCache = null;
 				return newCat;
-			}
-		}
-
-		/// <summary>
-		/// Handles the construction of an <see cref="T:IDocument" /> for the search engine.
-		/// </summary>
-		/// <param name="dumpedDocument">The input dumped document.</param>
-		/// <returns>The resulting <see cref="T:IDocument" />.</returns>
-		private IDocument BuildDocumentHandler(DumpedDocument dumpedDocument) {
-			if(dumpedDocument.TypeTag == PageDocument.StandardTypeTag) {
-				string pageName = PageDocument.GetPageName(dumpedDocument.Name);
-
-				PageInfo page = FindPage(NameTools.GetNamespace(pageName), NameTools.GetLocalName(pageName),
-					GetAllPages());
-
-				if(page == null)
-				{
-					return null;
-				}
-				else
-				{
-					return new PageDocument(page, dumpedDocument, TokenizeContent);
-				}
-			}
-			else if(dumpedDocument.TypeTag == MessageDocument.StandardTypeTag) {
-				string pageFullName;
-				int id;
-				MessageDocument.GetMessageDetails(dumpedDocument.Name, out pageFullName, out id);
-
-				PageInfo page = FindPage(NameTools.GetNamespace(pageFullName), NameTools.GetLocalName(pageFullName), GetAllPages());
-				if(page == null)
-				{
-					return null;
-				}
-				else
-				{
-					return new MessageDocument(page, id, dumpedDocument, TokenizeContent);
-				}
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		/// <summary>
-		/// Tokenizes page content.
-		/// </summary>
-		/// <param name="content">The content to tokenize.</param>
-		/// <returns>The tokenized words.</returns>
-		private static WordInfo[] TokenizeContent(string content) {
-			WordInfo[] words = SearchEngine.Tools.Tokenize(content);
-			return words;
-		}
-
-		/// <summary>
-		/// Indexes a page.
-		/// </summary>
-		/// <param name="content">The content of the page.</param>
-		/// <returns>The number of indexed words, including duplicates.</returns>
-		private int IndexPage(PageContent content) {
-			lock(this) {
-				try {
-					string documentName = PageDocument.GetDocumentName(content.PageInfo);
-
-					DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(content.PageInfo, content.Title),
-						PageDocument.StandardTypeTag, content.LastModified);
-
-					// Store the document
-					// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
-					int count = index.StoreDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent),
-						content.Keywords, host.PrepareContentForIndexing(content.PageInfo, content.Content), null);
-
-					if(count == 0 && content.Content.Length > 0) {
-						host.LogEntry("Indexed 0 words for page " + content.PageInfo.FullName + ": possible index corruption. Please report this error to the developers",
-							LogEntryType.Warning, null, this);
-					}
-
-					return count;
-				}
-				catch(Exception ex) {
-					host.LogEntry("Page indexing error for " + content.PageInfo.FullName + " (skipping page): " + ex.ToString(), LogEntryType.Error, null, this);
-					return 0;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Removes a page from the search engine index.
-		/// </summary>
-		/// <param name="content">The content of the page to remove.</param>
-		private void UnindexPage(PageContent content) {
-			lock(this) {
-				string documentName = PageDocument.GetDocumentName(content.PageInfo);
-
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(content.PageInfo, content.Title),
-					PageDocument.StandardTypeTag, content.LastModified);
-				index.RemoveDocument(new PageDocument(content.PageInfo, ddoc, TokenizeContent), null);
-			}
-		}
-
-		/// <summary>
-		/// Performs a search in the index.
-		/// </summary>
-		/// <param name="parameters">The search parameters.</param>
-		/// <returns>The results.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
-		public SearchResultCollection PerformSearch(SearchParameters parameters) {
-			if(parameters == null)
-			{
-				throw new ArgumentNullException("parameters");
-			}
-
-			lock(this) {
-				return index.Search(parameters);
-			}
-		}
-
-		/// <summary>
-		/// Rebuilds the search index.
-		/// </summary>
-		public void RebuildIndex() {
-			lock(this) {
-				index.Clear(null);
-
-				foreach(PageInfo page in GetAllPages()) {
-					IndexPage(GetContent(page));
-
-					foreach(Message msg in GetMessages(page)) {
-						IndexMessageTree(page, msg);
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets some statistics about the search engine index.
-		/// </summary>
-		/// <param name="documentCount">The total number of documents.</param>
-		/// <param name="wordCount">The total number of unique words.</param>
-		/// <param name="occurrenceCount">The total number of word-document occurrences.</param>
-		/// <param name="size">The approximated size, in bytes, of the search engine index.</param>
-		public void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size) {
-			lock(this) {
-				documentCount = index.TotalDocuments;
-				wordCount = index.TotalWords;
-				occurrenceCount = index.TotalOccurrences;
-				size = indexStorer.Size;
-			}
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether the search engine index is corrupted and needs to be rebuilt.
-		/// </summary>
-		public bool IsIndexCorrupted {
-			get {
-				lock(this) {
-					return indexStorer.DataCorrupted;
-				}
 			}
 		}
 
@@ -2014,9 +1856,9 @@ namespace ScrewTurn.Wiki {
 						Message[] messages = GetMessages(local);
 
 						// Update search engine index
-						UnindexPage(oldContent);
+						SearchClass.UnindexPage(oldContent);
 						foreach(Message msg in messages) {
-							UnindexMessageTree(local, msg);
+							SearchClass.UnindexMessage(msg.ID, oldContent);
 						}
 
 						string oldFullName = local.FullName;
@@ -2058,11 +1900,11 @@ namespace ScrewTurn.Wiki {
 						// Re-bind page with previously saved categories
 						RebindPage(local, cats);
 
+						var pageContent = new PageContent(local, oldContent.Title, oldContent.User, oldContent.LastModified, oldContent.Comment, oldContent.Content, oldContent.Keywords, oldContent.Description);
 						// Update search engine index
-						IndexPage(new PageContent(local, oldContent.Title, oldContent.User, oldContent.LastModified, oldContent.Comment,
-							oldContent.Content, oldContent.Keywords, oldContent.Description));
+						SearchClass.IndexPage(pageContent);
 						foreach(Message msg in messages) {
-							IndexMessageTree(local, msg);
+							SearchClass.IndexMessage(msg, pageContent);
 						}
 
 						return local;
@@ -2202,9 +2044,9 @@ namespace ScrewTurn.Wiki {
 
 					// Update search engine index
 					PageContent pageContent = new PageContent(page, title, username, dateTime, comment, content, keywords, description);
-					IndexPage(pageContent);
+					SearchClass.IndexPage(pageContent);
 				}
-				
+
 			}
 			return true;
 		}
@@ -2410,10 +2252,10 @@ namespace ScrewTurn.Wiki {
 						LocalPageInfo local = page as LocalPageInfo;
 
 						// Update search engine index
-						UnindexPage(content);
+						SearchClass.UnindexPage(content);
 						Message[] messages = GetMessages(local);
 						foreach(Message msg in messages) {
-							UnindexMessageTree(local, msg);
+							SearchClass.UnindexMessage(msg.ID, content);
 						}
 
 						allPages.Remove(allPages[i]);
@@ -2765,10 +2607,10 @@ namespace ScrewTurn.Wiki {
 			catch(ArgumentException) {
 				return false;
 			}
-
+			var content = GetContent(page);
 			// Be sure to remove all old messages from the search engine index
 			foreach(Message msg in GetMessages(local)) {
-				UnindexMessageTree(local, msg);
+				SearchClass.UnindexMessage(msg.ID, content);
 			}
 
 			// Simply overwrite all messages on disk
@@ -2776,7 +2618,7 @@ namespace ScrewTurn.Wiki {
 
 			// Add the new messages to the search engine index 
 			foreach(Message msg in messages) {
-				IndexMessageTree(local, msg);
+				SearchClass.IndexMessage(msg, content);
 			}
 
 			return true;
@@ -2802,7 +2644,7 @@ namespace ScrewTurn.Wiki {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
-		public bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
+		public int AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
 			if(page == null)
 			{
 				throw new ArgumentNullException("page");
@@ -2842,7 +2684,7 @@ namespace ScrewTurn.Wiki {
 				LocalPageInfo local = LoadLocalPageInfo(page);
 				if(local == null)
 				{
-					return false;
+					return -1;
 				}
 
 				if(parent != -1) {
@@ -2850,7 +2692,7 @@ namespace ScrewTurn.Wiki {
 					Message[] allMessages = GetMessages(page);
 					if(FindMessage(new List<Message>(allMessages), parent) == null)
 					{
-						return false;
+						return -1;
 					}
 				}
 
@@ -2878,102 +2720,10 @@ namespace ScrewTurn.Wiki {
 
 				File.AppendAllText(GetFullPathForMessages(local.File), sb.ToString());
 
-				// Update search engine index
-				IndexMessage(local, messageID, subject, dateTime, body);
-			}
-			return true;
-		}
-
-		/// <summary>
-		/// Indexes a message.
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <param name="id">The message ID.</param>
-		/// <param name="subject">The subject.</param>
-		/// <param name="dateTime">The date/time.</param>
-		/// <param name="body">The body.</param>
-		/// <returns>The number of indexed words, including duplicates.</returns>
-		private int IndexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body) {
-			lock(this) {
-				try {
-					// Trim "RE:" to avoid polluting the search engine index
-					if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3)
-					{
-						subject = subject.Substring(3).Trim();
-					}
-
-					string documentName = MessageDocument.GetDocumentName(page, id);
-
-					DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(null, subject),
-						MessageDocument.StandardTypeTag, dateTime);
-
-					// Store the document
-					// The content should always be prepared using IHost.PrepareForSearchEngineIndexing()
-					int count = index.StoreDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null,
-						host.PrepareContentForIndexing(null, body), null);
-
-					if(count == 0 && body.Length > 0) {
-						host.LogEntry("Indexed 0 words for message " + page.FullName + ":" + id.ToString() + ": possible index corruption. Please report this error to the developers",
-							LogEntryType.Warning, null, this);
-					}
-
-					return count;
-				}
-				catch(Exception ex) {
-					host.LogEntry("Message indexing error for " + page.FullName + ":" + id.ToString() + " (skipping message): " + ex.ToString(), LogEntryType.Error, null, this);
-					return 0;
-				}
+				return messageID;
 			}
 		}
 
-		/// <summary>
-		/// Indexes a message tree.
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <param name="root">The tree root.</param>
-		private void IndexMessageTree(PageInfo page, Message root) {
-			IndexMessage(page, root.ID, root.Subject, root.DateTime, root.Body);
-			foreach(Message reply in root.Replies) {
-				IndexMessageTree(page, reply);
-			}
-		}
-
-		/// <summary>
-		/// Removes a message from the search engine index.
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <param name="id">The message ID.</param>
-		/// <param name="subject">The subject.</param>
-		/// <param name="dateTime">The date/time.</param>
-		/// <param name="body">The body.</param>
-		/// <returns>The number of indexed words, including duplicates.</returns>
-		private void UnindexMessage(PageInfo page, int id, string subject, DateTime dateTime, string body) {
-			lock(this) {
-				// Trim "RE:" to avoid polluting the search engine index
-				if(subject.ToLowerInvariant().StartsWith("re:") && subject.Length > 3)
-				{
-					subject = subject.Substring(3).Trim();
-				}
-
-				string documentName = MessageDocument.GetDocumentName(page, id);
-
-				DumpedDocument ddoc = new DumpedDocument(0, documentName, host.PrepareTitleForIndexing(null, subject),
-					MessageDocument.StandardTypeTag, DateTime.Now);
-				index.RemoveDocument(new MessageDocument(page, id, ddoc, TokenizeContent), null);
-			}
-		}
-
-		/// <summary>
-		/// Removes a message tree from the search engine index.
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <param name="root">The tree root.</param>
-		private void UnindexMessageTree(PageInfo page, Message root) {
-			UnindexMessage(page, root.ID, root.Subject, root.DateTime, root.Body);
-			foreach(Message reply in root.Replies) {
-				UnindexMessageTree(page, reply);
-			}
-		}
 
 		/// <summary>
 		/// Find a free Message ID for a Page.
@@ -3066,11 +2816,14 @@ namespace ScrewTurn.Wiki {
 
 				// Recursively update search engine index
 				if(removeReplies) {
-					UnindexMessageTree(page, msg);
+					foreach(var item in replies)
+					{
+						SearchClass.UnindexMessage(item.ID, GetContent(page));
+					}
 				}
 				else
 				{
-					UnindexMessage(page, msg.ID, msg.Subject, msg.DateTime, msg.Body);
+					SearchClass.UnindexMessage(msg.ID, GetContent(page));
 				}
 
 				List<Message> tempList = new List<Message>(messages);
@@ -3198,8 +2951,9 @@ namespace ScrewTurn.Wiki {
 					return false;
 				}
 
+				PageContent pageContent = GetContent(page);
 				// Update search engine index
-				UnindexMessage(page, id, msg.Subject, msg.DateTime, msg.Body);
+				SearchClass.UnindexMessage(id, pageContent);
 
 				msg.Username = username;
 				msg.Subject = subject;
@@ -3209,7 +2963,7 @@ namespace ScrewTurn.Wiki {
 				DumpMessages(page, messages);
 
 				// Update search engine index
-				IndexMessage(page, id, subject, dateTime, body);
+				SearchClass.IndexMessage(msg, pageContent);
 			}
 			return true;
 		}

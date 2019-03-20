@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Resources;
 using System.Web.Configuration;
@@ -18,6 +19,23 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The configuration string.</returns>
 		public static string GetSettingsStorageProviderConfiguration() {
 			string config = WebConfigurationManager.AppSettings["SettingsStorageProviderConfig"];
+			if(config != null)
+			{
+				return config;
+			}
+			else
+			{
+				return "";
+			}
+		}
+
+		/// <summary>
+		/// Gets the Settings Storage Provider configuration string from web.config.
+		/// </summary>
+		/// <returns>The configuration string.</returns>
+		public static string GetIndexDirectoryProviderConfiguration()
+		{
+			string config = WebConfigurationManager.AppSettings["IndexDirectoryProviderConfig"];
 			if(config != null)
 			{
 				return config;
@@ -129,6 +147,11 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
+			// Load config
+			IIndexDirectoryProviderV30 idp = ProviderLoader.LoadIndexDirectoryProvider(WebConfigurationManager.AppSettings["IndexDirectoryProvider"]);
+			idp.Init(Host.Instance, GetSettingsStorageProviderConfiguration());
+			Collectors.IndexDirectoryProvider = idp;
+
 			MimeTypes.Init();
 
 			// Load Providers
@@ -236,8 +259,33 @@ namespace ScrewTurn.Wiki {
 							foreach(var provider in Collectors.PagesProviderCollector.AllProviders) {
 								if(!provider.ReadOnly) {
 									Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
-									provider.RebuildIndex();
+									foreach(var nspace in provider.GetNamespaces())
+									{
+										PageInfo[] pages = provider.GetPages(nspace);
+										foreach(var item in pages)
+										{
+											var pageContent = Content.GetPageContent(item, false);
+											SearchClass.UnindexPage(pageContent);
+											SearchClass.IndexPage(pageContent);
+
+											foreach(var message in item.Provider.GetMessages(item))
+											{
+												SearchClass.UnindexMessage(message.ID, pageContent);
+												SearchClass.IndexMessage(message, pageContent);
+											}
+										}
+									}
+									
+									//TODO: provider.RebuildIndex();
 									Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+								}
+							}
+							foreach(var item in Collectors.FilesProviderCollector.AllProviders)
+							{
+								string[] pagesWithAttachments = item.GetPagesWithAttachments();
+								foreach(var pageWithAttachments in pagesWithAttachments)
+								{
+									var pageInfo = item.GetPageAttachmentDetails(Pages.FindPage(pageWithAttachments), pageWithAttachments);
 								}
 							}
 						}

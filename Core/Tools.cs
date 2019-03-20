@@ -574,7 +574,7 @@ namespace ScrewTurn.Wiki {
 				bool upToDate = false;
 				for(int i = 0; i < versions.Length; i++) {
 					ver = versions[i];
-					if(versions[i].Equals(currentVersion)) {
+					if(versions[i].Replace("v", "").Equals(currentVersion)) {
 						if(i == versions.Length - 1)
 						{
 							upToDate = true;

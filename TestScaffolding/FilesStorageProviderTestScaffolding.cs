@@ -1797,6 +1797,11 @@ namespace ScrewTurn.Wiki.Tests {
 
 			PageInfo page = new PageInfo("Page", MockPagesProvider(), DateTime.Now);
 
+			Host.Instance = new Host();
+
+			Collectors.IndexDirectoryProvider = new DummyIndexDirectoryProvider();
+			ProviderLoader.SetUp<IIndexDirectoryProviderV30>(typeof(DummyIndexDirectoryProvider), "");
+
 			using(Stream s = FillStream("Blah")) {
 				Assert.IsTrue(prov.StorePageAttachment(page, "Attachment.TXT", s, false), "StorePageAttachment should return true");
 				Assert.IsFalse(prov.StorePageAttachment(page, "ATTACHMENT.txt", s, false), "StorePageAttachment should return false");
@@ -1812,6 +1817,71 @@ namespace ScrewTurn.Wiki.Tests {
 			Assert.IsTrue(prov.DeletePageAttachment(page, "newatt.TXT"), "DeletePageAttachment should return true");
 		}
 
-	}
+		private class DummyIndexDirectoryProvider : IIndexDirectoryProviderV30
+		{
 
+			#region IIndexDirectoryProviderV30 Members
+
+			private static Lucene.Net.Store.Directory directory;
+
+			public Lucene.Net.Store.Directory GetDirectory()
+			{
+				return directory;
+			}
+
+			#endregion
+
+			#region IProviderV30 Members
+
+			public string CurrentWiki
+			{
+				get
+				{
+					return "wiki1";
+				}
+			}
+
+			public void Init(IHostV30 host, string config)
+			{
+				// Nothing to do.
+			}
+
+			public void SetUp(IHostV30 host, string config)
+			{
+				directory = new Lucene.Net.Store.RAMDirectory();
+			}
+
+			public ComponentInformation Information
+			{
+				get
+				{
+					return new ComponentInformation("DummyIndexDirectoryProvider", "Threeplicate", "1.0", "", "");
+				}
+			}
+
+			public string ConfigHelpHtml
+			{
+				get
+				{
+					return "";
+				}
+			}
+
+			#endregion
+
+			#region IDisposable Members
+
+			public void Dispose()
+			{
+				// Nothing to do.
+			}
+
+			public void Shutdown()
+			{
+				// Nothing to do.
+			}
+
+			#endregion
+		}
+	}
 }

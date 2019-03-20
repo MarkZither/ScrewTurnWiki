@@ -50,7 +50,5 @@ namespace ScrewTurn.Wiki.Tests {
 		public static void AssertDateTimesAreEqual(DateTime expected, DateTime actual) {
 			AssertDateTimesAreEqual(expected, actual, false);
 		}
-
 	}
-
 }

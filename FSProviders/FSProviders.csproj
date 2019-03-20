@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>ScrewTurn.Wiki.Plugins.FSProviders</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AclEngine\AclEngine.csproj" />
+    <ProjectReference Include="..\PluginFramework\PluginFramework.csproj" />
+    <ProjectReference Include="..\SqlProvidersCommon\SqlProvidersCommon.csproj" />
+  </ItemGroup>
+
+</Project>

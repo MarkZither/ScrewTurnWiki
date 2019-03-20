@@ -44,6 +44,24 @@ namespace ScrewTurn.Wiki {
 		private const int EstimatedLogEntrySize = 60; // bytes
 
 		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
+		public void SetUp(IHostV30 host, string config)
+		{
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			// Nothing to do
+		}
+
+		/// <summary>
 		/// The name of the provider.
 		/// </summary>
 		public static readonly string ProviderName = "Local Settings Provider";

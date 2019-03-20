@@ -229,7 +229,7 @@ namespace ScrewTurn.Wiki {
 						}
 						else {
 							// Store attachment
-							bool done = provider.StorePageAttachment(CurrentPage, fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
+							bool done = FilesAndAttachments.StorePageAttachment(provider, CurrentPage.FullName, fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
 							if(!done) {
 								lblUploadResult.Text = Properties.Messages.CannotStoreFile;
 								lblUploadResult.CssClass = "resulterror";

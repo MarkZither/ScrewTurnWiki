@@ -21,6 +21,11 @@
     <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Plugins.SqlCommon.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="IIndexConnector.cs" />
+    <Compile Remove="IndexConnector.cs" />
+    <Compile Remove="SqlIndex.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>

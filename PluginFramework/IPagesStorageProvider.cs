@@ -139,33 +139,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		CategoryInfo MergeCategories(CategoryInfo source, CategoryInfo destination);
 
 		/// <summary>
-		/// Performs a search in the index.
-		/// </summary>
-		/// <param name="parameters">The search parameters.</param>
-		/// <returns>The results.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameters"/> is <c>null</c>.</exception>
-		SearchResultCollection PerformSearch(SearchParameters parameters);
-
-		/// <summary>
-		/// Rebuilds the search index.
-		/// </summary>
-		void RebuildIndex();
-
-		/// <summary>
-		/// Gets some statistics about the search engine index.
-		/// </summary>
-		/// <param name="documentCount">The total number of documents.</param>
-		/// <param name="wordCount">The total number of unique words.</param>
-		/// <param name="occurrenceCount">The total number of word-document occurrences.</param>
-		/// <param name="size">The approximated size, in bytes, of the search engine index.</param>
-		void GetIndexStats(out int documentCount, out int wordCount, out int occurrenceCount, out long size);
-
-		/// <summary>
-		/// Gets a value indicating whether the search engine index is corrupted and needs to be rebuilt.
-		/// </summary>
-		bool IsIndexCorrupted { get; }
-
-		/// <summary>
 		/// Gets a page.
 		/// </summary>
 		/// <param name="fullName">The full name of the page.</param>
@@ -357,7 +330,7 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		/// <exception cref="ArgumentNullException">If <paramref name="page"/>, <paramref name="username"/>, <paramref name="subject"/> or <paramref name="body"/> are <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">If <paramref name="username"/> or <paramref name="subject"/> are empty.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="parent"/> is less than -1.</exception>
-		bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent);
+		int AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent);
 
 		/// <summary>
 		/// Removes a Message.

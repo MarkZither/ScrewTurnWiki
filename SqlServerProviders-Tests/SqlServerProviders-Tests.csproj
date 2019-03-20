@@ -17,6 +17,9 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="SqlServerPagesStorageProvider_SqlIndexTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="System.Diagnostics.DiagnosticSource" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="NUnit" />
@@ -25,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PluginFramework\PluginFramework.csproj" />
-    <ProjectReference Include="..\SearchEngine-Tests\SearchEngine-Tests.csproj" />
     <ProjectReference Include="..\SearchEngine\SearchEngine.csproj" />
     <ProjectReference Include="..\SqlProvidersCommon\SqlProvidersCommon.csproj" />
     <ProjectReference Include="..\SqlServerProviders\SqlServerProviders.csproj" />

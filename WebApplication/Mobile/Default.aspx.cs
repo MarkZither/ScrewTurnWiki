@@ -29,8 +29,11 @@ public partial class FiftyOne_Mobile_Default : System.Web.UI.Page
     {
         var value = Request.Browser[propertyName];
         if (String.IsNullOrEmpty(value))
-            value = @"<a href=""http://51degrees.com/Products/Device-Detection"">Upgrade</a>";
-        return value;
+		{
+			value = @"<a href=""http://51degrees.com/Products/Device-Detection"">Upgrade</a>";
+		}
+
+		return value;
     }
 
     protected void Page_Load(object sender, EventArgs e)

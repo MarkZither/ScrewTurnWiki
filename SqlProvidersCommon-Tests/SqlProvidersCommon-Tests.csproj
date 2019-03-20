@@ -16,6 +16,9 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="SqlIndexTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="System.Diagnostics.DiagnosticSource" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="NUnit" />

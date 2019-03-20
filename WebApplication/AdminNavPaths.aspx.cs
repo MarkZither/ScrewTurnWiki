@@ -164,16 +164,21 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			PageInfo[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, lstNamespace.SelectedValue);
+			List<SearchResult> similarPages = SearchClass.Search( new SearchField[] { SearchField.PageFullName }, txtPageName.Text, SearchOptions.AtLeastOneWord);
 
 			lstAvailablePage.Items.Clear();
 
-			foreach(PageInfo page in pages) {
-				PageContent content = Content.GetPageContent(page, false);
-				lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(content.Title, false, FormattingContext.Other, page), page.FullName));
+			foreach(SearchResult page in similarPages)
+			{
+				if(page.DocumentType == DocumentType.Page)
+				{
+					PageDocument pageDocument = page.Document as PageDocument;
+					PageInfo pageInfo = Pages.FindPage(pageDocument.PageFullName);
+					lstAvailablePage.Items.Add(new ListItem(FormattingPipeline.PrepareTitle(pageDocument.Title, false, FormattingContext.Other, pageInfo), pageDocument.PageFullName));
+				}
 			}
 
-			btnAdd.Enabled = pages.Length > 0;
+			btnAdd.Enabled = lstAvailablePage.Items.Count > 0;
 		}
 
 		protected void btnAdd_Click(object sender, EventArgs e) {

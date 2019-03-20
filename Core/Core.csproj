@@ -19,10 +19,17 @@
     <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Core.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="IndexStorer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Lucene.Net.Contrib" Version="3.0.3" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AclEngine\AclEngine.csproj" />
+    <ProjectReference Include="..\FSProviders\FSProviders.csproj" />
     <ProjectReference Include="..\PluginFramework\PluginFramework.csproj" />
     <ProjectReference Include="..\SearchEngine\SearchEngine.csproj" />
   </ItemGroup>

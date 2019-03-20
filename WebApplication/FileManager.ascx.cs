@@ -640,7 +640,7 @@ namespace ScrewTurn.Wiki {
 						}
 						else {
 							// Store file
-							bool done = provider.StoreFile(CurrentDirectory + fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
+							bool done = FilesAndAttachments.StoreFile(provider, CurrentDirectory + fileUpload.FileName, fileUpload.FileContent, chkOverwrite.Checked);
 							if(!done) {
 								lblUploadResult.Text = Properties.Messages.CannotStoreFile;
 								lblUploadResult.CssClass = "resulterror";

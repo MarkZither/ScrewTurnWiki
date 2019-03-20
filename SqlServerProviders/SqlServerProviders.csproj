@@ -24,14 +24,11 @@
   <ItemGroup>
     <Compile Include="..\SqlProvidersCommon\Hash.cs" Link="SqlProvidersCommon\Hash.cs" />
     <Compile Include="..\SqlProvidersCommon\ICommandBuilder.cs" Link="SqlProvidersCommon\ICommandBuilder.cs" />
-    <Compile Include="..\SqlProvidersCommon\IIndexConnector.cs" Link="SqlProvidersCommon\IIndexConnector.cs" />
-    <Compile Include="..\SqlProvidersCommon\IndexConnector.cs" Link="SqlProvidersCommon\IndexConnector.cs" />
     <Compile Include="..\SqlProvidersCommon\Parameter.cs" Link="SqlProvidersCommon\Parameter.cs" />
     <Compile Include="..\SqlProvidersCommon\QueryBuilder.cs" Link="SqlProvidersCommon\QueryBuilder.cs" />
     <Compile Include="..\SqlProvidersCommon\SqlAclManager.cs" Link="SqlProvidersCommon\SqlAclManager.cs" />
     <Compile Include="..\SqlProvidersCommon\SqlClassBase.cs" Link="SqlProvidersCommon\SqlClassBase.cs" />
     <Compile Include="..\SqlProvidersCommon\SqlFilesStorageProviderBase.cs" Link="SqlProvidersCommon\SqlFilesStorageProviderBase.cs" />
-    <Compile Include="..\SqlProvidersCommon\SqlIndex.cs" Link="SqlProvidersCommon\SqlIndex.cs" />
     <Compile Include="..\SqlProvidersCommon\SqlPagesStorageProviderBase.cs" Link="SqlProvidersCommon\SqlPagesStorageProviderBase.cs" />
     <Compile Include="..\SqlProvidersCommon\SqlSettingsStorageProviderBase.cs" Link="SqlProvidersCommon\SqlSettingsStorageProviderBase.cs" />
     <Compile Include="..\SqlProvidersCommon\SqlStorageProviderBase.cs" Link="SqlProvidersCommon\SqlStorageProviderBase.cs" />
