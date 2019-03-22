@@ -14,7 +14,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		// Kindly contributed by Jens Felsner
 
-		private static readonly ComponentInformation info = new ComponentInformation("Footnotes Plugin", "Threeplicate Srl", "3.0.1.472", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/Footnotes2.txt");
+		private static readonly ComponentInformation info = new ComponentInformation("Footnotes Plugin", "Threeplicate Srl", "3.0.1.472", "https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages", "http://www.screwturn.eu/Version/PluginPack/Footnotes2.txt");
 
 		private static readonly Regex ReferencesRegex = new Regex("(<[ ]*references[ ]*/[ ]*>|<[ ]*references[ ]*>.*?<[ ]*/[ ]*references[ ]*>)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex RefRegex = new Regex("<[ ]*ref[ ]*>.*?<[ ]*/[ ]*ref[ ]*>", RegexOptions.Compiled | RegexOptions.IgnoreCase);

@@ -18,7 +18,7 @@ This is the main page of your new ScrewTurn Wiki, created for you by the system.
 
 You should edit this page, using the ''Edit'' button in the top-right corner of the screen. You can also create a new page, using the ''Create a new Page'' link in the sidebar on the left.
 
-If you need help, try to visit [http://www.screwturn.eu|our website] or [http://www.screwturn.eu/forum|our forum].
+If you need help, try to visit [https://github.com/MarkZither/ScrewTurnWiki|our website] or [http://www.screwturn.eu/forum|our forum].
 
 '''Warning''': remember to setup the ''admin'' account by editing the {{Web.config}} file placed in the root directory of the Wiki. It is ''extremely dangerous'' to keep the default password.";
 
@@ -30,7 +30,7 @@ This is the main page of the namespace, created for you by the system.
 
 You should edit this page, using the ''Edit'' button in the top-right corner of the screen. You can also create a new page, using the ''Create a new Page'' link in the sidebar on the left.
 
-If you need help, try to visit [http://www.screwturn.eu|our website] or [http://www.screwturn.eu/forum|our forum].";
+If you need help, try to visit [https://github.com/MarkZither/ScrewTurnWiki|our website] or [http://www.screwturn.eu/forum|our forum].";
 
 		/// <summary>
 		/// The default content of the account activation message.
@@ -51,12 +51,12 @@ The ##WIKITITLE## Team.";
 		/// The default content of the edit notice.
 		/// </summary>
 		public const string EditNoticeContent = @"Please '''do not''' include contents covered by copyright without the explicit permission of the Author. Always preview the result before saving.{BR}
-If you are having trouble, please visit the [http://www.screwturn.eu/Help.ashx|Help section] at the [http://www.screwturn.eu|ScrewTurn Wiki Website].";
+If you are having trouble, please visit the [https://web.archive.org/web/20130712073005/http://www.screwturn.eu/Help.MainPage.ashx?From=Help|Help section] at the [http://www.screwturn.eu|ScrewTurn Wiki Website].";
 
 		/// <summary>
 		/// The default content of the footer.
 		/// </summary>
-		public const string FooterContent = @"<p class=""small"">[http://www.screwturn.eu|ScrewTurn Wiki] version {WIKIVERSION}. Some of the icons created by [http://www.famfamfam.com|FamFamFam].</p>";
+		public const string FooterContent = @"<p class=""small"">[https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages|ScrewTurn Wiki] version {WIKIVERSION}. Some of the icons created by [http://www.famfamfam.com|FamFamFam].</p>";
 
 		/// <summary>
 		/// The default content of the header.
@@ -100,7 +100,7 @@ The ##WIKITITLE## Team.";
 <small>'''Search the wiki'''</small>{BR}
 {SEARCHBOX}
 
-[image|PoweredBy|Images/PoweredBy.png|http://www.screwturn.eu]";
+[image|PoweredBy|Images/PoweredBy.png|https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages]";
 
 		/// <summary>
 		/// The default content of the sidebar of a sub-namespace.
@@ -126,7 +126,7 @@ The ##WIKITITLE## Team.";
 <small>'''Search the wiki'''</small>{BR}
 {SEARCHBOX}
 
-[image|PoweredBy|Images/PoweredBy.png|http://www.screwturn.eu]";
+[image|PoweredBy|Images/PoweredBy.png|https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages]";
 
 		/// <summary>
 		/// The default content of the page change email message.

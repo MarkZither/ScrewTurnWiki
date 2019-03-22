@@ -13,7 +13,7 @@ namespace ScrewTurn.Wiki {
 	public class FilesStorageProvider : IFilesStorageProviderV30 {
 
 		private readonly ComponentInformation info = new ComponentInformation("Local Files Provider",
-			"Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			"Threeplicate Srl", Settings.WikiVersion, "https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages", null);
 
 		// The following strings MUST terminate with DirectorySeparatorPath in order to properly work
 		// in BuildFullPath method

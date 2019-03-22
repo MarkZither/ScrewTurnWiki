@@ -71,7 +71,7 @@ namespace ScrewTurn.Wiki.Plugins.FSProviders
 		{
 			get
 			{
-				return new ComponentInformation("File System IndexDirectory Provider", "Threeplicate Srl", "4.0.5.143", "http://www.screwturn.eu", null);
+				return new ComponentInformation("File System IndexDirectory Provider", "Threeplicate Srl", "4.0.5.143", "https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages", null);
 			}
 		}
 

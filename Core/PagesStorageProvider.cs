@@ -28,7 +28,7 @@ namespace ScrewTurn.Wiki {
 		private const string IndexMappingsFile = "IndexMappings.cs";
 
 		private readonly ComponentInformation info =
-			new ComponentInformation("Local Pages Provider", "Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			new ComponentInformation("Local Pages Provider", "Threeplicate Srl", Settings.WikiVersion, "https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages", null);
 		private IHostV30 host;
 
 		// This cache is needed due to performance problems

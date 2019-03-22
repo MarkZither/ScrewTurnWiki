@@ -67,7 +67,7 @@ namespace ScrewTurn.Wiki {
 		public static readonly string ProviderName = "Local Settings Provider";
 
 		private readonly ComponentInformation info =
-			new ComponentInformation(ProviderName, "Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			new ComponentInformation(ProviderName, "Threeplicate Srl", Settings.WikiVersion, "https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages", null);
 
 		private IHostV30 host;
 

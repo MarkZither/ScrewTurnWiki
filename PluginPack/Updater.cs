@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		private static bool AlreadyRun = false;
 
-		private static readonly ComponentInformation _info = new ComponentInformation("Updater Plugin", "Threeplicate Srl", "3.0.2.538", "http://www.screwturn.eu", null);
+		private static readonly ComponentInformation _info = new ComponentInformation("Updater Plugin", "Threeplicate Srl", "3.0.2.538", "https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages", null);
 
 		/// <summary>
 		/// Initializes the Storage Provider.
