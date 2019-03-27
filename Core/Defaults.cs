@@ -18,7 +18,7 @@ This is the main page of your new ScrewTurn Wiki, created for you by the system.
 
 You should edit this page, using the ''Edit'' button in the top-right corner of the screen. You can also create a new page, using the ''Create a new Page'' link in the sidebar on the left.
 
-If you need help, try to visit [https://github.com/MarkZither/ScrewTurnWiki|our website] or [http://www.screwturn.eu/forum|our forum].
+If you need help, try to visit [https://github.com/MarkZither/ScrewTurnWiki|our GitHub] or [https://web.archive.org/web/20120124151457/http://www.screwturn.eu/forum/|our forum].
 
 '''Warning''': remember to setup the ''admin'' account by editing the {{Web.config}} file placed in the root directory of the Wiki. It is ''extremely dangerous'' to keep the default password.";
 
@@ -30,7 +30,7 @@ This is the main page of the namespace, created for you by the system.
 
 You should edit this page, using the ''Edit'' button in the top-right corner of the screen. You can also create a new page, using the ''Create a new Page'' link in the sidebar on the left.
 
-If you need help, try to visit [https://github.com/MarkZither/ScrewTurnWiki|our website] or [http://www.screwturn.eu/forum|our forum].";
+If you need help, try to visit [https://github.com/MarkZither/ScrewTurnWiki|our GitHub] or [https://web.archive.org/web/20120124151457/http://www.screwturn.eu/forum/|our forum].";
 
 		/// <summary>
 		/// The default content of the account activation message.

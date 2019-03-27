@@ -169,7 +169,7 @@ namespace ScrewTurn.Wiki
 				doc.Add(new Field(SearchField.MessageId.AsString(), message.ID.ToString(), Field.Store.NO, Field.Index.NOT_ANALYZED));
 				doc.Add(new Field(SearchField.Title.AsString(), message.Subject, Field.Store.YES, Field.Index.ANALYZED));
 				doc.Add(new Field(SearchField.Content.AsString(), message.Body, Field.Store.YES, Field.Index.ANALYZED));
-				doc.Add(new Field(SearchField.MessageDateTime.AsString(), message.DateTime.ToString(), Field.Store.YES, Field.Index.NO));
+				doc.Add(new Field(SearchField.MessageDateTime.AsString(), message.DateTime.ToString("yyyy/MM/dd HH:mm:ss"), Field.Store.YES, Field.Index.NO));
 				writer.AddDocument(doc);
 				writer.Commit();
 			}

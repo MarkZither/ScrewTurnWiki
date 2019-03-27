@@ -2,6 +2,8 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using IFilterTextReader;
+using IFilterTextReader.Exceptions;
 
 namespace ScrewTurn.Wiki.SearchEngine
 {
@@ -87,6 +89,24 @@ namespace ScrewTurn.Wiki.SearchEngine
 		public static bool IsParseable(string filename)
 		{
 			return loadIFilter(filename) != null;
+		}
+
+		/// <summary>
+		/// blah
+		/// </summary>
+		/// <param name="stream"></param>
+		/// <param name="fileExtension"></param>
+		/// <returns></returns>
+		public static TextReader GetTextReader(Stream stream, string fileExtension)
+		{
+			try
+			{
+				return new FilterReader(stream, fileExtension, filterReaderTimeout: FilterReaderTimeout.TimeoutWithException, timeout: 60 * 1000);
+			}
+			catch(IFFilterNotFound)
+			{
+				return null;
+			}
 		}
 
 		/// <summary>

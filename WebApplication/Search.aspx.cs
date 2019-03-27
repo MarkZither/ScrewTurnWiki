@@ -420,6 +420,10 @@ namespace ScrewTurn.Wiki {
 				MessageDocument doc = result.Document as MessageDocument;
 				PageInfo pageInfo = Pages.FindPage(doc.PageFullName);
 				PageContent content = Cache.GetPageContent(pageInfo);
+				if(content == null)
+				{
+					content = Content.GetPageContent(pageInfo, false);
+				}
 
 				return new SearchResultRow(content.FullName + Settings.PageExtension + "?" + queryStringKeywords + "&amp;Discuss=1#" + Tools.GetMessageIdForAnchor(doc.DateTime), Message,
 					FormattingPipeline.PrepareTitle(doc.Subject, false, FormattingContext.MessageBody, pageInfo) + " (" +
