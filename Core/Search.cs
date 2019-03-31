@@ -112,6 +112,16 @@ namespace ScrewTurn.Wiki
 
 								result.Document = file;
 								break;
+							case DocumentType.SourceControlFile:
+								FileDocument scfile = new FileDocument();
+								scfile.FileName = doc.GetField(SearchField.FileName.AsString()).StringValue;
+								scfile.FileContent = doc.GetField(SearchField.FileContent.AsString()).StringValue;
+
+								TokenStream tokenStream5 = analyzer.TokenStream(SearchField.Content.AsString(), new StringReader(scfile.FileContent));
+								scfile.HighlightedFileContent = highlighter.GetBestFragments(tokenStream5, scfile.FileContent, 3, " [...]");
+
+								result.Document = scfile;
+								break;
 						}
 
 						searchResults.Add(result);
@@ -198,7 +208,7 @@ namespace ScrewTurn.Wiki
 					doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.Attachment), Field.Store.YES, Field.Index.ANALYZED));
 					doc.Add(new Field(SearchField.PageFullName.AsString(), page.FullName, Field.Store.YES, Field.Index.ANALYZED));
 					doc.Add(new Field(SearchField.FileName.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
-					string fileContent = ScrewTurn.Wiki.SearchEngine.Parser.Parse(filePath);
+					string fileContent = SearchEngine.Parser.Parse(filePath);
 					doc.Add(new Field(SearchField.FileContent.AsString(), fileContent, Field.Store.YES, Field.Index.ANALYZED));
 					writer.AddDocument(doc);
 					writer.Commit();
@@ -231,7 +241,7 @@ namespace ScrewTurn.Wiki
 					doc.Add(new Field(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.File) + "|" + fileName).Replace(" ", ""), Field.Store.NO, Field.Index.NOT_ANALYZED_NO_NORMS));
 					doc.Add(new Field(SearchField.DocumentType.AsString(), DocumentTypeToString(DocumentType.File), Field.Store.YES, Field.Index.ANALYZED));
 					doc.Add(new Field(SearchField.FileName.AsString(), fileName, Field.Store.YES, Field.Index.ANALYZED));
-					string fileContent = ScrewTurn.Wiki.SearchEngine.Parser.Parse(filePath);
+					string fileContent = SearchEngine.Parser.Parse(filePath);
 					doc.Add(new Field(SearchField.FileContent.AsString(), fileContent, Field.Store.YES, Field.Index.ANALYZED));
 					writer.AddDocument(doc);
 					writer.Commit();
@@ -356,6 +366,125 @@ namespace ScrewTurn.Wiki
 			{
 				writer.DeleteDocuments(new Term(SearchField.Key.AsString(), (DocumentTypeToString(DocumentType.File) + "|" + fileName).Replace(" ", "")));
 				writer.Commit();
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Rebuilds the index
+		/// </summary>
+		/// <returns><c>true</c> if the file has been unindexed succesfully, <c>false</c> otherwise.</returns>
+		public static bool RebuildIndex()
+		{
+			if((DateTime.Now - Settings.LastPageIndexing).TotalDays > 7 || Collectors.IndexDirectoryProvider.GetDirectory().ListAll().Length == 0)
+			{
+				Settings.LastPageIndexing = DateTime.Now;
+				System.Threading.Thread.Sleep(10000);
+				foreach(var provider in Collectors.PagesProviderCollector.AllProviders)
+				{
+					if(!provider.ReadOnly)
+					{
+						Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+						foreach(var nspace in provider.GetNamespaces())
+						{
+							PageInfo[] pages = provider.GetPages(nspace);
+							foreach(var item in pages)
+							{
+								var pageContent = Content.GetPageContent(item, false);
+								UnindexPage(pageContent);
+								IndexPage(pageContent);
+
+								foreach(var message in item.Provider.GetMessages(item))
+								{
+									UnindexMessage(message.ID, pageContent);
+									IndexMessage(message, pageContent);
+								}
+							}
+						}
+
+						PageInfo[] nonspages = provider.GetPages(null);
+						foreach(var item in nonspages)
+						{
+							var pageContent = Content.GetPageContent(item, false);
+							UnindexPage(pageContent);
+							IndexPage(pageContent);
+
+							foreach(var message in item.Provider.GetMessages(item))
+							{
+								UnindexMessage(message.ID, pageContent);
+								IndexMessage(message, pageContent);
+							}
+						}
+						Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
+					}
+				}
+				foreach(var prov in Collectors.FilesProviderCollector.AllProviders)
+				{
+					Log.LogEntry("Starting automatic rebuilding index for provider: " + prov.Information.Name, EntryType.General, Log.SystemUsername);
+					var allDirs = prov.ListDirectories(null).ToList();
+					allDirs.Insert(0, "/");
+					foreach(var dir in allDirs)
+					{
+						var allFiles = prov.ListFiles(dir);
+						foreach(var file in allFiles)
+						{
+							FileDetails fileDetails = prov.GetFileDetails(file);
+							FileInfo fileInfo = new FileInfo(file);
+
+							// Index the attached file
+							string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+							if(!System.IO.Directory.Exists(tempDir))
+							{
+								System.IO.Directory.CreateDirectory(tempDir);
+							}
+							string tempFile = Path.Combine(tempDir, fileInfo.Name);
+							using(MemoryStream ms = new MemoryStream(1048576))
+							{
+								prov.RetrieveFile(file, ms, false);
+								ms.Seek(0, SeekOrigin.Begin);
+								using(FileStream temp = File.Create(tempFile))
+								{
+									ms.CopyTo(temp);
+								}
+								IndexFile(prov.GetType().FullName + "|" + fileInfo.Name, tempFile);
+							}
+							System.IO.Directory.Delete(tempDir, true);
+						}
+					}
+					string[] pagesWithAttachments = prov.GetPagesWithAttachments();
+					foreach(string pageWithAttachments in pagesWithAttachments)
+					{
+						var pageInfo = Pages.FindPage(pageWithAttachments);
+						var pageContent = Content.GetPageContent(pageInfo, false);
+						string[] attachments = prov.ListPageAttachments(pageInfo);
+						foreach(var attachment in attachments)
+						{
+							var fileDetails = prov.GetPageAttachmentDetails(Pages.FindPage(pageWithAttachments), attachment);
+
+							string name = attachment;
+							// Index the attached file
+							string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
+							if(!System.IO.Directory.Exists(tempDir))
+							{
+								System.IO.Directory.CreateDirectory(tempDir);
+							}
+
+							string tempFile = Path.Combine(tempDir, name);
+							using(MemoryStream ms = new MemoryStream(1048576))
+							{
+								prov.RetrievePageAttachment(pageInfo, attachment, ms, false);
+								ms.Seek(0, SeekOrigin.Begin);
+								using(FileStream temp = File.Create(tempFile))
+								{
+									ms.CopyTo(temp);
+								}
+								IndexPageAttachment(name, tempFile, pageContent);
+							}
+							System.IO.Directory.Delete(tempDir, true);
+						}
+					}
+					Log.LogEntry("Finished automatic rebuilding files and attachments index for provider: " + prov.Information.Name, EntryType.General, Log.SystemUsername);
+				}
 			}
 			return true;
 		}
@@ -524,6 +653,10 @@ namespace ScrewTurn.Wiki
 		/// <summary>
 		/// The document returned is a file.
 		/// </summary>
-		File
+		File,
+		/// <summary>
+		/// The document returned is a file.
+		/// </summary>
+		SourceControlFile
 	}
 }

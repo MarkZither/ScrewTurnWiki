@@ -120,6 +120,17 @@ namespace ScrewTurn.Wiki.SearchEngine
 
 			try
 			{
+				try
+				{
+					FileInfo fileInfo = new FileInfo(filename);
+					using(var reader = new FilterReader(filename, fileInfo.Extension, filterReaderTimeout: FilterReaderTimeout.TimeoutWithException, timeout: 60 * 1000))
+					{
+						string text = reader.ReadToEnd();
+					}
+				}
+				catch(Exception)
+				{
+				}
 				filter = loadIFilter(filename);
 
 				return ExtractText(filter);

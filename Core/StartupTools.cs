@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Resources;
 using System.Web.Configuration;
 using ScrewTurn.Wiki.PluginFramework;
@@ -249,82 +250,9 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername);
 
-			System.Threading.ThreadPool.QueueUserWorkItem(ignored => {
-				if((DateTime.Now - Settings.LastPageIndexing).TotalDays > 7 || Collectors.IndexDirectoryProvider.GetDirectory().ListAll().Length == 0) {
-					Settings.LastPageIndexing = DateTime.Now;
-					System.Threading.Thread.Sleep(10000);
-					foreach(var provider in Collectors.PagesProviderCollector.AllProviders) {
-						if(!provider.ReadOnly) {
-							Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
-							foreach(var nspace in provider.GetNamespaces())
-							{
-								PageInfo[] pages = provider.GetPages(nspace);
-								foreach(var item in pages)
-								{
-									var pageContent = Content.GetPageContent(item, false);
-									SearchClass.UnindexPage(pageContent);
-									SearchClass.IndexPage(pageContent);
-
-									foreach(var message in item.Provider.GetMessages(item))
-									{
-										SearchClass.UnindexMessage(message.ID, pageContent);
-										SearchClass.IndexMessage(message, pageContent);
-									}
-								}
-							}
-
-							PageInfo[] nonspages = provider.GetPages(null);
-							foreach(var item in nonspages)
-							{
-								var pageContent = Content.GetPageContent(item, false);
-								SearchClass.UnindexPage(pageContent);
-								SearchClass.IndexPage(pageContent);
-
-								foreach(var message in item.Provider.GetMessages(item))
-								{
-									SearchClass.UnindexMessage(message.ID, pageContent);
-									SearchClass.IndexMessage(message, pageContent);
-								}
-							}
-							Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
-						}
-					}
-					foreach(var prov in Collectors.FilesProviderCollector.AllProviders)
-					{
-						string[] pagesWithAttachments = prov.GetPagesWithAttachments();
-						foreach(string pageWithAttachments in pagesWithAttachments)
-						{
-							var pageInfo = Pages.FindPage(pageWithAttachments);
-							var pageContent = Content.GetPageContent(pageInfo, false);
-							string[] attachments = prov.ListPageAttachments(pageInfo);
-							foreach(var attachment in attachments)
-							{
-								var fileDetails = prov.GetPageAttachmentDetails(Pages.FindPage(pageWithAttachments), attachment);
-
-								string name = attachment;
-								// Index the attached file
-								string tempDir = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), Guid.NewGuid().ToString());
-								if(!Directory.Exists(tempDir))
-								{
-									Directory.CreateDirectory(tempDir);
-								}
-
-								string tempFile = Path.Combine(tempDir, name);
-								using(MemoryStream ms = new MemoryStream(1048576))
-								{
-									prov.RetrievePageAttachment(pageInfo, attachment, ms, false);
-									ms.Seek(0, SeekOrigin.Begin);
-									using(FileStream temp = File.Create(tempFile))
-									{
-										ms.CopyTo(temp);
-									}
-									SearchClass.IndexPageAttachment(name, tempFile, pageContent);
-								}
-								Directory.Delete(tempDir, true);
-							}
-						}
-					}
-				}
+			System.Threading.ThreadPool.QueueUserWorkItem(ignored =>
+			{
+				SearchClass.RebuildIndex();
 			});
 		}
 
