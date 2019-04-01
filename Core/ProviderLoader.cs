@@ -6,6 +6,7 @@ using System.Text;
 using System.Reflection;
 using ScrewTurn.Wiki.PluginFramework;
 using System.Globalization;
+using ScrewTurn.Wiki.Plugins.FSProviders;
 
 namespace ScrewTurn.Wiki {
 
@@ -22,6 +23,7 @@ namespace ScrewTurn.Wiki {
 		internal const string CacheProviderInterfaceName = "ScrewTurn.Wiki.PluginFramework.ICacheProviderV30";
 
 		internal static string SettingsStorageProviderAssemblyName = "";
+		internal static string IndexDirectoryProviderAssemblyName = "";
 
 		/// <summary>
 		/// Verifies the read-only/read-write constraints of providers.
@@ -37,6 +39,40 @@ namespace ScrewTurn.Wiki {
 				if(!actualInstance.UserAccountsReadOnly && actualInstance.GroupMembershipReadOnly) {
 					throw new ProviderConstraintException("If UserAccountsReadOnly is false, then also GroupMembershipReadOnly must be false");
 				}
+			}
+		}
+
+		/// <summary>
+		/// Try to setup a provider.
+		/// </summary>
+		/// <typeparam name="T">The type of the provider, which must implement <b>IProvider</b>.</typeparam>
+		/// <param name="provider">The provider to setup.</param>
+		/// <param name="configuration">The configuration string.</param>
+		public static void SetUp<T>(Type provider, string configuration) where T : class, IProviderV30
+		{
+			try
+			{
+				T providerInstance = ProviderLoader.CreateInstance<T>(Assembly.GetAssembly(provider), provider);
+				providerInstance.SetUp(Host.Instance, configuration);
+
+				// Verify constraints
+				VerifyConstraints<T>(providerInstance);
+
+				Log.LogEntry("Provider " + provider.FullName + " loaded.", EntryType.General, Log.SystemUsername);
+
+				// Dispose the provider
+				// TODO: providerInstance.Dispose();
+			}
+			catch(InvalidConfigurationException)
+			{
+				Log.LogEntry("Unable to load provider " + provider.FullName + " (configuration rejected).", EntryType.Error, Log.SystemUsername);
+				// Throw InvalidConfigurationException in order to disable plugin
+				throw;
+			}
+			catch
+			{
+				Log.LogEntry("Unable to load provider " + provider.FullName + " (unknown error).", EntryType.Error, Log.SystemUsername);
+				throw; // Exception is rethrown because it's not a normal condition
 			}
 		}
 
@@ -516,6 +552,92 @@ namespace ScrewTurn.Wiki {
 			}
 
 			return result.ToArray();
+		}
+
+		/// <summary>
+		/// Loads the proper Index Directory Provider, given its name.
+		/// </summary>
+		/// <param name="name">The fully qualified name (such as "Namespace.ProviderClass, MyAssembly"), or <c>null</c>/<b>String.Empty</b>/"<b>default</b>" for the default provider.</param>
+		/// <returns>The Index Directory provider.</returns>
+		public static IIndexDirectoryProviderV30 LoadIndexDirectoryProvider(string name)
+		{
+			if(name == null || name.Length == 0 || string.Compare(name, "default", true, CultureInfo.InvariantCulture) == 0)
+			{
+				return new FSIndexDirectoryProvider();
+			}
+
+			IIndexDirectoryProviderV30 result = null;
+
+			Exception inner = null;
+
+			if(name.Contains(","))
+			{
+				string[] fields = name.Split(',');
+				if(fields.Length == 2)
+				{
+					fields[0] = fields[0].Trim(' ', '"');
+					fields[1] = fields[1].Trim(' ', '"');
+					try
+					{
+						// assemblyName should be an absolute path or a relative path in bin or public\Plugins
+
+						Assembly asm;
+						Type t;
+						string assemblyName = fields[1];
+						if(!assemblyName.ToLowerInvariant().EndsWith(".dll"))
+						{
+							assemblyName += ".dll";
+						}
+
+						if(File.Exists(assemblyName))
+						{
+							asm = Assembly.Load(LoadAssemblyFromDisk(assemblyName));
+							t = asm.GetType(fields[0]);
+							SettingsStorageProviderAssemblyName = Path.GetFileName(assemblyName);
+						}
+						else
+						{
+							string tentativePluginsPath = null;
+							try
+							{
+								// Settings.PublicDirectory is only available when running the web app
+								tentativePluginsPath = Path.Combine(Settings.PublicDirectory, "Plugins");
+								tentativePluginsPath = Path.Combine(tentativePluginsPath, assemblyName);
+							}
+							catch { }
+
+							if(!string.IsNullOrEmpty(tentativePluginsPath) && File.Exists(tentativePluginsPath))
+							{
+								asm = Assembly.Load(LoadAssemblyFromDisk(tentativePluginsPath));
+								t = asm.GetType(fields[0]);
+								IndexDirectoryProviderAssemblyName = Path.GetFileName(tentativePluginsPath);
+							}
+							else
+							{
+								// Trim .dll
+								t = Type.GetType(fields[0] + "," + assemblyName.Substring(0, assemblyName.Length - 4), true, true);
+								IndexDirectoryProviderAssemblyName = assemblyName;
+							}
+						}
+
+						result = t.GetConstructor(new Type[0]).Invoke(new object[0]) as IIndexDirectoryProviderV30;
+					}
+					catch(Exception ex)
+					{
+						inner = ex;
+						result = null;
+					}
+				}
+			}
+
+			if(result == null)
+			{
+				throw new ArgumentException("Could not load the specified Settings Storage Provider", inner);
+			}
+			else
+			{
+				return result;
+			}
 		}
 
 		/// <summary>

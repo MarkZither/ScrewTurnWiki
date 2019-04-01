@@ -9,8 +9,17 @@
     <AssemblyTitle>ScrewTurn Wiki Core</AssemblyTitle>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Core.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebugType>portable</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Core.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DebugType>portable</DebugType>
     <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Core.XML</DocumentationFile>
   </PropertyGroup>
@@ -18,11 +27,26 @@
     <DebugType>none</DebugType>
     <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Core.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebugType>none</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Core.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <DebugType>none</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Core.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="IndexStorer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Lucene.Net.Contrib" Version="3.0.3" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AclEngine\AclEngine.csproj" />
+    <ProjectReference Include="..\FSProviders\FSProviders.csproj" />
     <ProjectReference Include="..\PluginFramework\PluginFramework.csproj" />
     <ProjectReference Include="..\SearchEngine\SearchEngine.csproj" />
   </ItemGroup>

@@ -225,18 +225,6 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		string PrepareTitleForIndexing(PageInfo page, string title);
 
 		/// <summary>
-		/// Performs a search.
-		/// </summary>
-		/// <param name="query">The search query.</param>
-		/// <param name="fullText">A value indicating whether to perform a full-text search.</param>
-		/// <param name="filesAndAttachments">A value indicating whether to search the names of files and attachments.</param>
-		/// <param name="options">The search options.</param>
-		/// <returns>The search results.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="query"/> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <paramref name="query"/> is empty.</exception>
-		SearchResultCollection PerformSearch(string query, bool fullText, bool filesAndAttachments, SearchOptions options);
-
-		/// <summary>
 		/// Lists directories in a directory.
 		/// </summary>
 		/// <param name="directory">The directory (<c>null</c> for the root, first invocation).</param>

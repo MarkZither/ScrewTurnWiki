@@ -36,14 +36,25 @@ namespace ScrewTurn.Wiki {
 		public void PrintSearchResults() {
 			StringBuilder sb = new StringBuilder(1000);
 
-			PageInfo[] results = SearchTools.SearchSimilarPages(Request["Page"], DetectNamespace());
-			if(results.Length > 0) {
+			List<SearchResult> similarPages = SearchClass.Search(new SearchField[] { SearchField.PageFullName }, Request["Page"], SearchOptions.AtLeastOneWord);
+
+			List<PageInfo> results = new List<PageInfo>();
+			foreach(SearchResult page in similarPages)
+			{
+				if(page.DocumentType == DocumentType.Page)
+				{
+					PageDocument pageDocument = page.Document as PageDocument;
+					PageInfo pageInfo = Pages.FindPage(pageDocument.PageFullName);
+					results.Add(pageInfo);
+				}
+			}
+			if(results.Count > 0) {
 				sb.Append("<p>");
 				sb.Append(Properties.Messages.WereYouLookingFor);
 				sb.Append("</p>");
 				sb.Append("<ul>");
 				PageContent c;
-				for(int i = 0; i < results.Length; i++) {
+				for(int i = 0; i < results.Count; i++) {
 					c = Content.GetPageContent(results[i], true);
 					sb.Append(@"<li><a href=""");
 					UrlTools.BuildUrl(sb, Tools.UrlEncode(results[i].FullName), Settings.PageExtension);

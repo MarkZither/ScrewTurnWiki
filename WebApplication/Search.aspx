@@ -39,10 +39,6 @@
 		</div>
 	</div>
 	
-	<div id="SearchStatsDiv">
-		<asp:Literal ID="lblStats" runat="server" meta:resourcekey="lblStatsResource1" />
-	</div>
-	
 	<div id="ResultsDiv">
 		<asp:Repeater ID="rptResults" runat="server">
 			<ItemTemplate>

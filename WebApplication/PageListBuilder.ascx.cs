@@ -73,7 +73,18 @@ namespace ScrewTurn.Wiki {
 				return;
 			}
 
-			PageInfo[] pages = SearchTools.SearchSimilarPages(txtPageName.Text, CurrentNamespace);
+			List<SearchResult> similarPages = SearchClass.Search(new SearchField[] { SearchField.PageFullName }, txtPageName.Text, SearchOptions.AtLeastOneWord);
+
+			List<PageInfo> pages = new List<PageInfo>();
+			foreach(SearchResult page in similarPages)
+			{
+				if(page.DocumentType == DocumentType.Page)
+				{
+					PageDocument pageDocument = page.Document as PageDocument;
+					PageInfo pageInfo = Pages.FindPage(pageDocument.PageFullName);
+					pages.Add(pageInfo);
+				}
+			}
 
 			string cp = CurrentProvider;
 

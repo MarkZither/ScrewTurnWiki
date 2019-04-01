@@ -11,6 +11,14 @@ namespace ScrewTurn.Wiki.PluginFramework {
 	public class PageContent {
 
 		/// <summary>
+		/// The namespace of the Page.
+		/// </summary>
+		protected string nspace;
+		/// <summary>
+		/// The Name of the Page.
+		/// </summary>
+		protected string name;
+		/// <summary>
 		/// The PageInfo object.
 		/// </summary>
 		protected PageInfo pageInfo;
@@ -69,6 +77,22 @@ namespace ScrewTurn.Wiki.PluginFramework {
 			this.comment = comment;
 			this.keywords = keywords != null ? keywords : new string[0];
 			this.description = description;
+		}
+
+		/// <summary>
+		/// Gets or sets the full name of the Page, such as 'Namespace.Page' or 'Page'.
+		/// </summary>
+		public string FullName
+		{
+			get
+			{
+				return pageInfo.FullName;//TODO NameTools.GetFullName(pageInfo, name);
+			}
+			set
+			{
+				//TODO
+				NameTools.ExpandFullName(value, out nspace, out name);
+			}
 		}
 
 		/// <summary>

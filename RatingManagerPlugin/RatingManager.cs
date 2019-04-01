@@ -22,7 +22,7 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 
 		private IHostV30 _host;
 		private bool _enableLogging = true;
-        private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "3.0.3.555", "http://www.screwturn.eu", "http://www.screwturn.eu/Version/PluginPack/RatingManager2.txt");
+        private static readonly ComponentInformation Info = new ComponentInformation("Rating Manager Plugin", "Threeplicate Srl", "3.0.3.555", "https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages", "http://www.screwturn.eu/Version/PluginPack/RatingManager2.txt");
 
 		private bool foundRatings = false;
 
@@ -34,6 +34,24 @@ namespace ScrewTurn.Wiki.Plugins.RatingManagerPlugin {
 		/// </summary>
 		public RatingManager() {
 			
+		}
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
+		public void SetUp(IHostV30 host, string config)
+		{
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			// Nothing to do
 		}
 
 		/// <summary>

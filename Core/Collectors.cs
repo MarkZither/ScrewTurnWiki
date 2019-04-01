@@ -25,6 +25,11 @@ namespace ScrewTurn.Wiki {
 		public static ISettingsStorageProviderV30 SettingsProvider;
 
 		/// <summary>
+		/// The Index Directory storage provider.
+		/// </summary>
+		public static IIndexDirectoryProviderV30 IndexDirectoryProvider;
+
+		/// <summary>
 		/// The Users Provider Collector instance.
 		/// </summary>
 		public static ProviderCollector<IUsersStorageProviderV30> UsersProviderCollector;

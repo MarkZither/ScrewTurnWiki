@@ -12,9 +12,27 @@ namespace ScrewTurn.Wiki {
 	public class CacheProvider : ICacheProviderV30 {
 
 		private readonly ComponentInformation _info =
-			new ComponentInformation("Local Cache Provider", "Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			new ComponentInformation("Local Cache Provider", "Threeplicate Srl", Settings.WikiVersion, "https://github.com/MarkZither/ScrewTurnWiki", null);
 
 		private IHostV30 _host;
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
+		public void SetUp(IHostV30 host, string config)
+		{
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			// Nothing to do
+		}
 
 		// Implements the pseudo cache
 		private Dictionary<string, string> _pseudoCache;

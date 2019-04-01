@@ -16,7 +16,7 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 
 		private static bool AlreadyRun = false;
 
-		private static readonly ComponentInformation _info = new ComponentInformation("Updater Plugin", "Threeplicate Srl", "3.0.2.538", "http://www.screwturn.eu", null);
+		private static readonly ComponentInformation _info = new ComponentInformation("Updater Plugin", "Threeplicate Srl", "3.0.2.538", "https://github.com/MarkZither/ScrewTurnWiki/tree/gh-pages", null);
 
 		/// <summary>
 		/// Initializes the Storage Provider.
@@ -112,6 +112,24 @@ namespace ScrewTurn.Wiki.Plugins.PluginPack {
 		/// </summary>
 		/// <remarks>This method might not be invoked in some cases.</remarks>
 		public void Shutdown() {
+		}
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
+		public void SetUp(IHostV30 host, string config)
+		{
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			// Nothing to do
 		}
 
 		/// <summary>

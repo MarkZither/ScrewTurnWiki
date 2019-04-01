@@ -23,8 +23,17 @@
     <AssemblyTitle>ScrewTurn Wiki Search Engine</AssemblyTitle>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.SearchEngine.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebugType>portable</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.SearchEngine.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DebugType>portable</DebugType>
     <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.SearchEngine.XML</DocumentationFile>
   </PropertyGroup>
@@ -32,4 +41,15 @@
     <DebugType>none</DebugType>
     <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.SearchEngine.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebugType>none</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.SearchEngine.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <DebugType>none</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.SearchEngine.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="IFilterTextReader" Version="1.6.0" />
+  </ItemGroup>
 </Project>

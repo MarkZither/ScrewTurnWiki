@@ -8,12 +8,14 @@ using ScrewTurn.Wiki.PluginFramework;
 using System.Web;
 using System.Globalization;
 
-namespace ScrewTurn.Wiki {
+namespace ScrewTurn.Wiki
+{
 
 	/// <summary>
 	/// Allows access to the Pages.
 	/// </summary>
-	public static class Pages {
+	public static class Pages
+	{
 
 		#region Namespaces
 
@@ -21,16 +23,19 @@ namespace ScrewTurn.Wiki {
 		/// Gets all the namespaces, sorted.
 		/// </summary>
 		/// <returns>The namespaces, sorted.</returns>
-		public static List<NamespaceInfo> GetNamespaces() {
+		public static List<NamespaceInfo> GetNamespaces()
+		{
 			List<NamespaceInfo> result = new List<NamespaceInfo>(10);
 
 			int count = 0;
-			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders)
+			{
 				count++;
 				result.AddRange(provider.GetNamespaces());
 			}
 
-			if(count > 1) {
+			if(count > 1)
+			{
 				result.Sort(new NamespaceComparer());
 			}
 
@@ -42,7 +47,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name of the namespace to find.</param>
 		/// <returns>The namespace, or <c>null</c> if no namespace is found.</returns>
-		public static NamespaceInfo FindNamespace(string name) {
+		public static NamespaceInfo FindNamespace(string name)
+		{
 			if(string.IsNullOrEmpty(name))
 			{
 				return null;
@@ -55,8 +61,10 @@ namespace ScrewTurn.Wiki {
 				return nspace;
 			}
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
-				if(prov != defProv) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders)
+			{
+				if(prov != defProv)
+				{
 					nspace = prov.GetNamespace(name);
 					if(nspace != null)
 					{
@@ -74,7 +82,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The name of the namespace to find.</param>
 		/// <param name="provider">The provider to look into.</param>
 		/// <returns>The namespace, or <c>null</c> if the namespace is not found.</returns>
-		public static NamespaceInfo FindNamespace(string name, IPagesStorageProviderV30 provider) {
+		public static NamespaceInfo FindNamespace(string name, IPagesStorageProviderV30 provider)
+		{
 			if(string.IsNullOrEmpty(name))
 			{
 				return null;
@@ -88,7 +97,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The name of the namespace to add.</param>
 		/// <returns><c>true</c> if the namespace is created, <c>false</c> otherwise.</returns>
-		public static bool CreateNamespace(string name) {
+		public static bool CreateNamespace(string name)
+		{
 			return CreateNamespace(name, Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider));
 		}
 
@@ -98,7 +108,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The name of the namespace to add.</param>
 		/// <param name="provider">The provider to create the namespace into.</param>
 		/// <returns><c>true</c> if the namespace is created, <c>false</c> otherwise.</returns>
-		public static bool CreateNamespace(string name, IPagesStorageProviderV30 provider) {
+		public static bool CreateNamespace(string name, IPagesStorageProviderV30 provider)
+		{
 			if(provider.ReadOnly)
 			{
 				return false;
@@ -111,7 +122,8 @@ namespace ScrewTurn.Wiki {
 
 			NamespaceInfo result = provider.AddNamespace(name);
 
-			if(result != null) {
+			if(result != null)
+			{
 				InitMetaDataItems(name);
 
 				AuthWriter.ClearEntriesForNamespace(name, new List<string>());
@@ -124,7 +136,8 @@ namespace ScrewTurn.Wiki {
 				Log.LogEntry("Namespace " + name + " created", EntryType.General, Log.SystemUsername);
 				return true;
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Namespace creation failed for " + name, EntryType.Error, Log.SystemUsername);
 				return false;
 			}
@@ -135,7 +148,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="nspace">The namespace to remove.</param>
 		/// <returns><c>true</c> if the namespace is removed, <c>false</c> otherwise.</returns>
-		public static bool RemoveNamespace(NamespaceInfo nspace) {
+		public static bool RemoveNamespace(NamespaceInfo nspace)
+		{
 			if(nspace.Provider.ReadOnly)
 			{
 				return false;
@@ -150,7 +164,8 @@ namespace ScrewTurn.Wiki {
 			List<PageInfo> pages = GetPages(realNspace);
 
 			bool done = realNspace.Provider.RemoveNamespace(realNspace);
-			if(done) {
+			if(done)
+			{
 				DeleteAllAttachments(pages);
 
 				ResetMetaDataItems(nspace.Name);
@@ -162,10 +177,17 @@ namespace ScrewTurn.Wiki {
 
 				Host.Instance.OnNamespaceActivity(realNspace, null, NamespaceActivity.NamespaceRemoved);
 
+				// Unindexing all pages
+				foreach(PageInfo page in pages)
+				{
+					SearchClass.UnindexPage(nspace.Provider.GetContent(page));
+				}
+
 				Log.LogEntry("Namespace " + realNspace.Name + " removed", EntryType.General, Log.SystemUsername);
 				return true;
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Namespace deletion failed for " + realNspace.Name, EntryType.General, Log.SystemUsername);
 				return false;
 			}
@@ -175,11 +197,15 @@ namespace ScrewTurn.Wiki {
 		/// Deletes all page attachments for a whole namespace.
 		/// </summary>
 		/// <param name="pages">The pages in the namespace.</param>
-		private static void DeleteAllAttachments(List<PageInfo> pages) {
-			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
-				foreach(PageInfo page in pages) {
+		private static void DeleteAllAttachments(List<PageInfo> pages)
+		{
+			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders)
+			{
+				foreach(PageInfo page in pages)
+				{
 					string[] attachments = prov.ListPageAttachments(page);
-					foreach(string attachment in attachments) {
+					foreach(string attachment in attachments)
+					{
 						prov.DeletePageAttachment(page, attachment);
 					}
 				}
@@ -192,7 +218,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace to rename.</param>
 		/// <param name="newName">The new name.</param>
 		/// <returns><c>true</c> if the namespace is removed, <c>false</c> otherwise.</returns>
-		public static bool RenameNamespace(NamespaceInfo nspace, string newName) {
+		public static bool RenameNamespace(NamespaceInfo nspace, string newName)
+		{
 			if(nspace.Provider.ReadOnly)
 			{
 				return false;
@@ -221,7 +248,8 @@ namespace ScrewTurn.Wiki {
 			string oldName = nspace.Name;
 
 			NamespaceInfo newNspace = realNspace.Provider.RenameNamespace(realNspace, newName);
-			if(newNspace != null) {
+			if(newNspace != null)
+			{
 				NotifyFilesProvidersForNamespaceRename(pageNames, oldName, newName);
 
 				UpdateMetaDataItems(oldName, newName);
@@ -234,10 +262,20 @@ namespace ScrewTurn.Wiki {
 
 				Host.Instance.OnNamespaceActivity(newNspace, oldName, NamespaceActivity.NamespaceRenamed);
 
+				// Unindex pages with old full name and index new ones.
+				foreach(PageInfo page in pages)
+				{
+					//TODO: check if messages needs doing as well
+					SearchClass.UnindexPage(nspace.Provider.GetContent(page));
+					page.FullName = NameTools.GetFullName(newNspace.Name, NameTools.GetLocalName(page.FullName));
+					SearchClass.IndexPage(nspace.Provider.GetContent(page));
+				}
+
 				Log.LogEntry("Namespace " + nspace.Name + " renamed to " + newName, EntryType.General, Log.SystemUsername);
 				return true;
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Namespace rename failed for " + nspace.Name, EntryType.General, Log.SystemUsername);
 				return false;
 			}
@@ -249,9 +287,12 @@ namespace ScrewTurn.Wiki {
 		/// <param name="pages">The pages in the renamed namespace.</param>
 		/// <param name="nspace">The name of the renamed namespace.</param>
 		/// <param name="newName">The new name of the namespace.</param>
-		private static void NotifyFilesProvidersForNamespaceRename(List<string> pages, string nspace, string newName) {
-			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
-				foreach(string page in pages) {
+		private static void NotifyFilesProvidersForNamespaceRename(List<string> pages, string nspace, string newName)
+		{
+			foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders)
+			{
+				foreach(string page in pages)
+				{
 					PageInfo pageToNotify = new PageInfo(NameTools.GetFullName(nspace, page), null, DateTime.Now);
 					PageInfo newPage = new PageInfo(NameTools.GetFullName(newName, page), null, DateTime.Now);
 
@@ -264,7 +305,8 @@ namespace ScrewTurn.Wiki {
 		/// Initializes the namespace-specific meta-data items for a namespace.
 		/// </summary>
 		/// <param name="nspace">The namespace to initialize meta-data items for.</param>
-		private static void InitMetaDataItems(string nspace) {
+		private static void InitMetaDataItems(string nspace)
+		{
 			// Footer, Header, HtmlHead, PageFooter, PageHeader, Sidebar
 
 			Settings.Provider.SetMetaDataItem(MetaDataItem.EditNotice, nspace, Defaults.EditNoticeContent);
@@ -280,7 +322,8 @@ namespace ScrewTurn.Wiki {
 		/// Resets the namespace-specific meta-data items for a namespace.
 		/// </summary>
 		/// <param name="nspace">The namespace to reset meta-data items for.</param>
-		private static void ResetMetaDataItems(string nspace) {
+		private static void ResetMetaDataItems(string nspace)
+		{
 			// Footer, Header, HtmlHead, PageFooter, PageHeader, Sidebar
 
 			Settings.Provider.SetMetaDataItem(MetaDataItem.EditNotice, nspace, "");
@@ -297,7 +340,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="nspace">The renamed namespace to update the meta-data items for.</param>
 		/// <param name="newName">The new name of the namespace.</param>
-		private static void UpdateMetaDataItems(string nspace, string newName) {
+		private static void UpdateMetaDataItems(string nspace, string newName)
+		{
 			// Footer, Header, HtmlHead, PageFooter, PageHeader, Sidebar
 
 			Settings.Provider.SetMetaDataItem(MetaDataItem.EditNotice, newName,
@@ -324,8 +368,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <param name="page">The page.</param>
 		/// <returns><c>true</c> if the default page is set, <c>false</c> otherwise.</returns>
-		public static bool SetNamespaceDefaultPage(NamespaceInfo nspace, PageInfo page) {
-			if(nspace == null) {
+		public static bool SetNamespaceDefaultPage(NamespaceInfo nspace, PageInfo page)
+		{
+			if(nspace == null)
+			{
 				// Root namespace, default to classic settings storage
 				Settings.DefaultPage = page.FullName;
 				return true;
@@ -351,13 +397,15 @@ namespace ScrewTurn.Wiki {
 
 			NamespaceInfo result = pageNamespace.Provider.SetNamespaceDefaultPage(nspace, page);
 
-			if(result != null) {
+			if(result != null)
+			{
 				Host.Instance.OnNamespaceActivity(result, null, NamespaceActivity.NamespaceModified);
 
 				Log.LogEntry("Default Page set for " + nspace.Name + " (" + page.FullName + ")", EntryType.General, Log.SystemUsername);
 				return true;
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Default Page setting failed for " + nspace.Name + " (" + page.FullName + ")", EntryType.Error, Log.SystemUsername);
 				return false;
 			}
@@ -372,7 +420,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="fullName">The full name of the page to find (case <b>unsensitive</b>).</param>
 		/// <returns>The correct <see cref="T:PageInfo" /> object, if any, <c>null</c> otherwise.</returns>
-		public static PageInfo FindPage(string fullName) {
+		public static PageInfo FindPage(string fullName)
+		{
 			if(string.IsNullOrEmpty(fullName))
 			{
 				return null;
@@ -385,8 +434,10 @@ namespace ScrewTurn.Wiki {
 				return page;
 			}
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
-				if(prov != defProv) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders)
+			{
+				if(prov != defProv)
+				{
 					page = prov.GetPage(fullName);
 					if(page != null)
 					{
@@ -404,7 +455,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="fullName">The full name of the page to find (case <b>unsensitive</b>).</param>
 		/// <param name="provider">The Provider.</param>
 		/// <returns>The correct <see cref="T:PageInfo" /> object, if any, <c>null</c> otherwise.</returns>
-		public static PageInfo FindPage(string fullName, IPagesStorageProviderV30 provider) {
+		public static PageInfo FindPage(string fullName, IPagesStorageProviderV30 provider)
+		{
 			if(string.IsNullOrEmpty(fullName))
 			{
 				return null;
@@ -417,7 +469,8 @@ namespace ScrewTurn.Wiki {
 		/// Gets a page draft, if any.
 		/// </summary>
 		/// <param name="page">The draft content, or <c>null</c> if no draft exists.</param>
-		public static PageContent GetDraft(PageInfo page) {
+		public static PageContent GetDraft(PageInfo page)
+		{
 			if(page == null)
 			{
 				return null;
@@ -430,13 +483,15 @@ namespace ScrewTurn.Wiki {
 		/// Deletes the draft of a page (if any).
 		/// </summary>
 		/// <param name="page">The page of which to delete the draft.</param>
-		public static void DeleteDraft(PageInfo page) {
+		public static void DeleteDraft(PageInfo page)
+		{
 			if(page == null)
 			{
 				return;
 			}
 
-			if(page.Provider.GetDraft(page) != null) {
+			if(page.Provider.GetDraft(page) != null)
+			{
 				page.Provider.DeleteDraft(page);
 			}
 		}
@@ -446,7 +501,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The Page.</param>
 		/// <returns>The list of available Backups/Revision numbers.</returns>
-		public static List<int> GetBackups(PageInfo page) {
+		public static List<int> GetBackups(PageInfo page)
+		{
 			int[] temp = page.Provider.GetBackups(page);
 			if(temp == null)
 			{
@@ -464,7 +520,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="page">The Page.</param>
 		/// <param name="revision">The Backup/Revision number.</param>
 		/// <returns>The Content of the Backup.</returns>
-		public static PageContent GetBackupContent(PageInfo page, int revision) {
+		public static PageContent GetBackupContent(PageInfo page, int revision)
+		{
 			return page.Provider.GetBackupContent(page, revision);
 		}
 
@@ -472,7 +529,8 @@ namespace ScrewTurn.Wiki {
 		/// Deletes all the backups of a page.
 		/// </summary>
 		/// <param name="page">The Page.</param>
-		public static bool DeleteBackups(PageInfo page) {
+		public static bool DeleteBackups(PageInfo page)
+		{
 			return DeleteBackups(page, -1);
 		}
 
@@ -481,18 +539,21 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The Page.</param>
 		/// <param name="firstToDelete">The first backup to be deleted (this backup and older backups are deleted).</param>
-		public static bool DeleteBackups(PageInfo page, int firstToDelete) {
+		public static bool DeleteBackups(PageInfo page, int firstToDelete)
+		{
 			if(page.Provider.ReadOnly)
 			{
 				return false;
 			}
 
 			bool done = page.Provider.DeleteBackups(page, firstToDelete);
-			if(done) {
+			if(done)
+			{
 				Log.LogEntry("Backups (0-" + firstToDelete.ToString() + ") deleted for " + page.FullName, EntryType.General, Log.SystemUsername);
 				Host.Instance.OnPageActivity(page, null, SessionFacade.GetCurrentUsername(), PageActivity.PageBackupsDeleted);
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Backups (0-" + firstToDelete.ToString() + ") deletion failed for " + page.FullName, EntryType.Error, Log.SystemUsername);
 			}
 			return done;
@@ -503,24 +564,32 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The Page.</param>
 		/// <param name="version">The revision to rollback the Page to.</param>
-		public static bool Rollback(PageInfo page, int version) {
+		public static bool Rollback(PageInfo page, int version)
+		{
 			if(page.Provider.ReadOnly)
 			{
 				return false;
 			}
-
+			var oldPage = page.Provider.GetContent(page);
 			bool done = page.Provider.RollbackPage(page, version);
 
-			if(done) {
+			if(done)
+			{
 				Content.InvalidatePage(page);
+				// Unindex old content
+				SearchClass.UnindexPage(oldPage);
 
 				PageContent pageContent = Content.GetPageContent(page, false);
+
+				// Index the new content
+				SearchClass.IndexPage(pageContent);
 
 				// Update page's outgoing links
 				string[] linkedPages;
 				Formatter.Format(pageContent.Content, false, FormattingContext.PageContent, page, out linkedPages);
 				string[] outgoingLinks = new string[linkedPages.Length];
-				for(int i = 0; i < outgoingLinks.Length; i++) {
+				for(int i = 0; i < outgoingLinks.Length; i++)
+				{
 					outgoingLinks[i] = linkedPages[i];
 				}
 
@@ -531,7 +600,8 @@ namespace ScrewTurn.Wiki {
 				Host.Instance.OnPageActivity(page, null, SessionFacade.GetCurrentUsername(), PageActivity.PageRolledBack);
 				return true;
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Rollback failed for " + page.FullName + " at revision " + version.ToString(), EntryType.Error, Log.SystemUsername);
 				return false;
 			}
@@ -543,7 +613,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Page name.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(NamespaceInfo nspace, string name) {
+		public static bool CreatePage(NamespaceInfo nspace, string name)
+		{
 			string namespaceName = nspace != null ? nspace.Name : null;
 			return CreatePage(namespaceName, name, nspace != null ? nspace.Provider : null);
 		}
@@ -554,7 +625,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Page name.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(string nspace, string name) {
+		public static bool CreatePage(string nspace, string name)
+		{
 			return CreatePage(nspace, name, Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider));
 		}
 
@@ -565,7 +637,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The Page name.</param>
 		/// <param name="provider">The destination provider.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreatePage(NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider)
+		{
 			string namespaceName = nspace != null ? nspace.Name : null;
 			return CreatePage(namespaceName, name, provider);
 		}
@@ -577,7 +650,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The Page name.</param>
 		/// <param name="provider">The destination provider.</param>
 		/// <returns><c>true</c> if the Page is created, <c>false</c> otherwise.</returns>
-		public static bool CreatePage(string nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreatePage(string nspace, string name, IPagesStorageProviderV30 provider)
+		{
 			if(provider.ReadOnly)
 			{
 				return false;
@@ -592,7 +666,8 @@ namespace ScrewTurn.Wiki {
 
 			PageInfo newPage = provider.AddPage(nspace, name, DateTime.Now);
 
-			if(newPage != null) {
+			if(newPage != null)
+			{
 				AuthWriter.ClearEntriesForPage(fullName);
 
 				Content.InvalidateAllPages();
@@ -601,7 +676,8 @@ namespace ScrewTurn.Wiki {
 				Host.Instance.OnPageActivity(newPage, null, SessionFacade.GetCurrentUsername(), PageActivity.PageCreated);
 				return true;
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Page creation failed for " + fullName, EntryType.Error, Log.SystemUsername);
 				return false;
 			}
@@ -611,21 +687,26 @@ namespace ScrewTurn.Wiki {
 		/// Deletes a Page.
 		/// </summary>
 		/// <param name="page">The Page to delete.</param>
-		public static bool DeletePage(PageInfo page) {
+		public static bool DeletePage(PageInfo page)
+		{
 			if(page.Provider.ReadOnly)
 			{
 				return false;
 			}
 
-			string title = Content.GetPageContent(page, false).Title;
+			var pageContent = Content.GetPageContent(page, false);
+			string title = pageContent.Title;
 
 			bool done = page.Provider.RemovePage(page);
 
-			if(done) {
+			if(done)
+			{
 				AuthWriter.ClearEntriesForPage(page.FullName);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
-					foreach(string attn in prov.ListPageAttachments(page)) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders)
+				{
+					foreach(string attn in prov.ListPageAttachments(page))
+					{
 						prov.DeletePageAttachment(page, attn);
 					}
 				}
@@ -643,9 +724,14 @@ namespace ScrewTurn.Wiki {
 				Log.LogEntry("Page " + page.FullName + " deleted", EntryType.General, Log.SystemUsername);
 				RecentChanges.AddChange(page.FullName, title, null, DateTime.Now, SessionFacade.GetCurrentUsername(), Change.PageDeleted, "");
 				Host.Instance.OnPageActivity(page, null, SessionFacade.GetCurrentUsername(), PageActivity.PageDeleted);
+
+				// Unindex the page
+				SearchClass.UnindexPage(pageContent);
+
 				return true;
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Page deletion failed for " + page.FullName, EntryType.Error, Log.SystemUsername);
 				return false;
 			}
@@ -656,7 +742,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The Page to rename.</param>
 		/// <param name="name">The new name.</param>
-		public static bool RenamePage(PageInfo page, string name) {
+		public static bool RenamePage(PageInfo page, string name)
+		{
 			if(page.Provider.ReadOnly)
 			{
 				return false;
@@ -675,11 +762,13 @@ namespace ScrewTurn.Wiki {
 
 			Settings.Provider.StoreOutgoingLinks(page.FullName, new string[0]);
 			PageInfo pg = page.Provider.RenamePage(page, name);
-			if(pg != null) {
+			if(pg != null)
+			{
 				AuthWriter.ClearEntriesForPage(newFullName);
 				AuthWriter.ProcessPageRenaming(oldName, newFullName);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders)
+				{
 					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), pg);
 				}
 
@@ -697,7 +786,8 @@ namespace ScrewTurn.Wiki {
 				Host.Instance.OnPageActivity(page, oldName, SessionFacade.GetCurrentUsername(), PageActivity.PageRenamed);
 				return true;
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Page rename failed for " + page.FullName + " (" + name + ")", EntryType.Error, Log.SystemUsername);
 				return false;
 			}
@@ -710,18 +800,28 @@ namespace ScrewTurn.Wiki {
 		/// <param name="targetNamespace">The target namespace.</param>
 		/// <param name="copyCategories">A value indicating whether to copy the page categories to the target namespace.</param>
 		/// <returns><c>true</c> if the page is migrated, <c>false</c> otherwise.</returns>
-		public static bool MigratePage(PageInfo page, NamespaceInfo targetNamespace, bool copyCategories) {
+		public static bool MigratePage(PageInfo page, NamespaceInfo targetNamespace, bool copyCategories)
+		{
 			string oldName = page.FullName;
 
+			// Unindex old page
+			// TODO: check if need to do messages IndexMessageTree(result, msg, transaction);
+			SearchClass.UnindexPage(Content.GetPageContent(page, false));
+
 			PageInfo result = page.Provider.MovePage(page, targetNamespace, copyCategories);
-			if(result != null) {
+			if(result != null)
+			{
 				Settings.Provider.StoreOutgoingLinks(page.FullName, new string[0]);
 				PageContent content = Content.GetPageContent(result, false);
 				StorePageOutgoingLinks(result, content.Content);
 
-				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders) {
+				foreach(IFilesStorageProviderV30 prov in Collectors.FilesProviderCollector.AllProviders)
+				{
 					prov.NotifyPageRenaming(new PageInfo(oldName, page.Provider, page.CreationDateTime), result);
 				}
+				// Index the new page
+				// TODO: check if need to do messages
+				SearchClass.IndexPage(content);
 			}
 			return result != null;
 		}
@@ -740,7 +840,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="saveMode">The save mode.</param>
 		/// <returns>True if the Page has been modified successfully.</returns>
 		public static bool ModifyPage(PageInfo page, string title, string username, DateTime dateTime, string comment, string content,
-			string[] keywords, string description, SaveMode saveMode) {
+			string[] keywords, string description, SaveMode saveMode)
+		{
 
 			if(page.Provider.ReadOnly)
 			{
@@ -751,27 +852,40 @@ namespace ScrewTurn.Wiki {
 			sb.Replace("~~~~", "§§(" + username + "," + dateTime.ToString("yyyy'/'MM'/'dd' 'HH':'mm':'ss") + ")§§");
 			content = sb.ToString();
 
+			PageContent currentContent = Content.GetPageContent(page, false);
+			if(saveMode != SaveMode.Draft && currentContent != null)
+			{
+				// Unindex old current
+				SearchClass.UnindexPage(currentContent);
+			}
 			// Because of transclusion and other page-linking features, it is necessary to clear the whole cache
 			Content.ClearPseudoCache();
 			Content.InvalidateAllPages();
 
 			bool done = page.Provider.ModifyPage(page, title, username, dateTime, comment, content, keywords, description, saveMode);
 
-			if(done) {
+			if(done)
+			{
 				Log.LogEntry("Page Content updated for " + page.FullName, EntryType.General, Log.SystemUsername);
 
 				StorePageOutgoingLinks(page, content);
 
-				if(saveMode != SaveMode.Draft) {
+				if(saveMode != SaveMode.Draft)
+				{
 					RecentChanges.AddChange(page.FullName, title, null, dateTime, username, Change.PageUpdated, comment);
 					Host.Instance.OnPageActivity(page, null, username, PageActivity.PageModified);
 					SendEmailNotificationForPage(page, Users.FindUser(username));
+
+					// Index the new content
+					SearchClass.IndexPage(page.Provider.GetContent(page));
 				}
-				else {
+				else
+				{
 					Host.Instance.OnPageActivity(page, null, username, PageActivity.PageDraftSaved);
 				}
 
-				if(saveMode == SaveMode.Backup) {
+				if(saveMode == SaveMode.Backup)
+				{
 					// Delete old backups, if needed
 					DeleteOldBackupsIfNeeded(page);
 				}
@@ -789,7 +903,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		/// <param name="content">The raw content.</param>
-		public static void StorePageOutgoingLinks(PageInfo page, string content) {
+		public static void StorePageOutgoingLinks(PageInfo page, string content)
+		{
 			string[] linkedPages;
 			Formatter.Format(content, false, FormattingContext.PageContent, page, out linkedPages);
 
@@ -797,17 +912,21 @@ namespace ScrewTurn.Wiki {
 
 			// Avoid self-references
 			List<string> cleanLinkedPages = new List<string>(linkedPages);
-			for(int i = cleanLinkedPages.Count - 1; i >= 0; i--) {
-				if(cleanLinkedPages[i] == null || cleanLinkedPages[i].Length == 0) {
+			for(int i = cleanLinkedPages.Count - 1; i >= 0; i--)
+			{
+				if(cleanLinkedPages[i] == null || cleanLinkedPages[i].Length == 0)
+				{
 					cleanLinkedPages.RemoveAt(i);
 				}
-				else if(cleanLinkedPages[i].ToLowerInvariant() == lowercaseName) {
+				else if(cleanLinkedPages[i].ToLowerInvariant() == lowercaseName)
+				{
 					cleanLinkedPages.RemoveAt(i);
 				}
 			}
 
 			bool doneLinks = Settings.Provider.StoreOutgoingLinks(page.FullName, cleanLinkedPages.ToArray());
-			if(!doneLinks) {
+			if(!doneLinks)
+			{
 				Log.LogEntry("Could not store outgoing links for page " + page.FullName, EntryType.Error, Log.SystemUsername);
 			}
 		}
@@ -816,7 +935,8 @@ namespace ScrewTurn.Wiki {
 		/// Deletes the old backups if the current number of backups exceeds the limit.
 		/// </summary>
 		/// <param name="page">The page.</param>
-		private static void DeleteOldBackupsIfNeeded(PageInfo page) {
+		private static void DeleteOldBackupsIfNeeded(PageInfo page)
+		{
 			int maxBackups = Settings.KeptBackupNumber;
 			if(maxBackups == -1)
 			{
@@ -825,7 +945,8 @@ namespace ScrewTurn.Wiki {
 
 			// Oldest to newest: 0, 1, 2, 3
 			List<int> backups = GetBackups(page);
-			if(backups.Count > maxBackups) {
+			if(backups.Count > maxBackups)
+			{
 				backups.Reverse();
 				DeleteBackups(page, backups[maxBackups]);
 			}
@@ -837,7 +958,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="users">The array of users.</param>
 		/// <param name="userToRemove">The user to remove.</param>
 		/// <returns>The resulting array without the specified user.</returns>
-		private static UserInfo[] RemoveUserFromArray(UserInfo[] users, UserInfo userToRemove) {
+		private static UserInfo[] RemoveUserFromArray(UserInfo[] users, UserInfo userToRemove)
+		{
 			if(userToRemove == null)
 			{
 				return users;
@@ -845,7 +967,10 @@ namespace ScrewTurn.Wiki {
 
 			List<UserInfo> temp = new List<UserInfo>(users);
 			UsernameComparer comp = new UsernameComparer();
-			temp.RemoveAll(delegate(UserInfo elem) { return comp.Compare(elem, userToRemove) == 0; });
+			temp.RemoveAll(delegate (UserInfo elem)
+			{
+				return comp.Compare(elem, userToRemove) == 0;
+			});
 
 			return temp.ToArray();
 		}
@@ -855,7 +980,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The page that was modified.</param>
 		/// <param name="author">The author of the modification.</param>
-		private static void SendEmailNotificationForPage(PageInfo page, UserInfo author) {
+		private static void SendEmailNotificationForPage(PageInfo page, UserInfo author)
+		{
 			if(page == null)
 			{
 				return;
@@ -889,11 +1015,13 @@ namespace ScrewTurn.Wiki {
 		/// <param name="canEdit">A value indicating whether the user can edit the page.</param>
 		/// <param name="canEditWithApproval">A value indicating whether the user can edit the page with subsequent approval.</param>
 		public static void CanEditPage(PageInfo page, string username, string[] groups,
-			out bool canEdit, out bool canEditWithApproval) {
+			out bool canEdit, out bool canEditWithApproval)
+		{
 
 			canEdit = false;
 			canEditWithApproval = false;
-			switch(Settings.ChangeModerationMode) {
+			switch(Settings.ChangeModerationMode)
+			{
 				case ChangeModerationMode.RequirePageEditingPermissions:
 					canEdit = AuthChecker.CheckActionForPage(page, Actions.ForPages.ManagePage, username, groups);
 					canEditWithApproval = AuthChecker.CheckActionForPage(page, Actions.ForPages.ModifyPage, username, groups);
@@ -913,7 +1041,8 @@ namespace ScrewTurn.Wiki {
 			}
 
 			bool isAdminstrator = false;
-			foreach(string group in groups) {
+			foreach(string group in groups)
+			{
 				if(group == Settings.AdministratorsGroup)
 				{
 					isAdminstrator = true;
@@ -929,18 +1058,21 @@ namespace ScrewTurn.Wiki {
 		/// Verifies whether or not the current user's ip address is in the host filter or not.
 		/// </summary>
 		/// <returns></returns>
-		private static bool VerifyIpHostFilter() {
+		private static bool VerifyIpHostFilter()
+		{
 			const RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace;
 			var hostAddress = HttpContext.Current.Request.UserHostAddress;
 			var ips = Settings.IpHostFilter.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
 			// For each IP in the host filter setting
-			foreach(var ip in ips) {
+			foreach(var ip in ips)
+			{
 
 				// Split each by the .
 				var digits = ip.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
 				var regExpression = string.Empty;
-				foreach(var digit in digits) {
+				foreach(var digit in digits)
+				{
 
 					// Build a regex to check against the host ip.
 					if(regExpression != string.Empty)
@@ -975,7 +1107,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="username">The username.</param>
 		/// <param name="groups">The groups.</param>
 		/// <returns><c>true</c> if the user can approve/reject a draft of the page, <c>false</c> otherwise.</returns>
-		public static bool CanApproveDraft(PageInfo page, string username, string[] groups) {
+		public static bool CanApproveDraft(PageInfo page, string username, string[] groups)
+		{
 			string requiredAction = Actions.ForPages.ManagePage;
 
 			// TODO: decide whether it is incorrect to require only ModifyPage permission
@@ -1002,7 +1135,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="title">The title.</param>
 		/// <param name="comment">The comment.</param>
 		/// <param name="author">The author.</param>
-		public static void SendEmailNotificationForDraft(PageInfo currentPage, string title, string comment, string author) {
+		public static void SendEmailNotificationForDraft(PageInfo currentPage, string title, string comment, string author)
+		{
 			// Decide the users to notify based on the ChangeModerationMode
 			// Retrieve the list of matching users
 			// Asynchronously send the notification
@@ -1010,8 +1144,10 @@ namespace ScrewTurn.Wiki {
 			// Retrieve all the users that have a grant on requiredAction for the current page
 			// TODO: make this work when Users.GetUsers does not return all existing users but only a sub-set
 			List<UserInfo> usersToNotify = new List<UserInfo>(10);
-			foreach(UserInfo user in Users.GetUsers()) {
-				if(CanApproveDraft(currentPage, user.Username, user.Groups)) {
+			foreach(UserInfo user in Users.GetUsers())
+			{
+				if(CanApproveDraft(currentPage, user.Username, user.Groups))
+				{
 					usersToNotify.Add(user);
 				}
 			}
@@ -1038,17 +1174,20 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The pages.</returns>
-		public static List<PageInfo> GetPages(NamespaceInfo nspace) {
+		public static List<PageInfo> GetPages(NamespaceInfo nspace)
+		{
 			List<PageInfo> allPages = new List<PageInfo>(10000);
 
 			// Retrieve all pages from Pages Providers
 			int count = 0;
-			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders)
+			{
 				count++;
 				allPages.AddRange(provider.GetPages(nspace));
 			}
 
-			if(count > 1) {
+			if(count > 1)
+			{
 				allPages.Sort(new PageNameComparer());
 			}
 
@@ -1059,12 +1198,15 @@ namespace ScrewTurn.Wiki {
 		/// Gets the global number of pages.
 		/// </summary>
 		/// <returns>The number of pages.</returns>
-		public static int GetGlobalPageCount() {
+		public static int GetGlobalPageCount()
+		{
 			int count = 0;
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders)
+			{
 				count += prov.GetPages(null).Length;
-				foreach(NamespaceInfo nspace in prov.GetNamespaces()) {
+				foreach(NamespaceInfo nspace in prov.GetNamespaces())
+				{
 					count += prov.GetPages(nspace).Length;
 				}
 			}
@@ -1077,7 +1219,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		/// <returns>The incoming links.</returns>
-		public static string[] GetPageIncomingLinks(PageInfo page) {
+		public static string[] GetPageIncomingLinks(PageInfo page)
+		{
 			if(page == null)
 			{
 				return null;
@@ -1089,8 +1232,10 @@ namespace ScrewTurn.Wiki {
 
 			List<string> result = new List<string>(20);
 
-			foreach(string key in knownPages) {
-				if(Contains(allLinks[key], page.FullName)) {
+			foreach(string key in knownPages)
+			{
+				if(Contains(allLinks[key], page.FullName))
+				{
 					// result is likely to be very small, so a linear search is fine
 					if(!result.Contains(key))
 					{
@@ -1107,7 +1252,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The page.</param>
 		/// <returns>The outgoing links.</returns>
-		public static string[] GetPageOutgoingLinks(PageInfo page) {
+		public static string[] GetPageOutgoingLinks(PageInfo page)
+		{
 			if(page == null)
 			{
 				return null;
@@ -1121,7 +1267,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The orphaned pages.</returns>
-		public static PageInfo[] GetOrphanedPages(NamespaceInfo nspace) {
+		public static PageInfo[] GetOrphanedPages(NamespaceInfo nspace)
+		{
 			List<PageInfo> pages = GetPages(nspace);
 			IDictionary<string, string[]> allLinks = Settings.Provider.GetAllOutgoingLinks();
 			string[] knownPages = new string[allLinks.Count];
@@ -1129,10 +1276,13 @@ namespace ScrewTurn.Wiki {
 
 			Dictionary<PageInfo, bool> result = new Dictionary<PageInfo, bool>(pages.Count);
 
-			foreach(PageInfo page in pages) {
+			foreach(PageInfo page in pages)
+			{
 				result.Add(page, false);
-				foreach(string key in knownPages) {
-					if(Contains(allLinks[key], page.FullName)) {
+				foreach(string key in knownPages)
+				{
+					if(Contains(allLinks[key], page.FullName))
+					{
 						// page has incoming links
 						result[page] = true;
 					}
@@ -1147,7 +1297,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The wanted/inexistent pages (dictionary wanted_page->linking_pages).</returns>
-		public static Dictionary<string, List<string>> GetWantedPages(string nspace) {
+		public static Dictionary<string, List<string>> GetWantedPages(string nspace)
+		{
 			if(string.IsNullOrEmpty(nspace))
 			{
 				nspace = null;
@@ -1159,13 +1310,17 @@ namespace ScrewTurn.Wiki {
 
 			Dictionary<string, List<string>> result = new Dictionary<string, List<string>>(100);
 
-			foreach(string key in knownPages) {
-				foreach(string link in allLinks[key]) {
+			foreach(string key in knownPages)
+			{
+				foreach(string link in allLinks[key])
+				{
 					string linkNamespace = NameTools.GetNamespace(link);
-					if(linkNamespace == nspace) {
+					if(linkNamespace == nspace)
+					{
 
 						PageInfo tempPage = FindPage(link);
-						if(tempPage == null) {
+						if(tempPage == null)
+						{
 							if(!result.ContainsKey(link))
 							{
 								result.Add(link, new List<string>(3));
@@ -1187,7 +1342,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="array">The array.</param>
 		/// <param name="value">The value.</param>
 		/// <returns><c>true</c> if the array contains the value, <c>false</c> otherwise.</returns>
-		private static bool Contains<T>(T[] array, T value) {
+		private static bool Contains<T>(T[] array, T value)
+		{
 			return Array.IndexOf(array, value) >= 0;
 		}
 
@@ -1197,10 +1353,12 @@ namespace ScrewTurn.Wiki {
 		/// <typeparam name="T">The type of the key.</typeparam>
 		/// <param name="data">The dictionary.</param>
 		/// <returns>The negative keys.</returns>
-		private static T[] ExtractNegativeKeys<T>(Dictionary<T, bool> data) {
+		private static T[] ExtractNegativeKeys<T>(Dictionary<T, bool> data)
+		{
 			List<T> result = new List<T>(data.Count);
 
-			foreach(KeyValuePair<T, bool> pair in data) {
+			foreach(KeyValuePair<T, bool> pair in data)
+			{
 				if(!pair.Value)
 				{
 					result.Add(pair.Key);
@@ -1219,7 +1377,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="fullName">The full name of the Category to Find (case <b>unsensitive</b>).</param>
 		/// <returns>The correct <see cref="T:CategoryInfo" /> object or <c>null</c> if no category is found.</returns>
-		public static CategoryInfo FindCategory(string fullName) {
+		public static CategoryInfo FindCategory(string fullName)
+		{
 			if(string.IsNullOrEmpty(fullName))
 			{
 				return null;
@@ -1232,8 +1391,10 @@ namespace ScrewTurn.Wiki {
 				return category;
 			}
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
-				if(prov != defProv) {
+			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders)
+			{
+				if(prov != defProv)
+				{
 					category = prov.GetCategory(fullName);
 					if(category != null)
 					{
@@ -1251,7 +1412,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Name of the Category.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(NamespaceInfo nspace, string name) {
+		public static bool CreateCategory(NamespaceInfo nspace, string name)
+		{
 			string namespaceName = nspace != null ? nspace.Name : null;
 			return CreateCategory(namespaceName, name);
 		}
@@ -1262,7 +1424,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="nspace">The target namespace (<c>null</c> for the root).</param>
 		/// <param name="name">The Name of the Category.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(string nspace, string name) {
+		public static bool CreateCategory(string nspace, string name)
+		{
 			return CreateCategory(nspace, name, Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider));
 		}
 
@@ -1273,7 +1436,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The Name of the Category.</param>
 		/// <param name="provider">The Provider.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreateCategory(NamespaceInfo nspace, string name, IPagesStorageProviderV30 provider)
+		{
 			string namespaceName = nspace != null ? nspace.Name : null;
 			return CreateCategory(namespaceName, name, provider);
 		}
@@ -1285,7 +1449,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="name">The Name of the Category.</param>
 		/// <param name="provider">The Provider.</param>
 		/// <returns><c>true</c> if the category is created, <c>false</c> otherwise.</returns>
-		public static bool CreateCategory(string nspace, string name, IPagesStorageProviderV30 provider) {
+		public static bool CreateCategory(string nspace, string name, IPagesStorageProviderV30 provider)
+		{
 			if(provider == null)
 			{
 				provider = Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider);
@@ -1304,7 +1469,8 @@ namespace ScrewTurn.Wiki {
 			}
 
 			CategoryInfo newCat = provider.AddCategory(nspace, name);
-			if(newCat != null) {
+			if(newCat != null)
+			{
 				Log.LogEntry("Category " + fullName + " created", EntryType.General, Log.SystemUsername);
 
 				// Because of transclusion and other page-linking features, it is necessary to clear the whole cache
@@ -1313,7 +1479,8 @@ namespace ScrewTurn.Wiki {
 
 				return true;
 			}
-			else {
+			else
+			{
 				Log.LogEntry("Category creation failed for " + fullName, EntryType.Error, Log.SystemUsername);
 				return false;
 			}
@@ -1324,7 +1491,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="category">The Category to remove.</param>
 		/// <returns>True if the Category has been removed successfully.</returns>
-		public static bool RemoveCategory(CategoryInfo category) {
+		public static bool RemoveCategory(CategoryInfo category)
+		{
 			if(category.Provider.ReadOnly)
 			{
 				return false;
@@ -1353,7 +1521,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="category">The Category to rename.</param>
 		/// <param name="newName">The new Name of the Category.</param>
 		/// <returns>True if the Category has been renamed successfully.</returns>
-		public static bool RenameCategory(CategoryInfo category, string newName) {
+		public static bool RenameCategory(CategoryInfo category, string newName)
+		{
 			if(category.Provider.ReadOnly)
 			{
 				return false;
@@ -1390,7 +1559,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The Page.</param>
 		/// <returns>The Categories of the Page.</returns>
-		public static CategoryInfo[] GetCategoriesForPage(PageInfo page) {
+		public static CategoryInfo[] GetCategoriesForPage(PageInfo page)
+		{
 			if(page == null)
 			{
 				return new CategoryInfo[0];
@@ -1406,23 +1576,28 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="nspace">The namespace.</param>
 		/// <returns>The Uncategorized Pages.</returns>
-		public static PageInfo[] GetUncategorizedPages(NamespaceInfo nspace) {
-			if(nspace == null) {
+		public static PageInfo[] GetUncategorizedPages(NamespaceInfo nspace)
+		{
+			if(nspace == null)
+			{
 				List<PageInfo> pages = new List<PageInfo>(1000);
 
 				int count = 0;
-				foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
+				foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders)
+				{
 					count++;
 					pages.AddRange(prov.GetUncategorizedPages(null));
 				}
 
-				if(count > 1) {
+				if(count > 1)
+				{
 					pages.Sort(new PageNameComparer());
 				}
 
 				return pages.ToArray();
 			}
-			else {
+			else
+			{
 				PageInfo[] pages = nspace.Provider.GetUncategorizedPages(nspace);
 				return pages;
 			}
@@ -1433,13 +1608,16 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The Page, or <c>null</c> to use the default provider.</param>
 		/// <returns>The valid Categories.</returns>
-		public static CategoryInfo[] GetAvailableCategories(PageInfo page) {
+		public static CategoryInfo[] GetAvailableCategories(PageInfo page)
+		{
 			NamespaceInfo pageNamespace = FindNamespace(NameTools.GetNamespace(page.FullName));
 
-			if(page != null) {
+			if(page != null)
+			{
 				return page.Provider.GetCategories(pageNamespace);
 			}
-			else {
+			else
+			{
 				return Collectors.PagesProviderCollector.GetProvider(Settings.DefaultPagesProvider).GetCategories(pageNamespace);
 			}
 		}
@@ -1449,14 +1627,17 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="category">The Category.</param>
 		/// <returns>The matching Categories.</returns>
-		public static CategoryInfo[] GetMatchingCategories(CategoryInfo category) {
+		public static CategoryInfo[] GetMatchingCategories(CategoryInfo category)
+		{
 			NamespaceInfo nspace = FindNamespace(NameTools.GetNamespace(category.FullName));
 
 			List<CategoryInfo> allCategories = GetCategories(nspace);
 			List<CategoryInfo> result = new List<CategoryInfo>(10);
 
-			for(int i = 0; i < allCategories.Count; i++) {
-				if(allCategories[i].Provider == category.Provider && allCategories[i] != category) {
+			for(int i = 0; i < allCategories.Count; i++)
+			{
+				if(allCategories[i].Provider == category.Provider && allCategories[i] != category)
+				{
 					result.Add(allCategories[i]);
 				}
 			}
@@ -1474,14 +1655,16 @@ namespace ScrewTurn.Wiki {
 		/// The operation removes all the previous bindings.
 		/// </remarks>
 		/// <returns>True if the binding succeeded.</returns>
-		public static bool Rebind(PageInfo page, CategoryInfo[] cats) {
+		public static bool Rebind(PageInfo page, CategoryInfo[] cats)
+		{
 			if(page.Provider.ReadOnly)
 			{
 				return false;
 			}
 
 			string[] names = new string[cats.Length];
-			for(int i = 0; i < cats.Length; i++) {
+			for(int i = 0; i < cats.Length; i++)
+			{
 				if(cats[i].Provider != page.Provider)
 				{
 					return false;
@@ -1514,7 +1697,8 @@ namespace ScrewTurn.Wiki {
 		/// <returns>True if the Categories have been merged successfully.</returns>
 		/// <remarks>The <b>destination</b> Category remains, while the <b>source</b> Category is deleted, and all its Pages re-binded in the <b>destination</b> Category.
 		/// The two Categories must have the same provider.</remarks>
-		public static bool MergeCategories(CategoryInfo source, CategoryInfo destination) {
+		public static bool MergeCategories(CategoryInfo source, CategoryInfo destination)
+		{
 			if(source.Provider != destination.Provider)
 			{
 				return false;
@@ -1548,17 +1732,20 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="nspace">The namespace (<c>null</c> for the root).</param>
 		/// <returns>The categories, sorted by name.</returns>
-		public static List<CategoryInfo> GetCategories(NamespaceInfo nspace) {
+		public static List<CategoryInfo> GetCategories(NamespaceInfo nspace)
+		{
 			List<CategoryInfo> allCategories = new List<CategoryInfo>(50);
 
 			// Retrieve all the categories from Pages Provider
 			int count = 0;
-			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders) {
+			foreach(IPagesStorageProviderV30 provider in Collectors.PagesProviderCollector.AllProviders)
+			{
 				count++;
 				allCategories.AddRange(provider.GetCategories(nspace));
 			}
 
-			if(count > 1) {
+			if(count > 1)
+			{
 				allCategories.Sort(new CategoryNameComparer());
 			}
 
@@ -1574,7 +1761,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The Page.</param>
 		/// <returns>The list of the <b>first-level</b> Messages, containing the replies properly nested.</returns>
-		public static Message[] GetPageMessages(PageInfo page) {
+		public static Message[] GetPageMessages(PageInfo page)
+		{
 			return page.Provider.GetMessages(page);
 		}
 
@@ -1583,7 +1771,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The Page.</param>
 		/// <returns>The number of messages.</returns>
-		public static int GetMessageCount(PageInfo page) {
+		public static int GetMessageCount(PageInfo page)
+		{
 			return page.Provider.GetMessageCount(page);
 		}
 
@@ -1593,13 +1782,17 @@ namespace ScrewTurn.Wiki {
 		/// <param name="messages">The Messages.</param>
 		/// <param name="id">The Message ID.</param>
 		/// <returns>The Message or null.</returns>
-		public static Message FindMessage(Message[] messages, int id) {
+		public static Message FindMessage(Message[] messages, int id)
+		{
 			Message result = null;
-			for(int i = 0; i < messages.Length; i++) {
-				if(messages[i].ID == id) {
+			for(int i = 0; i < messages.Length; i++)
+			{
+				if(messages[i].ID == id)
+				{
 					result = messages[i];
 				}
-				if(result == null) {
+				if(result == null)
+				{
 					result = FindMessage(messages[i].Replies, id);
 				}
 				if(result != null)
@@ -1620,22 +1813,28 @@ namespace ScrewTurn.Wiki {
 		/// <param name="body">The Body.</param>
 		/// <param name="parent">The Parent Message ID, or -1.</param>
 		/// <returns>True if the Message has been added successfully.</returns>
-		public static bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent) {
+		public static bool AddMessage(PageInfo page, string username, string subject, DateTime dateTime, string body, int parent)
+		{
 			if(page.Provider.ReadOnly)
 			{
 				return false;
 			}
 
-			bool done = page.Provider.AddMessage(page, username, subject, dateTime, body, parent);
-			if(done) {
+			int messageId = page.Provider.AddMessage(page, username, subject, dateTime, body, parent);
+			if(messageId != -1)
+			{
 				SendEmailNotificationForMessage(page, Users.FindUser(username),
 					Tools.GetMessageIdForAnchor(dateTime), subject);
 
 				PageContent content = Content.GetPageContent(page, false);
 				RecentChanges.AddChange(page.FullName, content.Title, subject, dateTime, username, Change.MessagePosted, "");
 				Host.Instance.OnPageActivity(page, null, username, PageActivity.MessagePosted);
+
+				// Index message
+				Message message = new Message(messageId, username, subject, dateTime, body);
+				SearchClass.IndexMessage(message, content);
 			}
-			return done;
+			return messageId != -1;
 		}
 
 		/// <summary>
@@ -1645,7 +1844,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="author">The author of the message.</param>
 		/// <param name="id">The message ID to be used for anchors.</param>
 		/// <param name="subject">The message subject.</param>
-		private static void SendEmailNotificationForMessage(PageInfo page, UserInfo author, string id, string subject) {
+		private static void SendEmailNotificationForMessage(PageInfo page, UserInfo author, string id, string subject)
+		{
 			if(page == null)
 			{
 				return;
@@ -1677,7 +1877,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="id">The ID of the Message to remove.</param>
 		/// <param name="removeReplies">A value specifying whether or not to remove the replies.</param>
 		/// <returns>True if the Message has been removed successfully.</returns>
-		public static bool RemoveMessage(PageInfo page, int id, bool removeReplies) {
+		public static bool RemoveMessage(PageInfo page, int id, bool removeReplies)
+		{
 			if(page.Provider.ReadOnly)
 			{
 				return false;
@@ -1687,10 +1888,14 @@ namespace ScrewTurn.Wiki {
 			Message msg = FindMessage(messages, id);
 
 			bool done = page.Provider.RemoveMessage(page, id, removeReplies);
-			if(done) {
+			if(done)
+			{
 				PageContent content = Content.GetPageContent(page, false);
 				RecentChanges.AddChange(page.FullName, content.Title, msg.Subject, DateTime.Now, msg.Username, Change.MessageDeleted, "");
 				Host.Instance.OnPageActivity(page, null, null, PageActivity.MessageDeleted);
+
+				// Unindex message
+				SearchClass.UnindexMessage(msg.ID, content);
 			}
 			return done;
 		}
@@ -1700,17 +1905,26 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="page">The Page.</param>
 		/// <returns><c>true</c> if the messages are removed, <c>false</c> otherwise.</returns>
-		public static bool RemoveAllMessages(PageInfo page) {
+		public static bool RemoveAllMessages(PageInfo page)
+		{
 			if(page.Provider.ReadOnly)
 			{
 				return false;
 			}
 
 			Message[] messages = GetPageMessages(page);
-
+			var pageContent = Content.GetPageContent(page, false);
 			bool done = true;
-			foreach(Message msg in messages) {
-				done &= page.Provider.RemoveMessage(page, msg.ID, true);
+			foreach(Message msg in messages)
+			{
+				bool tempDone = page.Provider.RemoveMessage(page, msg.ID, true);
+				done &= tempDone;
+
+				// Unindex message
+				if(tempDone)
+				{
+					SearchClass.UnindexMessage(msg.ID, pageContent);
+				}
 			}
 
 			return done;
@@ -1726,17 +1940,25 @@ namespace ScrewTurn.Wiki {
 		/// <param name="dateTime">The Date/Time.</param>
 		/// <param name="body">The Body.</param>
 		/// <returns>True if the Message has been modified successfully.</returns>
-		public static bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body) {
+		public static bool ModifyMessage(PageInfo page, int id, string username, string subject, DateTime dateTime, string body)
+		{
 			if(page.Provider.ReadOnly)
 			{
 				return false;
 			}
 
 			bool done = page.Provider.ModifyMessage(page, id, username, subject, dateTime, body);
-			if(done) {
+			if(done)
+			{
 				PageContent content = Content.GetPageContent(page, false);
 				RecentChanges.AddChange(page.FullName, content.Title, subject, dateTime, username, Change.MessageEdited, "");
 				Host.Instance.OnPageActivity(page, null, username, PageActivity.MessageModified);
+
+				// Unindex old message
+				SearchClass.UnindexMessage(id, content);
+				// Index the new one
+				SearchClass.IndexMessage(new Message(id, username, subject, dateTime, body), content);
+
 			}
 			return done;
 		}
@@ -1748,7 +1970,8 @@ namespace ScrewTurn.Wiki {
 		/// </summary>
 		/// <param name="name">The Page name.</param>
 		/// <returns>True if the name is valid.</returns>
-		public static bool IsValidName(string name) {
+		public static bool IsValidName(string name)
+		{
 			if(name == null)
 			{
 				return false;
@@ -1758,7 +1981,8 @@ namespace ScrewTurn.Wiki {
 				name.Contains("?") || name.Contains("<") || name.Contains(">") || name.Contains("|") || name.Contains(":") ||
 				name.Contains("*") || name.Contains("\"") || name.Contains("/") || name.Contains("\\") || name.Contains("&") ||
 				name.Contains("%") || name.Contains("'") || name.Contains("\"") || name.Contains("+") || name.Contains(".") ||
-				name.Contains("#") || name.Contains("[") || name.Contains("]")) {
+				name.Contains("#") || name.Contains("[") || name.Contains("]"))
+			{
 				return false;
 			}
 			else
@@ -1772,7 +1996,8 @@ namespace ScrewTurn.Wiki {
 	/// <summary>
 	/// Compares PageContent objects.
 	/// </summary>
-	public class PageContentDateComparer : IComparer<PageContent> {
+	public class PageContentDateComparer : IComparer<PageContent>
+	{
 
 		/// <summary>
 		/// Compares two PageContent objects, using the DateTime as parameter.
@@ -1780,7 +2005,8 @@ namespace ScrewTurn.Wiki {
 		/// <param name="x">The first object.</param>
 		/// <param name="y">The second object.</param>
 		/// <returns>The result of the comparison (1, 0 or -1).</returns>
-		public int Compare(PageContent x, PageContent y) {
+		public int Compare(PageContent x, PageContent y)
+		{
 			return x.LastModified.CompareTo(y.LastModified);
 		}
 

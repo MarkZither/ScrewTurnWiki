@@ -568,30 +568,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		/// <summary>
-		/// Performs a search.
-		/// </summary>
-		/// <param name="query">The search query.</param>
-		/// <param name="fullText">A value indicating whether to perform a full-text search.</param>
-		/// <param name="filesAndAttachments">A value indicating whether to search the names of files and attachments.</param>
-		/// <param name="options">The search options.</param>
-		/// <returns>The search results.</returns>
-		/// <exception cref="ArgumentNullException">If <b>query</b> is <c>null</c>.</exception>
-		/// <exception cref="ArgumentException">If <b>query</b> is empty.</exception>
-		public SearchResultCollection PerformSearch(string query, bool fullText, bool filesAndAttachments, SearchOptions options) {
-			if(query == null)
-			{
-				throw new ArgumentNullException("query");
-			}
-
-			if(query.Length == 0)
-			{
-				throw new ArgumentException("Query cannot be empty", "query");
-			}
-
-			return SearchTools.Search(query, fullText, filesAndAttachments, options);
-		}
-
-		/// <summary>
 		/// Lists directories in a directory.
 		/// </summary>
 		/// <param name="directory">The directory (<c>null</c> for the root, first invocation).</param>

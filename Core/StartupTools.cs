@@ -1,6 +1,8 @@
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Resources;
 using System.Web.Configuration;
 using ScrewTurn.Wiki.PluginFramework;
@@ -18,6 +20,23 @@ namespace ScrewTurn.Wiki {
 		/// <returns>The configuration string.</returns>
 		public static string GetSettingsStorageProviderConfiguration() {
 			string config = WebConfigurationManager.AppSettings["SettingsStorageProviderConfig"];
+			if(config != null)
+			{
+				return config;
+			}
+			else
+			{
+				return "";
+			}
+		}
+
+		/// <summary>
+		/// Gets the Settings Storage Provider configuration string from web.config.
+		/// </summary>
+		/// <returns>The configuration string.</returns>
+		public static string GetIndexDirectoryProviderConfiguration()
+		{
+			string config = WebConfigurationManager.AppSettings["IndexDirectoryProviderConfig"];
 			if(config != null)
 			{
 				return config;
@@ -129,6 +148,11 @@ namespace ScrewTurn.Wiki {
 				}
 			}
 
+			// Load config
+			IIndexDirectoryProviderV30 idp = ProviderLoader.LoadIndexDirectoryProvider(WebConfigurationManager.AppSettings["IndexDirectoryProvider"]);
+			idp.Init(Host.Instance, GetSettingsStorageProviderConfiguration());
+			Collectors.IndexDirectoryProvider = idp;
+
 			MimeTypes.Init();
 
 			// Load Providers
@@ -226,23 +250,9 @@ namespace ScrewTurn.Wiki {
 
 			Log.LogEntry("ScrewTurn Wiki is ready", EntryType.General, Log.SystemUsername);
 
-			System.Threading.ThreadPool.QueueUserWorkItem(ignored => {
-				if((DateTime.Now - Settings.LastPageIndexing).TotalDays > 7) {
-					Settings.LastPageIndexing = DateTime.Now;
-					System.Threading.Thread.Sleep(10000);
-					using(MemoryStream ms = new MemoryStream()) {
-						using(StreamWriter wr = new System.IO.StreamWriter(ms)) {
-							System.Web.HttpContext.Current = new System.Web.HttpContext(new System.Web.Hosting.SimpleWorkerRequest("", "", wr));
-							foreach(var provider in Collectors.PagesProviderCollector.AllProviders) {
-								if(!provider.ReadOnly) {
-									Log.LogEntry("Starting automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
-									provider.RebuildIndex();
-									Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
-								}
-							}
-						}
-					}
-				}
+			System.Threading.ThreadPool.QueueUserWorkItem(ignored =>
+			{
+				SearchClass.RebuildIndex();
 			});
 		}
 

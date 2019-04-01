@@ -154,8 +154,8 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_ItemCommand(object sender, CommandEventArgs e) {
 			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername());
 
-			IPagesStorageProviderV30 provider = Collectors.PagesProviderCollector.GetProvider(e.CommandArgument as string);
-			provider.RebuildIndex();
+			IIndexDirectoryProviderV30 provider = Collectors.IndexDirectoryProvider;
+			//TODO provider.RebuildIndex();
 
 			Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername);
 
@@ -310,17 +310,20 @@ namespace ScrewTurn.Wiki {
 			this.command = "Rebuild";//command;
 			this.provider = provider.Information.Name;
 			providerType = provider.GetType().FullName;
+			documents = "c";
+			words = "cc";
+			occurrences = "c";
+			size = "c";
+			//int docCount, wordCount, matchCount;
+			//long size;
+			//TODO:  provider.GetIndexStats(out docCount, out wordCount, out matchCount, out size);
 
-			int docCount, wordCount, matchCount;
-			long size;
-			provider.GetIndexStats(out docCount, out wordCount, out matchCount, out size);
+			//this.documents = docCount.ToString();
+			//this.words = wordCount.ToString();
+			//this.occurrences = matchCount.ToString();
+			//this.size = Tools.BytesToString(size);
 
-			this.documents = docCount.ToString();
-			this.words = wordCount.ToString();
-			this.occurrences = matchCount.ToString();
-			this.size = Tools.BytesToString(size);
-
-			this.isOk = !provider.IsIndexCorrupted;
+			this.isOk = true; //TODO: !provider.IsIndexCorrupted;
 		}
 
 		/// <summary>

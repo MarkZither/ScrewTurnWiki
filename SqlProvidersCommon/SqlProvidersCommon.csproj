@@ -11,8 +11,17 @@
     <AssemblyTitle>ScrewTurn Wiki SQL Providers Common Types</AssemblyTitle>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Plugins.SqlCommon.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebugType>portable</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Plugins.SqlCommon.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DebugType>portable</DebugType>
     <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Plugins.SqlCommon.XML</DocumentationFile>
   </PropertyGroup>
@@ -20,6 +29,19 @@
     <DebugType>none</DebugType>
     <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Plugins.SqlCommon.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebugType>none</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Plugins.SqlCommon.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <DebugType>none</DebugType>
+    <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.Plugins.SqlCommon.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="IIndexConnector.cs" />
+    <Compile Remove="IndexConnector.cs" />
+    <Compile Remove="SqlIndex.cs" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>

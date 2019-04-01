@@ -59,7 +59,8 @@ searchhi = {
 		var qmIndex = url.indexOf("?HL=");
 		if (qmIndex === -1) return;
 		var ampIndex = url.indexOf("&");
-		var query = url.substring(qmIndex + 4, ampIndex !== -1 ? ampIndex : url.length);
+        var query = url.substring(qmIndex + 4, ampIndex !== -1 ? ampIndex : url.length);
+        if (query.length === 0) return;
 		query = query.replace(/,/g, ' ');
 		query = unescape(query);
 		searchhi.process(query);

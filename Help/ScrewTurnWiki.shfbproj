@@ -41,8 +41,8 @@
       <NamespaceSummaryItem name="ScrewTurn.Wiki" isDocumented="True">Root ScrewTurn Wiki namespace.</NamespaceSummaryItem>
     </NamespaceSummaries>
     <ProjectSummary>API documentation for ScrewTurn Wiki version 3.0.</ProjectSummary>
-    <CopyrightHref>http://www.screwturn.eu</CopyrightHref>
-    <CopyrightText>Copyright %28C%29 2006-2010 Threeplicate Srl. All rights reserved.</CopyrightText>
+    <CopyrightHref>https://github.com/MarkZither/ScrewTurnWiki</CopyrightHref>
+    <CopyrightText>Copyright %28C%29 2019 Mark Burton All rights reserved.</CopyrightText>
     <HelpTitle>ScrewTurn Wiki API Documentation</HelpTitle>
     <RootNamespaceContainer>True</RootNamespaceContainer>
     <RootNamespaceTitle>ScrewTurn Wiki</RootNamespaceTitle>

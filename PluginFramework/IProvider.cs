@@ -27,6 +27,15 @@ namespace ScrewTurn.Wiki.PluginFramework {
 		void Shutdown();
 
 		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <exception cref="ArgumentNullException">If <paramref name="host"/> or <paramref name="config"/> are <c>null</c>.</exception>
+		/// <exception cref="InvalidConfigurationException">If <paramref name="config"/> is not valid or is incorrect.</exception>
+		void SetUp(IHostV30 host, string config);
+
+		/// <summary>
 		/// Gets the Information about the Provider.
 		/// </summary>
 		ComponentInformation Information { get; }

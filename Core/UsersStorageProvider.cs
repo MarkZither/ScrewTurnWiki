@@ -17,12 +17,30 @@ namespace ScrewTurn.Wiki {
 		private const string GroupsFile = "Groups.cs";
 
 		private readonly ComponentInformation info = new ComponentInformation("Local Users Provider",
-			"Threeplicate Srl", Settings.WikiVersion, "http://www.screwturn.eu", null);
+			"Threeplicate Srl", Settings.WikiVersion, "https://github.com/MarkZither/ScrewTurnWiki", null);
 
 		private IHostV30 host;
 
 		private UserGroup[] groupsCache = null;
 		private UserInfo[] usersCache = null;
+
+		/// <summary>
+		/// Sets up the Storage Provider.
+		/// </summary>
+		/// <param name="host">The Host of the Component.</param>
+		/// <param name="config">The Configuration data, if any.</param>
+		/// <remarks>If the configuration string is not valid, the methoud should throw a <see cref="InvalidConfigurationException"/>.</remarks>
+		public void SetUp(IHostV30 host, string config)
+		{
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			// Nothing to do
+		}
 
 		private string GetFullPath(string filename) {
 			return Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), filename);
