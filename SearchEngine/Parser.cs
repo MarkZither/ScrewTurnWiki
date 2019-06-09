@@ -101,7 +101,7 @@ namespace ScrewTurn.Wiki.SearchEngine
 		{
 			try
 			{
-				return new FilterReader(stream, fileExtension, filterReaderTimeout: FilterReaderTimeout.TimeoutWithException, timeout: 60 * 1000);
+				return new FilterReader(stream, fileExtension, new FilterReaderOptions() { ReaderTimeout = FilterReaderTimeout.TimeoutWithException, Timeout = 60 * 1000 });
 			}
 			catch(IFFilterNotFound)
 			{
@@ -123,7 +123,7 @@ namespace ScrewTurn.Wiki.SearchEngine
 				try
 				{
 					FileInfo fileInfo = new FileInfo(filename);
-					using(var reader = new FilterReader(filename, fileInfo.Extension, filterReaderTimeout: FilterReaderTimeout.TimeoutWithException, timeout: 60 * 1000))
+					using(var reader = new FilterReader(filename, fileInfo.Extension, new FilterReaderOptions() { ReaderTimeout = FilterReaderTimeout.TimeoutWithException, Timeout = 60 * 1000 }))
 					{
 						string text = reader.ReadToEnd();
 					}

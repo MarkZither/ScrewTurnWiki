@@ -69,6 +69,12 @@ namespace ScrewTurn.Wiki {
 				providers.AddRange(Collectors.FilesProviderCollector.AllProviders);
 				providers.AddRange(Collectors.DisabledFilesProviderCollector.AllProviders);
 			}
+			else if(rdoVerFiles.Checked)
+			{
+				enabledCount = Collectors.VersionedFilesProviderCollector.AllProviders.Length;
+				providers.AddRange(Collectors.VersionedFilesProviderCollector.AllProviders);
+				providers.AddRange(Collectors.DisabledVersionedFilesProviderCollector.AllProviders);
+			}
 			else if(rdoCache.Checked) {
 				enabledCount = Collectors.CacheProviderCollector.AllProviders.Length;
 				providers.AddRange(Collectors.CacheProviderCollector.AllProviders);
@@ -676,6 +682,21 @@ namespace ScrewTurn.Wiki {
 			get { return additionalClass; }
 		}
 
+		public bool Enabled
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public bool Disabled
+		{
+			get
+			{
+				return !Enabled;
+			}
+		}
 	}
 
 }

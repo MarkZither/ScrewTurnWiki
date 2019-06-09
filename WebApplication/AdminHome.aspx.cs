@@ -144,9 +144,7 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_DataBinding(object sender, EventArgs e) {
 			List<IndexRow> result = new List<IndexRow>(5);
 
-			foreach(IPagesStorageProviderV30 prov in Collectors.PagesProviderCollector.AllProviders) {
-				result.Add(new IndexRow(prov));
-			}
+			result.Add(new IndexRow(Collectors.IndexDirectoryProvider));
 
 			rptIndex.DataSource = result;
 		}
@@ -154,8 +152,7 @@ namespace ScrewTurn.Wiki {
 		protected void rptIndex_ItemCommand(object sender, CommandEventArgs e) {
 			Log.LogEntry("Index rebuild requested for " + e.CommandArgument as string, EntryType.General, SessionFacade.GetCurrentUsername());
 
-			IIndexDirectoryProviderV30 provider = Collectors.IndexDirectoryProvider;
-			//TODO provider.RebuildIndex();
+			SearchClass.RebuildIndex();
 
 			Log.LogEntry("Index rebuild completed for " + e.CommandArgument as string, EntryType.General, Log.SystemUsername);
 
@@ -306,7 +303,7 @@ namespace ScrewTurn.Wiki {
 		/// Initializes a new instance of the <see cref="T:IndexRow" /> class.
 		/// </summary>
 		/// <param name="provider">The original provider.</param>
-		public IndexRow(IPagesStorageProviderV30 provider) {
+		public IndexRow(IIndexDirectoryProviderV30 provider) {
 			this.command = "Rebuild";//command;
 			this.provider = provider.Information.Name;
 			providerType = provider.GetType().FullName;
@@ -314,14 +311,14 @@ namespace ScrewTurn.Wiki {
 			words = "cc";
 			occurrences = "c";
 			size = "c";
-			//int docCount, wordCount, matchCount;
-			//long size;
-			//TODO:  provider.GetIndexStats(out docCount, out wordCount, out matchCount, out size);
+			int docCount, matchCount;
+			long indexSize, wordCount;
+			SearchClass.GetIndexStats(out docCount, out wordCount, out matchCount, out indexSize);
 
-			//this.documents = docCount.ToString();
-			//this.words = wordCount.ToString();
-			//this.occurrences = matchCount.ToString();
-			//this.size = Tools.BytesToString(size);
+			this.documents = docCount.ToString();
+			this.words = wordCount.ToString();
+			this.occurrences = matchCount.ToString();
+			this.size = Tools.BytesToString(indexSize);
 
 			this.isOk = true; //TODO: !provider.IsIndexCorrupted;
 		}

@@ -67,6 +67,15 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.RadioButton rdoFiles;
         
         /// <summary>
+        /// rdoVerFiles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rdoVerFiles;
+        
+        /// <summary>
         /// rdoCache control.
         /// </summary>
         /// <remarks>

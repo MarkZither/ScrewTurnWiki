@@ -160,11 +160,13 @@ namespace ScrewTurn.Wiki {
 			Collectors.UsersProviderCollector = new ProviderCollector<IUsersStorageProviderV30>();
 			Collectors.PagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
 			Collectors.FilesProviderCollector = new ProviderCollector<IFilesStorageProviderV30>();
+			Collectors.VersionedFilesProviderCollector = new ProviderCollector<IVersionedFilesStorageProviderV30>();
 			Collectors.FormatterProviderCollector = new ProviderCollector<IFormatterProviderV30>();
 			Collectors.CacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
 			Collectors.DisabledUsersProviderCollector = new ProviderCollector<IUsersStorageProviderV30>();
 			Collectors.DisabledPagesProviderCollector = new ProviderCollector<IPagesStorageProviderV30>();
 			Collectors.DisabledFilesProviderCollector = new ProviderCollector<IFilesStorageProviderV30>();
+			Collectors.DisabledVersionedFilesProviderCollector = new ProviderCollector<IVersionedFilesStorageProviderV30>();
 			Collectors.DisabledFormatterProviderCollector = new ProviderCollector<IFormatterProviderV30>();
 			Collectors.DisabledCacheProviderCollector = new ProviderCollector<ICacheProviderV30>();
 
@@ -252,6 +254,7 @@ namespace ScrewTurn.Wiki {
 
 			System.Threading.ThreadPool.QueueUserWorkItem(ignored =>
 			{
+				System.Threading.Thread.Sleep(10000);
 				SearchClass.RebuildIndex();
 			});
 		}
@@ -323,6 +326,10 @@ namespace ScrewTurn.Wiki {
 				provider.Shutdown();
 			}
 			foreach(ICacheProviderV30 provider in Collectors.CacheProviderCollector.AllProviders) {
+				provider.Shutdown();
+			}
+			foreach(IVersionedFilesStorageProviderV30 provider in Collectors.VersionedFilesProviderCollector.AllProviders)
+			{
 				provider.Shutdown();
 			}
 			Settings.Provider.Shutdown();

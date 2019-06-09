@@ -32,11 +32,11 @@
     <Compile Remove="IndexStorerTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.5.1" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="RhinoMocks" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />

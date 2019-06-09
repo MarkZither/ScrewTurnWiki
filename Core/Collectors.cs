@@ -45,6 +45,11 @@ namespace ScrewTurn.Wiki {
 		public static ProviderCollector<IFilesStorageProviderV30> FilesProviderCollector;
 
 		/// <summary>
+		/// The Versioned Files Provider Collector instance.
+		/// </summary>
+		public static ProviderCollector<IVersionedFilesStorageProviderV30> VersionedFilesProviderCollector;
+
+		/// <summary>
 		/// The Formatter Provider Collector instance.
 		/// </summary>
 		public static ProviderCollector<IFormatterProviderV30> FormatterProviderCollector;
@@ -63,6 +68,11 @@ namespace ScrewTurn.Wiki {
 		/// The Disabled Files Provider Collector instance.
 		/// </summary>
 		public static ProviderCollector<IFilesStorageProviderV30> DisabledFilesProviderCollector;
+
+		/// <summary>
+		/// The Disabled Files Provider Collector instance.
+		/// </summary>
+		public static ProviderCollector<IVersionedFilesStorageProviderV30> DisabledVersionedFilesProviderCollector;
 
 		/// <summary>
 		/// The Disabled Pages Provider Collector instance.
@@ -133,6 +143,21 @@ namespace ScrewTurn.Wiki {
 				return prov;
 			}
 
+			prov = VersionedFilesProviderCollector.GetProvider(typeName);
+			canDisable = typeName != Settings.DefaultFilesProvider;
+			if(prov == null)
+			{
+				prov = DisabledVersionedFilesProviderCollector.GetProvider(typeName);
+				if(prov != null)
+				{
+					enabled = false;
+				}
+			}
+			if(prov != null)
+			{
+				return prov;
+			}
+
 			prov = CacheProviderCollector.GetProvider(typeName);
 			canDisable = typeName != Settings.DefaultCacheProvider;
 			if(prov == null) {
@@ -174,6 +199,9 @@ namespace ScrewTurn.Wiki {
 			PagesProviderCollector.RemoveProvider(prov as IPagesStorageProviderV30);
 			DisabledPagesProviderCollector.RemoveProvider(prov as IPagesStorageProviderV30);
 
+			VersionedFilesProviderCollector.RemoveProvider(prov as IVersionedFilesStorageProviderV30);
+			DisabledVersionedFilesProviderCollector.RemoveProvider(prov as IVersionedFilesStorageProviderV30);
+
 			UsersProviderCollector.RemoveProvider(prov as IUsersStorageProviderV30);
 			DisabledUsersProviderCollector.RemoveProvider(prov as IUsersStorageProviderV30);
 
@@ -212,6 +240,14 @@ namespace ScrewTurn.Wiki {
 			if(prov != null) {
 				DisabledFilesProviderCollector.AddProvider((IFilesStorageProviderV30)prov);
 				FilesProviderCollector.RemoveProvider((IFilesStorageProviderV30)prov);
+				return;
+			}
+
+			prov = VersionedFilesProviderCollector.GetProvider(typeName);
+			if(prov != null)
+			{
+				DisabledVersionedFilesProviderCollector.AddProvider((IVersionedFilesStorageProviderV30)prov);
+				VersionedFilesProviderCollector.RemoveProvider((IVersionedFilesStorageProviderV30)prov);
 				return;
 			}
 
@@ -255,6 +291,14 @@ namespace ScrewTurn.Wiki {
 			if(prov != null) {
 				FilesProviderCollector.AddProvider((IFilesStorageProviderV30)prov);
 				DisabledFilesProviderCollector.RemoveProvider((IFilesStorageProviderV30)prov);
+				return;
+			}
+
+			prov = DisabledVersionedFilesProviderCollector.GetProvider(typeName);
+			if(prov != null)
+			{
+				VersionedFilesProviderCollector.AddProvider((IVersionedFilesStorageProviderV30)prov);
+				DisabledVersionedFilesProviderCollector.RemoveProvider((IVersionedFilesStorageProviderV30)prov);
 				return;
 			}
 
@@ -306,6 +350,16 @@ namespace ScrewTurn.Wiki {
 			}
 
 			foreach(IProviderV30 prov in DisabledFilesProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
+
+			foreach(IProviderV30 prov in VersionedFilesProviderCollector.AllProviders)
+			{
+				result.Add(prov.GetType().FullName);
+			}
+
+			foreach(IProviderV30 prov in DisabledVersionedFilesProviderCollector.AllProviders)
 			{
 				result.Add(prov.GetType().FullName);
 			}

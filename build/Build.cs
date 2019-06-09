@@ -63,7 +63,10 @@ class Build : NukeBuild
 		.DependsOn(Restore)
 		.Executes(() =>
 		{
-			MSBuild(s => s.SetWorkingDirectory(SolutionDirectory));
+			MSBuild(s => s
+			.SetWorkingDirectory(SolutionDirectory)
+			.SetVerbosity(MSBuildVerbosity.Quiet)
+			);
 			//DotNetBuild(s => s
 			//  .SetProjectFile(Solution)
 			//.SetConfiguration(Configuration)
@@ -120,8 +123,8 @@ class Build : NukeBuild
 	});
 
 	Target PublishGitHubRelease => _ => _
-	//.DependsOn(Compile)
-	//.OnlyWhenStatic(() => GitVersion.BranchName.Equals("master") || GitVersion.BranchName.Equals("origin/master"))
+	.DependsOn(Compile)
+	.OnlyWhenStatic(() => GitVersion.BranchName.Equals("master") || GitVersion.BranchName.Equals("origin/master"))
 	.Executes(() =>
 	{
 		MSBuildSettings buildSettings = new MSBuildSettings()
@@ -129,7 +132,20 @@ class Build : NukeBuild
 		.SetProjectFile("WebApplication.csproj")
 		.SetOutDir("C:\\publish\\ScrewTurnWiki\\WebApplication")
 		.AddProperty("PublishProfile", "FolderProfile")
-		.SetVerbosity(MSBuildVerbosity.Detailed);
+		.SetVerbosity(MSBuildVerbosity.Normal);
 		MSBuild(buildSettings);
+
+		string PluginsDir = @"C:\Publish\ScrewTurnWiki\WebApplication\_PublishedWebsites\Plugins\";
+		if(!Directory.Exists(PluginsDir))
+		{
+			Directory.CreateDirectory(PluginsDir);
+		}
+
+		File.Copy(SolutionDirectory / @"DownloadCounterPlugin\bin\Debug\net472\DownloadCounterPlugin.dll", PluginsDir + "DownloadCounterPlugin.dll", true);
+		File.Copy(SolutionDirectory / @"FootnotesPlugin\bin\Debug\net472\FootnotesPlugin.dll", PluginsDir + "FootnotesPlugin.dll", true);
+		File.Copy(SolutionDirectory / @"MultilanguageContentPlugin\bin\Debug\net472\MultilanguageContentPlugin.dll", PluginsDir + "MultilanguageContentPlugin.dll", true);
+		File.Copy(SolutionDirectory / @"RatingManagerPlugin\bin\Debug\net472\RatingManagerPlugin.dll", PluginsDir + "RatingManagerPlugin.dll", true);
+		File.Copy(SolutionDirectory / @"RssFeedDisplayPlugin\bin\Debug\net472\RssFeedDisplayPlugin.dll", PluginsDir + "RssFeedDisplayPlugin.dll", true);
+		File.Copy(SolutionDirectory / @"ActiveDirectoryProvider\bin\Debug\net472\ActiveDirectoryProvider.dll", PluginsDir + "ActiveDirectoryProvider.dll", true);
 	});
 }

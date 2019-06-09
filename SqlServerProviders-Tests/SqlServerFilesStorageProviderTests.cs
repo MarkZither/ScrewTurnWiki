@@ -13,7 +13,6 @@ namespace ScrewTurn.Wiki.Plugins.SqlServer.Tests {
 	[TestFixture]
 	public class SqlServerFilesStorageProviderTests : FilesStorageProviderTestScaffolding {
 
-		//private const string ConnString = "Data Source=(local)\\SQLExpress;User ID=sa;Password=password;";
 		private string ConnString = "Data Source=(local)\\MSSQLSERVER2016;Integrated Security=SSPI;";
 		private const string InitialCatalog = "Initial Catalog=ScrewTurnWikiTest;";
 

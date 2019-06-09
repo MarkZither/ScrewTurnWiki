@@ -50,6 +50,6 @@
     <DocumentationFile>bin\$(Configuration)\ScrewTurn.Wiki.SearchEngine.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="IFilterTextReader" Version="1.6.0" />
+    <PackageReference Include="IFilterTextReader" Version="1.6.1" />
   </ItemGroup>
 </Project>

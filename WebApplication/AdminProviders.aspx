@@ -29,6 +29,7 @@
                     <asp:RadioButton ID="rdoPages" runat="server" Text="Pages Providers" GroupName="type" Checked="true" AutoPostBack="true" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoPagesResource1" />
                     <asp:RadioButton ID="rdoUsers" runat="server" Text="Users Providers" GroupName="type" AutoPostBack="true" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoUsersResource1" />
                     <asp:RadioButton ID="rdoFiles" runat="server" Text="Files Providers" GroupName="type" AutoPostBack="true" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFilesResource1" />
+                    <asp:RadioButton ID="rdoVerFiles" runat="server" Text="Versioned Files Providers" GroupName="type" AutoPostBack="true" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoVerFilesResource1" />
                     <asp:RadioButton ID="rdoCache" runat="server" Text="Cache Providers" GroupName="type" AutoPostBack="true" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoCacheResource1" />
                     <asp:RadioButton ID="rdoFormatter" runat="server" Text="Formatter Providers" GroupName="type" AutoPostBack="true" OnCheckedChanged="rdo_CheckedChanged" meta:resourcekey="rdoFormatterResource1" />
                     <br />

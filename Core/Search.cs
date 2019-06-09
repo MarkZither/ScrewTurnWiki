@@ -136,6 +136,29 @@ namespace ScrewTurn.Wiki
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="docCount"></param>
+		/// <param name="wordCount"></param>
+		/// <param name="matchCount"></param>
+		/// <param name="size"></param>
+		public static void GetIndexStats(out int docCount, out long wordCount, out int matchCount, out long size)
+		{
+			docCount = 0;
+			wordCount = 0;
+			matchCount = 0;
+			size = 0;
+
+			IIndexDirectoryProviderV30 indexDirectoryProvider = Collectors.IndexDirectoryProvider;
+			using(IndexReader reader = IndexReader.Open(indexDirectoryProvider.GetDirectory(), true))
+			{
+				docCount = reader.NumDocs();
+				wordCount = reader.UniqueTermCount;
+			}
+			size = (from strFile in indexDirectoryProvider.GetDirectory().ListAll() select indexDirectoryProvider.GetDirectory().FileLength(strFile)).Sum();
+		}
+
+		/// <summary>
 		/// Indexes the page.
 		/// </summary>
 		/// <param name="page">The page page to be intexed.</param>
@@ -376,7 +399,7 @@ namespace ScrewTurn.Wiki
 		/// <returns><c>true</c> if the file has been unindexed succesfully, <c>false</c> otherwise.</returns>
 		public static bool RebuildIndex()
 		{
-			if((DateTime.Now - Settings.LastPageIndexing).TotalDays > 7 || Collectors.IndexDirectoryProvider.GetDirectory().ListAll().Length == 0)
+			if((true))//DateTime.Now - Settings.LastPageIndexing).TotalDays > 7 || Collectors.IndexDirectoryProvider.GetDirectory().ListAll().Length == 0)
 			{
 				Settings.LastPageIndexing = DateTime.Now;
 				System.Threading.Thread.Sleep(10000);
@@ -417,6 +440,17 @@ namespace ScrewTurn.Wiki
 						}
 						Log.LogEntry("Finished automatic rebuilding index for provider: " + provider.Information.Name, EntryType.General, Log.SystemUsername);
 					}
+				}
+				foreach(var prov in Collectors.VersionedFilesProviderCollector.AllProviders)
+				{
+					Log.LogEntry("Starting automatic rebuilding index for provider: " + prov.Information.Name, EntryType.General, Log.SystemUsername);
+					var files = prov.ListFiles("\\");
+					//var allDirs = prov.ListDirectories(null).ToList();
+					//allDirs.Insert(0, "/");
+					foreach(var file in files)
+					{
+					}
+					Log.LogEntry("Finished automatic rebuilding files index for provider: " + prov.Information.Name, EntryType.General, Log.SystemUsername);
 				}
 				foreach(var prov in Collectors.FilesProviderCollector.AllProviders)
 				{

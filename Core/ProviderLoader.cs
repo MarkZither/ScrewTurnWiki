@@ -142,6 +142,8 @@ namespace ScrewTurn.Wiki {
 			List<IUsersStorageProviderV30> dUsers = new List<IUsersStorageProviderV30>(2);
 			List<IPagesStorageProviderV30> pages = new List<IPagesStorageProviderV30>(2);
 			List<IPagesStorageProviderV30> dPages = new List<IPagesStorageProviderV30>(2);
+			List<IVersionedFilesStorageProviderV30> verFiles = new List<IVersionedFilesStorageProviderV30>(2);
+			List<IVersionedFilesStorageProviderV30> dVerFiles = new List<IVersionedFilesStorageProviderV30>(2);
 			List<IFilesStorageProviderV30> files = new List<IFilesStorageProviderV30>(2);
 			List<IFilesStorageProviderV30> dFiles = new List<IFilesStorageProviderV30>(2);
 			List<IFormatterProviderV30> forms = new List<IFormatterProviderV30>(2);
@@ -151,14 +153,20 @@ namespace ScrewTurn.Wiki {
 
 			for(int i = 0; i < pluginAssemblies.Length; i++) {
 				IFilesStorageProviderV30[] d;
+				IVersionedFilesStorageProviderV30[] v;
 				IUsersStorageProviderV30[] u;
 				IPagesStorageProviderV30[] p;
 				IFormatterProviderV30[] f;
 				ICacheProviderV30[] c;
-				LoadFrom(pluginAssemblies[i], out u, out p, out d, out f, out c);
+				LoadFrom(pluginAssemblies[i], out u, out p, out d, out f, out c, out v);
 				if(loadFiles)
 				{
 					files.AddRange(d);
+				}
+
+				if(loadFiles)
+				{
+					verFiles.AddRange(v);
 				}
 
 				if(loadUsers)
@@ -185,6 +193,11 @@ namespace ScrewTurn.Wiki {
 			// Init and add to the Collectors, starting from files providers
 			for(int i = 0; i < files.Count; i++) {
 				Initialize<IFilesStorageProviderV30>(files[i], Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
+			}
+
+			for(int i = 0; i < verFiles.Count; i++)
+			{
+				Initialize<IVersionedFilesStorageProviderV30>(verFiles[i], Collectors.VersionedFilesProviderCollector, Collectors.DisabledVersionedFilesProviderCollector);
 			}
 
 			for(int i = 0; i < users.Count; i++) {
@@ -248,15 +261,23 @@ namespace ScrewTurn.Wiki {
 			IUsersStorageProviderV30[] users;
 			IPagesStorageProviderV30[] pages;
 			IFilesStorageProviderV30[] files;
+			IVersionedFilesStorageProviderV30[] verFiles;
 			IFormatterProviderV30[] forms;
 			ICacheProviderV30[] cache;
-			LoadFrom(assembly, out users, out pages, out files, out forms, out cache);
+			LoadFrom(assembly, out users, out pages, out files, out forms, out cache, out verFiles);
 
 			int count = 0;
 
 			// Init and add to the Collectors, starting from files providers
 			for(int i = 0; i < files.Length; i++) {
 				Initialize<IFilesStorageProviderV30>(files[i], Collectors.FilesProviderCollector, Collectors.DisabledFilesProviderCollector);
+				count++;
+			}
+
+			// Init and add to the Collectors, starting from files providers
+			for(int i = 0; i < verFiles.Length; i++)
+			{
+				Initialize<IVersionedFilesStorageProviderV30>(verFiles[i], Collectors.VersionedFilesProviderCollector, Collectors.DisabledVersionedFilesProviderCollector);
 				count++;
 			}
 
@@ -292,9 +313,10 @@ namespace ScrewTurn.Wiki {
 		/// <param name="pages">The Pages Providers.</param>
 		/// <param name="formatters">The Formatter Providers.</param>
 		/// <param name="cache">The Cache Providers.</param>
+		/// <param name="verFiles">The Versioned File Providers.</param>
 		/// <remarks>The Components returned are <b>not</b> initialized.</remarks>
 		public static void LoadFrom(string assembly, out IUsersStorageProviderV30[] users, out IPagesStorageProviderV30[] pages,
-			out IFilesStorageProviderV30[] files, out IFormatterProviderV30[] formatters, out ICacheProviderV30[] cache) {
+			out IFilesStorageProviderV30[] files, out IFormatterProviderV30[] formatters, out ICacheProviderV30[] cache, out IVersionedFilesStorageProviderV30[] verFiles) {
 
 			Assembly asm = null;
 			try {
@@ -308,6 +330,7 @@ namespace ScrewTurn.Wiki {
 				pages = new IPagesStorageProviderV30[0];
 				formatters = new IFormatterProviderV30[0];
 				cache = new ICacheProviderV30[0];
+				verFiles = new IVersionedFilesStorageProviderV30[0];
 
 				Log.LogEntry("Unable to load assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
 				return;
@@ -318,14 +341,15 @@ namespace ScrewTurn.Wiki {
 			try {
 				types = asm.GetTypes();
 			}
-			catch(ReflectionTypeLoadException) {
+			catch(ReflectionTypeLoadException rex) {
 				files = new IFilesStorageProviderV30[0];
 				users = new IUsersStorageProviderV30[0];
 				pages = new IPagesStorageProviderV30[0];
 				formatters = new IFormatterProviderV30[0];
 				cache = new ICacheProviderV30[0];
+				verFiles = new IVersionedFilesStorageProviderV30[0];
 
-				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly), EntryType.Error, Log.SystemUsername);
+				Log.LogEntry("Unable to load providers from (probably v2) assembly " + Path.GetFileNameWithoutExtension(assembly) + rex.ToString(), EntryType.Error, Log.SystemUsername);
 				return;
 			}
 
@@ -334,6 +358,7 @@ namespace ScrewTurn.Wiki {
 			List<IFilesStorageProviderV30> fls = new List<IFilesStorageProviderV30>();
 			List<IFormatterProviderV30> frs = new List<IFormatterProviderV30>();
 			List<ICacheProviderV30> che = new List<ICacheProviderV30>();
+			List<IVersionedFilesStorageProviderV30> vfls = new List<IVersionedFilesStorageProviderV30>();
 
 			Type[] interfaces;
 			for(int i = 0; i < types.Length; i++) {
@@ -366,6 +391,15 @@ namespace ScrewTurn.Wiki {
 							Collectors.FileNames[tmpd.GetType().FullName] = assembly;
 						}
 					}
+					if(iface == typeof(IVersionedFilesStorageProviderV30))
+					{
+						IVersionedFilesStorageProviderV30 tmpe = CreateInstance<IVersionedFilesStorageProviderV30>(asm, types[i]);
+						if(tmpe != null)
+						{
+							vfls.Add(tmpe);
+							Collectors.FileNames[tmpe.GetType().FullName] = assembly;
+						}
+					}
 					if(iface == typeof(IFormatterProviderV30)) {
 						IFormatterProviderV30 tmpf = CreateInstance<IFormatterProviderV30>(asm, types[i]);
 						if(tmpf != null) {
@@ -388,6 +422,7 @@ namespace ScrewTurn.Wiki {
 			files = fls.ToArray();
 			formatters = frs.ToArray();
 			cache = che.ToArray();
+			verFiles = vfls.ToArray();
 		}
 
 		/// <summary>

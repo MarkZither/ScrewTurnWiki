@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>ScrewTurn.Wiki.Plugins.Versioning</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpSvn.1.9-x64" Version="1.9007.3987.251" />
+    <PackageReference Include="SharpSvn.1.9-x86" Version="1.9007.3987.251" />
+    <PackageReference Include="YamlDotNet" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PluginFramework\PluginFramework.csproj" />
+  </ItemGroup>
+
+</Project>
