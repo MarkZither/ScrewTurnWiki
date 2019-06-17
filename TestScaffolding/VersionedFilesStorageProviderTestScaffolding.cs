@@ -6,6 +6,7 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using ScrewTurn.Wiki.PluginFramework;
+using SharpSvn;
 
 namespace ScrewTurn.Wiki.Tests {
 
@@ -143,12 +144,12 @@ Repos:
 		public void StoreFile_SubDir() {
 			IVersionedFilesStorageProviderV30 prov = SetupProvider();
 
-			//prov.CreateDirectory("/", "Test");
+			prov.CreateDirectory("/", "Test");
 
 			Assert.AreEqual(0, prov.ListFiles("/Test").Length, "Wrong file count");
 
 			using(Stream s = FillStream("File1")) {
-				Assert.IsTrue(prov.StoreFile("/Test/File1.txt", s, false), "StoreFile should return true");
+				Assert.IsTrue(prov.StoreFile("/Test/File1.txt", s, true), "StoreFile should return true");
 			}
 			using(Stream s = FillStream("File2")) {
 				Assert.IsTrue(prov.StoreFile("/Test/File2.txt", s, true), "StoreFile should return true");
@@ -156,8 +157,8 @@ Repos:
 
 			string[] files = prov.ListFiles("/Test");
 			Assert.AreEqual(2, files.Length, "Wrong file count");
-			Assert.AreEqual("/Test/File1.txt", files[0], "Wrong file");
-			Assert.AreEqual("/Test/File2.txt", files[1], "Wrong file");
+			Assert.AreEqual("File1.txt", files[0], "Wrong file");
+			Assert.AreEqual("File2.txt", files[1], "Wrong file");
 		}
 		
 		[TestCase("")]
@@ -713,27 +714,29 @@ Repos:
 		public void CreateDirectory_ListDirectories() {
 			IVersionedFilesStorageProviderV30 prov = SetupProvider();
 
-			//Assert.IsTrue(prov.CreateDirectory("/", "Dir1"), "CreateDirectory should return true");
-			//Assert.IsTrue(prov.CreateDirectory("/", "Dir2"), "CreateDirectory should return true");
-			//Assert.IsTrue(prov.CreateDirectory("/Dir1", "Sub"), "CreateDirectory should return true");
+			Assert.IsTrue(prov.CreateDirectory("/", "Dir1"), "CreateDirectory should return true");
+			Assert.IsTrue(prov.CreateDirectory("/", "Dir2"), "CreateDirectory should return true");
+			Assert.IsTrue(prov.CreateDirectory("/Dir1", "Sub"), "CreateDirectory should return true");
 
 			string[] dirs = prov.ListDirectories("/");
-			Assert.AreEqual(2, dirs.Length, "Wrong dir count");
-			Assert.AreEqual("/Dir1/", dirs[0], "Wrong dir");
-			Assert.AreEqual("/Dir2/", dirs[1], "Wrong dir");
+			Assert.AreEqual(3, dirs.Length, "Wrong dir count");
+			Assert.AreEqual("", dirs[0], "Wrong dir");
+			Assert.AreEqual("Dir1", dirs[1], "Wrong dir");
+			Assert.AreEqual("Dir2", dirs[2], "Wrong dir");
 
-			dirs = prov.ListDirectories("/Dir1/");
-			Assert.AreEqual(1, dirs.Length, "Wrong dir count");
-			Assert.AreEqual("/Dir1/Sub/", dirs[0], "Wrong dir");
+			dirs = prov.ListDirectories("/Dir1");
+			Assert.AreEqual(2, dirs.Length, "Wrong dir count");
+			Assert.AreEqual("", dirs[0], "Wrong dir");
+			Assert.AreEqual("Sub", dirs[1], "Wrong dir");
 		}
-		/*
+		
 
 		[Test]
 		public void CreateDirectory_NullDirectory()
 		{
 			Assert.Throws<ArgumentNullException>(() =>
 			{
-				IFilesStorageProviderV30 prov = GetProvider();
+				IVersionedFilesStorageProviderV30 prov = SetupProvider();
 
 				prov.CreateDirectory(null, "Dir");
 			});
@@ -742,9 +745,9 @@ Repos:
 		[Test]
 		public void CreateDirectory_InexistentDirectory()
 		{
-			Assert.Throws<ArgumentException>(() =>
+			Assert.Throws<SvnIllegalTargetException>(() =>
 			{
-				IFilesStorageProviderV30 prov = GetProvider();
+				IVersionedFilesStorageProviderV30 prov = SetupProvider();
 
 				prov.CreateDirectory("/Inexistent/Dir/", "Sub");
 			});
@@ -755,7 +758,7 @@ Repos:
 		{
 			Assert.Throws<ArgumentNullException>(() =>
 			{
-				IFilesStorageProviderV30 prov = GetProvider();
+				IVersionedFilesStorageProviderV30 prov = SetupProvider();
 
 				prov.CreateDirectory("/", n);
 			});
@@ -766,7 +769,7 @@ Repos:
 		{
 			Assert.Throws<ArgumentException>(() =>
 			{
-				IFilesStorageProviderV30 prov = GetProvider();
+				IVersionedFilesStorageProviderV30 prov = SetupProvider();
 
 				prov.CreateDirectory("/", n);
 			});
@@ -775,15 +778,12 @@ Repos:
 		[Test]
 		public void CreateDirectory_ExistentName()
 		{
-			Assert.Throws<ArgumentException>(() =>
-			{
-				IFilesStorageProviderV30 prov = GetProvider();
+			IVersionedFilesStorageProviderV30 prov = SetupProvider();
 
-				Assert.IsTrue(prov.CreateDirectory("/", "Dir"), "CreateDirectory should return true");
-				prov.CreateDirectory("/", "Dir");
-			});
+			Assert.IsTrue(prov.CreateDirectory("/", "Dir"), "CreateDirectory should return true");
+			Assert.IsTrue(prov.CreateDirectory("/", "Dir"), "CreateDirectory should return true");
 		}
-
+		/*
 		[Test]
 		public void ListDirectories_NullOrEmptyDirectory() {
 			IFilesStorageProviderV30 prov = GetProvider();

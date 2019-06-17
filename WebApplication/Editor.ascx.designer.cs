@@ -49,6 +49,15 @@ namespace ScrewTurn.Wiki {
         protected global::System.Web.UI.WebControls.Button btnPreview;
         
         /// <summary>
+        /// btnStackEdit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnStackEdit;
+        
+        /// <summary>
         /// mlvEditor control.
         /// </summary>
         /// <remarks>
@@ -155,6 +164,33 @@ namespace ScrewTurn.Wiki {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal lblPreview;
+        
+        /// <summary>
+        /// viwStackEdit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View viwStackEdit;
+        
+        /// <summary>
+        /// lblMarkdownWarning control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMarkdownWarning;
+        
+        /// <summary>
+        /// lblMarkdown control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lblMarkdown;
         
         /// <summary>
         /// lblSnippets control.

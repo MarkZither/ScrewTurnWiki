@@ -166,7 +166,7 @@ namespace ScrewTurn.Wiki.Plugins.Versioning
 				using(SvnClient svnClient = GetSvnClient(repo))
 				{
 					Collection<SvnListEventArgs> contents;
-					if(svnClient.GetList(new Uri(repo.RepoUrl), out contents))
+					if(svnClient.GetList(new Uri(repo.RepoUrl + directory), out contents))
 					{
 						foreach(SvnListEventArgs item in contents.Where(x => x.Entry.NodeKind == SvnNodeKind.Directory))
 						{
@@ -176,6 +176,75 @@ namespace ScrewTurn.Wiki.Plugins.Versioning
 				}
 			}
 			return files.ToArray();
+		}
+
+		/// <summary>
+		/// Creates a new Directory.
+		/// </summary>
+		/// <param name="path">The path to create the new Directory in.</param>
+		/// <param name="name">The name of the new Directory.</param>
+		/// <returns><c>true</c> if the Directory is created, <c>false</c> otherwise.</returns>
+		/// <remarks>If <b>path</b> is "/my/directory" and <b>name</b> is "newdir", a new directory named "/my/directory/newdir" is created.</remarks>
+		/// <exception cref="ArgumentNullException">If <paramref name="path"/> or <paramref name="name"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if the directory does not exist, or if the new directory already exists.</exception>
+		public bool CreateDirectory(string path, string name)
+		{
+			if(path == null)
+			{
+				throw new ArgumentNullException("path");
+			}
+
+			if(name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+
+			if(name.Length == 0)
+			{
+				throw new ArgumentException("Name cannot be empty", "name");
+			}
+
+			//partialPath = path.Replace("/", Path.DirectorySeparatorChar.ToString()).TrimStart(Path.DirectorySeparatorChar);
+			
+			string up = Path.Combine(host.GetSettingValue(SettingName.PublicDirectory), SVNRootDirectory, m_Config.Repos.First().Name);
+
+			path = PrepareDirectory(up + path);
+			string newDirectoryFullPath = PrepareDirectory(path + name);
+
+			if(!Directory.Exists(newDirectoryFullPath))
+			{
+				Directory.CreateDirectory(newDirectoryFullPath);
+				var repo = m_Config.Repos.First();
+				using(SvnClient svnClient = GetSvnClient(repo))
+				{
+					SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs() {CreateParents = true };
+					bool DirCreated = svnClient.CreateDirectory(newDirectoryFullPath, args);
+					svnClient.Commit(newDirectoryFullPath,
+							new SvnCommitArgs() { LogMessage = "unit testing" },
+							out SvnCommitResult result);
+					return result.PostCommitError == null;
+				}
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Prepares the directory name.
+		/// </summary>
+		/// <param name="directory">The directory to prepare.</param>
+		/// <returns>The prepared directory, for example "/" or "/my/directory/".</returns>
+		private static string PrepareDirectory(string directory)
+		{
+			if(string.IsNullOrEmpty(directory))
+			{
+				return "/";
+			}
+			else
+			{
+				return directory +
+					(!directory.EndsWith("\\") ? "\\" : "");
+			}
 		}
 
 		/// <summary>
@@ -205,7 +274,8 @@ namespace ScrewTurn.Wiki.Plugins.Versioning
 				using(SvnClient svnClient = GetSvnClient(repo))
 				{
 					Collection<SvnListEventArgs> contents;
-					if(svnClient.GetList(new Uri(repo.RepoUrl), out contents))
+
+					if(svnClient.GetList(repo.RepoUrl + directory, out contents))
 					{
 						foreach(SvnListEventArgs item in contents.Where(x => x.Entry.NodeKind == SvnNodeKind.File))
 						{
@@ -385,11 +455,18 @@ namespace ScrewTurn.Wiki.Plugins.Versioning
 			}
 
 			string filename = BuildFullPath(m_Config.Repos.First().Name, fullName);
-
+			bool svnFileExists = false;
 			// Abort if the file already exists and overwrite is false
-			if(File.Exists(filename) && !overwrite)
+			if(File.Exists(filename))
 			{
-				return false;
+				if(overwrite)
+				{
+					svnFileExists = true;
+				}
+				else
+				{
+					return false;
+				}
 			}
 
 
@@ -425,7 +502,10 @@ namespace ScrewTurn.Wiki.Plugins.Versioning
 					{
 
 					}
-					svnClient.Add(filename);
+					if(!svnFileExists)
+					{
+						svnClient.Add(filename);
+					}
 					svnClient.Commit(filename, new SvnCommitArgs() { LogMessage = "unit testing"}, out SvnCommitResult result);
 				}
 				done = true;

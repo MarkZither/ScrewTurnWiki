@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using ScrewTurn.Wiki.PluginFramework;
 using ScrewTurn.Wiki.Tests;
@@ -43,24 +44,47 @@ Repos:
 		[TearDown]
 		public new void TearDown()
 		{
+			IVersionedFilesStorageProviderV30 prov = GetProvider();
+
+			ClearDirsRecursive(prov, "", "");
+
+			base.TearDown();
+		}
+
+		private void ClearDirsRecursive(IVersionedFilesStorageProviderV30 prov, string directory, string path)
+		{
+			var dirs = prov.ListDirectories(path).OrderByDescending(x => x);
 			try
 			{
-				IVersionedFilesStorageProviderV30 prov = GetProvider();
-				var files = prov.ListFiles("\\");
-				using(SvnClient svnClient = new SvnClient())
+				foreach(var dir in dirs)
 				{
-					svnClient.Authentication.Clear(); // Prevents saving/loading config to/from disk
-					svnClient.Authentication.DefaultCredentials = new System.Net.NetworkCredential("wiki", testRepoPassword);
-					svnClient.Authentication.SslServerTrustHandlers += delegate (object sender, SvnSslServerTrustEventArgs e) {
-						e.AcceptedFailures = e.Failures;
-						e.Save = false; // Save acceptance to authentication store
-					};
-					foreach(string file in files)
+					string fullPath = path + (path.Equals("") || dir.Equals("") ? "" : "\\") + dir;
+					if(!dir.Equals(""))
 					{
-						svnClient.Delete(Path.Combine(testDir, "SVN", "wiki", file));
-						svnClient.Commit(Path.Combine(testDir, "SVN", "wiki", file), 
-							new SvnCommitArgs() { LogMessage = "unit testing" }, 
-							out SvnCommitResult result);
+						ClearDirsRecursive(prov, dir, fullPath);
+					}
+					var files = prov.ListFiles(fullPath);
+					using(SvnClient svnClient = new SvnClient())
+					{
+						svnClient.Authentication.Clear(); // Prevents saving/loading config to/from disk
+						svnClient.Authentication.DefaultCredentials = new System.Net.NetworkCredential("wiki", testRepoPassword);
+						svnClient.Authentication.SslServerTrustHandlers += delegate (object sender, SvnSslServerTrustEventArgs e)
+						{
+							e.AcceptedFailures = e.Failures;
+							e.Save = false; // Save acceptance to authentication store
+						};
+						svnClient.Update(Path.Combine(testDir, "SVN", "wiki", fullPath), out SvnUpdateResult svnUpdateResult);
+						foreach(string file in files)
+						{
+							svnClient.Delete(Path.Combine(testDir, "SVN", "wiki", fullPath, file));
+						}
+						if(!fullPath.Equals("") && !dir.Equals(""))
+						{
+							svnClient.Delete(Path.Combine(testDir, "SVN", "wiki", fullPath));
+						}
+						svnClient.Commit(Path.Combine(testDir, "SVN", "wiki", fullPath),
+							new SvnCommitArgs() { LogMessage = "unit testing" },
+							out SvnCommitResult resultDir);
 					}
 				}
 			}
@@ -68,7 +92,6 @@ Repos:
 			{
 				Console.WriteLine("Test: could not delete temp directory");
 			}
-			base.TearDown();
 		}
 
 		public override IVersionedFilesStorageProviderV30 SetupProvider()
@@ -86,14 +109,6 @@ Repos:
 			prov.Init(MockHost(), config);
 
 			return prov;
-		}
-
-		[Test]
-		public void Test1()
-		{
-			IVersionedFilesStorageProviderV30 prov = SetupProvider();
-
-			Assert.That(true);
 		}
 	}
 }

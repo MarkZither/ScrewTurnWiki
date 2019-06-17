@@ -118,8 +118,8 @@
 	function __FocusEditorWindow() {
 		$("#<%= txtMarkup.ClientID %>").focus();
 		$("#iframe").focus();
-	}
-// -->
+    }
+    // -->
 </script>
 
 <div id="TabContainerDiv">
@@ -129,6 +129,8 @@
 		EnableViewState="False" meta:resourcekey="btnVisualResource3" />
 	<asp:Button ID="btnPreview" runat="server" Text="Preview" OnClick="btnPreview_Click" CssClass="tabbutton" CausesValidation="false"
 		EnableViewState="False" meta:resourcekey="btnPreviewResource3" />
+    <asp:Button ID="btnStackEdit" runat="server" Text="StackEdit" OnClick="btnStackEdit_Click" CssClass="tabbutton" CausesValidation="false"
+		EnableViewState="False" meta:resourcekey="btnStackEditResource3" />
 	<span id="ProgressSpan" style="display: none;">
 		<img src="Images/Editor/Progress.gif" alt="Please wait..." style="margin-bottom: -2px;" />
 	</span>
@@ -294,6 +296,19 @@
 	
 		<div id="PreviewDiv" style="border: solid 4px #999999; padding: 8px; height: 450px; overflow: auto;">
 			<asp:Literal ID="lblPreview" runat="server" EnableViewState="False" meta:resourcekey="lblPreviewResource3" />
+		</div>
+	</asp:View>
+
+    <asp:View ID="viwStackEdit" runat="server">
+		
+		<div class="toolbar" style="padding-top: 8px; padding-bottom: 0px;">
+			<asp:Label ID="lblMarkdownWarning" runat="server" CssClass="resulterror" EnableViewState="False"
+				Text="&lt;b&gt;Warning&lt;/b&gt;: this is only a preview. The content was not saved." meta:resourcekey="lblMarkdownWarningResource3" />
+		</div>
+	
+		<div id="MarkdownDiv" style="border: solid 4px #999999; padding: 8px; height: 450px; overflow: auto;">
+			<asp:Literal ID="lblMarkdown" runat="server" EnableViewState="False" meta:resourcekey="lblMarkdownResource3" />
+            <textarea id="txtMarkdownDiv"></textarea>
 		</div>
 	</asp:View>
 

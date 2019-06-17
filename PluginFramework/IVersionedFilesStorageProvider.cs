@@ -78,6 +78,17 @@ namespace ScrewTurn.Wiki.PluginFramework
 		FileDetails GetFileDetails(string fullName);
 
 		/// <summary>
+		/// Creates a new Directory.
+		/// </summary>
+		/// <param name="path">The path to create the new Directory in.</param>
+		/// <param name="name">The name of the new Directory.</param>
+		/// <returns><c>true</c> if the Directory is created, <c>false</c> otherwise.</returns>
+		/// <remarks>If <b>path</b> is "/my/directory" and <b>name</b> is "newdir", a new directory named "/my/directory/newdir" is created.</remarks>
+		/// <exception cref="ArgumentNullException">If <paramref name="path"/> or <paramref name="name"/> are <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">If <paramref name="name"/> is empty or if the directory does not exist, or if the new directory already exists.</exception>
+		bool CreateDirectory(string path, string name);
+
+		/// <summary>
 		/// Does a full checkout of all repos.
 		/// </summary>
 		/// <returns><c>true</c> if the repo is retrieved, <c>false</c> otherwise.</returns>

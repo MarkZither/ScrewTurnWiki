@@ -190,6 +190,11 @@ namespace ScrewTurn.Wiki {
             //end
 		}
 
+		protected void btnStackEdit_Click(object sender, EventArgs e)
+		{
+			SelectTab(3);
+		}
+
 		#endregion
 
 		#region Menus Management
@@ -346,7 +351,6 @@ namespace ScrewTurn.Wiki {
 		}
 
 		#endregion
-
 	}
 
 	/// <summary>
